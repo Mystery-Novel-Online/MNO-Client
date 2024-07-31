@@ -161,6 +161,8 @@ void Courtroom::setup_courtroom()
 
   reset_widget_toggles();
 
+  bind_shortcuts();
+
   // char select
   reconstruct_char_select();
   ui_char_select_background->setVisible(l_chr_select_visible);

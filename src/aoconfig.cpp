@@ -120,6 +120,10 @@ private:
 
   // audio sync
   DRAudioEngine *audio_engine = nullptr;
+
+  // shortcuts
+  QKeySequence screenshot_shortcut;
+  QKeySequence look_shortcut;
 };
 
 AOConfigPrivate::AOConfigPrivate()
@@ -269,6 +273,10 @@ void AOConfigPrivate::load_file()
 
   // audio device
   update_favorite_device();
+
+  // shortcuts
+  screenshot_shortcut = QKeySequence(cfg.value("screenshot_shortcut", "Ctrl+S").toString());
+  look_shortcut = QKeySequence(cfg.value("look_shortcut", "Ctrl+L").toString());
 }
 
 void AOConfigPrivate::save_file()
@@ -360,6 +368,10 @@ void AOConfigPrivate::save_file()
 
     cfg.endGroup();
   }
+
+  // shortcuts
+  cfg.setValue("screenshot_shortcut", screenshot_shortcut.toString());
+  cfg.setValue("look_shortcut", look_shortcut.toString());
 
   cfg.sync();
 }
@@ -749,6 +761,16 @@ double AOConfig::theme_resize() const
 int AOConfig::fade_duration() const
 {
   return d->fade_duration;
+}
+
+QKeySequence AOConfig::screenshot_shortcut() const
+{
+  return d->screenshot_shortcut;
+}
+
+QKeySequence AOConfig::look_shortcut() const
+{
+  return d->look_shortcut;
 }
 
 void AOConfig::load_file()
@@ -1250,6 +1272,22 @@ void AOConfig::setFadeDuration(int duration)
   d->fade_duration = duration;
   SceneManager::get().setFadeDuration(duration);
   d->invoke_signal("fade_duration_changed", Q_ARG(int, duration));
+}
+
+void AOConfig::set_screenshot_shortcut(const QKeySequence &p_shortcut)
+{
+  if (d->screenshot_shortcut == p_shortcut)
+    return;
+  d->screenshot_shortcut = p_shortcut;
+  d->invoke_signal("shortcuts_changed");
+}
+
+void AOConfig::set_look_shortcut(const QKeySequence &p_shortcut)
+{
+  if (d->look_shortcut == p_shortcut)
+    return;
+  d->look_shortcut = p_shortcut;
+  d->invoke_signal("shortcuts_changed");
 }
 
 // moc

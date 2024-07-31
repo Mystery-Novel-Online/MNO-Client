@@ -85,6 +85,10 @@ public:
   double theme_resize() const;
   int fade_duration() const;
 
+  // shortcuts
+  QKeySequence screenshot_shortcut() const;
+  QKeySequence look_shortcut() const;
+
   // io
 public slots:
   void load_file();
@@ -154,6 +158,10 @@ public slots:
   void set_blank_blips(bool p_enabled);
   void setThemeResize(double resize);
   void setFadeDuration(int duration);
+
+  // shortcuts
+  void set_screenshot_shortcut(const QKeySequence &p_shortcut);
+  void set_look_shortcut(const QKeySequence &p_shortcut);
 
   // signals
 signals:
@@ -229,6 +237,9 @@ signals:
   //Theme
   void theme_resize_changed(double);
   void fade_duration_changed(int);
+
+  // shortcuts
+  void shortcuts_changed();
 };
 
 #endif // AOCONFIG_H
