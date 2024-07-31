@@ -553,7 +553,7 @@ void AOApplication::resolve_current_theme()
                  "the DRO Discord including the large 'base' folder.\n"
                  "2. If you did, check that the base folder is in the same folder "
                  "where you launched Danganronpa Online from: " +
-                 DRPather::get_application_path() +
+                 DRPather::GetApplicationPath() +
                  "\n"
                  "3. If it is there, check that your current theme folder exists in "
                  "base/themes. ");

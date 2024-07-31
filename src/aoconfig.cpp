@@ -124,7 +124,7 @@ private:
 
 AOConfigPrivate::AOConfigPrivate()
     : QObject(nullptr)
-    , cfg(DRPather::get_application_path() + BASE_CONFIG_INI, QSettings::IniFormat)
+    , cfg(DRPather::GetApplicationPath() + BASE_CONFIG_INI, QSettings::IniFormat)
     , audio_engine(new DRAudioEngine(this))
 {
   Q_ASSERT_X(qApp, "initialization", "QGuiApplication is required");

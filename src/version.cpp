@@ -130,7 +130,7 @@ void launch_updater_check(bool is_beta, bool isSilent)
 bool check_updater_is_beta()
 {
   QString version = "stable";
-  QString version_file_path = DRPather::get_application_path() + "/base/version";
+  QString version_file_path = DRPather::GetApplicationPath() + "/base/version";
   if(file_exists(version_file_path))
   {
     QFile inputFile(version_file_path);

@@ -1,6 +1,7 @@
 #include "drpather.h"
 
 #include <QCoreApplication>
+#include <modules/managers/pathing_manager.h>
 #include <QDir>
 
 /* @brief Gets the directory containing the base folder and the application.
@@ -12,7 +13,7 @@
  *
  * @return Directory.
  */
-QString DRPather::get_application_path()
+QString DRPather::GetApplicationPath()
 {
 #ifdef Q_OS_MACOS
   QDir l_mac_path(QCoreApplication::applicationDirPath());
@@ -22,4 +23,19 @@ QString DRPather::get_application_path()
 #else
   return QDir::currentPath();
 #endif
+}
+
+QString DRPather::GetBasePath()
+{
+  return GetApplicationPath() + "/base/";
+}
+
+QString DRPather::SearchPathFirst(QString t_path)
+{
+  return PathingManager::get().searchFirstDirectory(t_path);
+}
+
+QStringList DRPather::SearchPathAll()
+{
+  return {};
 }

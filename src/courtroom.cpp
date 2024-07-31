@@ -38,6 +38,7 @@
 #include "modules/managers/animation_manager.h"
 #include "qmath.h"
 #include "src/datatypes.h"
+#include "drpather.h"
 #include "theme.h"
 
 #include <QCheckBox>
@@ -446,20 +447,29 @@ QString Courtroom::get_current_background() const
 
 void Courtroom::updateWeather(QString t_weatherName)
 {
-  vpWeatherLayer->hide();
-  const QString l_file_name = AOApplication::getInstance()->getWeatherSprite(t_weatherName);
-  auto l_viewer = vpWeatherLayer->get_reader();
+  QString l_WeatherDirPath = DRPather::SearchPathFirst("animations/weather/" + t_weatherName + "/");
+  VariableManager::get().setVariable("weather", t_weatherName);
 
+  if(!dir_exists(l_WeatherDirPath) || t_weatherName.trimmed().isEmpty())
+  {
+    vpWeatherLayer->stop();
+    vpWeatherLayer->hide();
+    return;
+  }
+
+  const QString l_file_name = l_WeatherDirPath + "overlay.webp";
+
+  auto l_viewer = vpWeatherLayer->get_reader();
   const QString l_current_file_name = l_viewer->get_file_name();
 
   if (l_file_name != l_current_file_name)
   {
     vpWeatherLayer->set_reader(mk2::SpriteReader::ptr(new mk2::SpriteCachingReader));
     vpWeatherLayer->set_file_name(l_file_name);
-    vpWeatherLayer->start();
-    vpWeatherLayer->show();
-    VariableManager::get().setVariable("weather", t_weatherName);
   }
+
+  vpWeatherLayer->start();
+  vpWeatherLayer->show();
 }
 
 void Courtroom::update_background_scene()
@@ -511,7 +521,6 @@ void Courtroom::display_background_scene()
   }
 
   ui_vp_desk->show();
-  vpWeatherLayer->show();
   ui_vp_desk->set_play_once(false);
   swap_viewport_reader(ui_vp_desk, ViewportStageFront);
   ui_vp_desk->start();

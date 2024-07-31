@@ -56,12 +56,12 @@ void AOApplication::save_disabled_packages_ini()
 
 QString AOApplication::get_base_path()
 {
-  return DRPather::get_application_path() + "/base/";
+  return DRPather::GetApplicationPath() + "/base/";
 }
 
 QString AOApplication::get_package_path(QString p_package)
 {
-  return DRPather::get_application_path() + "/packages/" + p_package + "/";
+  return DRPather::GetApplicationPath() + "/packages/" + p_package + "/";
 }
 
 QString AOApplication::get_package_or_base_path(QString p_path)
