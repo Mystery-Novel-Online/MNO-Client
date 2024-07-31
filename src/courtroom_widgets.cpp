@@ -42,6 +42,7 @@
 #include <QPropertyAnimation>
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QShortcut>
 #include <QSignalMapper>
 #include <QTimer>
 #include <QVBoxLayout>
@@ -576,10 +577,9 @@ void Courtroom::connect_widgets()
 
   connect(p_ButtonScreenshot, SIGNAL(clicked()), this, SLOT(onScreenshotClicked()));
 
-
-
+  // for some reason this didn't work without the new syntax
+  connect(ao_config, &AOConfig::shortcuts_changed, this, &Courtroom::bind_shortcuts);
 }
-
 
 void Courtroom::reset_widget_toggles()
 {
@@ -650,6 +650,19 @@ void Courtroom::reset_widget_toggles()
         }
       }
     }
+}
+
+void Courtroom::bind_shortcuts()
+{
+  if (p_ScreenshotShortcut != nullptr)
+    p_ScreenshotShortcut->deleteLater();
+  p_ScreenshotShortcut = new QShortcut(ao_config->screenshot_shortcut(), p_ButtonScreenshot);
+  connect(p_ScreenshotShortcut, SIGNAL(activated()), this, SLOT(onScreenshotClicked()));
+
+  if (p_LookShortcut != nullptr)
+    p_LookShortcut->deleteLater();
+  p_LookShortcut = new QShortcut(ao_config->look_shortcut(), ui_area_look);
+  connect(p_LookShortcut, SIGNAL(activated()), this, SLOT(on_area_look_clicked()));
 }
 
 void Courtroom::reset_widget_names()

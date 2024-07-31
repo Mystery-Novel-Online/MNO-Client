@@ -56,6 +56,7 @@ class QListWidgetItem;
 class QMenu;
 class QPropertyAnimation;
 class QScrollArea;
+class QShortcut;
 class QSignalMapper;
 class QLabel;
 
@@ -677,9 +678,10 @@ private:
   AOButton *ui_player_list_left = nullptr;
   AOButton *ui_player_list_right = nullptr;
   AOButton *ui_area_look = nullptr;
-
+  QShortcut *p_LookShortcut = nullptr;
 
   AOButton *p_ButtonScreenshot = nullptr;
+  QShortcut *p_ScreenshotShortcut = nullptr;
 
   DRTextEdit *ui_area_desc = nullptr;
 
@@ -710,6 +712,7 @@ private:
 
   void reset_widget_toggles();
 
+  void bind_shortcuts();
 
   void construct_char_select();
   void reconstruct_char_select();

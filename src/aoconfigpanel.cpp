@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QGroupBox>
+#include <QKeySequenceEdit>
 #include <QLabel>
 #include <QLineEdit>
 #include <QProcess>
@@ -98,7 +99,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_chat_tick_interval = AO_GUI_WIDGET(QSpinBox, "chat_tick_interval");
   ui_emote_preview = AO_GUI_WIDGET(QCheckBox, "emote_preview");
   ui_sticky_sfx = AO_GUI_WIDGET(QCheckBox, "sticky_sfx");
-
+  ui_screenshot_shortcut = AO_GUI_WIDGET(QKeySequenceEdit, "screenshot_shortcut");
+  ui_look_shortcut = AO_GUI_WIDGET(QKeySequenceEdit, "look_shortcut");
 
   // IC message
   ui_length_threshold = AO_GUI_WIDGET(QSlider, "length_threshold");
@@ -286,6 +288,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(ui_chat_tick_interval, SIGNAL(valueChanged(int)), m_config, SLOT(set_chat_tick_interval(int)));
   connect(ui_emote_preview, SIGNAL(toggled(bool)), m_config, SLOT(set_emote_preview(bool)));
   connect(ui_sticky_sfx, SIGNAL(toggled(bool)), m_config, SLOT(set_sticky_sfx(bool)));
+  connect(ui_screenshot_shortcut, SIGNAL(editingFinished()), this, SLOT(shortcuts_editing_finished()));
+  connect(ui_look_shortcut, SIGNAL(editingFinished()), this, SLOT(shortcuts_editing_finished()));
 
   //packages
   connect(ui_load_new_packages, SIGNAL(clicked()), this, SLOT(on_load_packages_clicked()));
@@ -360,6 +364,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_chat_tick_interval->setValue(m_config->chat_tick_interval());
   ui_emote_preview->setChecked(m_config->emote_preview_enabled());
   ui_sticky_sfx->setChecked(m_config->sticky_sfx_enabled());
+  ui_screenshot_shortcut->setKeySequence(m_config->screenshot_shortcut());
+  ui_look_shortcut->setKeySequence(m_config->look_shortcut());
 
   // ic message
   ui_length_threshold->setValue(m_config->message_length_threshold());
@@ -871,6 +877,12 @@ void AOConfigPanel::advertiser_editing_finished()
 void AOConfigPanel::callwords_editing_finished()
 {
   m_config->set_callwords(ui_callwords->text());
+}
+
+void AOConfigPanel::shortcuts_editing_finished()
+{
+  m_config->set_screenshot_shortcut(ui_screenshot_shortcut->keySequence());
+  m_config->set_look_shortcut(ui_look_shortcut->keySequence());
 }
 
 void AOConfigPanel::on_config_reload_theme_requested()
