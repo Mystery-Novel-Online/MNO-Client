@@ -77,6 +77,7 @@ void Courtroom::create_widgets()
 
   m_system_player = new AOSystemPlayer(ao_app, this);
   m_effects_player = new AOSfxPlayer(ao_app, this);
+  m_SfxPlayerWeather = new AOSfxPlayer(ao_app, this);
   m_shouts_player = new AOShoutPlayer(ao_app, this);
   m_blips_player = new AOBlipPlayer(ao_app, this);
 

@@ -436,6 +436,12 @@ void Courtroom::play_ambient()
   m_effects_player->play_ambient(l_filepath);
 }
 
+void Courtroom::PlayWeatherSFX(QString t_name)
+{
+  QString l_filepath = ao_app->get_ambient_sfx_path(t_name);
+  m_SfxPlayerWeather->play_ambient(l_filepath);
+}
+
 QString Courtroom::get_current_background() const
 {
   QString l_tod = ao_config->timeofday();
@@ -450,14 +456,24 @@ QString Courtroom::get_current_background() const
 void Courtroom::updateWeather(QString t_weatherName)
 {
   QString l_WeatherDirPath = DRPather::SearchPathFirst("animations/weather/" + t_weatherName + "/");
+
   VariableManager::get().setVariable("weather", t_weatherName);
 
   if(!dir_exists(l_WeatherDirPath) || t_weatherName.trimmed().isEmpty())
   {
     vpWeatherLayer->stop();
     vpWeatherLayer->hide();
+    m_SfxPlayerWeather->play_ambient("");
     return;
   }
+
+
+
+  JSONReader l_WeatherParam = JSONReader();
+  l_WeatherParam.ReadFromFile(l_WeatherDirPath + "param.json");
+
+  PlayWeatherSFX(l_WeatherParam.getStringValue("sound"));
+
 
   const QString l_file_name = l_WeatherDirPath + "overlay.webp";
 

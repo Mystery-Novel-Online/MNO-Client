@@ -143,6 +143,7 @@ public:
 
   void set_ambient(QString ambient_sfx);
   void play_ambient();
+  void PlayWeatherSFX(QString t_name);
 
   QString get_current_background() const;
 
@@ -966,6 +967,7 @@ public slots:
   void stop_all_audio();
 
 private:
+  AOSfxPlayer *m_SfxPlayerWeather = nullptr;
   AOSfxPlayer *m_effects_player = nullptr;
   AOShoutPlayer *m_shouts_player = nullptr;
   AOSystemPlayer *m_system_player = nullptr;
