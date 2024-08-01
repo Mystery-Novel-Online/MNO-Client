@@ -126,7 +126,11 @@ void ReplayManager::RecordPlaySplash(QString t_splash)
 
 void ReplayManager::RecordChangeWeather(QString t_weather)
 {
-  //TO-DO: Implement
+  ReplayOperation lNewOperation = ReplayOperation("weather");
+  lNewOperation.mTimestamp = m_TimerRecorder.elapsed();
+  lNewOperation.mVariables["name"] = t_weather;
+  m_ReplayOperationsRecorded.append(lNewOperation);
+  RecordingSave();
 }
 
 void ReplayManager::RecordChangeGamemode(QString t_gamemode)
@@ -214,6 +218,11 @@ void ReplayManager::PlaybackProgressManual()
     if(mOp == "msg")
     {
       p_SceneReplay->setMsgOperation(m_ReplayOperationsPlayback[m_PlaybackPositionIndex].mVariables);
+    }
+
+    if(mOp == "weather")
+    {
+      p_SceneReplay->setWeather(m_ReplayOperationsPlayback[m_PlaybackPositionIndex].mVariables["name"]);
     }
 
     if(mOp == "bg")

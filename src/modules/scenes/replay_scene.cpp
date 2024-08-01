@@ -59,6 +59,11 @@ void ReplayScene::setBackground(QString t_name)
   m_Viewport->UpdateBackground("wit");
 }
 
+void ReplayScene::setWeather(QString t_weather)
+{
+  m_Viewport->SetViewportWeather(t_weather);
+}
+
 void ReplayScene::playWTCE(QString t_name)
 {
   m_Viewport->PlaySplashAnimation(t_name);

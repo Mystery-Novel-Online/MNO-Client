@@ -30,6 +30,7 @@ public:
   void playSong(QString t_song);
   void setMsgOperation(QMap<QString, QString> t_vars);
   void setBackground(QString t_name);
+  void setWeather(QString t_weather);
   void playWTCE(QString t_name);
 
 

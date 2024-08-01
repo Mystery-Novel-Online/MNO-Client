@@ -15,6 +15,7 @@ public:
   }
 
   void InitializeAudio();
+  void WeatherPlay(QString t_weather);
   void BGMPlay(QString t_track);
   void PlaySFX(QString t_sfx);
   void PlaySFXCharacter(QString t_sfx, QString t_character);
@@ -27,6 +28,7 @@ private:
 
   AOMusicPlayer *m_PlayerMusic = nullptr;
   AOSfxPlayer *m_PlayerSFX = nullptr;
+  AOSfxPlayer *m_PlayerWeather = nullptr;
 };
 
 #endif // AUDIO_MANAGER_H

@@ -34,6 +34,9 @@ public:
   void PlayShoutAnimation(QString t_name);
   void ToggleChatbox(bool t_state);
 
+
+  void SetViewportWeather(QString t_weather);
+
   //
   void PlaySplashAnimation(QString t_name);
 
@@ -74,6 +77,8 @@ private:
   //Graphics Items
   DRSceneMovie *m_VpBackground = nullptr;
   DRCharacterMovie *m_VpPlayer = nullptr;
+  DRSceneMovie *m_VpWeather = nullptr;
+
 
   //Animations
   DREffectMovie *m_VpEffect = nullptr;

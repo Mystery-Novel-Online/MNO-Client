@@ -3,9 +3,12 @@
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsProxyWidget>
 #include <QPropertyAnimation>
+#include <drpather.h>
+#include <mk2/spritecachingreader.h>
 #include <modules/theme/thememanager.h>
 #include "aoapplication.h"
 #include "commondefs.h"
+#include "file_functions.h"
 #include <modules/managers/audio_manager.h>
 #include <modules/managers/scene_manager.h>
 #include <modules/managers/variable_manager.h>
@@ -24,11 +27,13 @@ void DROViewportWidget::ConstructViewport(ThemeSceneType t_scene)
   m_VpVideo = new DRVideoScreen(m_AOApp);
   m_VpShouts = new DRShoutMovie(m_AOApp);
   m_VpWtce = new DRSplashMovie(m_AOApp);
+  m_VpWeather = new DRSceneMovie(m_AOApp);
 
   //Add items to the scene.
   this->scene()->addItem(m_VpBackground);
   this->scene()->addItem(m_VpPlayer);
   this->scene()->addItem(m_VpEffect);
+  this->scene()->addItem(m_VpWeather);
   this->scene()->addItem(m_VpVideo);
   this->scene()->addItem(m_VpShouts);
   this->scene()->addItem(m_VpWtce);
@@ -174,6 +179,43 @@ void DROViewportWidget::ToggleChatbox(bool t_state)
     if(t_state) m_UserInterfaceObjects["chatbox"]->show();
     else m_UserInterfaceObjects["chatbox"]->hide();
   }
+}
+
+void DROViewportWidget::SetViewportWeather(QString t_weather)
+{
+  QString l_WeatherDirPath = DRPather::SearchPathFirst("animations/weather/" + t_weather + "/");
+
+  VariableManager::get().setVariable("weather", t_weather);
+
+  if(!dir_exists(l_WeatherDirPath) || t_weather.trimmed().isEmpty())
+  {
+    m_VpWeather->stop();
+    m_VpWeather->hide();
+    AudioManager::get().WeatherPlay("");
+    return;
+  }
+
+
+
+  JSONReader l_WeatherParam = JSONReader();
+  l_WeatherParam.ReadFromFile(l_WeatherDirPath + "param.json");
+
+  AudioManager::get().WeatherPlay(l_WeatherParam.getStringValue("sound"));
+
+
+  const QString l_file_name = l_WeatherDirPath + "overlay.webp";
+
+  auto l_viewer = m_VpWeather->get_reader();
+  const QString l_current_file_name = l_viewer->get_file_name();
+
+  if (l_file_name != l_current_file_name)
+  {
+    m_VpWeather->set_reader(mk2::SpriteReader::ptr(new mk2::SpriteCachingReader));
+    m_VpWeather->set_file_name(l_file_name);
+  }
+
+  m_VpWeather->start();
+  m_VpWeather->show();
 }
 
 void DROViewportWidget::PlaySplashAnimation(QString t_name)

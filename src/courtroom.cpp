@@ -457,6 +457,7 @@ void Courtroom::updateWeather(QString t_weatherName)
 {
   QString l_WeatherDirPath = DRPather::SearchPathFirst("animations/weather/" + t_weatherName + "/");
 
+  ReplayManager::get().RecordChangeWeather(t_weatherName);
   VariableManager::get().setVariable("weather", t_weatherName);
 
   if(!dir_exists(l_WeatherDirPath) || t_weatherName.trimmed().isEmpty())
