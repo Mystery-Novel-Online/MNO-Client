@@ -33,6 +33,8 @@ public:
   void setWeather(QString t_weather);
   void playWTCE(QString t_name);
 
+  void progressSlider(int t_progress);
+
 
   void SetupReplayMetadata(int t_operationsCount);
 

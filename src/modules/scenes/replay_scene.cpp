@@ -69,6 +69,11 @@ void ReplayScene::playWTCE(QString t_name)
   m_Viewport->PlaySplashAnimation(t_name);
 }
 
+void ReplayScene::progressSlider(int t_progress)
+{
+  m_PlaybackScrubber->setSliderPosition(t_progress);
+}
+
 void ReplayScene::SetupReplayMetadata(int t_operationsCount)
 {
   m_PlaybackScrubber->setMinimum(0);

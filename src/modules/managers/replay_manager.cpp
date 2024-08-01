@@ -243,7 +243,7 @@ void ReplayManager::PlaybackProgressManual()
 
     if(mOp != "msg" && mOp != "wtce") PlaybackProgressManual();
   }
-
+  p_SceneReplay->progressSlider(m_PlaybackPositionIndex);
 }
 
 void ReplayManager::PlaybackProgressSlider(int t_index)
