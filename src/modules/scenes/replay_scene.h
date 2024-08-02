@@ -18,6 +18,7 @@
 #include <mk2/graphicsvideoscreen.h>
 #include <modules/widgets/droviewportwidget.h>
 #include "modules/scenes/viewport_scene.h"
+#include <modules/widgets/replay_hover_controller.h>
 
 class ReplayScene : public QWidget
 {
@@ -60,6 +61,7 @@ private:
 
   DRTextEdit *vpShowname = nullptr;
   QSlider *m_PlaybackScrubber = nullptr;
+  ReplayHoverController *m_ReplayHoverPanel = nullptr;
 
   //To Be Moved
 

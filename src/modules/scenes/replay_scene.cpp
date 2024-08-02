@@ -104,8 +104,14 @@ void ReplayScene::constructWidgets()
   ThemeManager::get().AutoAdjustWidgetDimensions(m_Viewport, "viewport", SceneTypeReplays);
   ThemeManager::get().RegisterWidgetGeneric("viewport", m_Viewport);
 
+
   m_Viewport->ConstructViewport(SceneTypeReplays);
   SceneManager::get().CreateTransition(this, AOApplication::getInstance(), m_Viewport);
+
+  m_ReplayHoverPanel = new ReplayHoverController(this);
+  ThemeManager::get().AutoAdjustWidgetDimensions(m_ReplayHoverPanel, "controller", SceneTypeReplays);
+  ThemeManager::get().RegisterWidgetGeneric("controller", m_ReplayHoverPanel);
+  m_ReplayHoverPanel->show();
 
   //Replay Controls
   m_PlaybackScrubber = new QSlider(Qt::Horizontal, this);
@@ -121,6 +127,9 @@ void ReplayScene::constructWidgets()
   //Extra Stuff
          //ThemeManager::get().createButtonWidget("return_to_lobby", this);
 
+
+
+  m_ReplayHoverPanel->addWidget(m_PlaybackScrubber);
 }
 
 
