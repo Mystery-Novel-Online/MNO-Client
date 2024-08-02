@@ -28,7 +28,7 @@ protected:
 
   void leaveEvent(QEvent *event) override
   {
-    QTimer::singleShot(300, [this]() { for(QWidget * r_widget : m_Widgets) { r_widget->setVisible(false); } });
+    for(QWidget * r_widget : m_Widgets) { r_widget->setVisible(false); };
     QWidget::leaveEvent(event);
   }
 signals:
