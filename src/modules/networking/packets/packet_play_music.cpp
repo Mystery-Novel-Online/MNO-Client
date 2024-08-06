@@ -1,6 +1,5 @@
 #include "packet_play_music.h"
 #include "courtroom.h"
-
 #include <aoapplication.h>
 
 PacketPlayMusic::PacketPlayMusic()

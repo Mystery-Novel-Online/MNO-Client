@@ -121,6 +121,7 @@ HEADERS += \
   src/modules/networking/neo_network_handler.h \
   src/modules/networking/network_handler.h \
   src/modules/networking/packets/packet_play_music.h \
+  src/modules/networking/packets/packets_scene.h \
   src/modules/scenes/replay_scene.h \
   src/modules/scenes/scenetestinglabs.h \
   src/modules/scenes/viewport_scene.h \
@@ -262,6 +263,7 @@ SOURCES += \
   src/modules/networking/neo_network_handler.cpp \
   src/modules/networking/network_handler.cpp \
   src/modules/networking/packets/packet_play_music.cpp \
+  src/modules/networking/packets/packets_scene.cpp \
   src/modules/scenes/replay_scene.cpp \
   src/modules/scenes/scenetestinglabs.cpp \
   src/modules/scenes/viewport_scene.cpp \

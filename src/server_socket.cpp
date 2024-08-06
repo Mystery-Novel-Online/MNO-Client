@@ -430,16 +430,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (is_courtroom_constructed)
       m_courtroom->handleAnimation(l_content.at(0));
   }
-  else if (l_header == "SCENE")
-  {
-    if (l_content.size() < 3)
-      return;
-
-    VariableManager::get().setVariable("area_name", l_content.at(0));
-    VariableManager::get().setVariable("map_visual", l_content.at(2));
-    if (is_courtroom_constructed)
-      m_courtroom->handleAnimation("RoomTransition");
-  }
   else if (l_header == "RT")
   {
     if (l_content.size() < 1)
