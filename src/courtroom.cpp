@@ -2557,6 +2557,13 @@ void Courtroom::send_mc_packet(QString p_song)
 {
   if (is_client_muted)
     return;
+
+  if(GameManager::get().usesServerFunction("IgnoreTSU"))
+  {
+    ao_app->send_server_packet(DRPacket("MusPly", {p_song, QString::number(m_chr_id)}));
+    return;
+  }
+
   ao_app->send_server_packet(DRPacket("MC", {p_song, QString::number(m_chr_id)}));
 }
 

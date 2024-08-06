@@ -218,6 +218,11 @@ signals:
   void reload_audiotracks();
   void server_status_changed(ServerStatus);
 
+public:
+  bool GetCourtroomConstructed()
+  {
+    return is_courtroom_constructed;
+  }
 private:
   AOConfig *ao_config = nullptr;
   AOConfigPanel *ao_config_panel = nullptr;

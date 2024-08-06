@@ -111,10 +111,31 @@ void GameManager::setupGame()
   AudioManager::get().InitializeAudio();
 }
 
+void GameManager::SetupNetworkHandler()
+{
+  if(usesServerFunction("IgnoreTSU"))
+  {
+    m_CurrentNetworkHandler = new NeoNetworkHandler();
+  }
+  else
+  {
+    m_CurrentNetworkHandler = new LegacyNetworkHandler();
+  }
+  m_CurrentNetworkHandler->GeneratePacketMap();
+}
+
+bool GameManager::ProcessIncomingPacket(QString t_operation, QStringList t_parameters)
+{
+  if(m_CurrentNetworkHandler == nullptr) return false;
+  return m_CurrentNetworkHandler->ProcessPacket(t_operation, t_parameters);
+}
+
+
 void GameManager::setServerFunctions(QStringList tFunctionList)
 {
   m_ServerFeatures.clear();
   m_ServerFeatures = tFunctionList;
+  SetupNetworkHandler();
 }
 
 bool GameManager::usesServerFunction(QString tFunctionName)

@@ -25,9 +25,9 @@ QString DRPather::GetApplicationPath()
 #endif
 }
 
-QString DRPather::GetBasePath()
+QString DRPather::GetBasePath(QString t_subpath)
 {
-  return GetApplicationPath() + "/base/";
+  return GetApplicationPath() + "/base/" + t_subpath;
 }
 
 QString DRPather::SearchPathFirst(QString t_path)

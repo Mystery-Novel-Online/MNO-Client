@@ -94,6 +94,11 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   const QString l_header = p_packet.get_header();
   const QStringList l_content = p_packet.get_content();
 
+  if(GameManager::get().ProcessIncomingPacket(l_header, l_content))
+  {
+    return;
+  }
+
   if (l_header != "checkconnection")
     qDebug().noquote() << "S/R:" << p_packet.to_string();
 
@@ -417,11 +422,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   {
     if (is_courtroom_constructed && joined_server())
       m_courtroom->handle_acknowledged_ms();
-  }
-  else if (l_header == "MC")
-  {
-    if (is_courtroom_constructed && joined_server())
-      m_courtroom->handle_song(l_content);
   }
   else if (l_header == "ANI")
   {

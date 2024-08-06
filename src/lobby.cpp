@@ -1,5 +1,6 @@
 #include "lobby.h"
 
+#include "drdiscord.h"
 #include "file_functions.h"
 #include "modules/theme/widget_animator.h"
 #include "aoapplication.h"
@@ -589,6 +590,7 @@ void Lobby::onToggleGalleryPressed()
 
 void Lobby::onPlayReplayPresssed()
 {
+  ao_app->get_discord()->setReplayName(pUiReplayList->selectedItems().at(0)->text());
   ReplayManager::get().PlaybackLoadFile(ReplayManager::get().getReplayPath(mCurrentPackage, mCurrentCategory, pUiReplayList->selectedItems().at(0)->text()), ao_app->constructReplay());
 }
 

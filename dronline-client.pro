@@ -103,6 +103,7 @@ HEADERS += \
   src/modules/managers/animation_manager.h \
   src/modules/managers/audio_manager.h \
   src/modules/managers/character_manager.h \
+  src/modules/managers/configuration_manager.h \
   src/modules/managers/emotion_manager.h \
   src/modules/managers/evidence_manager.h \
   src/modules/managers/game_manager.h \
@@ -114,7 +115,12 @@ HEADERS += \
   src/modules/managers/scenario_manager.h \
   src/modules/managers/scene_manager.h \
   src/modules/managers/variable_manager.h \
+  src/modules/networking/dro_packet.h \
   src/modules/networking/json_packet.h \
+  src/modules/networking/legacy_network_handler.h \
+  src/modules/networking/neo_network_handler.h \
+  src/modules/networking/network_handler.h \
+  src/modules/networking/packets/packet_play_music.h \
   src/modules/scenes/replay_scene.h \
   src/modules/scenes/scenetestinglabs.h \
   src/modules/scenes/viewport_scene.h \
@@ -238,6 +244,7 @@ SOURCES += \
   src/modules/managers/animation_manager.cpp \
   src/modules/managers/audio_manager.cpp \
   src/modules/managers/character_manager.cpp \
+  src/modules/managers/configuration_manager.cpp \
   src/modules/managers/emotion_manager.cpp \
   src/modules/managers/evidence_manager.cpp \
   src/modules/managers/game_manager.cpp \
@@ -249,7 +256,12 @@ SOURCES += \
   src/modules/managers/scenario_manager.cpp \
   src/modules/managers/scene_manager.cpp \
   src/modules/managers/variable_manager.cpp \
+  src/modules/networking/dro_packet.cpp \
   src/modules/networking/json_packet.cpp \
+  src/modules/networking/legacy_network_handler.cpp \
+  src/modules/networking/neo_network_handler.cpp \
+  src/modules/networking/network_handler.cpp \
+  src/modules/networking/packets/packet_play_music.cpp \
   src/modules/scenes/replay_scene.cpp \
   src/modules/scenes/scenetestinglabs.cpp \
   src/modules/scenes/viewport_scene.cpp \

@@ -54,6 +54,13 @@ public slots:
   void set_character_name(const QString &f_character_name);
   void clear_character_name();
 
+  void setReplayName(const QString &t_replayName)
+  {
+    m_IsInReplay = true;
+    m_ReplayName = t_replayName;
+    on_update_queued();
+  };
+
   void start(const bool p_restart = false);
   void stop();
 
@@ -68,6 +75,9 @@ signals:
   void stopped();
 
 private:
+  bool m_IsInReplay = false;
+  QString m_ReplayName = "";
+
   Options m_options;
   State m_state = State::Idle;
   QPointer<QTimer> m_waiter;
