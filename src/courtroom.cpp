@@ -2569,6 +2569,26 @@ void Courtroom::OnAreaLockPassageTriggered()
   ui_ic_chat_message_field->setFocus();
 }
 
+void Courtroom::OnAreaPeekTriggered()
+{
+  QListWidgetItem *l_item = ui_area_list->currentItem();
+  if (l_item)
+  {
+    const QString l_Area = l_item->text();
+    if(l_Area.contains('-'))
+    {
+      bool l_result = false;
+      int l_areaId = l_Area.split('-').at(0).toInt(&l_result);
+
+      if(l_result)
+      {
+        send_ooc_packet({"/peek " + QString::number(l_areaId)});
+      }
+    }
+  }
+  ui_ic_chat_message_field->setFocus();
+}
+
 void Courtroom::on_music_search_edited(QString p_filter)
 {
   filter_list_widget(ui_music_list, p_filter);

@@ -231,6 +231,7 @@ void Courtroom::create_widgets()
 
   p_MenuAreaList = new QMenu(this);
   p_ActionAreasLockPassage = p_MenuAreaList->addAction(tr("Lock Passage to Area"));
+  p_ActionAreasPeek = p_MenuAreaList->addAction(tr("Peek into Area"));
 
   wCharaAnimList = new QListWidget(this);
 
@@ -488,7 +489,8 @@ void Courtroom::connect_widgets()
 
   connect(ui_music_menu_play, SIGNAL(triggered()), this, SLOT(on_music_menu_play_triggered()));
 
-  connect(p_ActionPinMusic, SIGNAL(triggered()), this, SLOT(OnMusicMenuPinSongTriggered()));
+  connect(p_ActionPinMusic, &QAction::triggered, this, &Courtroom::OnMusicMenuPinSongTriggered);
+  connect(p_ActionAreasPeek, &QAction::triggered, this, &Courtroom::OnAreaPeekTriggered);
   connect(p_ActionAreasLockPassage, &QAction::triggered, this, &Courtroom::OnAreaLockPassageTriggered);
 
   connect(ui_music_menu_insert_ooc, SIGNAL(triggered()), this, SLOT(on_music_menu_insert_ooc_triggered()));

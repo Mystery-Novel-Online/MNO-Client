@@ -525,6 +525,7 @@ private:
 
   QMenu *p_MenuAreaList = nullptr;
   QAction *p_ActionAreasLockPassage = nullptr;
+  QAction *p_ActionAreasPeek = nullptr;
 
   QListWidget *wCharaAnimList = nullptr;
   QListWidget *ui_sfx_list = nullptr;
@@ -802,6 +803,7 @@ private slots:
   void on_music_menu_insert_ooc_triggered();
   void OnMusicMenuPinSongTriggered();
   void OnAreaLockPassageTriggered();
+  void OnAreaPeekTriggered();
   void on_music_search_edited(QString);
   void on_music_search_edited();
   void send_mc_packet(QString p_song);
