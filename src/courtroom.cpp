@@ -2510,6 +2510,12 @@ void Courtroom::on_music_list_context_menu_requested(QPoint p_point)
   ui_music_menu->popup(l_global_point);
 }
 
+void Courtroom::OnAreaListContextMenuRequested(QPoint p_point)
+{
+  const QPoint l_global_point = ui_area_list->viewport()->mapToGlobal(p_point);
+  p_MenuAreaList->popup(l_global_point);
+}
+
 void Courtroom::on_music_menu_play_triggered()
 {
   QListWidgetItem *l_item = ui_music_list->currentItem();
@@ -2541,6 +2547,26 @@ void Courtroom::OnMusicMenuPinSongTriggered()
     ScenarioManager::get().PinTrack(l_song);
   }
   ui_ooc_chat_message->setFocus();
+}
+
+void Courtroom::OnAreaLockPassageTriggered()
+{
+  QListWidgetItem *l_item = ui_area_list->currentItem();
+  if (l_item)
+  {
+    const QString l_Area = l_item->text();
+    if(l_Area.contains('-'))
+    {
+      bool l_result = false;
+      int l_areaId = l_Area.split('-').at(0).toInt(&l_result);
+
+      if(l_result)
+      {
+        send_ooc_packet({"/bilock " + QString::number(l_areaId)});
+      }
+    }
+  }
+  ui_ic_chat_message_field->setFocus();
 }
 
 void Courtroom::on_music_search_edited(QString p_filter)

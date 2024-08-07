@@ -521,6 +521,11 @@ private:
   QAction *ui_music_menu_insert_ooc = nullptr;
   QAction *p_ActionPinMusic = nullptr;
 
+
+
+  QMenu *p_MenuAreaList = nullptr;
+  QAction *p_ActionAreasLockPassage = nullptr;
+
   QListWidget *wCharaAnimList = nullptr;
   QListWidget *ui_sfx_list = nullptr;
   QVector<DRSfx> m_sfx_list;
@@ -792,9 +797,11 @@ private slots:
   void on_music_list_clicked();
   void on_music_list_double_clicked(QModelIndex p_model);
   void on_music_list_context_menu_requested(QPoint p_point);
+  void OnAreaListContextMenuRequested(QPoint p_point);
   void on_music_menu_play_triggered();
   void on_music_menu_insert_ooc_triggered();
   void OnMusicMenuPinSongTriggered();
+  void OnAreaLockPassageTriggered();
   void on_music_search_edited(QString);
   void on_music_search_edited();
   void send_mc_packet(QString p_song);

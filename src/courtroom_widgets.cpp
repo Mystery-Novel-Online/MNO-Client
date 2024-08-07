@@ -214,6 +214,7 @@ void Courtroom::create_widgets()
   ui_ooc_chatlog->setOpenExternalLinks(true);
 
   ui_area_list = new QListWidget(this);
+  ui_area_list->setContextMenuPolicy(Qt::CustomContextMenu);
   ui_area_search = new QLineEdit(this);
   ui_area_search->setFrame(false);
   ui_area_search->setPlaceholderText(LocalizationManager::get().getLocalizationText("TEXTBOX_AREA"));
@@ -225,8 +226,11 @@ void Courtroom::create_widgets()
   ui_music_menu = new QMenu(this);
   ui_music_menu_play = ui_music_menu->addAction(tr("Play"));
   ui_music_menu_insert_ooc = ui_music_menu->addAction(tr("Insert to OOC"));
-  p_ActionPinMusic = ui_music_menu->addAction(tr("Add song to pinned."));
+  p_ActionPinMusic = ui_music_menu->addAction(tr("Add song to Pinned"));
 
+
+  p_MenuAreaList = new QMenu(this);
+  p_ActionAreasLockPassage = p_MenuAreaList->addAction(tr("Lock Passage to Area"));
 
   wCharaAnimList = new QListWidget(this);
 
@@ -480,10 +484,12 @@ void Courtroom::connect_widgets()
   connect(ui_music_list, SIGNAL(clicked(QModelIndex)), this, SLOT(on_music_list_clicked()));
   connect(ui_music_list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(on_music_list_double_clicked(QModelIndex)));
   connect(ui_music_list, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_music_list_context_menu_requested(QPoint)));
+  connect(ui_area_list, &QWidget::customContextMenuRequested, this, &Courtroom::OnAreaListContextMenuRequested);
 
   connect(ui_music_menu_play, SIGNAL(triggered()), this, SLOT(on_music_menu_play_triggered()));
 
   connect(p_ActionPinMusic, SIGNAL(triggered()), this, SLOT(OnMusicMenuPinSongTriggered()));
+  connect(p_ActionAreasLockPassage, &QAction::triggered, this, &Courtroom::OnAreaLockPassageTriggered);
 
   connect(ui_music_menu_insert_ooc, SIGNAL(triggered()), this, SLOT(on_music_menu_insert_ooc_triggered()));
 
