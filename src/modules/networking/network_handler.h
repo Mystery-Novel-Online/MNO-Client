@@ -14,10 +14,12 @@ public:
   virtual void GeneratePacketMap() = 0;
   bool ProcessPacket(QString t_operation, QStringList t_contents);
 
-  void RegisterPacket(QString t_operation, DROPacket * t_packet);
+  void RegisterPacket(QString t_operation, DROPacket * t_packet, bool l_RequireCourtroom = false, int l_MinimumParams = 0);
 
 private:
   QHash<QString, DROPacket *> m_PacketMap = {};
+  QHash<QString, int> m_ParamCount = {};
+  QHash<QString, bool> m_RequireCourtroom = {};
 };
 
 #endif // NETWORK_HANDLER_H

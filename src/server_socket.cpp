@@ -210,27 +210,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     dr_discord->set_state(DRDiscord::State::Connected);
     dr_discord->set_server_name(l_current_server.to_info());
   }
-  else if (l_header == "CharsCheck")
-  {
-    if (!is_courtroom_constructed)
-      return;
-
-    QVector<char_type> l_chr_list = CharacterManager::get().GetServerCharList();
-    if (l_content.length() != l_chr_list.length())
-    {
-      qWarning() << "Server sent a character list of length " << l_content.length() << "which is different from the expected length " << l_chr_list.length() << "so ignoring it.";
-      return;
-    }
-
-    for (int i = 0; i < l_chr_list.length(); ++i)
-    {
-      l_chr_list[i].taken = l_content.at(i) == "-1";
-      CharacterManager::get().SetCharaTaken(i, l_content.at(i) == "-1");
-    }
-
-
-    CharacterManager::get().SetCharList(l_chr_list);
-  }
   else if (l_header == "SC")
   {
     if (!is_courtroom_constructed)
@@ -346,56 +325,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
     destruct_lobby();
   }
-  else if (l_header == "joined_area")
-  {
-    if (!is_courtroom_constructed)
-      return;
-
-    m_courtroom->reset_viewport();
-  }
-  else if (l_header == "WEA")
-  {
-    if (l_content.size() < 1)
-      return;
-
-    if (!is_courtroom_constructed)
-      return;
-
-    m_courtroom->updateWeather(l_content.at(0));
-  }
-  else if (l_header == "BN")
-  {
-    if (l_content.size() < 1)
-      return;
-
-    if (!is_courtroom_constructed)
-      return;
-
-    DRAreaBackground l_area_bg;
-    l_area_bg.background = l_content.at(0);
-
-    for (int i = 1; i < l_content.size(); ++i)
-    {
-      const QStringList l_tod_data = l_content.at(i).split("|", DR::SkipEmptyParts);
-      if (l_tod_data.size() < 2)
-        continue;
-      l_area_bg.background_tod_map.insert(l_tod_data.at(0), l_tod_data.at(1));
-    }
-
-    qDebug() << l_area_bg.background << l_area_bg.background_tod_map;
-
-    m_courtroom->set_background(l_area_bg);
-  }
-  else if (l_header == "area_ambient")
-  {
-    if (l_content.size() < 1)
-      return;
-
-    if (!is_courtroom_constructed)
-      return;
-
-    m_courtroom->set_ambient(l_content.at(0));
-  }
   else if (l_header == "chat_tick_rate")
   {
     if (l_content.size() < 1)
@@ -436,11 +365,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       return;
     if (is_courtroom_constructed)
       m_courtroom->handle_wtce(l_content.at(0));
-  }
-  else if (l_header == "HP")
-  {
-    if (is_courtroom_constructed && l_content.size() > 1)
-      m_courtroom->set_hp_bar(l_content.at(0).toInt(), l_content.at(1).toInt());
   }
   else if (l_header == "KK")
   {

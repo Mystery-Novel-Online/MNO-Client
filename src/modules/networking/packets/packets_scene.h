@@ -9,19 +9,48 @@ class NeoPacketScene : public DROPacket
 {
 public:
   NeoPacketScene(){};
-
-public:
   void HandleIncoming(QStringList t_Contents);
 };
-
 
 class PacketScene : public DROPacket
 {
 public:
   PacketScene(){};
-
-public:
   void HandleIncoming(QStringList t_Contents);
 };
 
-#endif // PACKETS_SCENE_H
+class PacketJoinedArea : public DROPacket
+{
+public:
+  PacketJoinedArea(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketAreaAmbience : public DROPacket
+{
+public:
+  PacketAreaAmbience(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketAreaWeather : public DROPacket
+{
+public:
+  PacketAreaWeather(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketAreaBackground : public DROPacket
+{
+public:
+  PacketAreaBackground(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketAreaHP : public DROPacket
+{
+public:
+  PacketAreaHP(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+#endif

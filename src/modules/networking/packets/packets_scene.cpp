@@ -52,3 +52,41 @@ void NeoPacketScene::HandleIncoming(QStringList t_Contents)
   }
   l_CourtroomScene->reset_viewport();
 }
+
+void PacketJoinedArea::HandleIncoming(QStringList t_Contents)
+{
+  AOApplication::getInstance()->m_courtroom->reset_viewport();
+}
+
+void PacketAreaAmbience::HandleIncoming(QStringList t_Contents)
+{
+  AOApplication::getInstance()->m_courtroom->set_ambient(t_Contents.at(0));
+}
+
+void PacketAreaWeather::HandleIncoming(QStringList t_Contents)
+{
+  AOApplication::getInstance()->m_courtroom->updateWeather(t_Contents.at(0));
+}
+
+void PacketAreaBackground::HandleIncoming(QStringList t_Contents)
+{
+  DRAreaBackground l_area_bg;
+  l_area_bg.background = t_Contents.at(0);
+
+  for (int i = 1; i < t_Contents.size(); ++i)
+  {
+    const QStringList l_tod_data = t_Contents.at(i).split("|", DR::SkipEmptyParts);
+    if (l_tod_data.size() < 2)
+      continue;
+    l_area_bg.background_tod_map.insert(l_tod_data.at(0), l_tod_data.at(1));
+  }
+
+  qDebug() << l_area_bg.background << l_area_bg.background_tod_map;
+
+  AOApplication::getInstance()->m_courtroom->set_background(l_area_bg);
+}
+
+void PacketAreaHP::HandleIncoming(QStringList t_Contents)
+{
+  AOApplication::getInstance()->m_courtroom->set_hp_bar(t_Contents.at(0).toInt(), t_Contents.at(1).toInt());
+}
