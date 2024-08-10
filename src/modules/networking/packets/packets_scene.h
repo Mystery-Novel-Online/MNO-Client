@@ -3,8 +3,6 @@
 
 #include <modules/networking/dro_packet.h>
 
-
-
 class NeoPacketScene : public DROPacket
 {
 public:
@@ -53,4 +51,75 @@ public:
   PacketAreaHP(){};
   void HandleIncoming(QStringList t_Contents);
 };
+
+class PacketClock : public DROPacket
+{
+public:
+  PacketClock(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketTimeOfDay : public DROPacket
+{
+public:
+  PacketTimeOfDay(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketGameMode : public DROPacket
+{
+public:
+  PacketGameMode(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketPlayAnimation : public DROPacket
+{
+public:
+  PacketPlayAnimation(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketChatTickRate : public DROPacket
+{
+public:
+  PacketChatTickRate(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketICMessage : public DROPacket
+{
+public:
+  PacketICMessage(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketOOCMessage : public DROPacket
+{
+public:
+  PacketOOCMessage(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketSetBGPosition : public DROPacket
+{
+public:
+  PacketSetBGPosition(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketSetShowname : public DROPacket
+{
+public:
+  PacketSetShowname(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class PacketPlayWTCE : public DROPacket
+{
+public:
+  PacketPlayWTCE(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
 #endif

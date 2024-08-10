@@ -94,13 +94,13 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   const QString l_header = p_packet.get_header();
   const QStringList l_content = p_packet.get_content();
 
+  if (l_header != "checkconnection") qDebug().noquote() << "S/R:" << p_packet.to_string();
+
   if(GameManager::get().ProcessIncomingPacket(l_header, l_content))
   {
     return;
   }
 
-  if (l_header != "checkconnection")
-    qDebug().noquote() << "S/R:" << p_packet.to_string();
 
   if (l_header == "decryptor")
   {
@@ -114,6 +114,14 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     m_server_client_version_status = VersionStatus::NotCompatible;
     send_server_packet(DRPacket("HI", {get_hdid()}));
   }
+  else if (l_header == "BD")
+  {
+    call_notice(LocalizationManager::get().getLocalizationText("NOTICE_BANNED_2"));
+  }
+  else if (l_header == "FL")
+  {
+    GameManager::get().setServerFunctions(l_content);
+  }
   else if (l_header == "ID")
   {
     if (l_content.size() < 2)
@@ -123,30 +131,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     m_server_software = l_content.at(1);
 
     send_server_packet(DRPacket("ID", {"DRO", get_version_string()}));
-  }
-  else if (l_header == "FL")
-  {
-    GameManager::get().setServerFunctions(l_content);
-  }
-  else if (l_header == "CT")
-  {
-    if (l_content.size() < 2)
-      return;
-
-    if (is_courtroom_constructed)
-    {
-      QString l_text = l_content.at(1);
-      if (l_content.size() > 2)
-      {
-        QString l_localization = l_content.at(2);
-        QString l_varOne = l_content.at(3);
-        QString l_varTwo = l_content.at(4);
-
-        QString l_localized = LocalizationManager::get().getLocalizationText(l_localization, {l_varOne, l_varTwo});
-        if(!l_localized.isEmpty()) l_text = l_localized;
-      }
-      m_courtroom->append_server_chatmessage(l_content.at(0), l_text);
-    }
   }
   else if (l_header == "client_version")
   {
@@ -175,6 +159,18 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
     m_lobby->set_player_count(l_content.at(0).toInt(), l_content.at(1).toInt());
   }
+  else if (l_header == "DONE")
+  {
+    if (!is_courtroom_constructed)
+      return;
+
+    m_courtroom->done_received();
+    m_server_status = Joined;
+    emit server_status_changed(m_server_status);
+
+    destruct_lobby();
+  }
+  //Everything below here should be moved.
   else if (l_header == "SI")
   {
     if (l_content.size() != 3)
@@ -209,31 +205,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
     dr_discord->set_state(DRDiscord::State::Connected);
     dr_discord->set_server_name(l_current_server.to_info());
-  }
-  else if (l_header == "SC")
-  {
-    if (!is_courtroom_constructed)
-      return;
-
-    QVector<char_type> l_chr_list;
-    for (const QString &i_chr_name : qAsConst(l_content))
-    {
-      char_type l_chr;
-      l_chr.name = i_chr_name;
-      l_chr_list.append(std::move(l_chr));
-    }
-    CharacterManager::get().SetCharList(l_chr_list);
-    m_loaded_characters = m_character_count;
-
-    if (is_lobby_constructed)
-    {
-      m_lobby->set_loading_text("Loading chars:\n" + QString::number(m_loaded_characters) + "/" + QString::number(m_character_count));
-      int total_loading_size = m_character_count + m_evidence_count + m_music_count;
-      int loading_value = (m_loaded_characters / static_cast<double>(total_loading_size)) * 100;
-      m_lobby->set_loading_value(loading_value);
-
-      send_server_packet(DRPacket("RM"));
-    }
   }
   else if (l_header == "SM") // TODO remove block for 1.2.0+
   {
@@ -289,50 +260,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     m_courtroom->write_area_desc();
     AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();
   }
-  else if (l_header == "FA")
-  {
-    if (!is_courtroom_constructed)
-      return;
-    m_courtroom->set_area_list(l_content);
-
-    if (!m_loaded_area_list && is_lobby_constructed)
-    {
-      m_lobby->set_loading_text("Loading areas...");
-    }
-    m_loaded_area_list = true;
-  }
-  else if (l_header == "FM")
-  {
-    if (!is_courtroom_constructed)
-      return;
-    m_courtroom->set_music_list(ScenarioManager::get().ParseMusicList(l_content));
-
-    if (!m_loaded_area_list && is_lobby_constructed)
-    {
-      m_lobby->set_loading_text("Loading music...");
-      send_server_packet(DRPacket("RD"));
-    }
-    m_loaded_music_list = true;
-  }
-  else if (l_header == "DONE")
-  {
-    if (!is_courtroom_constructed)
-      return;
-
-    m_courtroom->done_received();
-    m_server_status = Joined;
-    emit server_status_changed(m_server_status);
-
-    destruct_lobby();
-  }
-  else if (l_header == "chat_tick_rate")
-  {
-    if (l_content.size() < 1)
-      return;
-    if (!is_courtroom_constructed)
-      return;
-    m_courtroom->set_tick_rate(l_content.at(0).toInt());
-  }
   // server accepting char request(CC) packet
   else if (l_header == "PV")
   {
@@ -342,148 +269,9 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (is_courtroom_constructed)
       m_courtroom->set_character_id(l_content.at(2).toInt());
   }
-  else if (l_header == "MS")
-  {
-    if (is_courtroom_constructed && joined_server())
-      m_courtroom->next_chatmessage(l_content);
-  }
   else if (l_header == "ackMS")
   {
     if (is_courtroom_constructed && joined_server())
       m_courtroom->handle_acknowledged_ms();
-  }
-  else if (l_header == "ANI")
-  {
-    if (l_content.size() < 1)
-      return;
-    if (is_courtroom_constructed)
-      m_courtroom->handleAnimation(l_content.at(0));
-  }
-  else if (l_header == "RT")
-  {
-    if (l_content.size() < 1)
-      return;
-    if (is_courtroom_constructed)
-      m_courtroom->handle_wtce(l_content.at(0));
-  }
-  else if (l_header == "KK")
-  {
-    if (is_courtroom_constructed && l_content.size() > 0)
-    {
-      int f_cid = m_courtroom->get_character_id();
-      int remote_cid = l_content.at(0).toInt();
-
-      if (f_cid != remote_cid && remote_cid != -1)
-        return;
-
-      call_notice(LocalizationManager::get().getLocalizationText("NOTICE_KICKED"));
-      leave_server();
-      construct_lobby();
-      destruct_courtroom();
-    }
-  }
-  else if (l_header == "KB")
-  {
-    if (is_courtroom_constructed && l_content.size() > 0)
-      m_courtroom->set_ban(l_content.at(0).toInt());
-  }
-  else if (l_header == "BD")
-  {
-    call_notice(LocalizationManager::get().getLocalizationText("NOTICE_BANNED_2"));
-  }
-  else if (l_header == "ZZ")
-  {
-    if (is_courtroom_constructed && l_content.size() > 0)
-      m_courtroom->mod_called(l_content.at(0));
-  }
-  else if (l_header == "CL")
-  {
-    if (is_courtroom_constructed && l_content.size() > 0)
-      m_courtroom->handle_clock(l_content.at(1));
-  }
-  else if (l_header == "GM")
-  {
-    if (l_content.length() < 1)
-      return;
-    ao_config->set_gamemode(l_content.at(0));
-  }
-  else if (l_header == "TOD")
-  {
-    if (l_content.length() < 1)
-      return;
-    ao_config->set_timeofday(l_content.at(0));
-  }
-  else if (l_header == "TR")
-  {
-    // Timer resume
-    if (l_content.size() != 1)
-      return;
-    if (!is_courtroom_constructed)
-      return;
-    int timer_id = l_content.at(0).toInt();
-    m_courtroom->resume_timer(timer_id);
-  }
-  else if (l_header == "TST")
-  {
-    // Timer set time
-    if (l_content.size() != 2)
-      return;
-    if (!is_courtroom_constructed)
-      return;
-    int timer_id = l_content.at(0).toInt();
-    int new_time = l_content.at(1).toInt();
-    m_courtroom->set_timer_time(timer_id, new_time);
-  }
-  else if (l_header == "TSS")
-  {
-    // Timer set timeStep length
-    if (l_content.size() != 2)
-      return;
-    if (!is_courtroom_constructed)
-      return;
-    int timer_id = l_content.at(0).toInt();
-    int timestep_length = l_content.at(1).toInt();
-    m_courtroom->set_timer_timestep(timer_id, timestep_length);
-  }
-  else if (l_header == "TSF")
-  {
-    // Timer set Firing interval
-    if (l_content.size() != 2)
-      return;
-    if (!is_courtroom_constructed)
-      return;
-    int timer_id = l_content.at(0).toInt();
-    int firing_interval = l_content.at(1).toInt();
-    m_courtroom->set_timer_firing(timer_id, firing_interval);
-  }
-  else if (l_header == "TP")
-  {
-    // Timer pause
-    if (l_content.size() != 1)
-      return;
-    if (!is_courtroom_constructed)
-      return;
-    int timer_id = l_content.at(0).toInt();
-    m_courtroom->pause_timer(timer_id);
-  }
-  else if (l_header == "SP")
-  {
-    // Set position
-    if (l_content.size() != 1)
-      return;
-    if (!is_courtroom_constructed)
-      return;
-    m_courtroom->set_character_position(l_content.at(0));
-  }
-  else if (l_header == "SN")
-  {
-    if (l_content.size() != 1)
-      return;
-    if (!is_courtroom_constructed)
-      return;
-    const QString &l_showname = l_content.at(0);
-    if (ao_config->showname() != l_showname)
-      m_courtroom->ignore_next_showname();
-    ao_config->set_showname(l_showname);
   }
 }

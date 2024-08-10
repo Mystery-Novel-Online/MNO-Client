@@ -207,7 +207,9 @@ public:
   ////// Functions for fonts handling //////
   void load_fonts();
   Courtroom *m_courtroom = nullptr;
+  Lobby *m_lobby = nullptr;
   ReplayScene *mReplayPlayer = nullptr;
+  AOConfig *ao_config = nullptr;
 
 public slots:
   void loading_cancelled();
@@ -223,8 +225,48 @@ public:
   {
     return is_courtroom_constructed;
   }
+
+  bool GetLobbyConstructed()
+  {
+    return is_lobby_constructed;
+  }
+
+  bool GetLoadedAreaList()
+  {
+    return m_loaded_area_list;
+  }
+
+  void SetLoadedAreaList(bool t_loadedAreaList)
+  {
+    m_loaded_area_list = t_loadedAreaList;
+  }
+
+  void SetLoadedMusicList(bool t_loadedMusicList)
+  {
+    m_loaded_music_list = t_loadedMusicList;
+  }
+
+  void SetLoadedCharacterCount(int t_count)
+  {
+    m_loaded_characters = t_count;
+  };
+
+  int GetCharacterCount()
+  {
+    return m_character_count;
+  }
+
+  int GetMusicCount()
+  {
+    return m_music_count;
+  }
+
+  int GetLoadedCharactersCount()
+  {
+    return m_loaded_characters;
+  }
+
 private:
-  AOConfig *ao_config = nullptr;
   AOConfigPanel *ao_config_panel = nullptr;
   DRDiscord *dr_discord = nullptr;
 
@@ -233,7 +275,6 @@ private:
 
   bool isTestingLabsConstructed = false;
 
-  Lobby *m_lobby = nullptr;
   bool is_lobby_constructed = false;
 
   bool is_courtroom_constructed = false;
