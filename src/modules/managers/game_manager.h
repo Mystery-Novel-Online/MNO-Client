@@ -30,6 +30,11 @@ public:
   void StopGameLoop();
   void RestartGameLoop();
 
+  NetworkHandler *GetNetworkHandlerCurrent()
+  {
+    return m_CurrentNetworkHandler;
+  };
+
   bool IsGameLoopRunning()
   {
     return m_IsUpdateRunning;

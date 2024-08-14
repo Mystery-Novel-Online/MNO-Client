@@ -10,6 +10,7 @@ public:
 
 public:
   void GeneratePacketMap();
+  void SendPlayMusic(QString t_Name, int t_CharId);
 };
 
 #endif // NEO_NETWORK_HANDLER_H

@@ -260,3 +260,8 @@ void setThemeFont(QWidget *widget, widgetFontStruct font_data, AOApplication *ao
                                "}";
   widget->setStyleSheet(style_sheet_string);
 }
+
+void ScaleText(DRTextEdit *widget, double l_scale)
+{
+  widget->setFontPointSize(widget->fontPointSize() * l_scale);
+}

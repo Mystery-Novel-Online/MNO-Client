@@ -2383,12 +2383,13 @@ void Courtroom::on_ooc_message_return_pressed()
 {
   const QString l_message = ui_ooc_chat_message->text();
 
-  if (l_message.startsWith("/screenshot"))
+  if(l_message.startsWith("/cameras"))
   {
-    ScenarioManager::get().ScreenshotViewport();
+    m_GMCameraDisplay->show();
+    ui_ooc_chat_message->clear();
     return;
   }
-  else if (l_message.startsWith("/rainbow") && !is_rainbow_enabled)
+  if (l_message.startsWith("/rainbow") && !is_rainbow_enabled)
   {
     ui_text_color->addItem(LocalizationManager::get().getLocalizationText("COLOR_RAINBOW"));
     ui_ooc_chat_message->clear();
@@ -2604,13 +2605,7 @@ void Courtroom::send_mc_packet(QString p_song)
   if (is_client_muted)
     return;
 
-  if(GameManager::get().usesServerFunction("IgnoreTSU"))
-  {
-    ao_app->send_server_packet(DRPacket("MusPly", {p_song, QString::number(m_chr_id)}));
-    return;
-  }
-
-  ao_app->send_server_packet(DRPacket("MC", {p_song, QString::number(m_chr_id)}));
+  GameManager::get().GetNetworkHandlerCurrent()->SendPlayMusic(p_song, m_chr_id);
 }
 
 /**

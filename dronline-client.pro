@@ -138,6 +138,7 @@ HEADERS += \
   src/modules/theme/widgets/dro_line_edit.h \
   src/modules/theme/widgets/droemotebuttons.h \
   src/modules/theme/widgets/tab_toggle_button.h \
+  src/modules/widgets/dro_camera_display.h \
   src/modules/widgets/droviewportwidget.h \
   src/modules/widgets/evidence_entry_button.h \
   src/modules/widgets/evidence_list.h \
@@ -283,6 +284,7 @@ SOURCES += \
   src/modules/theme/widgets/dro_line_edit.cpp \
   src/modules/theme/widgets/droemotebuttons.cpp \
   src/modules/theme/widgets/tab_toggle_button.cpp \
+  src/modules/widgets/dro_camera_display.cpp \
   src/modules/widgets/droviewportwidget.cpp \
   src/modules/widgets/evidence_entry_button.cpp \
   src/modules/widgets/evidence_list.cpp \

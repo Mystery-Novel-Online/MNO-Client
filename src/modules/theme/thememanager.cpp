@@ -200,6 +200,18 @@ void ThemeManager::AutoAdjustWidgetDimensions(QWidget *t_widget, QString t_name,
   t_widget->resize(lPositionData.width, lPositionData.height);
 }
 
+void ThemeManager::AutoAdjustWidgetDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene, double l_ManualResize)
+{
+  pos_size_type lPositionData = mCurrentThemeReader.GetWidgetTransform(t_scene, t_name);
+  lPositionData.width = static_cast<int>(lPositionData.width * l_ManualResize);
+  lPositionData.height = static_cast<int>(lPositionData.height * l_ManualResize);
+  lPositionData.x = static_cast<int>(lPositionData.x * l_ManualResize);
+  lPositionData.y = static_cast<int>(lPositionData.y * l_ManualResize);
+
+  t_widget->move(lPositionData.x, lPositionData.y);
+  t_widget->resize(lPositionData.width, lPositionData.height);
+}
+
 void ThemeManager::RegisterWidgetGenericBulk(QHash<QString, QWidget *> t_WidgetNames)
 {
   m_WidgetNames = t_WidgetNames;

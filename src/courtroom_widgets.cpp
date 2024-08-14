@@ -182,6 +182,10 @@ void Courtroom::create_widgets()
 
   p_DropdownMusicCategory = new QComboBox(this);
 
+  m_GMCameraDisplay = new DROCameraDisplay();
+  m_GMCameraDisplay->SetCameraCount(4, 3);
+
+
   ui_iniswap_dropdown = new QComboBox(this);
   ui_iniswap_dropdown->setInsertPolicy(QComboBox::NoInsert);
   {
@@ -776,6 +780,7 @@ void Courtroom::reset_widget_names()
       {"evidence_present", wEvidencePresent},
       {"chara_animations", wCharaAnimList},
       {"shouts_player", wShoutsLayer},
+      {"camera_display", m_GMCameraDisplay},
       {"screenshot", p_ButtonScreenshot}
   };
 

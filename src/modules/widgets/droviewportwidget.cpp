@@ -5,6 +5,8 @@
 #include <QPropertyAnimation>
 #include <drpather.h>
 #include <mk2/spritecachingreader.h>
+#include <modules/background/background_reader.h>
+#include <modules/background/legacy_background_reader.h>
 #include <modules/theme/thememanager.h>
 #include "aoapplication.h"
 #include "commondefs.h"
@@ -13,9 +15,13 @@
 #include <modules/managers/scene_manager.h>
 #include <modules/managers/variable_manager.h>
 
-DROViewportWidget::DROViewportWidget(QWidget *parent) : DRGraphicsView{parent}
+DROViewportWidget::DROViewportWidget(QWidget *parent, double m_Scale) : DRGraphicsView{parent}
 {
   m_AOApp = AOApplication::getInstance();
+  m_ViewportScale = m_Scale;
+
+  m_ViewportWidth = 960 * m_ViewportScale;
+  m_ViewportHeight = 544 * m_ViewportScale;
 }
 
 void DROViewportWidget::ConstructViewport(ThemeSceneType t_scene)
@@ -103,7 +109,7 @@ void DROViewportWidget::TransitionAnimate()
 void DROViewportWidget::ConstructUserInterface()
 {
   m_UserInterface = new DRGraphicsView(this);
-  m_UserInterface->resize(960, 544);
+  m_UserInterface->resize(m_ViewportWidth, m_ViewportHeight);
 
   m_UserInterface->setStyleSheet("background: transparent;");
   m_UserInterface->setBackgroundBrush(Qt::transparent);
@@ -121,6 +127,7 @@ void DROViewportWidget::ConstructUserInterface()
     m_UserInterface->scene()->addItem(l_uiObject);
     l_uiObject->show();
     l_uiObject->set_file_name(m_AOApp->find_theme_asset_path("vp_" + r_name + ".png"));
+    //l_uiObject->setScale(m_ViewportScale);
     l_uiObject->start();
     m_UserInterfaceObjects[r_name] = l_uiObject;
   }
@@ -130,7 +137,7 @@ void DROViewportWidget::ConstructUserInterface()
   ConstructText();
 
   m_ShoutsPlayer = new KeyframePlayer(this);
-  m_ShoutsPlayer->resize(960, 544);
+  m_ShoutsPlayer->resize(m_ViewportWidth, m_ViewportHeight);
   connect(m_ShoutsPlayer, SIGNAL(ShoutAnimationFinished()), this, SLOT(OnObjectionDone()));
 
 }
@@ -138,7 +145,7 @@ void DROViewportWidget::ConstructUserInterface()
 void DROViewportWidget::ConstructText()
 {
   m_TextMessage = new TypewriterTextEdit(this);
-  ThemeManager::get().AutoAdjustWidgetDimensions(m_TextMessage, "message", SceneTypeViewport);
+  ThemeManager::get().AutoAdjustWidgetDimensions(m_TextMessage, "message", SceneTypeViewport, m_ViewportScale);
   m_TextMessage->setFrameStyle(QFrame::NoFrame);
   m_TextMessage->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   m_TextMessage->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -147,22 +154,25 @@ void DROViewportWidget::ConstructText()
   set_drtextedit_font(m_TextMessage, "message", VIEWPORT_FONTS_INI, m_AOApp);
 
   m_TextShowname = new DRTextEdit();
-  ThemeManager::get().AutoAdjustWidgetDimensions(m_TextShowname, "showname", SceneTypeViewport);
+  ThemeManager::get().AutoAdjustWidgetDimensions(m_TextShowname, "showname", SceneTypeViewport, m_ViewportScale);
   m_TextShowname->setFrameStyle(QFrame::NoFrame);
   m_TextShowname->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   m_TextShowname->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   m_TextShowname->setReadOnly(true);
   set_drtextedit_font(m_TextShowname, "showname", VIEWPORT_FONTS_INI, m_AOApp);
+  ScaleText(m_TextShowname, m_ViewportScale);
+  ScaleText(m_TextMessage, m_ViewportScale);
 
 
   QGraphicsProxyWidget* pProxy = m_UserInterface->scene()->addWidget(m_TextShowname);
 
   WidgetThemeData * l_shownameData = ThemeManager::get().mCurrentThemeReader.GetWidgetData(SceneTypeViewport, "showname");
 
+
   if(l_shownameData != nullptr)
   {
     pProxy->setRotation(l_shownameData->Rotation);
-    pProxy->setPos(l_shownameData->Transform.x, l_shownameData->Transform.y);
+    pProxy->setPos(l_shownameData->Transform.x * m_ViewportScale, l_shownameData->Transform.y * m_ViewportScale);
   }
   pProxy->show();
 }
@@ -227,9 +237,32 @@ void DROViewportWidget::PlaySplashAnimation(QString t_name)
 
 }
 
+void DROViewportWidget::SetBackground(QString t_background)
+{
+  m_CurrentBackground = t_background;
+
+
+  const QString l_backgroundJSONPath = m_AOApp->find_asset_path(AOApplication::getInstance()->get_background_path(m_CurrentBackground) + "/" + "background.json");
+  if(file_exists(l_backgroundJSONPath))
+  {
+    p_BackgroundCurrent = new BackgroundReader();
+  }
+  else
+  {
+    p_BackgroundCurrent = new LegacyBackgroundReader();
+  }
+
+  p_BackgroundCurrent->execLoadBackground(m_CurrentBackground);
+
+  UpdateBackground("wit");
+}
+
 void DROViewportWidget::UpdateBackground(QString t_position)
 {
-  m_VpBackground->set_file_name(SceneManager::get().getBackgroundPath(t_position));
+
+  if(p_BackgroundCurrent == nullptr) return;
+  QString l_filename = p_BackgroundCurrent->getBackgroundFilename(t_position);
+  m_VpBackground->set_file_name(m_AOApp->get_background_sprite_path(m_CurrentBackground, l_filename));
   m_VpBackground->start();
 }
 

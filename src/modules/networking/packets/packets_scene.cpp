@@ -156,3 +156,32 @@ void PacketPlayWTCE::HandleIncoming(QStringList t_Contents)
 {
   AOApplication::getInstance()->m_courtroom->handle_wtce(t_Contents.at(0));
 }
+
+void PacketCamera::HandleIncoming(QStringList t_Contents)
+{
+  bool l_ValidID = false;
+  int l_CameraID = t_Contents.at(0).toInt(&l_ValidID);
+
+  if(!l_ValidID) return;
+
+  DROCameraDisplay * l_CameraDisplay = ThemeManager::get().GetWidgetType<DROCameraDisplay>("camera_display");
+
+  if(l_CameraDisplay == nullptr) return;
+
+  QString l_PacketData = QString::fromUtf8(QByteArray::fromBase64(t_Contents.at(1).toUtf8()));
+  QStringList l_MessageData = l_PacketData.split('#');
+
+  qDebug() << l_PacketData;
+  if(l_MessageData.at(0) == "MS")
+  {
+    l_MessageData.removeFirst();
+    ICMessageData *l_Message = new ICMessageData(l_MessageData, false);
+    l_CameraDisplay->ProcessMessage(l_CameraID, l_Message);
+  }
+  else if(l_MessageData.at(0) == "SCENE")
+  {
+    l_MessageData.removeFirst();
+    l_CameraDisplay->SetCameraBackground(l_CameraID, l_MessageData.at(1));
+    //l_CameraDisplay->ProcessMessage(l_CameraID, l_Message);
+  }
+}

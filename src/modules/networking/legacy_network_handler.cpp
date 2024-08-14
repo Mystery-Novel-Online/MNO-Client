@@ -6,6 +6,8 @@
 #include <modules/networking/packets/packets_scene.h>
 #include <modules/networking/packets/packets_timer.h>
 
+#include <aoapplication.h>
+
 
 LegacyNetworkHandler::LegacyNetworkHandler()
 {
@@ -51,4 +53,9 @@ void LegacyNetworkHandler::GeneratePacketMap()
 
 
 
+}
+
+void LegacyNetworkHandler::SendPlayMusic(QString t_Name, int t_CharId)
+{
+  AOApplication::getInstance()->send_server_packet(DRPacket("MC", {t_Name, QString::number(t_CharId)}));
 }

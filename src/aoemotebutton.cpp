@@ -7,6 +7,7 @@
 #include <QHelpEvent>
 #include <QImage>
 #include <QLabel>
+#include <QMenu>
 #include <QPaintEvent>
 #include <QPainter>
 #include <modules/managers/character_manager.h>
@@ -15,6 +16,10 @@ AOEmoteButton::AOEmoteButton(QWidget *p_parent, AOApplication *p_ao_app, int p_x
     : QPushButton(p_parent)
 {
   ao_app = p_ao_app;
+  this->setContextMenuPolicy(Qt::CustomContextMenu);
+
+  p_ContextMenu = new QMenu(this);
+  p_ActionUpdateEmotion = p_ContextMenu->addAction(tr("Swap Emotion"));
 
   this->move(p_x, p_y);
   this->resize((int)((float)40 * ThemeManager::get().GetResizeClient()), (int)((float)40 * ThemeManager::get().GetResizeClient()));
@@ -25,6 +30,8 @@ AOEmoteButton::AOEmoteButton(QWidget *p_parent, AOApplication *p_ao_app, int p_x
   ui_selected->hide();
 
   connect(this, &QAbstractButton::clicked, this, &AOEmoteButton::on_clicked);
+  connect(p_ActionUpdateEmotion, &QAction::triggered, this, &AOEmoteButton::OnUpdateEmotionClicked);
+  connect(this, &QWidget::customContextMenuRequested, this, &AOEmoteButton::OnContextMenuRequested);
 }
 
 void AOEmoteButton::set_emote_number(int p_emote_number)
@@ -115,5 +122,16 @@ bool AOEmoteButton::event(QEvent *event)
   }
 
   return QPushButton::event(event);
+}
+
+void AOEmoteButton::OnContextMenuRequested(QPoint p_point)
+{
+  const QPoint l_global_point = this->mapToGlobal(p_point);
+  p_ContextMenu->popup(l_global_point);
+}
+
+void AOEmoteButton::OnUpdateEmotionClicked()
+{
+
 }
 

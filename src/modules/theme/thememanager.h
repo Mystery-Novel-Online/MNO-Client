@@ -38,6 +38,7 @@ public:
   void AdjustWidgetTransform(QWidget *t_widget, int x, int y);
   void AdjustWidgetDimensions(QWidget *t_widget, int t_width, int t_height);
   void AutoAdjustWidgetDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene);
+  void AutoAdjustWidgetDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene, double l_ManualResize);
 
   //Widgets
   void RegisterWidgetGenericBulk(QHash<QString, QWidget *> t_WidgetNames);

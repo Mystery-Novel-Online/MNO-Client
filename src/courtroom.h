@@ -68,6 +68,7 @@ class QLabel;
 #include <modules/theme/widgets/dro_line_edit.h>
 #include <modules/theme/widgets/droemotebuttons.h>
 
+#include <modules/widgets/dro_camera_display.h>
 #include <modules/widgets/keyframe_player.h>
 #include <modules/widgets/rpnotifymenu.h>
 #include <modules/widgets/viewport_overlay.h>
@@ -446,6 +447,7 @@ private:
   DRSceneMovie *ui_vp_background = nullptr;
 
   DROViewportWidget *m_ViewportVerTwo = nullptr;
+  DROCameraDisplay *m_GMCameraDisplay = nullptr;
 
   GraphicObjectAnimator *aniPlayerChar = nullptr;
   DRCharacterMovie *ui_vp_player_char = nullptr;

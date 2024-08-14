@@ -122,4 +122,10 @@ public:
   void HandleIncoming(QStringList t_Contents);
 };
 
+class PacketCamera : public DROPacket
+{
+public:
+  PacketCamera(){};
+  void HandleIncoming(QStringList t_Contents);
+};
 #endif

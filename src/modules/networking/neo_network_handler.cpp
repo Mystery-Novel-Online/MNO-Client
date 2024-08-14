@@ -6,14 +6,19 @@
 #include <modules/networking/packets/packets_scene.h>
 #include <modules/networking/packets/packets_timer.h>
 
+#include <aoapplication.h>
+
 NeoNetworkHandler::NeoNetworkHandler()
 {
 }
 
 void NeoNetworkHandler::GeneratePacketMap()
 {
-  RegisterPacket("MC", new PacketPlayMusic());
+
   RegisterPacket("SCENE", new NeoPacketScene());
+  RegisterPacket("CAM", new PacketCamera(), true, 2);
+
+  RegisterPacket("MC", new PacketPlayMusic());
   RegisterPacket("joined_area", new PacketJoinedArea(), true);
   RegisterPacket("area_ambient", new PacketAreaAmbience(), true, 1);
   RegisterPacket("WEA", new PacketAreaWeather(), true, 1);
@@ -47,4 +52,9 @@ void NeoNetworkHandler::GeneratePacketMap()
   RegisterPacket("KB", new PacketKickBanned(), true, 1);
   RegisterPacket("KK", new PacketKicked(), true, 1);
   RegisterPacket("SC", new PacketCharaList(), true);
+}
+
+void NeoNetworkHandler::SendPlayMusic(QString t_Name, int t_CharId)
+{
+  AOApplication::getInstance()->send_server_packet(DRPacket("MusPly", {t_Name, QString::number(t_CharId)}));
 }

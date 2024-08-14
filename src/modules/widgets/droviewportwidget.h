@@ -17,11 +17,13 @@
 
 #include <aolabel.h>
 
+#include <modules/background/background_data.h>
+
 class DROViewportWidget : public DRGraphicsView
 {
   Q_OBJECT
 public:
-  explicit DROViewportWidget(QWidget *parent = nullptr);
+  explicit DROViewportWidget(QWidget *parent = nullptr, double m_Scale = 1);
   void ConstructViewport(ThemeSceneType t_scene);
   void ProcessIncomingMessage(ICMessageData *t_IncomingMessage);
 
@@ -41,6 +43,7 @@ public:
   void PlaySplashAnimation(QString t_name);
 
   //Visual Updates
+  void SetBackground(QString t_background = "Blackout_HD");
   void UpdateBackground(QString t_position = "wit");
 
   bool isPlayingAnimation()
@@ -89,6 +92,15 @@ private:
   //Transition
   AOLabel *m_WidgetTransition = nullptr;
   int m_FadeDuration = 500;
+  BackgroundData *p_BackgroundCurrent = nullptr;
+  QString m_CurrentBackground = "Blackout_HD";
+
+  //Resolution
+  int m_ViewportWidth = 960;
+  int m_ViewportHeight = 544;
+  double m_ViewportScale = 1;
+
+
 };
 
 #endif // DROVIEWPORTWIDGET_H

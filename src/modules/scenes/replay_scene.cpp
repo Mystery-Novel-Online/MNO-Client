@@ -55,8 +55,7 @@ void ReplayScene::setMsgOperation(QMap<QString, QString> t_vars)
 
 void ReplayScene::setBackground(QString t_name)
 {
-  SceneManager::get().execLoadPlayerBackground(t_name);
-  m_Viewport->UpdateBackground("wit");
+  m_Viewport->SetBackground(t_name);
 }
 
 void ReplayScene::setWeather(QString t_weather)
