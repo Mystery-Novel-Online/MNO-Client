@@ -142,6 +142,7 @@ HEADERS += \
   src/modules/widgets/droviewportwidget.h \
   src/modules/widgets/evidence_entry_button.h \
   src/modules/widgets/evidence_list.h \
+  src/modules/widgets/investigation_display.h \
   src/modules/widgets/keyframe_player.h \
   src/modules/widgets/replay_hover_controller.h \
   src/modules/widgets/rpnotifymenu.h \
@@ -288,6 +289,7 @@ SOURCES += \
   src/modules/widgets/droviewportwidget.cpp \
   src/modules/widgets/evidence_entry_button.cpp \
   src/modules/widgets/evidence_list.cpp \
+  src/modules/widgets/investigation_display.cpp \
   src/modules/widgets/keyframe_player.cpp \
   src/modules/widgets/replay_hover_controller.cpp \
   src/modules/widgets/rpnotifymenu.cpp \

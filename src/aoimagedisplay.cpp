@@ -22,19 +22,28 @@ QString AOImageDisplay::get_image()
   return m_image;
 }
 
-void AOImageDisplay::set_image(QString p_image)
+void AOImageDisplay::set_image(QString p_image, bool t_forceRefresh)
 {
+  if(!t_forceRefresh)
+  {
+    if(m_image == p_image) return;
+  }
   m_image = p_image;
   refreshImage();
 }
 
 void AOImageDisplay::refreshImage()
 {
+  if(m_Pixmap != nullptr)
+  {
+    delete m_Pixmap;
+    m_Pixmap = nullptr;
+  }
   if(!ThemeManager::get().mCurrentThemeReader.IsPixmapExist(m_image))
   {
     qDebug() << "[AOPixmap] Failed to find in theme, loading manually: " + m_image;
-    AOPixmap l_pixmap(m_image);
-    setPixmap(l_pixmap.scale(size()));
+    m_Pixmap = new AOPixmap(m_image);
+    setPixmap(m_Pixmap->scale(size()));
   }
   else
   {
@@ -70,4 +79,21 @@ void AOImageDisplay::set_chatbox_image(QString p_chatbox_name, bool p_is_self)
     qWarning() << "warning: could not retrieve any chatbox image, will display blank";
   }
   set_image(l_target_file);
+}
+
+void AOImageDisplay::SetImageBase(QString l_path)
+{
+  if(m_Pixmap == nullptr)
+  {
+    m_Pixmap = new AOPixmap();
+  };
+  m_Pixmap->SetAlphaBase(l_path);
+  setPixmap(m_Pixmap->scale(size()));
+}
+
+void AOImageDisplay::UpdateMaskPosition(int x, int y)
+{
+  if(m_Pixmap == nullptr) return;
+  m_Pixmap->UpdateAlphaCords(x, y);
+  setPixmap(m_Pixmap->scale(size()));
 }

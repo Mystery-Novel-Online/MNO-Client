@@ -86,6 +86,19 @@ pos_size_type JSONReader::getPositionData(QString string)
   return lReturnValue;
 }
 
+QRect JSONReader::getRectangleValue(QString string)
+{
+  QRect l_ReturnValue;
+  if(mTargetObject.contains(string))
+  {
+    l_ReturnValue.setX(mTargetObject.value(string).toObject().value("x").toInt());
+    l_ReturnValue.setY(mTargetObject.value(string).toObject().value("y").toInt());
+    l_ReturnValue.setWidth(mTargetObject.value(string).toObject().value("width").toInt());
+    l_ReturnValue.setHeight(mTargetObject.value(string).toObject().value("height").toInt());
+  }
+  return l_ReturnValue;
+}
+
 VariableMappedString JSONReader::getVarMappedString(QString t_fallback)
 {
 

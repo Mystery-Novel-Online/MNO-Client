@@ -94,7 +94,11 @@ void Courtroom::create_widgets()
 #endif
 
   ui_viewport = new DRGraphicsView(this);
+  p_WidgetInvestigate = new ViewportInvestigationDisplay(this, ao_app);
+  p_WidgetInvestigate->UpdateAlpha(AOApplication::getInstance()->find_theme_asset_path("cursor_alpha.png"), 0, 0);
+
   wShoutsLayer = new KeyframePlayer(this);
+  wShoutsLayer->setAttribute(Qt::WA_TransparentForMouseEvents);
 
   SceneManager::get().CreateTransition(this, ao_app, ui_viewport);
 
@@ -579,6 +583,7 @@ void Courtroom::connect_widgets()
 
 
   //Evidence List
+  connect(p_WidgetInvestigate, &ViewportInvestigationDisplay::InteractionClicked, this, &Courtroom::OnInteractionClicked);
   connect(wEvidenceLeft, SIGNAL(clicked()), this, SLOT(onEvidenceLeftClicked()));
   connect(wEvidenceRight, SIGNAL(clicked()), this, SLOT(onEvidenceRightClicked()));
   connect(wEvidencePresent, SIGNAL(clicked()), this, SLOT(onEvidencePresentClicked()));
@@ -779,6 +784,7 @@ void Courtroom::reset_widget_names()
       {"evidence_right", wEvidenceRight},
       {"evidence_present", wEvidencePresent},
       {"chara_animations", wCharaAnimList},
+      {"investigate_display", p_WidgetInvestigate},
       {"shouts_player", wShoutsLayer},
       {"camera_display", m_GMCameraDisplay},
       {"screenshot", p_ButtonScreenshot}
@@ -1041,6 +1047,7 @@ void Courtroom::set_widgets()
   TimeDebugger::get().CheckpointTimer("Courtroom Setup", "SetWidget-ComboBox");
 
   setupWidgetElement(ui_viewport, "viewport");
+  setupWidgetElement(p_WidgetInvestigate, "viewport");
   setupWidgetElement(wShoutsLayer, "viewport");
 
   setupWidgetElement(SceneManager::get().GetTransition(), "viewport");

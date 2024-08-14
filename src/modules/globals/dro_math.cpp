@@ -60,3 +60,9 @@ int CalcMaximumEntries(int t_dimensionsHeight, int t_entryHeight, int t_spacing)
 {
   return t_dimensionsHeight / (t_entryHeight + t_spacing);
 };
+
+QString Base64ToString(QString t_value)
+{
+  QString l_returnData = QString::fromUtf8(QByteArray::fromBase64(t_value.toUtf8()));
+  return l_returnData;
+}

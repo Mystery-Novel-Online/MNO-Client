@@ -128,4 +128,11 @@ public:
   PacketCamera(){};
   void HandleIncoming(QStringList t_Contents);
 };
+
+class PacketInvestigation : public DROPacket
+{
+public:
+  PacketInvestigation(){};
+  void HandleIncoming(QStringList t_Contents);
+};
 #endif

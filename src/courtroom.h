@@ -436,6 +436,7 @@ private:
 
   AOImageDisplay *ui_background = nullptr;
 
+  ViewportInvestigationDisplay *p_WidgetInvestigate = nullptr;
   KeyframePlayer *wShoutsLayer = nullptr;
   DRGraphicsView *ui_viewport = nullptr;
   QPropertyAnimation *background_anim = nullptr;
@@ -899,6 +900,9 @@ private slots:
   void on_spectator_clicked();
   void OnCharRefreshClicked();
   void OnCharRandomClicked();
+
+  //Investigation
+  void OnInteractionClicked(InvestigationObject * t_Interaction);
 
   //Player List
 

@@ -1,4 +1,5 @@
 #include "scenetestinglabs.h"
+#include <aoimagedisplay.h>
 
 
 SceneTestingLabs::SceneTestingLabs(QWidget *parent) : QWidget{parent}
@@ -36,11 +37,18 @@ void SceneTestingLabs::ConstructWidgets()
   connect(m_PlayAnimationButton, &QAbstractButton::clicked, this, &SceneTestingLabs::OnPlayAnimationClicked);
 
 
-
+  //Investigation Testing
+  m_InvestigationBackground = new ViewportInvestigationDisplay(this, AOApplication::getInstance());
+  ThemeManager::get().AutoAdjustWidgetDimensions(m_InvestigationBackground, "viewport", SceneTypeReplays);
+  m_InvestigationBackground->SetImageBase("invest.png");
+  m_InvestigationBackground->UpdateAlpha("invest_alpha.png", 600, 100);
+  //
 }
 
 void SceneTestingLabs::OnPlayAnimationClicked()
 {
   m_Viewport->ToggleChatbox(false);
   m_Viewport->PlayShoutAnimation("consent");
+  //m_InvestigationBackground->set_image("invest.png");
+  //m_InvestigationBackground->UpdateAlpha("invest_alpha.png", 200, 100);
 }

@@ -1149,6 +1149,8 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
 
   { // backgrounds
     DRPosition l_position = m_position_map.get_position(l_position_id);
+    p_WidgetInvestigate->SetImageBase(SceneManager::get().getBackgroundPath(l_position_id));
+
     l_file_list.insert(ViewportStageBack, SceneManager::get().getBackgroundPath(l_position_id));
     l_file_list.insert(ViewportStageFront, SceneManager::get().getForegroundPath(l_position_id));
 
@@ -3011,6 +3013,12 @@ void Courtroom::OnCharRandomClicked()
 
   ao_app->send_server_packet(
       DRPacket("CC", {QString::number(ao_app->get_client_id()), QString::number(n_real_char), "HDID"}));
+}
+
+void Courtroom::OnInteractionClicked(InvestigationObject *t_Interaction)
+{
+  AudioManager::get().PlaySFX("cursor_click");
+  ui_ooc_chatlog->append_chatmessage("[Object]", "== " + t_Interaction->GetObjectName() + " ==\nDescription: " + t_Interaction->GetDescription());
 }
 
 void Courtroom::onEvidenceLeftClicked()

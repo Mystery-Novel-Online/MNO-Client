@@ -50,6 +50,7 @@ void LegacyNetworkHandler::GeneratePacketMap()
   RegisterPacket("KB", new PacketKickBanned(), true, 1);
   RegisterPacket("KK", new PacketKicked(), true, 1);
   RegisterPacket("SC", new PacketCharaList(), true);
+  RegisterPacket("INVES", new PacketInvestigation(), true, 1);
 
 
 

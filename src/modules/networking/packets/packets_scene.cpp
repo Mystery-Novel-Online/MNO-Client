@@ -3,6 +3,8 @@
 #include <modules/managers/variable_manager.h>
 #include "courtroom.h"
 #include <aoapplication.h>
+#include <modules/globals/dro_math.h>
+#include <modules/widgets/investigation_display.h>
 
 void PacketScene::HandleIncoming(QStringList t_Contents)
 {
@@ -168,7 +170,8 @@ void PacketCamera::HandleIncoming(QStringList t_Contents)
 
   if(l_CameraDisplay == nullptr) return;
 
-  QString l_PacketData = QString::fromUtf8(QByteArray::fromBase64(t_Contents.at(1).toUtf8()));
+
+  QString l_PacketData = Base64ToString(t_Contents.at(1));
   QStringList l_MessageData = l_PacketData.split('#');
 
   qDebug() << l_PacketData;
@@ -184,4 +187,33 @@ void PacketCamera::HandleIncoming(QStringList t_Contents)
     l_CameraDisplay->SetCameraBackground(l_CameraID, l_MessageData.at(1));
     //l_CameraDisplay->ProcessMessage(l_CameraID, l_Message);
   }
+}
+
+void PacketInvestigation::HandleIncoming(QStringList t_Contents)
+{
+
+  ViewportInvestigationDisplay * l_InvestigationUI = ThemeManager::get().GetWidgetType<ViewportInvestigationDisplay>("investigate_display");
+  if(l_InvestigationUI == nullptr) return;
+  l_InvestigationUI->ClearObjects();
+  QString l_PacketData = Base64ToString(t_Contents.at(0));
+  JSONReader l_InvestigationJson = JSONReader();
+  l_InvestigationJson.ReadFromString(l_PacketData);
+
+
+  for (const QJsonValue &value : l_InvestigationJson.mDocument.array())
+  {
+    if (value.isObject())
+    {
+      l_InvestigationJson.SetTargetObject(value.toObject());
+      QString l_ObjName = l_InvestigationJson.getStringValue("name");
+      QString l_ObjDesc = l_InvestigationJson.getStringValue("desc");
+      QRect l_ObjRect = l_InvestigationJson.getRectangleValue("rect");
+
+      InvestigationObject *l_NewObject = new InvestigationObject(l_ObjName, l_ObjRect);
+      l_NewObject->SetDescription(l_ObjDesc);
+      l_InvestigationUI->AddObject(l_NewObject);
+
+    }
+  }
+
 }
