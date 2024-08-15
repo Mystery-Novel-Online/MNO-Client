@@ -7,6 +7,7 @@
 #include <QObject>
 #include <QWidget>
 #include <aoimagedisplay.h>
+#include <drtextedit.h>
 #include <qpainter.h>
 #include <modules/managers/audio_manager.h>
 
@@ -107,13 +108,14 @@ protected:
       if(m_CurrentObject != nullptr)
       {
         emit InteractionClicked(m_CurrentObject);
+        m_NameDisplay->hide();
       }
     }
     else if (event->button() == Qt::RightButton)
     {
       if(l_InvestigationActive)
       {
-        UpdateAlpha(150);
+        UpdateAlpha(190);
       }
     }
   }
@@ -137,9 +139,11 @@ private slots:
         {
           if(m_CurrentObject == nullptr)
           {
+            m_NameDisplay->show();
             AudioManager::get().PlaySFX("cursor_hover");
           }
           m_CurrentObject = r_object;
+          m_NameText->setText(m_CurrentObject->GetObjectName());
           break;
         }
       }
@@ -150,8 +154,12 @@ private slots:
       }
       else
       {
-        m_CurrentObject = nullptr;
-        m_CursorOverlay->set_image(AOApplication::getInstance()->find_theme_asset_path("cursor_idle.png"), false);
+        if(m_CurrentObject != nullptr)
+        {
+          m_CurrentObject = nullptr;
+          m_NameDisplay->hide();
+          m_CursorOverlay->set_image(AOApplication::getInstance()->find_theme_asset_path("cursor_idle.png"), false);
+        }
       }
 
       m_CursorOverlay->move(l_PositionX, l_PositionY);
@@ -164,6 +172,9 @@ private:
   QPoint m_LastMousePosition;
 
   AOImageDisplay *m_CursorOverlay = nullptr;
+  AOImageDisplay *m_NameDisplay = nullptr;
+  DRTextEdit *m_NameText = nullptr;
+
   QList<InvestigationObject *> m_AreaObjects = {};
   InvestigationObject *m_CurrentObject = nullptr;
 
