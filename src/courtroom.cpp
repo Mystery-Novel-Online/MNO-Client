@@ -1149,7 +1149,7 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
 
   { // backgrounds
     DRPosition l_position = m_position_map.get_position(l_position_id);
-    p_WidgetInvestigate->SetImageBase(SceneManager::get().getBackgroundPath(l_position_id));
+    p_WidgetInvestigate->SetImageBase(SceneManager::get().getBackgroundPath(l_position_id), 0);
 
     l_file_list.insert(ViewportStageBack, SceneManager::get().getBackgroundPath(l_position_id));
     l_file_list.insert(ViewportStageFront, SceneManager::get().getForegroundPath(l_position_id));
@@ -3018,6 +3018,32 @@ void Courtroom::OnCharRandomClicked()
 void Courtroom::OnInteractionClicked(InvestigationObject *t_Interaction)
 {
   AudioManager::get().PlaySFX("cursor_click");
+
+
+  if(SceneManager::get().mPlayerDataList.count() == 0)
+  {
+    m_CurrentMessageData = SceneManager::get().ProcessIncomingMessage({});
+
+    m_CurrentMessageData->m_CharacterServerId = SpectatorId;
+    m_CurrentMessageData->m_HideCharacter = true;
+    m_CurrentMessageData->m_ClientId = SpectatorId;
+    m_CurrentMessageData->m_AreaPosition = "wit";
+    m_CurrentMessageData->m_ShowName = t_Interaction->GetObjectName();
+    m_CurrentMessageData->m_MessageContents = t_Interaction->GetDescription();
+
+    if(GameManager::get().usesServerFunction("v2"))
+    {
+      next_chatmessage(m_CurrentMessageData->PacketContents());
+    }
+    else
+    {
+      next_chatmessage(m_CurrentMessageData->LegacyPacketContents());
+    }
+
+    return;
+  }
+
+
   ui_ooc_chatlog->append_chatmessage("[Object]", "== " + t_Interaction->GetObjectName() + " ==\nDescription: " + t_Interaction->GetDescription());
 }
 

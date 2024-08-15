@@ -40,8 +40,8 @@ void SceneTestingLabs::ConstructWidgets()
   //Investigation Testing
   m_InvestigationBackground = new ViewportInvestigationDisplay(this, AOApplication::getInstance());
   ThemeManager::get().AutoAdjustWidgetDimensions(m_InvestigationBackground, "viewport", SceneTypeReplays);
-  m_InvestigationBackground->SetImageBase("invest.png");
-  m_InvestigationBackground->UpdateAlpha("invest_alpha.png", 600, 100);
+  m_InvestigationBackground->SetImageBase("invest.png", 0);
+  m_InvestigationBackground->UpdateAlpha(255);
   //
 }
 

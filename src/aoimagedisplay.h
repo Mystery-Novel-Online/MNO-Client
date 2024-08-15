@@ -18,25 +18,28 @@ public:
   void set_theme_image(QString p_image);
   void set_chatbox_image(QString p_chatbox_name, bool p_is_self);
 
-  void SetImageBase(QString l_path);
+  void SetImageBase(QString l_path, int l_level);
 
-  void UpdateAlpha(QString l_path, int x, int y)
+  void UpdateAlpha(int l_AlphaLevel)
   {
+    if(m_alphaLevel == l_AlphaLevel) return;
     if(m_Pixmap == nullptr)
     {
       m_Pixmap = new AOPixmap();
     };
-    m_Pixmap->SetAlphaMask(l_path, x, y);
+    m_Pixmap->SetAlphaMask(l_AlphaLevel);
+    m_alphaLevel = l_AlphaLevel;
     setPixmap(m_Pixmap->scale(size()));
   };
 
-  void UpdateMaskPosition(int x, int y);
 
 private:
   AOApplication *ao_app = nullptr;
   AOPixmap *m_Pixmap = nullptr;
 
   QString m_image;
+
+  int m_alphaLevel = 255;
 };
 
 #endif // AOIMAGEDISPLAY_H

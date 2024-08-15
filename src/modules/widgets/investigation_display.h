@@ -35,12 +35,12 @@ public:
     return m_Description;
   }
 
-  bool CheckCollision(int x, int y)
+  bool CheckCollision(int x, int y, double t_scale)
   {
-    if(x < m_Rect.x()) return false;
-    if(y < m_Rect.y()) return false;
-    if(x > (m_Rect.x() + m_Rect.width())) return false;
-    if(y > (m_Rect.y() + m_Rect.height())) return false;
+    if(x < (m_Rect.x() * t_scale)) return false;
+    if(y < (m_Rect.y() * t_scale)) return false;
+    if(x > ((m_Rect.x() * t_scale) + (m_Rect.width() * t_scale))) return false;
+    if(y > ((m_Rect.y() * t_scale) + (m_Rect.height() * t_scale))) return false;
 
     return true;
   }
@@ -96,8 +96,8 @@ protected:
   {
     setCursor(Qt::ArrowCursor);
     l_InvestigationActive = false;
-    UpdateMaskPosition(9999, 9999);
     m_CursorOverlay->move(9999, 9999);
+    UpdateAlpha(0);
   }
 
   void mousePressEvent(QMouseEvent *event) override
@@ -107,6 +107,13 @@ protected:
       if(m_CurrentObject != nullptr)
       {
         emit InteractionClicked(m_CurrentObject);
+      }
+    }
+    else if (event->button() == Qt::RightButton)
+    {
+      if(l_InvestigationActive)
+      {
+        UpdateAlpha(150);
       }
     }
   }
@@ -119,12 +126,13 @@ private slots:
   {
     if (l_InvestigationActive)
     {
+      double scaleFactor = static_cast<double>(this->width()) / static_cast<double>(960);
       int l_PositionX = m_LastMousePosition.x() - 30;
       int l_PositionY = m_LastMousePosition.y() - 30;
       bool l_FoundHighlight = false;
       for(InvestigationObject * r_object: m_AreaObjects)
       {
-        l_FoundHighlight = r_object->CheckCollision(m_LastMousePosition.x(), m_LastMousePosition.y());
+        l_FoundHighlight = r_object->CheckCollision(m_LastMousePosition.x(), m_LastMousePosition.y(), scaleFactor);
         if(l_FoundHighlight == true)
         {
           if(m_CurrentObject == nullptr)
@@ -146,7 +154,6 @@ private slots:
         m_CursorOverlay->set_image(AOApplication::getInstance()->find_theme_asset_path("cursor_idle.png"), false);
       }
 
-      UpdateMaskPosition(l_PositionX, l_PositionY);
       m_CursorOverlay->move(l_PositionX, l_PositionY);
     }
   }

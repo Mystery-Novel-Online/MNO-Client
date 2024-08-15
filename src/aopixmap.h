@@ -15,15 +15,13 @@ public:
   QPixmap scale(QSize p_size);
   QPixmap scale_to_height(QSize p_size);
 
-  void SetAlphaMask(QString l_path, int x, int y);
-  void SetAlphaBase(QString l_path);
-  void UpdateAlphaCords(int x, int y);
+  void SetAlphaMask(int t_level);
+  void SetAlphaBase(QString l_path, int t_level);
 
 private:
   QPixmap m_pixmap;
   QPixmap m_AlphaBase;
-  QBitmap m_AlphaMaskImage;
-  QBitmap m_AlphaMaskFilled;
+
 };
 
 #endif

@@ -95,7 +95,7 @@ void Courtroom::create_widgets()
 
   ui_viewport = new DRGraphicsView(this);
   p_WidgetInvestigate = new ViewportInvestigationDisplay(this, ao_app);
-  p_WidgetInvestigate->UpdateAlpha(AOApplication::getInstance()->find_theme_asset_path("cursor_alpha.png"), 0, 0);
+  p_WidgetInvestigate->UpdateAlpha(255);
 
   wShoutsLayer = new KeyframePlayer(this);
   wShoutsLayer->setAttribute(Qt::WA_TransparentForMouseEvents);

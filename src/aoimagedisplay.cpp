@@ -81,19 +81,14 @@ void AOImageDisplay::set_chatbox_image(QString p_chatbox_name, bool p_is_self)
   set_image(l_target_file);
 }
 
-void AOImageDisplay::SetImageBase(QString l_path)
+void AOImageDisplay::SetImageBase(QString l_path, int l_level)
 {
+  m_alphaLevel = -1;
   if(m_Pixmap == nullptr)
   {
     m_Pixmap = new AOPixmap();
   };
-  m_Pixmap->SetAlphaBase(l_path);
+  m_Pixmap->SetAlphaBase(l_path, l_level);
   setPixmap(m_Pixmap->scale(size()));
 }
 
-void AOImageDisplay::UpdateMaskPosition(int x, int y)
-{
-  if(m_Pixmap == nullptr) return;
-  m_Pixmap->UpdateAlphaCords(x, y);
-  setPixmap(m_Pixmap->scale(size()));
-}

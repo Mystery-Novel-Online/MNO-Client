@@ -3,6 +3,7 @@
 #include "aoapplication.h"
 
 #include <qpainter.h>
+#include <QImage>
 
 AOPixmap::AOPixmap(QPixmap p_pixmap)
     : m_pixmap(p_pixmap)
@@ -37,36 +38,24 @@ QPixmap AOPixmap::scale_to_height(QSize p_size)
                                  l_pixmap_is_larger ? Qt::SmoothTransformation : Qt::FastTransformation);
 }
 
-void AOPixmap::SetAlphaMask(QString l_path, int x, int y)
+void AOPixmap::SetAlphaMask(int t_level)
 {
-  m_AlphaMaskImage.load(l_path);
-  m_AlphaMaskFilled = QBitmap(m_pixmap.size());
-  m_AlphaMaskFilled.fill(Qt::white);
+  QImage img = m_AlphaBase.toImage().convertToFormat(QImage::Format_ARGB32);
 
+  for (int y = 0; y < img.height(); ++y) {
+    QRgb *line = reinterpret_cast<QRgb*>(img.scanLine(y));
+    for (int x = 0; x < img.width(); ++x) {
+      QColor color = QColor::fromRgba(line[x]);
+      color.setAlpha(t_level);
+      line[x] = color.rgba();
+    }
+  }
 
-  QPainter painter(&m_AlphaMaskFilled);
-  QPoint l_AlphaCords(x, y);
-  painter.drawPixmap(l_AlphaCords, m_AlphaMaskImage);
-
-  m_pixmap.setMask(m_AlphaMaskFilled);
+  m_pixmap = QPixmap::fromImage(img);
 }
 
-void AOPixmap::SetAlphaBase(QString l_path)
+void AOPixmap::SetAlphaBase(QString l_path, int t_level)
 {
   m_AlphaBase = QPixmap(l_path);
-  m_pixmap = QPixmap(m_AlphaBase);
-  UpdateAlphaCords(9999, 9999);
-}
-
-void AOPixmap::UpdateAlphaCords(int x, int y)
-{
-  m_AlphaMaskFilled = QBitmap(m_pixmap.size());
-  m_AlphaMaskFilled.fill(Qt::white);
-
-  QPainter painter(&m_AlphaMaskFilled);
-  QPoint l_AlphaCords(x, y);
-  painter.drawPixmap(l_AlphaCords, m_AlphaMaskImage);
-
-  m_pixmap = QPixmap(m_AlphaBase);
-  m_pixmap.setMask(m_AlphaMaskFilled);
+  SetAlphaMask(t_level);
 }
