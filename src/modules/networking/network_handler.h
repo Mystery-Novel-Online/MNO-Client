@@ -16,6 +16,11 @@ public:
   void RegisterPacket(QString t_operation, DROPacket * t_packet, bool l_RequireCourtroom = false, int l_MinimumParams = 0);
 
 public:
+  virtual void ProcessMetalistAreas(QHash<int, QString> t_AreaList) = 0;
+  virtual void ProcessReachableAreas(QList<int> t_ReachableAreas) = 0;
+
+
+public:
   virtual void SendPlayMusic(QString t_Name, int t_CharId) = 0;
 
 private:

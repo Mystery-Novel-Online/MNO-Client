@@ -1,4 +1,6 @@
 #include "neo_network_handler.h"
+#include "courtroom.h"
+#include "lobby.h"
 
 #include <modules/networking/packets/packet_play_music.h>
 #include <modules/networking/packets/packets_metadata.h>
@@ -16,6 +18,10 @@ void NeoNetworkHandler::GeneratePacketMap()
 {
 
   RegisterPacket("SCENE", new NeoPacketScene());
+  RegisterPacket("LST_A", new NeoPacketAreaList(), true, 1);
+  RegisterPacket("LST_R", new NeoPacketReachableList(), true, 1);
+
+
   RegisterPacket("CAM", new PacketCamera(), true, 2);
 
   RegisterPacket("MC", new PacketPlayMusic());
@@ -57,4 +63,36 @@ void NeoNetworkHandler::GeneratePacketMap()
 void NeoNetworkHandler::SendPlayMusic(QString t_Name, int t_CharId)
 {
   AOApplication::getInstance()->send_server_packet(DRPacket("MusPly", {t_Name, QString::number(t_CharId)}));
+}
+
+void NeoNetworkHandler::ProcessMetalistAreas(QHash<int, QString> t_AreaList)
+{
+  m_CurrentAreaList = t_AreaList;
+}
+
+void NeoNetworkHandler::ProcessReachableAreas(QList<int> t_ReachableAreas)
+{
+  QStringList l_AreaList = {};
+
+  if(t_ReachableAreas.count() == 0) return;
+
+  if(t_ReachableAreas.at(0) == -1)
+  {
+    t_ReachableAreas = m_CurrentAreaList.keys();
+  }
+
+  std::sort(t_ReachableAreas.begin(), t_ReachableAreas.end());
+
+  for(int l_ReachableId : t_ReachableAreas)
+  {
+    if(m_CurrentAreaList.contains(l_ReachableId)) l_AreaList.append(QString::number(l_ReachableId) + "-" + m_CurrentAreaList[l_ReachableId]);
+  }
+
+  AOApplication::getInstance()->m_courtroom->set_area_list(l_AreaList);
+
+  if (!AOApplication::getInstance()->GetLoadedAreaList() && AOApplication::getInstance()->GetLobbyConstructed())
+  {
+    AOApplication::getInstance()->m_lobby->set_loading_text("Loading areas...");
+  }
+  AOApplication::getInstance()->SetLoadedAreaList(true);
 }

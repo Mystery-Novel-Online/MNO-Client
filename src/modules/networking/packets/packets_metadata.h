@@ -32,4 +32,20 @@ public:
   void HandleIncoming(QStringList t_Contents);
 };
 
+class NeoPacketAreaList : public DROPacket
+{
+public:
+  NeoPacketAreaList(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+class NeoPacketReachableList : public DROPacket
+{
+public:
+  NeoPacketReachableList(){};
+  void HandleIncoming(QStringList t_Contents);
+};
+
+
+
 #endif // PACKETS_METADATA_H

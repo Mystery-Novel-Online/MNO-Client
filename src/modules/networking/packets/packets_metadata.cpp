@@ -75,3 +75,45 @@ void PacketCharaCheck::HandleIncoming(QStringList t_Contents)
 
   CharacterManager::get().SetCharList(l_chr_list);
 }
+
+void NeoPacketAreaList::HandleIncoming(QStringList t_Contents)
+{
+  if((t_Contents.count() % 2) != 0) return;
+
+  QHash<int, QString> l_AreaList = {};
+
+  for(int i = 0; i < t_Contents.count(); i += 2)
+  {
+    QString l_IdString = t_Contents.at(i);
+    QString l_AreaName = t_Contents.at(i + 1);
+
+
+    bool l_Result = false;
+    int l_IdInt = l_IdString.toInt(&l_Result);
+    if(l_Result)
+    {
+      l_AreaList[l_IdInt] = l_AreaName;
+    }
+
+  }
+
+  GameManager::get().GetNetworkHandlerCurrent()->ProcessMetalistAreas(l_AreaList);
+
+}
+
+void NeoPacketReachableList::HandleIncoming(QStringList t_Contents)
+{
+  QList<int> l_ReachableAreas = {};
+
+  for(QString l_IdString : t_Contents)
+  {
+    bool l_Result = false;
+    int l_IdInt = l_IdString.toInt(&l_Result);
+    if(l_Result)
+    {
+      l_ReachableAreas.append(l_IdInt);
+    }
+  }
+
+  GameManager::get().GetNetworkHandlerCurrent()->ProcessReachableAreas(l_ReachableAreas);
+}

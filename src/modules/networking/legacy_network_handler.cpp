@@ -60,3 +60,13 @@ void LegacyNetworkHandler::SendPlayMusic(QString t_Name, int t_CharId)
 {
   AOApplication::getInstance()->send_server_packet(DRPacket("MC", {t_Name, QString::number(t_CharId)}));
 }
+
+void LegacyNetworkHandler::ProcessMetalistAreas(QHash<int, QString> t_AreaList)
+{
+
+}
+
+void LegacyNetworkHandler::ProcessReachableAreas(QList<int> t_ReachableAreas)
+{
+
+}
