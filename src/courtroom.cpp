@@ -322,7 +322,7 @@ void Courtroom::enter_courtroom(int p_cid)
 
   CharacterManager::get().SwitchCharacter(l_chr_name);
 
-  CharacterData *l_selectedCharacter = CharacterManager::get().p_SelectedCharacter;
+  ActorData *l_selectedCharacter = CharacterManager::get().p_SelectedCharacter;
 
   if (is_spectating())
   {
@@ -331,7 +331,7 @@ void Courtroom::enter_courtroom(int p_cid)
   }
   else
   {
-    const QString l_showname = l_selectedCharacter->getShowname();
+    const QString l_showname = l_selectedCharacter->GetShowname();
     const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
     ao_app->get_discord()->set_character_name(l_final_showname);
     ao_config->set_showname_placeholder(l_final_showname);
@@ -342,7 +342,7 @@ void Courtroom::enter_courtroom(int p_cid)
   }
   const bool l_changed_chr = l_chr_name != l_prev_chr_name;
   if (l_changed_chr)
-    set_character_position(l_selectedCharacter->getSide());
+    set_character_position(l_selectedCharacter->GetSide());
   select_base_character_iniswap();
   refresh_character_content_url();
 
@@ -356,7 +356,7 @@ void Courtroom::enter_courtroom(int p_cid)
   ui_emote_dropdown->setDisabled(is_spectating());
   ui_iniswap_dropdown->setDisabled(is_spectating());
   ui_ic_chat_message_field->setDisabled(is_spectating());
-  set_character_position(l_selectedCharacter->getSide());
+  set_character_position(l_selectedCharacter->GetSide());
 
   // restore line field focus
   l_current_field->setFocus();
@@ -692,7 +692,7 @@ QString Courtroom::get_current_position()
 {
   if (ui_pos_dropdown->currentIndex() == DefaultPositionIndex)
   {
-    return CharacterManager::get().p_SelectedCharacter->getSide();
+    return CharacterManager::get().p_SelectedCharacter->GetSide();
   }
   return ui_pos_dropdown->currentData(Qt::UserRole).toString();
 }
@@ -949,12 +949,12 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   const int l_message_chr_id = p_chatmessage[CMChrId].toInt();
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
 
-  CharacterData *l_speakerData = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
+  ActorData *l_speakerData = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
 
   QString l_showname = p_chatmessage[CMShowName];
   if (l_showname.isEmpty() && !l_system_speaking)
   {
-    l_showname = l_speakerData->getShowname();
+    l_showname = l_speakerData->GetShowname();
   }
 
   const QString l_message = QString(p_chatmessage[CMMessage]).remove(QRegularExpression("(?<!\\\\)(\\{|\\})")).replace(QRegularExpression("\\\\(\\{|\\})"), "\\1");
@@ -1020,12 +1020,6 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
     DRPosition l_position = m_position_map.get_position(l_position_id);
     l_file_list.insert(ViewportStageBack, SceneManager::get().getBackgroundPath(l_position_id));
     l_file_list.insert(ViewportStageFront, SceneManager::get().getForegroundPath(l_position_id));
-
-    double l_characterHeight = CharacterManager::get().ReadCharacter(l_character)->getHeight();
-
-    ui_vp_background->setBackgroundScaling(l_characterHeight);
-    ui_vp_desk->setBackgroundScaling(l_characterHeight);
-
   }
 
   // characters
@@ -1146,12 +1140,12 @@ void Courtroom::handle_chatmessage()
   // Having an empty showname for system is actually what we expect.
 
 
-  CharacterData *l_speakerData = CharacterManager::get().ReadCharacter(m_chatmessage[CMChrName]);
+  ActorData *l_speakerData = CharacterManager::get().ReadCharacter(m_chatmessage[CMChrName]);
 
   QString f_showname = m_chatmessage[CMShowName];
   if (f_showname.isEmpty() && !is_system_speaking)
   {
-    f_showname = l_speakerData->getShowname();
+    f_showname = l_speakerData->GetShowname();
   }
   m_speaker_showname = f_showname;
 
@@ -2151,7 +2145,7 @@ void Courtroom::set_hp_bar(int p_bar, int p_state)
 
 void Courtroom::set_character_position(QString p_pos)
 {
-  const bool l_is_default_pos = p_pos == CharacterManager::get().p_SelectedCharacter->getSide();
+  const bool l_is_default_pos = p_pos == CharacterManager::get().p_SelectedCharacter->GetSide();
 
   int l_pos_index = ui_pos_dropdown->currentIndex();
   if (!l_is_default_pos)

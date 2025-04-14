@@ -12,6 +12,7 @@ INCLUDEPATH += $$PWD/include $$PWD/src $$PWD/3rd
 DEPENDPATH += $$PWD/include $$PWD/src $$PWD/3rd
 
 HEADERS += \
+  dro/param/actor/actor_loader.h \
   src/aoapplication.h \
   src/aoblipplayer.h \
   src/aobutton.h \
@@ -84,10 +85,6 @@ HEADERS += \
   src/modules/background/background_data.h \
   src/modules/background/background_reader.h \
   src/modules/background/legacy_background_reader.h \
-  src/modules/character/character_data.h \
-  src/modules/character/character_data_reader.h \
-  src/modules/character/legacy_character_reader.h \
-  src/modules/character/outfit_reader.h \
   src/modules/debug/time_debugger.h \
   src/modules/files/image_loader.h \
   src/modules/json/json_reader.h \
@@ -117,6 +114,7 @@ HEADERS += \
   src/version.h
 
 SOURCES += \
+  dro/param/actor/actor_loader.cpp \
   src/aoapplication.cpp \
   src/aoblipplayer.cpp \
   src/aobutton.cpp \
@@ -193,10 +191,6 @@ SOURCES += \
   src/modules/background/background_data.cpp \
   src/modules/background/background_reader.cpp \
   src/modules/background/legacy_background_reader.cpp \
-  src/modules/character/character_data.cpp \
-  src/modules/character/character_data_reader.cpp \
-  src/modules/character/legacy_character_reader.cpp \
-  src/modules/character/outfit_reader.cpp \
   src/modules/debug/time_debugger.cpp \
   src/modules/files/image_loader.cpp \
   src/modules/json/json_reader.cpp \

@@ -1129,6 +1129,7 @@ void Courtroom::set_widgets()
   for (int i = 0; i < effect_names.size(); ++i)
   {
     set_size_and_pos(ui_effects[i], effect_names[i], COURTROOM_DESIGN_INI, ao_app);
+    ThemeManager::get().addWidgetName(effect_names[i], ui_effects[i]);
   }
   reset_effect_buttons();
 
@@ -1149,6 +1150,7 @@ void Courtroom::set_widgets()
   for (int i = 0; i < wtce_names.size(); ++i)
   {
     set_size_and_pos(ui_wtce[i], wtce_names[i], COURTROOM_DESIGN_INI, ao_app);
+    ThemeManager::get().addWidgetName(wtce_names[i], ui_wtce[i]);
   }
 
   if (ao_app->current_theme->read_config_bool("enable_single_wtce")) // courtroom_config.ini necessary
@@ -1196,6 +1198,7 @@ void Courtroom::set_widgets()
   for (int i = 0; i < ui_label_images.size(); ++i)
   {
     set_size_and_pos(ui_label_images[i], label_images[i].toLower() + "_image", COURTROOM_DESIGN_INI, ao_app);
+    ThemeManager::get().addWidgetName(label_images[i].toLower() + "_image", ui_label_images[i]);
   }
 
   if (ao_app->current_theme->read_config_bool("enable_label_images"))

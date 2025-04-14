@@ -33,6 +33,7 @@ void ThemeManager::createTabParent()
     TabToggleButton *l_newButton = new TabToggleButton(l_courtroom, AOApplication::getInstance());
     l_newButton->setTabName(r_tabInfo.m_Name);
     l_newButton->setTabGroup(r_tabInfo.m_Group);
+    l_newButton->show();
 
     setWidgetDimensions(l_newButton, l_buttonDimensions.width, l_buttonDimensions.height);
     setWidgetPosition(l_newButton, l_buttonDimensions.x, l_buttonDimensions.y);

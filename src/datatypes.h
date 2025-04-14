@@ -5,6 +5,26 @@
 #include <QDateTime>
 #include <QMap>
 #include <QVector>
+#include <QRect>
+
+
+class VariableMappedString
+{
+public:
+  VariableMappedString()
+  {
+
+  }
+
+  VariableMappedString(QString t_input)
+  {
+    mInputString = t_input;
+  };
+
+  QString mInputString = "";
+  QMap<QString, QString> mVariableMap = {};
+};
+
 
 enum ThemeSceneType
 {
@@ -45,6 +65,9 @@ public:
   QString sound_file;
   int sound_delay = 0;
   QString video_file;
+  QString outfitName = "";
+  QString emoteName = "";
+  QMap<QString, QRect> emoteOverlays = {};
 };
 
 class DRAreaBackground
