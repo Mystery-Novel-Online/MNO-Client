@@ -3,6 +3,7 @@
 
 #include "datatypes.h"
 #include "drgraphicscene.h"
+#include "dro/interface/menus/area_menu.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"
@@ -511,6 +512,8 @@ private:
   QMenu *ui_music_menu = nullptr;
   QAction *ui_music_menu_play = nullptr;
   QAction *ui_music_menu_insert_ooc = nullptr;
+
+  AreaMenu *p_AreaContextMenu = nullptr;
 
   QListWidget *ui_sfx_list = nullptr;
   QVector<DRSfx> m_sfx_list;

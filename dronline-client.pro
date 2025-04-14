@@ -12,6 +12,7 @@ INCLUDEPATH += $$PWD/include $$PWD/src $$PWD/3rd
 DEPENDPATH += $$PWD/include $$PWD/src $$PWD/3rd
 
 HEADERS += \
+  src/dro/interface/menus/area_menu.h \
   src/dro/param/actor/actor_loader.h \
   src/aoapplication.h \
   src/aoblipplayer.h \
@@ -114,6 +115,7 @@ HEADERS += \
   src/version.h
 
 SOURCES += \
+  src/dro/interface/menus/area_menu.cpp \
   src/dro/param/actor/actor_loader.cpp \
   src/aoapplication.cpp \
   src/aoblipplayer.cpp \

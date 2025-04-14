@@ -78,9 +78,9 @@ void ActorDataReader::loadActor(QString t_folder)
 QString ActorDataReader::getEmoteButton(DREmote t_emote, bool t_enabled)
 {
   QString currentOutfit = GetOutfit();
-  QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("outfits/" + currentOutfit + "/emotions/" + t_emote.comment + ".png").arg(t_emote.key));
+  QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("outfits/" + t_emote.outfitName + "/emotions/" + t_emote.comment + ".png").arg(t_emote.key));
 
-  if(t_enabled) l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("outfits/" + currentOutfit + "/emotions/" + t_emote.comment + "_on.png"));
+  if(t_enabled) l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("outfits/" + t_emote.outfitName + "/emotions/" + t_emote.comment + "_on.png"));
 
   return l_texture;
 }
@@ -136,6 +136,13 @@ QVector<DREmote> ActorDataReader::getEmotes()
   if(currentOutfit == "<All>")
   {
     QVector<DREmote> l_allEmotes = {};
+    for(QString &outfit : mOutfitNames)
+    {
+      if(mOutfits.contains(outfit))
+      {
+        l_allEmotes.append(mOutfits[outfit]->mEmotes);
+      }
+    }
 
     return l_allEmotes;
   }

@@ -186,6 +186,12 @@ void Courtroom::create_widgets()
   ui_ooc_chatlog->setOpenExternalLinks(true);
 
   ui_area_list = new QListWidget(this);
+  ui_area_list->setContextMenuPolicy(Qt::CustomContextMenu);
+
+  p_AreaContextMenu = new AreaMenu(this);
+  connect(ui_area_list, &QWidget::customContextMenuRequested, p_AreaContextMenu, &AreaMenu::OnMenuRequested);
+
+
   ui_area_search = new QLineEdit(this);
   ui_area_search->setFrame(false);
   ui_area_search->setPlaceholderText(LocalizationManager::get().getLocalizationText("TEXTBOX_AREA"));
