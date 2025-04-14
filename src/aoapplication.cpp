@@ -5,6 +5,8 @@
 #include "courtroom.h"
 #include "debug_functions.h"
 #include "drdiscord.h"
+#include "dro/fs/dir_utils.h"
+#include "dro/system/rp_audio.h"
 #include "drpacket.h"
 #include "drpather.h"
 #include "drserversocket.h"
@@ -38,6 +40,9 @@ AOApplication::AOApplication(int &argc, char **argv)
     : QApplication(argc, argv)
 {
   ao_config = new AOConfig(this);
+
+  DirUtils::CreateInitialFolders();
+
   SceneManager::get().pConfigAO = ao_config;
   LocalizationManager::get().execLoadLanguages();
 
@@ -47,6 +52,7 @@ AOApplication::AOApplication(int &argc, char **argv)
 
   m_server_socket = new DRServerSocket(this);
   setInstance(this);
+  RPAudio::Initialize();
 
   connect(ao_config, SIGNAL(theme_changed(QString)), this, SLOT(handle_theme_modification()));
   connect(ao_config, SIGNAL(gamemode_changed(QString)), this, SLOT(handle_theme_modification()));

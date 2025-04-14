@@ -1,10 +1,12 @@
 #include "scene_manager.h"
 #include <QPropertyAnimation>
 #include <QGraphicsOpacityEffect>
+#include <courtroom.h>
 #include "aoapplication.h"
 #include "file_functions.h"
 #include "modules/background/background_reader.h"
 #include "modules/background/legacy_background_reader.h"
+#include <modules/theme/thememanager.h>
 
 SceneManager SceneManager::s_Instance;
 
@@ -93,5 +95,25 @@ void SceneManager::setFadeDuration(int duration)
 void SceneManager::clearPlayerDataList()
 {
   mPlayerDataList.clear();
+}
+
+void SceneManager::ScreenshotViewport()
+{
+  Courtroom *l_Courtroom = ThemeManager::get().GetWidgetType<Courtroom>("courtroom");
+  DRGraphicsView *l_viewport = ThemeManager::get().GetWidgetType<DRGraphicsView>("viewport");
+
+  if(l_Courtroom != nullptr && l_viewport != nullptr)
+  {
+    QPixmap l_Pixmap = l_Courtroom->grab();
+
+    QRect l_croppingRect(l_viewport->x(), l_viewport->y(), l_viewport->width(), l_viewport->height());
+    QPixmap l_croppedPixmap = l_Pixmap.copy(l_croppingRect);
+
+    QString l_FileName = QDateTime::currentDateTime().toString("yyyy-MM-dd (hh.mm.ss.z)'.png'");
+    QString l_Path = "base/screenshots/" + l_FileName;
+    if (!l_croppedPixmap.save(l_Path, "PNG")) {
+      qWarning("Failed to save the screenshot.");
+    }
+  }
 }
 

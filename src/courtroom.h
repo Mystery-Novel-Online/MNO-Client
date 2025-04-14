@@ -4,6 +4,7 @@
 #include "datatypes.h"
 #include "drgraphicscene.h"
 #include "dro/interface/menus/area_menu.h"
+#include "dro/interface/widgets/screenshot_button.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"
@@ -666,6 +667,9 @@ private:
   AOButton *ui_player_list_left = nullptr;
   AOButton *ui_player_list_right = nullptr;
   AOButton *ui_area_look = nullptr;
+
+  ScreenshotButton *p_ScreenshotBtn = nullptr;
+
   DRTextEdit *ui_area_desc = nullptr;
 
 

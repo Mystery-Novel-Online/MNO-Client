@@ -363,6 +363,7 @@ void Courtroom::create_widgets()
   ui_player_list_left = setupButtonWidget("player_list_left", "arrow_left.png", "<-");
   ui_player_list_right = setupButtonWidget("player_list_right", "arrow_right.png", "->");
   ui_area_look = setupButtonWidget("area_look", "area_look.png", LocalizationManager::get().getLocalizationText("TITLE_LOOK"));
+  p_ScreenshotBtn = new ScreenshotButton(this, ao_app);
 
   construct_playerlist();
 
@@ -709,7 +710,8 @@ void Courtroom::reset_widget_names()
       {"pair_offset", pUIPairOffsetSlider},
       {"viewport_transition", SceneManager::get().GetTransition()},
       {"viewport_overlay", w_ViewportOverlay},
-      {"outfit_selector", wOutfitDropdown}
+      {"outfit_selector", wOutfitDropdown},
+      {"screenshot", p_ScreenshotBtn}
   };
 
     ThemeManager::get().SetWidgetNames(widget_names);

@@ -12,7 +12,9 @@ INCLUDEPATH += $$PWD/include $$PWD/src $$PWD/3rd
 DEPENDPATH += $$PWD/include $$PWD/src $$PWD/3rd
 
 HEADERS += \
+  src/dro/fs/dir_utils.h \
   src/dro/interface/menus/area_menu.h \
+  src/dro/interface/widgets/screenshot_button.h \
   src/dro/param/actor/actor_loader.h \
   src/aoapplication.h \
   src/aoblipplayer.h \
@@ -55,6 +57,7 @@ HEADERS += \
   src/drmasterclient.h \
   src/drmediatester.h \
   src/drmovie.h \
+  src/dro/system/rp_audio.h \
   src/drpacket.h \
   src/drpather.h \
   src/drplayerlistentry.h \
@@ -115,7 +118,9 @@ HEADERS += \
   src/version.h
 
 SOURCES += \
+  src/dro/fs/dir_utils.cpp \
   src/dro/interface/menus/area_menu.cpp \
+  src/dro/interface/widgets/screenshot_button.cpp \
   src/dro/param/actor/actor_loader.cpp \
   src/aoapplication.cpp \
   src/aoblipplayer.cpp \
@@ -162,6 +167,7 @@ SOURCES += \
   src/drmasterclient.cpp \
   src/drmediatester.cpp \
   src/drmovie.cpp \
+  src/dro/system/rp_audio.cpp \
   src/drpacket.cpp \
   src/drpather.cpp \
   src/drplayerlistentry.cpp \
