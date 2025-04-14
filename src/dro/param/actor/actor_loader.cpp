@@ -70,6 +70,7 @@ void ActorDataReader::loadActor(QString t_folder)
   SetShowname(getStringValue("showname"));
   SetGender(getStringValue("gender"));
   SetSide(getStringValue("side"));
+  mOutfitsOrder = getStringArrayValue("outfit_order");
 
   loadOutfits();
 }
@@ -92,8 +93,8 @@ void ActorDataReader::loadOutfits()
 
   QStringList l_outfitSubDirectories = l_outfitsDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-  if(l_outfitSubDirectories.length() <= 0) return;
-  if(!l_outfitSubDirectories.contains("default")) currentOutfit = l_outfitSubDirectories[0];
+  if (l_outfitSubDirectories.isEmpty()) return;
+
   for (const QString &f_outfitPath : l_outfitSubDirectories)
   {
 
@@ -106,6 +107,27 @@ void ActorDataReader::loadOutfits()
     }
 
   }
+
+  QStringList orderedOutfits;
+
+  for (const QString &orderedOutfit : mOutfitsOrder)
+  {
+    if (mOutfitNames.contains(orderedOutfit))
+    {
+      orderedOutfits.append(orderedOutfit);
+    }
+  }
+
+  for (const QString &outfit : mOutfitNames)
+  {
+    if (!mOutfitsOrder.contains(outfit))
+    {
+      orderedOutfits.append(outfit);
+    }
+  }
+
+  mOutfitNames = orderedOutfits;
+
 }
 
 QVector<DREmote> ActorDataReader::getEmotes()

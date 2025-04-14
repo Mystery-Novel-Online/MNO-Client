@@ -73,6 +73,7 @@ private:
   void loadOutfits();
   QMap<QString, OutfitReader*> mOutfits = {};
   QStringList mOutfitNames = {};
+  QStringList mOutfitsOrder = {};
 
   virtual QVector<DREmote> getEmotes() override;
 

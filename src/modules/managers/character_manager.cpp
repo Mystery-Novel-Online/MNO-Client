@@ -65,6 +65,7 @@ void CharacterManager::setOutfitList(QStringList t_outfits)
     QComboBox* l_outfitSelectorCombo = dynamic_cast<QComboBox*>(l_outfitSelectorWidget);
     l_outfitSelectorCombo->clear();
     l_outfitSelectorCombo->addItems(t_outfits);
+    if(l_outfitSelectorCombo->count() > 1) l_outfitSelectorCombo->setCurrentIndex(1);
   }
 }
 
