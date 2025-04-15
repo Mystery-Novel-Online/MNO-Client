@@ -85,6 +85,13 @@ void ThemeManager::execLayerTabs()
     }
   };
 
+  QMap<QString, QWidget *>::iterator it;
+
+  for (it = m_TabDeletionQueue.begin(); it != m_TabDeletionQueue.end(); ++it)
+  {
+    QWidget *value = it.value();
+    delete value;
+  }
 }
 
 void ThemeManager::resetSelectedTabs()
