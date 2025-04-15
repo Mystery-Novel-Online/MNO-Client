@@ -9,26 +9,48 @@ ThemeManager ThemeManager::s_Instance;
 
 void ThemeManager::createTabParent()
 {
-  waTabWidgets = {};
+  m_TabDeletionQueue = m_TabWidgets;
+  m_TabWidgets = {};
+
   for(ThemeTabInfo r_tabInfo : ThemeManager::get().getTabsInfo())
   {
     QWidget *l_courtroom = getWidget("courtroom");
-    TabGroupingWidget *l_newTab = new TabGroupingWidget(l_courtroom);
+
+    QString l_panelName = r_tabInfo.m_Name + "_panel";
+
+    QWidget *tabParent = l_courtroom;
+    if(m_DetatchedTabList.contains(l_panelName))
+    {
+      tabParent = nullptr;
+    }
+    TabGroupingWidget *l_newTab = new TabGroupingWidget(tabParent);
 
 
     QString l_buttonName = r_tabInfo.m_Name + "_toggle";
-    QString l_panelName = r_tabInfo.m_Name + "_panel";
 
     pos_size_type l_panelPosition = mCurrentThemeReader.getWidgetPosition(COURTROOM, l_panelName);
     pos_size_type l_buttonDimensions = mCurrentThemeReader.getWidgetPosition(COURTROOM, l_buttonName);
 
 
-    l_newTab->move(l_panelPosition.x, l_panelPosition.y);
+
+    if(m_DetatchedTabList.contains(l_panelName) && m_TabDeletionQueue.contains(l_panelName))
+    {
+      l_newTab->move(m_TabDeletionQueue[l_panelName]->pos().x(), m_TabDeletionQueue[l_panelName]->pos().y());
+    }
+    else
+    {
+      l_newTab->move(l_panelPosition.x, l_panelPosition.y);
+    }
+
     l_newTab->resize(l_panelPosition.width, l_panelPosition.height);
     l_newTab->setBackgroundImage(r_tabInfo.m_Name);
 
     addWidgetName(l_panelName, l_newTab);
-    waTabWidgets[r_tabInfo.m_Name] = l_newTab;
+
+    if(m_TabWidgets.contains(r_tabInfo.m_Name))delete m_TabWidgets[r_tabInfo.m_Name];
+
+    addWidgetName(l_panelName, l_newTab);
+    m_TabWidgets[r_tabInfo.m_Name] = l_newTab;
 
     TabToggleButton *l_newButton = new TabToggleButton(l_courtroom, AOApplication::getInstance());
     l_newButton->setTabName(r_tabInfo.m_Name);
@@ -48,18 +70,18 @@ void ThemeManager::execLayerTabs()
 {
   for(ThemeTabInfo r_tabInfo : ThemeManager::get().getTabsInfo())
   {
-    if(waTabWidgets.contains(r_tabInfo.m_Name))
+    if(m_TabWidgets.contains(r_tabInfo.m_Name))
     {
       for(QString r_WidgetName : r_tabInfo.m_WidgetContents)
       {
         QWidget *l_ChildWidget = getWidget(r_WidgetName);
         if(l_ChildWidget != nullptr)
         {
-          l_ChildWidget->setParent(waTabWidgets[r_tabInfo.m_Name]);
+          l_ChildWidget->setParent(m_TabWidgets[r_tabInfo.m_Name]);
         }
       }
-      waTabWidgets[r_tabInfo.m_Name]->raise();
-      waTabWidgets[r_tabInfo.m_Name]->hide();
+      m_TabWidgets[r_tabInfo.m_Name]->raise();
+      m_TabWidgets[r_tabInfo.m_Name]->hide();
     }
   };
 
@@ -116,6 +138,7 @@ void ThemeManager::toggleTab(QString t_tabName, QString t_tabGroup)
         TabToggleButton* l_tabButton = dynamic_cast<TabToggleButton*>(getWidget(l_buttonName));
         l_tabButton->setActiveStatus(false);
       }
+      if(m_DetatchedTabList.contains(l_tabPanel)) return;
       getWidget(l_tabPanel)->hide();
     }
 
@@ -135,6 +158,7 @@ void ThemeManager::detatchTab(QString t_tabName)
     l_widget->setWindowFlag(Qt::WindowStaysOnTopHint, true);
     l_widget->show();
 
+    m_DetatchedTabList[l_panelName] = {40, 40};
   }
 }
 

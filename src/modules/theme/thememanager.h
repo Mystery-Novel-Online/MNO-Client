@@ -99,7 +99,8 @@ private:
   double mViewportResize = 1;
 
 
-  QMap<QString, QWidget *> waTabWidgets = {};
+  QMap<QString, QWidget *> m_TabWidgets = {};
+  QMap<QString, QWidget *> m_TabDeletionQueue = {};
 
   QHash<QString, QWidget *> m_WidgetNames = {};
   QHash<QString, AOButton*> mButtonWidgets { };
@@ -108,6 +109,8 @@ private:
 
   bool mRequiresReload = true;
   AOImageDisplay *wCourtroomBackground = nullptr;
+
+  QMap<QString, QVector2D> m_DetatchedTabList = {};
 };
 
 #endif // THEMEMANAGER_H
