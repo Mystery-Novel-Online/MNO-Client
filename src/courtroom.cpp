@@ -112,6 +112,7 @@ void Courtroom::set_area_list(QStringList p_area_list)
 void Courtroom::set_music_list(QStringList p_music_list)
 {
   m_music_list = p_music_list;
+  ui_bgm_filter->ReloadCategories();
   list_music();
 }
 
@@ -1496,6 +1497,12 @@ void Courtroom::on_chat_config_changed()
   update_ic_log(true);
 }
 
+void Courtroom::OnBgmFilterChanged()
+{
+  m_music_list = ui_bgm_filter->GetMusicList();
+  list_music();
+}
+
 void Courtroom::CharacterSearchUpdated()
 {
   m_current_chr_page = 0;
@@ -2342,12 +2349,6 @@ void Courtroom::on_music_list_double_clicked(QModelIndex p_model)
   const QString l_song_name = ui_music_list->item(p_model.row())->data(Qt::UserRole).toString();
   send_mc_packet(l_song_name);
   ui_ic_chat_message_field->setFocus();
-}
-
-void Courtroom::on_music_list_context_menu_requested(QPoint p_point)
-{
-  const QPoint l_global_point = ui_music_list->viewport()->mapToGlobal(p_point);
-  ui_music_menu->popup(l_global_point);
 }
 
 void Courtroom::on_music_menu_play_triggered()

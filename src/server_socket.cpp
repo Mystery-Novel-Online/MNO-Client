@@ -6,6 +6,7 @@
 #include "courtroom.h"
 #include "debug_functions.h"
 #include "drdiscord.h"
+#include "dro/network/tracklist_metadata.h"
 #include "drpacket.h"
 #include "modules/managers/character_manager.h"
 #include "modules/managers/localization_manager.h"
@@ -301,7 +302,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   {
     if (!is_courtroom_constructed)
       return;
-    m_courtroom->set_music_list(l_content);
+    m_courtroom->set_music_list(TracklistMetadata::Parse(l_content));
 
     if (!m_loaded_area_list && is_lobby_constructed)
     {

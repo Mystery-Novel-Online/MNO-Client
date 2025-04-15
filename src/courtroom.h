@@ -4,6 +4,8 @@
 #include "datatypes.h"
 #include "drgraphicscene.h"
 #include "dro/interface/menus/area_menu.h"
+#include "dro/interface/menus/bgm_menu.h"
+#include "dro/interface/widgets/bgm_filter.h"
 #include "dro/interface/widgets/screenshot_button.h"
 #include "drposition.h"
 #include "drthememovie.h"
@@ -510,9 +512,7 @@ private:
   QLineEdit *ui_area_search = nullptr;
   QListWidget *ui_music_list = nullptr;
   QLineEdit *ui_music_search = nullptr;
-  QMenu *ui_music_menu = nullptr;
-  QAction *ui_music_menu_play = nullptr;
-  QAction *ui_music_menu_insert_ooc = nullptr;
+  BGMMenu *p_MenuBGM = nullptr;
 
   AreaMenu *p_AreaContextMenu = nullptr;
 
@@ -551,6 +551,8 @@ private:
   QComboBox *ui_emote_dropdown = nullptr;
 
   QComboBox *wOutfitDropdown = nullptr;
+
+  BGMFilter *ui_bgm_filter = nullptr;
 
   QComboBox *ui_iniswap_dropdown = nullptr;
 
@@ -736,6 +738,7 @@ public slots:
   void on_char_select_left_clicked();
   void on_char_select_right_clicked();
   void hide_emote_tooltip(int id);
+  void send_mc_packet(QString p_song);
 
 private slots:
   void setup_chat();
@@ -758,6 +761,7 @@ private slots:
   void on_ic_message_return_pressed();
   void handle_ic_message_length();
   void on_chat_config_changed();
+  void OnBgmFilterChanged();
 
   void CharacterSearchUpdated();
 
@@ -775,12 +779,10 @@ private slots:
 
   void on_music_list_clicked();
   void on_music_list_double_clicked(QModelIndex p_model);
-  void on_music_list_context_menu_requested(QPoint p_point);
   void on_music_menu_play_triggered();
   void on_music_menu_insert_ooc_triggered();
   void on_music_search_edited(QString);
   void on_music_search_edited();
-  void send_mc_packet(QString p_song);
 
   void select_emote(int p_id);
 
