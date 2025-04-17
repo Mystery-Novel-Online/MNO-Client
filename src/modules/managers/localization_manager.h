@@ -108,8 +108,9 @@ private:
           {"NOTICE_BANNED_2", "You are banned on this server."},
           {"NOTICE_KICKED", "You have been kicked."},
           {"NOTICE_MISSING", "Could not find %1"},
-          {"", ""},
-          {"", ""}
+          {"SFX_PREVIEW", "Preview"},
+          {"SFX_FILENAME", "Insert filename"},
+          {"SFX_CAPTION", "Insert caption"}
   };
 
 };

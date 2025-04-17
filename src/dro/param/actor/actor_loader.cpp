@@ -410,11 +410,11 @@ void OutfitReader::ReadEmotes()
     newEmote.character = mCharacterName;
     newEmote.outfitName = mOutfitName;
     newEmote.comment = emoteName;
-    newEmote.anim = animName;
+    newEmote.anim = animName.isEmpty() ? "" : "outfits/" + mOutfitName + "/" + animName;
     newEmote.emoteName = emoteName;
     newEmote.dialog = "outfits/" + mOutfitName + "/" + emoteName;
 
-    if(l_emoteData.toObject().contains("image")) newEmote.dialog = mOutfitName + "/" + getStringValue("image");
+    if(l_emoteData.toObject().contains("image")) newEmote.dialog = "outfits/" + mOutfitName + "/" + getStringValue("image");
 
     newEmote.desk_modifier = isValueExists("desk") ? getBoolValue("desk") : m_RuleDesk;
     newEmote.modifier = 0;
