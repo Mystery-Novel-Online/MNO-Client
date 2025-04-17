@@ -51,10 +51,13 @@ public:
 
   QVector<DREmote> mEmotes = {};
   QMap<QString, QRect> m_OverlayRectangles = {};
+
 private:
   QString mOutfitPath = "";
   QString mOutfitName = "";
   QString mCharacterName = "";
+
+  bool m_RuleDesk = true;
 
 };
 

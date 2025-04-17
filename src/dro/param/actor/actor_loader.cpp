@@ -384,7 +384,9 @@ OutfitReader::OutfitReader(QString t_character, QString t_outfit)
 void OutfitReader::ReadSettings()
 {
   ResetTargetObject();
-  SetTargetObject("settings");
+  SetTargetObject("default_rules");
+
+  m_RuleDesk = isValueExists("show_desk") ? getBoolValue("show_desk") : true;
 }
 
 void OutfitReader::ReadEmotes()
@@ -395,22 +397,33 @@ void OutfitReader::ReadEmotes()
   for(QJsonValueRef l_emoteData : l_emotesArray)
   {
     SetTargetObject(l_emoteData.toObject());
-    QString l_emoteName = getStringValue("name");
-    QString l_animName = getStringValue("pre");
 
-    DREmote l_newEmote;
+    const QString emoteName = getStringValue("name");
+    const QString animName = getStringValue("pre");
+    const QString videoName = getStringValue("video");
+    const QString soundFile = getStringValue("sfx");
+    const int delayMilliseconds = getIntValue("sfx_delay");
+    const int delayTicks = getIntValue("sfx_delay_ticks");
 
-           //l_emote.key = i_key;
-    l_newEmote.character = mCharacterName;
 
-    l_newEmote.comment = l_emoteName;
-    l_newEmote.anim = l_animName;
-    l_newEmote.outfitName = mOutfitName;
-    l_newEmote.emoteName = l_emoteName;
-    l_newEmote.dialog = "outfits/" + mOutfitName + "/" + l_emoteName;
-    if(l_emoteData.toObject().contains("image")) l_newEmote.dialog = mOutfitName + "/" + getStringValue("image");
-    l_newEmote.modifier = 0;
-    l_newEmote.desk_modifier = true;
+    DREmote newEmote;
+    newEmote.character = mCharacterName;
+    newEmote.outfitName = mOutfitName;
+    newEmote.comment = emoteName;
+    newEmote.anim = animName;
+    newEmote.emoteName = emoteName;
+    newEmote.dialog = "outfits/" + mOutfitName + "/" + emoteName;
+
+    if(l_emoteData.toObject().contains("image")) newEmote.dialog = mOutfitName + "/" + getStringValue("image");
+
+    newEmote.desk_modifier = isValueExists("desk") ? getBoolValue("desk") : m_RuleDesk;
+    newEmote.modifier = 0;
+
+    newEmote.sound_file = soundFile;
+    newEmote.sound_delay = (delayTicks == 0) ? delayMilliseconds : delayTicks * 60;
+    newEmote.sound_delay = qMax(0, newEmote.sound_delay);
+
+    newEmote.video_file = videoName;
 
     SetTargetObject("overlays");
 
@@ -419,11 +432,11 @@ void OutfitReader::ReadEmotes()
       QString overlayImage = getStringValue(overlayName);
       if(!overlayImage.trimmed().isEmpty())
       {
-        l_newEmote.emoteOverlays[overlayImage] = m_OverlayRectangles[overlayName];
+        newEmote.emoteOverlays[overlayImage] = m_OverlayRectangles[overlayName];
       }
     }
 
-    mEmotes.append(l_newEmote);
+    mEmotes.append(newEmote);
 
   }
 }
