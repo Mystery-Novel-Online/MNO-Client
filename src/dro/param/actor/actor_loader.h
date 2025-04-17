@@ -9,6 +9,7 @@ class ActorData
 public:
   ActorData(){};
 
+  virtual QString getEmoteSprite(DREmote t_emote);
   virtual QString getEmoteButton(DREmote t_emote, bool t_enabled);
   virtual QString getSelectedImage(DREmote t_emote);
 
@@ -62,6 +63,7 @@ class ActorDataReader : public ActorData, public JSONReader
 public:
   ActorDataReader() {};
   virtual void loadActor(QString folder) override;
+  virtual QString getEmoteSprite(DREmote t_emote) override;
   virtual QString getEmoteButton(DREmote t_emote, bool t_enabled) override;
   virtual QString getSelectedImage(DREmote t_emote) override;
   virtual QStringList getOutfitNames() override;
@@ -93,6 +95,7 @@ public:
   QString drLookupKey(const QStringList &keyList, const QString &targetKey);
 
   virtual QVector<DREmote> getEmotes() override;
+  virtual QString getEmoteSprite(DREmote t_emote) override;
   virtual QString getEmoteButton(DREmote t_emote, bool t_enabled) override;
   virtual QString getSelectedImage(DREmote t_emote) override;
   virtual QMap<QString, QRect> GetEmoteOverlays(QString outfit, QString emoteName) override { return {}; };

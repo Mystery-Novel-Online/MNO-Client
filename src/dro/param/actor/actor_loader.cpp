@@ -33,6 +33,11 @@ ActorData *ActorLoader::GetCharacter(QString folder)
   return s_CachedCharacters[folder];
 }
 
+QString ActorData::getEmoteSprite(DREmote t_emote)
+{
+  return "";
+}
+
 QString ActorData::getEmoteButton(DREmote t_emote, bool t_enabled)
 {
   QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("emotions/button%1_off.png").arg(t_emote.key));
@@ -73,6 +78,11 @@ void ActorDataReader::loadActor(QString t_folder)
   mOutfitsOrder = getStringArrayValue("outfit_order");
 
   loadOutfits();
+}
+
+QString ActorDataReader::getEmoteSprite(DREmote t_emote)
+{
+  return "";
 }
 
 QString ActorDataReader::getEmoteButton(DREmote t_emote, bool t_enabled)
@@ -325,6 +335,11 @@ QVector<DREmote> LegacyActorReader::getEmotes()
   return r_emote_list;
 }
 
+QString LegacyActorReader::getEmoteSprite(DREmote t_emote)
+{
+  return "";
+}
+
 QString LegacyActorReader::getEmoteButton(DREmote t_emote, bool t_enabled)
 {
   QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("emotions/button%1_off.png").arg(t_emote.key));
@@ -381,6 +396,7 @@ void OutfitReader::ReadEmotes()
   {
     SetTargetObject(l_emoteData.toObject());
     QString l_emoteName = getStringValue("name");
+    QString l_animName = getStringValue("pre");
 
     DREmote l_newEmote;
 
@@ -388,7 +404,7 @@ void OutfitReader::ReadEmotes()
     l_newEmote.character = mCharacterName;
 
     l_newEmote.comment = l_emoteName;
-    l_newEmote.anim = "";
+    l_newEmote.anim = l_animName;
     l_newEmote.outfitName = mOutfitName;
     l_newEmote.emoteName = l_emoteName;
     l_newEmote.dialog = "outfits/" + mOutfitName + "/" + l_emoteName;

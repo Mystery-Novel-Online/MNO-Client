@@ -22,6 +22,7 @@
 #include <QtMath>
 #include <QtConcurrent/QtConcurrent>
 #include <modules/theme/widgets/droemotebuttons.h>
+#include <dro/interface/menus/emote_menu.h>
 
 
 
@@ -69,7 +70,9 @@ void Courtroom::construct_emote_page_layout()
 
   QPoint f_spacing = ao_app->current_theme->get_widget_settings_spacing("emotes", "courtroom", "emote_button_spacing");
 
-  int buttonResize = (int)((float)40 * ThemeManager::get().getResize());
+  float buttonSize = EmoteMenu::isDoubleSize() ? 82 : 40;
+
+  int buttonResize = (int)(buttonSize * ThemeManager::get().getResize());
   const int button_width = buttonResize;
   int x_spacing = f_spacing.x();
   int x_mod_count = 0;

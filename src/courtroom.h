@@ -198,6 +198,8 @@ public:
   void select_base_character_iniswap();
   void refresh_character_content_url();
   void construct_playerlist_layout();
+  void construct_emotes();
+  void construct_emote_page_layout();
   void write_area_desc();
 
   // Set the showname of the client
@@ -709,8 +711,6 @@ private:
   void set_char_select();
   void set_char_select_page();
 
-  void construct_emotes();
-  void construct_emote_page_layout();
 
   void construct_playerlist();
 

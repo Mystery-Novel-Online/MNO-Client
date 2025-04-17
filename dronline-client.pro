@@ -15,6 +15,7 @@ HEADERS += \
   src/dro/fs/dir_utils.h \
   src/dro/interface/menus/area_menu.h \
   src/dro/interface/menus/bgm_menu.h \
+  src/dro/interface/menus/emote_menu.h \
   src/dro/interface/widgets/bgm_filter.h \
   src/dro/interface/widgets/screenshot_button.h \
   src/dro/network/tracklist_metadata.h \
@@ -93,7 +94,6 @@ HEADERS += \
   src/modules/background/background_reader.h \
   src/modules/background/legacy_background_reader.h \
   src/modules/debug/time_debugger.h \
-  src/modules/files/image_loader.h \
   src/modules/json/json_reader.h \
   src/modules/json/localization_reader.h \
   src/modules/json/theme_mode_reader.h \
@@ -124,6 +124,7 @@ SOURCES += \
   src/dro/fs/dir_utils.cpp \
   src/dro/interface/menus/area_menu.cpp \
   src/dro/interface/menus/bgm_menu.cpp \
+  src/dro/interface/menus/emote_menu.cpp \
   src/dro/interface/widgets/bgm_filter.cpp \
   src/dro/interface/widgets/screenshot_button.cpp \
   src/dro/network/tracklist_metadata.cpp \
@@ -206,7 +207,6 @@ SOURCES += \
   src/modules/background/background_reader.cpp \
   src/modules/background/legacy_background_reader.cpp \
   src/modules/debug/time_debugger.cpp \
-  src/modules/files/image_loader.cpp \
   src/modules/json/json_reader.cpp \
   src/modules/json/localization_reader.cpp \
   src/modules/json/theme_mode_reader.cpp \

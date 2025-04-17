@@ -10,6 +10,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include <modules/managers/character_manager.h>
+#include "dro/interface/menus/emote_menu.h"
 
 AOEmoteButton::AOEmoteButton(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y)
     : QPushButton(p_parent)
@@ -17,7 +18,12 @@ AOEmoteButton::AOEmoteButton(QWidget *p_parent, AOApplication *p_ao_app, int p_x
   ao_app = p_ao_app;
 
   this->move(p_x, p_y);
-  this->resize((int)((float)40 * ThemeManager::get().getResize()), (int)((float)40 * ThemeManager::get().getResize()));
+
+  float buttonSize = EmoteMenu::isDoubleSize() ? 82 : 40;
+
+  int resizedButtonSize = (int)(buttonSize * ThemeManager::get().getResize());
+
+  this->resize(resizedButtonSize, resizedButtonSize);
 
   ui_selected = new QLabel(this);
   ui_selected->resize(size());
@@ -47,10 +53,7 @@ void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
   // nested ifs are okay
   if (p_enabled)
   {
-
     const QString l_selected_texture = CharacterManager::get().p_SelectedCharacter->getSelectedImage(p_emote);
-
-
 
     if (file_exists(l_selected_texture))
     {
@@ -75,9 +78,44 @@ void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
 
   }
 
-  m_texture.load(l_texture);
+  if(EmoteMenu::isRealtime())
+  {
+    m_texture.load(ao_app->get_character_sprite_path(p_emote.character, p_emote.dialog, "", false));
+    m_texture = m_texture.scaledToHeight(250, Qt::SmoothTransformation);
+
+    int highestPixel = findHighestPixel(m_texture);
+
+    int cropY = 0;
+    if (highestPixel != -1) cropY = highestPixel + 30;
+
+    if (cropY + 82 > m_texture.height()) cropY = m_texture.height() - 82;
+    if (cropY < 0) cropY = 0;
+
+    int cropX = (m_texture.width() - 82) / 2;
+
+    m_texture = m_texture.copy(cropX, cropY, 82, 82);
+  }
+  else
+  {
+    m_texture.load(l_texture);
+  }
   m_comment = p_emote.comment;
   setText(m_texture.isNull() ? p_emote.comment : nullptr);
+}
+
+int AOEmoteButton::findHighestPixel(QImage &image)
+{
+  for (int y = 0; y < m_texture.height(); ++y)
+  {
+    const QRgb* scanLine = reinterpret_cast<const QRgb*>(m_texture.scanLine(y));
+    for (int x = 0; x < m_texture.width(); ++x)
+    {
+      if (qAlpha(scanLine[x]) > 0) return y;
+    }
+  }
+
+  return -1;
+
 }
 
 void AOEmoteButton::on_clicked()

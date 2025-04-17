@@ -23,6 +23,7 @@ public:
   int get_emote_number();
   void set_emote_number(int emote_number);
   void set_image(DREmote emote, bool enabled);
+  int findHighestPixel(QImage &image);
 
 signals:
   void emote_clicked(int emote_number);
