@@ -63,7 +63,6 @@ HEADERS += \
   src/drmovie.h \
   src/dro/system/rp_audio.h \
   src/drpacket.h \
-  src/drpather.h \
   src/drplayerlistentry.h \
   src/drposition.h \
   src/drscenemovie.h \
@@ -176,7 +175,6 @@ SOURCES += \
   src/drmovie.cpp \
   src/dro/system/rp_audio.cpp \
   src/drpacket.cpp \
-  src/drpather.cpp \
   src/drplayerlistentry.cpp \
   src/drposition.cpp \
   src/drscenemovie.cpp \

@@ -3,7 +3,7 @@
 #include "aoconfig.h"
 #include "commondefs.h"
 #include "courtroom.h"
-#include "drpather.h"
+#include "dro/fs/dir_utils.h"
 #include "file_functions.h"
 #include "modules/managers/character_manager.h"
 
@@ -30,7 +30,7 @@ void AOApplication::reload_packages()
   CharacterManager::get().ResetPackages();
   package_names = {};
 
-  QString packages_path = DRPather::get_application_path() + "/packages/";
+  QString packages_path = DirUtils::GetApplicationPath() + "/packages/";
   QDir packages_directory(packages_path);
 
   QList<QFileInfo> packages_fileinfo= packages_directory.entryInfoList();
@@ -104,12 +104,12 @@ void AOApplication::read_disabled_packages_ini()
 
 QString AOApplication::get_base_path()
 {
-  return DRPather::get_application_path() + "/base/";
+  return DirUtils::GetApplicationPath() + "/base/";
 }
 
 QString AOApplication::get_package_path(QString p_package)
 {
-  return DRPather::get_application_path() + "/packages/" + p_package + "/";
+  return DirUtils::GetApplicationPath() + "/packages/" + p_package + "/";
 }
 
 QString AOApplication::get_package_or_base_path(QString p_path)
