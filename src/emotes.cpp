@@ -118,6 +118,7 @@ void Courtroom::select_emote(int p_id)
   if (!SceneManager::get().pConfigAO->sticky_sfx_enabled())
     select_default_sfx();
 
+  ui_emotes->EmoteChange(EmotionManager::get().getCurrentEmote());
   ui_emote_dropdown->setCurrentIndex(EmotionManager::get().mEmoteID);
 
   ui_ic_chat_message_field->setFocus();

@@ -72,6 +72,7 @@ public:
   virtual QStringList getOutfitNames() override;
   virtual void switchOutfit(QString t_outfit) override;
 
+  virtual QVector<DREmote> getEmotes() override;
   virtual QMap<QString, QRect> GetEmoteOverlays(QString outfit, QString emoteName) override;
 
 private:
@@ -80,7 +81,6 @@ private:
   QStringList mOutfitNames = {};
   QStringList mOutfitsOrder = {};
 
-  virtual QVector<DREmote> getEmotes() override;
 
 
 };

@@ -2,15 +2,20 @@
 #include "courtroom.h"
 #include "modules/managers/emotion_manager.h"
 #include <QWheelEvent>
-#include "dro/interface/menus/emote_menu.h"
 
 DROEmoteButtons::DROEmoteButtons(QWidget *parent)
     : QWidget{parent}
 {
-  EmoteMenu *menu = new EmoteMenu(this);
+  m_ContextMenu = new EmoteMenu(this);
   setContextMenuPolicy(Qt::CustomContextMenu);
 
-  connect(this, &QWidget::customContextMenuRequested, menu, &EmoteMenu::OnMenuRequested);
+  connect(this, &QWidget::customContextMenuRequested, m_ContextMenu, &EmoteMenu::OnMenuRequested);
+}
+
+void DROEmoteButtons::EmoteChange(DREmote emote)
+{
+  if(m_ContextMenu == nullptr) return;
+  m_ContextMenu->EmoteChange(emote);
 }
 
 void DROEmoteButtons::wheelEvent(QWheelEvent *event)

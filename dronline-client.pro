@@ -62,6 +62,7 @@ HEADERS += \
   src/drmediatester.h \
   src/drmovie.h \
   src/dro/system/rp_audio.h \
+  src/dro/tools/button_maker.h \
   src/drpacket.h \
   src/drplayerlistentry.h \
   src/drposition.h \
@@ -174,6 +175,7 @@ SOURCES += \
   src/drmediatester.cpp \
   src/drmovie.cpp \
   src/dro/system/rp_audio.cpp \
+  src/dro/tools/button_maker.cpp \
   src/drpacket.cpp \
   src/drplayerlistentry.cpp \
   src/drposition.cpp \
