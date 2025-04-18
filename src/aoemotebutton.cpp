@@ -83,7 +83,7 @@ void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
     m_texture.load(ao_app->get_character_sprite_path(p_emote.character, p_emote.dialog, "", false));
     m_texture = m_texture.scaledToHeight(250, Qt::SmoothTransformation);
 
-    int highestPixel = findHighestPixel(m_texture);
+    int highestPixel = findHighestPixel();
 
     int cropY = 0;
     if (highestPixel != -1) cropY = highestPixel + 30;
@@ -103,7 +103,7 @@ void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
   setText(m_texture.isNull() ? p_emote.comment : nullptr);
 }
 
-int AOEmoteButton::findHighestPixel(QImage &image)
+int AOEmoteButton::findHighestPixel()
 {
   for (int y = 0; y < m_texture.height(); ++y)
   {

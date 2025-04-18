@@ -225,7 +225,7 @@ void Courtroom::on_iniswap_dropdown_changed(int p_index)
                                p_index == 0 ? get_character() : ui_iniswap_dropdown->itemText(p_index));
 }
 
-void Courtroom::onCharacterSelectPackageChanged(int p_index)
+void Courtroom::onCharacterSelectPackageChanged()
 {
   m_current_chr_page = 0;
   set_char_select_page();

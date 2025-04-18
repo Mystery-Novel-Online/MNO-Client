@@ -38,8 +38,3 @@ void LegacyBackgroundReader::execLoadBackground(QString t_backgroundName)
   }
   return;
 }
-
-int LegacyBackgroundReader::getVerticalPosition(double t_height)
-{
-  return 0;
-}

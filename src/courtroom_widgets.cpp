@@ -6,7 +6,6 @@
 #include "aoconfig.h"
 #include "aoimagedisplay.h"
 #include "aolabel.h"
-#include "aolineedit.h"
 #include "modules/managers/pair_manager.h"
 #include "aomusicplayer.h"
 #include "aonotearea.h"
@@ -550,7 +549,7 @@ void Courtroom::reset_widget_toggles()
 {
     widget_toggles = { };
 
-    for (const QString widgeToggle : widget_toggles)
+    for (const QString &widgeToggle : widget_toggles)
     {
       if(widget_names.contains(widgeToggle)) widget_names[widgeToggle]->show();
     }
@@ -565,17 +564,17 @@ void Courtroom::reset_widget_toggles()
       QStringList gm_tab = ao_app->current_theme->get_tab_widgets("GM");
 
 
-      for (const QString chatTabWidget : chat_tab)
+      for (const QString &chatTabWidget : chat_tab)
       {
         widget_toggles[chatTabWidget] = "Chat";
       }
 
-      for (const QString areaTabWidget : area_tab)
+      for (const QString &areaTabWidget : area_tab)
       {
         widget_toggles[areaTabWidget] = "Area";
       }
 
-      for (const QString gmTabWidget : gm_tab)
+      for (const QString &gmTabWidget : gm_tab)
       {
         widget_toggles[gmTabWidget] = "GM";
       }

@@ -793,7 +793,7 @@ private slots:
 
   void on_emote_dropdown_changed(int p_index);
   void on_iniswap_dropdown_changed(int p_index);
-  void onCharacterSelectPackageChanged(int p_index);
+  void onCharacterSelectPackageChanged();
   void update_iniswap_dropdown_searchable();
   void UpdateIniswapStylesheet();
   void on_pos_dropdown_changed();

@@ -805,7 +805,7 @@ void AOConfigPanel::set_caching_threshold(int p_number)
   ui_caching_threshold_label->setText(QString::number(p_number) + "%");
 }
 
-void AOConfigPanel::updateTabsVisibility(const QModelIndex &current, const QModelIndex &previous)
+void AOConfigPanel::updateTabsVisibility(const QModelIndex &current)
 {
   QString selected = current.data(Qt::DisplayRole).toString();
 

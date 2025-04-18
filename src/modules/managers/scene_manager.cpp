@@ -28,8 +28,7 @@ void SceneManager::execLoadPlayerBackground(QString t_backgroundName)
 
 int SceneManager::getBackgroundPosition()
 {
-  if(pCurrentBackground == nullptr) return 0;
-  return pCurrentBackground->getVerticalPosition(0);
+  return 0;
 }
 
 QString SceneManager::getBackgroundPath(QString t_position)

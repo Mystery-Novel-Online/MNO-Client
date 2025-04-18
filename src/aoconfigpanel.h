@@ -219,7 +219,7 @@ private:
 
 
 private slots:
-  void updateTabsVisibility(const QModelIndex &current, const QModelIndex &previous);
+  void updateTabsVisibility(const QModelIndex &current);
   void username_editing_finished();
   void showname_editing_finished();
   void advertiser_editing_finished();

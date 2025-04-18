@@ -29,7 +29,6 @@ void RPNotifyMenu::ThemeReload()
 {
 
   AOApplication *lAOApp = AOApplication::getInstance();
-  double themeResize = ThemeManager::get().getResize();
 
   //Background Image
   pBackgroundImage->move(0, 0);

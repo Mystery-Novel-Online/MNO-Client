@@ -44,8 +44,3 @@ void BackgroundReader::execLoadBackground(QString t_backgroundName)
 
   }
 }
-
-int BackgroundReader::getVerticalPosition(double t_height)
-{
-  return -230;
-}
