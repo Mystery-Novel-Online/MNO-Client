@@ -365,6 +365,7 @@ void Courtroom::create_widgets()
   ui_player_list_right = setupButtonWidget("player_list_right", "arrow_right.png", "->");
   ui_area_look = setupButtonWidget("area_look", "area_look.png", LocalizationManager::get().getLocalizationText("TITLE_LOOK"));
   p_ScreenshotBtn = new ScreenshotButton(this, ao_app);
+  ThemeManager::get().addButton("screenshot", p_ScreenshotBtn);
 
   construct_playerlist();
 

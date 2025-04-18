@@ -57,8 +57,9 @@ void ThemeManager::createTabParent()
     l_newButton->setTabGroup(r_tabInfo.m_Group);
     l_newButton->show();
 
-    setWidgetDimensions(l_newButton, l_buttonDimensions.width, l_buttonDimensions.height);
-    setWidgetPosition(l_newButton, l_buttonDimensions.x, l_buttonDimensions.y);
+
+    l_newButton->move(l_buttonDimensions.x, l_buttonDimensions.y);
+    l_newButton->resize(l_buttonDimensions.width, l_buttonDimensions.height);
 
     addWidgetName(l_buttonName,  l_newButton);
     addButton(l_buttonName, l_newButton);
@@ -208,10 +209,10 @@ void ThemeManager::setWidgetDimensions(QWidget *t_widget, int t_width, int t_hei
 void ThemeManager::AssignDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene)
 {
   pos_size_type lPositionData = mCurrentThemeReader.getWidgetPosition(t_scene, t_name);
-  lPositionData.width = static_cast<int>(lPositionData.width * mClientResize);
-  lPositionData.height = static_cast<int>(lPositionData.height * mClientResize);
-  lPositionData.x = static_cast<int>(lPositionData.x * mClientResize);
-  lPositionData.y = static_cast<int>(lPositionData.y * mClientResize);
+  lPositionData.width = static_cast<int>(lPositionData.width);
+  lPositionData.height = static_cast<int>(lPositionData.height);
+  lPositionData.x = static_cast<int>(lPositionData.x);
+  lPositionData.y = static_cast<int>(lPositionData.y);
 
   t_widget->move(lPositionData.x, lPositionData.y);
   t_widget->resize(lPositionData.width, lPositionData.height);
