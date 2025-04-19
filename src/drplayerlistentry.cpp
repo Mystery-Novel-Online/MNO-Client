@@ -79,17 +79,28 @@ void DrPlayerListEntry::set_character(QString p_character)
 {
 
   m_character = p_character;
-  const QString l_icon_path = ao_app->get_character_path(m_character, "char_icon.png");
+  QString characterIconPath = "";
 
-  const bool l_file_exist = file_exists(l_icon_path);
-  if(l_file_exist)
+
+  if(!m_CharacterOutfit.isEmpty())
   {
-      ui_user_image->set_image(l_icon_path);
+    characterIconPath = ao_app->get_character_path(m_character, "outfits/" + m_CharacterOutfit + "/char_icon.png");
+    if(!file_exists(characterIconPath))
+    {
+      characterIconPath = "";
+    }
+  }
 
+  if(characterIconPath.isEmpty())
+  {
+    characterIconPath = ao_app->get_character_path(m_character, "char_icon.png");
+  }
+
+  if(file_exists(characterIconPath))
+  {
+      ui_user_image->set_image(characterIconPath);
       const QString l_selected_texture = ao_app->get_character_path(p_character, "char_border.png");
-
       if (file_exists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
-
   }
   else
   {
@@ -105,6 +116,12 @@ void DrPlayerListEntry::set_character(QString p_character)
 
   m_prompt->hide();
 
+}
+
+void DrPlayerListEntry::setOutfit(QString outfitName)
+{
+  m_CharacterOutfit = outfitName;
+  set_character(m_character);
 }
 
 void DrPlayerListEntry::set_name(QString showname)

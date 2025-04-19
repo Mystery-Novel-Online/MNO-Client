@@ -45,11 +45,13 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
     QString characterName = jsonReader.getStringValue("character");
     QString charaURL = jsonReader.getStringValue("url");
     QString statusPlayer = jsonReader.getStringValue("status");
+    QString characterOutfit = jsonReader.getStringValue("outfit");
+    if(characterOutfit == "<All>") characterOutfit = "";
 
     QString charaIPID = jsonReader.getStringValue("IPID");
     QString charaHDID = jsonReader.getStringValue("HDID");
 
-    DrPlayer* drp = new DrPlayer(playerId, showname, characterName, charaURL, statusPlayer);
+    DrPlayer* drp = new DrPlayer(playerId, showname, characterName, charaURL, statusPlayer, characterOutfit);
     drp->setMod(charaIPID, charaHDID);
     SceneManager::get().mPlayerDataList.append(*drp);
   }

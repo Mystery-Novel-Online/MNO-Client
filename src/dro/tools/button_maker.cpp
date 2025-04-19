@@ -116,7 +116,7 @@ void ButtonMaker::onGenerateClicked()
   QString buttonDirectory = "/emotions/button" + QString::number(m_EmoteIndex + 1) + "_off.png";
   if(m_IsJson)
   {
-    buttonDirectory = "/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + QFileInfo(m_Emotes.at(m_EmoteIndex).dialog).fileName() + ".png";
+    buttonDirectory = "/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".png";
   }
 
   QString filePath = AOApplication::getInstance()->get_character_path(m_Emotes.at(m_EmoteIndex).character, buttonDirectory);

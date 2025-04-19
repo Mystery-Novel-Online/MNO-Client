@@ -8,7 +8,7 @@
 class DrPlayer
 {
 public:
-    DrPlayer(int id, QString showname, QString character, QString url, QString status);
+    DrPlayer(int id, QString showname, QString character, QString url, QString status, QString outfit);
 
     void setMod(QString ipid, QString hdid);
 
@@ -19,6 +19,7 @@ public:
     QString mPlayerStatus;
     QString mHDID;
     QString mIPID;
+    QString m_CharacterOutfit = "";
 };
 
 #endif // DRPLAYER_H

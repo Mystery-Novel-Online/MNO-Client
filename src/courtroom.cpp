@@ -338,13 +338,7 @@ void Courtroom::enter_courtroom(int p_cid)
     ao_app->get_discord()->set_character_name(l_final_showname);
     ao_config->set_showname_placeholder(l_final_showname);
 
-
-
-    const QString l_outfitPath = CharacterManager::get().p_SelectedCharacter->mFolder + "/outfits/" + CharacterManager::get().p_SelectedCharacter->GetOutfit();
-    const QString l_icon_path = ao_app->get_character_path(l_outfitPath, "char_icon.png");
-    const QString l_finalCharacterPath = file_exists(l_icon_path) ? l_outfitPath : l_chr_name;
-
-    QStringList l_content{l_finalCharacterPath, l_final_showname};
+    QStringList l_content{l_chr_name, l_final_showname, CharacterManager::get().p_SelectedCharacter->GetOutfit()};
     ao_app->send_server_packet(DRPacket("chrini", l_content));
   }
   const bool l_changed_chr = l_chr_name != l_prev_chr_name;
@@ -2637,19 +2631,10 @@ void Courtroom::onOutfitChanged(int t_outfitIndex)
   const QString l_chr_name = get_character_ini();
   const QString l_showname = CharacterManager::get().p_SelectedCharacter->GetShowname();
   const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
-  const QString l_outfitPath = CharacterManager::get().p_SelectedCharacter->mFolder + "/outfits/" + CharacterManager::get().p_SelectedCharacter->GetOutfit();
-
-
-  const QString l_icon_path = ao_app->get_character_path(l_outfitPath, "char_icon.png");
-  const QString l_finalCharacterPath = file_exists(l_icon_path) ? l_outfitPath : l_chr_name;
 
   ao_config->set_showname_placeholder(l_final_showname);
-
-         // send the character declaration
-  QStringList l_content{l_finalCharacterPath, l_final_showname};
+  QStringList l_content{l_chr_name, l_final_showname, CharacterManager::get().p_SelectedCharacter->GetOutfit()};
   ao_app->send_server_packet(DRPacket("chrini", l_content));
-
-
 }
 
 /**
@@ -3125,7 +3110,7 @@ void Courtroom::construct_playerlist_layout()
     ui_playername->setURL(playerData.mURL);
     ui_playername->setID(playerData.m_id);
     ui_playername->setStatus(playerData.mPlayerStatus);
-    ui_playername->setStatus(playerData.mPlayerStatus);
+    ui_playername->setOutfit(playerData.m_CharacterOutfit);
 
     ui_playername->setMod(playerData.mIPID, playerData.mHDID);
 
