@@ -428,7 +428,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   on_manual_gamemode_selection_changed(m_config->is_manual_gamemode_selection_enabled());
   on_manual_timeofday_selection_changed(m_config->is_manual_timeofday_selection_enabled());
 
-  ui_about->setText(get_about_message());
+  ui_about->setText(build_about_message());
 }
 
 void AOConfigPanel::showEvent(QShowEvent *event)

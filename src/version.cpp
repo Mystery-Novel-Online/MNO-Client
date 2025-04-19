@@ -37,14 +37,7 @@ QString get_post_version()
 
 QString get_version_string()
 {
-  QString l_version = get_version_number().to_string();
-
-  const QString l_post = get_post_version();
-  if (!l_post.isEmpty())
-  {
-    l_version += l_post;
-  }
-
+  QString l_version = get_version_number().to_string() + get_post_version();
   return l_version;
 }
 
@@ -62,7 +55,7 @@ QString get_resource_file_text(QString filename)
   return data;
 }
 
-QString get_about_message()
+QString build_about_message()
 {
   const bool hasApng = QImageReader::supportedImageFormats().contains("apng");
   const QString git_branch = get_resource_file_text(":/res/git/git_branch.txt");
