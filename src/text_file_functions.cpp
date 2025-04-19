@@ -15,7 +15,7 @@
 
 QStringList AOApplication::get_callwords()
 {
-  return ao_config->callwords().split(" ", DR::SkipEmptyParts);
+  return ao_config->callwords().split(" ", DR::SplitBehavior::SkipEmptyParts);
 }
 
 QString AOApplication::read_note(QString filename)

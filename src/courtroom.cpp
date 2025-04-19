@@ -56,7 +56,6 @@
 #include <QTimer>
 #include <QToolTip>
 #include <QVBoxLayout>
-#include <cmath>
 
 const int Courtroom::DEFAULT_WIDTH = 714;
 const int Courtroom::DEFAULT_HEIGHT = 668;
@@ -1288,8 +1287,8 @@ void Courtroom::handle_chatmessage_2() // handles IC
     }
 
 
-    setShownameFont(ui_vp_showname, "showname", offsetTextbox, ao_app);
-    setShownameFont(ui_vp_message, "message", offsetTextbox, ao_app);
+    setShownameFont(ui_vp_showname, "showname", offsetTextbox);
+    setShownameFont(ui_vp_message, "message", offsetTextbox);
   }
 
   if (m_shout_reload_theme)

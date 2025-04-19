@@ -342,7 +342,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
     for (int i = 1; i < l_content.size(); ++i)
     {
-      const QStringList l_tod_data = l_content.at(i).split("|", DR::SkipEmptyParts);
+      const QStringList l_tod_data = l_content.at(i).split("|", DR::SplitBehavior::SkipEmptyParts);
       if (l_tod_data.size() < 2)
         continue;
       l_area_bg.background_tod_map.insert(l_tod_data.at(0), l_tod_data.at(1));
