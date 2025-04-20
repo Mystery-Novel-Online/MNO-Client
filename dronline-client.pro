@@ -33,7 +33,6 @@ HEADERS += \
   src/aolineedit.h \
   src/aomusicplayer.h \
   src/aonotearea.h \
-  src/aonotepad.h \
   src/aonotepicker.h \
   src/aoobject.h \
   src/aopixmap.h \
@@ -141,7 +140,6 @@ SOURCES += \
   src/aolineedit.cpp \
   src/aomusicplayer.cpp \
   src/aonotearea.cpp \
-  src/aonotepad.cpp \
   src/aonotepicker.cpp \
   src/aoobject.cpp \
   src/aopixmap.cpp \
