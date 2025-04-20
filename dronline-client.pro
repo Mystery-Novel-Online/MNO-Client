@@ -79,7 +79,6 @@ HEADERS += \
   src/hardware_functions.h \
   src/lobby.h \
   src/logger.h \
-  src/misc_functions.h \
   src/mk2/drplayer.h \
   src/mk2/graphicsspriteitem.h \
   src/mk2/graphicsvideoscreen.h \
@@ -195,7 +194,6 @@ SOURCES += \
   src/lobby.cpp \
   src/logger.cpp \
   src/main.cpp \
-  src/misc_functions.cpp \
   src/mk2/drplayer.cpp \
   src/mk2/graphicsspriteitem.cpp \
   src/mk2/graphicsvideoscreen.cpp \
