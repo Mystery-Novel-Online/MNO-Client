@@ -3,7 +3,7 @@
 #include <QGraphicsOpacityEffect>
 #include <courtroom.h>
 #include "aoapplication.h"
-#include "file_functions.h"
+#include "dro/fs/file_utils.h"
 #include "modules/background/background_reader.h"
 #include "modules/background/legacy_background_reader.h"
 #include <modules/theme/thememanager.h>
@@ -14,7 +14,7 @@ void SceneManager::execLoadPlayerBackground(QString t_backgroundName)
 {
   mBackgroundName = t_backgroundName;
   const QString l_backgroundJSONPath = AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(t_backgroundName) + "/" + "background.json");
-  if(file_exists(l_backgroundJSONPath))
+  if(FSChecks::FileExists(l_backgroundJSONPath))
   {
     pCurrentBackground = new BackgroundReader();
   }

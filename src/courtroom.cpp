@@ -31,12 +31,13 @@
 #include "drshoutmovie.h"
 #include "drsplashmovie.h"
 #include "drstickerviewer.h"
-#include "file_functions.h"
+#include "dro/fs/file_utils.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "mk2/spritedynamicreader.h"
 #include "mk2/spriteseekingreader.h"
 #include "src/datatypes.h"
 #include "theme.h"
+#include "dro/fs/file_utils.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -521,7 +522,7 @@ void Courtroom::set_background(DRAreaBackground p_background)
   for (const QString &i_background : qAsConst(l_background_list))
   {
     const QString l_background_path = ao_app->get_case_sensitive_path(ao_app->get_background_path(i_background));
-    if (!dir_exists(l_background_path))
+    if (!FSChecks::DirectoryExists(l_background_path))
     {
       l_missing_backgrounds.append(i_background);
     }
@@ -590,7 +591,7 @@ void Courtroom::handle_clock(QString time)
 
   qDebug() << "Displaying clock asset...";
   QString clock_filename = "hours/" + QString::number(m_current_clock);
-  const QString asset_path = ao_app->find_theme_asset_path(clock_filename, animated_or_static_extensions());
+  const QString asset_path = ao_app->find_theme_asset_path(clock_filename, Formats::SupportedImages());
   if (asset_path.isEmpty())
   {
     qDebug() << "Asset not found; aborting.";
@@ -630,7 +631,7 @@ void Courtroom::list_music()
     l_item->setData(Qt::UserRole, l_track.filename());
     if (l_track.title() != l_track.filename())
       l_item->setToolTip(l_track.filename());
-    const QString l_song_path = ao_app->find_asset_path({ao_app->get_music_path(i_song)}, audio_extensions());
+    const QString l_song_path = ao_app->find_asset_path({ao_app->get_music_path(i_song)}, Formats::SupportedAudio());
     l_item->setBackground(l_song_path.isEmpty() ? l_missing_song_brush : l_song_brush);
   }
   filter_list_widget(ui_music_list, ui_music_search->text());
@@ -651,7 +652,7 @@ void Courtroom::list_areas()
 
 void Courtroom::list_note_files()
 {
-  QString f_config = ao_app->get_base_path() + CONFIG_FILESABSTRACT_INI;
+  QString f_config = FSPaths::BasePath() + CONFIG_FILESABSTRACT_INI;
   QFile f_file(f_config);
   if (!f_file.open(QIODevice::ReadOnly))
   {
@@ -719,7 +720,7 @@ void Courtroom::save_note()
 
 void Courtroom::save_textlog(QString p_text)
 {
-  QString f_file = ao_app->get_base_path() + icchatlogsfilename;
+  QString f_file = FSPaths::BasePath() + icchatlogsfilename;
 
   ao_app->append_note("[" + QTime::currentTime().toString() + "]" + p_text, f_file);
 }
@@ -1364,9 +1365,9 @@ void Courtroom::handle_chatmessage_3()
     QString l_showname_image;
     if (ao_app->current_theme->read_config_bool("enable_showname_image"))
     {
-      l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname", static_extensions());
+      l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname", Formats::StaticImages());
       if (l_showname_image.isEmpty())
-        l_showname_image = ao_app->find_asset_path({ao_app->get_character_path(f_char, "showname")}, static_extensions());
+        l_showname_image = ao_app->find_asset_path({ao_app->get_character_path(f_char, "showname")}, Formats::StaticImages());
       ui_vp_showname_image->set_image(l_showname_image);
       ui_vp_showname_image->show();
     }
@@ -1804,7 +1805,7 @@ void Courtroom::setup_chat()
 
   QString f_gender = "male";
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(m_chatmessage[CMChrName], "char.json");
-  if(file_exists(l_jsonPath))
+  if(FSChecks::FileExists(l_jsonPath))
   {
     ActorData *speakerActor = new ActorDataReader();
     speakerActor->loadActor(m_chatmessage[CMChrName]);
@@ -2091,11 +2092,11 @@ void Courtroom::handle_song(QStringList p_contents)
     return;
 
   QString l_song = p_contents.at(0);
-  for (auto &i_extension : audio_extensions())
+  for (auto &i_extension : Formats::SupportedAudio())
   {
     const QString l_fetched_song = l_song + i_extension;
     const QString l_path = ao_app->get_music_path(l_fetched_song);
-    if (file_exists(l_path))
+    if (FSChecks::FileExists(l_path))
     {
       l_song = l_fetched_song;
       break;
@@ -2796,7 +2797,7 @@ void Courtroom::OnCharRandomClicked()
 
   QString char_ini_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_INI);
 
-  if (!file_exists(char_ini_path))
+  if (!FSChecks::FileExists(char_ini_path))
   {
     qDebug() << "did not find " << char_ini_path;
     call_notice("Could not find " + char_ini_path);

@@ -13,6 +13,7 @@
 #include <QLineEdit>
 #include <QTextStream>
 #include <QVBoxLayout>
+#include "dro/fs/file_utils.h"
 
 AONoteArea::AONoteArea(QWidget *p_parent, AOApplication *p_ao_app)
     : AOImageDisplay(p_parent, p_ao_app)
@@ -70,7 +71,7 @@ void Courtroom::on_add_button_clicked()
 
 void Courtroom::set_note_files()
 {
-  QString filename = ao_app->get_base_path() + CONFIG_FILESABSTRACT_INI;
+  QString filename = FSPaths::BasePath() + CONFIG_FILESABSTRACT_INI;
   QFile config_file(filename);
 
   if (!config_file.open(QIODevice::ReadOnly | QIODevice::Text))

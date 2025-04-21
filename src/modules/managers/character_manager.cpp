@@ -1,7 +1,7 @@
 #include "character_manager.h"
 #include "aoemotebutton.h"
 #include "commondefs.h"
-#include "file_functions.h"
+#include "dro/fs/file_utils.h"
 #include "emotion_manager.h"
 
 #include <AOApplication.h>
@@ -19,7 +19,7 @@ CharacterManager CharacterManager::s_Instance;
 ActorData *CharacterManager::ReadCharacter(QString t_folder)
 {
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");
-  if(file_exists(l_jsonPath))
+  if(FSChecks::FileExists(l_jsonPath))
   {
     ActorData *l_returnData = new ActorDataReader();
     l_returnData->loadActor(t_folder);
@@ -38,7 +38,7 @@ void CharacterManager::SwitchCharacter(QString t_folder)
   QStringList l_OutfitNames = {"<All>"};
 
 
-  if(file_exists(l_jsonPath))
+  if(FSChecks::FileExists(l_jsonPath))
   {
     p_SelectedCharacter = new ActorDataReader();
     p_SelectedCharacter->loadActor(t_folder);

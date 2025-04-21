@@ -2,10 +2,10 @@
 
 #include "aoapplication.h"
 #include "aoimagedisplay.h"
-#include "file_functions.h"
 #include <QDesktopServices>
 #include "modules/managers/character_manager.h"
 #include "modules/managers/localization_manager.h"
+#include "dro/fs/file_utils.h"
 
 #include <QFile>
 #include <QLabel>
@@ -66,7 +66,7 @@ void AOCharButton::set_character(QString p_character, QString p_character_ini)
 {
   m_character = p_character;
   const QString l_icon_path = ao_app->get_character_path(m_character, "char_icon.png");
-  const bool l_file_exist = file_exists(l_icon_path);
+  const bool l_file_exist = FSChecks::FileExists(l_icon_path);
   setStyleSheet(l_file_exist ? QString("AOCharButton { border-image: url(\"%1\");  }").arg(l_icon_path) : nullptr);
   const QString l_final_character = QString(m_character).replace("&", "&&");
   setText(l_file_exist ? nullptr : l_final_character);

@@ -3,7 +3,7 @@
 #include "commondefs.h"
 #include "datatypes.h"
 #include "draudioengine.h"
-#include "dro/fs/dir_utils.h"
+#include "dro/fs/file_utils.h"
 #include "mk2/spritedynamicreader.h"
 #include "modules/managers/scene_manager.h"
 #include "modules/managers/localization_manager.h"
@@ -121,7 +121,7 @@ private:
 
 AOConfigPrivate::AOConfigPrivate()
     : QObject(nullptr)
-    , cfg(DirUtils::GetApplicationPath() + BASE_CONFIG_INI, QSettings::IniFormat)
+    , cfg(FSPaths::ApplicationPath() + BASE_CONFIG_INI, QSettings::IniFormat)
     , audio_engine(new DRAudioEngine(this))
 {
   Q_ASSERT_X(qApp, "initialization", "QGuiApplication is required");

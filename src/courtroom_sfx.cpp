@@ -3,7 +3,7 @@
 #include "aoapplication.h"
 #include "aosfxplayer.h"
 #include "commondefs.h"
-#include "file_functions.h"
+#include "dro/fs/file_utils.h"
 #include "drtheme.h"
 
 #include <QCheckBox>
@@ -16,6 +16,8 @@
 #include <QMenu>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
+
+#include "dro/fs/file_utils.h"
 
 #include <optional>
 
@@ -62,7 +64,7 @@ void Courtroom::load_current_character_sfx_list()
 
     const QString l_name = l_sfx_entry.at(l_sfx_entry.size() - 1).trimmed();
     const QString l_file = QString(l_sfx_entry.size() >= 2 ? l_sfx_entry.at(0) : nullptr).trimmed();
-    const bool l_is_found = !ao_app->find_asset_path({ao_app->get_sfx_noext_path(l_file)}, audio_extensions()).isEmpty();
+    const bool l_is_found = !ao_app->find_asset_path({ao_app->get_sfx_noext_path(l_file)}, Formats::SupportedAudio()).isEmpty();
     m_sfx_list.append(DRSfx(l_name, l_file, l_is_found));
   }
 

@@ -11,11 +11,12 @@
 #include "modules/managers/character_manager.h"
 #include "modules/managers/localization_manager.h"
 #include "drserversocket.h"
-#include "file_functions.h"
+#include "dro/fs/file_utils.h"
 #include "hardware_functions.h"
 #include "lobby.h"
 #include "version.h"
 #include "modules/networking/json_packet.h"
+#include "dro/fs/file_utils.h"
 
 void AOApplication::connect_to_server(DRServerInfo p_server)
 {
@@ -247,7 +248,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
       { // look for first song
         const QString &i_value = l_content.at(i);
-        for (const QString &i_ext : audio_extensions(true))
+        for (const QString &i_ext : Formats::SupportedAudio(true))
         {
           if (!i_value.endsWith(i_ext, Qt::CaseInsensitive))
             continue;

@@ -3,8 +3,6 @@
 #include "aoconfig.h"
 #include "commondefs.h"
 #include "courtroom.h"
-#include "dro/fs/dir_utils.h"
-#include "file_functions.h"
 #include "modules/managers/character_manager.h"
 
 #include <QDebug>
@@ -14,6 +12,7 @@
 #include <QRegExp>
 
 #include <modules/theme/thememanager.h>
+#include "dro/fs/file_utils.h"
 
 // Copied over from Vanilla.
 // As said in the comments there, this is a *super broad* definition.
@@ -30,7 +29,7 @@ void AOApplication::reload_packages()
   CharacterManager::get().ResetPackages();
   package_names = {};
 
-  QString packages_path = DirUtils::GetApplicationPath() + "/packages/";
+  QString packages_path = FSPaths::ApplicationPath() + "/packages/";
   QDir packages_directory(packages_path);
 
   QList<QFileInfo> packages_fileinfo= packages_directory.entryInfoList();
@@ -69,7 +68,7 @@ void AOApplication::reload_packages()
 
 void AOApplication::save_disabled_packages_ini()
 {
-  const QString l_ini_path = get_base_path() + BASE_PACKAGES_INI;
+  const QString l_ini_path = FSPaths::BasePath() + BASE_PACKAGES_INI;
   QFile l_packages_ini(l_ini_path);
   l_packages_ini.open(QIODevice::WriteOnly);
   QTextStream out(&l_packages_ini);
@@ -89,7 +88,7 @@ void AOApplication::read_disabled_packages_ini()
 {
   m_disabled_packages = {};
 
-  const QString l_ini_path = get_base_path() + BASE_PACKAGES_INI;
+  const QString l_ini_path = FSPaths::BasePath() + BASE_PACKAGES_INI;
   QFile l_packages_ini(l_ini_path);
   if (l_packages_ini.open(QFile::ReadOnly))
   {
@@ -102,16 +101,6 @@ void AOApplication::read_disabled_packages_ini()
   }
 }
 
-QString AOApplication::get_base_path()
-{
-  return DirUtils::GetApplicationPath() + "/base/";
-}
-
-QString AOApplication::get_package_path(QString p_package)
-{
-  return DirUtils::GetApplicationPath() + "/packages/" + p_package + "/";
-}
-
 QString AOApplication::get_package_or_base_path(QString p_path)
 {
 
@@ -119,8 +108,8 @@ QString AOApplication::get_package_or_base_path(QString p_path)
   {
     if(!m_disabled_packages.contains(package_names.at(i)))
     {
-      QString package_path = get_package_path(package_names.at(i))  + p_path;
-      if(dir_exists(package_path))
+      QString package_path = FSPaths::PackagePath(package_names.at(i))  + p_path;
+      if(FSChecks::DirectoryExists(package_path))
       {
         return package_path;
       }
@@ -128,7 +117,7 @@ QString AOApplication::get_package_or_base_path(QString p_path)
 
   }
 
-  return get_base_path() + p_path;
+  return FSPaths::BasePath() + p_path;
 }
 
 QString AOApplication::get_package_or_base_file(QString p_filepath)
@@ -137,15 +126,15 @@ QString AOApplication::get_package_or_base_file(QString p_filepath)
   {
     if(!m_disabled_packages.contains(package_names.at(i)))
     {
-      QString package_path = get_package_path(package_names.at(i))  + p_filepath;
-      if(file_exists(package_path))
+      QString package_path = FSPaths::PackagePath(package_names.at(i))  + p_filepath;
+      if(FSChecks::FileExists(package_path))
       {
         return package_path;
       }
     }
   }
 
-  return get_base_path() + p_filepath;
+  return FSPaths::BasePath() + p_filepath;
 }
 
 
@@ -163,15 +152,15 @@ QVector<QString> AOApplication::get_all_package_and_base_paths(QString p_path)
   {
     if(!m_disabled_packages.contains(package_names.at(i)))
     {
-      QString package_path = get_package_path(package_names.at(i))  + p_path;
-      if(dir_exists(package_path))
+      QString package_path = FSPaths::PackagePath(package_names.at(i))  + p_path;
+      if(FSChecks::DirectoryExists(package_path))
       {
         found_paths.append(package_path);
       }
     }
   }
 
-  found_paths.append(get_base_path() + p_path);
+  found_paths.append(FSPaths::BasePath() + p_path);
 
 
   return found_paths;
@@ -191,7 +180,7 @@ QString AOApplication::get_character_path(QString p_chr, QString p_file)
 
 QString AOApplication::get_music_folder_path()
 {
-  const QString l_path = get_base_path() + "sounds/music/";
+  const QString l_path = FSPaths::BasePath() + "sounds/music/";
   return get_case_sensitive_path(l_path);
 }
 
@@ -285,7 +274,7 @@ QString AOApplication::find_asset_path(QStringList p_file_list, QStringList p_ex
     for (const QString &i_extension : qAsConst(p_extension_list))
     {
       const QString l_file_path = get_case_sensitive_path(l_dir.filePath(i_file + i_extension));
-      if (file_exists(l_file_path))
+      if (FSChecks::FileExists(l_file_path))
       {
         return l_file_path;
       }
@@ -363,8 +352,8 @@ QString AOApplication::find_theme_asset_path(QString p_file, QStringList p_exten
 
   // Check if default folder exists. We do this here as it is cheaper than doing it in find_asset_path
   // (as we know there should not be capitalization or folder jumping shenanigans here.
-  const QString l_default_theme_path = get_base_path() + "themes/default/";
-  if (dir_exists(l_default_theme_path))
+  const QString l_default_theme_path = FSPaths::BasePath() + "themes/default/";
+  if (FSChecks::DirectoryExists(l_default_theme_path))
     l_path_list.append(l_default_theme_path + p_file);
 
   return find_asset_path(l_path_list, p_extension_list);

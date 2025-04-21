@@ -2,7 +2,6 @@
 
 #include "aoapplication.h"
 #include "courtroom.h"
-#include "file_functions.h"
 #include "modules/theme/thememanager.h"
 #include <QHelpEvent>
 #include <QImage>
@@ -11,6 +10,7 @@
 #include <QPainter>
 #include <modules/managers/character_manager.h>
 #include "dro/interface/menus/emote_menu.h"
+#include "dro/fs/file_utils.h"
 
 AOEmoteButton::AOEmoteButton(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y)
     : QPushButton(p_parent)
@@ -55,7 +55,7 @@ void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
   {
     const QString l_selected_texture = CharacterManager::get().p_SelectedCharacter->getSelectedImage(p_emote);
 
-    if (file_exists(l_selected_texture))
+    if (FSChecks::FileExists(l_selected_texture))
     {
       ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(l_selected_texture));
       ui_selected->show();
@@ -64,7 +64,7 @@ void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
     {
       const QString l_enabled_texture = CharacterManager::get().p_SelectedCharacter->getEmoteButton(p_emote, true);
 
-      if (file_exists(l_enabled_texture))
+      if (FSChecks::FileExists(l_enabled_texture))
       {
         l_texture = l_enabled_texture;
       }

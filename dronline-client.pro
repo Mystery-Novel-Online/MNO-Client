@@ -13,6 +13,7 @@ DEPENDPATH += $$PWD/include $$PWD/src $$PWD/3rd
 
 HEADERS += \
   src/dro/fs/dir_utils.h \
+  src/dro/fs/file_utils.h \
   src/dro/interface/menus/area_menu.h \
   src/dro/interface/menus/bgm_menu.h \
   src/dro/interface/menus/emote_menu.h \
@@ -75,7 +76,6 @@ HEADERS += \
   src/drtextedit.h \
   src/drtheme.h \
   src/drthememovie.h \
-  src/file_functions.h \
   src/hardware_functions.h \
   src/lobby.h \
   src/logger.h \
@@ -122,6 +122,7 @@ HEADERS += \
 
 SOURCES += \
   src/dro/fs/dir_utils.cpp \
+  src/dro/fs/file_utils.cpp \
   src/dro/interface/menus/area_menu.cpp \
   src/dro/interface/menus/bgm_menu.cpp \
   src/dro/interface/menus/emote_menu.cpp \
@@ -190,7 +191,6 @@ SOURCES += \
   src/drtheme.cpp \
   src/drthememovie.cpp \
   src/emotes.cpp \
-  src/file_functions.cpp \
   src/hardware_functions.cpp \
   src/lobby.cpp \
   src/logger.cpp \

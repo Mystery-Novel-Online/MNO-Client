@@ -4,11 +4,8 @@
 #include <QImageReader>
 #include <QString>
 #include <qprocess.h>
-
 #include <bass/bass.h>
-
 #include "datatypes.h"
-#include "file_functions.h"
 
 int get_release_version()
 {

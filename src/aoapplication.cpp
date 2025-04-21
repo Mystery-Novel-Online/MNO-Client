@@ -9,7 +9,7 @@
 #include "dro/system/rp_audio.h"
 #include "drpacket.h"
 #include "drserversocket.h"
-#include "file_functions.h"
+#include "dro/fs/file_utils.h"
 #include "lobby.h"
 #include "theme.h"
 #include "drtheme.h"
@@ -22,6 +22,7 @@
 
 #include <modules/managers/character_manager.h>
 #include <modules/managers/localization_manager.h>
+#include "dro/fs/file_utils.h"
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -225,7 +226,7 @@ QString AOApplication::get_sfx_noext_path(QString p_file)
   QVector<QString> l_sfx_paths = get_all_package_and_base_paths(get_sfx_dir_path());
   for(QString &l_sfx_path : l_sfx_paths)
   {
-    l_asset_path = find_asset_path(l_sfx_path + "/" + p_file, audio_extensions());
+    l_asset_path = find_asset_path(l_sfx_path + "/" + p_file, Formats::SupportedAudio());
     if(l_asset_path != nullptr) break;
   }
 
@@ -256,7 +257,7 @@ QString AOApplication::get_character_sprite_path(QString p_character, QString p_
   }
 
   QStringList l_file_name_list;
-  for (const QString &i_extension : animated_or_static_extensions())
+  for (const QString &i_extension : Formats::SupportedImages())
   {
     if (!p_prefix.isEmpty())
     {
@@ -290,7 +291,7 @@ QString AOApplication::get_character_sprite_path(QString p_character, QString p_
 
   if (l_file_path.isEmpty() && p_use_placeholder)
   {
-    l_file_path = find_theme_asset_path("placeholder", animated_extensions());
+    l_file_path = find_theme_asset_path("placeholder", Formats::AnimatedImages());
   }
 
   if (l_file_path.isEmpty())
@@ -325,7 +326,7 @@ QString AOApplication::get_background_sprite_path(QString p_background_name, QSt
 
 QString AOApplication::get_background_sprite_noext_path(QString background, QString image)
 {
-  return find_asset_path(get_background_path(background) + "/" + image, animated_or_static_extensions());
+  return find_asset_path(get_background_path(background) + "/" + image, Formats::SupportedImages());
 }
 
 QString AOApplication::get_shout_sprite_path(QString p_character, QString p_shout)
@@ -335,15 +336,15 @@ QString AOApplication::get_shout_sprite_path(QString p_character, QString p_shou
       get_character_path(p_character, p_shout + "_bubble"),
   };
 
-  QString l_filename = find_asset_path(l_filepath_list, animated_extensions());
+  QString l_filename = find_asset_path(l_filepath_list, Formats::AnimatedImages());
   if (l_filename.isEmpty())
   {
-    l_filename = find_theme_asset_path(p_shout, animated_extensions());
+    l_filename = find_theme_asset_path(p_shout, Formats::AnimatedImages());
   }
 
   if (l_filename.isEmpty())
   {
-    l_filename = find_asset_path(get_package_or_base_path("shouts/default/") + p_shout, animated_extensions());
+    l_filename = find_asset_path(get_package_or_base_path("shouts/default/") + p_shout, Formats::AnimatedImages());
   }
 
   if (l_filename.isEmpty())
@@ -370,15 +371,15 @@ QString AOApplication::get_theme_sprite_path(QString p_file_name, QString p_char
         get_character_path(p_character, l_character_file_name),
         get_character_path(p_character, "overlay/" + l_character_file_name),
     };
-    l_file_path = find_asset_path(l_path_list, animated_or_static_extensions());
+    l_file_path = find_asset_path(l_path_list, Formats::SupportedImages());
   }
 
   if (l_file_path.isEmpty())
   {
-    l_file_path = find_theme_asset_path(p_file_name, animated_or_static_extensions());
+    l_file_path = find_theme_asset_path(p_file_name, Formats::SupportedImages());
     if (l_file_path.isEmpty())
     {
-      l_file_path = find_theme_asset_path("placeholder", animated_or_static_extensions());
+      l_file_path = find_theme_asset_path("placeholder", Formats::SupportedImages());
     }
   }
 
@@ -394,16 +395,16 @@ QString AOApplication::get_effect_anim_path(QString file_name)
 {
   QString l_file_path;
 
-  l_file_path = find_theme_asset_path(file_name, animated_extensions());
+  l_file_path = find_theme_asset_path(file_name, Formats::AnimatedImages());
 
   if (l_file_path.isEmpty())
   {
-    l_file_path = find_asset_path(get_base_path() + "effects/default/" + file_name, animated_extensions());
+    l_file_path = find_asset_path(FSPaths::BasePath() + "effects/default/" + file_name, Formats::AnimatedImages());
   }
 
   if (l_file_path.isEmpty())
   {
-    l_file_path = find_theme_asset_path("placeholder", animated_extensions());
+    l_file_path = find_theme_asset_path("placeholder", Formats::AnimatedImages());
   }
 
 
@@ -415,16 +416,16 @@ QString AOApplication::get_wtce_anim_path(QString file_name)
 {
   QString l_file_path;
 
-  l_file_path = find_theme_asset_path(file_name, animated_extensions());
+  l_file_path = find_theme_asset_path(file_name, Formats::AnimatedImages());
 
   if (l_file_path.isEmpty())
   {
-    l_file_path = find_asset_path(get_base_path() + "shouts/default/" + file_name, animated_extensions());
+    l_file_path = find_asset_path(FSPaths::BasePath() + "shouts/default/" + file_name, Formats::AnimatedImages());
   }
 
   if (l_file_path.isEmpty())
   {
-    l_file_path = find_theme_asset_path("placeholder", animated_extensions());
+    l_file_path = find_theme_asset_path("placeholder", Formats::AnimatedImages());
   }
 
 
@@ -516,7 +517,7 @@ void AOApplication::resolve_current_theme()
                  "the DRO Discord including the large 'base' folder.\n"
                  "2. If you did, check that the base folder is in the same folder "
                  "where you launched Danganronpa Online from: " +
-                 DirUtils::GetApplicationPath() +
+                 FSPaths::ApplicationPath() +
                  "\n"
                  "3. If it is there, check that your current theme folder exists in "
                  "base/themes. ");

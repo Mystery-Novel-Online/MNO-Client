@@ -9,7 +9,7 @@
 #include "debug_functions.h"
 #include "modules/managers/localization_manager.h"
 #include "drpacket.h"
-#include "file_functions.h"
+#include "dro/fs/file_utils.h"
 #include "hardware_functions.h"
 #include "modules/managers/character_manager.h"
 #include "qcombobox.h"
@@ -236,7 +236,7 @@ void Courtroom::char_clicked(int n_char)
 
   qDebug() << "char_ini_path" << l_pathCharIni;
 
-  if (!file_exists(l_pathCharIni) && !file_exists(l_pathCharJson) )
+  if (!FSChecks::FileExists(l_pathCharIni) && !FSChecks::FileExists(l_pathCharJson) )
   {
     qDebug() << "did not find " << l_pathCharIni;
     call_notice("Could not find " + l_pathCharIni);
