@@ -5,8 +5,9 @@
 #include "courtroom.h"
 #include "debug_functions.h"
 #include "drdiscord.h"
+#include "dro/fs/dir_utils.h"
+#include "dro/system/rp_audio.h"
 #include "drpacket.h"
-#include "drpather.h"
 #include "drserversocket.h"
 #include "file_functions.h"
 #include "lobby.h"
@@ -38,6 +39,9 @@ AOApplication::AOApplication(int &argc, char **argv)
     : QApplication(argc, argv)
 {
   ao_config = new AOConfig(this);
+
+  DirUtils::CreateInitialFolders();
+
   SceneManager::get().pConfigAO = ao_config;
   LocalizationManager::get().execLoadLanguages();
 
@@ -47,6 +51,7 @@ AOApplication::AOApplication(int &argc, char **argv)
 
   m_server_socket = new DRServerSocket(this);
   setInstance(this);
+  RPAudio::Initialize();
 
   connect(ao_config, SIGNAL(theme_changed(QString)), this, SLOT(handle_theme_modification()));
   connect(ao_config, SIGNAL(gamemode_changed(QString)), this, SLOT(handle_theme_modification()));
@@ -511,7 +516,7 @@ void AOApplication::resolve_current_theme()
                  "the DRO Discord including the large 'base' folder.\n"
                  "2. If you did, check that the base folder is in the same folder "
                  "where you launched Danganronpa Online from: " +
-                 DRPather::get_application_path() +
+                 DirUtils::GetApplicationPath() +
                  "\n"
                  "3. If it is there, check that your current theme folder exists in "
                  "base/themes. ");

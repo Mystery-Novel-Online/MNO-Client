@@ -124,18 +124,6 @@ void GraphicsSpriteItem::setVerticalOffset(int t_offset)
   mVerticalVPOffset = -t_offset;
 }
 
-void GraphicsSpriteItem::setBackgroundScaling(double t_offset)
-{
-  //TO-DO
-  //DRBackgroundSettings l_settings = SceneManager::get().getBackgroundSettings();
-  //double l_minimum_scale = l_settings.mScaleMinimum;
-  //double l_maxScale = l_settings.mScaleMax;
-  //
-  //double l_minimumPosition = l_settings.mPositionMinimum;
-  //double l_maxPosition = l_settings.mPositionMaximum;
-
-}
-
 void GraphicsSpriteItem::stop()
 {
   m_player->stop();

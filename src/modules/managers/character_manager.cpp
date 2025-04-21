@@ -11,26 +11,23 @@
 #include "qmath.h"
 #include <QTextStream>
 
-#include <modules/character/character_data_reader.h>
-#include <modules/character/legacy_character_reader.h>
-
 #include <modules/theme/thememanager.h>
 
 CharacterManager CharacterManager::s_Instance;
 
 
-CharacterData *CharacterManager::ReadCharacter(QString t_folder)
+ActorData *CharacterManager::ReadCharacter(QString t_folder)
 {
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");
   if(file_exists(l_jsonPath))
   {
-    CharacterData *l_returnData = new CharacterDataReader();
-    l_returnData->loadCharacter(t_folder);
+    ActorData *l_returnData = new ActorDataReader();
+    l_returnData->loadActor(t_folder);
     return l_returnData;
   }
 
-  CharacterData *l_returnData = new LegacyCharacterReader();
-  l_returnData->loadCharacter(t_folder);
+  ActorData *l_returnData = new LegacyActorReader();
+  l_returnData->loadActor(t_folder);
   return l_returnData;
 }
 
@@ -43,16 +40,16 @@ void CharacterManager::SwitchCharacter(QString t_folder)
 
   if(file_exists(l_jsonPath))
   {
-    p_SelectedCharacter = new CharacterDataReader();
-    p_SelectedCharacter->loadCharacter(t_folder);
+    p_SelectedCharacter = new ActorDataReader();
+    p_SelectedCharacter->loadActor(t_folder);
     QStringList l_charaOutfits = p_SelectedCharacter->getOutfitNames();
     l_OutfitNames.append(l_charaOutfits);
     setOutfitList(l_OutfitNames);
     return;
   }
 
-  p_SelectedCharacter = new LegacyCharacterReader();
-  p_SelectedCharacter->loadCharacter(t_folder);
+  p_SelectedCharacter = new LegacyActorReader();
+  p_SelectedCharacter->loadActor(t_folder);
   setOutfitList(l_OutfitNames);
   return;
 }
@@ -68,6 +65,7 @@ void CharacterManager::setOutfitList(QStringList t_outfits)
     QComboBox* l_outfitSelectorCombo = dynamic_cast<QComboBox*>(l_outfitSelectorWidget);
     l_outfitSelectorCombo->clear();
     l_outfitSelectorCombo->addItems(t_outfits);
+    if(l_outfitSelectorCombo->count() > 1) l_outfitSelectorCombo->setCurrentIndex(1);
   }
 }
 

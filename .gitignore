@@ -3,7 +3,7 @@
 3rdparty/
 base/
 docs/
-build/*
+build/
 .qmake.conf
 .gitignore
 *~

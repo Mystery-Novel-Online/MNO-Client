@@ -12,7 +12,6 @@ public:
   BackgroundReader();
 
   void execLoadBackground(QString t_backgroundName);
-  int getVerticalPosition(double t_height);
 };
 
 #endif // BACKGROUNDREADER_H

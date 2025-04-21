@@ -38,6 +38,9 @@ public:
   void setWidgetPosition(QWidget *t_widget, int x, int y);
   void setWidgetDimensions(QWidget *t_widget, int t_width, int t_height);
 
+
+  void AssignDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene);
+
   //Widgets
   void SetWidgetNames(QHash<QString, QWidget *> t_WidgetNames);
   void addWidgetName(QString t_widgetName, QWidget *t_widget);
@@ -68,6 +71,20 @@ public:
 
   void setCourtroomBackground(AOImageDisplay *t_background);
 
+
+  template<typename T>
+  T* GetWidgetType(QString t_name)
+  {
+    QWidget *mReturnWidget = ThemeManager::get().getWidget(t_name);
+    if (dynamic_cast<T*>(mReturnWidget) != nullptr)
+    {
+      T* l_return = dynamic_cast<T*>(mReturnWidget);
+      return l_return;
+    }
+
+    return nullptr;
+  }
+
   QWidget *getWidget(QString name);
   AOButton *GetButton(QString t_name);
 
@@ -82,7 +99,8 @@ private:
   double mViewportResize = 1;
 
 
-  QMap<QString, QWidget *> waTabWidgets = {};
+  QMap<QString, QWidget *> m_TabWidgets = {};
+  QMap<QString, QWidget *> m_TabDeletionQueue = {};
 
   QHash<QString, QWidget *> m_WidgetNames = {};
   QHash<QString, AOButton*> mButtonWidgets { };
@@ -91,6 +109,8 @@ private:
 
   bool mRequiresReload = true;
   AOImageDisplay *wCourtroomBackground = nullptr;
+
+  QMap<QString, QVector2D> m_DetatchedTabList = {};
 };
 
 #endif // THEMEMANAGER_H

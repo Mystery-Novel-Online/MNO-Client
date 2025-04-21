@@ -4,7 +4,7 @@
 #include <aoemotebutton.h>
 #include <datatypes.h>
 
-#include <modules/character/character_data.h>
+#include "dro/param/actor/actor_loader.h"
 
 
 
@@ -13,9 +13,9 @@ class CharacterManager
 public:
   CharacterManager(const CharacterManager&) = delete;
 
-  CharacterData *p_SelectedCharacter = nullptr;
+  ActorData *p_SelectedCharacter = nullptr;
 
-  CharacterData *ReadCharacter(QString t_folder);
+  ActorData *ReadCharacter(QString t_folder);
   void SwitchCharacter(QString t_folder);
 
 

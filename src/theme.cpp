@@ -151,16 +151,21 @@ void set_drtextedit_font(DRTextEdit *p_widget, QString p_identifier, QString p_i
 
   // Do outlines
   bool outline;
+  int outlineWidth = 1;
+  QColor outlineColor = QColor(Qt::black);
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    outline = ThemeManager::get().mCurrentThemeReader.getFont(COURTROOM, p_identifier).outline;
+    widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.getFont(COURTROOM, p_identifier);
+    outline = fontData.outline;
+    outlineWidth = fontData.outlineSize;
+    outlineColor = fontData.outlineColor;
   }
   else
   {
     outline = (ao_app->get_font_property(p_identifier + "_outline", p_ini_file) == 1);
   }
-  p_widget->set_outline(outline);
+  p_widget->set_outline(outline, outlineWidth, outlineColor);
 
   // alignment
   set_text_alignment_or_default(p_widget, p_identifier, p_ini_file, ao_app, "text_alignment", Qt::AlignLeft,
@@ -218,9 +223,7 @@ void setShownameFont(DRTextEdit *widget, QString identifier, QString align, AOAp
 
   setThemeFont(widget, fontData, ao_app);
 
-  bool outline = fontData.outline;
-
-  widget->set_outline(outline);
+  widget->set_outline(fontData.outline, fontData.outlineSize, fontData.outlineColor);
 
   set_text_alignment_or_default(widget, fontData, ao_app, "text_alignment", Qt::AlignLeft, Qt::AlignTop);
 }

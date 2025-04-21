@@ -11,7 +11,6 @@ public:
   void setPosition(QString t_position, DRBackgroundPosition t_data);
   QString getBackgroundFilename(QString t_position);
   QString getForegroundFilename(QString t_position);
-  virtual int getVerticalPosition(double t_height) = 0;
   void setSettings(DRBackgroundSettings t_settings);
   DRBackgroundSettings getSettings();
 

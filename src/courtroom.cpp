@@ -56,6 +56,7 @@
 #include <QTimer>
 #include <QToolTip>
 #include <QVBoxLayout>
+#include <cmath>
 
 const int Courtroom::DEFAULT_WIDTH = 714;
 const int Courtroom::DEFAULT_HEIGHT = 668;
@@ -112,6 +113,7 @@ void Courtroom::set_area_list(QStringList p_area_list)
 void Courtroom::set_music_list(QStringList p_music_list)
 {
   m_music_list = p_music_list;
+  ui_bgm_filter->ReloadCategories();
   list_music();
 }
 
@@ -322,7 +324,7 @@ void Courtroom::enter_courtroom(int p_cid)
 
   CharacterManager::get().SwitchCharacter(l_chr_name);
 
-  CharacterData *l_selectedCharacter = CharacterManager::get().p_SelectedCharacter;
+  ActorData *l_selectedCharacter = CharacterManager::get().p_SelectedCharacter;
 
   if (is_spectating())
   {
@@ -331,18 +333,17 @@ void Courtroom::enter_courtroom(int p_cid)
   }
   else
   {
-    const QString l_showname = l_selectedCharacter->getShowname();
+    const QString l_showname = l_selectedCharacter->GetShowname();
     const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
     ao_app->get_discord()->set_character_name(l_final_showname);
     ao_config->set_showname_placeholder(l_final_showname);
 
-    // send the character declaration
-    QStringList l_content{l_chr_name, l_final_showname};
+    QStringList l_content{l_chr_name, l_final_showname, CharacterManager::get().p_SelectedCharacter->GetOutfit()};
     ao_app->send_server_packet(DRPacket("chrini", l_content));
   }
   const bool l_changed_chr = l_chr_name != l_prev_chr_name;
   if (l_changed_chr)
-    set_character_position(l_selectedCharacter->getSide());
+    set_character_position(l_selectedCharacter->GetSide());
   select_base_character_iniswap();
   refresh_character_content_url();
 
@@ -356,7 +357,7 @@ void Courtroom::enter_courtroom(int p_cid)
   ui_emote_dropdown->setDisabled(is_spectating());
   ui_iniswap_dropdown->setDisabled(is_spectating());
   ui_ic_chat_message_field->setDisabled(is_spectating());
-  set_character_position(l_selectedCharacter->getSide());
+  set_character_position(l_selectedCharacter->GetSide());
 
   // restore line field focus
   l_current_field->setFocus();
@@ -692,7 +693,7 @@ QString Courtroom::get_current_position()
 {
   if (ui_pos_dropdown->currentIndex() == DefaultPositionIndex)
   {
-    return CharacterManager::get().p_SelectedCharacter->getSide();
+    return CharacterManager::get().p_SelectedCharacter->GetSide();
   }
   return ui_pos_dropdown->currentData(Qt::UserRole).toString();
 }
@@ -949,12 +950,12 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   const int l_message_chr_id = p_chatmessage[CMChrId].toInt();
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
 
-  CharacterData *l_speakerData = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
+  ActorData *l_speakerData = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
 
   QString l_showname = p_chatmessage[CMShowName];
   if (l_showname.isEmpty() && !l_system_speaking)
   {
-    l_showname = l_speakerData->getShowname();
+    l_showname = l_speakerData->GetShowname();
   }
 
   const QString l_message = QString(p_chatmessage[CMMessage]).remove(QRegularExpression("(?<!\\\\)(\\{|\\})")).replace(QRegularExpression("\\\\(\\{|\\})"), "\\1");
@@ -1020,12 +1021,6 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
     DRPosition l_position = m_position_map.get_position(l_position_id);
     l_file_list.insert(ViewportStageBack, SceneManager::get().getBackgroundPath(l_position_id));
     l_file_list.insert(ViewportStageFront, SceneManager::get().getForegroundPath(l_position_id));
-
-    double l_characterHeight = CharacterManager::get().ReadCharacter(l_character)->getHeight();
-
-    ui_vp_background->setBackgroundScaling(l_characterHeight);
-    ui_vp_desk->setBackgroundScaling(l_characterHeight);
-
   }
 
   // characters
@@ -1146,12 +1141,12 @@ void Courtroom::handle_chatmessage()
   // Having an empty showname for system is actually what we expect.
 
 
-  CharacterData *l_speakerData = CharacterManager::get().ReadCharacter(m_chatmessage[CMChrName]);
+  ActorData *l_speakerData = CharacterManager::get().ReadCharacter(m_chatmessage[CMChrName]);
 
   QString f_showname = m_chatmessage[CMShowName];
   if (f_showname.isEmpty() && !is_system_speaking)
   {
-    f_showname = l_speakerData->getShowname();
+    f_showname = l_speakerData->GetShowname();
   }
   m_speaker_showname = f_showname;
 
@@ -1502,6 +1497,12 @@ void Courtroom::on_chat_config_changed()
   update_ic_log(true);
 }
 
+void Courtroom::OnBgmFilterChanged()
+{
+  m_music_list = ui_bgm_filter->GetMusicList();
+  list_music();
+}
+
 void Courtroom::CharacterSearchUpdated()
 {
   m_current_chr_page = 0;
@@ -1786,18 +1787,33 @@ void Courtroom::setup_chat()
   // Cache these so chat_tick performs better
   if(ao_app->current_theme->m_jsonLoaded)
   {
-
-    m_chatbox_message_outline = ThemeManager::get().mCurrentThemeReader.getFont(COURTROOM, "message").outline;
+    widgetFontStruct messageFont = ThemeManager::get().mCurrentThemeReader.getFont(COURTROOM, "message");
+    m_chatbox_message_outline = messageFont.outline;
+    m_messageOutlineColor = messageFont.outlineColor;
+    m_messageOutlineSize = messageFont.outlineSize;
   }
   else
   {
     m_chatbox_message_outline = (ao_app->get_font_property("message_outline", COURTROOM_FONTS_INI) == 1);
+    m_messageOutlineColor = QColor(Qt::black);
+    m_messageOutlineSize = 1;
   }
 
   m_chatbox_message_enable_highlighting = (ao_app->current_theme->read_config_bool("enable_highlighting"));
   m_chatbox_message_highlight_colors = ao_app->get_highlight_colors();
 
-  QString f_gender = ao_app->get_gender(m_chatmessage[CMChrName]);
+  QString f_gender = "male";
+  QString l_jsonPath = AOApplication::getInstance()->get_character_path(m_chatmessage[CMChrName], "char.json");
+  if(file_exists(l_jsonPath))
+  {
+    ActorData *speakerActor = new ActorDataReader();
+    speakerActor->loadActor(m_chatmessage[CMChrName]);
+    f_gender = speakerActor->GetGender();
+  }
+  else
+  {
+    f_gender = ao_app->get_gender(m_chatmessage[CMChrName]);
+  }
 
   m_blips_player->set_blips("sfx-blip" + f_gender + ".wav");
 
@@ -1852,7 +1868,7 @@ void Courtroom::next_chat_letter()
   QTextCharFormat vp_message_format = ui_vp_message->currentCharFormat();
 
   if (m_chatbox_message_outline)
-    vp_message_format.setTextOutline(QPen(Qt::black, 1));
+    vp_message_format.setTextOutline(QPen(m_messageOutlineColor, m_messageOutlineSize));
   else
     vp_message_format.setTextOutline(Qt::NoPen);
 
@@ -2151,7 +2167,7 @@ void Courtroom::set_hp_bar(int p_bar, int p_state)
 
 void Courtroom::set_character_position(QString p_pos)
 {
-  const bool l_is_default_pos = p_pos == CharacterManager::get().p_SelectedCharacter->getSide();
+  const bool l_is_default_pos = p_pos == CharacterManager::get().p_SelectedCharacter->GetSide();
 
   int l_pos_index = ui_pos_dropdown->currentIndex();
   if (!l_is_default_pos)
@@ -2348,12 +2364,6 @@ void Courtroom::on_music_list_double_clicked(QModelIndex p_model)
   const QString l_song_name = ui_music_list->item(p_model.row())->data(Qt::UserRole).toString();
   send_mc_packet(l_song_name);
   ui_ic_chat_message_field->setFocus();
-}
-
-void Courtroom::on_music_list_context_menu_requested(QPoint p_point)
-{
-  const QPoint l_global_point = ui_music_list->viewport()->mapToGlobal(p_point);
-  ui_music_menu->popup(l_global_point);
 }
 
 void Courtroom::on_music_menu_play_triggered()
@@ -2621,6 +2631,14 @@ void Courtroom::on_chat_type_changed(int p_type)
 void Courtroom::onOutfitChanged(int t_outfitIndex)
 {
   CharacterManager::get().setOutfitIndex(t_outfitIndex);
+
+  const QString l_chr_name = get_character_ini();
+  const QString l_showname = CharacterManager::get().p_SelectedCharacter->GetShowname();
+  const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
+
+  ao_config->set_showname_placeholder(l_final_showname);
+  QStringList l_content{l_chr_name, l_final_showname, CharacterManager::get().p_SelectedCharacter->GetOutfit()};
+  ao_app->send_server_packet(DRPacket("chrini", l_content));
 }
 
 /**
@@ -3096,7 +3114,7 @@ void Courtroom::construct_playerlist_layout()
     ui_playername->setURL(playerData.mURL);
     ui_playername->setID(playerData.m_id);
     ui_playername->setStatus(playerData.mPlayerStatus);
-    ui_playername->setStatus(playerData.mPlayerStatus);
+    ui_playername->setOutfit(playerData.m_CharacterOutfit);
 
     ui_playername->setMod(playerData.mIPID, playerData.mHDID);
 

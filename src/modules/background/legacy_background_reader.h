@@ -9,7 +9,6 @@ public:
   LegacyBackgroundReader();
 
   void execLoadBackground(QString t_backgroundName);
-  int getVerticalPosition(double t_height);
 };
 
 #endif // LEGACYBACKGROUNDREADER_H

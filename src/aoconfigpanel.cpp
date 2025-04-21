@@ -4,7 +4,6 @@
 #include "aoconfig.h"
 #include "aoguiloader.h"
 #include "datatypes.h"
-#include "drpather.h"
 #include "drtheme.h"
 #include "mk2/spritedynamicreader.h"
 #include "version.h"
@@ -288,9 +287,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
 
   //packages
   connect(ui_load_new_packages, SIGNAL(clicked()), this, SLOT(on_load_packages_clicked()));
-
-  //packages
-  //connect(ui_check_updates, SIGNAL(clicked()), this, SLOT(on_check_for_updates_clicked()));
 
   // ic message
   connect(m_config, SIGNAL(message_length_threshold_changed(int)), ui_length_threshold, SLOT(setValue(int)));
@@ -634,10 +630,6 @@ void AOConfigPanel::on_load_packages_clicked()
   refresh_packages_list();
 }
 
-void AOConfigPanel::on_check_for_updates_clicked()
-{
-  launch_updater_check(ui_beta_updates->isChecked(), false);
-}
 
 void AOConfigPanel::on_reload_theme_clicked()
 {
@@ -813,7 +805,7 @@ void AOConfigPanel::set_caching_threshold(int p_number)
   ui_caching_threshold_label->setText(QString::number(p_number) + "%");
 }
 
-void AOConfigPanel::updateTabsVisibility(const QModelIndex &current, const QModelIndex &previous)
+void AOConfigPanel::updateTabsVisibility(const QModelIndex &current)
 {
   QString selected = current.data(Qt::DisplayRole).toString();
 

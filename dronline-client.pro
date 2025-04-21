@@ -12,6 +12,14 @@ INCLUDEPATH += $$PWD/include $$PWD/src $$PWD/3rd
 DEPENDPATH += $$PWD/include $$PWD/src $$PWD/3rd
 
 HEADERS += \
+  src/dro/fs/dir_utils.h \
+  src/dro/interface/menus/area_menu.h \
+  src/dro/interface/menus/bgm_menu.h \
+  src/dro/interface/menus/emote_menu.h \
+  src/dro/interface/widgets/bgm_filter.h \
+  src/dro/interface/widgets/screenshot_button.h \
+  src/dro/network/tracklist_metadata.h \
+  src/dro/param/actor/actor_loader.h \
   src/aoapplication.h \
   src/aoblipplayer.h \
   src/aobutton.h \
@@ -53,8 +61,9 @@ HEADERS += \
   src/drmasterclient.h \
   src/drmediatester.h \
   src/drmovie.h \
+  src/dro/system/rp_audio.h \
+  src/dro/tools/button_maker.h \
   src/drpacket.h \
-  src/drpather.h \
   src/drplayerlistentry.h \
   src/drposition.h \
   src/drscenemovie.h \
@@ -84,12 +93,7 @@ HEADERS += \
   src/modules/background/background_data.h \
   src/modules/background/background_reader.h \
   src/modules/background/legacy_background_reader.h \
-  src/modules/character/character_data.h \
-  src/modules/character/character_data_reader.h \
-  src/modules/character/legacy_character_reader.h \
-  src/modules/character/outfit_reader.h \
   src/modules/debug/time_debugger.h \
-  src/modules/files/image_loader.h \
   src/modules/json/json_reader.h \
   src/modules/json/localization_reader.h \
   src/modules/json/theme_mode_reader.h \
@@ -117,6 +121,14 @@ HEADERS += \
   src/version.h
 
 SOURCES += \
+  src/dro/fs/dir_utils.cpp \
+  src/dro/interface/menus/area_menu.cpp \
+  src/dro/interface/menus/bgm_menu.cpp \
+  src/dro/interface/menus/emote_menu.cpp \
+  src/dro/interface/widgets/bgm_filter.cpp \
+  src/dro/interface/widgets/screenshot_button.cpp \
+  src/dro/network/tracklist_metadata.cpp \
+  src/dro/param/actor/actor_loader.cpp \
   src/aoapplication.cpp \
   src/aoblipplayer.cpp \
   src/aobutton.cpp \
@@ -162,8 +174,9 @@ SOURCES += \
   src/drmasterclient.cpp \
   src/drmediatester.cpp \
   src/drmovie.cpp \
+  src/dro/system/rp_audio.cpp \
+  src/dro/tools/button_maker.cpp \
   src/drpacket.cpp \
-  src/drpather.cpp \
   src/drplayerlistentry.cpp \
   src/drposition.cpp \
   src/drscenemovie.cpp \
@@ -193,12 +206,7 @@ SOURCES += \
   src/modules/background/background_data.cpp \
   src/modules/background/background_reader.cpp \
   src/modules/background/legacy_background_reader.cpp \
-  src/modules/character/character_data.cpp \
-  src/modules/character/character_data_reader.cpp \
-  src/modules/character/legacy_character_reader.cpp \
-  src/modules/character/outfit_reader.cpp \
   src/modules/debug/time_debugger.cpp \
-  src/modules/files/image_loader.cpp \
   src/modules/json/json_reader.cpp \
   src/modules/json/localization_reader.cpp \
   src/modules/json/theme_mode_reader.cpp \

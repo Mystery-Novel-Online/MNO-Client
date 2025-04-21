@@ -3,6 +3,10 @@
 
 #include "datatypes.h"
 #include "drgraphicscene.h"
+#include "dro/interface/menus/area_menu.h"
+#include "dro/interface/menus/bgm_menu.h"
+#include "dro/interface/widgets/bgm_filter.h"
+#include "dro/interface/widgets/screenshot_button.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"
@@ -194,6 +198,8 @@ public:
   void select_base_character_iniswap();
   void refresh_character_content_url();
   void construct_playerlist_layout();
+  void construct_emotes();
+  void construct_emote_page_layout();
   void write_area_desc();
 
   // Set the showname of the client
@@ -396,6 +402,9 @@ private:
 
   // Cached values for chat_tick
   bool m_chatbox_message_outline = false;
+  int m_messageOutlineSize = 1;
+  QColor m_messageOutlineColor = QColor(Qt::black);
+
   bool m_chatbox_message_enable_highlighting = false;
   QVector<QStringList> m_chatbox_message_highlight_colors;
 
@@ -508,9 +517,9 @@ private:
   QLineEdit *ui_area_search = nullptr;
   QListWidget *ui_music_list = nullptr;
   QLineEdit *ui_music_search = nullptr;
-  QMenu *ui_music_menu = nullptr;
-  QAction *ui_music_menu_play = nullptr;
-  QAction *ui_music_menu_insert_ooc = nullptr;
+  BGMMenu *p_MenuBGM = nullptr;
+
+  AreaMenu *p_AreaContextMenu = nullptr;
 
   QListWidget *ui_sfx_list = nullptr;
   QVector<DRSfx> m_sfx_list;
@@ -547,6 +556,8 @@ private:
   QComboBox *ui_emote_dropdown = nullptr;
 
   QComboBox *wOutfitDropdown = nullptr;
+
+  BGMFilter *ui_bgm_filter = nullptr;
 
   QComboBox *ui_iniswap_dropdown = nullptr;
 
@@ -663,6 +674,9 @@ private:
   AOButton *ui_player_list_left = nullptr;
   AOButton *ui_player_list_right = nullptr;
   AOButton *ui_area_look = nullptr;
+
+  ScreenshotButton *p_ScreenshotBtn = nullptr;
+
   DRTextEdit *ui_area_desc = nullptr;
 
 
@@ -700,8 +714,6 @@ private:
   void set_char_select();
   void set_char_select_page();
 
-  void construct_emotes();
-  void construct_emote_page_layout();
 
   void construct_playerlist();
 
@@ -729,6 +741,7 @@ public slots:
   void on_char_select_left_clicked();
   void on_char_select_right_clicked();
   void hide_emote_tooltip(int id);
+  void send_mc_packet(QString p_song);
 
 private slots:
   void setup_chat();
@@ -751,6 +764,7 @@ private slots:
   void on_ic_message_return_pressed();
   void handle_ic_message_length();
   void on_chat_config_changed();
+  void OnBgmFilterChanged();
 
   void CharacterSearchUpdated();
 
@@ -768,12 +782,10 @@ private slots:
 
   void on_music_list_clicked();
   void on_music_list_double_clicked(QModelIndex p_model);
-  void on_music_list_context_menu_requested(QPoint p_point);
   void on_music_menu_play_triggered();
   void on_music_menu_insert_ooc_triggered();
   void on_music_search_edited(QString);
   void on_music_search_edited();
-  void send_mc_packet(QString p_song);
 
   void select_emote(int p_id);
 

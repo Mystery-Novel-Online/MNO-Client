@@ -77,7 +77,6 @@ public slots:
   void start();
   void restart();
   void setVerticalOffset(int t_offset);
-  void setBackgroundScaling(double t_offset);
   void stop();
 
 signals:

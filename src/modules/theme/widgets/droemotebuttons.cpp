@@ -6,7 +6,16 @@
 DROEmoteButtons::DROEmoteButtons(QWidget *parent)
     : QWidget{parent}
 {
+  m_ContextMenu = new EmoteMenu(this);
+  setContextMenuPolicy(Qt::CustomContextMenu);
 
+  connect(this, &QWidget::customContextMenuRequested, m_ContextMenu, &EmoteMenu::OnMenuRequested);
+}
+
+void DROEmoteButtons::EmoteChange(DREmote emote)
+{
+  if(m_ContextMenu == nullptr) return;
+  m_ContextMenu->EmoteChange(emote);
 }
 
 void DROEmoteButtons::wheelEvent(QWheelEvent *event)

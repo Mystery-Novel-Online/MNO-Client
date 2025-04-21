@@ -115,6 +115,15 @@ ThemeModeReader::ThemeModeReader(QString filePath)
         widgetFont.bold = obj["font"].toObject()["bold"].toBool();
         widgetFont.sharp = obj["font"].toObject()["sharp"].toBool();
         widgetFont.outline = obj["font"].toObject()["outline"].toBool();
+        if(obj["font"].toObject().contains("outline_color"))
+        {
+          widgetFont.outlineColor = QColor(obj["font"].toObject()["outline_color"].toString());
+        }
+
+        if(obj["font"].toObject().contains("outline_size"))
+        {
+          widgetFont.outlineSize = obj["font"].toObject()["outline_size"].toInt();
+        }
 
         mCourtroomWidgetFonts[key] = widgetFont;
 
@@ -156,6 +165,16 @@ ThemeModeReader::ThemeModeReader(QString filePath)
         widgetFont.bold = obj["font"].toObject()["bold"].toBool();
         widgetFont.sharp = obj["font"].toObject()["sharp"].toBool();
         widgetFont.outline = obj["font"].toObject()["outline"].toBool();
+
+        if(obj["font"].toObject().contains("outline_color"))
+        {
+          widgetFont.outlineColor = QColor(obj["font"].toObject()["outline_color"].toString());
+        }
+
+        if(obj["font"].toObject().contains("outline_size"))
+        {
+          widgetFont.outlineSize = obj["font"].toObject()["outline_size"].toInt();
+        }
 
         mLobbyWidgetFonts[key] = widgetFont;
 

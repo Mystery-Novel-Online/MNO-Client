@@ -11,14 +11,14 @@ DRTextEdit::DRTextEdit(QWidget *parent)
   connect(this, SIGNAL(text_alignment_changed(Qt::Alignment)), this, SLOT(on_text_changed()));
 }
 
-void DRTextEdit::set_outline(bool p_enabled)
+void DRTextEdit::set_outline(bool p_enabled, int outlineWidth, QColor outlineColor)
 {
   if (has_outline == p_enabled)
     return;
   has_outline = p_enabled;
   QTextCharFormat widget_format = currentCharFormat();
   if (p_enabled)
-    widget_format.setTextOutline(QPen(Qt::black, 1));
+    widget_format.setTextOutline(QPen(outlineColor, outlineWidth));
   else
     widget_format.setTextOutline(Qt::NoPen);
   setCurrentCharFormat(widget_format);

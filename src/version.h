@@ -12,7 +12,3 @@ QString get_post_version();
 QString get_version_string();
 QString get_about_message();
 
-
-//Updater
-void launch_updater_check(bool is_beta, bool isSilent);
-bool check_updater_is_beta();

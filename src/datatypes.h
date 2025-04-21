@@ -5,6 +5,27 @@
 #include <QDateTime>
 #include <QMap>
 #include <QVector>
+#include <QRect>
+#include <QColor>
+
+
+class VariableMappedString
+{
+public:
+  VariableMappedString()
+  {
+
+  }
+
+  VariableMappedString(QString t_input)
+  {
+    mInputString = t_input;
+  };
+
+  QString mInputString = "";
+  QMap<QString, QString> mVariableMap = {};
+};
+
 
 enum ThemeSceneType
 {
@@ -45,6 +66,9 @@ public:
   QString sound_file;
   int sound_delay = 0;
   QString video_file;
+  QString outfitName = "";
+  QString emoteName = "";
+  QMap<QString, QRect> emoteOverlays = {};
 };
 
 class DRAreaBackground
@@ -219,6 +243,8 @@ struct widgetFontStruct
   bool outline = false;
   QString color = "#FFFFFF";
   QString align = "left";
+  QColor outlineColor = QColor(Qt::black);
+  int outlineSize = 1;
 };
 
 struct WidgetThemeData

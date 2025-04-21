@@ -196,6 +196,16 @@ ThemeScene *ThemeModuleReader::ParseScene(QString t_scene)
       widgetFont->sharp = widgetFontObject["sharp"].toBool();
       widgetFont->outline = widgetFontObject["outline"].toBool();
 
+      if(widgetFontObject.contains("outline_color"))
+      {
+        widgetFont->outlineColor = QColor(widgetFontObject["outline_color"].toString());
+      }
+
+      if(widgetFontObject.contains("outline_size"))
+      {
+        widgetFont->outlineSize = widgetFontObject["outline_size"].toInt();
+      }
+
       newScene->setWidgetFont(key, widgetFont);
 
       if(key == "ic_chatlog")

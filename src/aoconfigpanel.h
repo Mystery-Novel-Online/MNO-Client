@@ -59,7 +59,6 @@ private slots:
   void on_reload_character_clicked();
   void on_reload_audiotracks_clicked();
   void on_load_packages_clicked();
-  void on_check_for_updates_clicked();
   void on_theme_changed(QString);
   void on_gamemode_changed(QString);
   void on_manual_gamemode_selection_changed(bool);
@@ -220,7 +219,7 @@ private:
 
 
 private slots:
-  void updateTabsVisibility(const QModelIndex &current, const QModelIndex &previous);
+  void updateTabsVisibility(const QModelIndex &current);
   void username_editing_finished();
   void showname_editing_finished();
   void advertiser_editing_finished();

@@ -4,7 +4,7 @@
 #include "aonotearea.h"
 #include "courtroom.h"
 #include "debug_functions.h"
-#include "drpather.h"
+#include "dro/fs/dir_utils.h"
 
 #include <QFileDialog>
 #include <QLineEdit>
@@ -52,7 +52,7 @@ void Courtroom::on_set_file_button_clicked()
   AOButton *f_button = static_cast<AOButton *>(sender());
   AONotePicker *f_notepicker = static_cast<AONotePicker *>(f_button->parent());
   QString f_filename =
-      QFileDialog::getOpenFileName(this, "Open File", DRPather::get_application_path(), "Text files (*.txt)");
+      QFileDialog::getOpenFileName(this, "Open File", DirUtils::GetApplicationPath(), "Text files (*.txt)");
 
   if (f_filename != "")
   {

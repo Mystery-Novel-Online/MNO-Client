@@ -38,6 +38,8 @@ public:
   QVector<DrPlayer> mPlayerDataList;
 
   AOConfig *pConfigAO = nullptr;
+
+  void ScreenshotViewport();
 private:
   SceneManager() {}
   static SceneManager s_Instance;

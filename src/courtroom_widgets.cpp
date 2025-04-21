@@ -6,7 +6,6 @@
 #include "aoconfig.h"
 #include "aoimagedisplay.h"
 #include "aolabel.h"
-#include "aolineedit.h"
 #include "modules/managers/pair_manager.h"
 #include "aomusicplayer.h"
 #include "aonotearea.h"
@@ -162,6 +161,9 @@ void Courtroom::create_widgets()
   m_loading_timer->setSingleShot(true);
   m_loading_timer->setInterval(ao_config->loading_bar_delay());
 
+  ui_bgm_filter = new BGMFilter(this);
+  connect(ui_bgm_filter, SIGNAL(activated(int)), this, SLOT(OnBgmFilterChanged()));
+
   ui_iniswap_dropdown = new QComboBox(this);
   ui_iniswap_dropdown->setInsertPolicy(QComboBox::NoInsert);
   {
@@ -186,6 +188,12 @@ void Courtroom::create_widgets()
   ui_ooc_chatlog->setOpenExternalLinks(true);
 
   ui_area_list = new QListWidget(this);
+  ui_area_list->setContextMenuPolicy(Qt::CustomContextMenu);
+
+  p_AreaContextMenu = new AreaMenu(this);
+  connect(ui_area_list, &QWidget::customContextMenuRequested, p_AreaContextMenu, &AreaMenu::OnMenuRequested);
+
+
   ui_area_search = new QLineEdit(this);
   ui_area_search->setFrame(false);
   ui_area_search->setPlaceholderText(LocalizationManager::get().getLocalizationText("TEXTBOX_AREA"));
@@ -194,9 +202,7 @@ void Courtroom::create_widgets()
   ui_music_list->setContextMenuPolicy(Qt::CustomContextMenu);
   ui_music_search = setupLineEditWidget("music_search", LocalizationManager::get().getLocalizationText("TEXTBOX_MUSIC"), "[MUSIC SEARCH]", "");
   ui_music_search->setFrame(false);
-  ui_music_menu = new QMenu(this);
-  ui_music_menu_play = ui_music_menu->addAction(tr("Play"));
-  ui_music_menu_insert_ooc = ui_music_menu->addAction(tr("Insert to OOC"));
+  p_MenuBGM = new BGMMenu(this);
 
   ui_sfx_list = new QListWidget(this);
   ui_sfx_list->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -357,6 +363,8 @@ void Courtroom::create_widgets()
   ui_player_list_left = setupButtonWidget("player_list_left", "arrow_left.png", "<-");
   ui_player_list_right = setupButtonWidget("player_list_right", "arrow_right.png", "->");
   ui_area_look = setupButtonWidget("area_look", "area_look.png", LocalizationManager::get().getLocalizationText("TITLE_LOOK"));
+  p_ScreenshotBtn = new ScreenshotButton(this, ao_app);
+  ThemeManager::get().addButton("screenshot", p_ScreenshotBtn);
 
   construct_playerlist();
 
@@ -448,10 +456,7 @@ void Courtroom::connect_widgets()
 
   connect(ui_music_list, SIGNAL(clicked(QModelIndex)), this, SLOT(on_music_list_clicked()));
   connect(ui_music_list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(on_music_list_double_clicked(QModelIndex)));
-  connect(ui_music_list, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_music_list_context_menu_requested(QPoint)));
-
-  connect(ui_music_menu_play, SIGNAL(triggered()), this, SLOT(on_music_menu_play_triggered()));
-  connect(ui_music_menu_insert_ooc, SIGNAL(triggered()), this, SLOT(on_music_menu_insert_ooc_triggered()));
+  connect(ui_music_list, SIGNAL(customContextMenuRequested(QPoint)), p_MenuBGM, SLOT(OnMenuRequested(QPoint)));
 
   connect(ui_area_list, SIGNAL(clicked(QModelIndex)), this, SLOT(on_area_list_clicked()));
   connect(ui_area_list, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(on_area_list_double_clicked(QModelIndex)));
@@ -544,7 +549,7 @@ void Courtroom::reset_widget_toggles()
 {
     widget_toggles = { };
 
-    for (const QString widgeToggle : widget_toggles)
+    for (const QString &widgeToggle : widget_toggles)
     {
       if(widget_names.contains(widgeToggle)) widget_names[widgeToggle]->show();
     }
@@ -559,17 +564,17 @@ void Courtroom::reset_widget_toggles()
       QStringList gm_tab = ao_app->current_theme->get_tab_widgets("GM");
 
 
-      for (const QString chatTabWidget : chat_tab)
+      for (const QString &chatTabWidget : chat_tab)
       {
         widget_toggles[chatTabWidget] = "Chat";
       }
 
-      for (const QString areaTabWidget : area_tab)
+      for (const QString &areaTabWidget : area_tab)
       {
         widget_toggles[areaTabWidget] = "Area";
       }
 
-      for (const QString gmTabWidget : gm_tab)
+      for (const QString &gmTabWidget : gm_tab)
       {
         widget_toggles[gmTabWidget] = "GM";
       }
@@ -655,6 +660,7 @@ void Courtroom::reset_widget_names()
       {"emote_right", ui_emote_right},
       {"emote_dropdown", ui_emote_dropdown},
       {"iniswap_dropdown", ui_iniswap_dropdown},
+      {"category_dropdown", ui_bgm_filter},
       {"pos_dropdown", ui_pos_dropdown},
       {"defense_bar", ui_defense_bar},
       {"prosecution_bar", ui_prosecution_bar},
@@ -703,7 +709,8 @@ void Courtroom::reset_widget_names()
       {"pair_offset", pUIPairOffsetSlider},
       {"viewport_transition", SceneManager::get().GetTransition()},
       {"viewport_overlay", w_ViewportOverlay},
-      {"outfit_selector", wOutfitDropdown}
+      {"outfit_selector", wOutfitDropdown},
+      {"screenshot", p_ScreenshotBtn}
   };
 
     ThemeManager::get().SetWidgetNames(widget_names);
@@ -1098,6 +1105,10 @@ void Courtroom::set_widgets()
   UpdateIniswapStylesheet();
   TimeDebugger::get().CheckpointTimer("Courtroom Setup", "Iniswap Dropdown");
 
+
+  set_size_and_pos(ui_bgm_filter, "category_dropdown", COURTROOM_DESIGN_INI, ao_app);
+  set_stylesheet(ui_bgm_filter, "[CATEGORY DROPDOWN]", COURTROOM_STYLESHEETS_CSS, ao_app);
+
   set_size_and_pos(ui_pos_dropdown, "pos_dropdown", COURTROOM_DESIGN_INI, ao_app);
   set_stylesheet(ui_pos_dropdown, "[POS DROPDOWN]", COURTROOM_STYLESHEETS_CSS, ao_app);
 
@@ -1129,6 +1140,7 @@ void Courtroom::set_widgets()
   for (int i = 0; i < effect_names.size(); ++i)
   {
     set_size_and_pos(ui_effects[i], effect_names[i], COURTROOM_DESIGN_INI, ao_app);
+    ThemeManager::get().addWidgetName(effect_names[i], ui_effects[i]);
   }
   reset_effect_buttons();
 
@@ -1149,6 +1161,7 @@ void Courtroom::set_widgets()
   for (int i = 0; i < wtce_names.size(); ++i)
   {
     set_size_and_pos(ui_wtce[i], wtce_names[i], COURTROOM_DESIGN_INI, ao_app);
+    ThemeManager::get().addWidgetName(wtce_names[i], ui_wtce[i]);
   }
 
   if (ao_app->current_theme->read_config_bool("enable_single_wtce")) // courtroom_config.ini necessary
@@ -1196,6 +1209,7 @@ void Courtroom::set_widgets()
   for (int i = 0; i < ui_label_images.size(); ++i)
   {
     set_size_and_pos(ui_label_images[i], label_images[i].toLower() + "_image", COURTROOM_DESIGN_INI, ao_app);
+    ThemeManager::get().addWidgetName(label_images[i].toLower() + "_image", ui_label_images[i]);
   }
 
   if (ao_app->current_theme->read_config_bool("enable_label_images"))
