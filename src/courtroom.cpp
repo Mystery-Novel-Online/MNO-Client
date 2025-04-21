@@ -3040,7 +3040,7 @@ void Courtroom::construct_playerlist_layout()
   player_columns = (( (int)((float)ui_player_list->height() * resize) - player_height) / (y_spacing + player_height)) + 1;
 
 
-  if(m_current_reportcard_reason != ReportCardReason::None)
+  if(m_current_reportcard_reason != ReportCardReason::None && m_chr_id != SpectatorId)
   {
     m_page_player_list = 0;
     ui_player_list_right->hide();
