@@ -16,6 +16,7 @@ public:
 
   QVector<DREmote> mEmotes = {};
 private:
+  double mHeight = 0.1;
   QString mOutfitPath = "";
   QString mOutfitName = "";
   QString mCharacterName = "";

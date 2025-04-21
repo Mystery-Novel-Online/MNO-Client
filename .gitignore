@@ -13,5 +13,3 @@ docs/
 *.autosave
 *DS_Store
 *.swp
-/build
-dronline-client.pro.user.*

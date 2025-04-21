@@ -22,33 +22,24 @@ QString AOImageDisplay::get_image()
   return m_image;
 }
 
-void AOImageDisplay::set_image(QString p_image, bool t_forceRefresh)
+void AOImageDisplay::set_image(QString p_image)
 {
-  if(!t_forceRefresh)
-  {
-    if(m_image == p_image) return;
-  }
   m_image = p_image;
   refreshImage();
 }
 
 void AOImageDisplay::refreshImage()
 {
-  if(m_Pixmap != nullptr)
-  {
-    delete m_Pixmap;
-    m_Pixmap = nullptr;
-  }
-  if(!ThemeManager::get().mCurrentThemeReader.IsPixmapExist(m_image))
+  if(!ThemeManager::get().mCurrentThemeReader.pixmapExists(m_image))
   {
     qDebug() << "[AOPixmap] Failed to find in theme, loading manually: " + m_image;
-    m_Pixmap = new AOPixmap(m_image);
-    setPixmap(m_Pixmap->scale(size()));
+    AOPixmap l_pixmap(m_image);
+    setPixmap(l_pixmap.scale(size()));
   }
   else
   {
     qDebug() << "[AOPixmap] Found in theme, loading: " + m_image;
-    setPixmap(ThemeManager::get().mCurrentThemeReader.GetCachedPixmap(m_image).scale(size()));//->scale(size()));
+    setPixmap(ThemeManager::get().mCurrentThemeReader.getPixmap(m_image).scale(size()));//->scale(size()));
   }
 }
 
@@ -80,15 +71,3 @@ void AOImageDisplay::set_chatbox_image(QString p_chatbox_name, bool p_is_self)
   }
   set_image(l_target_file);
 }
-
-void AOImageDisplay::SetImageBase(QString l_path, int l_level)
-{
-  m_alphaLevel = -1;
-  if(m_Pixmap == nullptr)
-  {
-    m_Pixmap = new AOPixmap();
-  };
-  m_Pixmap->SetAlphaBase(l_path, l_level);
-  setPixmap(m_Pixmap->scale(size()));
-}
-

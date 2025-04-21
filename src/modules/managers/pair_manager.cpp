@@ -1,8 +1,7 @@
 #include "pair_manager.h"
 #include "commondefs.h"
-#include "scene_manager.h"
 
-#include <aoapplication.h>
+#include <AOApplication.h>
 
 #include <modules/theme/thememanager.h>
 
@@ -38,15 +37,6 @@ void PairManager::SetPairData(QString character, QString emote, int selfOffset, 
   mEmote = emote;
   mPairUsed = true;
   mIsFlipped = flipped;
-}
-
-void PairManager::UpdatePairData()
-{
-  ICMessageData *l_MessageData = SceneManager::get().GetMessageData();
-  if(!l_MessageData->m_PairCharacterFolder.isEmpty())
-  {
-    SetPairData(l_MessageData->m_PairCharacterFolder, l_MessageData->m_PairCharacterEmotion, l_MessageData->m_OffsetX, l_MessageData->m_PairOffsetX, l_MessageData->m_PairIsFlipped);
-  }
 }
 
 double PairManager::GetOffsetSelf()
@@ -116,7 +106,7 @@ void PairManager::ThemeReload()
 {
   mPairChatboxPositions = {};
   QStringList shownameElements = {"showname", "ao2_chatbox", "message", "chat_arrow"};
-  QStringList alignmentElements = {"", "_left", "_right", "_cg"};
+  QStringList alignmentElements = {"", "_left", "_right"};
 
   for(QString elementname : shownameElements)
   {

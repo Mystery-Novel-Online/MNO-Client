@@ -21,7 +21,6 @@ public:
   QStringList getLanguageNames();
 
   QString getLocalizationText(QString t_value);
-  QString getLocalizationText(QString t_value, QStringList t_variables);
   QString getLocalizationCode();
   QString getLocalizationCredit();
 
@@ -29,7 +28,6 @@ public:
 private:
   LocalizationManager() {}
   static LocalizationManager s_Instance;
-  QString insertVariables(QString t_value, QStringList t_variables);
 
   QString mSelectedLanguageName = "English";
 
@@ -60,7 +58,6 @@ private:
           {"POS_PRO_ASS", "Prosecutor Assistant"},
           {"SFX_SILENCE", "Silence"},
           {"CHAT_TALK", "Talk"},
-          {"CHAT_CG", "CG"},
           {"CHAT_SHOUT", "Shout"},
           {"CHAT_THINK", "Think"},
           {"COLOR_WHITE", "White"},

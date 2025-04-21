@@ -13,36 +13,6 @@ AOMusicPlayer::AOMusicPlayer(AOApplication *p_ao_app, QObject *p_parent)
   m_family->set_capacity(1); // a single song is needed
 }
 
-void AOMusicPlayer::play_streamed(QString t_url)
-{
-  stop();
-
-  m_filename = t_url;
-
-  if(mLastSong != nullptr)
-  {
-    mLastSong->stop();
-  }
-  mLastSong = mCurrentSong;
-
-  if(mLastSong != nullptr)
-  {
-    mLastSong->fadeOut(3000);
-  }
-
-  mCurrentSong = m_family->create_url_stream(t_url);
-  if (mCurrentSong)
-  {
-    mCurrentSong->fadeIn(3000);
-    mCurrentSong->play();
-
-    if (mCurrentSong->is_playing())
-    {
-      qDebug() << "playing" << mCurrentSong->get_file_name();
-    }
-  }
-}
-
 void AOMusicPlayer::play(QString p_song)
 {
   stop();
@@ -87,10 +57,4 @@ void AOMusicPlayer::stop()
   //  for (auto &song : m_family->get_stream_list())
   //    song->stop();
   //}
-}
-
-void AOMusicPlayer::forceStop()
-{
-  if(mCurrentSong != nullptr) mCurrentSong->stop();
-  if(mLastSong != nullptr) mLastSong->stop();
 }

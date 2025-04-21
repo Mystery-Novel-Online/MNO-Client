@@ -1,9 +1,9 @@
 #ifndef DROEMOTEBUTTONS_H
 #define DROEMOTEBUTTONS_H
 
+#include <AOApplication.h>
 #include <QObject>
 #include <QWidget>
-#include <aoapplication.h>
 
 class DROEmoteButtons : public QWidget
 {

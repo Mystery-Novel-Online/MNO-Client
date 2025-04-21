@@ -19,7 +19,7 @@ void DRTheme::InitTheme()
 {
   ThemeManager::get().loadTheme(ao_app->getCurrentTheme());
   ThemeManager::get().LoadGamemode(ao_app->getCurrentGamemode());
-  ThemeManager::get().mCurrentThemeReader.SetTimeOfDay(ao_app->getCurrentTime());
+  ThemeManager::get().mCurrentThemeReader.SetTime(ao_app->getCurrentTime());
   const QString l_json_path = ao_app->find_theme_asset_path(THEME_JSON);
   m_themePath = ao_app->find_current_theme_path();
 
@@ -50,13 +50,13 @@ void DRTheme::InitTheme()
 
 void DRTheme::setup_layers()
 {
-  widget_layers = ThemeManager::get().mCurrentThemeReader.GetLayers();
+  widget_layers = ThemeManager::get().mCurrentThemeReader.getLayers();
   return;
 }
 
 void DRTheme::setup_free_blocks()
 {
-  mFreeBlocks = {};
+  free_blocks = {};
   //free_blocks = ThemeManager::get().mCurrentThemeReader->;
   free_block_count = 0;
   QJsonValue free_blocks_array_value = m_currentThemeObject.value(QString("free_blocks"));
@@ -66,25 +66,10 @@ void DRTheme::setup_free_blocks()
   {
     QJsonObject free_block_object = i.toObject();
     QString free_block_name = free_block_object["name"].toString();
-    QString imagePath = free_block_object["image"].toString();
 
     if(!free_block_name.isEmpty())
     {
-      FreeblockData mFreeblock = FreeblockData(free_block_name);
-      mFreeblock.mImagePath = imagePath;
-
-
-      QJsonArray variablesArray = free_block_object.value(QString("variables")).toArray();
-
-      for(QJsonValueRef rVar : variablesArray)
-      {
-        QJsonObject varObject = rVar.toObject();
-        mFreeblock.mVariables[varObject["key"].toString()] = varObject["value"].toString();
-
-      }
-
-      mFreeBlocks.append(mFreeblock);
-
+      free_blocks.append(free_block_name);
       free_block_count += 1;
     }
   }
@@ -192,7 +177,7 @@ bool DRTheme::read_config_bool(QString p_setting_name)
     return ao_app->read_theme_ini_bool(p_setting_name, COURTROOM_CONFIG_INI);
   }
 
-  return ThemeManager::get().GetThemeConfigBool(p_setting_name);
+  return ThemeManager::get().getConfigBool(p_setting_name);
 }
 
 int DRTheme::read_config_int(QString p_setting_name)
@@ -213,18 +198,18 @@ int DRTheme::read_config_int(QString p_setting_name)
 
 QVector<QStringList>DRTheme::get_highlight_characters()
 {
-  return ThemeManager::get().mCurrentThemeReader.GetColorsHighlights();
+  return ThemeManager::get().mCurrentThemeReader.getHighlights();
 }
 
 pos_size_type DRTheme::get_element_dimensions(QString p_identifier, QString p_scene)
 {
   if(p_scene == "courtroom")
   {
-    return ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(SceneTypeCourtroom, p_identifier);
+    return ThemeManager::get().mCurrentThemeReader.getWidgetPosition(COURTROOM, p_identifier);
   }
   else
   {
-    return ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(SceneTypeLobby, p_identifier);
+    return ThemeManager::get().mCurrentThemeReader.getWidgetPosition(LOBBY, p_identifier);
   }
 
 }
@@ -257,9 +242,9 @@ QString DRTheme::get_widget_font_string_setting(QString p_identifier, QString p_
     return ao_app->read_theme_ini(fallback, p_scene);
   }
 
-  ThemeSceneType sceneType = SceneTypeCourtroom;
-  if(p_scene == LOBBY_FONTS_INI) sceneType = SceneTypeLobby;
-  return ThemeManager::get().mCurrentThemeReader.GetFontData(sceneType, p_identifier).align;
+  ThemeSceneType sceneType = COURTROOM;
+  if(p_scene == LOBBY_FONTS_INI) sceneType = LOBBY;
+  return ThemeManager::get().mCurrentThemeReader.getFont(sceneType, p_identifier).align;
 }
 
 bool DRTheme::get_widget_font_bool(QString p_identifier, QString p_scene, QString p_param, QString p_type)
@@ -362,7 +347,7 @@ QColor DRTheme::get_widget_settings_color(QString p_identifier, QString p_scene,
     return ao_app->get_color(ini_fallback, COURTROOM_DESIGN_INI);
   }
 
-  QString l_color = ThemeManager::get().mCurrentThemeReader.GetConfigSoundName(p_type + "_color");
+  QString l_color = ThemeManager::get().mCurrentThemeReader.getSoundName(p_type + "_color");
   if(l_color.isEmpty())
   {
     return ao_app->get_color(ini_fallback, COURTROOM_DESIGN_INI);
@@ -381,7 +366,7 @@ QPoint DRTheme::get_widget_settings_spacing(QString p_identifier, QString p_scen
     return ao_app->get_button_spacing(ini_fallback, COURTROOM_DESIGN_INI);
   }
 
-  QVector2D spacing = ThemeManager::get().mCurrentThemeReader.GetWidgetSpacing(p_identifier);
+  QVector2D spacing = ThemeManager::get().mCurrentThemeReader.getWidgetSpacing(p_identifier);
   QPoint return_value = QPoint(spacing.x(),spacing.y());
   return return_value;
 }
@@ -405,7 +390,7 @@ QMap<DR::Color, DR::ColorInfo> DRTheme::get_chat_colors()
   QJsonArray array = item["colors"].toArray();
 
 
-  QMap<QString, DR::ColorInfo> color_replacement_map = ThemeManager::get().mCurrentThemeReader.GetColorsDefault();
+  QMap<QString, DR::ColorInfo> color_replacement_map = ThemeManager::get().mCurrentThemeReader.getTextColors();
 
   for (DR::Color &i_color : color_map.keys())
   {
@@ -424,7 +409,7 @@ QString DRTheme::get_sfx_file(QString p_identifier)
 {
   if(!m_jsonLoaded) return ao_app->read_theme_ini(p_identifier, COURTROOM_SOUNDS_INI);
 
-  return ThemeManager::get().mCurrentThemeReader.GetConfigSoundName(p_identifier);
+  return ThemeManager::get().mCurrentThemeReader.getSoundName(p_identifier);
 }
 
 QStringList DRTheme::get_effect(int index)
@@ -484,39 +469,8 @@ int DRTheme::get_wtce_count()
 
 QString DRTheme::get_free_block(int index)
 {
-  if(mFreeBlocks.length() <= index) return "";
-  return mFreeBlocks[index].mName;
-}
-
-QString DRTheme::getFreeblockImage(int index)
-{
-  if(mFreeBlocks.length() <= index) return "";
-  if(mFreeBlocks[index].mImagePath.isEmpty()) return "free_block_" + mFreeBlocks[index].mName;
-  return mFreeBlocks[index].mImagePath;
-}
-
-QMap<QString, QString> DRTheme::getFreeblockVariables(QString t_name)
-{
-  for(FreeblockData fbdata : mFreeBlocks)
-  {
-    if(("free_block_" + fbdata.mName) == t_name)
-    {
-      if(!fbdata.mImagePath.isEmpty()) return fbdata.mVariables;
-    }
-  }
-  return {};
-}
-
-QString DRTheme::getFreeblockImage(QString t_name)
-{
-  for(FreeblockData fbdata : mFreeBlocks)
-  {
-    if(("free_block_" + fbdata.mName) == t_name)
-    {
-      if(!fbdata.mImagePath.isEmpty()) return fbdata.mImagePath;
-    }
-  }
-  return t_name;
+  if(free_blocks.length() <= index) return "";
+  return free_blocks[index];
 }
 
 int DRTheme::get_free_block_count()

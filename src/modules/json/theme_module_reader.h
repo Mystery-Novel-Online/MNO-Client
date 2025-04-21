@@ -23,8 +23,6 @@ public:
 
   ThemeScene *getThemeScene(ThemeSceneType t_scene);
 
-  bool getContainsSceneWidget(ThemeSceneType t_scene, QString t_name);
-
   //layers
   bool getContainsLayers();
   QVector<QStringList> getWidgetLayers();
@@ -53,8 +51,6 @@ private:
   //Scenes
   ThemeScene *m_CourtroomScene = nullptr;
   ThemeScene *m_LobbyScene = nullptr;
-  ThemeScene *m_ReplaysScene = nullptr;
-  ThemeScene *m_ViewportScene = nullptr;
 
   //Other
   QHash<QString, widgetFontStruct*> m_ChatlogColours = {};

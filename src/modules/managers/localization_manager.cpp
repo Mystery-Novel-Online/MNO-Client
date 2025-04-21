@@ -52,20 +52,6 @@ QString LocalizationManager::getLocalizationText(QString t_value)
   return "";
 }
 
-QString LocalizationManager::getLocalizationText(QString t_value, QStringList t_variables)
-{
-  if(mLanguages.contains(mSelectedLanguageName))
-  {
-    if(mLanguages[mSelectedLanguageName]->containsLocalizationValue(t_value)) return insertVariables(mLanguages[mSelectedLanguageName]->getLocalizationValue(t_value), t_variables);
-  }
-  if(mDefaultText.contains(t_value))
-  {
-    return insertVariables(mDefaultText[t_value], t_variables);
-  }
-
-  return "";
-}
-
 QString LocalizationManager::getLocalizationCode()
 {
   if(mLanguages.contains(mSelectedLanguageName))
@@ -82,16 +68,4 @@ QString LocalizationManager::getLocalizationCredit()
     return mLanguages[mSelectedLanguageName]->getCredit();
   }
   return "";
-}
-
-QString LocalizationManager::insertVariables(QString t_value, QStringList t_variables)
-{
-  QString l_replacedText = t_value;
-
-  for (int i = 0; i < t_variables.size(); ++i) {
-    QString l_placeholder = "%" + QString::number(i);
-    l_replacedText.replace(l_placeholder, t_variables[i]);
-  }
-
-  return l_replacedText;
 }

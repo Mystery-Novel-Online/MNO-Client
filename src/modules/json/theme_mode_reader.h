@@ -16,12 +16,54 @@ public:
   void LoadTimeMode();
   void LoadModules();
 
-  QStringList GetDirectoryLoadOrder();
+  QStringList m_ModuleNames = {};
+
+  ThemeModuleReader* m_GamemodeModule = nullptr;
+  QHash<QString, ThemeModuleReader*> m_TimeModules = {};
+  QHash<QString, QHash<QString, ThemeModuleReader*>> m_ThemeModules = {};
+
+
+
+  QStringList getThemeDirOrder();
+
+  QHash<QString, bool> mConfigToggles = {};
+
+  int mMusicScrollSpeed = -1;
+  int mTimerNumber = -1;
+
+  QMap<QString, DR::ColorInfo> mTextColours = {};
+  QHash<QString, QString> mSounds = {};
 
   void SetThemeJsonObject(QString category);
 
-  void SetTimeOfDay(QString time);
+  void SetTime(QString time);
 
+
+  ThemeModeReader* mCurrentTime = nullptr;
+  QString mCurrentTimeName = "";
+
+
+
+  QHash<QString, pos_size_type> mCourtroomWidgetPositions = {};
+  QHash<QString, widgetFontStruct> mCourtroomWidgetFonts = {};
+  QHash<QString, dialogueHighlights> mCourtroomFontHighlights = {};
+
+
+  QHash<QString, pos_size_type> mLobbyWidgetPositions = {};
+  QHash<QString, widgetFontStruct> mLobbyWidgetFonts = {};
+
+  QHash<QString, QStringList> mTabWidgets = {};
+  QMap<QString, QStringList> mWidgetLayers = {};
+
+
+  QHash<QString, AOPixmap> mThemeImages = {};
+
+  QHash<QString, QVector2D> mWidgetSpacings = {};
+
+  QString mFilePath = "";
+
+
+  QHash<QString, ThemeModeReader*> mTimeModes = {};
 
   //IC Chatlog
   QColor getChatlogColour(QString t_type);
@@ -33,16 +75,23 @@ public:
   //Data Retrieval
   QVector<ThemeTabInfo> getTabs();
   QVector<QStringList> getLayers();
+  QHash<QString, dialogueHighlights>getHighlightColors();
+  QMap<QString, DR::ColorInfo>getTextColors();
 
-  QHash<QString, dialogueHighlights>GetFontColorsHighlights();
-  QMap<QString, DR::ColorInfo>GetFontColorsDefault();
+  bool containsSoundName(QString setting);
+  QString getSoundName(QString setting);
 
   //Data Retrieval
+  bool containsSettingBool(QString setting);
+  bool getSettingBool(QString setting);
+
   QVector2D getWidgetSpacing(QString widget_name);
   int getMusicScrollSpeed();
   int getTimerNumber();
 
   bool containsWidgetPosition(ThemeSceneType sceneType, QString name);
+  bool containsCourtroomWidgetPosition(QString widget_name);
+  bool containsLobbyWidgetPosition(QString widget_name);
 
   pos_size_type getWidgetPosition(ThemeSceneType sceneType, QString name);
 
@@ -53,28 +102,6 @@ public:
 
   QVector<ThemeScene *> getSceneLoadOrder(ThemeSceneType t_type);
   QVector<ThemeModuleReader *>getModuleLoadOrder();
-
-public:
-  QHash<QString, AOPixmap> mThemeImages = {};
-
-private:
-  QString m_FilePath = "";
-  int m_MusicDisplayScrollSpeed = -1;
-  int m_TimerCount = -1;
-
-  QMap<QString, DR::ColorInfo> m_CourtroomFontColorsDefault = {};
-  QHash<QString, dialogueHighlights> m_CourtroomFontColorsHighlights = {};
-
-  QString m_TimeOfDayCurrentName = "";
-  ThemeModeReader* m_TimeOfDayCurrent = nullptr;
-  QHash<QString, ThemeModeReader*> m_TimeOfDayReaders = {};
-
-  QStringList m_ModuleNames = {};
-  ThemeModuleReader* m_GamemodeModule = nullptr;
-  QHash<QString, ThemeModuleReader*> m_TimeModules = {};
-  QHash<QString, QHash<QString, ThemeModuleReader*>> m_ThemeModules = {};
-
-
 };
 
 #endif // THEMEMODEREADER_H

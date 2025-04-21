@@ -10,5 +10,7 @@ void ImageLoader::loadImage(const QString &imagePath)
 {
   AOPixmap pixmap(imagePath);
 
+  loaderResult = pixmap;
+
   emit LoadingComplete(pixmap);
 }

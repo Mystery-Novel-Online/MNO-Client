@@ -1,9 +1,9 @@
 #ifndef DROLINEEDIT_H
 #define DROLINEEDIT_H
 
+#include <AOApplication.h>
 #include <QLineEdit>
 #include <QWidget>
-#include <aoapplication.h>
 #include "theme.h"
 
 class DROLineEdit : public QLineEdit

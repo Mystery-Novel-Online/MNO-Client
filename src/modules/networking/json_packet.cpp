@@ -5,7 +5,6 @@
 #include "modules/json/json_reader.h"
 #include "modules/managers/notify_manager.h"
 #include "modules/managers/pair_manager.h"
-#include "modules/managers/evidence_manager.h"
 #include <qjsondocument.h>
 
 
@@ -24,17 +23,13 @@ void JsonPacket::ProcessJson(QString p_jsonString)
   {
     ProcessNotifyRequestPacket(jsonReader);
   }
-  ////else if(packetValue == "pair_data")
-  ////{
-  ////  ProcessPairDataPacket(jsonReader);
-  ////}
+  else if(packetValue == "pair_data")
+  {
+    ProcessPairDataPacket(jsonReader);
+  }
   else if(packetValue == "pair")
   {
     ProcessPairPacket(jsonReader);
-  }
-  else if(packetValue == "evidence")
-  {
-    ProcessEvidencePacket(jsonReader);
   }
 }
 
@@ -81,14 +76,14 @@ void JsonPacket::ProcessNotifyRequestPacket(JSONReader& jsonReader)
 
 void JsonPacket::ProcessPairDataPacket(JSONReader& jsonReader)
 {
-  //jsonReader.SetTargetObject("data");
-  //int offsetPair = jsonReader.getIntValue("offset_pair");
-  //int offsetSelf = jsonReader.getIntValue("self_offset");
-  //QString charat = jsonReader.getStringValue("character");
-  //QString emote = jsonReader.getStringValue("last_sprite");
-  //bool isFlipped = jsonReader.getBoolValue("flipped");
+  jsonReader.SetTargetObject("data");
+  int offsetPair = jsonReader.getIntValue("offset_pair");
+  int offsetSelf = jsonReader.getIntValue("self_offset");
+  QString charat = jsonReader.getStringValue("character");
+  QString emote = jsonReader.getStringValue("last_sprite");
+  bool isFlipped = jsonReader.getBoolValue("flipped");
 
-  ////
+  PairManager::get().SetPairData(charat, emote, offsetSelf, offsetPair, isFlipped);
 }
 
 void JsonPacket::ProcessPairPacket(JSONReader& jsonReader)
@@ -108,22 +103,4 @@ void JsonPacket::ProcessPairPacket(JSONReader& jsonReader)
     int offset = jsonReader.getIntValue("offset_right");
     PairManager::get().SetUserPair(pair_left, offset);
   }
-}
-
-void JsonPacket::ProcessEvidencePacket(JSONReader &jsonReader)
-{
-  QJsonArray playerArray = jsonReader.getArrayValue("data");
-  EvidenceManager::get().DestroyAllEvidence();
-  for(QJsonValueRef ref : playerArray)
-  {
-    jsonReader.SetTargetObject(ref.toObject());
-
-    QString l_evidenceName = jsonReader.getStringValue("name");
-    QString l_evidenceDescription = jsonReader.getStringValue("description");
-    QString l_evidenceImage = jsonReader.getStringValue("image");
-
-    EvidenceManager::get().CreateEvidence(l_evidenceName, l_evidenceDescription, l_evidenceImage);
-  }
-  if(AOApplication::getInstance()->m_courtroom != nullptr)
-    AOApplication::getInstance()->m_courtroom->buildEvidenceList();
 }

@@ -3,14 +3,12 @@
 
 #include "datatypes.h"
 #include "drgraphicscene.h"
-#include "modules/theme/graphicobjectanimator.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "mk2/spriteplayer.h"
 #include "mk2/spritereadersynchronizer.h"
-#include "modules/widgets/evidence_list.h"
 
 class AOApplication;
 class AOBlipPlayer;
@@ -56,7 +54,6 @@ class QListWidgetItem;
 class QMenu;
 class QPropertyAnimation;
 class QScrollArea;
-class QShortcut;
 class QSignalMapper;
 class QLabel;
 
@@ -68,8 +65,6 @@ class QLabel;
 #include <modules/theme/widgets/dro_line_edit.h>
 #include <modules/theme/widgets/droemotebuttons.h>
 
-#include <modules/widgets/dro_camera_display.h>
-#include <modules/widgets/keyframe_player.h>
 #include <modules/widgets/rpnotifymenu.h>
 #include <modules/widgets/viewport_overlay.h>
 
@@ -91,6 +86,15 @@ public:
     Chat,
     Area,
     GM,
+  };
+
+  enum class ChatTypes
+  {
+    Talk,
+    Shout,
+    Think,
+    Whisper,
+    Party
   };
 
   enum class ReportCardReason
@@ -144,12 +148,10 @@ public:
 
   void set_ambient(QString ambient_sfx);
   void play_ambient();
-  void PlayWeatherSFX(QString t_name);
 
   QString get_current_background() const;
 
   // updates background based on the position given from the chatmessage; will reset preloading if active
-  void updateWeather(QString t_weatherName);
   void update_background_scene();
 
   // displays the current background
@@ -192,7 +194,6 @@ public:
   void select_base_character_iniswap();
   void refresh_character_content_url();
   void construct_playerlist_layout();
-  void buildEvidenceList();
   void write_area_desc();
 
   // Set the showname of the client
@@ -274,7 +275,6 @@ public:
   void play_preanim();
 
   // plays a splash animation based on the argument
-  void handleAnimation(QString t_aniName);
   void handle_wtce(QString p_wtce);
 
   // sets the hp bar of defense(p_bar 1) or pro(p_bar 2)
@@ -357,7 +357,7 @@ private:
   QString icchatlogsfilename = QDateTime::currentDateTime().toString("'logs/'yyyy-MM-dd (hh.mm.ss.z)'.txt'");
 
   static const int MINIMUM_MESSAGE_SIZE = 15;
-  static const int OPTIMAL_MESSAGE_SIZE = 26;
+  static const int OPTIMAL_MESSAGE_SIZE = 19;
   QStringList m_pre_chatmessage;
   GameState m_game_state = GameState::Finished;
 
@@ -373,6 +373,7 @@ private:
   QString m_speaker_showname;
   bool m_hide_character = false;
   bool m_play_pre = false;
+  bool m_play_zoom = false;
   bool chatmessage_is_empty = false;
 
   QString previous_ic_message;
@@ -436,8 +437,6 @@ private:
 
   AOImageDisplay *ui_background = nullptr;
 
-  ViewportInvestigationDisplay *p_WidgetInvestigate = nullptr;
-  KeyframePlayer *wShoutsLayer = nullptr;
   DRGraphicsView *ui_viewport = nullptr;
   QPropertyAnimation *background_anim = nullptr;
 
@@ -446,15 +445,9 @@ private:
 
   DRVideoScreen *ui_video = nullptr;
   DRSceneMovie *ui_vp_background = nullptr;
-
-  DROViewportWidget *m_ViewportVerTwo = nullptr;
-  DROCameraDisplay *m_GMCameraDisplay = nullptr;
-
-  GraphicObjectAnimator *aniPlayerChar = nullptr;
   DRCharacterMovie *ui_vp_player_char = nullptr;
   DRCharacterMovie *ui_vp_player_pair = nullptr;
   DRSceneMovie *ui_vp_desk = nullptr;
-  DRSceneMovie *vpWeatherLayer = nullptr;
 
   AONoteArea *ui_note_area = nullptr;
 
@@ -490,10 +483,6 @@ private:
   void swap_viewport_reader(DRMovie *viewer, ViewportSprite type);
   void cleanup_preload_readers();
 
-  //Evidence
-  AOImageDisplay *wEvidencePreviewImage = nullptr;
-  DRTextEdit *wEvidenceDescription = nullptr;
-
   AOImageDisplay *ui_vp_music_display_a = nullptr;
   AOImageDisplay *ui_vp_music_display_b = nullptr;
 
@@ -522,15 +511,7 @@ private:
   QMenu *ui_music_menu = nullptr;
   QAction *ui_music_menu_play = nullptr;
   QAction *ui_music_menu_insert_ooc = nullptr;
-  QAction *p_ActionPinMusic = nullptr;
 
-
-
-  QMenu *p_MenuAreaList = nullptr;
-  QAction *p_ActionAreasLockPassage = nullptr;
-  QAction *p_ActionAreasPeek = nullptr;
-
-  QListWidget *wCharaAnimList = nullptr;
   QListWidget *ui_sfx_list = nullptr;
   QVector<DRSfx> m_sfx_list;
   const QString m_sfx_default_file = "__DEFAULT__";
@@ -555,7 +536,6 @@ private:
 
 
   QWidget * ui_player_list = nullptr;
-  EvidenceList *wEvidenceList = nullptr;
 
 
   AOButton *ui_emote_left = nullptr;
@@ -576,9 +556,7 @@ private:
   {
     DefaultPositionIndex,
   };
-
-  QComboBox *p_DropdownPosition = nullptr;
-  QComboBox *p_DropdownMusicCategory = nullptr;
+  QComboBox *ui_pos_dropdown = nullptr;
 
   AOImageDisplay *ui_defense_bar = nullptr;
   AOImageDisplay *ui_prosecution_bar = nullptr;
@@ -681,18 +659,10 @@ private:
   QHash<QString, QString> widget_toggles;
 
 
-  AOButton *wEvidenceLeft = nullptr;
-  AOButton *wEvidenceRight = nullptr;
-  AOButton *wEvidencePresent = nullptr;
 
   AOButton *ui_player_list_left = nullptr;
   AOButton *ui_player_list_right = nullptr;
   AOButton *ui_area_look = nullptr;
-  QShortcut *p_LookShortcut = nullptr;
-
-  AOButton *p_ButtonScreenshot = nullptr;
-  QShortcut *p_ScreenshotShortcut = nullptr;
-
   DRTextEdit *ui_area_desc = nullptr;
 
 
@@ -706,6 +676,7 @@ private:
   void create_widgets();
 
   QComboBox* setupComboBoxWidget(const QStringList& items, QString name, QString cssHeader);
+  AOButton* setupButtonWidget(const QString name, QString image, QString fallback, QWidget* parent = nullptr);
   QLineEdit* setupLineEditWidget(const QString name, QString image, QString legacy_css, QString text, QWidget* parent = nullptr);
 
 
@@ -722,7 +693,6 @@ private:
 
   void reset_widget_toggles();
 
-  void bind_shortcuts();
 
   void construct_char_select();
   void reconstruct_char_select();
@@ -733,11 +703,9 @@ private:
   void construct_emotes();
   void construct_emote_page_layout();
 
-  void constructEvidenceList();
   void construct_playerlist();
 
   QString get_current_position();
-  QString getCurrentCategory();
 
   void load_note();
   void save_note();
@@ -801,12 +769,8 @@ private slots:
   void on_music_list_clicked();
   void on_music_list_double_clicked(QModelIndex p_model);
   void on_music_list_context_menu_requested(QPoint p_point);
-  void OnAreaListContextMenuRequested(QPoint p_point);
   void on_music_menu_play_triggered();
   void on_music_menu_insert_ooc_triggered();
-  void OnMusicMenuPinSongTriggered();
-  void OnAreaLockPassageTriggered();
-  void OnAreaPeekTriggered();
   void on_music_search_edited(QString);
   void on_music_search_edited();
   void send_mc_packet(QString p_song);
@@ -823,7 +787,6 @@ private slots:
   void onCharacterSelectPackageChanged(int p_index);
   void update_iniswap_dropdown_searchable();
   void UpdateIniswapStylesheet();
-  void OnMusicCategoryChanged();
   void on_pos_dropdown_changed();
 
   void on_cycle_clicked();
@@ -901,21 +864,11 @@ private slots:
   void OnCharRefreshClicked();
   void OnCharRandomClicked();
 
-  //Investigation
-  void OnInteractionClicked(InvestigationObject * t_Interaction);
-
-  //Player List
-
-  void onEvidenceLeftClicked();
-  void onEvidenceRightClicked();
-  void onEvidencePresentClicked();
-
   //Player List
 
   void on_player_list_left_clicked();
   void on_player_list_right_clicked();
   void on_area_look_clicked();
-  void onScreenshotClicked();
 
   void ping_server();
 
@@ -982,14 +935,14 @@ public slots:
   void stop_all_audio();
 
 private:
-  AOSfxPlayer *m_SfxPlayerWeather = nullptr;
   AOSfxPlayer *m_effects_player = nullptr;
   AOShoutPlayer *m_shouts_player = nullptr;
   AOSystemPlayer *m_system_player = nullptr;
+  AOMusicPlayer *m_music_player = nullptr;
   AOBlipPlayer *m_blips_player = nullptr;
   bool is_audio_muted = false;
 
-  ICMessageData *m_CurrentMessageData = new ICMessageData({}, false);
+  // QWidget interface
 
 protected:
   void changeEvent(QEvent *) override;

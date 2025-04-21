@@ -19,13 +19,11 @@
 **************************************************************************/
 #pragma once
 
-#include "modules/theme/droanimation.h"
 #include "spriteplayer.h"
 #include "spritereader.h"
 
 #include <QGraphicsObject>
 #include <QObject>
-#include <QPainter>
 
 namespace mk2
 {
@@ -57,17 +55,12 @@ public:
 
   bool is_running() const;
 
-
   QRectF boundingRect() const final;
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
 
 public slots:
   void set_scaling_mode(SpritePlayer::ScalingMode scaling_mode);
-
-  void set_center_mode(bool t_center);
-
-  void set_composition_mode(QPainter::CompositionMode t_composition);
 
   void set_size(QSizeF size);
 
@@ -77,8 +70,6 @@ public slots:
 
   void set_file_name(QString file_name);
 
-  void setProxyImage(QImage t_image);
-
   void set_device(QIODevice *device);
 
   void set_reader(SpriteReader::ptr reader);
@@ -86,39 +77,7 @@ public slots:
   void start();
   void restart();
   void setVerticalOffset(int t_offset);
-
-  void ResetAnimation()
-  {
-    setScale(1);
-    setRotation(0);
-    setOpacity(1);
-    setTransformOffset(0, 0);
-  }
-
-  void setTransformOffset(int t_x, int t_y)
-  {
-    if(t_x != -11037) m_TransformX = t_x;
-    if(t_y != -11037) m_TransformY = t_y;
-    update();
-  };
-
-  void setTransformX(int t_x)
-  {
-    if(t_x == -11037) return;
-    m_TransformX = t_x;
-    update();
-  };
-
-  void setTransformY(int t_y)
-  {
-    if(t_y == -11037) return;
-    m_TransformY = t_y;
-    update();
-  };
-
   void setBackgroundScaling(double t_offset);
-
-  void setCurrentAnimation(DROAnimation* t_animation);
   void stop();
 
 signals:
@@ -132,17 +91,8 @@ signals:
   void finished();
 
 private:
-  int m_TransformX = 0;
-  int m_TransformY = 0;
-
   QScopedPointer<SpritePlayer> m_player;
-  QPainter::CompositionMode mCompoMode = QPainter::CompositionMode_SourceOver;
   int mVerticalVPOffset = 0;
-  bool mCenterSprite = true;
-  DROAnimation* mWidgetAnimation = nullptr;
-
-  bool mUsesProxy = false;
-  QImage m_ProxyImage = QImage();
 
 private slots:
   void notify_size();

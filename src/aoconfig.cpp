@@ -20,9 +20,6 @@
 
 #include <modules/theme/thememanager.h>
 
-#include <modules/managers/replay_manager.h>
-#include <modules/managers/variable_manager.h>
-
 /*!
     We have to suffer through a lot of boilerplate code
     but hey, when has ao2 ever cared?
@@ -120,15 +117,11 @@ private:
 
   // audio sync
   DRAudioEngine *audio_engine = nullptr;
-
-  // shortcuts
-  QKeySequence screenshot_shortcut;
-  QKeySequence look_shortcut;
 };
 
 AOConfigPrivate::AOConfigPrivate()
     : QObject(nullptr)
-    , cfg(DRPather::GetApplicationPath() + BASE_CONFIG_INI, QSettings::IniFormat)
+    , cfg(DRPather::get_application_path() + BASE_CONFIG_INI, QSettings::IniFormat)
     , audio_engine(new DRAudioEngine(this))
 {
   Q_ASSERT_X(qApp, "initialization", "QGuiApplication is required");
@@ -239,7 +232,7 @@ void AOConfigPrivate::load_file()
   blip_rate = cfg.value("blip_rate", 1000000000).toInt();
   punctuation_delay = cfg.value("punctuation_delay", 110).toInt();
   theme_resize = cfg.value("theme_resize", 1).toDouble();
-  ThemeManager::get().SetResizeClient(theme_resize);
+  ThemeManager::get().setResize(theme_resize);
   fade_duration = cfg.value("fade_duration", 200).toInt();
   SceneManager::get().setFadeDuration(fade_duration);
   blank_blips = cfg.value("blank_blips").toBool();
@@ -273,10 +266,6 @@ void AOConfigPrivate::load_file()
 
   // audio device
   update_favorite_device();
-
-  // shortcuts
-  screenshot_shortcut = QKeySequence(cfg.value("screenshot_shortcut", "Ctrl+S").toString());
-  look_shortcut = QKeySequence(cfg.value("look_shortcut", "Ctrl+L").toString());
 }
 
 void AOConfigPrivate::save_file()
@@ -368,10 +357,6 @@ void AOConfigPrivate::save_file()
 
     cfg.endGroup();
   }
-
-  // shortcuts
-  cfg.setValue("screenshot_shortcut", screenshot_shortcut.toString());
-  cfg.setValue("look_shortcut", look_shortcut.toString());
 
   cfg.sync();
 }
@@ -763,16 +748,6 @@ int AOConfig::fade_duration() const
   return d->fade_duration;
 }
 
-QKeySequence AOConfig::screenshot_shortcut() const
-{
-  return d->screenshot_shortcut;
-}
-
-QKeySequence AOConfig::look_shortcut() const
-{
-  return d->look_shortcut;
-}
-
 void AOConfig::load_file()
 {
   d->load_file();
@@ -946,8 +921,6 @@ void AOConfig::set_timeofday(QString p_string)
     return;
   d->timeofday = p_string;
   d->invoke_signal("timeofday_changed", Q_ARG(QString, p_string));
-  VariableManager::get().setVariable("time_period", p_string);
-  ReplayManager::get().RecordChangeTOD(p_string);
 }
 
 void AOConfig::set_manual_timeofday(QString p_string)
@@ -956,8 +929,6 @@ void AOConfig::set_manual_timeofday(QString p_string)
     return;
   d->manual_timeofday = p_string;
   d->invoke_signal("manual_timeofday_changed", Q_ARG(QString, p_string));
-  VariableManager::get().setVariable("time_period", p_string);
-  ReplayManager::get().RecordChangeTOD(p_string);
 }
 
 void AOConfig::set_manual_timeofday_selection_enabled(bool p_enabled)
@@ -1261,7 +1232,7 @@ void AOConfig::setThemeResize(double resize)
   if (d->theme_resize == resize)
     return;
   d->theme_resize = resize;
-  ThemeManager::get().SetResizeClient(resize);
+  ThemeManager::get().setResize(resize);
   d->invoke_signal("theme_resize_changed", Q_ARG(double, resize));
 }
 
@@ -1272,22 +1243,6 @@ void AOConfig::setFadeDuration(int duration)
   d->fade_duration = duration;
   SceneManager::get().setFadeDuration(duration);
   d->invoke_signal("fade_duration_changed", Q_ARG(int, duration));
-}
-
-void AOConfig::set_screenshot_shortcut(const QKeySequence &p_shortcut)
-{
-  if (d->screenshot_shortcut == p_shortcut)
-    return;
-  d->screenshot_shortcut = p_shortcut;
-  d->invoke_signal("shortcuts_changed");
-}
-
-void AOConfig::set_look_shortcut(const QKeySequence &p_shortcut)
-{
-  if (d->look_shortcut == p_shortcut)
-    return;
-  d->look_shortcut = p_shortcut;
-  d->invoke_signal("shortcuts_changed");
 }
 
 // moc

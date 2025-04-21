@@ -21,7 +21,6 @@ public:
 
   bool GetUsePairData();
   void SetPairData(QString character, QString emote, int selfOffset, int pairOffset, bool flipped);
-  void UpdatePairData();
   double GetOffsetSelf();
   double GetOffsetOther();
 

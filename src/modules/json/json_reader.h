@@ -7,8 +7,6 @@
 #include <QJsonArray>
 #include <QFile>
 #include <QVector2D>
-#include <datatypes.h>
-#include <QRect>
 
 
 class JSONReader
@@ -25,9 +23,6 @@ public:
   bool        isValueExists(QString value);
   QVector2D   getVector2DValue(QString string);
   QJsonArray  getArrayValue(QString string);
-  pos_size_type  getPositionData(QString string);
-  QRect  getRectangleValue(QString string);
-  VariableMappedString getVarMappedString(QString t_fallback);
 
   bool        getBoolValue(QString string);
   int         getIntValue(QString string);

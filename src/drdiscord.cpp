@@ -189,7 +189,6 @@ void DRDiscord::clear_server_name()
 
 void DRDiscord::set_character_name(const QString &f_character_name)
 {
-  m_IsInReplay = false;
   Q_ASSERT_X(!f_character_name.trimmed().isEmpty(), "DRDiscord", "a server name is required");
   if (m_character_name.has_value() && m_character_name.value() == f_character_name)
     return;
@@ -216,25 +215,15 @@ void DRDiscord::on_update_queued()
   default:
   case State::Idle:
     m_buf_details.clear();
-
-    if(!m_IsInReplay)
+    if (!hide_server_enabled())
     {
-      if (!hide_server_enabled())
-      {
-        m_buf_details = "Lobby";
-      }
-      m_buf_state.clear();
+      m_buf_details = "Lobby";
     }
-    else
-    {
-      m_buf_details = QString("Watching Replay: ").toUtf8();
-      m_buf_state = m_ReplayName.toUtf8();
-    }
+    m_buf_state.clear();
     break;
 
   case State::Connected:
     m_buf_details.clear();
-
     if (!hide_server_enabled())
     {
       m_buf_details = QString("In: %1")
@@ -249,7 +238,6 @@ void DRDiscord::on_update_queued()
       m_buf_state = m_character_name.has_value() ? QString("As: %1").arg(m_character_name.value()).toUtf8()
                                                  : QByteArray("Spectating");
     }
-
     break;
   }
 

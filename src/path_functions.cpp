@@ -6,8 +6,6 @@
 #include "drpather.h"
 #include "file_functions.h"
 #include "modules/managers/character_manager.h"
-#include "modules/managers/pathing_manager.h"
-#include "modules/managers/replay_manager.h"
 
 #include <QDebug>
 #include <QDir>
@@ -29,9 +27,43 @@
 
 void AOApplication::reload_packages()
 {
-  PathingManager::get().refreshLocalPackages();
-  package_names = PathingManager::get().getPackageNames().toVector();
-  m_disabled_packages = PathingManager::get().getDisabledPackages().toVector();
+  CharacterManager::get().ResetPackages();
+  package_names = {};
+
+  QString packages_path = DRPather::get_application_path() + "/packages/";
+  QDir packages_directory(packages_path);
+
+  QList<QFileInfo> packages_fileinfo= packages_directory.entryInfoList();
+
+
+  for (int i=0; i< packages_fileinfo.size(); i++)
+  {
+    if (packages_fileinfo.at(i).isDir())
+    {
+      QString packageBaseName = packages_fileinfo.at(i).baseName();
+      if(!packageBaseName.isEmpty())
+      {
+        package_names.append(packageBaseName);
+
+        QDir package_dir(packages_fileinfo.at(i).absoluteFilePath() + "/characters");
+        if (package_dir.exists())
+        {
+          QVector<char_type> packageCharacters;
+          QStringList character_folders = package_dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+          for (const QString &character_folder : character_folders)
+          {
+            char_type packageChar;
+            packageChar.name = character_folder;
+            packageCharacters.append(std::move(packageChar));
+          }
+          CharacterManager::get().SetCharList(packageBaseName, packageCharacters);
+        }
+
+      }
+    }
+  }
+
+  read_disabled_packages_ini();
 }
 
 
@@ -53,20 +85,50 @@ void AOApplication::save_disabled_packages_ini()
 
 
 }
+void AOApplication::read_disabled_packages_ini()
+{
+  m_disabled_packages = {};
+
+  const QString l_ini_path = get_base_path() + BASE_PACKAGES_INI;
+  QFile l_packages_ini(l_ini_path);
+  if (l_packages_ini.open(QFile::ReadOnly))
+  {
+    QTextStream in(&l_packages_ini);
+    while (!in.atEnd())
+    {
+      QString l_line = in.readLine().trimmed();
+      if(package_names.contains(l_line)) m_disabled_packages.append(l_line);
+    }
+  }
+}
 
 QString AOApplication::get_base_path()
 {
-  return DRPather::GetApplicationPath() + "/base/";
+  return DRPather::get_application_path() + "/base/";
 }
 
 QString AOApplication::get_package_path(QString p_package)
 {
-  return DRPather::GetApplicationPath() + "/packages/" + p_package + "/";
+  return DRPather::get_application_path() + "/packages/" + p_package + "/";
 }
 
 QString AOApplication::get_package_or_base_path(QString p_path)
 {
-  return PathingManager::get().searchFirstDirectory(p_path);
+
+  for (int i=0; i< package_names.size(); i++)
+  {
+    if(!m_disabled_packages.contains(package_names.at(i)))
+    {
+      QString package_path = get_package_path(package_names.at(i))  + p_path;
+      if(dir_exists(package_path))
+      {
+        return package_path;
+      }
+    }
+
+  }
+
+  return get_base_path() + p_path;
 }
 
 QString AOApplication::get_package_or_base_file(QString p_filepath)

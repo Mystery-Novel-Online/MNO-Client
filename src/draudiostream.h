@@ -51,8 +51,6 @@ public:
 
 public slots:
   std::optional<DRAudioError> set_file_name(QString file);
-  std::optional<DRAudioError> SetWebAddress(QString t_url);
-  std::optional<DRAudioError> setByteData(QByteArray t_data);
   void set_volume(float volume);
   void set_repeatable(bool);
   void set_loop(quint64 start, quint64 end);
@@ -98,8 +96,6 @@ private:
   DRAudioEngine *m_engine = nullptr;
   DRAudio::Family m_family;
   QString m_filename;
-  QString m_url;
-  QByteArray m_byteData;
   DRAudioStream::InitState m_init_state = InitNotDone;
   DRAudioStream::Fade m_fade;
   int m_fade_duration = 0;

@@ -30,8 +30,8 @@ void Courtroom::construct_emotes()
   ui_emotes = new DROEmoteButtons(this);
   EmotionManager::get().setEmotesPanel(ui_emotes);
 
-  ui_emote_left = ThemeManager::get().CreateWidgetButton(SceneTypeCourtroom, "emote_left", "arrow_left.png", "", this);
-  ui_emote_right = ThemeManager::get().CreateWidgetButton(SceneTypeCourtroom, "emote_right", "arrow_right.png", "", this);
+  ui_emote_left = setupButtonWidget("emote_left", "arrow_left.png", "");
+  ui_emote_right = setupButtonWidget("emote_right", "arrow_right.png", "");
 
   ui_emote_preview = new DRGraphicsView(nullptr);
   ui_emote_preview->setWindowFlags(Qt::ToolTip | Qt::FramelessWindowHint | Qt::BypassGraphicsProxyWidget);
@@ -48,14 +48,14 @@ void Courtroom::construct_emotes()
   }
 
   ui_emote_dropdown = new QComboBox(this);
-  p_DropdownPosition = new QComboBox(this);
-  p_DropdownPosition->addItem(LocalizationManager::get().getLocalizationText("DEFAULT"));
-  p_DropdownPosition->addItem(LocalizationManager::get().getLocalizationText("POS_WIT"), "wit");
-  p_DropdownPosition->addItem(LocalizationManager::get().getLocalizationText("POS_DEF"), "def");
-  p_DropdownPosition->addItem(LocalizationManager::get().getLocalizationText("POS_PRO"), "pro");
-  p_DropdownPosition->addItem(LocalizationManager::get().getLocalizationText("POS_JUD"), "jud");
-  p_DropdownPosition->addItem(LocalizationManager::get().getLocalizationText("POS_DEF_ASS"), "hld");
-  p_DropdownPosition->addItem(LocalizationManager::get().getLocalizationText("POS_PRO_ASS"), "hlp");
+  ui_pos_dropdown = new QComboBox(this);
+  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("DEFAULT"));
+  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_WIT"), "wit");
+  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_DEF"), "def");
+  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_PRO"), "pro");
+  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_JUD"), "jud");
+  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_DEF_ASS"), "hld");
+  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_PRO_ASS"), "hlp");
 }
 
 void Courtroom::construct_emote_page_layout()
@@ -69,7 +69,7 @@ void Courtroom::construct_emote_page_layout()
 
   QPoint f_spacing = ao_app->current_theme->get_widget_settings_spacing("emotes", "courtroom", "emote_button_spacing");
 
-  int buttonResize = (int)((float)40 * ThemeManager::get().GetResizeClient());
+  int buttonResize = (int)((float)40 * ThemeManager::get().getResize());
   const int button_width = buttonResize;
   int x_spacing = f_spacing.x();
   int x_mod_count = 0;
@@ -108,7 +108,6 @@ void Courtroom::construct_emote_page_layout()
 
   EmotionManager::get().refreshEmotePage(true);
 }
-
 
 void Courtroom::select_emote(int p_id)
 {

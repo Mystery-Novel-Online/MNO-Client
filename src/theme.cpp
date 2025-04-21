@@ -81,10 +81,8 @@ void set_text_alignment(QWidget *p_widget, QString p_identifier, QString p_ini_f
 void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOApplication *ao_app)
 {
 
-  ThemeSceneType l_scene = SceneTypeLobby;
-  if(ini_file == COURTROOM_FONTS_INI) l_scene = SceneTypeCourtroom;
-  else if(ini_file == REPLAYS_FONTS_INI) l_scene = SceneTypeReplays;
-  else if(ini_file == VIEWPORT_FONTS_INI) l_scene = SceneTypeViewport;
+  ThemeSceneType l_scene = LOBBY;
+  if(ini_file == COURTROOM_FONTS_INI) l_scene = COURTROOM;
 
 
   QString class_name = p_widget->metaObject()->className();
@@ -104,7 +102,7 @@ void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOAppli
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontdata = ThemeManager::get().mCurrentThemeReader.GetFontData(l_scene, p_identifier);
+    widgetFontStruct fontdata = ThemeManager::get().mCurrentThemeReader.getFont(l_scene, p_identifier);
     font_name = fontdata.font;
     is_bold = fontdata.bold;
     is_antialias = fontdata.sharp;
@@ -156,7 +154,7 @@ void set_drtextedit_font(DRTextEdit *p_widget, QString p_identifier, QString p_i
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    outline = ThemeManager::get().mCurrentThemeReader.GetFontData(SceneTypeCourtroom, p_identifier).outline;
+    outline = ThemeManager::get().mCurrentThemeReader.getFont(COURTROOM, p_identifier).outline;
   }
   else
   {
@@ -214,9 +212,9 @@ void set_sticker_play_once(DRStickerViewer *p_sticker, QString p_identifier, QSt
 
 void setShownameFont(DRTextEdit *widget, QString identifier, QString align, AOApplication *ao_app)
 {
-  widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontDataPairing(identifier, align);
+  widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.getPairingFont(identifier, align);
 
-  fontData.size = static_cast<int>(fontData.size * ThemeManager::get().GetResizeViewport());
+  fontData.size = static_cast<int>(fontData.size * ThemeManager::get().getViewporResize());
 
   setThemeFont(widget, fontData, ao_app);
 
@@ -259,9 +257,4 @@ void setThemeFont(QWidget *widget, widgetFontStruct font_data, AOApplication *ao
                                "color: " + QColor(font_data.color).name(QColor::HexArgb) + ";\n" + (font_data.bold ? "font: bold;" : "") +
                                "}";
   widget->setStyleSheet(style_sheet_string);
-}
-
-void ScaleText(DRTextEdit *widget, double l_scale)
-{
-  widget->setFontPointSize(widget->fontPointSize() * l_scale);
 }

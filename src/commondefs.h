@@ -24,9 +24,6 @@ extern const QString COURTROOM_SOUNDS_INI;
 extern const QString COURTROOM_TEXT_COLOR_INI;
 extern const QString COURTROOM_STYLESHEETS_CSS;
 
-extern const QString REPLAYS_FONTS_INI;
-extern const QString VIEWPORT_FONTS_INI;
-
 extern const QString LOBBY_DESIGN_INI;
 extern const QString LOBBY_FONTS_INI;
 

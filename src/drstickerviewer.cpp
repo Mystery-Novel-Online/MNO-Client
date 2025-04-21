@@ -29,18 +29,9 @@ void DRStickerViewer::set_hide_when_done(bool p_enabled)
   }
 }
 
-bool DRStickerViewer::set_theme_image(QString p_file_name)
+void DRStickerViewer::set_theme_image(QString p_file_name)
 {
-
   set_file_name(ao_app->get_theme_sprite_path(p_file_name, ""));
-  return true;
-}
-
-bool DRStickerViewer::setFreeblockImage(QString p_file_name, QString t_fallblockName)
-{
-  QString l_FilePath = ao_app->GetFirstThemeSpritePath({p_file_name, t_fallblockName});
-  set_file_name(l_FilePath);
-  return true;
 }
 
 void DRStickerViewer::maybe_hide()
@@ -66,11 +57,6 @@ void DRStickerViewer::set_chatbox_image(QString p_chatbox_name, bool p_is_self, 
       targetChatboxes.append("chatmed_self_" + pair);
     }
     targetChatboxes.append("chatmed_" + pair);
-  }
-
-  if(pair == "cg")
-  {
-    targetChatboxes.append("chatmed_cg");
   }
 
   if(p_is_self)
@@ -110,24 +96,4 @@ void DRStickerViewer::set_chatbox_image(QString p_chatbox_name, bool p_is_self, 
   drtheme->InitTheme();
   this->hide();
 
-}
-
-void DRStickerViewer::set_variable_map(QMap<QString, QString> t_map)
-{
-  mVariables = t_map;
-}
-
-void DRStickerViewer::set_variable_string(QString t_path)
-{
-  mVariableString = t_path;
-}
-
-QString DRStickerViewer::getVariableString()
-{
-  return mVariableString;
-}
-
-QMap<QString, QString> DRStickerViewer::getVariableMap()
-{
-  return mVariables;
 }

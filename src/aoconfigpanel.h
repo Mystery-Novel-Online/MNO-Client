@@ -16,7 +16,6 @@ class AOConfig;
 class QCheckBox;
 class QComboBox;
 class QGroupBox;
-class QKeySequenceEdit;
 class QLabel;
 class QLineEdit;
 class QPushButton;
@@ -147,9 +146,6 @@ private:
   QComboBox *ui_manual_timeofday = nullptr;
   QCheckBox *ui_manual_timeofday_selection = nullptr;
 
-  QKeySequenceEdit *ui_screenshot_shortcut = nullptr;
-  QKeySequenceEdit *ui_look_shortcut = nullptr;
-
   // messages
   QSlider *ui_length_threshold = nullptr;
   QLabel *ui_length_threshold_label = nullptr;
@@ -229,7 +225,6 @@ private slots:
   void showname_editing_finished();
   void advertiser_editing_finished();
   void callwords_editing_finished();
-  void shortcuts_editing_finished();
 };
 
 #endif // AOCONFIGPANEL_H

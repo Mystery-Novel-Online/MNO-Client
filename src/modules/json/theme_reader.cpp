@@ -10,53 +10,53 @@ ThemeReader::ThemeReader()
 
 void ThemeReader::LoadTheme(QString themeName)
 {
-  m_ThemeName = themeName;
-  m_ThemeDirectory = AOApplication::getInstance()->get_package_or_base_path("themes/" + m_ThemeName);
-  m_GameModeCollection = {};
-  m_GameModeCollection["default"] = new ThemeModeReader(m_ThemeDirectory);
+  mThemeName = themeName;
+  mThemeDirectory = AOApplication::getInstance()->get_package_or_base_path("themes/" + mThemeName);
+  mGameModes = {};
+  mGameModes["default"] = new ThemeModeReader(mThemeDirectory);
 
-  QString gameModesPath = m_ThemeDirectory + "/gamemodes/";
+  QString gameModesPath = mThemeDirectory + "/gamemodes/";
   for (const QString &i_folder : QDir(AOApplication::getInstance()->get_case_sensitive_path(gameModesPath)).entryList(QDir::Dirs))
   {
     if (i_folder == "." || i_folder == "..")
       continue;
-    m_GameModeCollection[i_folder] = new ThemeModeReader(m_ThemeDirectory + "/gamemodes/" + i_folder);
+    mGameModes[i_folder] = new ThemeModeReader(mThemeDirectory + "/gamemodes/" + i_folder);
   }
 
 }
 
 void ThemeReader::SetGamemode(QString gamemode)
 {
-  if(m_GameModeCollection.contains(gamemode))
+  if(mGameModes.contains(gamemode))
   {
-    m_GameModeCurrentName = gamemode;
-    m_GameModeCurrent = m_GameModeCollection[gamemode];
+    mCurrentGamemodeName = gamemode;
+    mCurrentGamemode = mGameModes[gamemode];
   }
   else
   {
-    m_GameModeCurrentName = "default";
-    m_GameModeCurrent = m_GameModeCollection["default"];
+    mCurrentGamemodeName = "default";
+    mCurrentGamemode = mGameModes["default"];
   }
 }
 
-void ThemeReader::SetTimeOfDay(QString time)
+void ThemeReader::SetTime(QString time)
 {
-  m_TimeOfDay = time;
-  if(m_GameModeCurrent != nullptr) m_GameModeCurrent->SetTimeOfDay(time);
+  mTime = time;
+  if(mCurrentGamemode != nullptr) mCurrentGamemode->SetTime(time);
 }
 
 QColor ThemeReader::getChatlogColor(QString type)
 {
   QColor return_value = QColor(0,0,0);
 
-  if(m_GameModeCurrent != nullptr)
+  if(mCurrentGamemode != nullptr)
   {
-    if(m_GameModeCurrent->getContainsChatlogColour(type)) return m_GameModeCurrent->getChatlogColour(type);
+    if(mCurrentGamemode->getContainsChatlogColour(type)) return mCurrentGamemode->getChatlogColour(type);
   }
 
-  if(m_GameModeCollection["default"]->getContainsChatlogColour(type))
+  if(mGameModes["default"]->getContainsChatlogColour(type))
   {
-    return m_GameModeCollection["default"]->getChatlogColour(type);
+    return mGameModes["default"]->getChatlogColour(type);
   }
 
   return return_value;
@@ -66,14 +66,14 @@ bool ThemeReader::getChatlogBool(QString t_type)
 {
   bool return_value = false;
 
-  if(m_GameModeCurrent != nullptr)
+  if(mCurrentGamemode != nullptr)
   {
-    if(m_GameModeCurrent->getContainsChatlogBool(t_type)) return m_GameModeCurrent->getChatlogBool(t_type);
+    if(mCurrentGamemode->getContainsChatlogBool(t_type)) return mCurrentGamemode->getChatlogBool(t_type);
   }
 
-  if(m_GameModeCollection["default"]->getContainsChatlogBool(t_type))
+  if(mGameModes["default"]->getContainsChatlogBool(t_type))
   {
-    return m_GameModeCollection["default"]->getChatlogBool(t_type);
+    return mGameModes["default"]->getChatlogBool(t_type);
   }
 
   return return_value;
@@ -81,30 +81,30 @@ bool ThemeReader::getChatlogBool(QString t_type)
 
 QStringList ThemeReader::getThemeDirOrder()
 {
-  QStringList l_DirectoryOrder = {};
+  QStringList reteurnDirs = {};
 
-  for(ThemeModeReader* r_ThemeModeReader : GetGamemodeOrder())
+  if(mCurrentGamemode != nullptr)
   {
-    l_DirectoryOrder.append(r_ThemeModeReader->GetDirectoryLoadOrder());
+    if(mCurrentGamemodeName != "default") reteurnDirs.append(mCurrentGamemode->getThemeDirOrder());
   }
-
-  return l_DirectoryOrder;
+  reteurnDirs.append(mGameModes["default"]->getThemeDirOrder());
+  return reteurnDirs;
 }
 
-QVector2D ThemeReader::GetWidgetSpacing(QString widget_name)
+QVector2D ThemeReader::getWidgetSpacing(QString widget_name)
 {
   QVector2D return_value(-1, -1);
-  if(m_GameModeCurrent != nullptr)
+  if(mCurrentGamemode != nullptr)
   {
-    return_value = m_GameModeCurrent->getWidgetSpacing(widget_name);
+    return_value = mCurrentGamemode->getWidgetSpacing(widget_name);
   }
 
   if(return_value.x() == -1 || return_value.y() == -1)
   {
-    return_value = m_GameModeCollection["default"]->getWidgetSpacing(widget_name);
+    return_value = mGameModes["default"]->getWidgetSpacing(widget_name);
   }
 
-  double resize = ThemeManager::get().GetResizeClient();
+  double resize = ThemeManager::get().getResize();
   return_value.setX((int)((double)return_value.x() * resize));
   return_value.setY((int)((double)return_value.y() * resize));
 
@@ -114,13 +114,13 @@ QVector2D ThemeReader::GetWidgetSpacing(QString widget_name)
 
 int ThemeReader::getMusicScrollSpeed()
 {
-  if(m_GameModeCurrent != nullptr)
+  if(mCurrentGamemode != nullptr)
   {
-    if(m_GameModeCurrent->getMusicScrollSpeed() != -1) return m_GameModeCurrent->getMusicScrollSpeed();
+    if(mCurrentGamemode->getMusicScrollSpeed() != -1) return mCurrentGamemode->getMusicScrollSpeed();
   }
-  if(m_GameModeCollection["default"]->getMusicScrollSpeed() != -1)
+  if(mGameModes["default"]->getMusicScrollSpeed() != -1)
   {
-    return m_GameModeCollection["default"]->getMusicScrollSpeed();
+    return mGameModes["default"]->getMusicScrollSpeed();
   }
 
   return -1;
@@ -128,38 +128,38 @@ int ThemeReader::getMusicScrollSpeed()
 
 int ThemeReader::getTimerNumber()
 {
-  if(m_GameModeCurrent != nullptr)
+  if(mCurrentGamemode != nullptr)
   {
-    if(m_GameModeCurrent->getTimerNumber() != -1) return m_GameModeCurrent->getTimerNumber();
+    if(mCurrentGamemode->getTimerNumber() != -1) return mCurrentGamemode->getTimerNumber();
   }
-  if(m_GameModeCollection["default"]->getTimerNumber() != -1)
+  if(mGameModes["default"]->getTimerNumber() != -1)
   {
-    return m_GameModeCollection["default"]->getTimerNumber();
+    return mGameModes["default"]->getTimerNumber();
   }
 
   return 0;
 }
 
-QVector<QStringList> ThemeReader::GetLayers()
+QVector<QStringList> ThemeReader::getLayers()
 {
-  if(m_GameModeCurrent != nullptr)
+  if(mCurrentGamemode != nullptr)
   {
-    QVector<QStringList> layers = m_GameModeCurrent->getLayers();
+    QVector<QStringList> layers = mCurrentGamemode->getLayers();
 
     if(layers.count() != 0) return layers;
   }
 
-  QVector<QStringList> layers = m_GameModeCollection["default"]->getLayers();
+  QVector<QStringList> layers = mGameModes["default"]->getLayers();
   if(layers.count() != 0) return layers;
   return {};
 }
 
-  QStringList ThemeReader::GetLayerChildren(QString t_widget)
+  QStringList ThemeReader::getLayerChildren(QString t_widget)
 {
   QStringList l_returnData = {};
-  if(m_GameModeCurrent != nullptr)
+  if(mCurrentGamemode != nullptr)
   {
-    QVector<QStringList> l_rawLayers = m_GameModeCurrent->getLayers();
+    QVector<QStringList> l_rawLayers = mCurrentGamemode->getLayers();
 
     if(l_rawLayers.count() != 0)
     {
@@ -175,7 +175,7 @@ QVector<QStringList> ThemeReader::GetLayers()
     }
   }
 
-  QVector<QStringList> l_rawLayers = m_GameModeCollection["default"]->getLayers();
+  QVector<QStringList> l_rawLayers = mGameModes["default"]->getLayers();
 
   if(l_rawLayers.count() != 0)
   {
@@ -197,52 +197,50 @@ QVector<ThemeTabInfo> ThemeReader::getTabs()
 {
   QVector<ThemeTabInfo> return_data = {};
 
-  if(m_GameModeCurrent != nullptr && m_GameModeCurrent != m_GameModeCollection["default"])
+  if(mCurrentGamemode != nullptr && mCurrentGamemode != mGameModes["default"])
   {
-    return_data = m_GameModeCurrent->getTabs();
+    return_data = mCurrentGamemode->getTabs();
     if(return_data.length() > 0) return return_data;
   }
-  return_data = m_GameModeCollection["default"]->getTabs();
+  return_data = mGameModes["default"]->getTabs();
   return return_data;
 }
 
-bool ThemeReader::GetConfigBool(QString boolValue)
+bool ThemeReader::getConfigBool(QString boolValue)
 {
-  QVector<ThemeModuleReader *> l_modules = RetrieveModuleOrder();
-
-  for(ThemeModuleReader * r_module : l_modules)
+  if(mCurrentGamemode != nullptr)
   {
-    if(r_module != nullptr)
-    {
-      if(r_module->getContainsBool(boolValue)) return r_module->getSettingBool(boolValue);
-    }
+    if(mCurrentGamemode->containsSettingBool(boolValue)) return mCurrentGamemode->getSettingBool(boolValue);
+  }
+  if(mGameModes["default"]->containsSettingBool(boolValue))
+  {
+    return mGameModes["default"]->getSettingBool(boolValue);
   }
 
   return false;
 }
 
-QString ThemeReader::GetConfigSoundName(QString soundName)
+QString ThemeReader::getSoundName(QString soundName)
 {
-  QVector<ThemeModuleReader *> l_modules = RetrieveModuleOrder();
-
-  for(ThemeModuleReader * r_module : l_modules)
+  if(mCurrentGamemode != nullptr)
   {
-    if(r_module != nullptr)
-    {
-      if(r_module->getContainsSound(soundName)) return r_module->getSoundFile(soundName);
-    }
+    if(mCurrentGamemode->containsSoundName(soundName)) return mCurrentGamemode->getSoundName(soundName);
+  }
+  if(mGameModes["default"]->containsSoundName(soundName))
+  {
+    return mGameModes["default"]->getSoundName(soundName);
   }
 
   return "";
 }
 
-QVector<QStringList> ThemeReader::GetColorsHighlights()
+QVector<QStringList> ThemeReader::getHighlights()
 {
   QVector<QStringList> f_vec;
-  QHash<QString, dialogueHighlights> returnValue = m_GameModeCollection["default"]->GetFontColorsHighlights(); ;
-  if(m_GameModeCurrent != nullptr && m_GameModeCurrent != m_GameModeCollection["default"])
+  QHash<QString, dialogueHighlights> returnValue = mGameModes["default"]->getHighlightColors(); ;
+  if(mCurrentGamemode != nullptr && mCurrentGamemode != mGameModes["default"])
   {
-    QHashIterator<QString, dialogueHighlights> i(m_GameModeCurrent->GetFontColorsHighlights());
+    QHashIterator<QString, dialogueHighlights> i(mCurrentGamemode->getHighlightColors());
     while (i.hasNext())
     {
       i.next();
@@ -262,12 +260,12 @@ QVector<QStringList> ThemeReader::GetColorsHighlights()
 
 }
 
-QMap<QString, DR::ColorInfo> ThemeReader::GetColorsDefault()
+QMap<QString, DR::ColorInfo> ThemeReader::getTextColors()
 {
-  QMap<QString, DR::ColorInfo> returnValue = m_GameModeCollection["default"]->GetFontColorsDefault();
-  if(m_GameModeCurrent != nullptr && m_GameModeCurrent != m_GameModeCollection["default"])
+  QMap<QString, DR::ColorInfo> returnValue = mGameModes["default"]->getTextColors();
+  if(mCurrentGamemode != nullptr && mCurrentGamemode != mGameModes["default"])
   {
-    QMapIterator<QString, DR::ColorInfo> i(m_GameModeCurrent->GetFontColorsDefault());
+    QMapIterator<QString, DR::ColorInfo> i(mCurrentGamemode->getTextColors());
     while (i.hasNext())
     {
       i.next();
@@ -277,15 +275,15 @@ QMap<QString, DR::ColorInfo> ThemeReader::GetColorsDefault()
   return returnValue;
 }
 
-bool ThemeReader::IsPixmapExist(QString path)
+bool ThemeReader::pixmapExists(QString path)
 {
-  if(m_GameModeCurrent->mThemeImages.contains(path))
+  if(mCurrentGamemode->mThemeImages.contains(path))
   {
     return true;
   }
-  else if(m_GameModeCollection.contains("default"))
+  else if(mGameModes.contains("default"))
   {
-    if(m_GameModeCollection["default"]->mThemeImages.contains(path))
+    if(mGameModes["default"]->mThemeImages.contains(path))
     {
       return true;
     }
@@ -293,57 +291,57 @@ bool ThemeReader::IsPixmapExist(QString path)
   return false;
 }
 
-AOPixmap ThemeReader::GetCachedPixmap(QString path)
+AOPixmap ThemeReader::getPixmap(QString path)
 {
-  if(m_GameModeCurrent->mThemeImages.contains(path))
+  if(mCurrentGamemode->mThemeImages.contains(path))
   {
-    return m_GameModeCurrent->mThemeImages[path];
+    return mCurrentGamemode->mThemeImages[path];
   }
-  else if(m_GameModeCollection.contains("default"))
+  else if(mGameModes.contains("default"))
   {
-    if(m_GameModeCollection["default"]->mThemeImages.contains(path))
+    if(mGameModes["default"]->mThemeImages.contains(path))
     {
-      return m_GameModeCollection["default"]->mThemeImages[path];
+      return mGameModes["default"]->mThemeImages[path];
     }
   }
   return AOPixmap();
 }
 
-widgetFontStruct ThemeReader::GetFontData(ThemeSceneType sceneType, QString element)
+widgetFontStruct ThemeReader::getFont(ThemeSceneType sceneType, QString element)
 {
   widgetFontStruct return_value;
-  double resize = ThemeManager::get().GetResizeClient();
+  double resize = ThemeManager::get().getResize();
 
-  if(m_GameModeCurrent != nullptr)
+  if(mCurrentGamemode != nullptr)
   {
-    if(m_GameModeCurrent->containsWidgetFont(sceneType, element))
+    if(mCurrentGamemode->containsWidgetFont(sceneType, element))
     {
-      return_value = m_GameModeCurrent->getWidgetFont(sceneType, element);
+      return_value = mCurrentGamemode->getWidgetFont(sceneType, element);
       return_value.size = (int)((double)return_value.size * resize);
       return return_value;
     }
   }
 
-  if(m_GameModeCollection["default"]->containsWidgetFont(sceneType, element))
+  if(mGameModes["default"]->containsWidgetFont(sceneType, element))
   {
-    return_value = m_GameModeCollection["default"]->getWidgetFont(sceneType, element);
+    return_value = mGameModes["default"]->getWidgetFont(sceneType, element);
   }
   return_value.size = (int)((double)return_value.size * resize);
 
   return return_value;
 }
 
-pos_size_type ThemeReader::GetWidgetTransform(ThemeSceneType sceneType, QString element)
+pos_size_type ThemeReader::getWidgetPosition(ThemeSceneType sceneType, QString element)
 {
   pos_size_type return_value;
 
-  double resize = ThemeManager::get().GetResizeClient();
+  double resize = ThemeManager::get().getResize();
 
-  if(m_GameModeCurrent != nullptr)
+  if(mCurrentGamemode != nullptr)
   {
-    if(m_GameModeCurrent->containsWidgetPosition(sceneType, element))
+    if(mCurrentGamemode->containsWidgetPosition(sceneType, element))
     {
-      return_value = m_GameModeCurrent->getWidgetPosition(sceneType, element);
+      return_value = mCurrentGamemode->getWidgetPosition(sceneType, element);
 
       return_value.x = (int)((double)return_value.x * resize);
       return_value.y = (int)((double)return_value.y * resize);
@@ -354,9 +352,9 @@ pos_size_type ThemeReader::GetWidgetTransform(ThemeSceneType sceneType, QString 
     }
   }
 
-  if(m_GameModeCollection["default"]->containsWidgetPosition(sceneType, element))
+  if(mGameModes["default"]->containsWidgetPosition(sceneType, element))
   {
-    return_value = m_GameModeCollection["default"]->getWidgetPosition(sceneType, element);
+    return_value = mGameModes["default"]->getWidgetPosition(sceneType, element);
   }
 
   return_value.x = (int)((double)return_value.x * resize);
@@ -367,36 +365,36 @@ pos_size_type ThemeReader::GetWidgetTransform(ThemeSceneType sceneType, QString 
   return return_value;
 }
 
-widgetFontStruct ThemeReader::GetFontDataPairing(QString element, QString position)
+widgetFontStruct ThemeReader::getPairingFont(QString element, QString position)
 {
   widgetFontStruct return_value;
 
-  double resize = ThemeManager::get().GetResizeClient();
+  double resize = ThemeManager::get().getResize();
   QString name_alignment = element + "_" + position;
 
-  if(m_GameModeCurrent != nullptr)
+  if(mCurrentGamemode != nullptr)
   {
-    if(m_GameModeCurrent->containsWidgetFont(SceneTypeCourtroom, name_alignment))
+    if(mCurrentGamemode->containsWidgetFont(COURTROOM, name_alignment))
     {
-      return_value = m_GameModeCurrent->getWidgetFont(SceneTypeCourtroom, name_alignment);
+      return_value = mCurrentGamemode->getWidgetFont(COURTROOM, name_alignment);
       return_value.size = (int)((double)return_value.size * resize);
       return return_value;
     }
-    else if(m_GameModeCurrent->containsWidgetFont(SceneTypeCourtroom, element))
+    else if(mCurrentGamemode->containsWidgetFont(COURTROOM, element))
     {
-      return_value = m_GameModeCurrent->getWidgetFont(SceneTypeCourtroom, element);
+      return_value = mCurrentGamemode->getWidgetFont(COURTROOM, element);
       return_value.size = (int)((double)return_value.size * resize);
       return return_value;
     }
   }
 
 
-  if(m_GameModeCollection.contains("default"))
+  if(mGameModes.contains("default"))
   {
-    if(m_GameModeCollection["default"]->containsWidgetFont(SceneTypeCourtroom, name_alignment)) return_value = m_GameModeCollection["default"]->getWidgetFont(SceneTypeCourtroom, name_alignment);
-    else if(m_GameModeCollection["default"]->containsWidgetFont(SceneTypeCourtroom, element))
+    if(mGameModes["default"]->containsWidgetFont(COURTROOM, name_alignment)) return_value = mGameModes["default"]->getWidgetFont(COURTROOM, name_alignment);
+    else if(mGameModes["default"]->containsWidgetFont(COURTROOM, element))
     {
-      return_value = m_GameModeCollection["default"]->getWidgetFont(SceneTypeCourtroom, element);
+      return_value = mGameModes["default"]->getWidgetFont(COURTROOM, element);
     }
   }
 

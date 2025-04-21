@@ -38,12 +38,6 @@ void ThemeScene::setWidgetTransform(QString t_name, pos_size_type t_transform)
   m_Widgets[t_name]->Transform = t_transform;
 }
 
-void ThemeScene::setWidgetRotation(QString t_name, double t_rotation)
-{
-  if(!m_Widgets.contains(t_name)) m_Widgets[t_name] = new WidgetThemeData();
-  m_Widgets[t_name]->Rotation = t_rotation;
-}
-
 void ThemeScene::setWidgetSpacing(QString t_name, QVector2D t_spacing)
 {
   if(!m_Widgets.contains(t_name)) setDummyTransform(t_name);
@@ -56,9 +50,15 @@ void ThemeScene::setWidgetFont(QString t_name, widgetFontStruct *t_font)
   m_Widgets[t_name]->Font = t_font;
 }
 
+bool ThemeScene::containsChatlogBold(QString t_type)
+{
+  return m_ChatlogBold.contains(t_type);
+}
 
-
-
+bool ThemeScene::containsChatlogColor(QString t_type)
+{
+  return m_ChatlogColor.contains(t_type);
+}
 
 bool ThemeScene::getChatlogBold(QString t_type)
 {

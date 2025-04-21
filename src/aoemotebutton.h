@@ -43,15 +43,10 @@ private:
 
   QLabel *ui_selected = nullptr;
 
-  //Context Menu
-  QMenu *p_ContextMenu = nullptr;
-  QAction *p_ActionUpdateEmotion = nullptr;
-
 private slots:
-  void OnContextMenuRequested(QPoint p_point);
-  void OnUpdateEmotionClicked();
   void on_clicked();
 
+  // QWidget interface
 protected:
   void paintEvent(QPaintEvent *event) final;
 };

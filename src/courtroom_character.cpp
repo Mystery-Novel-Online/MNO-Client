@@ -255,22 +255,3 @@ void Courtroom::UpdateIniswapStylesheet()
   update_iniswap_list();
   ui_iniswap_dropdown->blockSignals(false);
 }
-
-void Courtroom::OnMusicCategoryChanged()
-{
-  QString l_category = getCurrentCategory();
-  if(l_category == "All")
-  {
-    m_music_list = ScenarioManager::get().GetAllMusic();
-  }
-  else if(l_category == "Pinned")
-  {
-    m_music_list = ScenarioManager::get().GetPinnedTracks();
-  }
-  else
-  {
-    m_music_list = ScenarioManager::get().GetCategoryMusic(l_category);
-  }
-  list_music();
-
-}

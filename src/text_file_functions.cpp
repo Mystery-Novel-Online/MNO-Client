@@ -127,8 +127,8 @@ pos_size_type AOApplication::get_element_dimensions(QString p_identifier, QStrin
   {
     pos_size_type json_pos;
 
-    if(p_file == COURTROOM_DESIGN_INI) json_pos = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(SceneTypeCourtroom, p_identifier);
-    else if(p_file == LOBBY_DESIGN_INI) json_pos = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(SceneTypeLobby, p_identifier);
+    if(p_file == COURTROOM_DESIGN_INI) json_pos = ThemeManager::get().mCurrentThemeReader.getWidgetPosition(COURTROOM, p_identifier);
+    else if(p_file == LOBBY_DESIGN_INI) json_pos = ThemeManager::get().mCurrentThemeReader.getWidgetPosition(LOBBY, p_identifier);
 
     if(json_pos.width != -1)
     {

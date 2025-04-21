@@ -2,7 +2,7 @@
 
 #include <QString>
 
-const QString BASE_CONFIG_INI = "/base/config_beta.ini";
+const QString BASE_CONFIG_INI = "/base/config.ini";
 const QString BASE_PACKAGES_INI = "packages.ini";
 const QString BASE_SERVER_BROWSER_INI = "server_browser.ini";
 const QString BASE_FAVORITE_SERVERS_INI = "favorite_servers.ini";
@@ -23,9 +23,6 @@ const QString COURTROOM_TOGGLES_INI = "courtroom_toggles.ini";
 const QString COURTROOM_SOUNDS_INI = "courtroom_sounds.ini";
 const QString COURTROOM_TEXT_COLOR_INI = "courtroom_text_colors.ini";
 const QString COURTROOM_STYLESHEETS_CSS = "courtroom_stylesheets.css";
-
-const QString REPLAYS_FONTS_INI = "replays_fonts.ini";
-const QString VIEWPORT_FONTS_INI = "viewport_fonts.ini";
 
 const QString LOBBY_DESIGN_INI = "lobby_design.ini";
 const QString LOBBY_FONTS_INI = "lobby_fonts.ini";

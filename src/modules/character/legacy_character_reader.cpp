@@ -116,7 +116,6 @@ QVector<DREmote> LegacyCharacterReader::getEmotes()
       l_emote.comment = l_emotions.at(Comment);
       l_emote.anim = l_emotions.at(Animation);
       l_emote.dialog = l_emotions.at(Dialog);
-      l_emote.emoteName = l_emotions.at(Dialog);
       l_emote.modifier = qMax(l_emotions.at(Modifier).toInt(), 0);
       if (DeskModifier < l_emotions.length())
         l_emote.desk_modifier = l_emotions.at(DeskModifier).toInt();

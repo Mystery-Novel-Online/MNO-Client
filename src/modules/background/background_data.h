@@ -3,8 +3,6 @@
 
 #include "datatypes.h"
 
-#include <drposition.h>
-
 class BackgroundData
 {
 public:
@@ -23,34 +21,6 @@ public:
 private:
   DRBackgroundSettings mSettings;
   QMap<QString, DRBackgroundPosition> mPositions = {};
-
-private:
-  QMap<QString, DRPosition> m_LegacyPositionMap{
-      {
-          "wit",
-          DRPosition("witnessempty", "stand"),
-      },
-      {
-          "def",
-          DRPosition("defenseempty", "defensedesk"),
-      },
-      {
-          "pro",
-          DRPosition("prosecutorempty", "prosecutiondesk"),
-      },
-      {
-          "jud",
-          DRPosition("judgestand", "judgedesk"),
-      },
-      {
-          "hld",
-          DRPosition("helperstand", "helperdesk"),
-      },
-      {
-          "hlp",
-          DRPosition("prohelperstand", "prohelperdesk"),
-      },
-  };
 };
 
 #endif // BACKGROUNDDATA_H

@@ -7,8 +7,6 @@
 
 #include <QDebug>
 
-#include <modules/managers/scene_manager.h>
-
 int main(int argc, char *argv[])
 {
 #if defined(Q_OS_WINDOWS)
@@ -55,20 +53,8 @@ int main(int argc, char *argv[])
     QObject::connect(l_media_tester, SIGNAL(done()), l_media_tester, SLOT(deleteLater()));
 
     app.load_fonts();
-
-
-    QStringList arguments = QCoreApplication::arguments();
-    if (arguments.contains("--testinglabs"))
-    {
-      SceneManager::get().ConstructTestingLabs();
-      //app.constructTestingLabs();
-    }
-    else
-    {
-      app.construct_lobby();
-      app.get_lobby()->show();
-    }
-
+    app.construct_lobby();
+    app.get_lobby()->show();
 
     l_exit_code = app.exec();
 

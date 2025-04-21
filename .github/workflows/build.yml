@@ -70,12 +70,12 @@ jobs:
         curl http://www.un4seen.com/files/bass24-linux.zip -o ./bass.zip
         unzip -d ./bass -o ./bass.zip
         cp ./bass/bass.h ./3rd/bass/bass.h
-        cp ./bass/libs/x86_64/libbass.so ./3rd/libbass.so
+        cp ./bass/x64/libbass.so ./3rd/libbass.so
 
         curl http://www.un4seen.com/files/bassopus24-linux.zip -o ./bassopus.zip
         unzip -d ./bass -o ./bassopus.zip
         cp ./bass/bassopus.h ./3rd/bass/bassopus.h
-        cp ./bass/libs/x86_64/libbassopus.so ./3rd/libbassopus.so
+        cp ./bass/x64/libbassopus.so ./3rd/libbassopus.so
 
     - name: Install BASS (MacOS)
       if: contains(matrix.os, 'macos')
@@ -127,7 +127,7 @@ jobs:
     - name: Install Qt (Ubuntu)
       if: contains(matrix.os, 'ubuntu')
       run: |
-        sudo apt-get install qtbase5-dev qttools5-dev qtmultimedia5-dev qt5-image-formats-plugins
+        sudo apt-get install qt5-default libqt5designer5 qttools5-dev libqt5multimedia5 libqt5multimedia5-plugins libqt5multimediawidgets5 qtmultimedia5-dev
         
     - name: Install Qt (Others)
       if: contains(matrix.os, 'ubuntu') != true

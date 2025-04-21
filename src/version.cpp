@@ -13,12 +13,12 @@
 
 int get_release_version()
 {
-  return 2;
+  return 1;
 }
 
 int get_major_version()
 {
-  return 0;
+  return 7;
 }
 
 int get_minor_version()
@@ -33,7 +33,7 @@ VersionNumber get_version_number()
 
 QString get_post_version()
 {
-  return "a07";
+  return "a01";
 }
 
 QString get_version_string()
@@ -130,7 +130,7 @@ void launch_updater_check(bool is_beta, bool isSilent)
 bool check_updater_is_beta()
 {
   QString version = "stable";
-  QString version_file_path = DRPather::GetApplicationPath() + "/base/version";
+  QString version_file_path = DRPather::get_application_path() + "/base/version";
   if(file_exists(version_file_path))
   {
     QFile inputFile(version_file_path);

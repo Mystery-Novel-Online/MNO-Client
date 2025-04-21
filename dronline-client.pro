@@ -3,7 +3,7 @@ QT += core gui widgets uitools network multimedia multimediawidgets
 CONFIG += c++17
 
 TEMPLATE = app
-VERSION = 2.0.0
+VERSION = 1.6.0
 TARGET = dro-client
 
 RC_ICONS = icon.ico
@@ -37,7 +37,6 @@ HEADERS += \
   src/courtroom.h \
   src/datatypes.h \
   src/debug_functions.h \
-  src/debugmenuui.h \
   src/draudio.h \
   src/draudiodevice.h \
   src/draudioengine.h \
@@ -50,7 +49,6 @@ HEADERS += \
   src/drchatlog.h \
   src/drdiscord.h \
   src/dreffectmovie.h \
-  src/drevidencedialogue.h \
   src/drgraphicscene.h \
   src/drmasterclient.h \
   src/drmediatester.h \
@@ -92,63 +90,27 @@ HEADERS += \
   src/modules/character/outfit_reader.h \
   src/modules/debug/time_debugger.h \
   src/modules/files/image_loader.h \
-  src/modules/globals/dro_math.h \
-  src/modules/json/animation_reader.h \
   src/modules/json/json_reader.h \
   src/modules/json/localization_reader.h \
-  src/modules/json/replay_reader.h \
   src/modules/json/theme_mode_reader.h \
   src/modules/json/theme_module_reader.h \
   src/modules/json/theme_reader.h \
-  src/modules/managers/animation_manager.h \
-  src/modules/managers/audio_manager.h \
   src/modules/managers/character_manager.h \
-  src/modules/managers/configuration_manager.h \
   src/modules/managers/emotion_manager.h \
-  src/modules/managers/evidence_manager.h \
-  src/modules/managers/game_manager.h \
   src/modules/managers/localization_manager.h \
   src/modules/managers/notify_manager.h \
   src/modules/managers/pair_manager.h \
-  src/modules/managers/pathing_manager.h \
-  src/modules/managers/replay_manager.h \
-  src/modules/managers/scenario_manager.h \
   src/modules/managers/scene_manager.h \
-  src/modules/managers/variable_manager.h \
-  src/modules/networking/dro_packet.h \
   src/modules/networking/json_packet.h \
-  src/modules/networking/legacy_network_handler.h \
-  src/modules/networking/neo_network_handler.h \
-  src/modules/networking/network_handler.h \
-  src/modules/networking/packets/packet_play_music.h \
-  src/modules/networking/packets/packets_metadata.h \
-  src/modules/networking/packets/packets_moderation.h \
-  src/modules/networking/packets/packets_scene.h \
-  src/modules/networking/packets/packets_timer.h \
-  src/modules/scenes/replay_scene.h \
-  src/modules/scenes/scenetestinglabs.h \
-  src/modules/scenes/viewport_scene.h \
-  src/modules/theme/droanimation.h \
-  src/modules/theme/graphicobjectanimator.h \
   src/modules/theme/theme_scene.h \
   src/modules/theme/thememanager.h \
-  src/modules/theme/widget_animator.h \
   src/modules/theme/widgets/characterselectwidget.h \
   src/modules/theme/widgets/dro_combo_box.h \
   src/modules/theme/widgets/dro_line_edit.h \
   src/modules/theme/widgets/droemotebuttons.h \
   src/modules/theme/widgets/tab_toggle_button.h \
-  src/modules/widgets/dro_camera_display.h \
-  src/modules/widgets/droviewportwidget.h \
-  src/modules/widgets/evidence_entry_button.h \
-  src/modules/widgets/evidence_list.h \
-  src/modules/widgets/investigation_display.h \
-  src/modules/widgets/keyframe_player.h \
-  src/modules/widgets/replay_hover_controller.h \
   src/modules/widgets/rpnotifymenu.h \
   src/modules/widgets/tabgroupingwidget.h \
-  src/modules/widgets/taggablelineedit.h \
-  src/modules/widgets/typewritertextedit.h \
   src/modules/widgets/viewport_overlay.h \
   src/theme.h \
   src/utils.h \
@@ -185,7 +147,6 @@ SOURCES += \
   src/courtroom_widgets.cpp \
   src/datatypes.cpp \
   src/debug_functions.cpp \
-  src/debugmenuui.cpp \
   src/draudio.cpp \
   src/draudiodevice.cpp \
   src/draudioengine.cpp \
@@ -197,7 +158,6 @@ SOURCES += \
   src/drcharactermovie.cpp \
   src/drchatlog.cpp \
   src/dreffectmovie.cpp \
-  src/drevidencedialogue.cpp \
   src/drgraphicscene.cpp \
   src/drmasterclient.cpp \
   src/drmediatester.cpp \
@@ -239,63 +199,27 @@ SOURCES += \
   src/modules/character/outfit_reader.cpp \
   src/modules/debug/time_debugger.cpp \
   src/modules/files/image_loader.cpp \
-  src/modules/globals/dro_math.cpp \
-  src/modules/json/animation_reader.cpp \
   src/modules/json/json_reader.cpp \
   src/modules/json/localization_reader.cpp \
-  src/modules/json/replay_reader.cpp \
   src/modules/json/theme_mode_reader.cpp \
   src/modules/json/theme_module_reader.cpp \
   src/modules/json/theme_reader.cpp \
-  src/modules/managers/animation_manager.cpp \
-  src/modules/managers/audio_manager.cpp \
   src/modules/managers/character_manager.cpp \
-  src/modules/managers/configuration_manager.cpp \
   src/modules/managers/emotion_manager.cpp \
-  src/modules/managers/evidence_manager.cpp \
-  src/modules/managers/game_manager.cpp \
   src/modules/managers/localization_manager.cpp \
   src/modules/managers/notify_manager.cpp \
   src/modules/managers/pair_manager.cpp \
-  src/modules/managers/pathing_manager.cpp \
-  src/modules/managers/replay_manager.cpp \
-  src/modules/managers/scenario_manager.cpp \
   src/modules/managers/scene_manager.cpp \
-  src/modules/managers/variable_manager.cpp \
-  src/modules/networking/dro_packet.cpp \
   src/modules/networking/json_packet.cpp \
-  src/modules/networking/legacy_network_handler.cpp \
-  src/modules/networking/neo_network_handler.cpp \
-  src/modules/networking/network_handler.cpp \
-  src/modules/networking/packets/packet_play_music.cpp \
-  src/modules/networking/packets/packets_metadata.cpp \
-  src/modules/networking/packets/packets_moderation.cpp \
-  src/modules/networking/packets/packets_scene.cpp \
-  src/modules/networking/packets/packets_timer.cpp \
-  src/modules/scenes/replay_scene.cpp \
-  src/modules/scenes/scenetestinglabs.cpp \
-  src/modules/scenes/viewport_scene.cpp \
-  src/modules/theme/droanimation.cpp \
-  src/modules/theme/graphicobjectanimator.cpp \
   src/modules/theme/theme_scene.cpp \
   src/modules/theme/thememanager.cpp \
-  src/modules/theme/widget_animator.cpp \
   src/modules/theme/widgets/characterselectwidget.cpp \
   src/modules/theme/widgets/dro_combo_box.cpp \
   src/modules/theme/widgets/dro_line_edit.cpp \
   src/modules/theme/widgets/droemotebuttons.cpp \
   src/modules/theme/widgets/tab_toggle_button.cpp \
-  src/modules/widgets/dro_camera_display.cpp \
-  src/modules/widgets/droviewportwidget.cpp \
-  src/modules/widgets/evidence_entry_button.cpp \
-  src/modules/widgets/evidence_list.cpp \
-  src/modules/widgets/investigation_display.cpp \
-  src/modules/widgets/keyframe_player.cpp \
-  src/modules/widgets/replay_hover_controller.cpp \
   src/modules/widgets/rpnotifymenu.cpp \
   src/modules/widgets/tabgroupingwidget.cpp \
-  src/modules/widgets/taggablelineedit.cpp \
-  src/modules/widgets/typewritertextedit.cpp \
   src/modules/widgets/viewport_overlay.cpp \
   src/path_functions.cpp \
   src/server_socket.cpp \
@@ -322,10 +246,7 @@ DISTFILES +=
 
 FORMS += \
   res/ui/config_panel.ui \
-  src/debugmenuui.ui \
-  src/drevidencedialogue.ui \
-  src/drserverinfoeditor.ui \
-  src/evidencedialogue.ui
+  src/drserverinfoeditor.ui
 
 # Mac stuff
 QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13

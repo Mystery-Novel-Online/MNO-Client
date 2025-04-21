@@ -53,16 +53,6 @@ void GraphicsSpriteItem::set_scaling_mode(SpritePlayer::ScalingMode p_scaling_mo
   m_player->set_scaling_mode(p_scaling_mode);
 }
 
-void GraphicsSpriteItem::set_center_mode(bool t_center)
-{
-  mCenterSprite = t_center;
-}
-
-void GraphicsSpriteItem::set_composition_mode(QPainter::CompositionMode t_composition)
-{
-  mCompoMode = t_composition;
-}
-
 QSizeF GraphicsSpriteItem::get_size() const
 {
   return m_player->get_size();
@@ -91,12 +81,6 @@ QString GraphicsSpriteItem::get_file_name() const
 void GraphicsSpriteItem::set_file_name(QString p_file_name)
 {
   m_player->set_file_name(p_file_name);
-}
-
-void GraphicsSpriteItem::setProxyImage(QImage t_image)
-{
-  mUsesProxy = true;
-  m_ProxyImage = t_image;
 }
 
 QIODevice *GraphicsSpriteItem::get_device() const
@@ -152,11 +136,6 @@ void GraphicsSpriteItem::setBackgroundScaling(double t_offset)
 
 }
 
-void GraphicsSpriteItem::setCurrentAnimation(DROAnimation *t_animation)
-{
-  mWidgetAnimation = t_animation;
-}
-
 void GraphicsSpriteItem::stop()
 {
   m_player->stop();
@@ -182,60 +161,22 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   Q_UNUSED(option);
   Q_UNUSED(widget);
 
-  QImage l_image;
-  if(mUsesProxy)
-  {
-    l_image = m_ProxyImage;
-  }
-  else
-  {
-    l_image = m_player->get_current_frame();
-  }
+  const QImage l_image = m_player->get_current_frame();
   if (!l_image.isNull())
   {
-    //if(mWidgetAnimation != nullptr)
-    //{
-    //  int lWidth = mWidgetAnimation->GetCurrentValue(eVarWidth);
-    //  int lHeight = mWidgetAnimation->GetCurrentValue(eVarHeight);
-    //  if(lWidth != 9999999 && lHeight != 9999999 && mWidgetAnimation->GetCurrentlyRunning())
-    //  {
-    //    l_image = l_image.scaled(QSize(lWidth, lHeight), Qt::IgnoreAspectRatio);
-    //    update();
-    //  }
-    //}
-
     painter->save();
-    painter->setCompositionMode(mCompoMode);
+    painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+
     // calculate center position
-    QPointF l_horizontal_center(m_TransformX, m_TransformY);
-    if(mCenterSprite)
+    QPointF l_horizontal_center;
+    if (auto *l_scene = scene())
     {
-      if (auto *l_scene = scene())
-      {
-        const QPointF l_center = l_scene->sceneRect().center() - m_player->get_scaled_bounding_rect().center();
-        l_horizontal_center.setX(l_horizontal_center.x() + l_center.x());
-        l_horizontal_center.setY(l_horizontal_center.y() + mVerticalVPOffset);
-      }
-    }
-    if(rotation() == 0)
-    {
-      painter->setRenderHint(QPainter::SmoothPixmapTransform, false);
-      painter->setRenderHint(QPainter::Antialiasing, false);
-    }
-    else
-    {
-      painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
-      painter->setRenderHint(QPainter::Antialiasing, true);
+      const QPointF l_center = l_scene->sceneRect().center() - m_player->get_scaled_bounding_rect().center();
+      l_horizontal_center.setX(l_center.x());
+      l_horizontal_center.setY(mVerticalVPOffset);
     }
 
-    painter->drawImage(l_horizontal_center, l_image);
-
-    //painter->setPen(Qt::blue);
-    //painter->drawRect(scene()->sceneRect());
-
-    //painter->setPen(Qt::red);
-    //painter->drawRect(m_player->get_scaled_bounding_rect());
-
+    painter->drawImage(l_horizontal_center, m_player->get_current_frame());
     painter->restore();
   }
 }

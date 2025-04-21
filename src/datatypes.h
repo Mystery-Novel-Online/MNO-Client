@@ -1,169 +1,17 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H
 
-#include "modules/globals/dro_math.h"
-#include "qdebug.h"
 #include "qvector2d.h"
 #include <QDateTime>
 #include <QMap>
 #include <QVector>
 
-
-enum class ChatTypes
-{
-  Talk,
-  Shout,
-  Think,
-  CG,
-  Narrator
-};
-
-class VariableMappedString
-{
-public:
-  VariableMappedString()
-  {
-
-  }
-
-  VariableMappedString(QString t_input)
-  {
-    mInputString = t_input;
-  };
-
-  QString mInputString = "";
-  QMap<QString, QString> mVariableMap = {};
-};
-
-
-class GameShoutData
-{
-public:
-  GameShoutData(QString t_name)
-  {
-    mName = t_name;
-  };
-
-  QString mName = "";
-  int mLegacyId = -1;
-};
-
-class GameEffectData
-{
-public:
-  GameEffectData(QString t_name)
-  {
-    mName = t_name;
-  };
-
-  QString mName = "";
-  bool mLoops = false;
-  bool mIgnoresPair = false;
-  int mLegacyId = -1;
-};
-
-class ReplayOperation
-{
-public:
-  ReplayOperation(QString t_operation)
-  {
-    mOperation = t_operation;
-  };
-  QString mOperation = "";
-  int mTimestamp = 0;
-  QMap<QString, QString> mVariables = {};
-};
-
-class FreeblockData
-{
-public:
-  FreeblockData(QString t_name)
-  {
-    mName = t_name;
-  };
-  QString mName = "";
-  QString mImagePath = "";
-  QMap<QString, QString> mVariables = {};
-};
-
-class SpeakerData
-{
-public:
-  SpeakerData(QString t_chara, QString t_sprite)
-  {
-    mCharacter = t_chara;
-    mEmote = t_sprite;
-  };
-  QString mCharacter = "";
-  QString mEmote = "";
-};
-
-enum AnimTypes
-{
-  eAnimationShout,
-  eAnimationGM,
-  eAnimationEffects,
-  eAnimationPlayer,
-  eAnimationTheme
-};
-
-enum AnimationVariableTypes
-{
-  ePOS_X,
-  ePOS_Y,
-  eVarWidth,
-  eVarHeight,
-  eSCALE,
-  eKEYFRAME,
-  eALPHA,
-  eFIXED_HEIGHT,
-  eROTATION,
-  eNONE
-};
-
-enum AnimCurveType
-{
-  LINEAR,
-  EASE,
-  BEZIER,
-  PARAMETRIC,
-  NONE
-};
-
-
-class DROAnimationKeyframe
-{
-public:
-  DROAnimationKeyframe(qint64 time, AnimationVariableTypes type, float value, AnimCurveType fin, AnimCurveType fout)
-  {
-    Time = time;
-    Type = type;
-    Value = value;
-    FadeIn = fin;
-    FadeOut = fout;
-  };
-  qint64 Time;
-  AnimationVariableTypes Type;
-  float Value;
-  AnimCurveType FadeIn = LINEAR;
-  AnimCurveType FadeOut = LINEAR;
-};
-
 enum ThemeSceneType
 {
-  SceneTypeLobby,
-  SceneTypeCourtroom,
-  SceneTypeTestingLab,
-  SceneTypeReplays,
-  SceneTypeViewport
-};
-
-class EvidenceData
-{
-public:
-  QString mName = "???";
-  QString mDescription = "No Description Provided.";
-  QString mImage = "";
+  LOBBY,
+  COURTROOM,
+  TESTINGLABS,
+  REPLAYS
 };
 
 class DRBackgroundSettings
@@ -197,8 +45,6 @@ public:
   QString sound_file;
   int sound_delay = 0;
   QString video_file;
-  QString outfitName = "";
-  QString emoteName = "";
 };
 
 class DRAreaBackground
@@ -378,7 +224,6 @@ struct widgetFontStruct
 struct WidgetThemeData
 {
   pos_size_type Transform;
-  double Rotation = 0;
   widgetFontStruct *Font = nullptr;
   QVector2D Spacing = QVector2D(-1, -1);
 };
@@ -389,7 +234,6 @@ enum SpriteCategory
   SpriteStage,
   SpriteCharacter,
   SpritePairCharacter,
-  SpriteWeather,
   SpriteEffect,
   SpriteShout,
   SpriteSticker,
@@ -407,49 +251,11 @@ enum ViewportSprite
   ViewportCharacterIdle,
   ViewportCharacterTalk,
   ViewportPairCharacterIdle,
-  ViewportWeather,
   ViewportEffect,
   ViewportShout,
 };
 
 SpriteCategory viewport_sprite_to_sprite_category(ViewportSprite p_type);
-
-enum ChatCharaType : int32_t
-{
-  CharChara,
-  CharNarrator,
-  CharCG
-};
-
-
-enum MessagePacket : int32_t
-{
-  eMsClientToggles,
-  eMsCharacterId,
-  eMsCharacterFolder,
-  eMsCharacterOutfit,
-  eMsPreAnim,
-  eMsCharacterEmote,
-  eMsShowname,
-  eMsTextContents,
-  eMsSoundEffect,
-  eMsSoundDelay,
-  eMsTextColour,
-  eMsShout,
-  eMsEffects,
-  eMsAnimation,
-  eMsEvidenceName,
-  eMsVideo,
-  eMsClientId,
-  eMsServerToggles,
-  eMsAreaPosition,
-  eMsOffsetX,
-  eMsOffsetY,
-  eMsPairCharaFolder,
-  eMsPairCharaEmote,
-  eMsPairOffsetX,
-  eMsPairOffsetY
-};
 
 enum ChatMessage : int32_t
 {
@@ -472,13 +278,6 @@ enum ChatMessage : int32_t
   CMVideoName,
   CMHideCharacter,
   CMClientId,
-  CMOffsetX,
-  CMPairChrName,
-  CMPairEmote,
-  CMPairFlip,
-  CMPairOffsetX,
-  CMKeyframeAnim,
-  CMCharType
 };
 
 enum EmoteMod
@@ -488,7 +287,6 @@ enum EmoteMod
   ZoomEmoteMod = 5,
   PreZoomEmoteMod = 6,
 };
-
 
 namespace DR
 {

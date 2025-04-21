@@ -8,7 +8,6 @@
 class AOConfig;
 class AOConfigPanel;
 class Courtroom;
-class ReplayScene;
 class DRDiscord;
 class DRTheme;
 class DRMasterClient;
@@ -18,8 +17,6 @@ class Lobby;
 #include <QVector>
 
 #include <optional>
-
-
 
 class AOApplication : public QApplication
 {
@@ -56,7 +53,6 @@ public:
   void destruct_lobby();
 
   Courtroom *get_courtroom() const;
-  ReplayScene *constructReplay();
   void construct_courtroom();
   void destruct_courtroom();
 
@@ -78,6 +74,7 @@ public:
   QVector<QString> m_disabled_packages = {};
   void reload_packages();
   void save_disabled_packages_ini();
+  void read_disabled_packages_ini();
   QString get_base_path();
   QString get_package_path(QString p_package);
   QString get_package_or_base_path(QString p_path);
@@ -207,9 +204,6 @@ public:
   ////// Functions for fonts handling //////
   void load_fonts();
   Courtroom *m_courtroom = nullptr;
-  Lobby *m_lobby = nullptr;
-  ReplayScene *mReplayPlayer = nullptr;
-  AOConfig *ao_config = nullptr;
 
 public slots:
   void loading_cancelled();
@@ -220,65 +214,18 @@ signals:
   void reload_audiotracks();
   void server_status_changed(ServerStatus);
 
-public:
-  bool GetCourtroomConstructed()
-  {
-    return is_courtroom_constructed;
-  }
-
-  bool GetLobbyConstructed()
-  {
-    return is_lobby_constructed;
-  }
-
-  bool GetLoadedAreaList()
-  {
-    return m_loaded_area_list;
-  }
-
-  void SetLoadedAreaList(bool t_loadedAreaList)
-  {
-    m_loaded_area_list = t_loadedAreaList;
-  }
-
-  void SetLoadedMusicList(bool t_loadedMusicList)
-  {
-    m_loaded_music_list = t_loadedMusicList;
-  }
-
-  void SetLoadedCharacterCount(int t_count)
-  {
-    m_loaded_characters = t_count;
-  };
-
-  int GetCharacterCount()
-  {
-    return m_character_count;
-  }
-
-  int GetMusicCount()
-  {
-    return m_music_count;
-  }
-
-  int GetLoadedCharactersCount()
-  {
-    return m_loaded_characters;
-  }
-
 private:
+  AOConfig *ao_config = nullptr;
   AOConfigPanel *ao_config_panel = nullptr;
   DRDiscord *dr_discord = nullptr;
 
   DRServerSocket *m_server_socket = nullptr;
   ServerStatus m_server_status = NotConnected;
 
-  bool isTestingLabsConstructed = false;
-
+  Lobby *m_lobby = nullptr;
   bool is_lobby_constructed = false;
 
   bool is_courtroom_constructed = false;
-  bool isReplayConstructed = false;
 
   ///////////////server metadata////////////////
 
@@ -320,11 +267,9 @@ public:
   QString get_character_sprite_idle_path(QString character, QString emote);
   QString get_character_sprite_talk_path(QString character, QString emote);
   QString get_background_sprite_path(QString background, QString image);
-  QString getWeatherSprite(QString weather);
   QString get_background_sprite_noext_path(QString background, QString image);
   QString get_shout_sprite_path(QString character, QString shout);
   QString get_theme_sprite_path(QString file_name, QString character);
-  QString GetFirstThemeSpritePath(QStringList t_FilePaths);
   QString get_theme_sprite_path(QString file_name);
   QString get_effect_anim_path(QString file_name);
   QString get_wtce_anim_path(QString file_name);

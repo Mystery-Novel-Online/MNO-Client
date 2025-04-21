@@ -2,8 +2,6 @@
 #define LEGACYBACKGROUNDREADER_H
 #include "background_data.h"
 
-#include <drposition.h>
-
 
 class LegacyBackgroundReader : public BackgroundData
 {
@@ -12,7 +10,6 @@ public:
 
   void execLoadBackground(QString t_backgroundName);
   int getVerticalPosition(double t_height);
-
 };
 
 #endif // LEGACYBACKGROUNDREADER_H

@@ -2,7 +2,7 @@
 #define DRTHEME_H
 
 #include "qjsonobject.h"
-#include <aoapplication.h>
+#include <AOApplication.h>
 #include <qjsondocument.h>
 #include <qstring.h>
 
@@ -68,9 +68,6 @@ public:
   int get_wtce_count();
 
   QString get_free_block(int index);
-  QString getFreeblockImage(int index);
-  QMap<QString, QString> getFreeblockVariables(QString t_name);
-  QString getFreeblockImage(QString t_name);
   int get_free_block_count();
 
   QVector<QStringList> widget_layers = {};
@@ -88,7 +85,7 @@ private:
   QVector<QStringList> effects = {};
   QVector<QStringList> shouts = {};
   QVector<QStringList> wtce = {};
-  QVector<FreeblockData> mFreeBlocks = {};
+  QVector<QString> free_blocks = {};
   int effect_count = 0;
   int shouts_count = 0;
   int wtce_count = 0;

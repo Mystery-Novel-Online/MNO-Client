@@ -21,8 +21,6 @@ void ThemeModuleReader::ParseModule()
   ParseModuleConfig();
   m_CourtroomScene = ParseScene("courtroom");
   m_LobbyScene = ParseScene("lobby");
-  m_ReplaysScene = ParseScene("replays");
-  m_ViewportScene = ParseScene("viewport");
   ParseLayers();
   ParseTabs();
 }
@@ -150,8 +148,6 @@ ThemeScene *ThemeModuleReader::ParseScene(QString t_scene)
       widgetTransform.x = obj["position"].toObject()["x"].toInt(); widgetTransform.y = obj["position"].toObject()["y"].toInt();
       widgetTransform.width = obj["position"].toObject()["width"].toInt(); widgetTransform.height = obj["position"].toObject()["height"].toInt();
       newScene->setWidgetTransform(key, widgetTransform);
-
-      newScene->setWidgetRotation(key, obj["position"].toObject()["rotation"].toDouble());
     }
 
     if(obj.contains("settings"))
@@ -238,39 +234,15 @@ ThemeScene *ThemeModuleReader::getThemeScene(ThemeSceneType t_scene)
 {
   switch (t_scene)
   {
-    case SceneTypeLobby:
+    case LOBBY:
       return m_LobbyScene;
 
-    case SceneTypeReplays:
-      return m_ReplaysScene;
-
-    case SceneTypeCourtroom:
-      return m_CourtroomScene;
-
-    case SceneTypeViewport:
-      return m_ViewportScene;
+    case COURTROOM:
+    return m_CourtroomScene;
 
     default:
       return nullptr;
     }
-}
-
-bool ThemeModuleReader::getContainsSceneWidget(ThemeSceneType t_scene, QString t_name)
-{
-    ThemeScene *l_scene = getThemeScene(t_scene);
-
-    if(l_scene == nullptr) return false;
-    WidgetThemeData* l_widgetData = l_scene->getWidgetData(t_name);
-
-    if(l_widgetData == nullptr) return false;
-
-    pos_size_type position = l_widgetData->Transform;
-    if(position.height != -1 && position.width != -1)
-    {
-      return true;
-    }
-
-    return false;
 }
 
 bool ThemeModuleReader::getContainsLayers()
@@ -312,4 +284,3 @@ QString ThemeModuleReader::getDirectoryPath()
 {
   return m_moduleDirectory;
 }
-

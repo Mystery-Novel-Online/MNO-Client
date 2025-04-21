@@ -3,7 +3,6 @@
 #include "aoconfig.h"
 #include "aoconfigpanel.h"
 #include "courtroom.h"
-#include "modules/scenes/replay_scene.h"
 #include "debug_functions.h"
 #include "drdiscord.h"
 #include "drpacket.h"
@@ -21,10 +20,7 @@
 #include <QRegularExpression>
 
 #include <modules/managers/character_manager.h>
-#include <modules/managers/game_manager.h>
 #include <modules/managers/localization_manager.h>
-
-#include <modules/theme/thememanager.h>
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -77,7 +73,6 @@ AOApplication::AOApplication(int &argc, char **argv)
   CharacterManager::get().LoadFavoritesList();
   reload_packages();
   resolve_current_theme();
-  GameManager::get().setupGame();
 }
 
 AOApplication::~AOApplication()
@@ -110,7 +105,6 @@ Lobby *AOApplication::get_lobby() const
 
 void AOApplication::construct_lobby()
 {
-  ThemeManager::get().UnregisterWidgetsAll();
   if (is_lobby_constructed)
   {
     qDebug() << "W: lobby was attempted constructed when it already exists";
@@ -143,15 +137,6 @@ Courtroom *AOApplication::get_courtroom() const
   return m_courtroom;
 }
 
-ReplayScene *AOApplication::constructReplay()
-{
-  isReplayConstructed = true;
-  mReplayPlayer = new ReplayScene(this);
-  center_widget_to_screen(mReplayPlayer);
-  mReplayPlayer->show();
-  return mReplayPlayer;
-}
-
 void AOApplication::construct_courtroom()
 {
   if (is_courtroom_constructed)
@@ -172,18 +157,10 @@ void AOApplication::destruct_courtroom()
   // destruct courtroom
   if (is_courtroom_constructed)
   {
-    GameManager::get().StopGameLoop();
-    while(GameManager::get().IsGameLoopRunning())
-    {
-      //Wait for the game loop to stop.
-    }
-
     delete m_courtroom;
     is_courtroom_constructed = false;
     ao_config->set_gamemode(nullptr);
     ao_config->set_timeofday(nullptr);
-
-    GameManager::get().StartGameLoop();
   }
   else
   {
@@ -341,11 +318,6 @@ QString AOApplication::get_background_sprite_path(QString p_background_name, QSt
   return l_target_filename;
 }
 
-QString AOApplication::getWeatherSprite(QString weather)
-{
-  return get_case_sensitive_path(get_package_or_base_file("animations/weather/" + weather + ".webp"));
-}
-
 QString AOApplication::get_background_sprite_noext_path(QString background, QString image)
 {
   return find_asset_path(get_background_path(background) + "/" + image, animated_or_static_extensions());
@@ -406,20 +378,6 @@ QString AOApplication::get_theme_sprite_path(QString p_file_name, QString p_char
   }
 
   return l_file_path;
-}
-
-QString AOApplication::GetFirstThemeSpritePath(QStringList t_FilePaths)
-{
-  for(QString r_FilePath : t_FilePaths)
-  {
-    QString l_FoundAssetPath = find_theme_asset_path(r_FilePath, animated_or_static_extensions());
-    if (!l_FoundAssetPath.isEmpty())
-    {
-      return l_FoundAssetPath;
-    }
-  }
-
-  return find_theme_asset_path("placeholder", animated_or_static_extensions());
 }
 
 QString AOApplication::get_theme_sprite_path(QString file_name)
@@ -553,7 +511,7 @@ void AOApplication::resolve_current_theme()
                  "the DRO Discord including the large 'base' folder.\n"
                  "2. If you did, check that the base folder is in the same folder "
                  "where you launched Danganronpa Online from: " +
-                 DRPather::GetApplicationPath() +
+                 DRPather::get_application_path() +
                  "\n"
                  "3. If it is there, check that your current theme folder exists in "
                  "base/themes. ");

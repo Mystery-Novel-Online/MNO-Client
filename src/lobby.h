@@ -3,13 +3,10 @@
 
 #include "datatypes.h"
 
-#include <QComboBox>
 #include <QMainWindow>
 #include <QModelIndex>
 
 #include <optional>
-
-#include <modules/theme/widget_animator.h>
 
 class AOApplication;
 class AOButton;
@@ -63,9 +60,6 @@ private:
   AOImageDisplay *ui_background = nullptr;
   AOButton *ui_public_server_filter = nullptr;
   AOButton *ui_favorite_server_filter = nullptr;
-
-  AOImageDisplay *pUiReplayBackground = nullptr;
-  AOImageDisplay *pUIReplayPreview = nullptr;
   enum ServerFilter
   {
     NoFilter,
@@ -73,13 +67,6 @@ private:
     FavoriteOnly,
   };
   ServerFilter m_server_filter = NoFilter;
-
-  AOButton *wReplayPlay = nullptr;
-  AOButton *pUiGalleryToggle = nullptr;
-  QListWidget *pUiReplayList = nullptr;
-  QComboBox *pUiPackageSelector = nullptr;
-  QComboBox *pUiPackageCategory = nullptr;
-
   AOButton *ui_refresh = nullptr;
   AOButton *ui_toggle_favorite = nullptr;
   AOButton *ui_connect = nullptr;
@@ -116,9 +103,6 @@ private:
   void load_legacy_favorite_server_list();
   void save_favorite_server_list();
 
-  QString mCurrentPackage = "";
-  QString mCurrentCategory = "";
-
 private slots:
   void update_widgets();
 
@@ -134,11 +118,6 @@ private slots:
   void filter_server_listing();
   void select_current_server();
 
-  void onReplayRowChanged(int row);
-  void onReplayPackageChanged(int t_index);
-  void onReplayCategoryChanged(int t_index);
-  void onToggleGalleryPressed();
-  void onPlayReplayPresssed();
   void on_refresh_pressed();
   void on_refresh_released();
   void on_add_to_fav_pressed();
