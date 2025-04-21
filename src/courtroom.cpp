@@ -1787,12 +1787,16 @@ void Courtroom::setup_chat()
   // Cache these so chat_tick performs better
   if(ao_app->current_theme->m_jsonLoaded)
   {
-
-    m_chatbox_message_outline = ThemeManager::get().mCurrentThemeReader.getFont(COURTROOM, "message").outline;
+    widgetFontStruct messageFont = ThemeManager::get().mCurrentThemeReader.getFont(COURTROOM, "message");
+    m_chatbox_message_outline = messageFont.outline;
+    m_messageOutlineColor = messageFont.outlineColor;
+    m_messageOutlineSize = messageFont.outlineSize;
   }
   else
   {
     m_chatbox_message_outline = (ao_app->get_font_property("message_outline", COURTROOM_FONTS_INI) == 1);
+    m_messageOutlineColor = QColor(Qt::black);
+    m_messageOutlineSize = 1;
   }
 
   m_chatbox_message_enable_highlighting = (ao_app->current_theme->read_config_bool("enable_highlighting"));
@@ -1864,7 +1868,7 @@ void Courtroom::next_chat_letter()
   QTextCharFormat vp_message_format = ui_vp_message->currentCharFormat();
 
   if (m_chatbox_message_outline)
-    vp_message_format.setTextOutline(QPen(Qt::black, 1));
+    vp_message_format.setTextOutline(QPen(m_messageOutlineColor, m_messageOutlineSize));
   else
     vp_message_format.setTextOutline(Qt::NoPen);
 

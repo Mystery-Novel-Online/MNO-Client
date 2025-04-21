@@ -402,6 +402,9 @@ private:
 
   // Cached values for chat_tick
   bool m_chatbox_message_outline = false;
+  int m_messageOutlineSize = 1;
+  QColor m_messageOutlineColor = QColor(Qt::black);
+
   bool m_chatbox_message_enable_highlighting = false;
   QVector<QStringList> m_chatbox_message_highlight_colors;
 

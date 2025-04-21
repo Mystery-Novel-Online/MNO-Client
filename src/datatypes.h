@@ -6,6 +6,7 @@
 #include <QMap>
 #include <QVector>
 #include <QRect>
+#include <QColor>
 
 
 class VariableMappedString
@@ -242,6 +243,8 @@ struct widgetFontStruct
   bool outline = false;
   QString color = "#FFFFFF";
   QString align = "left";
+  QColor outlineColor = QColor(Qt::black);
+  int outlineSize = 1;
 };
 
 struct WidgetThemeData

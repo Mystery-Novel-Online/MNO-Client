@@ -15,7 +15,7 @@ public:
   Qt::Alignment get_text_alignment() const;
 
 public slots:
-  void set_outline(bool enabled);
+  void set_outline(bool enabled, int outlineWidth = 1, QColor outlineColor = QColor(Qt::black));
   void set_auto_align(bool enabled);
   void set_text_alignment(Qt::Alignment alignment);
   void realign_text();
