@@ -5,7 +5,7 @@
 #include <QSettings>
 #include <utils.h>
 
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 
 #include <QDir>
 
@@ -17,7 +17,7 @@ ActorData *ActorLoader::GetCharacter(QString folder)
   {
     QString charaConfigPath = AOApplication::getInstance()->get_character_path(folder, "char.json");
     ActorData *characterData;
-    if(FSChecks::FileExists(charaConfigPath))
+    if(FS::Checks::FileExists(charaConfigPath))
     {
       characterData = new ActorDataReader();
     }
@@ -231,7 +231,7 @@ QVector<DREmote> LegacyActorReader::getEmotes()
 
   for (const QString &i_chr : l_chr_list)
   {
-    if (!FSChecks::DirectoryExists(AOApplication::getInstance()->get_character_folder_path(i_chr)))
+    if (!FS::Checks::DirectoryExists(AOApplication::getInstance()->get_character_folder_path(i_chr)))
     {
       qWarning().noquote()
       << QString("Parent character <%1> not found, character <%2> cannot use it.").arg(i_chr, mFolder);
@@ -361,7 +361,7 @@ OutfitReader::OutfitReader(QString t_character, QString t_outfit)
   mCharacterName = t_character;
   mOutfitPath = AOApplication::getInstance()->get_character_folder_path(t_character) + "/outfits/" + t_outfit;
 
-  if(!FSChecks::FileExists(mOutfitPath + "/outfit.json")) return;
+  if(!FS::Checks::FileExists(mOutfitPath + "/outfit.json")) return;
 
   ReadFromFile(mOutfitPath  + "/outfit.json");
 

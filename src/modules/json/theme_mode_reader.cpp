@@ -1,5 +1,5 @@
 #include "theme_mode_reader.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 #include "modules/managers/localization_manager.h"
 #include <AOApplication.h>
 #include <QDir>
@@ -24,7 +24,7 @@ ThemeModeReader::ThemeModeReader(QString filePath)
   }
 
 
-  if(FSChecks::FileExists(filePath + "/theme.json"))
+  if(FS::Checks::FileExists(filePath + "/theme.json"))
   {
     m_GamemodeModule = new ThemeModuleReader(filePath, "theme.json");
 

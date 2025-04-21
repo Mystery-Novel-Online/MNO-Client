@@ -2,7 +2,7 @@
 #include "aoapplication.h"
 
 #include <QDir>
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 
 LocalizationManager LocalizationManager::s_Instance;
 
@@ -10,7 +10,7 @@ void LocalizationManager::execLoadLanguages()
 {
   mLanguageNames.clear();
   mLanguageNames.append("English");
-  QString l_localizationPath = FSPaths::BasePath() + "localization/" ;
+  QString l_localizationPath = FS::Paths::BasePath() + "localization/" ;
   QDir l_localizationDirectory(l_localizationPath);
 
   QStringList l_fileList = l_localizationDirectory.entryList(QStringList() << "*.json", QDir::Files);

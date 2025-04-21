@@ -1,5 +1,5 @@
 #include "background_reader.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 
 #include <aoapplication.h>
 
@@ -12,7 +12,7 @@ void BackgroundReader::execLoadBackground(QString t_backgroundName)
 {
   const QString l_backgroundJSONPath = AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(t_backgroundName) + "/" + "background.json");
 
-  if(FSChecks::FileExists(l_backgroundJSONPath))
+  if(FS::Checks::FileExists(l_backgroundJSONPath))
   {
     ReadFromFile(l_backgroundJSONPath);
 

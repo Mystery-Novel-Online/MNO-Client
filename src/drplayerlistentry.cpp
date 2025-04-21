@@ -1,10 +1,10 @@
 #include "drplayerlistentry.h"
 #include "aoapplication.h"
 #include "commondefs.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 #include "modules/theme/thememanager.h"
 #include "theme.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 #include "modules/managers/pair_manager.h"
 #include "modules/managers/localization_manager.h"
 
@@ -49,12 +49,12 @@ DrPlayerListEntry::DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app,
 
     const QString lStatusImagePath = ao_app->find_theme_asset_path("player_list_status.png");
 
-    if (FSChecks::FileExists(lStatusImagePath)) pStatusDisplay->set_image(lStatusImagePath);
+    if (FS::Checks::FileExists(lStatusImagePath)) pStatusDisplay->set_image(lStatusImagePath);
 
 
     const QString l_selected_texture = ao_app->find_theme_asset_path("char_border.png");
 
-    if (FSChecks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
+    if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
 
     //Prompt (For Blackouts / Look)
     m_prompt = new AOLabel(this, ao_app);
@@ -85,7 +85,7 @@ void DrPlayerListEntry::set_character(QString p_character)
   if(!m_CharacterOutfit.isEmpty())
   {
     characterIconPath = ao_app->get_character_path(m_character, "outfits/" + m_CharacterOutfit + "/char_icon.png");
-    if(!FSChecks::FileExists(characterIconPath))
+    if(!FS::Checks::FileExists(characterIconPath))
     {
       characterIconPath = "";
     }
@@ -96,11 +96,11 @@ void DrPlayerListEntry::set_character(QString p_character)
     characterIconPath = ao_app->get_character_path(m_character, "char_icon.png");
   }
 
-  if(FSChecks::FileExists(characterIconPath))
+  if(FS::Checks::FileExists(characterIconPath))
   {
       ui_user_image->set_image(characterIconPath);
       const QString l_selected_texture = ao_app->get_character_path(p_character, "char_border.png");
-      if (FSChecks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
+      if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
   }
   else
   {
@@ -171,11 +171,7 @@ void DrPlayerListEntry::setMod(QString ipid, QString hdid)
 
 void DrPlayerListEntry::openCharacterFolder()
 {
-
-  QString folderPath = "characters/" + m_character;
-
-  QUrl folderUrl = QUrl::fromLocalFile(ao_app->get_package_or_base_path(folderPath));
-
+  QUrl folderUrl = QUrl::fromLocalFile(FS::Paths::FindDirectory("characters/" + m_character));
   QDesktopServices::openUrl(folderUrl);
 }
 

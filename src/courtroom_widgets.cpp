@@ -24,7 +24,7 @@
 #include "drsplashmovie.h"
 #include "drstickerviewer.h"
 #include "drtextedit.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "modules/managers/notify_manager.h"
 #include "theme.h"
@@ -52,7 +52,7 @@
 #include "modules/debug/time_debugger.h"
 
 #include <modules/managers/localization_manager.h>
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 
 void Courtroom::create_widgets()
 {
@@ -985,7 +985,7 @@ void Courtroom::set_widgets()
 
   set_size_and_pos(ui_vp_chat_arrow, "chat_arrow", COURTROOM_DESIGN_INI, ao_app);
 
-  if (!ao_app->find_theme_asset_path("chat_arrow", Formats::SupportedImages()).isEmpty())
+  if (!ao_app->find_theme_asset_path("chat_arrow", FS::Formats::SupportedImages()).isEmpty())
   {
     ui_vp_chat_arrow->set_theme_image("chat_arrow");
   }
@@ -1420,12 +1420,12 @@ void Courtroom::check_effects()
 
   for (int i = 0; i < ui_effects.size(); ++i)
   {
-    QString path = ao_app->find_asset_path({ao_app->get_character_path(get_character_ini(), effect_names.at(i))}, Formats::AnimatedImages());
+    QString path = ao_app->find_asset_path({ao_app->get_character_path(get_character_ini(), effect_names.at(i))}, FS::Formats::AnimatedImages());
     if (path.isEmpty())
-      path = ao_app->find_theme_asset_path(effect_names.at(i), Formats::AnimatedImages());
+      path = ao_app->find_theme_asset_path(effect_names.at(i), FS::Formats::AnimatedImages());
 
     if (path.isEmpty())
-      path = ao_app->find_asset_path(FSPaths::BasePath() + "effects/default/" + effect_names.at(i), Formats::AnimatedImages());
+      path = ao_app->find_asset_path(FS::Paths::BasePath() + "effects/default/" + effect_names.at(i), FS::Formats::AnimatedImages());
 
     effects_enabled[i] = (!path.isEmpty());
   }
@@ -1444,13 +1444,13 @@ void Courtroom::check_shouts()
 
   for (int i = 0; i < ui_shouts.size(); ++i)
   {
-    QString path = ao_app->find_asset_path({ao_app->get_character_path(get_character_ini(), shout_names.at(i))}, Formats::AnimatedImages());
+    QString path = ao_app->find_asset_path({ao_app->get_character_path(get_character_ini(), shout_names.at(i))}, FS::Formats::AnimatedImages());
 
     if (path.isEmpty())
-      path = ao_app->find_theme_asset_path(shout_names.at(i), Formats::AnimatedImages());
+      path = ao_app->find_theme_asset_path(shout_names.at(i), FS::Formats::AnimatedImages());
 
     if (path.isEmpty())
-      path = ao_app->find_asset_path(FSPaths::BasePath() + "shouts/default/" + shout_names.at(i), Formats::AnimatedImages());
+      path = ao_app->find_asset_path(FS::Paths::BasePath() + "shouts/default/" + shout_names.at(i), FS::Formats::AnimatedImages());
 
     shouts_enabled[i] = (!path.isEmpty());
   }
@@ -1467,9 +1467,9 @@ void Courtroom::check_wtce()
 
   for (int i = 0; i < ui_wtce.size(); ++i)
   {
-    QString path = ao_app->find_asset_path({ao_app->get_character_path(get_character_ini(), wtce_names.at(i))}, Formats::AnimatedImages());
+    QString path = ao_app->find_asset_path({ao_app->get_character_path(get_character_ini(), wtce_names.at(i))}, FS::Formats::AnimatedImages());
     if (path.isEmpty())
-      path = ao_app->find_theme_asset_path(wtce_names.at(i), Formats::AnimatedImages());
+      path = ao_app->find_theme_asset_path(wtce_names.at(i), FS::Formats::AnimatedImages());
     wtce_enabled[i] = (!path.isEmpty());
   }
 }

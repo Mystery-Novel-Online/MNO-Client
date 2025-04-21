@@ -1,5 +1,5 @@
 #include "localization_reader.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 #include "aoapplication.h"
 
 
@@ -7,8 +7,8 @@
 LocalizationReader::LocalizationReader(QString t_languageCode)
 {
   mLangCode = t_languageCode;
-  QString l_localizationPath = FSPaths::BasePath() + "localization/" + t_languageCode + ".json";
-  if(FSChecks::FileExists(l_localizationPath))
+  QString l_localizationPath = FS::Paths::BasePath() + "localization/" + t_languageCode + ".json";
+  if(FS::Checks::FileExists(l_localizationPath))
   {
     ReadFromFile(l_localizationPath);
     mIsLoaded = true;

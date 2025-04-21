@@ -1,5 +1,5 @@
-#ifndef DIR_UTILS_H
-#define DIR_UTILS_H
+#ifndef FS_WRITING_H
+#define FS_WRITING_H
 
 #include <QString>
 
@@ -9,4 +9,4 @@ public:
   static void CreateInitialFolders();
 };
 
-#endif // DIR_UTILS_H
+#endif // FS_WRITING_H

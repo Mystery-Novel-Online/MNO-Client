@@ -1,6 +1,6 @@
 #include "drtheme.h"
 #include "commondefs.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 #include "qjsonobject.h"
 #include "aoconfig.h"
 #include <QJsonArray>
@@ -23,7 +23,7 @@ void DRTheme::InitTheme()
   const QString l_json_path = ao_app->find_theme_asset_path(THEME_JSON);
   m_themePath = ao_app->find_current_theme_path();
 
-  if(!FSChecks::FileExists(l_json_path))
+  if(!FS::Checks::FileExists(l_json_path))
   {
     m_currentThemeString = "";
     m_jsonLoaded = false;
@@ -79,7 +79,7 @@ void DRTheme::setup_free_blocks()
 
 QString DRTheme::LoadFileString(QString p_path)
 {
-  if(!FSChecks::FileExists(p_path))
+  if(!FS::Checks::FileExists(p_path))
   {
     return "";
   }
@@ -92,7 +92,7 @@ QString DRTheme::LoadFileString(QString p_path)
 
 void DRTheme::LoadEffects()
 {
-  const QString l_effects_json_path = FSPaths::BasePath() + "effects/default/effects.json";
+  const QString l_effects_json_path = FS::Paths::BasePath() + "effects/default/effects.json";
 
   effects = {};
   effect_count = 0;
@@ -116,7 +116,7 @@ void DRTheme::LoadEffects()
 
 void DRTheme::LoadWtce()
 {
-  const QString l_wtce_json_path = FSPaths::BasePath() + "shouts/default/wtce.json";
+  const QString l_wtce_json_path = FS::Paths::BasePath() + "shouts/default/wtce.json";
 
   wtce = {};
   wtce_count = 0;
@@ -144,7 +144,7 @@ void DRTheme::LoadWtce()
 
 void DRTheme::LoadShouts()
 {
-  const QString l_shouts_json_path = FSPaths::BasePath() + "shouts/default/shouts.json";
+  const QString l_shouts_json_path = FS::Paths::BasePath() + "shouts/default/shouts.json";
 
   shouts = {};
   shouts_count = 0;

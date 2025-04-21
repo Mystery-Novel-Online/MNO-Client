@@ -1,7 +1,7 @@
 #include "character_manager.h"
 #include "aoemotebutton.h"
 #include "commondefs.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 #include "emotion_manager.h"
 
 #include <AOApplication.h>
@@ -19,7 +19,7 @@ CharacterManager CharacterManager::s_Instance;
 ActorData *CharacterManager::ReadCharacter(QString t_folder)
 {
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");
-  if(FSChecks::FileExists(l_jsonPath))
+  if(FS::Checks::FileExists(l_jsonPath))
   {
     ActorData *l_returnData = new ActorDataReader();
     l_returnData->loadActor(t_folder);
@@ -38,7 +38,7 @@ void CharacterManager::SwitchCharacter(QString t_folder)
   QStringList l_OutfitNames = {"<All>"};
 
 
-  if(FSChecks::FileExists(l_jsonPath))
+  if(FS::Checks::FileExists(l_jsonPath))
   {
     p_SelectedCharacter = new ActorDataReader();
     p_SelectedCharacter->loadActor(t_folder);
@@ -229,7 +229,7 @@ void CharacterManager::RemoveFromFavorites(QString chara)
 void CharacterManager::LoadFavoritesList()
 {
   mFavoriteCharacters.clear();
-  QFile file(AOApplication::getInstance()->get_base_file_path(SAVE_FAVORITES));
+  QFile file(FS::Paths::FindFile(SAVE_FAVORITES, false));
   if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
   {
     qDebug() << "Failed to open file for reading";
@@ -261,7 +261,7 @@ void CharacterManager::SaveFavoritesList()
     favoritesList.append(mFavoriteCharacters[j].name);
   }
 
-  QFile file(AOApplication::getInstance()->get_base_file_path(SAVE_FAVORITES));
+  QFile file(FS::Paths::FindFile(SAVE_FAVORITES, false));
   if (file.open(QIODevice::WriteOnly | QIODevice::Text))
   {
     QTextStream out(&file);

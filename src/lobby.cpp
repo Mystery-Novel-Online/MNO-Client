@@ -36,6 +36,7 @@
 #include <QSettings>
 
 #include <utility>
+#include "dro/fs/fs_reading.h"
 
 Lobby::Lobby(AOApplication *p_ao_app)
     : QMainWindow()
@@ -288,7 +289,7 @@ void Lobby::set_loading_value(int p_value)
 
 void Lobby::load_settings()
 {
-  QSettings l_ini(ao_app->get_base_file_path(BASE_SERVER_BROWSER_INI), QSettings::IniFormat);
+  QSettings l_ini(FS::Paths::FindFile(BASE_SERVER_BROWSER_INI, false), QSettings::IniFormat);
   l_ini.setIniCodec("UTF-8");
 
   l_ini.beginGroup("filters");
@@ -298,7 +299,7 @@ void Lobby::load_settings()
 
 void Lobby::save_settings()
 {
-  QSettings l_ini(ao_app->get_base_file_path(BASE_SERVER_BROWSER_INI), QSettings::IniFormat);
+  QSettings l_ini(FS::Paths::FindFile(BASE_SERVER_BROWSER_INI, false), QSettings::IniFormat);
   l_ini.setIniCodec("UTF-8");
 
   l_ini.beginGroup("filters");
@@ -309,7 +310,7 @@ void Lobby::save_settings()
 
 void Lobby::load_favorite_server_list()
 {
-  const QString l_file_path = ao_app->find_asset_path(ao_app->get_base_file_path(BASE_FAVORITE_SERVERS_INI));
+  const QString l_file_path = FS::Paths::FindFile(BASE_FAVORITE_SERVERS_INI, false);
   if (l_file_path.isEmpty())
   {
     load_legacy_favorite_server_list();
@@ -345,7 +346,7 @@ void Lobby::load_favorite_server_list()
 void Lobby::load_legacy_favorite_server_list()
 {
   DRServerInfoList l_server_list;
-  QFile l_file(ao_app->get_base_file_path(BASE_SERVERLIST_TXT));
+  QFile l_file(FS::Paths::FindFile(BASE_SERVERLIST_TXT, false));
   if (l_file.open(QIODevice::ReadOnly))
   {
     QTextStream in(&l_file);
@@ -367,7 +368,7 @@ void Lobby::load_legacy_favorite_server_list()
 
 void Lobby::save_favorite_server_list()
 {
-  QSettings l_ini(ao_app->get_base_file_path(BASE_FAVORITE_SERVERS_INI), QSettings::IniFormat);
+  QSettings l_ini(FS::Paths::FindFile(BASE_FAVORITE_SERVERS_INI, false), QSettings::IniFormat);
   l_ini.setIniCodec("UTF-8");
 
   l_ini.clear();

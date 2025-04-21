@@ -9,7 +9,7 @@
 #include <QLineEdit>
 #include <QVBoxLayout>
 
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 
 AONotePicker::AONotePicker(QWidget *p_parent, AOApplication *p_ao_app)
     : QLabel(p_parent)
@@ -53,7 +53,7 @@ void Courtroom::on_set_file_button_clicked()
   AOButton *f_button = static_cast<AOButton *>(sender());
   AONotePicker *f_notepicker = static_cast<AONotePicker *>(f_button->parent());
   QString f_filename =
-      QFileDialog::getOpenFileName(this, "Open File", FSPaths::ApplicationPath(), "Text files (*.txt)");
+      QFileDialog::getOpenFileName(this, "Open File", FS::Paths::ApplicationPath(), "Text files (*.txt)");
 
   if (f_filename != "")
   {

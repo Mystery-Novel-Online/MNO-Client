@@ -27,6 +27,7 @@
 #include <modules/theme/thememanager.h>
 
 #include <modules/managers/localization_manager.h>
+#include "dro/fs/fs_mounting.h"
 
 AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
     : QWidget(p_parent)
@@ -456,11 +457,14 @@ void AOConfigPanel::refresh_packages_list()
 {
   ui_packages_list->clear();
   //Parse through the stored packages
-  for (const QString &package : ao_app->package_names) {
-    //Create the list widget item with the name of the package.
+  QVector<QString> packageNames = FS::Packages::CachedNames();
+  QVector<QString> disabledPackages = FS::Packages::DisabledList();
+
+  for (const QString &package : packageNames)
+  {
     QListWidgetItem* item = new QListWidgetItem(package, ui_packages_list);
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-    item->setCheckState(ao_app->m_disabled_packages.contains(package) ? Qt::Unchecked : Qt::Checked);
+    item->setCheckState(disabledPackages.contains(package) ? Qt::Unchecked : Qt::Checked);
   }
 }
 
@@ -616,16 +620,17 @@ void AOConfigPanel::on_switch_theme_clicked()
 
 void AOConfigPanel::on_load_packages_clicked()
 {
-  ao_app->m_disabled_packages = {};
+  QVector<QString> disabledList = {};
+
   for(int i = 0; i < ui_packages_list->count(); ++i)
   {
     QListWidgetItem* item = ui_packages_list->item(i);
     if(item->checkState() == Qt::Unchecked)
     {
-      ao_app->m_disabled_packages.append(item->text());
+      disabledList.append(item->text());
     }
   }
-  ao_app->save_disabled_packages_ini();
+  FS::Packages::SetDisabled(disabledList);
   ao_app->reload_packages();
   refresh_packages_list();
 }

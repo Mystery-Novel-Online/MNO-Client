@@ -1,12 +1,12 @@
 #include "theme_module_reader.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 
 ThemeModuleReader::ThemeModuleReader(QString t_moduleDirectory, QString t_moduleName)
 {
   m_moduleDirectory = t_moduleDirectory;
   QString modulePath = m_moduleDirectory + "/" + t_moduleName;
 
-  if(FSChecks::FileExists(modulePath))
+  if(FS::Checks::FileExists(modulePath))
   {
     ReadFromFile(modulePath);
     ParseModule();

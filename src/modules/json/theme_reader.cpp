@@ -2,6 +2,7 @@
 #include "aoapplication.h"
 #include <QDir>
 #include <modules/theme/thememanager.h>
+#include "dro/fs/fs_reading.h"
 
 ThemeReader::ThemeReader()
 {
@@ -11,7 +12,7 @@ ThemeReader::ThemeReader()
 void ThemeReader::LoadTheme(QString themeName)
 {
   mThemeName = themeName;
-  mThemeDirectory = AOApplication::getInstance()->get_package_or_base_path("themes/" + mThemeName);
+  mThemeDirectory = FS::Paths::FindDirectory("themes/" + mThemeName);
   mGameModes = {};
   mGameModes["default"] = new ThemeModeReader(mThemeDirectory);
 

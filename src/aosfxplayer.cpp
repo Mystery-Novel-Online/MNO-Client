@@ -3,8 +3,8 @@
 #include "aoapplication.h"
 #include "draudioengine.h"
 #include "draudiostream.h"
-#include "dro/fs/file_utils.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_reading.h"
 
 #include <QDebug>
 #include <cstddef>
@@ -26,7 +26,7 @@ void AOSfxPlayer::play(QString p_filename)
 
 void AOSfxPlayer::play_effect(QString p_effect)
 {
-  play(ao_app->find_asset_path({ao_app->get_sfx_noext_path(p_effect)}, Formats::SupportedAudio()));
+  play(ao_app->find_asset_path({ao_app->get_sfx_noext_path(p_effect)}, FS::Formats::SupportedAudio()));
 }
 
 void AOSfxPlayer::play_character_effect(QString p_chr, QString p_effect)
@@ -35,7 +35,7 @@ void AOSfxPlayer::play_character_effect(QString p_chr, QString p_effect)
   for (const QString &i_chr : ao_app->get_char_include_tree(p_chr))
     l_file_list.append(ao_app->get_character_path(i_chr, QString("sounds/%1").arg(p_effect)));
 
-  const QString l_target_file = ao_app->find_asset_path(l_file_list, Formats::SupportedAudio());
+  const QString l_target_file = ao_app->find_asset_path(l_file_list, FS::Formats::SupportedAudio());
   if (l_target_file.isEmpty())
   {
     play_effect(p_effect);

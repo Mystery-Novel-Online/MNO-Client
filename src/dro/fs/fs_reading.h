@@ -1,24 +1,26 @@
-#ifndef FILE_UTILS_H
-#define FILE_UTILS_H
+#ifndef FS_READING_H
+#define FS_READING_H
 
 class QString;
 class QStringList;
 
 
-namespace FSChecks
+namespace FS::Checks
 {
   bool FileExists(const QString& path);
   bool DirectoryExists(const QString& path);
 }
 
-namespace FSPaths
+namespace FS::Paths
 {
   QString ApplicationPath();
   QString BasePath();
-  QString PackagePath(QString packageName);
+  QString Package(const QString& packageName);
+  QString FindFile(const QString& filePath, bool allowPackages = true);
+  QString FindDirectory(const QString& directoryPath, bool allowPackages = true);
 }
 
-namespace Formats
+namespace FS::Formats
 {
   QStringList SupportedAudio(bool allowExtensionless = false);
 
@@ -28,4 +30,4 @@ namespace Formats
 }
 
 
-#endif // FILE_UTILS_H
+#endif // FS_READING_H

@@ -4,7 +4,7 @@
 
 #include "aoapplication.h"
 #include "aopixmap.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 #include "modules/theme/thememanager.h"
 
 /*!
@@ -50,7 +50,7 @@ void AOImageDisplay::set_theme_image(QString p_image)
 
 void AOImageDisplay::set_chatbox_image(QString p_chatbox_name, bool p_is_self)
 {
-  QString l_target_file = ao_app->find_asset_path(FSPaths::BasePath() + "misc/" + p_chatbox_name + ".png");
+  QString l_target_file = ao_app->find_asset_path(FS::Paths::BasePath() + "misc/" + p_chatbox_name + ".png");
   if (l_target_file.isEmpty())
   {
     l_target_file = ao_app->find_theme_asset_path("chatmed.png");

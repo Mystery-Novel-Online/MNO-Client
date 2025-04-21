@@ -2,8 +2,8 @@
 
 #include "aoapplication.h"
 #include "drtheme.h"
-#include "dro/fs/file_utils.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_reading.h"
 
 DRStickerViewer::DRStickerViewer(AOApplication *ao_app, QWidget *parent)
     : mk2::SpriteViewer(parent)
@@ -69,13 +69,13 @@ void DRStickerViewer::set_chatbox_image(QString p_chatbox_name, bool p_is_self, 
 
 
 
-  QString l_target_file = ao_app->find_asset_path(FSPaths::BasePath() + "misc/" + p_chatbox_name + ".png");
+  QString l_target_file = ao_app->find_asset_path(FS::Paths::BasePath() + "misc/" + p_chatbox_name + ".png");
   if (l_target_file.isEmpty())
   {
 
     for(QString chatbox_type : targetChatboxes)
     {
-      l_target_file = ao_app->find_theme_asset_path(chatbox_type, Formats::SupportedImages());
+      l_target_file = ao_app->find_theme_asset_path(chatbox_type, FS::Formats::SupportedImages());
       if (!l_target_file.isEmpty())
       {
         break;

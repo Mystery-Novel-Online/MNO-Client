@@ -8,7 +8,7 @@
 #include <QDir>
 #include <QMessageBox>
 #include "aoapplication.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 
 ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 {
@@ -81,7 +81,7 @@ void ButtonMaker::SetCharacter(QString character)
   m_Emotes.clear();
 
   m_Path = AOApplication::getInstance()->get_character_path(character, "char.json");
-  if(FSChecks::FileExists(m_Path))
+  if(FS::Checks::FileExists(m_Path))
   {
     m_IsJson = true;
     ActorDataReader jsonActor = ActorDataReader();
@@ -121,7 +121,7 @@ void ButtonMaker::onGenerateClicked()
   }
 
   QString filePath = AOApplication::getInstance()->get_character_path(m_Emotes.at(m_EmoteIndex).character, buttonDirectory);
-  if(FSChecks::FileExists(filePath))
+  if(FS::Checks::FileExists(filePath))
   {
     QMessageBox::StandardButton replaceResult;
     replaceResult = QMessageBox::question(nullptr, "Button Maker", "You are about to replace a button that already exists, continue?", QMessageBox::Yes|QMessageBox::No);
@@ -131,7 +131,7 @@ void ButtonMaker::onGenerateClicked()
     }
 
   }
-  if(!FSChecks::DirectoryExists(QFileInfo(filePath).absolutePath()))
+  if(!FS::Checks::DirectoryExists(QFileInfo(filePath).absolutePath()))
   {
     QDir().mkdir(QFileInfo(filePath).absolutePath());
   }

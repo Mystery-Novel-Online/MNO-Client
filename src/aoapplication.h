@@ -70,19 +70,11 @@ public:
   QString get_current_char();
 
   // implementation in path_functions.cpp
-  QVector<QString> package_names;
-  QVector<QString> m_disabled_packages = {};
   void reload_packages();
-  void save_disabled_packages_ini();
-  void read_disabled_packages_ini();
-  QString get_package_or_base_path(QString p_path);
-  QString get_package_or_base_file(QString p_filepath);
   QVector<QString> get_all_package_and_base_paths(QString p_path);
-  QString get_base_file_path(QString file);
   QString get_character_folder_path(QString character);
   QString get_character_path(QString p_character, QString p_file);
   // QString get_demothings_path();
-  QString get_music_folder_path();
   QString get_music_path(QString p_song);
 
   QString get_background_path(QString p_background_name);

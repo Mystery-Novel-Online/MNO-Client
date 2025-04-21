@@ -1,7 +1,7 @@
 #include "drcharactermovie.h"
 
 #include "aoapplication.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 
 #include <QDebug>
 

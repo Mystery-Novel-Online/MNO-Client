@@ -12,8 +12,9 @@ INCLUDEPATH += $$PWD/include $$PWD/src $$PWD/3rd
 DEPENDPATH += $$PWD/include $$PWD/src $$PWD/3rd
 
 HEADERS += \
-  src/dro/fs/dir_utils.h \
-  src/dro/fs/file_utils.h \
+  src/dro/fs/fs_mounting.h \
+  src/dro/fs/fs_reading.h \
+  src/dro/fs/fs_writing.h \
   src/dro/interface/menus/area_menu.h \
   src/dro/interface/menus/bgm_menu.h \
   src/dro/interface/menus/emote_menu.h \
@@ -121,8 +122,9 @@ HEADERS += \
   src/version.h
 
 SOURCES += \
-  src/dro/fs/dir_utils.cpp \
-  src/dro/fs/file_utils.cpp \
+  src/dro/fs/fs_mounting.cpp \
+  src/dro/fs/fs_reading.cpp \
+  src/dro/fs/fs_writing.cpp \
   src/dro/interface/menus/area_menu.cpp \
   src/dro/interface/menus/bgm_menu.cpp \
   src/dro/interface/menus/emote_menu.cpp \

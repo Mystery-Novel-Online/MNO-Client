@@ -19,7 +19,9 @@
 #include "modules/debug/time_debugger.h"
 #include "modules/managers/character_manager.h"
 #include <QtConcurrent/QtConcurrent>
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_mounting.h"
+
 
 int Courtroom::get_character_id()
 {
@@ -69,7 +71,7 @@ void drSetItemIcon(QComboBox *p_widget, const int p_index, const QString &p_chr_
   }();
 
   const QString l_icon_file = ao_app->get_character_path(p_chr_name, "char_icon.png");
-  p_widget->setItemIcon(p_index, FSChecks::FileExists(l_icon_file) ? QIcon(l_icon_file) : s_blank_icon);
+  p_widget->setItemIcon(p_index, FS::Checks::FileExists(l_icon_file) ? QIcon(l_icon_file) : s_blank_icon);
 }
 } // namespace
 
@@ -96,17 +98,19 @@ void Courtroom::SearchForCharacterListAsync()
   currentIniswapList = QStringList{"Default"};
 
   QStringList l_package_folders{};
+  QVector<QString> packageNames = FS::Packages::CachedNames();
+  QVector<QString> disabledPackages = FS::Packages::DisabledList();
 
-  for (int i=0; i< ao_app->package_names.size(); i++)
+  for (int i=0; i< packageNames.size(); i++)
   {
-    if(!ao_app->m_disabled_packages.contains(ao_app-> package_names.at(i)))
+    if(!disabledPackages.contains(packageNames.at(i)))
     {
-      const QString l_path = FSPaths::PackagePath(ao_app->package_names.at(i)) + "/characters";
-      if(FSChecks::DirectoryExists(l_path)) l_package_folders.append(l_path);
+      const QString l_path = FS::Paths::Package(packageNames.at(i)) + "/characters";
+      if(FS::Checks::DirectoryExists(l_path)) l_package_folders.append(l_path);
     }
   }
 
-  l_package_folders.append(FSPaths::BasePath() + "/characters");
+  l_package_folders.append(FS::Paths::BasePath() + "/characters");
 
   for (int i = 0; i < l_package_folders.length(); ++i)
   {
@@ -114,7 +118,7 @@ void Courtroom::SearchForCharacterListAsync()
     for (const QFileInfo &i_info : l_info_list)
     {
       const QString l_name = i_info.fileName();
-      if (!FSChecks::FileExists(ao_app->get_character_path(l_name, CHARACTER_CHAR_INI)) && !FSChecks::FileExists(ao_app->get_character_path(l_name, CHARACTER_CHAR_JSON)))
+      if (!FS::Checks::FileExists(ao_app->get_character_path(l_name, CHARACTER_CHAR_INI)) && !FS::Checks::FileExists(ao_app->get_character_path(l_name, CHARACTER_CHAR_JSON)))
         continue;
       if(!currentIniswapList.contains(l_name))
       {

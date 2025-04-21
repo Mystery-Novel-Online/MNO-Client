@@ -2,11 +2,11 @@
 #include "AOApplication.h"
 #include "commondefs.h"
 #include "drtheme.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 #include "courtroom.h"
 #include "modules/theme/thememanager.h"
 #include "theme.h"
-#include "dro/fs/file_utils.h"
+#include "dro/fs/fs_reading.h"
 
 RPNotifyMenu::RPNotifyMenu(QWidget *parent)
     : QWidget{parent}
@@ -35,7 +35,7 @@ void RPNotifyMenu::ThemeReload()
   pBackgroundImage->move(0, 0);
   ThemeManager::get().setWidgetDimensions(pBackgroundImage, 235, 135);
 
-  if (!lAOApp->find_theme_asset_path("notify_bg", Formats::SupportedImages()).isEmpty())
+  if (!lAOApp->find_theme_asset_path("notify_bg", FS::Formats::SupportedImages()).isEmpty())
     pBackgroundImage->set_theme_image("notify_bg");
 
   set_sticker_play_once(pBackgroundImage, "notify_bg", COURTROOM_CONFIG_INI, lAOApp);
