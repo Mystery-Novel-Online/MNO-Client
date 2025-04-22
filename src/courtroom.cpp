@@ -1098,6 +1098,7 @@ void Courtroom::start_chatmessage()
 void Courtroom::handle_chatmessage()
 {
   qDebug() << "handle_chatmessage";
+  LuaBridge::OnCharacterMessage(m_chatmessage[CMShowName], m_chatmessage[CMChrName], m_chatmessage[CMEmote], m_chatmessage[CMMessage]);
   m_hide_character = m_chatmessage[CMHideCharacter].toInt();
   m_play_pre = false;
   m_play_zoom = false;

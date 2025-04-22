@@ -1,6 +1,7 @@
 #include "tab_toggle_button.h"
 
 #include <modules/theme/thememanager.h>
+#include "dro/system/theme_scripting.h"
 
 #include <QMenu>
 
@@ -42,6 +43,7 @@ void TabToggleButton::setActiveStatus(bool t_isActive)
 void TabToggleButton::on_clicked()
 {
   if(mIsDetatched) return;
+  LuaBridge::onTabChange(mTabName, mTabGroup);
   ThemeManager::get().toggleTab(mTabName, mTabGroup);
 }
 

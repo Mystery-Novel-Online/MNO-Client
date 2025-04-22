@@ -53,6 +53,7 @@
 
 #include <modules/managers/localization_manager.h>
 #include "dro/fs/fs_reading.h"
+#include "dro/interface/courtroom_layout.h"
 
 void Courtroom::create_widgets()
 {
@@ -714,6 +715,7 @@ void Courtroom::reset_widget_names()
       {"screenshot", p_ScreenshotBtn}
   };
 
+    Layout::Courtroom::SetWidgetList(widget_names);
     ThemeManager::get().SetWidgetNames(widget_names);
 }
 
