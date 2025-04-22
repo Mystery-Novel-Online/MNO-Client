@@ -11,6 +11,14 @@ void ThemeManager::createTabParent()
 {
   m_TabDeletionQueue = m_TabWidgets;
   m_TabWidgets = {};
+  for(QString oldTabs : m_TabDeletionQueue.keys())
+  {
+    QString oldtabToggle = oldTabs + "_toggle";
+    if(mButtonWidgets.contains(oldtabToggle))
+    {
+      mButtonWidgets.remove(oldtabToggle);
+    }
+  }
 
   for(ThemeTabInfo r_tabInfo : ThemeManager::get().getTabsInfo())
   {
