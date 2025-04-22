@@ -20,7 +20,6 @@ signals:
 
 private slots:
   void on_clicked();
-  void displayContextMenu(QPoint t_position);
   void detatchTab();
 
 private:

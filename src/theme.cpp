@@ -44,7 +44,7 @@ void set_text_alignment_or_default(QWidget *p_widget, QString p_identifier, QStr
 
 
   const QStringList l_values =
-      ao_app->current_theme->get_widget_font_string_setting(p_identifier, "align", p_ini_file, p_identifier + "_align").split(",", DR::SkipEmptyParts);
+      ao_app->current_theme->get_widget_font_string_setting(p_identifier, "align", p_ini_file, p_identifier + "_align").split(",", DR::SplitBehavior::SkipEmptyParts);
   if (!p_widget->property(p_property.c_str()).isValid())
     return;
   p_widget->setProperty(p_property.c_str(),
@@ -56,11 +56,11 @@ void set_text_alignment_or_default(QWidget *p_widget, QString p_identifier, QStr
                                      .value(l_values.value(1).trimmed().toLower(), p_default_vertical)));
 }
 
-void set_text_alignment_or_default(QWidget *p_widget, widgetFontStruct font_data, AOApplication *ao_app,
+void set_text_alignment_or_default(QWidget *p_widget, widgetFontStruct font_data,
                                    std::string p_property, Qt::Alignment p_default_horizontal,
                                    Qt::Alignment p_default_vertical)
 {
-  const QStringList l_values = font_data.align.split(",", DR::SkipEmptyParts);
+  const QStringList l_values = font_data.align.split(",", DR::SplitBehavior::SkipEmptyParts);
   if (!p_widget->property(p_property.c_str()).isValid())
     return;
   p_widget->setProperty(p_property.c_str(),
@@ -215,20 +215,20 @@ void set_sticker_play_once(DRStickerViewer *p_sticker, QString p_identifier, QSt
   }
 }
 
-void setShownameFont(DRTextEdit *widget, QString identifier, QString align, AOApplication *ao_app)
+void setShownameFont(DRTextEdit *widget, QString identifier, QString align)
 {
   widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.getPairingFont(identifier, align);
 
   fontData.size = static_cast<int>(fontData.size * ThemeManager::get().getViewporResize());
 
-  setThemeFont(widget, fontData, ao_app);
+  setThemeFont(widget, fontData);
 
   widget->set_outline(fontData.outline, fontData.outlineSize, fontData.outlineColor);
 
-  set_text_alignment_or_default(widget, fontData, ao_app, "text_alignment", Qt::AlignLeft, Qt::AlignTop);
+  set_text_alignment_or_default(widget, fontData, "text_alignment", Qt::AlignLeft, Qt::AlignTop);
 }
 
-void setThemeFont(QWidget *widget, widgetFontStruct font_data, AOApplication *ao_app)
+void setThemeFont(QWidget *widget, widgetFontStruct font_data)
 {
 
   QString class_name = widget->metaObject()->className();

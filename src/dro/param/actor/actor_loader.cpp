@@ -277,7 +277,7 @@ QVector<DREmote> LegacyActorReader::getEmotes()
     for (const QString &i_key : qAsConst(l_keys))
     {
       l_chrini.beginGroup(l_fetcher.lookup_group("emotions"));
-      const QStringList l_emotions = l_chrini.value(i_key).toString().split("#", DR::KeepEmptyParts);
+      const QStringList l_emotions = l_chrini.value(i_key).toString().split("#", DR::SplitBehavior::KeepEmptyParts);
       l_chrini.endGroup();
 
       if (l_emotions.length() < 4)

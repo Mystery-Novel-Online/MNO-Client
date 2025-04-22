@@ -103,7 +103,7 @@ void DRServerSocket::_p_check_socket_error()
 void DRServerSocket::_p_read_socket()
 {
   m_buffer += QString::fromUtf8(m_socket->readAll());
-  QStringList l_raw_packet_list = m_buffer.split("#%", DR::KeepEmptyParts);
+  QStringList l_raw_packet_list = m_buffer.split("#%", DR::SplitBehavior::KeepEmptyParts);
   m_buffer = l_raw_packet_list.takeLast();
   for (const QString &i_raw_packet : l_raw_packet_list)
   {

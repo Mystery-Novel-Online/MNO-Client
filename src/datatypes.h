@@ -316,13 +316,12 @@ enum EmoteMod
 
 namespace DR
 {
+
 #if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
 using SplitBehavior = QString::SplitBehavior;
 #else
 using SplitBehavior = Qt::SplitBehaviorFlags;
 #endif
-const SplitBehavior KeepEmptyParts = SplitBehavior::KeepEmptyParts;
-const SplitBehavior SkipEmptyParts = SplitBehavior::SkipEmptyParts;
 
 enum VAlign : int32_t
 {

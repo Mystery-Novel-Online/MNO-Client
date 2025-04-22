@@ -8,7 +8,6 @@ TabToggleButton::TabToggleButton(QWidget *parent, AOApplication *p_ao_app) : AOB
 {
 
   this->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(this ,&QWidget::customContextMenuRequested, this, &TabToggleButton::displayContextMenu);
   connect(this, &QAbstractButton::clicked, this, &TabToggleButton::on_clicked);
 }
 
@@ -44,15 +43,6 @@ void TabToggleButton::on_clicked()
 {
   if(mIsDetatched) return;
   ThemeManager::get().toggleTab(mTabName, mTabGroup);
-}
-
-void TabToggleButton::displayContextMenu(QPoint t_position)
-{
-  //QMenu *l_menu = new QMenu(this);
-  //QAction *l_detatchTab = new QAction("Detach from Window");
-  //QObject::connect(l_detatchTab, &QAction::triggered, [this](){detatchTab();});
-  //l_menu->addAction(l_detatchTab);
-  //l_menu->popup(this->mapToGlobal(t_position));
 }
 
 void TabToggleButton::detatchTab()

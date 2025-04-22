@@ -60,7 +60,7 @@ void Courtroom::load_current_character_sfx_list()
   const QStringList l_sfx_list = ao_app->get_sfx_list();
   for (const QString &i_sfx_line : l_sfx_list)
   {
-    const QStringList l_sfx_entry = i_sfx_line.split("=", DR::SkipEmptyParts);
+    const QStringList l_sfx_entry = i_sfx_line.split("=", DR::SplitBehavior::SkipEmptyParts);
 
     const QString l_name = l_sfx_entry.at(l_sfx_entry.size() - 1).trimmed();
     const QString l_file = QString(l_sfx_entry.size() >= 2 ? l_sfx_entry.at(0) : nullptr).trimmed();

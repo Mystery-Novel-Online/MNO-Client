@@ -35,7 +35,6 @@ HEADERS += \
   src/aolineedit.h \
   src/aomusicplayer.h \
   src/aonotearea.h \
-  src/aonotepad.h \
   src/aonotepicker.h \
   src/aoobject.h \
   src/aopixmap.h \
@@ -80,7 +79,6 @@ HEADERS += \
   src/hardware_functions.h \
   src/lobby.h \
   src/logger.h \
-  src/misc_functions.h \
   src/mk2/drplayer.h \
   src/mk2/graphicsspriteitem.h \
   src/mk2/graphicsvideoscreen.h \
@@ -145,7 +143,6 @@ SOURCES += \
   src/aolineedit.cpp \
   src/aomusicplayer.cpp \
   src/aonotearea.cpp \
-  src/aonotepad.cpp \
   src/aonotepicker.cpp \
   src/aoobject.cpp \
   src/aopixmap.cpp \
@@ -197,7 +194,6 @@ SOURCES += \
   src/lobby.cpp \
   src/logger.cpp \
   src/main.cpp \
-  src/misc_functions.cpp \
   src/mk2/drplayer.cpp \
   src/mk2/graphicsspriteitem.cpp \
   src/mk2/graphicsvideoscreen.cpp \
