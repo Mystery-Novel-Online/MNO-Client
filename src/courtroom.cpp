@@ -38,6 +38,7 @@
 #include "src/datatypes.h"
 #include "theme.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/network/server_metadata.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -338,7 +339,9 @@ void Courtroom::enter_courtroom(int p_cid)
     ao_app->get_discord()->set_character_name(l_final_showname);
     ao_config->set_showname_placeholder(l_final_showname);
 
-    QStringList l_content{l_chr_name, l_final_showname, CharacterManager::get().p_SelectedCharacter->GetOutfit()};
+    QStringList l_content{l_chr_name, l_final_showname};
+    if(ServerMetadata::FeatureSupported("outfits")) l_content.append(CharacterManager::get().p_SelectedCharacter->GetOutfit());
+
     ao_app->send_server_packet(DRPacket("chrini", l_content));
   }
   const bool l_changed_chr = l_chr_name != l_prev_chr_name;
@@ -2637,7 +2640,9 @@ void Courtroom::onOutfitChanged(int t_outfitIndex)
   const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
 
   ao_config->set_showname_placeholder(l_final_showname);
-  QStringList l_content{l_chr_name, l_final_showname, CharacterManager::get().p_SelectedCharacter->GetOutfit()};
+  QStringList l_content{l_chr_name, l_final_showname};
+  if(ServerMetadata::FeatureSupported("outfits")) l_content.append(CharacterManager::get().p_SelectedCharacter->GetOutfit());
+
   ao_app->send_server_packet(DRPacket("chrini", l_content));
 }
 

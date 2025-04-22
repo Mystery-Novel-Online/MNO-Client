@@ -17,6 +17,7 @@
 #include "version.h"
 #include "modules/networking/json_packet.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/network/server_metadata.h"
 
 void AOApplication::connect_to_server(DRServerInfo p_server)
 {
@@ -117,6 +118,10 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     m_server_software = l_content.at(1);
 
     send_server_packet(DRPacket("ID", {"DRO", get_version_string()}));
+  }
+  else if (l_header == "FL")
+  {
+    ServerMetadata::SetFeatureList(l_content);
   }
   else if (l_header == "CT")
   {

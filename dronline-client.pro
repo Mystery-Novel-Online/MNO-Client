@@ -20,6 +20,7 @@ HEADERS += \
   src/dro/interface/menus/emote_menu.h \
   src/dro/interface/widgets/bgm_filter.h \
   src/dro/interface/widgets/screenshot_button.h \
+  src/dro/network/server_metadata.h \
   src/dro/network/tracklist_metadata.h \
   src/dro/param/actor/actor_loader.h \
   src/aoapplication.h \
@@ -128,6 +129,7 @@ SOURCES += \
   src/dro/interface/menus/emote_menu.cpp \
   src/dro/interface/widgets/bgm_filter.cpp \
   src/dro/interface/widgets/screenshot_button.cpp \
+  src/dro/network/server_metadata.cpp \
   src/dro/network/tracklist_metadata.cpp \
   src/dro/param/actor/actor_loader.cpp \
   src/aoapplication.cpp \
