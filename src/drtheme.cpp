@@ -6,6 +6,7 @@
 #include <QJsonArray>
 
 #include "modules/theme/thememanager.h"
+#include "dro/system/theme_scripting.h"
 
 #include <qcolor.h>
 #include <qfile.h>
@@ -17,7 +18,8 @@ DRTheme::DRTheme(AOApplication *p_ao_app)
 
 void DRTheme::InitTheme()
 {
-  ThemeManager::get().loadTheme(ao_app->getCurrentTheme());
+  QString currentThemeName = ao_app->getCurrentTheme();
+  ThemeManager::get().loadTheme(currentThemeName);
   ThemeManager::get().LoadGamemode(ao_app->getCurrentGamemode());
   ThemeManager::get().mCurrentThemeReader.SetTime(ao_app->getCurrentTime());
   const QString l_json_path = ao_app->find_theme_asset_path(THEME_JSON);
@@ -30,6 +32,7 @@ void DRTheme::InitTheme()
   }
   else
   {
+    ThemeScripting::InitializeLua(FS::Paths::FindDirectory("themes/" + currentThemeName));
     QFile json_file(l_json_path); json_file.open(QIODevice::ReadOnly | QIODevice::Text);
     m_currentThemeString = json_file.readAll();
     json_file.close();

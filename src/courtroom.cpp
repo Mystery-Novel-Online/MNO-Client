@@ -39,6 +39,7 @@
 #include "theme.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/network/server_metadata.h"
+#include "dro/system/theme_scripting.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -2321,6 +2322,19 @@ void Courtroom::on_ooc_message_return_pressed()
       timer_id = l_message.mid(space_location + 1).toInt();
     pause_timer(timer_id);
   }
+  else if(l_message.startsWith("/"))
+  {
+    QStringList commandArguments = l_message.mid(1).split(" ");
+    if(commandArguments.at(0).length() > 0)
+    {
+      if(LuaBridge::CustomCommand(commandArguments.at(0)))
+      {
+        ui_ooc_chat_message->clear();
+        return;
+      }
+    }
+  }
+
 
   send_ooc_packet(l_message);
   ui_ooc_chat_message->clear();

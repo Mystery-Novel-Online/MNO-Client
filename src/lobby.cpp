@@ -149,8 +149,6 @@ DRServerInfoList Lobby::get_combined_server_list()
 // sets images, position and size
 void Lobby::update_widgets()
 {
-  ao_app->current_theme->InitTheme();
-
   pos_size_type f_lobby = ao_app->get_element_dimensions("lobby", LOBBY_DESIGN_INI);
   if (f_lobby.width < 0 || f_lobby.height < 0)
   {

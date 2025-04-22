@@ -8,7 +8,7 @@ TARGET = dro-client
 
 RC_ICONS = icon.ico
 
-INCLUDEPATH += $$PWD/include $$PWD/src $$PWD/3rd
+INCLUDEPATH += $$PWD/include $$PWD/src $$PWD/3rd $$PWD/3rd/lua
 DEPENDPATH += $$PWD/include $$PWD/src $$PWD/3rd
 
 HEADERS += \
@@ -64,6 +64,7 @@ HEADERS += \
   src/drmediatester.h \
   src/drmovie.h \
   src/dro/system/rp_audio.h \
+  src/dro/system/theme_scripting.h \
   src/dro/tools/button_maker.h \
   src/drpacket.h \
   src/drplayerlistentry.h \
@@ -177,6 +178,7 @@ SOURCES += \
   src/drmediatester.cpp \
   src/drmovie.cpp \
   src/dro/system/rp_audio.cpp \
+  src/dro/system/theme_scripting.cpp \
   src/dro/tools/button_maker.cpp \
   src/drpacket.cpp \
   src/drplayerlistentry.cpp \
@@ -245,7 +247,7 @@ SOURCES += \
 # 2. You need to compile the Discord Rich Presence SDK separately and add the lib/headers
 #    in the same way as BASS. Discord RPC uses CMake, which does not play nicely with
 #    QMake, so this step must be manual.
-LIBS += -L$$PWD/3rd -lbass -lbassopus -ldiscord-rpc
+LIBS += -L$$PWD/3rd -lbass -lbassopus -ldiscord-rpc -llua54
 
 RESOURCES += \
   res.qrc
