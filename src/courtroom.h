@@ -198,6 +198,7 @@ public:
   void update_default_iniswap_item();
   void select_base_character_iniswap();
   void refresh_character_content_url();
+  void update_character_content_url(QString url);
   void construct_playerlist_layout();
   void construct_emotes();
   void construct_emote_page_layout();

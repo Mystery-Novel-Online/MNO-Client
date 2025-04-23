@@ -5,11 +5,13 @@
 #include <QObject>
 #include <QWidget>
 
+class Courtroom;
+
 class CharMenu : public QMenu
 {
   Q_OBJECT
 public:
-  CharMenu(QWidget *parent = nullptr);
+  CharMenu(Courtroom *parent = nullptr);
 
 public slots:
   void OnMenuRequested(QPoint p_point);
@@ -17,6 +19,7 @@ public slots:
 
 private:
   QAction *p_UpdateCharacterFilesAction;
+  Courtroom *parentCourtroom;
 };
 
 #endif // CHAR_MENU_H

@@ -2,9 +2,10 @@
 #include "modules/theme/thememanager.h"
 #include "courtroom.h"
 
+#include <QInputDialog>
 #include <QListWidget>
 
-CharMenu::CharMenu(QWidget *parent) : QMenu(parent)
+CharMenu::CharMenu(Courtroom *parent) : QMenu(parent), parentCourtroom(parent)
 {
   p_UpdateCharacterFilesAction = addAction(tr("Update Character Files Link"));
 
@@ -20,5 +21,15 @@ void CharMenu::OnMenuRequested(QPoint p_point)
 
 void CharMenu::OnUpdateCharacterFilesTriggered()
 {
-  //TODO
+  bool userEnteredInput;
+  QString filesLink = QInputDialog::getText(this,
+                                       tr("Update Character Files"),
+                                       tr("Enter link:"),
+                                       QLineEdit::Normal,
+                                       "", &userEnteredInput);
+
+  if (userEnteredInput)
+  {
+    parentCourtroom->update_character_content_url(filesLink);
+  }
 }
