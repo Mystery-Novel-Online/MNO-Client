@@ -5,6 +5,7 @@
 #include "drgraphicscene.h"
 #include "dro/interface/menus/area_menu.h"
 #include "dro/interface/menus/bgm_menu.h"
+#include "dro/interface/menus/char_menu.h"
 #include "dro/interface/widgets/bgm_filter.h"
 #include "dro/interface/widgets/screenshot_button.h"
 #include "drposition.h"
@@ -606,7 +607,9 @@ private:
   QVector<bool> wtce_enabled;
   QVector<bool> free_blocks_enabled;
 
+  CharMenu *p_CharacterContextMenu;
   AOButton *ui_change_character = nullptr;
+
   AOButton *ui_call_mod = nullptr;
   AOButton *ui_switch_area_music = nullptr;
 

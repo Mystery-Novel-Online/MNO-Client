@@ -17,6 +17,7 @@ HEADERS += \
   src/dro/fs/fs_writing.h \
   src/dro/interface/menus/area_menu.h \
   src/dro/interface/menus/bgm_menu.h \
+  src/dro/interface/menus/char_menu.h \
   src/dro/interface/menus/emote_menu.h \
   src/dro/interface/widgets/bgm_filter.h \
   src/dro/interface/widgets/screenshot_button.h \
@@ -126,6 +127,7 @@ SOURCES += \
   src/dro/fs/fs_writing.cpp \
   src/dro/interface/menus/area_menu.cpp \
   src/dro/interface/menus/bgm_menu.cpp \
+  src/dro/interface/menus/char_menu.cpp \
   src/dro/interface/menus/emote_menu.cpp \
   src/dro/interface/widgets/bgm_filter.cpp \
   src/dro/interface/widgets/screenshot_button.cpp \
