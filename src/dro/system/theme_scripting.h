@@ -22,8 +22,10 @@ namespace LuaFunctions
 {
   void PlaySfx(const char* effectName);
   void ChangeTab(const char* group, const char* tabName);
+  void CustomChoiceDialog(const char* text, const char* event);
   void SetNotificationText(const char* text, bool show);
   void AlertUser(bool playSound);
+  void SwitchCharacter(const char* characterFolder);
 }
 
 #endif // THEME_SCRIPTING_H

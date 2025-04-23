@@ -11,7 +11,8 @@ enum NotificationType
   INVALID = 0,
   PairRequest = 1,
   PartyRequest = 2,
-  EventPopup = 3
+  EventPopup = 3,
+  LuaEvent = 4
 
 };
 

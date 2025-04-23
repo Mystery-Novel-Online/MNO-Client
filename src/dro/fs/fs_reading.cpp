@@ -20,6 +20,11 @@ namespace FS::Checks
     return check_dir.exists();
   }
 
+  bool CharacterExists(const char *characterFolder)
+  {
+    return DirectoryExists(Paths::FindDirectory("characters/" + QString(characterFolder)));
+  }
+
 }
 
 namespace FS::Formats

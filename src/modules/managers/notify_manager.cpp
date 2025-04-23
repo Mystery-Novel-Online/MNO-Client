@@ -11,6 +11,13 @@ void NotifyManager::ThemeSetupPopup(RPNotifyMenu *notify)
   HideNotification();
 }
 
+void NotifyManager::SetLuaNotification(QString dialog, QString eventName)
+{
+  mCurrentNotification = LuaEvent;
+  SetRequestKey(eventName);
+  SetText(dialog, true);
+}
+
 void NotifyManager::SetPairNotifcation()
 {
   mCurrentNotification = PairRequest;

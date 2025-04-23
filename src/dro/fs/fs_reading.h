@@ -9,6 +9,7 @@ namespace FS::Checks
 {
   bool FileExists(const QString& path);
   bool DirectoryExists(const QString& path);
+  bool CharacterExists(const char* characterFolder);
 }
 
 namespace FS::Paths

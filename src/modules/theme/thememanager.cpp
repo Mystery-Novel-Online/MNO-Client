@@ -4,6 +4,8 @@
 #include "aoapplication.h"
 #include "widgets/tab_toggle_button.h"
 #include "../widgets/tabgroupingwidget.h"
+#include "dro/system/theme_scripting.h"
+#include "dro/interface/courtroom_layout.h"
 
 ThemeManager ThemeManager::s_Instance;
 
@@ -73,6 +75,8 @@ void ThemeManager::createTabParent()
     addButton(l_buttonName, l_newButton);
   };
 
+
+  LuaBridge::QuickCall("onTogglesCreated");
 }
 
 void ThemeManager::execLayerTabs()
@@ -233,6 +237,7 @@ void ThemeManager::SetWidgetNames(QHash<QString, QWidget *> t_WidgetNames)
 
 void ThemeManager::addWidgetName(QString t_widgetName, QWidget *t_widget)
 {
+  Layout::Courtroom::AddToWidgetList(t_widgetName, t_widget);
   m_WidgetNames[t_widgetName] = t_widget;
 }
 

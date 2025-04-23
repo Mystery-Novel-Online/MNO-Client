@@ -221,6 +221,40 @@ void Courtroom::update_character_icon(QString p_character)
   }
 }
 
+void Courtroom::SwitchCharacterByName(const char *characterName)
+{
+  int serverCharacterId = 0;
+  QString characterPathIni = ao_app->get_character_path(characterName, CHARACTER_CHAR_INI);
+  QString characterPathJson = ao_app->get_character_path(characterName, CHARACTER_CHAR_JSON);
+
+  if (get_character() == characterName)
+  {
+    enter_courtroom(get_character_id());
+    return;
+  }
+
+  if (!FS::Checks::FileExists(characterPathIni) && !FS::Checks::FileExists(characterPathJson))
+  {
+    qDebug() << "did not find " << characterPathIni;
+    call_notice("Could not find " + characterPathIni);
+    return;
+  }
+
+  if(!CharacterManager::get().GetCharacterInServer(characterName))
+  {
+    serverCharacterId = CharacterManager::get().GetAvaliablePersona();
+    ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(serverCharacterId), characterName);
+  }
+  else
+  {
+    serverCharacterId = CharacterManager::get().GetFilteredId(characterName);
+  }
+
+  ao_app->send_server_packet(
+      DRPacket("CC", {QString::number(ao_app->get_client_id()), QString::number(serverCharacterId), "HDID"}));
+
+}
+
 void Courtroom::char_clicked(int n_char)
 {
   if (get_character() == UIFilteredCharButton.at(n_char)->character())

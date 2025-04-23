@@ -19,6 +19,7 @@ public:
 
   void ThemeSetupPopup(RPNotifyMenu *notify);
 
+  void SetLuaNotification(QString dialog, QString eventName);
   void SetPairNotifcation();
   void ShowNotification();
   void HideNotification();

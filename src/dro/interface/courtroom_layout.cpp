@@ -53,5 +53,16 @@ namespace Layout::Courtroom
     s_CourtroomWidgets[name]->setVisible(visibleState);
   }
 
+  void AddToWidgetList(QString name, QWidget *widget)
+  {
+    s_CourtroomWidgets[name] = widget;
+  }
+
+  void RaiseWidget(const char *name)
+  {
+    if(!s_CourtroomWidgets.contains(name)) return;
+    s_CourtroomWidgets[name]->raise();
+  }
+
 
 }

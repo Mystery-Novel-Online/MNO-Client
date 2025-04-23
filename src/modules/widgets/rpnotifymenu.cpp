@@ -7,6 +7,7 @@
 #include "modules/theme/thememanager.h"
 #include "theme.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/system/theme_scripting.h"
 
 RPNotifyMenu::RPNotifyMenu(QWidget *parent)
     : QWidget{parent}
@@ -93,6 +94,12 @@ void RPNotifyMenu::NotifyAccept()
   if(mType == NotificationType::PairRequest)
   {
     AOApplication::getInstance()->send_server_packet(DRPacket("PAIR", {QString::number(mSender), mKey}));
+    LuaBridge::QuickCall("onPairRequestAccepted");
+  }
+  else if(mType == NotificationType::LuaEvent)
+  {
+    QString luaEventName = mKey + "Accepted";
+    LuaBridge::QuickCall(luaEventName.toUtf8());
   }
 
   AOApplication::getInstance()->get_courtroom()->SetChatboxFocus();
@@ -103,4 +110,16 @@ void RPNotifyMenu::NotifyDecline()
 {
   AOApplication::getInstance()->get_courtroom()->SetChatboxFocus();
   this->hide();
+
+  if(mType == NotificationType::PairRequest)
+  {
+    LuaBridge::QuickCall("onPairRequestDeclined");
+  }
+  else if(mType == NotificationType::LuaEvent)
+  {
+    QString luaEventName = mKey + "Declined";
+    LuaBridge::QuickCall(luaEventName.toUtf8());
+  }
+
+
 }

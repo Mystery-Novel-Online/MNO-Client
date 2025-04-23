@@ -28,10 +28,17 @@ namespace ThemeScripting
       s_themeScript["play_sfx"] = &LuaFunctions::PlaySfx;
       s_themeScript["change_tab"] = &LuaFunctions::ChangeTab;
       s_themeScript["move_widget"] = &Layout::Courtroom::MoveWidget;
+      s_themeScript["raise_widget"] = &Layout::Courtroom::RaiseWidget;
       s_themeScript["create_sticker"] = &Layout::Courtroom::CreateSticker;
       s_themeScript["alert"] = &LuaFunctions::AlertUser;
       s_themeScript["toggle_widget_visibility"] = &Layout::Courtroom::ToggleWidgetVisibility;
-      s_themeScript["set_popup_text"] = &LuaFunctions::SetNotificationText;
+      s_themeScript["set_choice_text"] = &LuaFunctions::SetNotificationText;
+      s_themeScript["choice_dialog"] = &LuaFunctions::CustomChoiceDialog;
+
+      //Character Functions
+      s_themeScript["character_exists"] = &FS::Checks::CharacterExists;
+      s_themeScript["switch_character"] = &LuaFunctions::SwitchCharacter;
+
       s_themeScript.safe_script_file(filePath.toStdString());
       s_luaOnTabChange = s_themeScript["onTabChanged"];
       s_luaOnCharacterMessage = s_themeScript["onCharacterMessage"];
@@ -110,6 +117,18 @@ namespace LuaFunctions
   void SetNotificationText(const char *text, bool show)
   {
     NotifyManager::get().SetText(text, show);
+  }
+
+  void CustomChoiceDialog(const char *text, const char *event)
+  {
+    NotifyManager::get().SetLuaNotification(text, event);
+  }
+
+  void SwitchCharacter(const char *characterFolder)
+  {
+    Courtroom *courtroom = AOApplication::getInstance()->get_courtroom();
+    if(courtroom == nullptr) return;
+    courtroom->SwitchCharacterByName(characterFolder);
   }
 
 }
