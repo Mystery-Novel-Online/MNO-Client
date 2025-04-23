@@ -1,4 +1,5 @@
 #include "notify_manager.h"
+#include "dro/system/theme_scripting.h"
 
 NotifyManager NotifyManager::s_Instance;
 
@@ -13,9 +14,13 @@ void NotifyManager::ThemeSetupPopup(RPNotifyMenu *notify)
 void NotifyManager::SetPairNotifcation()
 {
   mCurrentNotification = PairRequest;
-  mCurrentNotificationMessage = mSenderName + " has sent you a pair request.";
-  pNotificationPopup->SetNotificationText(mCurrentNotificationMessage);
-  ShowNotification();
+
+  if(!LuaBridge::QuickCall("pairRequestEvent", mSenderName.toUtf8()))
+  {
+    LuaBridge::QuickCall("onPairRequest", mSenderName.toUtf8());
+    LuaFunctions::AlertUser(true);
+    SetText(mSenderName + " has sent you a pair request.", true);
+  }
 }
 
 void NotifyManager::ShowNotification()
@@ -57,4 +62,12 @@ void NotifyManager::SetSenderCharacter(QString sender)
 void NotifyManager::SetRequestKey(QString sender)
 {
   mRequestKey = sender;
+}
+
+void NotifyManager::SetText(QString text, bool show)
+{
+  if(pNotificationPopup == nullptr) return;
+  mCurrentNotificationMessage = text;
+  pNotificationPopup->SetNotificationText(text);
+  if(show) ShowNotification();
 }

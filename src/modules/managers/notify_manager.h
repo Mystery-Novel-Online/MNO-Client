@@ -29,6 +29,8 @@ public:
   void SetSenderCharacter(QString sender);
   void SetRequestKey(QString sender);
 
+  void SetText(QString text, bool show);
+
 
 private:
   int mSenderId = -1;
