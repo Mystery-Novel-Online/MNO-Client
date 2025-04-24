@@ -23,6 +23,7 @@
 #include <modules/managers/character_manager.h>
 #include <modules/managers/localization_manager.h>
 #include "dro/fs/fs_reading.h"
+#include "dro/system/runtime_loop.h"
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -79,6 +80,10 @@ AOApplication::AOApplication(int &argc, char **argv)
   CharacterManager::get().LoadFavoritesList();
   reload_packages();
   resolve_current_theme();
+
+  QTimer* timer = new QTimer(this);
+  connect(timer, &QTimer::timeout, this, [=]() { RuntimeLoop::Update(); });
+  timer->start(16);
 }
 
 AOApplication::~AOApplication()

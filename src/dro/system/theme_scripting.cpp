@@ -21,6 +21,7 @@ namespace ThemeScripting
   void InitializeLua(QString themePath)
   {
     s_registeredFunctions.clear();
+    s_themeScript = sol::state();
     s_themeScript.open_libraries(sol::lib::base, sol::lib::io, sol::lib::math, sol::lib::string);
     QString filePath = themePath + "/script.lua";
     if(FS::Checks::FileExists(filePath))

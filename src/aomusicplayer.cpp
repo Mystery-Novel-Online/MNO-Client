@@ -53,6 +53,7 @@ void AOMusicPlayer::play(QString p_song)
 
 void AOMusicPlayer::setSpeed(float speed)
 {
+  if(mCurrentSong == nullptr) return;
   if (mCurrentSong->is_playing())
   {
     mCurrentSong->set_speed(speed);
@@ -61,6 +62,7 @@ void AOMusicPlayer::setSpeed(float speed)
 
 void AOMusicPlayer::setPitch(float pitch)
 {
+  if(mCurrentSong == nullptr) return;
   if (mCurrentSong->is_playing())
   {
     mCurrentSong->set_pitch(pitch);
