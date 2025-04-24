@@ -94,12 +94,12 @@ void RPNotifyMenu::NotifyAccept()
   if(mType == NotificationType::PairRequest)
   {
     AOApplication::getInstance()->send_server_packet(DRPacket("PAIR", {QString::number(mSender), mKey}));
-    LuaBridge::QuickCall("OnPairRequestAccepted");
+    LuaBridge::LuaEventCall("OnPairRequestAccepted");
   }
   else if(mType == NotificationType::LuaEvent)
   {
     QString luaEventName = mKey + "Accepted";
-    LuaBridge::QuickCall(luaEventName.toUtf8());
+    LuaBridge::LuaEventCall(luaEventName.toUtf8());
   }
 
   AOApplication::getInstance()->get_courtroom()->SetChatboxFocus();
@@ -113,12 +113,12 @@ void RPNotifyMenu::NotifyDecline()
 
   if(mType == NotificationType::PairRequest)
   {
-    LuaBridge::QuickCall("OnPairRequestDeclined");
+    LuaBridge::LuaEventCall("OnPairRequestDeclined");
   }
   else if(mType == NotificationType::LuaEvent)
   {
     QString luaEventName = mKey + "Declined";
-    LuaBridge::QuickCall(luaEventName.toUtf8());
+    LuaBridge::LuaEventCall(luaEventName.toUtf8());
   }
 
 

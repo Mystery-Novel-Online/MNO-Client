@@ -22,9 +22,9 @@ void NotifyManager::SetPairNotifcation()
 {
   mCurrentNotification = PairRequest;
 
-  if(!LuaBridge::QuickCall("PairRequestEvent", mSenderName.toUtf8()))
+  if(!LuaBridge::LuaEventCall("PairRequestEvent", mSenderName.toStdString()))
   {
-    LuaBridge::QuickCall("OnPairRequest", mSenderName.toUtf8());
+    LuaBridge::LuaEventCall("OnPairRequest", mSenderName.toStdString());
     LuaFunctions::AlertUser(true);
     SetText(mSenderName + " has sent you a pair request.", true);
   }

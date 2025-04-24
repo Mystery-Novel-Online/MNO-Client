@@ -40,6 +40,7 @@
 #include "dro/fs/fs_reading.h"
 #include "dro/network/server_metadata.h"
 #include "dro/system/theme_scripting.h"
+#include "dro/system/rp_audio.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -1098,7 +1099,7 @@ void Courtroom::start_chatmessage()
 void Courtroom::handle_chatmessage()
 {
   qDebug() << "handle_chatmessage";
-  LuaBridge::OnCharacterMessage(m_chatmessage[CMShowName], m_chatmessage[CMChrName], m_chatmessage[CMEmote], m_chatmessage[CMMessage]);
+  LuaBridge::OnCharacterMessage(m_chatmessage[CMShowName].toStdString(), m_chatmessage[CMChrName].toStdString(), m_chatmessage[CMEmote].toStdString(), m_chatmessage[CMMessage].toStdString());
   m_hide_character = m_chatmessage[CMHideCharacter].toInt();
   m_play_pre = false;
   m_play_zoom = false;
@@ -1481,7 +1482,7 @@ void Courtroom::handle_chatmessage_3()
   {
     if (f_message.contains(word, Qt::CaseInsensitive))
     {
-      m_system_player->play(ao_app->get_sfx("word_call"));
+      RPAudio::PlaySystem(ao_app->get_sfx("word_call").toUtf8());
       ao_app->alert(this);
       const QString name = "CLIENT";
       const QString message = ui_vp_showname->toPlainText() + " has called you via your callword \"" + word + "\": \"" + f_message + "\"";
@@ -2118,25 +2119,35 @@ void Courtroom::handle_song(QStringList p_contents)
   }
   m_current_song = l_song;
 
-  m_music_player->play(l_song);
-
   DRAudiotrackMetadata l_song_meta(l_song);
-  if (l_chr_id >= 0 && l_chr_id < CharacterManager::get().mServerCharacters.length())
+
+  if(!LuaBridge::SongChangeEvent(l_song.toStdString(), l_song_meta.title().toStdString(), l_showname.toStdString()))
   {
-    if (l_showname.isEmpty())
+    RPAudio::PlayBGM(l_song.toUtf8());
+
+    if (l_chr_id >= 0 && l_chr_id < CharacterManager::get().mServerCharacters.length())
     {
-      l_showname = ao_app->get_showname(CharacterManager::get().mServerCharacters.at(l_chr_id).name);
+      if (l_showname.isEmpty())
+      {
+        l_showname = ao_app->get_showname(CharacterManager::get().mServerCharacters.at(l_chr_id).name);
+      }
+
+      append_ic_text(l_showname, "has played a song: " + l_song_meta.title(), false, true, NoClientId, l_chr_id == m_chr_id);
+
+      if (ao_config->log_is_recording_enabled())
+      {
+        save_textlog(l_showname + " has played a song: " + l_song_meta.filename());
+      }
     }
 
-    append_ic_text(l_showname, "has played a song: " + l_song_meta.title(), false, true, NoClientId, l_chr_id == m_chr_id);
+    set_music_text(l_song_meta.title());
 
-    if (ao_config->log_is_recording_enabled())
-    {
-      save_textlog(l_showname + " has played a song: " + l_song_meta.filename());
-    }
+    LuaBridge::OnSongChange(l_song.toStdString(), l_song_meta.title().toStdString(), l_showname.toStdString());
   }
 
-  set_music_text(l_song_meta.title());
+
+
+
 }
 
 void Courtroom::handle_wtce(QString p_wtce)
@@ -2225,7 +2236,7 @@ void Courtroom::mod_called(QString p_ip)
   ui_ooc_chatlog->append(p_ip);
   if (ao_config->server_alerts_enabled())
   {
-    m_system_player->play(ao_app->get_sfx("mod_call"));
+    RPAudio::PlaySystem(ao_app->get_sfx("mod_call").toUtf8());
     ao_app->alert(this);
     if (ao_config->log_is_recording_enabled())
       save_textlog("(OOC)(MOD CALL)" + p_ip);
@@ -2328,10 +2339,13 @@ void Courtroom::on_ooc_message_return_pressed()
     QStringList commandArguments = l_message.mid(1).split(" ");
     if(commandArguments.at(0).length() > 0)
     {
-      if(LuaBridge::CustomCommand(commandArguments.at(0)))
+      QString commandFunction = "OnCommand_" + commandArguments.at(0).toLower();
+      if(!commandFunction.isEmpty())
       {
-        ui_ooc_chat_message->clear();
-        return;
+        if(LuaBridge::LuaEventCall(commandFunction.toUtf8()))
+        {
+          return;
+        }
       }
     }
   }
@@ -2506,7 +2520,7 @@ void Courtroom::on_cycle_clicked()
   }
 
   if (ao_app->current_theme->read_config_bool("enable_cycle_ding"))
-    m_system_player->play(ao_app->get_sfx("cycle"));
+    RPAudio::PlaySystem(ao_app->get_sfx("cycle").toUtf8());
 
   set_shouts();
   ui_ic_chat_message_field->setFocus();

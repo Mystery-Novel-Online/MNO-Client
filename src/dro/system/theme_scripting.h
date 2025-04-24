@@ -1,7 +1,10 @@
 #ifndef THEME_SCRIPTING_H
 #define THEME_SCRIPTING_H
 
+#include <QMap>
 #include <QString>
+#include <QDebug>
+#include <sol/sol.hpp>
 
 
 namespace ThemeScripting
@@ -11,11 +14,22 @@ namespace ThemeScripting
 
 namespace LuaBridge
 {
-  bool QuickCall(const char *eventName);
-  bool QuickCall(const char *eventName, const char *argument);
-  bool CustomCommand(QString commandName);
-  bool onTabChange(QString name, QString group);
-  bool OnCharacterMessage(QString character, QString folder, QString emote, QString message);
+  sol::function& GetFunction(const char* functionName);
+
+  template<typename... Args>
+  inline bool LuaEventCall(const char* functionName, Args&&... args)
+  {
+    qDebug() << "LUA Function Called: " << functionName ;
+    sol::function function = GetFunction(functionName);
+    if(!function.valid()) return false;
+    function(std::forward<Args>(args)...);
+    return true;
+  }
+
+  bool OnTabChange(std::string name, std::string group);
+  bool OnCharacterMessage(std::string character, std::string folder, std::string emote, std::string message);
+  bool SongChangeEvent(std::string path, std::string name, std::string submitter);
+  bool OnSongChange(std::string path, std::string name, std::string submitter);
 }
 
 namespace LuaFunctions

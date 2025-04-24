@@ -13,21 +13,23 @@
 
 static sol::state s_themeScript;
 
-sol::function s_luaOnTabChange;
-sol::function s_luaOnCharacterMessage;
+static QMap<std::string, sol::function> s_registeredFunctions;
 
 namespace ThemeScripting
 {
 
   void InitializeLua(QString themePath)
   {
+    s_registeredFunctions.clear();
     s_themeScript.open_libraries(sol::lib::base, sol::lib::io, sol::lib::math, sol::lib::string);
     QString filePath = themePath + "/script.lua";
     if(FS::Checks::FileExists(filePath))
     {
 
       sol::table audioTable = s_themeScript.create_named_table("Audio");
-      audioTable.set_function("PlaySFX", &LuaFunctions::PlaySfx);
+      audioTable.set_function("PlaySFX", &RPAudio::PlayEffect);
+      audioTable.set_function("PlaySystem", &RPAudio::PlaySystem);
+      audioTable.set_function("PlayBGM", &RPAudio::PlayBGM);
 
       sol::table widgetTable = s_themeScript.create_named_table("Widget");
       widgetTable.set_function("Move", &Layout::Courtroom::MoveWidget);
@@ -51,53 +53,61 @@ namespace ThemeScripting
       s_themeScript["alert"] = &LuaFunctions::AlertUser;
 
       s_themeScript.safe_script_file(filePath.toStdString());
-
-      s_luaOnTabChange = s_themeScript["OnTabChanged"];
-      s_luaOnCharacterMessage = s_themeScript["OnCharacterMessage"];
     }
   }
 }
 
-bool LuaBridge::CustomCommand(QString commandName)
+namespace LuaBridge
 {
-  if(commandName.isEmpty()) return false;
-  QString CommandFunction = "OnCommand_" + commandName.toLower();
-  sol::function customCommandFunction = s_themeScript[CommandFunction.toStdString()];
-  if (!customCommandFunction.valid()) return false;
-  customCommandFunction();
-  return true;
+
+  sol::function &GetFunction(const char* functionName)
+  {
+    if(s_registeredFunctions.contains(functionName)) return s_registeredFunctions[functionName];
+    sol::function eventCall = s_themeScript[functionName];
+    if(eventCall.valid()) s_registeredFunctions[functionName] = eventCall;
+    return s_registeredFunctions[functionName];
+  }
+
+  bool QuickCall(const char *eventName)
+  {
+    sol::function eventCall = s_themeScript[eventName];
+    if (!eventCall.valid()) return false;
+    eventCall();
+    return true;
+  }
+
+  bool QuickCall(const char *eventName, const char *argument)
+  {
+    sol::function eventCall = s_themeScript[eventName];
+    if (!eventCall.valid()) return false;
+    eventCall(argument);
+    return true;
+  }
+
+  bool OnTabChange(std::string name, std::string group)
+  {
+    return LuaEventCall("OnTabChanged", name, group);
+  }
+
+  bool OnCharacterMessage(std::string character, std::string folder, std::string emote, std::string message)
+  {
+    return LuaEventCall("OnCharacterMessage", character, folder, emote, message);
+  }
+
+  bool SongChangeEvent(std::string path, std::string name, std::string submitter)
+  {
+    return LuaEventCall("SongChangeEvent", path, name, submitter);
+  }
+
+  bool OnSongChange(std::string path, std::string name, std::string submitter)
+  {
+    return LuaEventCall("OnSongChange", path, name, submitter);
+  }
+
+
+
 }
 
-bool LuaBridge::onTabChange(QString name, QString group)
-{
-  if(!s_luaOnTabChange.valid()) return false;
-  s_luaOnTabChange(name.toStdString(), group.toStdString());
-  return true;
-}
-
-
-bool LuaBridge::QuickCall(const char *eventName)
-{
-  sol::function eventCall = s_themeScript[eventName];
-  if (!eventCall.valid()) return false;
-  eventCall();
-  return true;
-}
-
-bool LuaBridge::QuickCall(const char *eventName, const char *argument)
-{
-  sol::function eventCall = s_themeScript[eventName];
-  if (!eventCall.valid()) return false;
-  eventCall(argument);
-  return true;
-}
-
-bool LuaBridge::OnCharacterMessage(QString character, QString folder, QString emote, QString message)
-{
-  if(!s_luaOnCharacterMessage.valid()) return false;
-  s_luaOnCharacterMessage(character.toStdString(), folder.toStdString(), emote.toStdString(), message.toStdString());
-  return true;
-}
 namespace LuaFunctions
 {
   void PlaySfx(const char* effectName)
@@ -112,7 +122,7 @@ namespace LuaFunctions
 
   void AlertUser(bool playSound)
   {
-    //m_system_player->play(ao_app->get_sfx("word_call"));
+    if(playSound) RPAudio::PlaySystem(AOApplication::getInstance()->get_sfx("word_call").toUtf8());
     Courtroom *courtroom = AOApplication::getInstance()->get_courtroom();
     Lobby *lobby = AOApplication::getInstance()->get_lobby();
     if(courtroom != nullptr)

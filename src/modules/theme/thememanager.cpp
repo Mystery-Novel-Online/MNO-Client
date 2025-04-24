@@ -76,7 +76,7 @@ void ThemeManager::createTabParent()
   };
 
 
-  LuaBridge::QuickCall("OnTogglesCreated");
+  LuaBridge::LuaEventCall("OnTogglesCreated");
 }
 
 void ThemeManager::execLayerTabs()

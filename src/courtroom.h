@@ -950,8 +950,6 @@ public slots:
 private:
   AOSfxPlayer *m_effects_player = nullptr;
   AOShoutPlayer *m_shouts_player = nullptr;
-  AOSystemPlayer *m_system_player = nullptr;
-  AOMusicPlayer *m_music_player = nullptr;
   AOBlipPlayer *m_blips_player = nullptr;
   bool is_audio_muted = false;
 
