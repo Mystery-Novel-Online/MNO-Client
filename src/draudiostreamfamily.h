@@ -31,6 +31,7 @@ public:
   bool is_ignore_suppression() const;
 
 public slots:
+  void toggle_reverb(bool reverb);
   void set_pitch(float pitch);
   void set_speed(float speed);
   void set_volume(int32_t p_volume);

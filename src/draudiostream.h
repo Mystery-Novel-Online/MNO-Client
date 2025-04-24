@@ -55,6 +55,7 @@ public slots:
   void set_pitch(float pitch);
   void set_speed(float speed);
 
+  void toggle_reverb(bool reverb);
   void set_volume(float volume);
   void set_repeatable(bool);
   void set_loop(quint64 start, quint64 end);
@@ -104,6 +105,8 @@ private:
   DRAudioStream::Fade m_fade;
   int m_fade_duration = 0;
   bool m_fade_running = false;
+  bool m_reverb = false;
+  HFX m_reverb_effect;
   HSTREAM m_hstream = 0;
   float m_volume = 0.0f;
   float m_pitch = 0.0f;

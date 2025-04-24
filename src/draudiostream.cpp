@@ -252,6 +252,7 @@ bool DRAudioStream::ensure_init()
 
   m_init_state = InitFinished;
   init_loop();
+  toggle_reverb(m_reverb);
   update_volume();
   update_pitch();
   update_speed();
@@ -290,6 +291,25 @@ void DRAudioStream::init_loop()
     }
 
     m_loop_sync = BASS_ChannelSetSync(m_hstream, BASS_SYNC_POS | BASS_SYNC_MIXTIME, m_loop_end_pos, &loop_sync, this);
+  }
+}
+
+void DRAudioStream::toggle_reverb(bool reverb)
+{
+  m_reverb = reverb;
+  if(reverb)
+  {
+    m_reverb_effect = BASS_ChannelSetFX(m_hstream, BASS_FX_DX8_REVERB, 0);BASS_DX8_REVERB reverb = {};
+    reverb.fInGain = 0.0f;
+    reverb.fReverbMix = -5.0f;
+    reverb.fReverbTime = 1000.0f;
+    reverb.fHighFreqRTRatio = 0.001f;
+
+    BASS_FXSetParameters(m_reverb_effect, &reverb);
+  }
+  else
+  {
+    BASS_ChannelRemoveFX(m_hstream, m_reverb_effect);
   }
 }
 

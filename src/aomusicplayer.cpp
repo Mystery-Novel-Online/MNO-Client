@@ -48,6 +48,7 @@ void AOMusicPlayer::play(QString p_song)
       qDebug() << "playing" << mCurrentSong->get_file_name();
     }
     mCurrentSong->set_speed(0.0f);
+    mCurrentSong->toggle_reverb(false);
   };
 }
 
@@ -57,6 +58,15 @@ void AOMusicPlayer::setSpeed(float speed)
   if (mCurrentSong->is_playing())
   {
     mCurrentSong->set_speed(speed);
+  }
+}
+
+void AOMusicPlayer::toggleReverb(bool reverb)
+{
+  if(mCurrentSong == nullptr) return;
+  if (mCurrentSong->is_playing())
+  {
+    mCurrentSong->toggle_reverb(true);
   }
 }
 

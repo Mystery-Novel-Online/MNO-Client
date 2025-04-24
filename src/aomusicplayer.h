@@ -13,6 +13,7 @@ public:
 public slots:
   void play(QString p_song);
   void setSpeed(float speed);
+  void toggleReverb(bool reverb);
   void setPitch(float speed);
   void stop();
 

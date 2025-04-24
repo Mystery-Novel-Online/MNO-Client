@@ -63,4 +63,9 @@ namespace RPAudio
     s_musicPlayer->setPitch(pitch);
   }
 
+  void SetBGMReverb(bool reverb)
+  {
+    s_musicPlayer->toggleReverb(reverb);
+  }
+
 }

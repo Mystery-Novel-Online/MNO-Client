@@ -11,6 +11,7 @@ namespace RPAudio
   void PlayBGM(const char *name);
   void SetBGMSpeed(float speed);
   void SetBGMPitch(float speed);
+  void SetBGMReverb(bool reverb);
 
   void SetBlipSound(const char *sound);
   void SetBlipGender(const char *gender);

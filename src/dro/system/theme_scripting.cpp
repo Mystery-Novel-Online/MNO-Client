@@ -39,6 +39,7 @@ namespace ThemeScripting
       bgmTable.set_function("Play", &RPAudio::PlayBGM);
       bgmTable.set_function("SetSpeed", &RPAudio::SetBGMSpeed);
       bgmTable.set_function("SetPitch", &RPAudio::SetBGMPitch);
+      bgmTable.set_function("ToggleReverb", &RPAudio::SetBGMReverb);
 
       sol::table blipTable = s_themeScript.create_table();
       blipTable.set_function("Tick", &RPAudio::BlipTick);

@@ -31,6 +31,12 @@ bool DRAudioStreamFamily::is_ignore_suppression() const
   return m_options.testFlag(DRAudio::OIgnoreSuppression);
 }
 
+void DRAudioStreamFamily::toggle_reverb(bool reverb)
+{
+  for (auto &stream : m_stream_list)
+    stream->toggle_reverb(reverb);
+}
+
 void DRAudioStreamFamily::set_pitch(float pitch)
 {
   m_pitch = pitch;
