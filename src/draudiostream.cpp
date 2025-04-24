@@ -216,6 +216,7 @@ bool DRAudioStream::ensure_init()
     return false;
 
   HSTREAM l_hstream;
+  HSTREAM decodeStream;
 
   if (m_filename.endsWith("opus", Qt::CaseInsensitive))
   {
