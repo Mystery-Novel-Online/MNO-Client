@@ -12,6 +12,8 @@ public:
 
 public slots:
   void play(QString p_song);
+  void setSpeed(float speed);
+  void setPitch(float speed);
   void stop();
 
 private:

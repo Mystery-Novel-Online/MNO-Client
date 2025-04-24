@@ -31,6 +31,8 @@ public:
   bool is_ignore_suppression() const;
 
 public slots:
+  void set_pitch(float pitch);
+  void set_speed(float speed);
   void set_volume(int32_t p_volume);
   void set_capacity(int32_t p_capacity);
   void set_options(DRAudio::Options p_options);
@@ -39,6 +41,8 @@ public slots:
   void set_ignore_suppression(bool p_enabled);
 
 signals:
+  void pitch_changed(float);
+  void speed_change(float);
   void volume_changed(int32_t);
   void capacity_changed(int32_t);
   void options_changed(DRAudio::Options);
@@ -49,6 +53,8 @@ private:
   friend class DRAudioEnginePrivate;
 
   DRAudio::Family m_family;
+  float m_speed = 1;
+  float m_pitch = 1;
   int32_t m_volume = 0;
   int32_t m_capacity = 0;
   DRAudio::Options m_options;
@@ -61,6 +67,8 @@ private:
   void update_capacity();
   void update_options();
   void update_volume();
+  void update_pitch();
+  void update_speed();
 
 private slots:
   void on_stream_finished();

@@ -47,6 +47,23 @@ void AOMusicPlayer::play(QString p_song)
     {
       qDebug() << "playing" << mCurrentSong->get_file_name();
     }
+    mCurrentSong->set_speed(0.0f);
+  };
+}
+
+void AOMusicPlayer::setSpeed(float speed)
+{
+  if (mCurrentSong->is_playing())
+  {
+    mCurrentSong->set_speed(speed);
+  }
+}
+
+void AOMusicPlayer::setPitch(float pitch)
+{
+  if (mCurrentSong->is_playing())
+  {
+    mCurrentSong->set_pitch(pitch);
   }
 }
 

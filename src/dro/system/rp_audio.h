@@ -7,9 +7,14 @@ namespace RPAudio
 {
   void Initialize();
   void PlayEffect(const char *name);
-  void PlayBlip(const char *name);
   void PlaySystem(const char *name);
   void PlayBGM(const char *name);
+  void SetBGMSpeed(float speed);
+  void SetBGMPitch(float speed);
+
+  void SetBlipSound(const char *sound);
+  void SetBlipGender(const char *gender);
+  void BlipTick();
 };
 
 #endif // RP_AUDIO_H

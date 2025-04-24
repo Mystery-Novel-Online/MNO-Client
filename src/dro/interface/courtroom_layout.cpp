@@ -2,6 +2,8 @@
 
 #include <DRStickerViewer.h>
 #include <aoapplication.h>
+#include <drchatlog.h>
+#include <QString>
 
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
 static QVector<DRStickerViewer *> s_CourtroomStickers = {};
@@ -62,6 +64,15 @@ namespace Layout::Courtroom
   {
     if(!s_CourtroomWidgets.contains(name)) return;
     s_CourtroomWidgets[name]->raise();
+  }
+
+  void AppendToOOC(const char* name, const char* message)
+  {
+    DRChatLog *oocChatlog = nullptr;
+    QWidget *chatlogWidget = s_CourtroomWidgets["server_chatlog"];
+    oocChatlog = dynamic_cast<DRChatLog*>(chatlogWidget);
+    if(oocChatlog == nullptr) return;
+    oocChatlog->append_chatmessage(name, message);
   }
 
 

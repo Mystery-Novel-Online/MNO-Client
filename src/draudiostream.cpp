@@ -5,7 +5,9 @@
 #include <QtMath>
 
 #include <bass/bass.h>
+
 #include <bass/bassopus.h>
+#include <bass/bass_fx.h>
 
 #include "draudioengine.h"
 
@@ -83,6 +85,22 @@ std::optional<DRAudioError> DRAudioStream::set_file_name(QString p_file_name)
   }
   emit file_name_changed(m_filename);
   return std::nullopt;
+}
+
+void DRAudioStream::set_pitch(float pitch)
+{
+  if (!ensure_init())
+    return;
+  m_pitch = pitch;
+  BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_TEMPO_PITCH, pitch);
+}
+
+void DRAudioStream::set_speed(float speed)
+{
+  if (!ensure_init())
+    return;
+  m_speed = speed;
+  BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_TEMPO, speed);
 }
 
 void DRAudioStream::set_volume(float p_volume)
@@ -198,23 +216,44 @@ bool DRAudioStream::ensure_init()
     return false;
 
   HSTREAM l_hstream;
-  if (m_filename.endsWith("opus", Qt::CaseInsensitive))
-    l_hstream = BASS_OPUS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE);
-  else
-    l_hstream = BASS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_PRESCAN);
 
-  if (!l_hstream)
+  if (m_filename.endsWith("opus", Qt::CaseInsensitive))
+  {
+    l_hstream = BASS_OPUS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE);
+    decodeStream = BASS_OPUS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE);
+  }
+  else
+  {
+    l_hstream = BASS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_PRESCAN);
+    decodeStream = BASS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_PRESCAN | BASS_STREAM_DECODE);
+  }
+
+  if (!l_hstream && !decodeStream)
   {
     qWarning() << "error: failed to create audio stream (file:" << m_filename << ")";
     return false;
   }
   m_hstream = l_hstream;
 
-  BASS_ChannelSetSync(l_hstream, BASS_SYNC_END, 0, &end_sync, this);
-  BASS_ChannelSetSync(l_hstream, BASS_SYNC_SLIDE, 0, &fade_sync, this);
+  BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
+  m_hstream = BASS_FX_TempoCreate(decodeStream, BASS_FX_FREESOURCE);
+
+
+  if (!m_hstream)
+  {
+    qWarning() << "error: failed to create tempo stream:" << DRAudio::get_last_bass_error();
+    BASS_StreamFree(decodeStream);
+    return false;
+  }
+
+  BASS_ChannelSetSync(m_hstream, BASS_SYNC_END, 0, &end_sync, this);
+  BASS_ChannelSetSync(m_hstream, BASS_SYNC_SLIDE, 0, &fade_sync, this);
+
   m_init_state = InitFinished;
   init_loop();
   update_volume();
+  update_pitch();
+  update_speed();
   return true;
 }
 
@@ -274,4 +313,14 @@ void DRAudioStream::update_volume()
     BASS_ChannelGetAttribute(m_hstream, BASS_ATTRIB_VOL, &l_volume);
   }
   BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_VOL, l_volume);
+}
+
+void DRAudioStream::update_pitch()
+{
+  BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_TEMPO_PITCH, m_pitch);
+}
+
+void DRAudioStream::update_speed()
+{
+  BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_TEMPO, m_speed);
 }

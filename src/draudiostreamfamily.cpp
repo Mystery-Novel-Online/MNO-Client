@@ -31,6 +31,20 @@ bool DRAudioStreamFamily::is_ignore_suppression() const
   return m_options.testFlag(DRAudio::OIgnoreSuppression);
 }
 
+void DRAudioStreamFamily::set_pitch(float pitch)
+{
+  m_pitch = pitch;
+  update_pitch();
+  Q_EMIT pitch_changed(pitch);
+}
+
+void DRAudioStreamFamily::set_speed(float speed)
+{
+  m_speed = speed;
+  update_speed();
+  Q_EMIT speed_change(speed);
+}
+
 void DRAudioStreamFamily::set_capacity(int32_t p_capacity)
 {
   p_capacity = qMax(0, p_capacity);
@@ -157,6 +171,18 @@ void DRAudioStreamFamily::update_volume()
   const float volume = calculate_volume();
   for (auto &stream : m_stream_list)
     stream->set_volume(volume);
+}
+
+void DRAudioStreamFamily::update_pitch()
+{
+  for (auto &stream : m_stream_list)
+    stream->set_pitch(m_pitch);
+}
+
+void DRAudioStreamFamily::update_speed()
+{
+  for (auto &stream : m_stream_list)
+    stream->set_speed(m_speed);
 }
 
 void DRAudioStreamFamily::on_stream_finished()

@@ -28,11 +28,6 @@ namespace RPAudio
     s_effectsPlayer->play_effect(name);
   }
 
-  void PlayBlip(const char *name)
-  {
-    //s_blipPlayer->blip_tick()name);
-  }
-
   void PlaySystem(const char *name)
   {
     s_systemPlayer->play(name);
@@ -41,6 +36,31 @@ namespace RPAudio
   void PlayBGM(const char *name)
   {
     s_musicPlayer->play(name);
+  }
+
+  void SetBlipGender(const char *gender)
+  {
+    s_blipPlayer->set_blips("sfx-blip" + QString(gender) + ".wav");
+  }
+
+  void BlipTick()
+  {
+    s_blipPlayer->blip_tick();
+  }
+
+  void SetBlipSound(const char *sound)
+  {
+    s_blipPlayer->set_blips(sound);
+  }
+
+  void SetBGMSpeed(float speed)
+  {
+    s_musicPlayer->setSpeed(speed);
+  }
+
+  void SetBGMPitch(float pitch)
+  {
+    s_musicPlayer->setPitch(pitch);
   }
 
 }

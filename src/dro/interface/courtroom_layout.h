@@ -13,6 +13,9 @@ namespace Layout::Courtroom
   void MoveWidget(const char* name, int axisX, int axisY);
   void ToggleWidgetVisibility(const char* name, bool visibleState);
   void RaiseWidget(const char* name);
+
+
+  void AppendToOOC(const char* name, const char* message);
 }
 
 #endif // COURTROOM_LAYOUT_H

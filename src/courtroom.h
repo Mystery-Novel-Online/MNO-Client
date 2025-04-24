@@ -950,7 +950,6 @@ public slots:
 private:
   AOSfxPlayer *m_effects_player = nullptr;
   AOShoutPlayer *m_shouts_player = nullptr;
-  AOBlipPlayer *m_blips_player = nullptr;
   bool is_audio_muted = false;
 
   // QWidget interface

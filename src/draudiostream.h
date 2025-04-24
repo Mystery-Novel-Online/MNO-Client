@@ -51,6 +51,10 @@ public:
 
 public slots:
   std::optional<DRAudioError> set_file_name(QString file);
+
+  void set_pitch(float pitch);
+  void set_speed(float speed);
+
   void set_volume(float volume);
   void set_repeatable(bool);
   void set_loop(quint64 start, quint64 end);
@@ -102,6 +106,8 @@ private:
   bool m_fade_running = false;
   HSTREAM m_hstream = 0;
   float m_volume = 0.0f;
+  float m_pitch = 0.0f;
+  float m_speed = 0.0f;
   bool m_repeatable = false;
   QWORD m_loop_start = 0;
   QWORD m_loop_start_pos = 0;
@@ -117,6 +123,8 @@ private:
 
 private slots:
   void update_volume();
+  void update_pitch();
+  void update_speed();
 
 signals:
   void device_error(QPrivateSignal);

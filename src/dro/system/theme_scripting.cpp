@@ -27,9 +27,28 @@ namespace ThemeScripting
     {
 
       sol::table audioTable = s_themeScript.create_named_table("Audio");
-      audioTable.set_function("PlaySFX", &RPAudio::PlayEffect);
-      audioTable.set_function("PlaySystem", &RPAudio::PlaySystem);
-      audioTable.set_function("PlayBGM", &RPAudio::PlayBGM);
+
+      sol::table systemAudioTable = s_themeScript.create_table();
+      systemAudioTable.set_function("Play", &RPAudio::PlaySystem);
+
+      sol::table sfxTable = s_themeScript.create_table();
+      sfxTable.set_function("Play", &RPAudio::PlayEffect);
+
+      sol::table bgmTable = s_themeScript.create_table();
+      bgmTable.set_function("Play", &RPAudio::PlayBGM);
+      bgmTable.set_function("SetSpeed", &RPAudio::SetBGMSpeed);
+      bgmTable.set_function("SetPitch", &RPAudio::SetBGMPitch);
+
+      sol::table blipTable = s_themeScript.create_table();
+      blipTable.set_function("Tick", &RPAudio::BlipTick);
+      blipTable.set_function("SetGender", &RPAudio::SetBlipGender);
+      blipTable.set_function("SetSound", &RPAudio::SetBlipSound);
+
+      audioTable.set("BGM", bgmTable);
+      audioTable.set("Blip", blipTable);
+      audioTable.set("SFX", sfxTable);
+      audioTable.set("System", systemAudioTable);
+
 
       sol::table widgetTable = s_themeScript.create_named_table("Widget");
       widgetTable.set_function("Move", &Layout::Courtroom::MoveWidget);
@@ -50,7 +69,11 @@ namespace ThemeScripting
       sol::table tabTable = s_themeScript.create_named_table("Tabs");
       tabTable.set_function("Change", &LuaFunctions::ChangeTab);
 
-      s_themeScript["alert"] = &LuaFunctions::AlertUser;
+      sol::table chatlogTable = s_themeScript.create_named_table("Chatlog");
+      chatlogTable.set_function("AppendOOC", &Layout::Courtroom::AppendToOOC);
+
+      sol::table systemTable = s_themeScript.create_named_table("System");
+      systemTable.set_function("Alert", &LuaFunctions::AlertUser);
 
       s_themeScript.safe_script_file(filePath.toStdString());
     }
@@ -66,22 +89,6 @@ namespace LuaBridge
     sol::function eventCall = s_themeScript[functionName];
     if(eventCall.valid()) s_registeredFunctions[functionName] = eventCall;
     return s_registeredFunctions[functionName];
-  }
-
-  bool QuickCall(const char *eventName)
-  {
-    sol::function eventCall = s_themeScript[eventName];
-    if (!eventCall.valid()) return false;
-    eventCall();
-    return true;
-  }
-
-  bool QuickCall(const char *eventName, const char *argument)
-  {
-    sol::function eventCall = s_themeScript[eventName];
-    if (!eventCall.valid()) return false;
-    eventCall(argument);
-    return true;
   }
 
   bool OnTabChange(std::string name, std::string group)
@@ -104,17 +111,10 @@ namespace LuaBridge
     return LuaEventCall("OnSongChange", path, name, submitter);
   }
 
-
-
 }
 
 namespace LuaFunctions
 {
-  void PlaySfx(const char* effectName)
-  {
-    RPAudio::PlayEffect(effectName);
-  }
-
   void ChangeTab(const char *group, const char *tabName)
   {
     ThemeManager::get().toggleTab(tabName, group);

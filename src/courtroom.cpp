@@ -731,9 +731,13 @@ void Courtroom::save_textlog(QString p_text)
 
 void Courtroom::append_server_chatmessage(QString p_name, QString p_message)
 {
-  ui_ooc_chatlog->append_chatmessage(p_name, p_message);
-  if (ao_config->log_is_recording_enabled())
-    save_textlog("(OOC)" + p_name + ": " + p_message);
+  if(!LuaBridge::LuaEventCall("OOCMessageEvent", p_name.toStdString(), p_message.toStdString()))
+  {
+    ui_ooc_chatlog->append_chatmessage(p_name, p_message);
+    if (ao_config->log_is_recording_enabled())
+      save_textlog("(OOC)" + p_name + ": " + p_message);
+    LuaBridge::LuaEventCall("OnOOCMessage", p_name.toStdString(), p_message.toStdString());
+  }
 }
 
 void Courtroom::ignore_next_showname()
@@ -1821,7 +1825,7 @@ void Courtroom::setup_chat()
     f_gender = ao_app->get_gender(m_chatmessage[CMChrName]);
   }
 
-  m_blips_player->set_blips("sfx-blip" + f_gender + ".wav");
+  RPAudio::SetBlipGender(f_gender.toUtf8());
 
   // means text is currently ticking
   text_state = 1;
@@ -1945,6 +1949,7 @@ void Courtroom::next_chat_letter()
     vp_message_format.setForeground(text_color);
 
     ui_vp_message->textCursor().insertText(f_character, vp_message_format);
+    LuaBridge::LuaEventCall("OnMessageTick", QString(f_character).toStdString());
   }
   else if (m_chatbox_message_enable_highlighting)
   {
@@ -1999,13 +2004,17 @@ void Courtroom::next_chat_letter()
     }
 
     if (render_character)
+    {
       ui_vp_message->textCursor().insertText(f_character, vp_message_format);
+       LuaBridge::LuaEventCall("OnMessageTick", QString(f_character).toStdString());
+    }
 
     m_message_color_name = m_future_string_color;
   }
   else
   {
     ui_vp_message->textCursor().insertText(f_character, vp_message_format);
+    LuaBridge::LuaEventCall("OnMessageTick", QString(f_character).toStdString());
   }
 
   QScrollBar *scroll = ui_vp_message->verticalScrollBar();
@@ -2016,9 +2025,11 @@ void Courtroom::next_chat_letter()
     if (m_blip_step % ao_config->blip_rate() == 0)
     {
       m_blip_step = 0;
-
-      // play blip
-      m_blips_player->blip_tick();
+      if(!LuaBridge::LuaEventCall("BlipTickEvent"))
+      {
+        RPAudio::BlipTick();
+        LuaBridge::LuaEventCall("OnBlipTick");
+      }
     }
 
     ++m_blip_step;

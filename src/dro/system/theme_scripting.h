@@ -34,7 +34,6 @@ namespace LuaBridge
 
 namespace LuaFunctions
 {
-  void PlaySfx(const char* effectName);
   void ChangeTab(const char* group, const char* tabName);
   void CustomChoiceDialog(const char* text, const char* event);
   void SetNotificationText(const char* text, bool show);
