@@ -3,13 +3,11 @@
 
 #include <QString>
 
-
-class RPAudio
+namespace RPAudio
 {
-public:
-  static void Initialize();
-  static void PlayEffect(const QString &name);
-  static void PlayBlip();
+  void Initialize();
+  void PlayEffect(const QString &name);
+  void PlayBlip();
 };
 
 #endif // RP_AUDIO_H

@@ -94,7 +94,7 @@ void RPNotifyMenu::NotifyAccept()
   if(mType == NotificationType::PairRequest)
   {
     AOApplication::getInstance()->send_server_packet(DRPacket("PAIR", {QString::number(mSender), mKey}));
-    LuaBridge::QuickCall("onPairRequestAccepted");
+    LuaBridge::QuickCall("OnPairRequestAccepted");
   }
   else if(mType == NotificationType::LuaEvent)
   {
@@ -113,7 +113,7 @@ void RPNotifyMenu::NotifyDecline()
 
   if(mType == NotificationType::PairRequest)
   {
-    LuaBridge::QuickCall("onPairRequestDeclined");
+    LuaBridge::QuickCall("OnPairRequestDeclined");
   }
   else if(mType == NotificationType::LuaEvent)
   {

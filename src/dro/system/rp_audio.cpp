@@ -7,13 +7,23 @@
 static AOMusicPlayer *s_musicPlayer;
 static AOSfxPlayer *s_effectsPlayer;
 
-void RPAudio::Initialize()
+namespace RPAudio
 {
-  s_musicPlayer = new AOMusicPlayer(AOApplication::getInstance());
-  s_effectsPlayer = new AOSfxPlayer(AOApplication::getInstance());
-}
 
-void RPAudio::PlayEffect(const QString &effectName)
-{
-  s_effectsPlayer->play_effect(effectName);
+  void PlayBlip()
+  {
+
+  }
+
+  void Initialize()
+  {
+    s_musicPlayer = new AOMusicPlayer(AOApplication::getInstance());
+    s_effectsPlayer = new AOSfxPlayer(AOApplication::getInstance());
+  }
+
+  void PlayEffect(const QString &effectName)
+  {
+    s_effectsPlayer->play_effect(effectName);
+  }
+
 }

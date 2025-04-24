@@ -25,23 +25,35 @@ namespace ThemeScripting
     QString filePath = themePath + "/script.lua";
     if(FS::Checks::FileExists(filePath))
     {
-      s_themeScript["play_sfx"] = &LuaFunctions::PlaySfx;
-      s_themeScript["change_tab"] = &LuaFunctions::ChangeTab;
-      s_themeScript["move_widget"] = &Layout::Courtroom::MoveWidget;
-      s_themeScript["raise_widget"] = &Layout::Courtroom::RaiseWidget;
-      s_themeScript["create_sticker"] = &Layout::Courtroom::CreateSticker;
-      s_themeScript["alert"] = &LuaFunctions::AlertUser;
-      s_themeScript["toggle_widget_visibility"] = &Layout::Courtroom::ToggleWidgetVisibility;
-      s_themeScript["set_choice_text"] = &LuaFunctions::SetNotificationText;
-      s_themeScript["choice_dialog"] = &LuaFunctions::CustomChoiceDialog;
 
-      //Character Functions
-      s_themeScript["character_exists"] = &FS::Checks::CharacterExists;
-      s_themeScript["switch_character"] = &LuaFunctions::SwitchCharacter;
+      sol::table audioTable = s_themeScript.create_named_table("Audio");
+      audioTable.set_function("PlaySFX", &LuaFunctions::PlaySfx);
+
+      sol::table widgetTable = s_themeScript.create_named_table("Widget");
+      widgetTable.set_function("Move", &Layout::Courtroom::MoveWidget);
+      widgetTable.set_function("Raise", &Layout::Courtroom::RaiseWidget);
+      widgetTable.set_function("SetVisible", &Layout::Courtroom::ToggleWidgetVisibility);
+
+      sol::table dialogTable = s_themeScript.create_named_table("ChoiceDialog");
+      dialogTable.set_function("TriggerCustom", &LuaFunctions::CustomChoiceDialog);
+      dialogTable.set_function("SetText", &LuaFunctions::SetNotificationText);
+
+      sol::table characterTable = s_themeScript.create_named_table("Character");
+      characterTable.set_function("Exists", &FS::Checks::CharacterExists);
+      characterTable.set_function("Switch", &LuaFunctions::SwitchCharacter);
+
+      sol::table stickerTable = s_themeScript.create_named_table("Sticker");
+      stickerTable.set_function("Create", &Layout::Courtroom::CreateSticker);
+
+      sol::table tabTable = s_themeScript.create_named_table("Tabs");
+      tabTable.set_function("Change", &LuaFunctions::ChangeTab);
+
+      s_themeScript["alert"] = &LuaFunctions::AlertUser;
 
       s_themeScript.safe_script_file(filePath.toStdString());
-      s_luaOnTabChange = s_themeScript["onTabChanged"];
-      s_luaOnCharacterMessage = s_themeScript["onCharacterMessage"];
+
+      s_luaOnTabChange = s_themeScript["OnTabChanged"];
+      s_luaOnCharacterMessage = s_themeScript["OnCharacterMessage"];
     }
   }
 }
@@ -49,7 +61,7 @@ namespace ThemeScripting
 bool LuaBridge::CustomCommand(QString commandName)
 {
   if(commandName.isEmpty()) return false;
-  QString CommandFunction = "onCommand_" + commandName.toLower();
+  QString CommandFunction = "OnCommand_" + commandName.toLower();
   sol::function customCommandFunction = s_themeScript[CommandFunction.toStdString()];
   if (!customCommandFunction.valid()) return false;
   customCommandFunction();
