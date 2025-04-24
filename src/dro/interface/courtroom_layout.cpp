@@ -4,6 +4,7 @@
 #include <aoapplication.h>
 #include <drchatlog.h>
 #include <QString>
+#include "modules/theme/thememanager.h"
 
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
 static QVector<DRStickerViewer *> s_CourtroomStickers = {};
@@ -19,7 +20,10 @@ namespace Layout::Courtroom
   {
     if(!s_CourtroomWidgets.contains(name)) return;
     QWidget *targetWidget = s_CourtroomWidgets[name];
-    targetWidget->move(axisX, axisY);
+    float resizeFactor = ThemeManager::get().getResize();
+    int scaledX = static_cast<int>(axisX * resizeFactor);
+    int scaledY = static_cast<int>(axisY * resizeFactor);
+    targetWidget->move(scaledX, scaledY);
   }
 
   void CreateSticker(const char *name, const char *image, int axisX, int axisY, int sizeX, int sizeY)
@@ -42,9 +46,15 @@ namespace Layout::Courtroom
       if(targetSticker == nullptr) return;
 
     }
+    float resizeFactor = ThemeManager::get().getResize();
 
-    targetSticker->resize(sizeX, sizeY);
-    targetSticker->move(axisX, axisY);
+    int l_scaledWidth = static_cast<int>(sizeX * resizeFactor);
+    int l_scaledHeight = static_cast<int>(sizeY * resizeFactor);
+    int l_scaledX = static_cast<int>(axisX * resizeFactor);
+    int l_scaledY = static_cast<int>(axisY * resizeFactor);
+
+    targetSticker->resize(l_scaledWidth, l_scaledHeight);
+    targetSticker->move(l_scaledX, l_scaledY);
     targetSticker->set_theme_image(image);
     targetSticker->start();
   }
