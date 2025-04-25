@@ -1406,7 +1406,11 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
   const QString l_chatbox_name = ao_app->get_chat(m_chatmessage[CMChrName]);
   const bool l_is_self = (ao_config->log_display_self_highlight_enabled() && m_speaker_chr_id == m_chr_id);
-  ui_vp_chatbox->set_chatbox_image(l_chatbox_name, l_is_self, chatmessage_is_empty, offsetTextbox);
+
+  if(!LuaBridge::LuaEventCall("ChatboxImageEvent", l_is_self, chatmessage_is_empty, offsetTextbox.toStdString()))
+  {
+    ui_vp_chatbox->set_chatbox_image(l_chatbox_name, l_is_self, chatmessage_is_empty, offsetTextbox);
+  }
 
   if (!m_msg_is_first_person)
   {
@@ -2139,6 +2143,7 @@ void Courtroom::next_chat_letter()
 
 void Courtroom::post_chatmessage()
 {
+  LuaBridge::LuaEventCall("OnMessageCompleted");
   m_tick_timer->stop();
   if (m_game_state != GameState::Preloading)
   {
@@ -3286,6 +3291,7 @@ void Courtroom::on_player_list_right_clicked()
 
 void Courtroom::on_area_look_clicked()
 {
+  LuaBridge::LuaEventCall("OnAreaLook", m_current_reportcard_reason);
   if(m_current_reportcard_reason == ReportCardReason::PendingLook)
   {
     m_current_reportcard_reason = ReportCardReason::None;
