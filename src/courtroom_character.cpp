@@ -223,6 +223,21 @@ void Courtroom::refresh_character_content_url()
   ao_app->send_server_packet(DRPacket("FS", {m_character_content_url}));
 }
 
+void Courtroom::update_character_content_url(QString url)
+{
+  QString contentFilePath = ao_app->get_character_path(get_character_ini(), "CONTENT.txt");
+
+  QFile contentFile(contentFilePath);
+  if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))
+  {
+    QTextStream out(&contentFile);
+    out << url;
+    contentFile.close();
+  }
+  refresh_character_content_url();
+}
+
+
 void Courtroom::on_iniswap_dropdown_changed(int p_index)
 {
   ao_config->set_character_ini(get_character(),

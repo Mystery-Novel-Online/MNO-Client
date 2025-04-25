@@ -323,7 +323,11 @@ void Courtroom::create_widgets()
   ui_wtce_down = setupButtonWidget("wtce_down", "wtcedown.png", "");
   ui_wtce_down->setProperty("cycle_id", 4);
 
+  p_CharacterContextMenu = new CharMenu(this);
   ui_change_character = setupButtonWidget("change_character", "changecharacter.png", "Change Character");
+  ui_change_character->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(ui_change_character, &QWidget::customContextMenuRequested, p_CharacterContextMenu, &CharMenu::OnMenuRequested);
+
   ui_call_mod = setupButtonWidget("call_mod", "callmod.png", LocalizationManager::get().getLocalizationText("PING_MODS"));
   ui_switch_area_music = setupButtonWidget("switch_area_music", "switch_area_music.png", "A/M");
 

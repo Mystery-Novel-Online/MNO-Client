@@ -5,6 +5,7 @@
 #include "drgraphicscene.h"
 #include "dro/interface/menus/area_menu.h"
 #include "dro/interface/menus/bgm_menu.h"
+#include "dro/interface/menus/char_menu.h"
 #include "dro/interface/widgets/bgm_filter.h"
 #include "dro/interface/widgets/screenshot_button.h"
 #include "drposition.h"
@@ -197,6 +198,7 @@ public:
   void update_default_iniswap_item();
   void select_base_character_iniswap();
   void refresh_character_content_url();
+  void update_character_content_url(QString url);
   void construct_playerlist_layout();
   void construct_emotes();
   void construct_emote_page_layout();
@@ -616,7 +618,9 @@ private:
   QVector<bool> wtce_enabled;
   QVector<bool> free_blocks_enabled;
 
+  CharMenu *p_CharacterContextMenu;
   AOButton *ui_change_character = nullptr;
+
   AOButton *ui_call_mod = nullptr;
   AOButton *ui_switch_area_music = nullptr;
 
