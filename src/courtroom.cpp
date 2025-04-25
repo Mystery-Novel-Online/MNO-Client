@@ -325,9 +325,18 @@ void Courtroom::enter_courtroom(int p_cid)
 
   const QString l_chr_name = get_character_ini();
 
-  CharacterManager::get().SwitchCharacter(l_chr_name);
-
-  ActorData *l_selectedCharacter = CharacterManager::get().p_SelectedCharacter;
+  ActorData *actor = CharacterManager::get().SwitchCharacter(l_chr_name);
+  if(!actor->GetScalingPresets().empty())
+  {
+    ActorScalingPreset preset = actor->GetScalingPresets().at(0);
+    ui_slider_scale->setValue(preset.Scale);
+    ui_slider_vertical_axis->setValue(preset.VerticalAlign);
+  }
+  else
+  {
+    ui_slider_scale->setValue(1000);
+    ui_slider_vertical_axis->setValue(0);
+  }
 
   if (is_spectating())
   {
@@ -336,7 +345,7 @@ void Courtroom::enter_courtroom(int p_cid)
   }
   else
   {
-    const QString l_showname = l_selectedCharacter->GetShowname();
+    const QString l_showname = actor->GetShowname();
     const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
     ao_app->get_discord()->set_character_name(l_final_showname);
     ao_config->set_showname_placeholder(l_final_showname);
@@ -348,7 +357,7 @@ void Courtroom::enter_courtroom(int p_cid)
   }
   const bool l_changed_chr = l_chr_name != l_prev_chr_name;
   if (l_changed_chr)
-    set_character_position(l_selectedCharacter->GetSide());
+    set_character_position(actor->GetSide());
   select_base_character_iniswap();
   refresh_character_content_url();
 
@@ -362,7 +371,7 @@ void Courtroom::enter_courtroom(int p_cid)
   ui_emote_dropdown->setDisabled(is_spectating());
   ui_iniswap_dropdown->setDisabled(is_spectating());
   ui_ic_chat_message_field->setDisabled(is_spectating());
-  set_character_position(l_selectedCharacter->GetSide());
+  set_character_position(actor->GetSide());
 
   // restore line field focus
   l_current_field->setFocus();
@@ -788,12 +797,8 @@ void Courtroom::OnPlayerOffsetsChanged()
     mk2::SpritePlayer::ScalingMode targetScaling = mk2::SpritePlayer::AutomaticScaling;
     if(m_SpeakerActor != nullptr)
     {
-      OutfitReader* outfit = m_SpeakerActor->GetEmoteOutfit(m_chatmessage[CMEmote]);
-      if(outfit != nullptr)
-      {
-        QString scalingMode = outfit->GetScalingMode();
-        if(scalingMode == "width_smooth") targetScaling = mk2::SpritePlayer::WidthSmoothScaling;
-      }
+      QString scalingMode = m_SpeakerActor->GetScalingMode();
+      if(scalingMode == "width_smooth") targetScaling = mk2::SpritePlayer::WidthSmoothScaling;
     }
 
     if (ui_vp_player_char->is_running())
@@ -1009,14 +1014,11 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
 
 
   m_ActorScaling = mk2::SpritePlayer::AutomaticScaling;
+
   if(m_SpeakerActor != nullptr)
   {
-    OutfitReader* outfit = m_SpeakerActor->GetEmoteOutfit(p_chatmessage[CMEmote]);
-    if(outfit != nullptr)
-    {
-      QString scalingMode = outfit->GetScalingMode();
-      if(scalingMode == "width_smooth") m_ActorScaling = mk2::SpritePlayer::WidthSmoothScaling;
-    }
+    QString scalingMode = m_SpeakerActor->GetScalingMode();
+    if(scalingMode == "width_smooth") m_ActorScaling = mk2::SpritePlayer::WidthSmoothScaling;
   }
 
 

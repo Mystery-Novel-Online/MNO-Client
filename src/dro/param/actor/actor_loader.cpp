@@ -75,7 +75,39 @@ void ActorDataReader::loadActor(QString t_folder)
   SetShowname(getStringValue("showname"));
   SetGender(getStringValue("gender"));
   SetSide(getStringValue("side"));
+  if(isValueExists("scaling_mode"))
+  {
+    QString scalingMode = getStringValue("scaling_mode");
+    static const QStringList allowedScalings = {"automatic", "width_smooth"};
+    if(allowedScalings.contains(scalingMode)) SetScalingMode(scalingMode);
+  }
+
+
+
   mOutfitsOrder = getStringArrayValue("outfit_order");
+
+
+  QJsonArray presetsArray = getArrayValue("scaling_presets");
+
+  QVector<ActorScalingPreset> presets = {};
+  for(QJsonValueRef presetParam : presetsArray)
+  {
+    SetTargetObject(presetParam.toObject());
+    if(isValueExists("name"))
+    {
+      ActorScalingPreset preset;
+      preset.name = getStringValue("name");
+      preset.VerticalAlign = getIntValue("vertical");
+      if(isValueExists("scale"))
+      {
+        preset.Scale = getIntValue("scale");
+      }
+
+      presets.append(preset);
+    }
+  }
+  SetScalingPresets(presets);
+
 
   loadOutfits();
 }
@@ -399,10 +431,6 @@ void OutfitReader::ReadSettings()
 
   m_RuleDesk = isValueExists("show_desk") ? getBoolValue("show_desk") : true;
 
-  QString scalingMode = getStringValue("scaling_mode");
-  static const QStringList allowedScalings = {"automatic", "width_smooth"};
-
-  if(allowedScalings.contains(scalingMode)) m_ScalingMode = scalingMode;
 
 }
 

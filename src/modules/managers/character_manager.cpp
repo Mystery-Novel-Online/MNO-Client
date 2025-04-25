@@ -31,7 +31,7 @@ ActorData *CharacterManager::ReadCharacter(QString t_folder)
   return l_returnData;
 }
 
-void CharacterManager::SwitchCharacter(QString t_folder)
+ActorData *CharacterManager::SwitchCharacter(QString t_folder)
 {
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");
 
@@ -45,13 +45,13 @@ void CharacterManager::SwitchCharacter(QString t_folder)
     QStringList l_charaOutfits = p_SelectedCharacter->getOutfitNames();
     l_OutfitNames.append(l_charaOutfits);
     setOutfitList(l_OutfitNames);
-    return;
+    return p_SelectedCharacter;
   }
 
   p_SelectedCharacter = new LegacyActorReader();
   p_SelectedCharacter->loadActor(t_folder);
   setOutfitList(l_OutfitNames);
-  return;
+  return p_SelectedCharacter;
 }
 
 void CharacterManager::setOutfitList(QStringList t_outfits)

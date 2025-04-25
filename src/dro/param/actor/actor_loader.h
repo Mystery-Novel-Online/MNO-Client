@@ -4,6 +4,13 @@
 #include <datatypes.h>
 #include <modules/json/json_reader.h>
 
+struct ActorScalingPreset
+{
+  QString name = "N/A";
+  int VerticalAlign = 0;
+  int Scale = 1000;
+};
+
 class OutfitReader : public JSONReader
 {
 public:
@@ -12,8 +19,6 @@ public:
   void ReadSettings();
   void ReadEmotes();
 
-  QString GetScalingMode() {return m_ScalingMode;};
-
   QVector<DREmote> mEmotes = {};
   QMap<QString, QRect> m_OverlayRectangles = {};
 
@@ -21,7 +26,6 @@ private:
   QString mOutfitPath = "";
   QString mOutfitName = "";
   QString mCharacterName = "";
-  QString m_ScalingMode = "automatic";
 
   bool m_RuleDesk = true;
 
@@ -48,6 +52,13 @@ public:
   virtual QString GetOutfit() { return mOutfit; };
   virtual void SetOutfit(QString outfit) {mOutfit = outfit;};
 
+  virtual void SetScalingMode(QString mode) {m_ScalingMode = mode;};
+  virtual QString GetScalingMode() {return m_ScalingMode;};
+
+
+  virtual void SetScalingPresets(QVector<ActorScalingPreset> presets) {mPresets = presets;};
+  virtual QVector<ActorScalingPreset> GetScalingPresets() { return mPresets; };
+
   virtual QStringList getOutfitNames();
   virtual QVector<DREmote> getEmotes();
 
@@ -59,10 +70,12 @@ public:
 
   QString mFolder = "Makoto Naegi (DRO)";
 private:
+  QVector<ActorScalingPreset> mPresets = {};
   QString mOutfit = "default";
   QString mShowname = "Makoto Naegi";
   QString mGender = "male";
   QString mSide = "wit";
+  QString m_ScalingMode = "automatic";
 };
 
 class ActorDataReader : public ActorData, public JSONReader
