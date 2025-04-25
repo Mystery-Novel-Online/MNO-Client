@@ -959,12 +959,12 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   const int l_message_chr_id = p_chatmessage[CMChrId].toInt();
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
 
-  ActorData *l_speakerData = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
+  m_SpeakerActor = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
 
   QString l_showname = p_chatmessage[CMShowName];
   if (l_showname.isEmpty() && !l_system_speaking)
   {
-    l_showname = l_speakerData->GetShowname();
+    l_showname = m_SpeakerActor->GetShowname();
   }
 
   const QString l_message = QString(p_chatmessage[CMMessage]).remove(QRegularExpression("(?<!\\\\)(\\{|\\})")).replace(QRegularExpression("\\\\(\\{|\\})"), "\\1");
@@ -1151,12 +1151,10 @@ void Courtroom::handle_chatmessage()
   // Having an empty showname for system is actually what we expect.
 
 
-  ActorData *l_speakerData = CharacterManager::get().ReadCharacter(m_chatmessage[CMChrName]);
-
   QString f_showname = m_chatmessage[CMShowName];
   if (f_showname.isEmpty() && !is_system_speaking)
   {
-    f_showname = l_speakerData->GetShowname();
+    f_showname = m_SpeakerActor->GetShowname();
   }
   m_speaker_showname = f_showname;
 
@@ -1409,11 +1407,22 @@ void Courtroom::handle_chatmessage_3()
     ui_vp_player_pair->hide();
   }
 
+  mk2::SpritePlayer::ScalingMode targetScaling = mk2::SpritePlayer::AutomaticScaling;
+  if(m_SpeakerActor != nullptr)
+  {
+    OutfitReader* outfit = m_SpeakerActor->GetEmoteOutfit(m_chatmessage[CMEmote]);
+    if(outfit != nullptr)
+    {
+      QString scalingMode = outfit->GetScalingMode();
+      if(scalingMode == "width_smooth") targetScaling = mk2::SpritePlayer::WidthSmoothScaling;
+    }
+  }
 
   // Path may be empty if
   // 1. Chat message was empty
   // 2. Enable showname images was false
   // 3. No valid showname image was found
+
   ui_vp_player_char->hide();
   if (ui_vp_player_char->is_running())
   {
@@ -1425,7 +1434,7 @@ void Courtroom::handle_chatmessage_3()
     if (!m_hide_character && !m_msg_is_first_person)
     {
       swap_viewport_reader(ui_vp_player_char, ViewportCharacterTalk);
-      ui_vp_player_char->start();
+      ui_vp_player_char->start(targetScaling);
     }
     anim_state = 2;
     break;
@@ -1436,7 +1445,7 @@ void Courtroom::handle_chatmessage_3()
     if (!m_hide_character && !m_msg_is_first_person)
     {
       swap_viewport_reader(ui_vp_player_char, ViewportCharacterIdle);
-      ui_vp_player_char->start();
+      ui_vp_player_char->start(targetScaling);
     }
     anim_state = 3;
     break;

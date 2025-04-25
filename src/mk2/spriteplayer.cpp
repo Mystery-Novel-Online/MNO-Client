@@ -176,12 +176,13 @@ bool SpritePlayer::is_running() const
   return m_running;
 }
 
-void SpritePlayer::start()
+void SpritePlayer::start(ScalingMode scaling)
 {
+  m_manualScalingMode = scaling;
   m_running = true;
   m_elapsed_timer.start();
   emit started();
-  resolve_scaling_mode();
+  resolve_scaling_mode(m_manualScalingMode);
   fetch_next_frame();
 }
 
@@ -198,8 +199,9 @@ void SpritePlayer::stop()
   m_frame_number = 0;
 }
 
-void SpritePlayer::start(int p_start_frame)
+void SpritePlayer::start(int p_start_frame, ScalingMode scaling)
 {
+  m_manualScalingMode = scaling;
   if(m_frame_count > p_start_frame)
   {
     m_frame_number = p_start_frame;
@@ -211,7 +213,7 @@ void SpritePlayer::start(int p_start_frame)
   m_running = true;
   m_elapsed_timer.start();
   emit started();
-  resolve_scaling_mode();
+  resolve_scaling_mode(m_manualScalingMode);
   fetch_next_frame();
 }
 
@@ -226,8 +228,17 @@ int SpritePlayer::get_frame()
   return m_frame_number;
 }
 
-void SpritePlayer::resolve_scaling_mode()
+void SpritePlayer::resolve_scaling_mode(ScalingMode scalingMode)
 {
+  if(scalingMode != AutomaticScaling)
+  {
+    if(scalingMode == WidthSmoothScaling)
+    {
+      m_transform = Qt::SmoothTransformation;
+      m_resolved_scaling_mode = WidthScaling;
+      return;
+    }
+  }
   m_resolved_scaling_mode = m_scaling_mode;
 
   const QSize l_image_size = m_reader->get_sprite_size();

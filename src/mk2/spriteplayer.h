@@ -42,6 +42,8 @@ public:
     HeightScaling,
     StretchScaling,
     DynamicScaling,
+    WidthSmoothScaling,
+    AutomaticScaling
   };
   Q_ENUM(ScalingMode)
 
@@ -84,11 +86,11 @@ public slots:
 
   void set_reader(SpriteReader::ptr reader);
 
-  void start();
+  void start(ScalingMode scaling = ScalingMode::AutomaticScaling);
   void restart();
   void stop();
 
-  void start(int p_start_frame);
+  void start(int p_start_frame, ScalingMode scaling = ScalingMode::AutomaticScaling);
   void restart(int p_start_frame);
 signals:
   void current_frame_changed();
@@ -103,6 +105,7 @@ signals:
   void finished();
 
 private:
+  ScalingMode m_manualScalingMode = AutomaticScaling;
   SpriteReader::ptr m_reader;
   SpriteFrame m_current_frame;
   QImage m_scaled_current_frame;
@@ -119,7 +122,7 @@ private:
   QTimer m_frame_timer;
   QTimer m_repaint_timer;
 
-  void resolve_scaling_mode();
+  void resolve_scaling_mode(ScalingMode scalingMode = AutomaticScaling);
 
 private slots:
   void fetch_next_frame();

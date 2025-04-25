@@ -19,7 +19,6 @@ namespace LuaBridge
   template<typename... Args>
   inline bool LuaEventCall(const char* functionName, Args&&... args)
   {
-    qDebug() << "LUA Function Called: " << functionName ;
     sol::function function = GetFunction(functionName);
     if(!function.valid()) return false;
     function(std::forward<Args>(args)...);

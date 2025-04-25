@@ -108,9 +108,9 @@ SpritePlayer *GraphicsSpriteItem::get_player() const
   return m_player.get();
 }
 
-void GraphicsSpriteItem::start()
+void GraphicsSpriteItem::start(ScalingMode scaling)
 {
-  m_player->start();
+  m_player->start(scaling);
 }
 
 void GraphicsSpriteItem::restart()

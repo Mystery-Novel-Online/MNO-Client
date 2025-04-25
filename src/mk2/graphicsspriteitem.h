@@ -74,7 +74,7 @@ public slots:
 
   void set_reader(SpriteReader::ptr reader);
 
-  void start();
+  void start(ScalingMode scaling = ScalingMode::AutomaticScaling);
   void restart();
   void setVerticalOffset(int t_offset);
   void stop();

@@ -4,6 +4,29 @@
 #include <datatypes.h>
 #include <modules/json/json_reader.h>
 
+class OutfitReader : public JSONReader
+{
+public:
+  OutfitReader(QString t_character, QString t_outfit);
+
+  void ReadSettings();
+  void ReadEmotes();
+
+  QString GetScalingMode() {return m_ScalingMode;};
+
+  QVector<DREmote> mEmotes = {};
+  QMap<QString, QRect> m_OverlayRectangles = {};
+
+private:
+  QString mOutfitPath = "";
+  QString mOutfitName = "";
+  QString mCharacterName = "";
+  QString m_ScalingMode = "automatic";
+
+  bool m_RuleDesk = true;
+
+};
+
 class ActorData
 {
 public:
@@ -32,6 +55,7 @@ public:
   virtual void switchOutfit(QString t_outfit);
 
   virtual QMap<QString, QRect> GetEmoteOverlays(QString outfit, QString emoteName) = 0;
+  virtual OutfitReader* GetEmoteOutfit(QString emoteName) = 0;
 
   QString mFolder = "Makoto Naegi (DRO)";
 private:
@@ -39,26 +63,6 @@ private:
   QString mShowname = "Makoto Naegi";
   QString mGender = "male";
   QString mSide = "wit";
-};
-
-class OutfitReader : public JSONReader
-{
-public:
-  OutfitReader(QString t_character, QString t_outfit);
-
-  void ReadSettings();
-  void ReadEmotes();
-
-  QVector<DREmote> mEmotes = {};
-  QMap<QString, QRect> m_OverlayRectangles = {};
-
-private:
-  QString mOutfitPath = "";
-  QString mOutfitName = "";
-  QString mCharacterName = "";
-
-  bool m_RuleDesk = true;
-
 };
 
 class ActorDataReader : public ActorData, public JSONReader
@@ -74,6 +78,7 @@ public:
 
   virtual QVector<DREmote> getEmotes() override;
   virtual QMap<QString, QRect> GetEmoteOverlays(QString outfit, QString emoteName) override;
+  virtual OutfitReader* GetEmoteOutfit(QString emoteName) override;
 
 private:
   void loadOutfits();
@@ -102,6 +107,7 @@ public:
   virtual QString getEmoteButton(DREmote t_emote, bool t_enabled) override;
   virtual QString getSelectedImage(DREmote t_emote) override;
   virtual QMap<QString, QRect> GetEmoteOverlays(QString outfit, QString emoteName) override { return {}; };
+  virtual OutfitReader* GetEmoteOutfit(QString emoteName) override { return nullptr; };
 
 };
 

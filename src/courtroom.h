@@ -397,6 +397,10 @@ private:
   // ticking done
   int text_state = 2;
 
+  //Temporary speaker management, will be put into its own class at some point.
+  ActorData *m_SpeakerActor = nullptr;
+  ActorData *m_PairActor = nullptr;
+
   // if enabled, disable showing our own sprites when we talk in ic
   bool m_msg_is_first_person = false;
 

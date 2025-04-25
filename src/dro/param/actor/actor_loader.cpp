@@ -200,6 +200,17 @@ QMap<QString, QRect> ActorDataReader::GetEmoteOverlays(QString outfit, QString e
   return {};
 }
 
+OutfitReader *ActorDataReader::GetEmoteOutfit(QString emoteName)
+{
+  if(!emoteName.contains("outfits/")) return nullptr;
+  QStringList parts = emoteName.split('/');
+  if (parts.size() < 3) return nullptr;
+  QString outfitName = parts[1];
+  if(mOutfits.contains(outfitName)) return mOutfits[outfitName];
+  return nullptr;
+}
+
+
 
 void LegacyActorReader::loadActor(QString folder)
 {
@@ -387,6 +398,12 @@ void OutfitReader::ReadSettings()
   SetTargetObject("default_rules");
 
   m_RuleDesk = isValueExists("show_desk") ? getBoolValue("show_desk") : true;
+
+  QString scalingMode = getStringValue("scaling_mode");
+  static const QStringList allowedScalings = {"automatic", "width_smooth"};
+
+  if(allowedScalings.contains(scalingMode)) m_ScalingMode = scalingMode;
+
 }
 
 void OutfitReader::ReadEmotes()
