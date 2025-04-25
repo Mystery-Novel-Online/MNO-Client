@@ -1,6 +1,7 @@
 #include "courtroom.h"
 
 #include "draudioengine.h"
+#include "dro/system/theme_scripting.h"
 
 bool Courtroom::is_audio_suppressed() const
 {
@@ -23,4 +24,14 @@ void Courtroom::stop_all_audio()
   for (auto &family : DRAudioEngine::get_family_list())
     for (auto &stream : family->get_stream_list())
       stream->stop();
+}
+
+void Courtroom::keyPressEvent(QKeyEvent *event)
+{
+  if (event)
+  {
+    int key = event->key();
+    QString keyText = QKeySequence(event->key()).toString();
+    LuaBridge::LuaEventCall("OnKeyboardInput", keyText.toStdString(), key);
+  }
 }

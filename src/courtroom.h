@@ -969,6 +969,7 @@ private:
   // QWidget interface
 
 protected:
+  void keyPressEvent(QKeyEvent* event) override;
   void changeEvent(QEvent *) override;
   void closeEvent(QCloseEvent *event) override;
 };
