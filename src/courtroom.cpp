@@ -1258,12 +1258,18 @@ void Courtroom::handle_chatmessage_2() // handles IC
   double selfOffset = PairManager::get().GetOffsetSelf();
   double otherOffset = PairManager::get().GetOffsetOther();
 
+
+
+
   QString offsetTextbox = "left";
 
   if(selfOffset > otherOffset) offsetTextbox = "right";
 
   ui_vp_player_char->setPos(selfOffset, ui_vp_player_char->y());
   ui_vp_player_pair->setPos(otherOffset, ui_vp_player_pair->y());
+
+  double verticalOffset = 0.0f;
+  ui_vp_player_char->setVerticalOffset(verticalOffset * 544.0);
 
   setup_screenshake_anim(selfOffset);
   qDebug() << "handle_chatmessage_2";

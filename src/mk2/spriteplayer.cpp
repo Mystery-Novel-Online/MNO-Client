@@ -351,23 +351,29 @@ void SpritePlayer::scale_current_frame()
   {
     switch (m_resolved_scaling_mode)
     {
-    case NoScaling:
-      [[fallthrough]];
-    default:
-      break;
+      case NoScaling:
+        [[fallthrough]];
+      default:
+        break;
 
-    case StretchScaling:
-      l_image = l_image.scaled(m_size, Qt::IgnoreAspectRatio, m_transform);
-      break;
+      case StretchScaling:
+        l_image = l_image.scaled(m_size, Qt::IgnoreAspectRatio, m_transform);
+        break;
 
-    case WidthScaling:
-      l_image = l_image.scaledToWidth(m_size.width(), m_transform);
-      break;
+      case WidthScaling:
+        l_image = l_image.scaledToWidth(m_size.width(), m_transform);
+        break;
 
-    case HeightScaling:
-      l_image = l_image.scaledToHeight(m_size.height(), m_transform);
-      break;
+      case HeightScaling:
+        l_image = l_image.scaledToHeight(m_size.height(), m_transform);
+        break;
     }
+
+    if (m_scale != 1.0) {
+      QSize newSize(static_cast<int>(l_image.width() * m_scale), static_cast<int>(l_image.height() * m_scale) );
+      l_image = l_image.scaled(newSize, Qt::IgnoreAspectRatio, m_transform);
+    }
+
   }
 
   // slow operation...

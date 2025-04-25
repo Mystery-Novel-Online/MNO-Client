@@ -109,6 +109,7 @@ private:
   SpriteReader::ptr m_reader;
   SpriteFrame m_current_frame;
   QImage m_scaled_current_frame;
+  double m_scale = 1.0;
   SpritePlayer::ScalingMode m_scaling_mode;
   SpritePlayer::ScalingMode m_resolved_scaling_mode;
   Qt::TransformationMode m_transform;
