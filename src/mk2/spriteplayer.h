@@ -86,11 +86,11 @@ public slots:
 
   void set_reader(SpriteReader::ptr reader);
 
-  void start(ScalingMode scaling = ScalingMode::AutomaticScaling);
+  void start(ScalingMode scaling = ScalingMode::AutomaticScaling, double scale = 1.0f);
   void restart();
   void stop();
 
-  void start(int p_start_frame, ScalingMode scaling = ScalingMode::AutomaticScaling);
+  void start(int p_start_frame, ScalingMode scaling = ScalingMode::AutomaticScaling, double scale = 1.0f);
   void restart(int p_start_frame);
 signals:
   void current_frame_changed();
@@ -123,7 +123,7 @@ private:
   QTimer m_frame_timer;
   QTimer m_repaint_timer;
 
-  void resolve_scaling_mode(ScalingMode scalingMode = AutomaticScaling);
+  void resolve_scaling_mode(ScalingMode scalingMode = AutomaticScaling, double scale = 1.0f);
 
 private slots:
   void fetch_next_frame();

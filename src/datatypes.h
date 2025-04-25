@@ -304,6 +304,9 @@ enum ChatMessage : int32_t
   CMVideoName,
   CMHideCharacter,
   CMClientId,
+  CMOffsetH,
+  CMOffsetV,
+  CMOffsetS
 };
 
 enum EmoteMod

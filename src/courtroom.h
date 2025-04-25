@@ -362,8 +362,8 @@ private:
   // Generate a File Name based on the time you launched the client
   QString icchatlogsfilename = QDateTime::currentDateTime().toString("'logs/'yyyy-MM-dd (hh.mm.ss.z)'.txt'");
 
-  static const int MINIMUM_MESSAGE_SIZE = 15;
-  static const int OPTIMAL_MESSAGE_SIZE = 19;
+  static const int MINIMUM_MESSAGE_SIZE = 22;
+  static const int OPTIMAL_MESSAGE_SIZE = 24;
   QStringList m_pre_chatmessage;
   GameState m_game_state = GameState::Finished;
 
@@ -766,6 +766,7 @@ private slots:
   void on_showname_changed(QString);
 
   void on_pair_offset_changed();
+  void OnPlayerOffsetsChanged();
 
 
   void on_showname_placeholder_changed(QString);

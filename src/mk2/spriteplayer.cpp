@@ -176,13 +176,14 @@ bool SpritePlayer::is_running() const
   return m_running;
 }
 
-void SpritePlayer::start(ScalingMode scaling)
+void SpritePlayer::start(ScalingMode scaling, double scale)
 {
+  m_scale = scale;
   m_manualScalingMode = scaling;
   m_running = true;
   m_elapsed_timer.start();
   emit started();
-  resolve_scaling_mode(m_manualScalingMode);
+  resolve_scaling_mode(m_manualScalingMode, scale);
   fetch_next_frame();
 }
 
@@ -199,8 +200,9 @@ void SpritePlayer::stop()
   m_frame_number = 0;
 }
 
-void SpritePlayer::start(int p_start_frame, ScalingMode scaling)
+void SpritePlayer::start(int p_start_frame, ScalingMode scaling, double scale)
 {
+  m_scale = scale;
   m_manualScalingMode = scaling;
   if(m_frame_count > p_start_frame)
   {
@@ -213,7 +215,7 @@ void SpritePlayer::start(int p_start_frame, ScalingMode scaling)
   m_running = true;
   m_elapsed_timer.start();
   emit started();
-  resolve_scaling_mode(m_manualScalingMode);
+  resolve_scaling_mode(m_manualScalingMode, scale);
   fetch_next_frame();
 }
 
@@ -228,8 +230,9 @@ int SpritePlayer::get_frame()
   return m_frame_number;
 }
 
-void SpritePlayer::resolve_scaling_mode(ScalingMode scalingMode)
+void SpritePlayer::resolve_scaling_mode(ScalingMode scalingMode, double scale)
 {
+  m_scale = scale;
   if(scalingMode != AutomaticScaling)
   {
     if(scalingMode == WidthSmoothScaling)
