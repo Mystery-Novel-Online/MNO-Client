@@ -7,17 +7,22 @@ static bool s_renderSprites = false;
 #include "courtroom.h"
 #include "modules/managers/emotion_manager.h"
 #include "modules/managers/character_manager.h"
+#include "dro/interface/courtroom_layout.h"
 
 EmoteMenu::EmoteMenu(QWidget *parent) : QMenu(parent)
 {
   p_SizeAction = addAction(tr("Resize"));
   p_RenderAction = addAction(tr("Use Sprite Images"));
   addSeparator();
-  p_makerAction = addAction(tr("Button Maker"));
+
+  m_presetsMenu = new QMenu(tr("Presets"), this);
+  addMenu(m_presetsMenu);
+
+  //p_makerAction = addAction(tr("Button Maker"));
 
   connect(p_SizeAction, &QAction::triggered, this, &EmoteMenu::OnDoubleSizeTriggered);
   connect(p_RenderAction, &QAction::triggered, this, &EmoteMenu::OnRealtimeTriggered);
-  connect(p_makerAction, &QAction::triggered, this, &EmoteMenu::OnButtonMakerTriggered);
+  //connect(p_makerAction, &QAction::triggered, this, &EmoteMenu::OnButtonMakerTriggered);
 
   m_buttonMaker = new ButtonMaker();
   m_buttonMaker->resize(960, 544);
@@ -38,6 +43,17 @@ bool EmoteMenu::isRealtime()
 bool EmoteMenu::isDoubleSize()
 {
   return s_sizeDoubled;
+}
+
+void EmoteMenu::ClearPresets()
+{
+  m_presetsMenu->clear();
+}
+
+void EmoteMenu::AddPreset(const QString &name)
+{
+  QAction* action = m_presetsMenu->addAction(name);
+  connect(action, &QAction::triggered, this, [=]() { ApplyPreset(name); });
 }
 
 void EmoteMenu::OnMenuRequested(QPoint p_point)
@@ -79,4 +95,18 @@ void EmoteMenu::OnButtonMakerTriggered()
 {
   m_buttonMaker->show();
   m_buttonMaker->SetCharacter(CharacterManager::get().p_SelectedCharacter->mFolder);
+}
+
+void EmoteMenu::ApplyPreset(const QString &presetName)
+{
+
+  for(ActorScalingPreset presetData : CharacterManager::get().p_SelectedCharacter->GetScalingPresets())
+  {
+    if(presetData.name == presetName)
+    {
+      Layout::Courtroom::SetScaleSlider(presetData.Scale);
+      Layout::Courtroom::SetVerticalSlider(presetData.VerticalAlign);
+    }
+  }
+  qDebug() << "Presets applied";
 }

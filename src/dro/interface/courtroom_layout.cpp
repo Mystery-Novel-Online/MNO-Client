@@ -85,5 +85,21 @@ namespace Layout::Courtroom
     oocChatlog->append_chatmessage(name, message);
   }
 
+  void SetScaleSlider(int scaleValue)
+  {
+    QSlider *sliderWidget = nullptr;
+    sliderWidget = dynamic_cast<QSlider*>(s_CourtroomWidgets["scale_offset"]);
+    if(sliderWidget == nullptr) return;
+    sliderWidget->setValue(scaleValue);
+  }
+
+  void SetVerticalSlider(int verticalValue)
+  {
+    QSlider *sliderWidget = nullptr;
+    sliderWidget = dynamic_cast<QSlider*>(s_CourtroomWidgets["vertical_offset"]);
+    if(sliderWidget == nullptr) return;
+    sliderWidget->setValue(verticalValue);
+  }
+
 
 }

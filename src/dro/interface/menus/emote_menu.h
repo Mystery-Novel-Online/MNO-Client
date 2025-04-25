@@ -17,20 +17,26 @@ public:
   static bool isRealtime();
   static bool isDoubleSize();
 
+  void ClearPresets();
+  void AddPreset(const QString& name);
+
 
 public slots:
   void OnMenuRequested(QPoint p_point);
   void OnDoubleSizeTriggered();
   void OnRealtimeTriggered();
   void OnButtonMakerTriggered();
+  void ApplyPreset(const QString& presetName);
 
 private:
   ButtonMaker *m_buttonMaker = nullptr;
   bool m_DoubleSize = false;
   bool m_Realtime = false;
+
   QAction *p_SizeAction = nullptr;
   QAction *p_RenderAction = nullptr;
   QAction *p_makerAction = nullptr;
+  QMenu* m_presetsMenu;
 
 };
 

@@ -326,6 +326,7 @@ void Courtroom::enter_courtroom(int p_cid)
   const QString l_chr_name = get_character_ini();
 
   ActorData *actor = CharacterManager::get().SwitchCharacter(l_chr_name);
+  ui_emotes->ActorChange(actor);
   if(!actor->GetScalingPresets().empty())
   {
     ActorScalingPreset preset = actor->GetScalingPresets().at(0);

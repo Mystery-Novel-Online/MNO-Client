@@ -18,6 +18,15 @@ void DROEmoteButtons::EmoteChange(DREmote emote)
   m_ContextMenu->EmoteChange(emote);
 }
 
+void DROEmoteButtons::ActorChange(ActorData *actor)
+{
+  m_ContextMenu->ClearPresets();
+  for(ActorScalingPreset presetData : actor->GetScalingPresets())
+  {
+    m_ContextMenu->AddPreset(presetData.name);
+  }
+}
+
 void DROEmoteButtons::wheelEvent(QWheelEvent *event)
 {
   int delta = event->angleDelta().y();

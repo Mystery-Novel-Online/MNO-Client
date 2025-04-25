@@ -36,6 +36,7 @@
 #include <QFile>
 #include <QGraphicsBlurEffect>
 #include <QHBoxLayout>
+#include <QInputDialog>
 #include <QListWidget>
 #include <QMenu>
 #include <QPropertyAnimation>
@@ -249,20 +250,43 @@ void Courtroom::create_widgets()
   ui_note_area->add_button = new AOButton(ui_note_area, ao_app);
   ui_note_area->m_layout = new QVBoxLayout(ui_note_area);
 
-
   ui_slider_horizontal_axis = new QSlider(Qt::Horizontal, this);
   ui_slider_horizontal_axis->setMinimum(0);
   ui_slider_horizontal_axis->setMaximum(960);
+
+  ui_slider_horizontal_axis->setContextMenuPolicy(Qt::CustomContextMenu);
+  QObject::connect(ui_slider_horizontal_axis, &QSlider::customContextMenuRequested, this, [this](const QPoint &pos)
+  {
+    bool ok;
+    int val = QInputDialog::getInt(ui_slider_horizontal_axis, "Set Value", "Value:", ui_slider_horizontal_axis->value(), ui_slider_horizontal_axis->minimum(), ui_slider_horizontal_axis->maximum(), 1, &ok);
+    if (ok) ui_slider_horizontal_axis->setValue(val);
+  });
+
 
   ui_slider_vertical_axis = new QSlider(Qt::Horizontal, this);
   ui_slider_vertical_axis->setMinimum(-1000);
   ui_slider_vertical_axis->setMaximum(1000);
   ui_slider_vertical_axis->setSliderPosition(0);
 
+  ui_slider_vertical_axis->setContextMenuPolicy(Qt::CustomContextMenu);
+  QObject::connect(ui_slider_vertical_axis, &QSlider::customContextMenuRequested, this, [this](const QPoint &pos)
+  {
+    bool ok;
+    int val = QInputDialog::getInt(ui_slider_vertical_axis, "Set Value", "Value:", ui_slider_vertical_axis->value(), ui_slider_vertical_axis->minimum(), ui_slider_vertical_axis->maximum(), 1, &ok);
+    if (ok) ui_slider_vertical_axis->setValue(val);
+  });
+
+
   ui_slider_scale = new QSlider(Qt::Horizontal, this);
   ui_slider_scale->setMinimum(100);
   ui_slider_scale->setMaximum(1000);
   ui_slider_scale->setSliderPosition(1000);
+  QObject::connect(ui_slider_scale, &QSlider::customContextMenuRequested, this, [this](const QPoint &pos)
+  {
+    bool ok;
+    int val = QInputDialog::getInt(ui_slider_scale, "Set Value", "Value:", ui_slider_scale->value(), ui_slider_scale->minimum(), ui_slider_scale->maximum(), 1, &ok);
+    if (ok) ui_slider_scale->setValue(val);
+  });
 
   PairManager::get().SetSlider(ui_slider_horizontal_axis);
 

@@ -16,6 +16,10 @@ namespace Layout::Courtroom
 
 
   void AppendToOOC(const char* name, const char* message);
+
+
+  void SetScaleSlider(int scaleValue);
+  void SetVerticalSlider(int verticalValue);
 }
 
 #endif // COURTROOM_LAYOUT_H

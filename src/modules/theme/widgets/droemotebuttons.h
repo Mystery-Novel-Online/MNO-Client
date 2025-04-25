@@ -12,6 +12,7 @@ class DROEmoteButtons : public QWidget
 public:
   explicit DROEmoteButtons(QWidget *parent);
   void EmoteChange(DREmote emote);
+  void ActorChange(ActorData *actor);
 
 private:
   EmoteMenu* m_ContextMenu = nullptr;
