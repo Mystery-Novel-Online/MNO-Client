@@ -771,7 +771,7 @@ void Courtroom::on_showname_changed(QString p_showname)
 
 void Courtroom::on_pair_offset_changed()
 {
-  ao_app->send_server_packet(DRPacket("POFF", {QString::number(pUIPairOffsetSlider->value())}));
+  ao_app->send_server_packet(DRPacket("POFF", {QString::number(ui_slider_horizontal_axis->value())}));
 }
 
 bool Courtroom::is_spectating()
@@ -1268,7 +1268,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
   ui_vp_player_char->setPos(selfOffset, ui_vp_player_char->y());
   ui_vp_player_pair->setPos(otherOffset, ui_vp_player_pair->y());
 
-  double verticalOffset = 0.0f;
+  double verticalOffset = (double)ui_slider_vertical_axis->value() / (double)1000;
   ui_vp_player_char->setVerticalOffset(verticalOffset * 544.0);
 
   setup_screenshake_anim(selfOffset);

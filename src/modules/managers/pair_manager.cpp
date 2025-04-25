@@ -85,8 +85,8 @@ void PairManager::SetUserPair(int partner, int offset)
   mLocalPair = partner;
   mLocalOffset = offset;
   pSliderWidget->setValue(mLocalOffset);
-  if(partner != -1) pSliderWidget->show();
-  else{ pSliderWidget->hide();}
+  //if(partner != -1) pSliderWidget->show();
+  //else{ pSliderWidget->hide();}
 }
 
 bool PairManager::GetCanPair()

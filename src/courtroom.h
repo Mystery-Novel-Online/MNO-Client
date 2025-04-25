@@ -467,7 +467,9 @@ private:
 
   ViewportOverlay *w_ViewportOverlay = nullptr;
 
-  QSlider *pUIPairOffsetSlider = nullptr;
+  QSlider *ui_slider_horizontal_axis = nullptr;
+  QSlider *ui_slider_vertical_axis = nullptr;
+  QSlider *ui_slider_scale = nullptr;
 
   AOImageDisplay *ui_vp_notepad_image = nullptr;
   DRTextEdit *ui_vp_notepad = nullptr;
@@ -762,7 +764,10 @@ private slots:
   void post_chatmessage();
 
   void on_showname_changed(QString);
+
   void on_pair_offset_changed();
+
+
   void on_showname_placeholder_changed(QString);
   void on_character_ini_changed();
   void on_ic_showname_editing_finished();

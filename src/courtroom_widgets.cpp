@@ -250,11 +250,21 @@ void Courtroom::create_widgets()
   ui_note_area->m_layout = new QVBoxLayout(ui_note_area);
 
 
-  pUIPairOffsetSlider = new QSlider(Qt::Horizontal, this);
-  pUIPairOffsetSlider->setMinimum(0);
-  pUIPairOffsetSlider->setMaximum(960);
+  ui_slider_horizontal_axis = new QSlider(Qt::Horizontal, this);
+  ui_slider_horizontal_axis->setMinimum(0);
+  ui_slider_horizontal_axis->setMaximum(960);
 
-  PairManager::get().SetSlider(pUIPairOffsetSlider);
+  ui_slider_vertical_axis = new QSlider(Qt::Horizontal, this);
+  ui_slider_vertical_axis->setMinimum(-1000);
+  ui_slider_vertical_axis->setMaximum(1000);
+  ui_slider_vertical_axis->setSliderPosition(0);
+
+  ui_slider_scale = new QSlider(Qt::Horizontal, this);
+  ui_slider_scale->setMinimum(100);
+  ui_slider_scale->setMaximum(1000);
+  ui_slider_scale->setSliderPosition(1000);
+
+  PairManager::get().SetSlider(ui_slider_horizontal_axis);
 
   pNotifyPopup = new RPNotifyMenu(this);
 
@@ -521,9 +531,8 @@ void Courtroom::connect_widgets()
   connect(ui_sfx_menu_preview, SIGNAL(triggered()), this, SLOT(on_sfx_menu_preview_triggered()));
   connect(ui_sfx_menu_insert_file_name, SIGNAL(triggered()), this, SLOT(on_sfx_menu_insert_file_name_triggered()));
   connect(ui_sfx_menu_insert_caption, SIGNAL(triggered()), this, SLOT(on_sfx_menu_insert_caption_triggered()));
-  connect(pUIPairOffsetSlider, SIGNAL(sliderReleased()), this, SLOT(on_pair_offset_changed()));
 
-
+  connect(ui_slider_horizontal_axis, SIGNAL(sliderReleased()), this, SLOT(on_pair_offset_changed()));
 
   connect(ui_note_area->add_button, SIGNAL(clicked(bool)), this, SLOT(on_add_button_clicked()));
   connect(ui_set_notes, SIGNAL(clicked(bool)), this, SLOT(on_set_notes_clicked()));
@@ -705,7 +714,9 @@ void Courtroom::reset_widget_names()
       {"player_list_right", ui_player_list_right},
       {"area_look", ui_area_look},
       {"area_desc", ui_area_desc},
-      {"pair_offset", pUIPairOffsetSlider},
+      {"pair_offset", ui_slider_horizontal_axis},
+      {"vertical_offset", ui_slider_vertical_axis},
+      {"scale_offset", ui_slider_scale},
       {"viewport_transition", SceneManager::get().GetTransition()},
       {"viewport_overlay", w_ViewportOverlay},
       {"outfit_selector", wOutfitDropdown},
@@ -1265,7 +1276,9 @@ void Courtroom::set_widgets()
   update_music_text_anim();
 
   set_size_and_pos(pNotifyPopup, "notify_popup", COURTROOM_DESIGN_INI, ao_app);
-  set_size_and_pos(pUIPairOffsetSlider, "pair_offset", COURTROOM_DESIGN_INI, ao_app);
+  set_size_and_pos(ui_slider_horizontal_axis, "pair_offset", COURTROOM_DESIGN_INI, ao_app);
+  set_size_and_pos(ui_slider_vertical_axis, "vertical_offset", COURTROOM_DESIGN_INI, ao_app);
+  set_size_and_pos(ui_slider_scale, "scale_offset", COURTROOM_DESIGN_INI, ao_app);
 
   set_size_and_pos(ui_set_notes, "set_notes_button", COURTROOM_DESIGN_INI, ao_app);
   ui_set_notes->set_image("set_notes.png");
