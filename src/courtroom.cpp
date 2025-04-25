@@ -776,6 +776,7 @@ void Courtroom::on_pair_offset_changed()
 
 void Courtroom::OnPlayerOffsetsChanged()
 {
+  if(!ServerMetadata::FeatureSupported("outfits")) return;
   bool intParse = false;
   int speakerClientId = m_chatmessage[CMClientId].toInt(&intParse);
   if(speakerClientId == ao_app->get_client_id())
@@ -998,6 +999,27 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
 
   m_SpeakerActor = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
+  m_ActorScale = 1.0;
+
+  int scaleValue = p_chatmessage[CMOffsetS].trimmed().toInt();
+  if(!p_chatmessage[CMOffsetS].isEmpty())
+  {
+    m_ActorScale = (double)scaleValue / 1000.0f;
+  }
+
+
+  m_ActorScaling = mk2::SpritePlayer::AutomaticScaling;
+  if(m_SpeakerActor != nullptr)
+  {
+    OutfitReader* outfit = m_SpeakerActor->GetEmoteOutfit(p_chatmessage[CMEmote]);
+    if(outfit != nullptr)
+    {
+      QString scalingMode = outfit->GetScalingMode();
+      if(scalingMode == "width_smooth") m_ActorScaling = mk2::SpritePlayer::WidthSmoothScaling;
+    }
+  }
+
+
 
   QString l_showname = p_chatmessage[CMShowName];
   if (l_showname.isEmpty() && !l_system_speaking)
@@ -1461,26 +1483,6 @@ void Courtroom::handle_chatmessage_3()
     ui_vp_player_pair->hide();
   }
 
-  double playerScale = 1.0;
-
-  int scaleValue = m_chatmessage[CMOffsetS].trimmed().toInt();
-  if(!m_chatmessage[CMOffsetV].isEmpty())
-  {
-    playerScale = (double)scaleValue / 1000.0f;
-  }
-
-
-  mk2::SpritePlayer::ScalingMode targetScaling = mk2::SpritePlayer::AutomaticScaling;
-  if(m_SpeakerActor != nullptr)
-  {
-    OutfitReader* outfit = m_SpeakerActor->GetEmoteOutfit(m_chatmessage[CMEmote]);
-    if(outfit != nullptr)
-    {
-      QString scalingMode = outfit->GetScalingMode();
-      if(scalingMode == "width_smooth") targetScaling = mk2::SpritePlayer::WidthSmoothScaling;
-    }
-  }
-
   // Path may be empty if
   // 1. Chat message was empty
   // 2. Enable showname images was false
@@ -1497,7 +1499,7 @@ void Courtroom::handle_chatmessage_3()
     if (!m_hide_character && !m_msg_is_first_person)
     {
       swap_viewport_reader(ui_vp_player_char, ViewportCharacterTalk);
-      ui_vp_player_char->start(targetScaling, playerScale);
+      ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
     }
     anim_state = 2;
     break;
@@ -1508,7 +1510,7 @@ void Courtroom::handle_chatmessage_3()
     if (!m_hide_character && !m_msg_is_first_person)
     {
       swap_viewport_reader(ui_vp_player_char, ViewportCharacterIdle);
-      ui_vp_player_char->start(targetScaling, playerScale);
+      ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
     }
     anim_state = 3;
     break;
@@ -1823,7 +1825,7 @@ void Courtroom::play_preanim()
   qDebug() << "[viewport] Playing character animation; character:" << l_chr_name << "animation: " << l_anim_name << "file:" << ui_vp_player_char->file_name();
   ui_vp_player_char->set_play_once(true);
   swap_viewport_reader(ui_vp_player_char, ViewportCharacterPre);
-  ui_vp_player_char->start();
+  ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
 }
 
 void Courtroom::preanim_done()
@@ -2126,7 +2128,7 @@ void Courtroom::post_chatmessage()
   if (!m_hide_character && !m_msg_is_first_person)
   {
     swap_viewport_reader(ui_vp_player_char, ViewportCharacterIdle);
-    ui_vp_player_char->start();
+    ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
   }
 
   m_message_color_name = "";

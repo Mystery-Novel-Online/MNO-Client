@@ -362,7 +362,7 @@ private:
   // Generate a File Name based on the time you launched the client
   QString icchatlogsfilename = QDateTime::currentDateTime().toString("'logs/'yyyy-MM-dd (hh.mm.ss.z)'.txt'");
 
-  static const int MINIMUM_MESSAGE_SIZE = 22;
+  static const int MINIMUM_MESSAGE_SIZE = 15;
   static const int OPTIMAL_MESSAGE_SIZE = 24;
   QStringList m_pre_chatmessage;
   GameState m_game_state = GameState::Finished;
@@ -400,6 +400,8 @@ private:
   //Temporary speaker management, will be put into its own class at some point.
   ActorData *m_SpeakerActor = nullptr;
   ActorData *m_PairActor = nullptr;
+  double m_ActorScale = 1.0;
+  mk2::SpritePlayer::ScalingMode m_ActorScaling = mk2::SpritePlayer::ScalingMode::AutomaticScaling;
 
   // if enabled, disable showing our own sprites when we talk in ic
   bool m_msg_is_first_person = false;

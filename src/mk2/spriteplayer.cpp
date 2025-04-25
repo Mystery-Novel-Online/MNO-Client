@@ -183,7 +183,7 @@ void SpritePlayer::start(ScalingMode scaling, double scale)
   m_running = true;
   m_elapsed_timer.start();
   emit started();
-  resolve_scaling_mode(m_manualScalingMode, scale);
+  resolve_scaling_mode(m_manualScalingMode, m_scale);
   fetch_next_frame();
 }
 
@@ -232,13 +232,14 @@ int SpritePlayer::get_frame()
 
 void SpritePlayer::resolve_scaling_mode(ScalingMode scalingMode, double scale)
 {
-  m_scale = scale;
+
   if(scalingMode != AutomaticScaling)
   {
     if(scalingMode == WidthSmoothScaling)
     {
       m_transform = Qt::SmoothTransformation;
       m_resolved_scaling_mode = WidthScaling;
+      scale_current_frame();
       return;
     }
   }
