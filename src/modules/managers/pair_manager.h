@@ -20,9 +20,11 @@ public:
   void SetSlider(QSlider *slider);
 
   bool GetUsePairData();
-  void SetPairData(QString character, QString emote, int selfOffset, int pairOffset, bool flipped);
+  void SetPairData(QString character, QString emote, int selfOffset, int pairOffset, bool flipped, int scale, int vertical);
   double GetOffsetSelf();
   double GetOffsetOther();
+  double GetVerticalOffset() {return (double)mVerticalOffset / (double)1000.0f; }
+  double GetScaleoffset() {return (double)mScaleOffset / (double)1000.0f; }
 
   QString GetEmoteName();
   QString GetCharacterFolder();
@@ -49,6 +51,8 @@ private:
   QString mEmote = "DUMMY";
   int mSelfOffset = 0;
   int mPairOffset = 0;
+  int mScaleOffset = 1000;
+  int mVerticalOffset = 0;
 
   int mLocalPair = -1;
   int mLocalOffset = 0;

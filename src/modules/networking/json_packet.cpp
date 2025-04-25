@@ -84,8 +84,10 @@ void JsonPacket::ProcessPairDataPacket(JSONReader& jsonReader)
   QString charat = jsonReader.getStringValue("character");
   QString emote = jsonReader.getStringValue("last_sprite");
   bool isFlipped = jsonReader.getBoolValue("flipped");
+  int offsetVertical = jsonReader.getIntValue("pair_vertical");
+  int offsetScale = jsonReader.getIntValue("pair_scale");
 
-  PairManager::get().SetPairData(charat, emote, offsetSelf, offsetPair, isFlipped);
+  PairManager::get().SetPairData(charat, emote, offsetSelf, offsetPair, isFlipped, offsetScale, offsetVertical);
 }
 
 void JsonPacket::ProcessPairPacket(JSONReader& jsonReader)

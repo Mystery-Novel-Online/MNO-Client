@@ -401,7 +401,9 @@ private:
   ActorData *m_SpeakerActor = nullptr;
   ActorData *m_PairActor = nullptr;
   double m_ActorScale = 1.0;
+  double m_PairScale = 1.0;
   mk2::SpritePlayer::ScalingMode m_ActorScaling = mk2::SpritePlayer::ScalingMode::AutomaticScaling;
+  mk2::SpritePlayer::ScalingMode m_PairScaling = mk2::SpritePlayer::ScalingMode::AutomaticScaling;
 
   // if enabled, disable showing our own sprites when we talk in ic
   bool m_msg_is_first_person = false;

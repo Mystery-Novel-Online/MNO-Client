@@ -1005,6 +1005,22 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
 
   m_SpeakerActor = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
+  if(PairManager::get().GetUsePairData())
+  {
+    m_PairActor = CharacterManager::get().ReadCharacter(PairManager::get().GetCharacterFolder());
+
+    m_PairScaling = mk2::SpritePlayer::AutomaticScaling;
+
+    if(m_PairActor != nullptr)
+    {
+      QString scalingMode = m_PairActor->GetScalingMode();
+      if(scalingMode == "width_smooth") m_PairScaling = mk2::SpritePlayer::WidthSmoothScaling;
+      m_PairScale = PairManager::get().GetScaleoffset();
+    }
+
+  }
+
+
   m_ActorScale = 1.0;
 
   int scaleValue = p_chatmessage[CMOffsetS].trimmed().toInt();
@@ -1012,6 +1028,8 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   {
     m_ActorScale = (double)scaleValue / 1000.0f;
   }
+
+
 
 
   m_ActorScaling = mk2::SpritePlayer::AutomaticScaling;
@@ -1344,6 +1362,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
     ui_vp_player_char->setVerticalOffset(544 * verticalOffset);
   }
 
+  ui_vp_player_pair->setVerticalOffset(544 * PairManager::get().GetVerticalOffset());
   setup_screenshake_anim(selfOffset);
   qDebug() << "handle_chatmessage_2";
   ui_vp_player_char->stop();
@@ -1479,7 +1498,7 @@ void Courtroom::handle_chatmessage_3()
     }
 
     swap_viewport_reader(ui_vp_player_pair, ViewportPairCharacterIdle);
-    ui_vp_player_pair->start();
+    ui_vp_player_pair->start(m_PairScaling, m_PairScale);
   }
   else
   {

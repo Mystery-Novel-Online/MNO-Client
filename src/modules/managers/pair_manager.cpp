@@ -17,7 +17,7 @@ bool PairManager::GetUsePairData()
   return mPairUsed;
 }
 
-void PairManager::SetPairData(QString character, QString emote, int selfOffset, int pairOffset, bool flipped)
+void PairManager::SetPairData(QString character, QString emote, int selfOffset, int pairOffset, bool flipped, int scale, int vertical)
 {
   int l_CourtroomWidth = ThemeManager::get().getWidget("viewport")->width();
 
@@ -37,6 +37,9 @@ void PairManager::SetPairData(QString character, QString emote, int selfOffset, 
   mEmote = emote;
   mPairUsed = true;
   mIsFlipped = flipped;
+  if(scale != 0) mScaleOffset = scale;
+  else mScaleOffset = 1000;
+  mVerticalOffset = vertical;
 }
 
 double PairManager::GetOffsetSelf()

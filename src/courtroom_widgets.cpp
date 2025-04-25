@@ -281,6 +281,8 @@ void Courtroom::create_widgets()
   ui_slider_scale->setMinimum(100);
   ui_slider_scale->setMaximum(1000);
   ui_slider_scale->setSliderPosition(1000);
+
+  ui_slider_scale->setContextMenuPolicy(Qt::CustomContextMenu);
   QObject::connect(ui_slider_scale, &QSlider::customContextMenuRequested, this, [this](const QPoint &pos)
   {
     bool ok;
