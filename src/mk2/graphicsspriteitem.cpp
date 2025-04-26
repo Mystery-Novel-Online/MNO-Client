@@ -161,7 +161,7 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
     {
       const QPointF l_center = l_scene->sceneRect().center() - m_player->get_scaled_bounding_rect().center();
       l_horizontal_center.setX(l_center.x());
-      l_horizontal_center.setY((544 - m_player->get_scaled_bounding_rect().height()) + mVerticalVPOffset);
+      l_horizontal_center.setY((l_scene->sceneRect().height() - m_player->get_scaled_bounding_rect().height()) + mVerticalVPOffset);
     }
 
     painter->drawImage(l_horizontal_center, m_player->get_current_frame());
