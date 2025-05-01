@@ -1483,9 +1483,22 @@ void Courtroom::handle_chatmessage_3()
     QString l_showname_image;
     if (ao_app->current_theme->read_config_bool("enable_showname_image"))
     {
-      l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname", FS::Formats::StaticImages());
+      if(f_emote.contains("outfits/"))
+      {
+        QStringList parts = f_emote.split('/');
+        if (parts.size() >= 3)
+        {
+          QString outfitName = parts[1];
+          l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname_" + outfitName, FS::Formats::StaticImages());
+        }
+      }
+
+      if (l_showname_image.isEmpty())
+        l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname", FS::Formats::StaticImages());
+
       if (l_showname_image.isEmpty())
         l_showname_image = ao_app->find_asset_path({ao_app->get_character_path(f_char, "showname")}, FS::Formats::StaticImages());
+
       ui_vp_showname_image->set_image(l_showname_image);
       ui_vp_showname_image->show();
     }
