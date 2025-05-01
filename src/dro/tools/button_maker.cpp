@@ -7,8 +7,10 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QMessageBox>
+#include <QFileDialog>
 #include "aoapplication.h"
 #include "dro/fs/fs_reading.h"
+#include <QSlider>
 
 ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 {
@@ -29,6 +31,11 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
   m_GraphicsView = new DRGraphicsView(this);
   m_GraphicsView->resize(960, 544);
 
+  m_GraphicsView->setStyleSheet("background: transparent");
+  m_GraphicsView->setAttribute(Qt::WA_TranslucentBackground);
+  m_GraphicsView->setBackgroundBrush(Qt::NoBrush);
+  m_GraphicsView->scene()->setBackgroundBrush(Qt::NoBrush);
+
   m_CharacterSprite = new DRCharacterMovie(AOApplication::getInstance());
   m_CharacterSprite->set_size(QSizeF(960, 544));
   m_GraphicsView->scene()->addItem(m_CharacterSprite);
@@ -41,15 +48,28 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
   QVBoxLayout *leftLayout = new QVBoxLayout();
   QVBoxLayout *rightLayout = new QVBoxLayout();
 
+
   QPushButton *generateButton = new QPushButton("Generate Button");
+  QPushButton *underlayButton = new QPushButton("Add Underlay");
+  QPushButton *overlayButton = new QPushButton("Add Overlay");
+  QPushButton *alphaButton = new QPushButton("Add Alpha Mask");
+
+  rightLayout->addWidget(underlayButton);
+  rightLayout->addWidget(overlayButton);
+  rightLayout->addWidget(alphaButton);
   rightLayout->addWidget(generateButton);
+
   connect(generateButton, &QPushButton::clicked, this, &ButtonMaker::onGenerateClicked);
+  connect(underlayButton, &QPushButton::clicked, this, &ButtonMaker::onAddUnderlayClicked);
+  connect(overlayButton, &QPushButton::clicked, this, &ButtonMaker::onAddOverlayClicked);
+  connect(alphaButton, &QPushButton::clicked, this, &ButtonMaker::onAlphaClicked);
 
   mainLayout->addLayout(leftLayout);
   mainLayout->addStretch();
   mainLayout->addLayout(rightLayout);
 
-  setLayout(mainLayout);
+
+
 }
 
 void ButtonMaker::SetEmote(DREmote emote)
@@ -70,9 +90,11 @@ void ButtonMaker::SetEmote(DREmote emote)
     {
       m_EmoteIndex = i;
       m_CharacterSprite->play_idle(m_Emotes.at(m_EmoteIndex).character, m_Emotes.at(m_EmoteIndex).dialog);
+      m_CharacterSprite->start(DRCharacterMovie::ScalingMode::WidthSmoothScaling, 1.0f);
       return;
     }
   }
+
 }
 
 void ButtonMaker::SetCharacter(QString character)
@@ -98,21 +120,50 @@ void ButtonMaker::SetCharacter(QString character)
   }
 
   m_CharacterSprite->play_idle(m_Emotes.at(m_EmoteIndex).character, m_Emotes.at(m_EmoteIndex).dialog);
+  m_CharacterSprite->start(DRCharacterMovie::ScalingMode::WidthSmoothScaling, 1.0f);
 }
 
 void ButtonMaker::onGenerateClicked()
 {
+  QRect cropRect(m_Overlay->m_rectPos, QSize(m_Overlay->m_rectSize, m_Overlay->m_rectSize));
+  QSize outputSize = cropRect.size();
+
+  if(!m_UnderlayImage.isNull()) outputSize = m_UnderlayImage.size();
+  QImage finalOutput(outputSize, QImage::Format_ARGB32_Premultiplied);
+  finalOutput.fill(Qt::transparent);
+  QPainter finalPainter(&finalOutput);
+
+  if (!m_UnderlayImage.isNull()) {
+    QImage underlayScaled = m_UnderlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    finalPainter.drawImage(0, 0, underlayScaled);
+  }
+
   QImage fullImage(m_GraphicsView->viewport()->size(), QImage::Format_ARGB32_Premultiplied);
   fullImage.fill(Qt::transparent);
+  QPainter viewportPainter(&fullImage);
+  m_GraphicsView->render(&viewportPainter);
+  viewportPainter.end();
 
-  QPainter painter(&fullImage);
-  m_GraphicsView->render(&painter);
-  painter.end();
+  //cropRect = cropRect.intersected(fullImage.rect());
 
-  QRect cropRect(m_Overlay->m_rectPos, QSize(m_Overlay->m_rectSize, m_Overlay->m_rectSize));
-  cropRect = cropRect.intersected(fullImage.rect());
+  QImage cropppedSprite = fullImage.copy(cropRect);
+  cropppedSprite = cropppedSprite.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-  QImage cropped = fullImage.copy(cropRect);
+  if (!m_AlphaMaskImage.isNull())
+  {
+    QImage maskScaled = m_AlphaMaskImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    cropppedSprite.setAlphaChannel(maskScaled);
+  }
+
+  finalPainter.drawImage(0, 0, cropppedSprite);
+
+  if (!m_OverlayImage.isNull())
+  {
+    QImage overlayScaled = m_OverlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    finalPainter.drawImage(0, 0, overlayScaled);
+  }
+
+  finalPainter.end();
 
   QString buttonDirectory = "/emotions/button" + QString::number(m_EmoteIndex + 1) + "_off.png";
   if(m_IsJson)
@@ -135,7 +186,7 @@ void ButtonMaker::onGenerateClicked()
   {
     QDir().mkdir(QFileInfo(filePath).absolutePath());
   }
-  cropped.save(filePath);
+  finalOutput.save(filePath);
 
   if(m_EmoteIndex < (m_Emotes.count() - 1))
   {
@@ -148,8 +199,33 @@ void ButtonMaker::onGenerateClicked()
 
 
   m_CharacterSprite->play_idle(m_Emotes.at(m_EmoteIndex).character, m_Emotes.at(m_EmoteIndex).dialog);
+  m_CharacterSprite->start(DRCharacterMovie::ScalingMode::WidthSmoothScaling, 1.0f);
 }
 
+void ButtonMaker::onAddUnderlayClicked()
+{
+  m_UnderlayImage = LoadImageDialog();
+}
+
+void ButtonMaker::onAddOverlayClicked()
+{
+  m_OverlayImage = LoadImageDialog();
+}
+
+void ButtonMaker::onAlphaClicked()
+{
+  m_AlphaMaskImage = LoadImageDialog();
+}
+
+QImage ButtonMaker::LoadImageDialog()
+{
+  QString filePath = QFileDialog::getOpenFileName(this, "Select Image", "", "Images (*.png *.jpg *.bmp)");
+  if (!filePath.isEmpty())
+  {
+    return QImage(filePath);
+  }
+  return QImage();
+}
 
 ButtonMakerOverlay::ButtonMakerOverlay(QWidget *parent) : QWidget(parent)
 {

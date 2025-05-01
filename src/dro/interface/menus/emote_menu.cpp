@@ -18,11 +18,11 @@ EmoteMenu::EmoteMenu(QWidget *parent) : QMenu(parent)
   m_presetsMenu = new QMenu(tr("Presets"), this);
   addMenu(m_presetsMenu);
 
-  //p_makerAction = addAction(tr("Button Maker"));
+  p_makerAction = addAction(tr("Button Maker"));
 
   connect(p_SizeAction, &QAction::triggered, this, &EmoteMenu::OnDoubleSizeTriggered);
   connect(p_RenderAction, &QAction::triggered, this, &EmoteMenu::OnRealtimeTriggered);
-  //connect(p_makerAction, &QAction::triggered, this, &EmoteMenu::OnButtonMakerTriggered);
+  connect(p_makerAction, &QAction::triggered, this, &EmoteMenu::OnButtonMakerTriggered);
 
   m_buttonMaker = new ButtonMaker();
   m_buttonMaker->resize(960, 544);

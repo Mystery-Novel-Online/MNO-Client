@@ -24,6 +24,9 @@
 #include <QFile>
 #include <QResizeEvent>
 
+#define STB_IMAGE_RESIZE_IMPLEMENTATION
+#include "stb_image_resize2.h"
+
 using namespace mk2;
 
 SpritePlayer::SpritePlayer(QObject *parent)
@@ -373,9 +376,20 @@ void SpritePlayer::scale_current_frame()
         break;
     }
 
-    if (m_scale != 1.0) {
+    if (m_scale != 1.0)
+    {
+      if(l_image.isNull()) return;
+      QImage src = l_image.convertToFormat(QImage::Format_RGBA8888);
       QSize newSize(static_cast<int>(l_image.width() * m_scale), static_cast<int>(l_image.height() * m_scale) );
-      l_image = l_image.scaled(newSize, Qt::IgnoreAspectRatio, m_transform);
+      QImage dst(newSize.width(), newSize.height(), QImage::Format_RGBA8888);
+
+      stbir_resize_uint8_linear(
+          src.constBits(), src.width(), src.height(), src.bytesPerLine(),
+          dst.bits(), newSize.width(), newSize.height(), dst.bytesPerLine(),
+          STBIR_BGRA
+          );
+
+      l_image = dst;
     }
 
   }

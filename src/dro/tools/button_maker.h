@@ -45,7 +45,11 @@ public:
 
 private slots:
   void onGenerateClicked();
-
+  void onAddUnderlayClicked();
+  void onAddOverlayClicked();
+  void onAlphaClicked();
+private:
+  QImage LoadImageDialog();
 private:
 
   QVector<DREmote> m_Emotes = {};
@@ -57,6 +61,10 @@ private:
   DRCharacterMovie *m_CharacterSprite = nullptr;
   DRGraphicsView *m_GraphicsView = nullptr;
   ButtonMakerOverlay *m_Overlay = nullptr;
+
+  QImage m_UnderlayImage;
+  QImage m_OverlayImage;
+  QImage m_AlphaMaskImage;
 
 };
 
