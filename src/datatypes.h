@@ -63,6 +63,7 @@ public:
   QString dialog;
   int modifier = 0;
   int desk_modifier = -1;
+  bool ignore_offsets = false;
   QString sound_file;
   int sound_delay = 0;
   QString video_file;

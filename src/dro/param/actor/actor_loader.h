@@ -28,6 +28,7 @@ private:
   QString mCharacterName = "";
 
   bool m_RuleDesk = true;
+  bool m_RuleOffsets = false;
 
 };
 

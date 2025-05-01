@@ -957,9 +957,18 @@ void Courtroom::on_ic_message_return_pressed()
 
   if(ServerMetadata::FeatureSupported("outfits"))
   {
-    packet_contents.append(QString::number(ui_slider_horizontal_axis->value()));
-    packet_contents.append(QString::number(ui_slider_vertical_axis->value()));
-    packet_contents.append(QString::number(ui_slider_scale->value()));
+    if(l_emote.ignore_offsets)
+    {
+      packet_contents.append(QString::number(480));
+      packet_contents.append(QString::number(0));
+      packet_contents.append(QString::number(1000));
+    }
+    else
+    {
+      packet_contents.append(QString::number(ui_slider_horizontal_axis->value()));
+      packet_contents.append(QString::number(ui_slider_vertical_axis->value()));
+      packet_contents.append(QString::number(ui_slider_scale->value()));
+    }
   }
 
   ao_app->send_server_packet(DRPacket("MS", packet_contents));

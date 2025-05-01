@@ -430,6 +430,7 @@ void OutfitReader::ReadSettings()
   SetTargetObject("default_rules");
 
   m_RuleDesk = isValueExists("show_desk") ? getBoolValue("show_desk") : true;
+  m_RuleOffsets = isValueExists("ignore_offsets") ? getBoolValue("ignore_offsets") : false;
 
 
 }
@@ -462,6 +463,7 @@ void OutfitReader::ReadEmotes()
     if(l_emoteData.toObject().contains("image")) newEmote.dialog = "outfits/" + mOutfitName + "/" + getStringValue("image");
 
     newEmote.desk_modifier = isValueExists("desk") ? getBoolValue("desk") : m_RuleDesk;
+    newEmote.ignore_offsets = isValueExists("ignore_offsets") ? getBoolValue("ignore_offsets") : m_RuleOffsets;
     newEmote.modifier = 0;
 
     newEmote.sound_file = soundFile;
