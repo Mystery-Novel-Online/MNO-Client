@@ -100,9 +100,9 @@ namespace LuaBridge
     return LuaEventCall("OnTabChanged", name, group);
   }
 
-  bool OnCharacterMessage(std::string character, std::string folder, std::string emote, std::string message)
+  bool OnCharacterMessage(std::string character, std::string folder, std::string emote, std::string message, bool isBlankpost)
   {
-    return LuaEventCall("OnCharacterMessage", character, folder, emote, message);
+    return LuaEventCall("OnMessageReceived", character, folder, emote, message, isBlankpost);
   }
 
   bool SongChangeEvent(std::string path, std::string name, std::string submitter)

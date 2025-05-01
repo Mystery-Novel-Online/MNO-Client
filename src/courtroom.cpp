@@ -1193,7 +1193,7 @@ void Courtroom::start_chatmessage()
 void Courtroom::handle_chatmessage()
 {
   qDebug() << "handle_chatmessage";
-  LuaBridge::OnCharacterMessage(m_chatmessage[CMShowName].toStdString(), m_chatmessage[CMChrName].toStdString(), m_chatmessage[CMEmote].toStdString(), m_chatmessage[CMMessage].toStdString());
+  LuaBridge::OnCharacterMessage(m_chatmessage[CMShowName].toStdString(), m_chatmessage[CMChrName].toStdString(), m_chatmessage[CMEmote].toStdString(), m_chatmessage[CMMessage].toStdString(), m_chatmessage[CMMessage].trimmed().isEmpty());
   m_hide_character = m_chatmessage[CMHideCharacter].toInt();
   m_play_pre = false;
   m_play_zoom = false;
@@ -1620,6 +1620,8 @@ void Courtroom::handle_chatmessage_3()
   }
 
   calculate_chat_tick_interval();
+
+  LuaBridge::LuaEventCall("OnMessageStart");
   start_chat_timer();
   PairManager::get().DisableUpcomingPair();
 }
@@ -2165,7 +2167,7 @@ void Courtroom::next_chat_letter()
 
 void Courtroom::post_chatmessage()
 {
-  LuaBridge::LuaEventCall("OnMessageCompleted");
+  LuaBridge::LuaEventCall("OnMessageCompleted", m_chatmessage[CMMessage].trimmed().isEmpty());
   m_tick_timer->stop();
   if (m_game_state != GameState::Preloading)
   {

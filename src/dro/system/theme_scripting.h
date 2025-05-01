@@ -26,7 +26,7 @@ namespace LuaBridge
   }
 
   bool OnTabChange(std::string name, std::string group);
-  bool OnCharacterMessage(std::string character, std::string folder, std::string emote, std::string message);
+  bool OnCharacterMessage(std::string character, std::string folder, std::string emote, std::string message, bool isBlankpost);
   bool SongChangeEvent(std::string path, std::string name, std::string submitter);
   bool OnSongChange(std::string path, std::string name, std::string submitter);
 }
