@@ -62,7 +62,8 @@ namespace Layout::Courtroom
   void ToggleWidgetVisibility(const char *name, bool visibleState)
   {
     if(!s_CourtroomWidgets.contains(name)) return;
-    s_CourtroomWidgets[name]->setVisible(visibleState);
+    QWidget *widgetTarget = s_CourtroomWidgets[name];
+    widgetTarget->setVisible(visibleState);
   }
 
   void AddToWidgetList(QString name, QWidget *widget)
@@ -72,7 +73,10 @@ namespace Layout::Courtroom
 
   void RaiseWidget(const char *name)
   {
-    if(!s_CourtroomWidgets.contains(name)) return;
+    if(!s_CourtroomWidgets.contains(name))
+    {
+      return;
+    }
     s_CourtroomWidgets[name]->raise();
   }
 

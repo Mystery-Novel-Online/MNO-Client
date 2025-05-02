@@ -2480,6 +2480,7 @@ void Courtroom::on_ooc_message_return_pressed()
       {
         if(LuaBridge::LuaEventCall(commandFunction.toUtf8()))
         {
+          ui_ooc_chat_message->clear();
           return;
         }
       }
