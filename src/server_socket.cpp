@@ -18,7 +18,9 @@
 #include "modules/networking/json_packet.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/network/server_metadata.h"
+#include "dro/network/area_metadata.h"
 #include "dro/system/theme_scripting.h"
+
 
 void AOApplication::connect_to_server(DRServerInfo p_server)
 {
@@ -286,13 +288,15 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   else if (l_header == "LIST_REASON")
   {
     int prompt = l_content.at(0).toInt();
+
+    if(!LuaBridge::LuaEventCall("AreaDescriptionEvent", l_content.at(1).toStdString()))
+    {
+      LuaBridge::LuaEventCall("OnAreaDescriptionRecieved", l_content.at(1).toStdString());
+      AreaMetadata::SetDescription(l_content.at(1).toUtf8());
+    };
+
     m_courtroom->m_current_reportcard_reason = Courtroom::ReportCardReason(prompt);
-
-    m_courtroom->m_area_description = l_content.at(1);
-    LuaBridge::LuaEventCall("OnAreaDescriptionRecieved", l_content.at(1).toStdString());
-
-    m_courtroom->write_area_desc();
-    AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();
+    m_courtroom->construct_playerlist_layout();
   }
   else if (l_header == "FA")
   {

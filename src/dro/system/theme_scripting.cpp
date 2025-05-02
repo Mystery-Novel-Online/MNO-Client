@@ -4,6 +4,7 @@
 #include "dro/interface/courtroom_layout.h"
 #include <modules/theme/thememanager.h>
 #include "modules/managers/notify_manager.h"
+#include "dro/network/area_metadata.h"
 #include "courtroom.h"
 #include <lobby.h>
 
@@ -78,6 +79,9 @@ namespace ThemeScripting
 
       sol::table systemTable = s_themeScript.create_named_table("System");
       systemTable.set_function("Alert", &LuaFunctions::AlertUser);
+
+      sol::table areaTable = s_themeScript.create_named_table("Area");
+      areaTable.set_function("SetDescription", &AreaMetadata::SetDescription);
 
       s_themeScript.safe_script_file(filePath.toStdString());
     }
