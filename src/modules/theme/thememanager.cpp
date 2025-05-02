@@ -102,7 +102,16 @@ void ThemeManager::execLayerTabs()
 
   for (it = m_TabDeletionQueue.begin(); it != m_TabDeletionQueue.end(); ++it)
   {
+    Courtroom* target = AOApplication::getInstance()->get_courtroom();
     QWidget *value = it.value();
+    if(target != nullptr)
+    {
+      const auto children = value->findChildren<QWidget *>(QString(), Qt::FindDirectChildrenOnly);
+      for (QWidget *child : children)
+      {
+        child->setParent(target);
+      }
+    }
     delete value;
   }
 }
