@@ -1374,7 +1374,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
     double l_CourtroomWidth = static_cast<double>(ui_viewport->width());
     double l_HalfCourtroomWidth = static_cast<double>(l_CourtroomWidth / 2);
     int hOffset = m_chatmessage[CMOffsetH].toInt();
-    if(hOffset == 0) hOffset = 480;
+    if(hOffset == 0) hOffset = selfOffset;
     double offsetValue = static_cast<double>(((double)hOffset / l_CourtroomWidth) * l_CourtroomWidth - l_HalfCourtroomWidth);
 
     ui_vp_player_char->setPos(offsetValue, ui_vp_player_char->y());

@@ -215,35 +215,28 @@ bool DRAudioStream::ensure_init()
   if (m_filename.isEmpty())
     return false;
 
-  HSTREAM l_hstream;
-  HSTREAM decodeStream;
-
+  HSTREAM stream;
+  
   if (m_filename.endsWith("opus", Qt::CaseInsensitive))
   {
-    l_hstream = BASS_OPUS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE);
-    decodeStream = BASS_OPUS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE);
+    stream = BASS_OPUS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE);
   }
   else
   {
-    l_hstream = BASS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_PRESCAN);
-    decodeStream = BASS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_PRESCAN | BASS_STREAM_DECODE);
+    stream = BASS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN);
   }
 
-  if (!l_hstream && !decodeStream)
-  {
-    qWarning() << "error: failed to create audio stream (file:" << m_filename << ")";
+  if (!stream) {
+    qWarning() << "error: failed to create decode stream:" << DRAudio::get_last_bass_error();
     return false;
   }
-  m_hstream = l_hstream;
 
   BASS_SetConfig(BASS_CONFIG_FLOATDSP, TRUE);
-  m_hstream = BASS_FX_TempoCreate(decodeStream, BASS_FX_FREESOURCE);
+  m_hstream = BASS_FX_TempoCreate(stream, BASS_FX_FREESOURCE);
 
-
-  if (!m_hstream)
-  {
+  if (!m_hstream) {
     qWarning() << "error: failed to create tempo stream:" << DRAudio::get_last_bass_error();
-    BASS_StreamFree(decodeStream);
+    BASS_StreamFree(stream);
     return false;
   }
 
