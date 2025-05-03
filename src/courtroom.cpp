@@ -2988,13 +2988,65 @@ void Courtroom::OnCharRandomClicked()
     return;
   }
 
+
+  QString char_json_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_JSON);
   QString char_ini_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_INI);
 
-  if (!FS::Checks::FileExists(char_ini_path))
+  if (!FS::Checks::FileExists(char_json_path))
   {
-    qDebug() << "did not find " << char_ini_path;
-    call_notice("Could not find " + char_ini_path);
+    if (!FS::Checks::FileExists(char_ini_path))
+    {
+      qDebug() << "did not find " << char_ini_path;
+      call_notice("Could not find " + char_ini_path);
+      return;
+    }
+  }
+
+  if(!CharacterManager::get().GetCharacterInServer(selectedChar.name))
+  {
+    n_real_char = CharacterManager::get().GetAvaliablePersona();
+    ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(n_real_char), selectedChar.name);
+  }
+  else
+  {
+    n_real_char = CharacterManager::get().GetFilteredId(selectedChar.name);
+  }
+
+  ao_app->send_server_packet(
+      DRPacket("CC", {QString::number(ao_app->get_client_id()), QString::number(n_real_char), "HDID"}));
+}
+
+void Courtroom::SwitchRandomCharacter(QString list)
+{
+  int n_real_char = 0;
+  std::srand(std::time(nullptr));
+
+  QVector<char_type> randomList = CharacterManager::get().GetCharList(list);
+
+  int randomCount = randomList.length();
+
+  int randomIndex = std::rand() % randomCount;
+
+  char_type selectedChar = randomList[randomIndex];
+
+
+  if (get_character() == selectedChar.name)
+  {
+    enter_courtroom(get_character_id());
     return;
+  }
+
+  QString char_json_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_JSON);
+  QString char_ini_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_INI);
+
+  if (!FS::Checks::FileExists(char_json_path))
+  {
+    if (!FS::Checks::FileExists(char_ini_path))
+    {
+      qDebug() << "did not find " << char_ini_path;
+      call_notice("Could not find " + char_ini_path);
+      return;
+    }
   }
 
   if(!CharacterManager::get().GetCharacterInServer(selectedChar.name))

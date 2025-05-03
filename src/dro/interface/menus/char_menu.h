@@ -16,9 +16,21 @@ public:
 public slots:
   void OnMenuRequested(QPoint p_point);
   void OnUpdateCharacterFilesTriggered();
+  void OnOpenCharacterTriggered();
+  void OnRandomizeServerTriggered();
+  void OnRandomizeFavoritesTriggered();
+  void OnRandomizeIniswapTriggered();
 
 private:
   QAction *p_UpdateCharacterFilesAction;
+  QAction *p_OpenDirectoryAction;
+
+
+  QMenu* p_RandomizeMenu;
+  QAction *p_RandomServerAction;
+  QAction *p_RandomFavoritesAction;
+  QAction *p_RandomFilesAction;
+
   Courtroom *parentCourtroom;
 };
 

@@ -757,6 +757,7 @@ public slots:
   void hide_emote_tooltip(int id);
   void send_mc_packet(QString p_song);
   void SwitchCharacterByName(const char* characterName);
+  void SwitchRandomCharacter(QString list);
 
 private slots:
   void setup_chat();
