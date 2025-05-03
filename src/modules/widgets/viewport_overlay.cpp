@@ -65,27 +65,27 @@ void ViewportOverlay::resizeWidgetAndChildren(QString t_widget, int t_width, int
 
 void ViewportOverlay::displayContextMenu(QPoint t_position)
 {
-  if(AOApplication::getInstance()->current_theme->read_config_bool("detatchable_viewport"))
-  {
-    QMenu *l_menu = new QMenu(this);
+  //if(AOApplication::getInstance()->current_theme->read_config_bool("detatchable_viewport"))
+  //{
+  //  QMenu *l_menu = new QMenu(this);
 
-    //Create the detachWindowAction
-    QAction *l_detachWindowAction = new QAction("Detach from Window");
-    QObject::connect(l_detachWindowAction, &QAction::triggered, [this](){detatchViewport();});
-    l_menu->addAction(l_detachWindowAction);
+  //  //Create the detachWindowAction
+  //  QAction *l_detachWindowAction = new QAction("Detach from Window");
+  //  QObject::connect(l_detachWindowAction, &QAction::triggered, [this](){detatchViewport();});
+  //  l_menu->addAction(l_detachWindowAction);
 
 
-    //Create the resize Actions
-    QMenu *l_scaleMenu = l_menu->addMenu("Scale (1.76:1)");
+  //  //Create the resize Actions
+  //  QMenu *l_scaleMenu = l_menu->addMenu("Scale (1.76:1)");
 
-    l_scaleMenu->addAction(createResizeAction(480, 272));
-    l_scaleMenu->addAction(createResizeAction(960, 544));
-    l_scaleMenu->addAction(createResizeAction(1280, 725));
-    l_scaleMenu->addAction(createResizeAction(1440, 816));
-    l_scaleMenu->addAction(createResizeAction(1920, 1088));
+  //  l_scaleMenu->addAction(createResizeAction(480, 272));
+  //  l_scaleMenu->addAction(createResizeAction(960, 544));
+  //  l_scaleMenu->addAction(createResizeAction(1280, 725));
+  //  l_scaleMenu->addAction(createResizeAction(1440, 816));
+  //  l_scaleMenu->addAction(createResizeAction(1920, 1088));
 
-    l_menu->popup(this->mapToGlobal(t_position));
-  }
+  //  l_menu->popup(this->mapToGlobal(t_position));
+  //}
 }
 
 void ViewportOverlay::detatchViewport()
