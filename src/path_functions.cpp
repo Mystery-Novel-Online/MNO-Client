@@ -31,6 +31,20 @@ void AOApplication::reload_packages()
   QVector<QString> packageNames = FS::Packages::Scan();
   QString packagesPath = FS::Paths::ApplicationPath() + "/packages/";
 
+  QDir baseCharactersDir (FS::Paths::BasePath() + "/characters");
+  if (baseCharactersDir.exists())
+  {
+    QVector<char_type> baseCharacters;
+    QStringList character_folders = baseCharactersDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const QString &character_folder : character_folders)
+    {
+      char_type packageChar;
+      packageChar.name = character_folder;
+      baseCharacters.append(std::move(packageChar));
+    }
+    CharacterManager::get().SetCharList("base", baseCharacters);
+  }
+
   for(QString packageName : packageNames)
   {
     QDir charactersPath (packagesPath + packageName + "/characters");
