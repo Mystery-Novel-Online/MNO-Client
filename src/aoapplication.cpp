@@ -266,7 +266,7 @@ QString AOApplication::get_character_sprite_path(QString p_character, QString p_
   {
     if (!p_prefix.isEmpty())
     {
-      if (p_emote.contains("/"))
+      if (p_emote.contains("outfits/"))
       {
         int lastSlashIndex = p_emote.lastIndexOf('/');
         l_file_name_list.append(p_emote.left(lastSlashIndex + 1) + p_prefix + p_emote.mid(lastSlashIndex + 1) + i_extension);
