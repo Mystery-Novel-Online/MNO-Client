@@ -782,6 +782,7 @@ void Courtroom::on_showname_changed(QString p_showname)
 void Courtroom::on_pair_offset_changed()
 {
   ao_app->send_server_packet(DRPacket("POFF", {QString::number(ui_slider_horizontal_axis->value())}));
+  OnPlayerOffsetsChanged();
 }
 
 void Courtroom::OnPlayerOffsetsChanged()
@@ -806,6 +807,14 @@ void Courtroom::OnPlayerOffsetsChanged()
     {
       ui_vp_player_char->stop();
     }
+
+
+    double l_CourtroomWidth = static_cast<double>(ui_viewport->width());
+    double l_HalfCourtroomWidth = static_cast<double>(l_CourtroomWidth / 2);
+    double offsetValue = static_cast<double>(((double)ui_slider_horizontal_axis->value() / l_CourtroomWidth) * l_CourtroomWidth - l_HalfCourtroomWidth);
+
+    ui_vp_player_char->setPos(offsetValue, ui_vp_player_char->y());
+
 
     ui_vp_player_char->start(targetScaling, playerScale);
 
@@ -1355,7 +1364,21 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
   if(selfOffset > otherOffset) offsetTextbox = "right";
 
-  ui_vp_player_char->setPos(selfOffset, ui_vp_player_char->y());
+
+  if(m_chatmessage[CMOffsetH].isEmpty())
+  {
+    ui_vp_player_char->setPos(selfOffset, ui_vp_player_char->y());
+  }
+  else
+  {
+    double l_CourtroomWidth = static_cast<double>(ui_viewport->width());
+    double l_HalfCourtroomWidth = static_cast<double>(l_CourtroomWidth / 2);
+    double offsetValue = static_cast<double>(((double)m_chatmessage[CMOffsetH].toInt() / l_CourtroomWidth) * l_CourtroomWidth - l_HalfCourtroomWidth);
+
+    ui_vp_player_char->setPos(offsetValue, ui_vp_player_char->y());
+  }
+
+
   ui_vp_player_pair->setPos(otherOffset, ui_vp_player_pair->y());
 
   int verticalValue = m_chatmessage[CMOffsetV].trimmed().toInt();
@@ -1498,9 +1521,6 @@ void Courtroom::handle_chatmessage_3()
 
       if (l_showname_image.isEmpty())
         l_showname_image = ao_app->find_asset_path({ao_app->get_character_path(f_char, "showname")}, FS::Formats::StaticImages());
-
-      ui_vp_showname_image->set_image(l_showname_image);
-      ui_vp_showname_image->show();
     }
 
     if (!l_showname_image.isEmpty())
@@ -1510,6 +1530,7 @@ void Courtroom::handle_chatmessage_3()
     }
     else
     {
+      ui_vp_showname_image->hide();
       ui_vp_showname->show();
     }
   }
