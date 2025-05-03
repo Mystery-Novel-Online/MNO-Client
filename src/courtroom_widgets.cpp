@@ -251,7 +251,7 @@ void Courtroom::create_widgets()
   ui_note_area->m_layout = new QVBoxLayout(ui_note_area);
 
   ui_slider_horizontal_axis = new QSlider(Qt::Horizontal, this);
-  ui_slider_horizontal_axis->setMinimum(0);
+  ui_slider_horizontal_axis->setMinimum(1);
   ui_slider_horizontal_axis->setMaximum(960);
 
   ui_slider_horizontal_axis->setContextMenuPolicy(Qt::CustomContextMenu);
