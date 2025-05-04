@@ -15,6 +15,7 @@ EmoteMenu::EmoteMenu(QWidget *parent) : QMenu(parent)
   p_RenderAction = addAction(tr("Use Sprite Images"));
   addSeparator();
 
+  p_ResetOffsetsAction = addAction(tr("Reset Offsets"));
   m_presetsMenu = new QMenu(tr("Presets"), this);
   addMenu(m_presetsMenu);
 
@@ -22,6 +23,7 @@ EmoteMenu::EmoteMenu(QWidget *parent) : QMenu(parent)
 
   connect(p_SizeAction, &QAction::triggered, this, &EmoteMenu::OnDoubleSizeTriggered);
   connect(p_RenderAction, &QAction::triggered, this, &EmoteMenu::OnRealtimeTriggered);
+  connect(p_ResetOffsetsAction, &QAction::triggered, this, &EmoteMenu::OnOffsetResetTriggered);
   //connect(p_makerAction, &QAction::triggered, this, &EmoteMenu::OnButtonMakerTriggered);
 
   m_buttonMaker = new ButtonMaker();
@@ -95,6 +97,13 @@ void EmoteMenu::OnButtonMakerTriggered()
 {
   m_buttonMaker->show();
   m_buttonMaker->SetCharacter(CharacterManager::get().p_SelectedCharacter->mFolder);
+}
+
+void EmoteMenu::OnOffsetResetTriggered()
+{
+  Layout::Courtroom::SetScaleSlider(1000);
+  Layout::Courtroom::SetVerticalSlider(0);
+  Layout::Courtroom::SetHorizontalSlider(480);
 }
 
 void EmoteMenu::ApplyPreset(const QString &presetName)

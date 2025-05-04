@@ -105,5 +105,13 @@ namespace Layout::Courtroom
     sliderWidget->setValue(verticalValue);
   }
 
+  void SetHorizontalSlider(int horizontalValue)
+  {
+    QSlider *sliderWidget = nullptr;
+    sliderWidget = dynamic_cast<QSlider*>(s_CourtroomWidgets["pair_offset"]);
+    if(sliderWidget == nullptr) return;
+    sliderWidget->setValue(horizontalValue);
+  }
+
 
 }

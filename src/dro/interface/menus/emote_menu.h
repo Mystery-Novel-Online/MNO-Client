@@ -26,6 +26,7 @@ public slots:
   void OnDoubleSizeTriggered();
   void OnRealtimeTriggered();
   void OnButtonMakerTriggered();
+  void OnOffsetResetTriggered();
   void ApplyPreset(const QString& presetName);
 
 private:
@@ -36,6 +37,9 @@ private:
   QAction *p_SizeAction = nullptr;
   QAction *p_RenderAction = nullptr;
   QAction *p_makerAction = nullptr;
+
+  QAction *p_ResetOffsetsAction = nullptr;
+
   QMenu* m_presetsMenu;
 
 };

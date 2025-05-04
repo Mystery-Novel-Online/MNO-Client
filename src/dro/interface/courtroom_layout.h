@@ -19,7 +19,8 @@ namespace Layout::Courtroom
 
 
   void SetScaleSlider(int scaleValue);
-  void SetVerticalSlider(int verticalValue);
+  void SetHorizontalSlider(int scaleValue);
+  void SetVerticalSlider(int horizontalValue);
 }
 
 #endif // COURTROOM_LAYOUT_H
