@@ -808,14 +808,12 @@ void Courtroom::OnPlayerOffsetsChanged()
       ui_vp_player_char->stop();
     }
 
+    constexpr double referenceWidth = 960.0;
 
     double l_CourtroomWidth = static_cast<double>(ui_viewport->width());
-    double l_HalfCourtroomWidth = static_cast<double>(l_CourtroomWidth / 2);
-    double offsetValue = static_cast<double>(((double)ui_slider_horizontal_axis->value() / l_CourtroomWidth) * l_CourtroomWidth - l_HalfCourtroomWidth);
-
+    double l_HalfCourtroomWidth = l_CourtroomWidth / 2.0;
+    double offsetValue = (static_cast<double>(ui_slider_horizontal_axis->value()) / referenceWidth) * l_CourtroomWidth - l_HalfCourtroomWidth;
     ui_vp_player_char->setPos(offsetValue, ui_vp_player_char->y());
-
-
     ui_vp_player_char->start(targetScaling, playerScale);
 
   }
@@ -1371,12 +1369,15 @@ void Courtroom::handle_chatmessage_2() // handles IC
   }
   else
   {
+    constexpr double referenceWidth = 960.0;
+
     double l_CourtroomWidth = static_cast<double>(ui_viewport->width());
-    double l_HalfCourtroomWidth = static_cast<double>(l_CourtroomWidth / 2);
+    double l_HalfCourtroomWidth = l_CourtroomWidth / 2.0;
     int hOffset = m_chatmessage[CMOffsetH].toInt();
+
     if(hOffset != 0)
     {
-      double offsetValue = static_cast<double>(((double)hOffset / l_CourtroomWidth) * l_CourtroomWidth - l_HalfCourtroomWidth);
+      double offsetValue = (static_cast<double>(hOffset) / referenceWidth) * l_CourtroomWidth - l_HalfCourtroomWidth;
       ui_vp_player_char->setPos(offsetValue, ui_vp_player_char->y());
     }
     else
