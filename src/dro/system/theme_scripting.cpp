@@ -67,6 +67,7 @@ namespace ThemeScripting
       characterTable.set_function("Switch", &LuaFunctions::SwitchCharacter);
       characterTable.set_function("SetScaleOffset", &Layout::Courtroom::SetScaleSlider);
       characterTable.set_function("SetVerticalOffset", &Layout::Courtroom::SetVerticalSlider);
+      characterTable.set_function("SetHorizontalOffset", &Layout::Courtroom::SetHorizontalSlider);
 
       sol::table stickerTable = s_themeScript.create_named_table("Sticker");
       stickerTable.set_function("Create", &Layout::Courtroom::CreateSticker);
