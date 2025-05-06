@@ -23,7 +23,7 @@ namespace ThemeScripting
   {
     s_registeredFunctions.clear();
     s_themeScript = sol::state();
-    s_themeScript.open_libraries(sol::lib::base, sol::lib::io, sol::lib::math, sol::lib::string);
+    s_themeScript.open_libraries(sol::lib::base, sol::lib::io, sol::lib::math, sol::lib::string, sol::lib::table);
     QString filePath = themePath + "/script.lua";
     if(FS::Checks::FileExists(filePath))
     {
@@ -84,7 +84,7 @@ namespace ThemeScripting
       sol::table areaTable = s_themeScript.create_named_table("Area");
       areaTable.set_function("SetDescription", &AreaMetadata::SetDescription);
 
-      s_themeScript.safe_script_file(filePath.toStdString());
+      s_themeScript.safe_script_file(filePath.toUtf8().constData());
     }
   }
 }
