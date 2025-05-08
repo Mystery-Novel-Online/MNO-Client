@@ -16,6 +16,7 @@ HEADERS += \
   src/dro/fs/fs_reading.h \
   src/dro/fs/fs_writing.h \
   src/dro/interface/courtroom_layout.h \
+  src/dro/interface/lobby_layout.h \
   src/dro/interface/menus/area_menu.h \
   src/dro/interface/menus/bgm_menu.h \
   src/dro/interface/menus/char_menu.h \
@@ -130,6 +131,7 @@ SOURCES += \
   src/dro/fs/fs_reading.cpp \
   src/dro/fs/fs_writing.cpp \
   src/dro/interface/courtroom_layout.cpp \
+  src/dro/interface/lobby_layout.cpp \
   src/dro/interface/menus/area_menu.cpp \
   src/dro/interface/menus/bgm_menu.cpp \
   src/dro/interface/menus/char_menu.cpp \

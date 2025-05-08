@@ -37,6 +37,9 @@
 
 #include <utility>
 #include "dro/fs/fs_reading.h"
+#include "dro/interface/lobby_layout.h"
+
+#include <modules/theme/thememanager.h>
 
 Lobby::Lobby(AOApplication *p_ao_app)
     : QMainWindow()
@@ -46,19 +49,25 @@ Lobby::Lobby(AOApplication *p_ao_app)
   m_master_client = new DRMasterClient(this);
 
   setWindowTitle("Danganronpa Online (" + get_version_string() + ")");
+  Layout::ServerSelect::AssignLobby(this, ao_app);
 
   ui_background = new AOImageDisplay(this, ao_app);
+
   ui_public_server_filter = new AOButton(this, ao_app);
+
   ui_favorite_server_filter = new AOButton(this, ao_app);
-  ui_refresh = new AOButton(this, ao_app);
-  ui_toggle_favorite = new AOButton(this, ao_app);
-  ui_connect = new AOButton(this, ao_app);
+
+  ui_toggle_favorite = Layout::ServerSelect::CreateButton("add_to_fav", "addtofav", [this]() {this->on_add_to_fav_released();});
+  ui_refresh = Layout::ServerSelect::CreateButton("refresh", "refresh", [this]() {this->on_refresh_released();});
+  ui_connect = Layout::ServerSelect::CreateButton("connect", "connect", [this]() {this->on_connect_released();});
+
+  ui_config_panel = new AOButton(this, ao_app);
+
   ui_version = new DRTextEdit(this);
   ui_version->setFrameStyle(QFrame::NoFrame);
   ui_version->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_version->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_version->setReadOnly(true);
-  ui_config_panel = new AOButton(this, ao_app);
   ui_server_list = new QListWidget(this);
   ui_server_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -76,18 +85,23 @@ Lobby::Lobby(AOApplication *p_ao_app)
   ui_player_count->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_player_count->setWordWrapMode(QTextOption::NoWrap);
   ui_player_count->setReadOnly(true);
+
   ui_description = new QTextBrowser(this);
   ui_description->setOpenExternalLinks(true);
   ui_description->setReadOnly(true);
+
   ui_chatbox = new DRChatLog(this);
   ui_chatbox->setOpenExternalLinks(true);
   ui_chatbox->setReadOnly(true);
+
   ui_loading_background = new AOImageDisplay(this, ao_app);
   ui_loading_text = new DRTextEdit(ui_loading_background);
   ui_progress_bar = new QProgressBar(ui_loading_background);
+
   ui_progress_bar->setMinimum(0);
   ui_progress_bar->setMaximum(100);
   ui_progress_bar->setStyleSheet("QProgressBar{ color: white; }");
+
   ui_cancel = new AOButton(ui_loading_background, ao_app);
 
   connect(ao_app, SIGNAL(reload_theme()), this, SLOT(update_widgets()));
@@ -103,15 +117,6 @@ Lobby::Lobby(AOApplication *p_ao_app)
   connect(ui_public_server_filter, SIGNAL(clicked()), this, SLOT(toggle_public_server_filter()));
 
   connect(ui_favorite_server_filter, SIGNAL(clicked()), this, SLOT(toggle_favorite_server_filter()));
-
-  connect(ui_refresh, SIGNAL(pressed()), this, SLOT(on_refresh_pressed()));
-  connect(ui_refresh, SIGNAL(released()), this, SLOT(on_refresh_released()));
-
-  connect(ui_toggle_favorite, SIGNAL(pressed()), this, SLOT(on_add_to_fav_pressed()));
-  connect(ui_toggle_favorite, SIGNAL(released()), this, SLOT(on_add_to_fav_released()));
-
-  connect(ui_connect, SIGNAL(pressed()), this, SLOT(on_connect_pressed()));
-  connect(ui_connect, SIGNAL(released()), this, SLOT(on_connect_released()));
 
   connect(ui_config_panel, SIGNAL(pressed()), this, SLOT(on_config_pressed()));
   connect(ui_config_panel, SIGNAL(released()), this, SLOT(on_config_released()));
@@ -134,6 +139,7 @@ Lobby::Lobby(AOApplication *p_ao_app)
   set_choose_a_server();
 
   EmotionManager::get().wEmoteList = {};
+  ThemeManager::get().ResetWidgetLists();
 }
 
 Lobby::~Lobby()
@@ -168,15 +174,6 @@ void Lobby::update_widgets()
 
   set_size_and_pos(ui_favorite_server_filter, "favorites", LOBBY_DESIGN_INI, ao_app);
   ui_favorite_server_filter->set_image(m_server_filter == FavoriteOnly ? "favorites_selected.png" : "favorites.png");
-
-  set_size_and_pos(ui_refresh, "refresh", LOBBY_DESIGN_INI, ao_app);
-  ui_refresh->set_image("refresh.png");
-
-  set_size_and_pos(ui_toggle_favorite, "add_to_fav", LOBBY_DESIGN_INI, ao_app);
-  ui_toggle_favorite->set_image("addtofav.png");
-
-  set_size_and_pos(ui_connect, "connect", LOBBY_DESIGN_INI, ao_app);
-  ui_connect->set_image("connect.png");
 
   set_size_and_pos(ui_version, "version", LOBBY_DESIGN_INI, ao_app);
   ui_version->setText("Version: " + get_version_string());
@@ -486,26 +483,14 @@ void Lobby::update_server_filter_buttons()
   filter_server_listing();
 }
 
-void Lobby::on_refresh_pressed()
-{
-  ui_refresh->set_image("refresh_pressed.png");
-}
-
 void Lobby::on_refresh_released()
 {
-  ui_refresh->set_image("refresh.png");
   m_master_client->request_server_list();
   load_favorite_server_list();
 }
 
-void Lobby::on_add_to_fav_pressed()
-{
-  ui_toggle_favorite->set_image("addtofav_pressed.png");
-}
-
 void Lobby::on_add_to_fav_released()
 {
-  ui_toggle_favorite->set_image("addtofav.png");
   const auto l_index = ui_server_list->currentIndex();
   if (!l_index.isValid() || l_index.row() < m_favorite_server_list.length())
   {
@@ -524,14 +509,9 @@ void Lobby::on_add_to_fav_released()
   set_favorite_server_list(l_server_list);
 }
 
-void Lobby::on_connect_pressed()
-{
-  SceneManager::get().clearPlayerDataList();
-  ui_connect->set_image("connect_pressed.png");
-}
-
 void Lobby::on_connect_released()
 {
+  SceneManager::get().clearPlayerDataList();
   const VersionStatus l_status = ao_app->get_server_client_version_status();
   if (l_status != VersionStatus::Ok)
   {
@@ -555,8 +535,6 @@ void Lobby::on_connect_released()
                  "<br /><br />"
                  "The client may not work properly, if at all.");
   }
-
-  ui_connect->set_image("connect.png");
   ao_app->send_server_packet(DRPacket("askchaa"));
 }
 

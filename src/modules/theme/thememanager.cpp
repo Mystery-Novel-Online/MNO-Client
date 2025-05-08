@@ -9,6 +9,17 @@
 
 ThemeManager ThemeManager::s_Instance;
 
+void ThemeManager::ResetWidgetLists()
+{
+  m_TabWidgets.clear();
+  m_TabDeletionQueue.clear();
+  m_WidgetNames.clear();
+  mButtonWidgets.clear();
+  mLineEditWidgets.clear();
+  mComboBoxWidgets.clear();
+  m_DetatchedTabList.clear();
+}
+
 void ThemeManager::createTabParent()
 {
   m_TabDeletionQueue = m_TabWidgets;

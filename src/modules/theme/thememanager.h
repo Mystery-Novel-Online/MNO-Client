@@ -21,6 +21,8 @@ public:
     return s_Instance;
   }
 
+  void ResetWidgetLists();
+
   //Tabs
   void createTabParent();
   void execLayerTabs();

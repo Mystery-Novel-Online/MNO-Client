@@ -67,9 +67,11 @@ private:
     FavoriteOnly,
   };
   ServerFilter m_server_filter = NoFilter;
+
   AOButton *ui_refresh = nullptr;
   AOButton *ui_toggle_favorite = nullptr;
   AOButton *ui_connect = nullptr;
+
   DRTextEdit *ui_version = nullptr;
   AOButton *ui_config_panel = nullptr;
   QListWidget *ui_server_list = nullptr;
@@ -118,11 +120,8 @@ private slots:
   void filter_server_listing();
   void select_current_server();
 
-  void on_refresh_pressed();
   void on_refresh_released();
-  void on_add_to_fav_pressed();
   void on_add_to_fav_released();
-  void on_connect_pressed();
   void on_connect_released();
   void on_config_pressed();
   void on_config_released();
