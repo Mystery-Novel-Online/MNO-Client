@@ -54,10 +54,10 @@ namespace ThemeScripting
 
 
       sol::table widgetTable = s_themeScript.create_named_table("Widget");
-      widgetTable.set_function("Move", &Layout::Courtroom::MoveWidget);
-      widgetTable.set_function("Raise", &Layout::Courtroom::RaiseWidget);
-      widgetTable.set_function("SetVisible", &Layout::Courtroom::ToggleWidgetVisibility);
-      widgetTable.set_function("CreateButton", &Layout::Courtroom::CreateButton);
+      widgetTable.set_function("Move", &courtroom::layout::moveWidget);
+      widgetTable.set_function("Raise", &courtroom::layout::raiseWidget);
+      widgetTable.set_function("SetVisible", &courtroom::layout::setVisibility);
+      widgetTable.set_function("SetParent", &courtroom::layout::setParent);
 
       sol::table dialogTable = s_themeScript.create_named_table("ChoiceDialog");
       dialogTable.set_function("TriggerCustom", &LuaFunctions::CustomChoiceDialog);
@@ -66,18 +66,21 @@ namespace ThemeScripting
       sol::table characterTable = s_themeScript.create_named_table("Character");
       characterTable.set_function("Exists", &FS::Checks::CharacterExists);
       characterTable.set_function("Switch", &LuaFunctions::SwitchCharacter);
-      characterTable.set_function("SetScaleOffset", &Layout::Courtroom::SetScaleSlider);
-      characterTable.set_function("SetVerticalOffset", &Layout::Courtroom::SetVerticalSlider);
-      characterTable.set_function("SetHorizontalOffset", &Layout::Courtroom::SetHorizontalSlider);
+      characterTable.set_function("SetScale", &courtroom::sliders::setScale);
+      characterTable.set_function("SetVertical", &courtroom::sliders::setVertical);
+      characterTable.set_function("SetHorizontal", &courtroom::sliders::setHorizontal);
+
+      sol::table buttonsTable = s_themeScript.create_named_table("Button");
+      buttonsTable.set_function("Create", &courtroom::buttons::create);
 
       sol::table stickerTable = s_themeScript.create_named_table("Sticker");
-      stickerTable.set_function("Create", &Layout::Courtroom::CreateSticker);
+      stickerTable.set_function("Create", &courtroom::stickers::create);
 
       sol::table tabTable = s_themeScript.create_named_table("Tabs");
       tabTable.set_function("Change", &LuaFunctions::ChangeTab);
 
       sol::table chatlogTable = s_themeScript.create_named_table("Chatlog");
-      chatlogTable.set_function("AppendOOC", &Layout::Courtroom::AppendToOOC);
+      chatlogTable.set_function("AppendOOC", &courtroom::ooc::appendMessage);
 
       sol::table systemTable = s_themeScript.create_named_table("System");
       systemTable.set_function("Alert", &LuaFunctions::AlertUser);

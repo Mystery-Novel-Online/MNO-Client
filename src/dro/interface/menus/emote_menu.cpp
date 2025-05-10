@@ -101,9 +101,9 @@ void EmoteMenu::OnButtonMakerTriggered()
 
 void EmoteMenu::OnOffsetResetTriggered()
 {
-  Layout::Courtroom::SetScaleSlider(1000);
-  Layout::Courtroom::SetVerticalSlider(0);
-  Layout::Courtroom::SetHorizontalSlider(480);
+  courtroom::sliders::setScale(1000);
+  courtroom::sliders::setVertical(0);
+  courtroom::sliders::setHorizontal(480);
 }
 
 void EmoteMenu::ApplyPreset(const QString &presetName)
@@ -113,8 +113,8 @@ void EmoteMenu::ApplyPreset(const QString &presetName)
   {
     if(presetData.name == presetName)
     {
-      Layout::Courtroom::SetScaleSlider(presetData.Scale);
-      Layout::Courtroom::SetVerticalSlider(presetData.VerticalAlign);
+      courtroom::sliders::setScale(presetData.Scale);
+      courtroom::sliders::setVertical(presetData.VerticalAlign);
     }
   }
   qDebug() << "Presets applied";

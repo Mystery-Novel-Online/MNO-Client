@@ -257,7 +257,7 @@ void ThemeManager::SetWidgetNames(QHash<QString, QWidget *> t_WidgetNames)
 
 void ThemeManager::addWidgetName(QString t_widgetName, QWidget *t_widget)
 {
-  Layout::Courtroom::AddToWidgetList(t_widgetName, t_widget);
+  courtroom::layout::addWidget(t_widgetName, t_widget);
   m_WidgetNames[t_widgetName] = t_widget;
 }
 

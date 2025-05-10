@@ -757,7 +757,7 @@ void Courtroom::reset_widget_names()
       {"screenshot", p_ScreenshotBtn}
   };
 
-    Layout::Courtroom::SetWidgetList(widget_names);
+    courtroom::layout::setWidgetList(widget_names);
     ThemeManager::get().SetWidgetNames(widget_names);
 }
 

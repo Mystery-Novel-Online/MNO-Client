@@ -102,7 +102,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
 
 Courtroom::~Courtroom()
 {
-  Layout::Courtroom::Cleanup();
+  courtroom::cleanup();
   cleanup_preload_readers();
   ao_config->set_gamemode(nullptr);
   ao_config->set_timeofday(nullptr);
@@ -125,7 +125,7 @@ void Courtroom::set_music_list(QStringList p_music_list)
 void Courtroom::setup_courtroom()
 {
   TimeDebugger::get().StartTimer("Courtroom Setup");
-  Layout::Courtroom::Cleanup();
+  courtroom::cleanup();
   load_shouts();
   load_free_blocks();
   load_sfx_list_theme();
@@ -167,6 +167,7 @@ void Courtroom::setup_courtroom()
   construct_playerlist_layout();
   TimeDebugger::get().EndTimer("Courtroom Setup");
   PairManager::get().ThemeReload();
+  LuaBridge::LuaEventCall("OnCourtroomSetup");
 }
 
 void Courtroom::map_viewers()
