@@ -18,7 +18,7 @@ namespace FS::Paths
   QString BasePath();
   QString Package(const QString& packageName);
   QString FindFile(const QString& filePath, bool allowPackages = true);
-  QString FindDirectory(const QString& directoryPath, bool allowPackages = true);
+  QString FindDirectory(const QString& directoryPath, bool allowPackages = true, bool absolutePath = true);
 }
 
 namespace FS::Formats

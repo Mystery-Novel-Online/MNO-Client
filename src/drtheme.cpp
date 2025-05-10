@@ -32,7 +32,7 @@ void DRTheme::InitTheme()
   }
   else
   {
-    ThemeScripting::InitializeLua(FS::Paths::FindDirectory("themes/" + currentThemeName));
+    ThemeScripting::InitializeLua(FS::Paths::FindDirectory("themes/" + currentThemeName, true, false));
     QFile json_file(l_json_path); json_file.open(QIODevice::ReadOnly | QIODevice::Text);
     m_currentThemeString = json_file.readAll();
     json_file.close();

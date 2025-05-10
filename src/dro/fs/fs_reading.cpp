@@ -100,7 +100,7 @@ QString FindFile(const QString &filePath, bool allowPackages)
   return BasePath() + filePath;
 }
 
-QString FindDirectory(const QString &directoryPath, bool allowPackages)
+QString FindDirectory(const QString &directoryPath, bool allowPackages, bool absolutePath)
 {
   if(!allowPackages) return BasePath() + directoryPath;
 
@@ -119,7 +119,8 @@ QString FindDirectory(const QString &directoryPath, bool allowPackages)
     }
   }
 
-  return BasePath() + directoryPath;
+  if(absolutePath) return BasePath() + directoryPath;
+  return "base/" + directoryPath;
 }
 
 
