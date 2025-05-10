@@ -223,6 +223,8 @@ struct ThemeTabInfo
 {
   QString m_Name = "chat";
   QString m_Group = "default";
+  bool m_DragEnabled = false;
+  bool m_ToggleEnabled = false;
   pos_size_type m_transform;
   QStringList m_WidgetContents = {};
 };

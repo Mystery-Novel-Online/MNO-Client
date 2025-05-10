@@ -110,6 +110,8 @@ void ThemeModuleReader::ParseTabs()
     SetTargetObject(tabObject.toObject());
     ThemeTabInfo themeTab;
     themeTab.m_Name = getStringValue("tab_name").toLower();
+    themeTab.m_DragEnabled = getBoolValue("drag_enabled");
+    themeTab.m_ToggleEnabled = getBoolValue("is_toggle");
     themeTab.m_WidgetContents = getStringArrayValue("widgets");
 
     if(tabObject.toObject().contains("group"))

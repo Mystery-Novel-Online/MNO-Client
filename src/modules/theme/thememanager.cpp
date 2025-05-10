@@ -65,6 +65,7 @@ void ThemeManager::createTabParent()
 
     l_newTab->resize(l_panelPosition.width, l_panelPosition.height);
     l_newTab->setBackgroundImage(r_tabInfo.m_Name);
+    l_newTab->setDragable(r_tabInfo.m_DragEnabled);
 
     addWidgetName(l_panelName, l_newTab);
 
@@ -138,50 +139,58 @@ void ThemeManager::resetSelectedTabs()
   }
 }
 
-void ThemeManager::toggleTab(QString t_tabName, QString t_tabGroup)
+void ThemeManager::toggleTab(const QString& name, const QString& group)
 {
-  for(ThemeTabInfo r_tabInfo : ThemeManager::get().getTabsInfo())
+  QVector<ThemeTabInfo> tabsInfo = ThemeManager::get().getTabsInfo();
+  const ThemeTabInfo* selectedTab = nullptr;
+
+  for (const ThemeTabInfo& tabInfo : tabsInfo)
   {
-
-    QString l_buttonName = r_tabInfo.m_Name + "_toggle";
-    QString l_tabPanel = r_tabInfo.m_Name + "_panel";
-
-    if(r_tabInfo.m_Group != t_tabGroup) continue;
-    if(!m_WidgetNames.contains(l_tabPanel)) continue;
-
-    if(r_tabInfo.m_Name == t_tabName)
+    if (tabInfo.m_Name == name && tabInfo.m_Group == group)
     {
-      if(m_WidgetNames.contains(l_buttonName))
-      {
-        TabToggleButton* l_tabButton = dynamic_cast<TabToggleButton*>(getWidget(l_buttonName));
-        l_tabButton->setActiveStatus(true);
-      }
+      selectedTab = &tabInfo;
+      break;
+    }
+  }
 
-      getWidget(l_tabPanel)->show();
+  if (!selectedTab) return;
 
-      QString l_bg_image = AOApplication::getInstance()->find_theme_asset_path("courtroombackground_" + t_tabName + ".png");
-      if (!l_bg_image.isEmpty())
-      {
-        wCourtroomBackground->set_theme_image("courtroombackground_" + t_tabName + ".png");
-      }
+  const bool isToggle = selectedTab->m_ToggleEnabled;
+
+  for (const ThemeTabInfo& tabInfo : tabsInfo)
+  {
+    if (tabInfo.m_Group != group) continue;
+
+    const QString buttonName = tabInfo.m_Name + "_toggle";
+    const QString panelName = tabInfo.m_Name + "_panel";
+
+    bool isCurrent = (tabInfo.m_Name == name);
+
+    if (!m_WidgetNames.contains(panelName)) continue;
+
+    if (m_WidgetNames.contains(buttonName))
+    {
+      if (auto* tabButton = dynamic_cast<TabToggleButton*>(getWidget(buttonName))) tabButton->setActiveStatus(isCurrent);
+    }
+
+    if (isCurrent)
+    {
+      getWidget(panelName)->show();
+
+      const QString bgImage = AOApplication::getInstance()->find_theme_asset_path("courtroombackground_" + name + ".png");
+      if (!bgImage.isEmpty())
+        wCourtroomBackground->set_theme_image("courtroombackground_" + name + ".png");
       else
-      {
         wCourtroomBackground->set_theme_image("courtroombackground.png");
-      }
-
-
     }
-    else
+    else if (!isToggle)
     {
-      if(m_WidgetNames.contains(l_buttonName))
+      if(!tabInfo.m_ToggleEnabled)
       {
-        TabToggleButton* l_tabButton = dynamic_cast<TabToggleButton*>(getWidget(l_buttonName));
-        l_tabButton->setActiveStatus(false);
+        if (m_DetatchedTabList.contains(panelName)) continue;
+        getWidget(panelName)->hide();
       }
-      if(m_DetatchedTabList.contains(l_tabPanel)) return;
-      getWidget(l_tabPanel)->hide();
     }
-
   }
 
 }

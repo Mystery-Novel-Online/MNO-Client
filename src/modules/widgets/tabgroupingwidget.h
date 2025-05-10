@@ -11,7 +11,15 @@ class TabGroupingWidget : public QWidget
 public:
   TabGroupingWidget(QWidget *parent = nullptr);
   void setBackgroundImage(QString t_name);
+  void setDragable(bool isDragable);
 
+protected:
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+
+private:
+  QPoint m_dragStartPosition;
+  bool m_DragEnabled = false;
   AOImageDisplay *w_BackgroundImage = nullptr;
 
 };

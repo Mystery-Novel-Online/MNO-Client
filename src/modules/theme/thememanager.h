@@ -27,7 +27,7 @@ public:
   void createTabParent();
   void execLayerTabs();
   void resetSelectedTabs();
-  void toggleTab(QString t_tabName, QString t_tabGroup);
+  void toggleTab(const QString& name, const QString& group);
   void detatchTab(QString t_tabName);
   QVector <ThemeTabInfo> getTabsInfo();
 
