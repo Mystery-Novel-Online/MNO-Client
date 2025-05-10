@@ -782,10 +782,9 @@ void Courtroom::on_showname_changed(QString p_showname)
   send_showname_packet(p_showname);
 }
 
-void Courtroom::on_pair_offset_changed(int value)
+void Courtroom::on_pair_offset_changed()
 {
   ao_app->send_server_packet(DRPacket("POFF", {QString::number(ui_slider_horizontal_axis->value())}));
-  OnPlayerOffsetsChanged(value);
 }
 
 void Courtroom::OnPlayerOffsetsChanged(int value)

@@ -774,7 +774,7 @@ private slots:
 
   void on_showname_changed(QString);
 
-  void on_pair_offset_changed(int value);
+  void on_pair_offset_changed();
   void OnPlayerOffsetsChanged(int value);
 
 
