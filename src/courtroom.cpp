@@ -782,13 +782,13 @@ void Courtroom::on_showname_changed(QString p_showname)
   send_showname_packet(p_showname);
 }
 
-void Courtroom::on_pair_offset_changed()
+void Courtroom::on_pair_offset_changed(int value)
 {
   ao_app->send_server_packet(DRPacket("POFF", {QString::number(ui_slider_horizontal_axis->value())}));
-  OnPlayerOffsetsChanged();
+  OnPlayerOffsetsChanged(value);
 }
 
-void Courtroom::OnPlayerOffsetsChanged()
+void Courtroom::OnPlayerOffsetsChanged(int value)
 {
   if(!ServerMetadata::FeatureSupported("outfits")) return;
   bool intParse = false;

@@ -564,9 +564,9 @@ void Courtroom::connect_widgets()
 
 
 
-  connect(ui_slider_horizontal_axis, SIGNAL(sliderReleased()), this, SLOT(on_pair_offset_changed()));
-  connect(ui_slider_vertical_axis, SIGNAL(sliderReleased()), this, SLOT(OnPlayerOffsetsChanged()));
-  connect(ui_slider_scale, SIGNAL(sliderReleased()), this, SLOT(OnPlayerOffsetsChanged()));
+  connect(ui_slider_horizontal_axis, SIGNAL(valueChanged(int)), this, SLOT(on_pair_offset_changed(int)));
+  connect(ui_slider_vertical_axis, SIGNAL(valueChanged(int)), this, SLOT(OnPlayerOffsetsChanged(int)));
+  connect(ui_slider_scale, SIGNAL(valueChanged(int)), this, SLOT(OnPlayerOffsetsChanged(int)));
 
   connect(ui_note_area->add_button, SIGNAL(clicked(bool)), this, SLOT(on_add_button_clicked()));
   connect(ui_set_notes, SIGNAL(clicked(bool)), this, SLOT(on_set_notes_clicked()));
