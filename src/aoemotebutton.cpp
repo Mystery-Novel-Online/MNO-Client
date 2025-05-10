@@ -45,7 +45,7 @@ int AOEmoteButton::get_emote_number()
 
 void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
 {
-  QString l_texture = CharacterManager::get().p_SelectedCharacter->getEmoteButton(p_emote, false);
+  QString l_texture = CharacterManager::get().p_SelectedCharacter->GetEmoteButton(p_emote, false);
 
   // reset states
   ui_selected->hide();
@@ -53,7 +53,7 @@ void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
   // nested ifs are okay
   if (p_enabled)
   {
-    const QString l_selected_texture = CharacterManager::get().p_SelectedCharacter->getSelectedImage(p_emote);
+    const QString l_selected_texture = CharacterManager::get().p_SelectedCharacter->GetSelectedImage(p_emote);
 
     if (FS::Checks::FileExists(l_selected_texture))
     {
@@ -62,7 +62,7 @@ void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
     }
     else
     {
-      const QString l_enabled_texture = CharacterManager::get().p_SelectedCharacter->getEmoteButton(p_emote, true);
+      const QString l_enabled_texture = CharacterManager::get().p_SelectedCharacter->GetEmoteButton(p_emote, true);
 
       if (FS::Checks::FileExists(l_enabled_texture))
       {

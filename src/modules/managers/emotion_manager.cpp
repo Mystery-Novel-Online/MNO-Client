@@ -52,7 +52,7 @@ void EmotionManager::fillEmoteDropdown()
 void EmotionManager::refreshEmoteSelection(bool t_switchedCharacter)
 {
   const int l_prev_emote_count = mEmoteList.count();
-  mEmoteList = CharacterManager::get().p_SelectedCharacter->getEmotes();
+  mEmoteList = CharacterManager::get().p_SelectedCharacter->GetEmotes();
   
   QComboBox* l_emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
   QCheckBox* l_preCheckbox = dynamic_cast<QCheckBox*>(ThemeManager::get().getWidget("pre"));

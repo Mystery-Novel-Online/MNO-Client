@@ -12,15 +12,8 @@
 class VariableMappedString
 {
 public:
-  VariableMappedString()
-  {
-
-  }
-
-  VariableMappedString(QString t_input)
-  {
-    mInputString = t_input;
-  };
+  VariableMappedString() = default;
+  VariableMappedString(const QString& input) : mInputString(input) { };
 
   QString mInputString = "";
   QMap<QString, QString> mVariableMap = {};

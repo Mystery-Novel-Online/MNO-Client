@@ -96,7 +96,7 @@ void EmoteMenu::OnRealtimeTriggered()
 void EmoteMenu::OnButtonMakerTriggered()
 {
   m_buttonMaker->show();
-  m_buttonMaker->SetCharacter(CharacterManager::get().p_SelectedCharacter->mFolder);
+  m_buttonMaker->SetCharacter(CharacterManager::get().p_SelectedCharacter->GetFolder());
 }
 
 void EmoteMenu::OnOffsetResetTriggered()
@@ -113,8 +113,8 @@ void EmoteMenu::ApplyPreset(const QString &presetName)
   {
     if(presetData.name == presetName)
     {
-      courtroom::sliders::setScale(presetData.Scale);
-      courtroom::sliders::setVertical(presetData.VerticalAlign);
+      courtroom::sliders::setScale(presetData.scale);
+      courtroom::sliders::setVertical(presetData.verticalAlign);
     }
   }
   qDebug() << "Presets applied";

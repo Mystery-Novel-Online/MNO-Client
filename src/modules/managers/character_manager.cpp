@@ -22,12 +22,12 @@ ActorData *CharacterManager::ReadCharacter(QString t_folder)
   if(FS::Checks::FileExists(l_jsonPath))
   {
     ActorData *l_returnData = new ActorDataReader();
-    l_returnData->loadActor(t_folder);
+    l_returnData->LoadActor(t_folder);
     return l_returnData;
   }
 
   ActorData *l_returnData = new LegacyActorReader();
-  l_returnData->loadActor(t_folder);
+  l_returnData->LoadActor(t_folder);
   return l_returnData;
 }
 
@@ -41,15 +41,15 @@ ActorData *CharacterManager::SwitchCharacter(QString t_folder)
   if(FS::Checks::FileExists(l_jsonPath))
   {
     p_SelectedCharacter = new ActorDataReader();
-    p_SelectedCharacter->loadActor(t_folder);
-    QStringList l_charaOutfits = p_SelectedCharacter->getOutfitNames();
+    p_SelectedCharacter->LoadActor(t_folder);
+    QStringList l_charaOutfits = p_SelectedCharacter->GetOutfitNames();
     l_OutfitNames.append(l_charaOutfits);
     setOutfitList(l_OutfitNames);
     return p_SelectedCharacter;
   }
 
   p_SelectedCharacter = new LegacyActorReader();
-  p_SelectedCharacter->loadActor(t_folder);
+  p_SelectedCharacter->LoadActor(t_folder);
   setOutfitList(l_OutfitNames);
   return p_SelectedCharacter;
 }
@@ -73,7 +73,7 @@ void CharacterManager::setOutfitIndex(int t_index)
 {
   if(mCharacterOutfits.length() > t_index && t_index != -1)
   {
-    p_SelectedCharacter->switchOutfit(mCharacterOutfits[t_index]);
+    p_SelectedCharacter->SwitchOutfit(mCharacterOutfits[t_index]);
   }
   EmotionManager::get().refreshEmoteSelection(false);
   EmotionManager::get().refreshEmotePage();

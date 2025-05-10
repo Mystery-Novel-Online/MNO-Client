@@ -107,16 +107,16 @@ void ButtonMaker::SetCharacter(QString character)
   {
     m_IsJson = true;
     ActorDataReader jsonActor = ActorDataReader();
-    jsonActor.loadActor(character);
+    jsonActor.LoadActor(character);
     jsonActor.SetOutfit("<All>");
-    m_Emotes = jsonActor.getEmotes();
+    m_Emotes = jsonActor.GetEmotes();
   }
   else
   {
     m_IsJson = false;
     LegacyActorReader legacyActor = LegacyActorReader();
-    legacyActor.loadActor(character);
-    m_Emotes = legacyActor.getEmotes();
+    legacyActor.LoadActor(character);
+    m_Emotes = legacyActor.GetEmotes();
   }
 
   m_CharacterSprite->play_idle(m_Emotes.at(m_EmoteIndex).character, m_Emotes.at(m_EmoteIndex).dialog);

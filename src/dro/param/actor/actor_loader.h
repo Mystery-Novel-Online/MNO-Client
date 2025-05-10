@@ -7,26 +7,25 @@
 struct ActorScalingPreset
 {
   QString name = "N/A";
-  int VerticalAlign = 0;
-  int Scale = 1000;
+  int verticalAlign = 0;
+  int scale = 1000;
 };
 
 class OutfitReader : public JSONReader
 {
 public:
-  OutfitReader(QString t_character, QString t_outfit);
+  OutfitReader(const QString& character, const QString& outfit);
 
   void ReadSettings();
   void ReadEmotes();
 
-  QVector<DREmote> mEmotes = {};
+  QVector<DREmote> m_Emotes = {};
   QMap<QString, QRect> m_OverlayRectangles = {};
 
 private:
-  QString mOutfitPath = "";
-  QString mOutfitName = "";
-  QString mCharacterName = "";
-
+  QString m_CharacterName = "";
+  QString m_OutfitName = "";
+  QString m_OutfitPath = "";
   bool m_RuleDesk = true;
   bool m_RuleOffsets = false;
 
@@ -37,103 +36,97 @@ class ActorData
 public:
   ActorData(){};
 
-  virtual QString getEmoteSprite(DREmote t_emote);
-  virtual QString getEmoteButton(DREmote t_emote, bool t_enabled);
-  virtual QString getSelectedImage(DREmote t_emote);
+  virtual QString GetEmoteSprite(const DREmote& t_emote);
+  virtual QString GetEmoteButton(const DREmote& t_emote, bool t_enabled);
+  virtual QString GetSelectedImage(const DREmote& t_emote);
 
-  virtual QString GetShowname() {return mShowname;};
-  virtual void SetShowname(QString showname) { mShowname = showname;};
+  virtual void SetShowname(const QString& showname) { m_Showname = showname;};
+  virtual QString GetShowname() {return m_Showname;};
 
-  virtual QString GetGender() {return mGender;};
-  virtual void SetGender(QString gender) { mGender = gender;};
+  virtual void SetGender(const QString& gender) { m_Gender = gender;};
+  virtual QString GetGender() {return m_Gender;};
 
-  virtual QString GetSide() { return mSide; };
-  virtual void SetSide(QString side) {mSide = side;};
+  virtual void SetSide(const QString& side) {m_Side = side;};
+  virtual QString GetSide() { return m_Side; };
 
-  virtual QString GetOutfit() { return mOutfit; };
-  virtual void SetOutfit(QString outfit) {mOutfit = outfit;};
+  virtual void SetOutfit(const QString& outfit) {m_CurrentOutfit = outfit;};
+  virtual QString GetOutfit() { return m_CurrentOutfit; };
 
-  virtual void SetScalingMode(QString mode) {m_ScalingMode = mode;};
+  virtual void SetScalingMode(const QString& mode) {m_ScalingMode = mode;};
   virtual QString GetScalingMode() {return m_ScalingMode;};
 
+  virtual void SetScalingPresets(QVector<ActorScalingPreset> presets) {m_Presets = presets;};
+  virtual QVector<ActorScalingPreset> GetScalingPresets() { return m_Presets; };
 
-  virtual void SetScalingPresets(QVector<ActorScalingPreset> presets) {mPresets = presets;};
-  virtual QVector<ActorScalingPreset> GetScalingPresets() { return mPresets; };
+  virtual QStringList GetOutfitNames();
+  virtual QVector<DREmote> GetEmotes();
 
-  virtual QStringList getOutfitNames();
-  virtual QVector<DREmote> getEmotes();
+  virtual void SetFolder(const QString& folder) { m_Folder = folder; };
+  virtual QString GetFolder() { return m_Folder; };
 
-  virtual void loadActor(QString folder) = 0;
-  virtual void switchOutfit(QString t_outfit);
+  virtual void LoadActor(const QString& folder) = 0;
+  virtual void SwitchOutfit(const QString& t_outfit);
 
-  virtual QMap<QString, QRect> GetEmoteOverlays(QString outfit, QString emoteName) = 0;
-  virtual OutfitReader* GetEmoteOutfit(QString emoteName) = 0;
+  virtual QMap<QString, QRect> GetEmoteOverlays(const QString& outfit, const QString& emoteName) = 0;
+  virtual OutfitReader* GetEmoteOutfit(const QString& emoteName) = 0;
 
-  QString mFolder = "Makoto Naegi (DRO)";
 private:
-  QVector<ActorScalingPreset> mPresets = {};
-  QString mOutfit = "default";
-  QString mShowname = "Makoto Naegi";
-  QString mGender = "male";
-  QString mSide = "wit";
+  QVector<ActorScalingPreset> m_Presets = {};
+  QString m_Folder = "Makoto Naegi (DRO)";
+  QString m_Showname = "Makoto Naegi";
+  QString m_Gender = "male";
+  QString m_Side = "wit";
+  QString m_CurrentOutfit = "default";
   QString m_ScalingMode = "automatic";
 };
 
 class ActorDataReader : public ActorData, public JSONReader
 {
 public:
-  ActorDataReader() {};
-  virtual void loadActor(QString folder) override;
-  virtual QString getEmoteSprite(DREmote t_emote) override;
-  virtual QString getEmoteButton(DREmote t_emote, bool t_enabled) override;
-  virtual QString getSelectedImage(DREmote t_emote) override;
-  virtual QStringList getOutfitNames() override;
-  virtual void switchOutfit(QString t_outfit) override;
+  ActorDataReader() = default;
 
-  virtual QVector<DREmote> getEmotes() override;
-  virtual QMap<QString, QRect> GetEmoteOverlays(QString outfit, QString emoteName) override;
-  virtual OutfitReader* GetEmoteOutfit(QString emoteName) override;
+  void LoadActor(const QString& folder) override;
+  QString GetEmoteSprite(const DREmote& t_emote) override;
+  QString GetEmoteButton(const DREmote& t_emote, bool t_enabled) override;
+  QString GetSelectedImage(const DREmote& t_emote) override;
+  QStringList GetOutfitNames() override;
+  void SwitchOutfit(const QString& t_outfit) override;
+
+  QVector<DREmote> GetEmotes() override;
+  QMap<QString, QRect> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override;
+  OutfitReader* GetEmoteOutfit(const QString& emoteName) override;
 
 private:
-  void loadOutfits();
-  QMap<QString, OutfitReader*> mOutfits = {};
-  QStringList mOutfitNames = {};
-  QStringList mOutfitsOrder = {};
+  void LoadOutfits();
 
-
-
+  QMap<QString, OutfitReader*> m_Outfits = {};
+  QStringList m_OutfitNames = {};
+  QStringList m_OutfitsOrder = {};
 };
-
 
 
 class LegacyActorReader : public ActorDataReader
 {
 public:
-  LegacyActorReader(){};
+  LegacyActorReader() = default;
 
-public:
-  virtual void loadActor(QString folder) override;
+  void LoadActor(const QString& folder) override;
 
-  QString drLookupKey(const QStringList &keyList, const QString &targetKey);
+  QString DRLookupKey(const QStringList &keyList, const QString &targetKey);
 
-  virtual QVector<DREmote> getEmotes() override;
-  virtual QString getEmoteSprite(DREmote t_emote) override;
-  virtual QString getEmoteButton(DREmote t_emote, bool t_enabled) override;
-  virtual QString getSelectedImage(DREmote t_emote) override;
-  virtual QMap<QString, QRect> GetEmoteOverlays(QString outfit, QString emoteName) override { return {}; };
-  virtual OutfitReader* GetEmoteOutfit(QString emoteName) override { return nullptr; };
+  QVector<DREmote> GetEmotes() override;
+  QString GetEmoteSprite(const DREmote& emote) override { return ""; };
+  QString GetEmoteButton(const DREmote& t_emote, bool t_enabled) override;
+  QString GetSelectedImage(const DREmote& t_emote) override;
+  QMap<QString, QRect> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override { return {}; };
+  OutfitReader* GetEmoteOutfit(const QString& emoteName) override { return nullptr; };
 
 };
-
 
 class ActorLoader
 {
 public:
-  static ActorData *GetCharacter(QString folder);
+  static ActorData *GetCharacter(const QString& folder);
 };
-
-
-
-
 
 #endif // ACTOR_LOADER_H

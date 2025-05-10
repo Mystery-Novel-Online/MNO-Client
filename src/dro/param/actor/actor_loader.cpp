@@ -11,7 +11,7 @@
 
 static QMap<QString, ActorData*> s_CachedCharacters;
 
-ActorData *ActorLoader::GetCharacter(QString folder)
+ActorData *ActorLoader::GetCharacter(const QString& folder)
 {
   if(!s_CachedCharacters.contains(folder))
   {
@@ -26,250 +26,211 @@ ActorData *ActorLoader::GetCharacter(QString folder)
       characterData = new LegacyActorReader();
     }
 
-    characterData->loadActor(folder);
+    characterData->LoadActor(folder);
     s_CachedCharacters[folder] = characterData;
   }
 
   return s_CachedCharacters[folder];
 }
 
-QString ActorData::getEmoteSprite(DREmote t_emote)
+QString ActorData::GetEmoteSprite(const DREmote& emote)
 {
+  Q_UNUSED(emote);
   return "";
 }
 
-QString ActorData::getEmoteButton(DREmote t_emote, bool t_enabled)
+QString ActorData::GetEmoteButton(const DREmote& emote, bool enabled)
 {
-  QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("emotions/button%1_off.png").arg(t_emote.key));
-
-  if(t_enabled) l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("emotions/button%1_on.png").arg(t_emote.key));
-  return l_texture;
+  const QString filename = enabled ? QString("emotions/button%1_on.png").arg(emote.key) : QString("emotions/button%1_off.png").arg(emote.key);
+  return AOApplication::getInstance()->get_character_path(emote.character, filename);
 }
 
-QString ActorData::getSelectedImage(DREmote t_emote)
+QString ActorData::GetSelectedImage(const DREmote& emote)
 {
-  QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, "emotions/selected.png");
-  return l_texture;
+  return AOApplication::getInstance()->get_character_path(emote.character, "emotions/selected.png");
 }
 
-QStringList ActorData::getOutfitNames()
+QStringList ActorData::GetOutfitNames()
 {
   return {};
 }
 
-QVector<DREmote> ActorData::getEmotes()
+QVector<DREmote> ActorData::GetEmotes()
 {
   return {};
 }
 
-void ActorData::switchOutfit(QString t_outfit)
+void ActorData::SwitchOutfit(const QString& t_outfit)
 {
-  mOutfit = t_outfit;
+  m_CurrentOutfit = t_outfit;
 }
 
-void ActorDataReader::loadActor(QString t_folder)
+void ActorDataReader::LoadActor(const QString& folder)
 {
-  mFolder = t_folder;
-  ReadFromFile(AOApplication::getInstance()->get_character_path(t_folder, "char.json"));
+  SetFolder(folder);
+  ReadFromFile(AOApplication::getInstance()->get_character_path(folder, "char.json"));
 
   SetShowname(getStringValue("showname"));
   SetGender(getStringValue("gender"));
   SetSide(getStringValue("side"));
+
   if(isValueExists("scaling_mode"))
   {
-    QString scalingMode = getStringValue("scaling_mode");
+    const QString scalingMode = getStringValue("scaling_mode");
     static const QStringList allowedScalings = {"automatic", "width_smooth"};
     if(allowedScalings.contains(scalingMode)) SetScalingMode(scalingMode);
   }
 
-
-
-  mOutfitsOrder = getStringArrayValue("outfit_order");
-
-
-  QJsonArray presetsArray = getArrayValue("scaling_presets");
+  m_OutfitsOrder = getStringArrayValue("outfit_order");
 
   QVector<ActorScalingPreset> presets = {};
-  for(QJsonValueRef presetParam : presetsArray)
+  for(QJsonValueRef presetValue : getArrayValue("scaling_presets"))
   {
-    SetTargetObject(presetParam.toObject());
+    SetTargetObject(presetValue.toObject());
     if(isValueExists("name"))
     {
       ActorScalingPreset preset;
       preset.name = getStringValue("name");
-      preset.VerticalAlign = getIntValue("vertical");
+      preset.verticalAlign = getIntValue("vertical");
       if(isValueExists("scale"))
-      {
-        preset.Scale = getIntValue("scale");
-      }
-
+        preset.scale = getIntValue("scale");
       presets.append(preset);
     }
   }
   SetScalingPresets(presets);
 
-
-  loadOutfits();
+  LoadOutfits();
 }
 
-QString ActorDataReader::getEmoteSprite(DREmote t_emote)
+QString ActorDataReader::GetEmoteSprite(const DREmote& emote)
 {
+  Q_UNUSED(emote);
   return "";
 }
 
-QString ActorDataReader::getEmoteButton(DREmote t_emote, bool t_enabled)
+QString ActorDataReader::GetEmoteButton(const DREmote& emote, bool enabled)
 {
-  QString currentOutfit = GetOutfit();
-  QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("outfits/" + t_emote.outfitName + "/emotions/" + t_emote.comment + ".png").arg(t_emote.key));
-
-  if(t_enabled) l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("outfits/" + t_emote.outfitName + "/emotions/" + t_emote.comment + "_on.png"));
-
-  return l_texture;
+  const QString path = QString("outfits/%1/emotions/%2%3.png")
+  .arg(emote.outfitName, emote.comment, enabled ? "_on" : "");
+  return AOApplication::getInstance()->get_character_path(emote.character, path);
 }
 
-void ActorDataReader::loadOutfits()
+QString ActorDataReader::GetSelectedImage(const DREmote& emote)
 {
   QString currentOutfit = GetOutfit();
-  mOutfitNames.clear();
-  QDir l_outfitsDirectory(AOApplication::getInstance()->get_character_folder_path(mFolder) + "/outfits");
+  QString path  = QString("outfits/%1/emotions/selected.png").arg(currentOutfit);
+  return AOApplication::getInstance()->get_character_path(emote.character, path);
+}
 
-  QStringList l_outfitSubDirectories = l_outfitsDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+QStringList ActorDataReader::GetOutfitNames()
+{
+  return m_OutfitNames;
+}
 
-  if (l_outfitSubDirectories.isEmpty()) return;
+void ActorDataReader::SwitchOutfit(const QString& outfit)
+{
+  if(m_OutfitNames.contains(outfit) || outfit == "<All>")
+    ActorData::SwitchOutfit(outfit);
+}
 
-  for (const QString &f_outfitPath : l_outfitSubDirectories)
+void ActorDataReader::LoadOutfits()
+{
+  m_OutfitNames.clear();
+
+  const QString outfitPath = AOApplication::getInstance()->get_character_folder_path(GetFolder()) + "/outfits";
+  QDir outfitDir(outfitPath);
+
+  QStringList subdirs = outfitDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+  if (subdirs.isEmpty()) return;
+
+  for (const QString &name : subdirs)
   {
-
-    QDir l_outfitPathFull(l_outfitsDirectory.filePath(f_outfitPath));
-
-    if(!mOutfits.contains(f_outfitPath))
+    if(!m_Outfits.contains(name))
     {
-      mOutfitNames.append(f_outfitPath);
-      mOutfits[f_outfitPath] = new OutfitReader(mFolder, f_outfitPath);
+      m_OutfitNames.append(name);
+      m_Outfits[name] = new OutfitReader(GetFolder(), name);
     }
 
   }
 
-  QStringList orderedOutfits;
+  //Sort the list of outfits as configured in the char.json
+  QStringList ordered;
+  for (const QString &name : m_OutfitsOrder)
+    if (m_OutfitNames.contains(name)) ordered.append(name);
 
-  for (const QString &orderedOutfit : mOutfitsOrder)
-  {
-    if (mOutfitNames.contains(orderedOutfit))
-    {
-      orderedOutfits.append(orderedOutfit);
-    }
-  }
+  for (const QString& name : m_OutfitNames)
+    if (!m_OutfitsOrder.contains(name))
+      ordered.append(name);
 
-  for (const QString &outfit : mOutfitNames)
-  {
-    if (!mOutfitsOrder.contains(outfit))
-    {
-      orderedOutfits.append(outfit);
-    }
-  }
-
-  mOutfitNames = orderedOutfits;
+  m_OutfitNames = ordered;
 
 }
 
-QVector<DREmote> ActorDataReader::getEmotes()
+QVector<DREmote> ActorDataReader::GetEmotes()
 {
   QString currentOutfit = GetOutfit();
+
   if(currentOutfit == "<All>")
   {
-    QVector<DREmote> l_allEmotes = {};
-    for(QString &outfit : mOutfitNames)
-    {
-      if(mOutfits.contains(outfit))
-      {
-        l_allEmotes.append(mOutfits[outfit]->mEmotes);
-      }
-    }
+    QVector<DREmote> all = {};
+    for(QString &outfit : m_OutfitNames)
+      if(m_Outfits.contains(outfit)) all.append(m_Outfits[outfit]->m_Emotes);
 
-    return l_allEmotes;
+    return all;
   }
 
-  if(mOutfits.contains(currentOutfit))
+  return m_Outfits.contains(currentOutfit) ? m_Outfits[currentOutfit]->m_Emotes : QVector<DREmote>();
+}
+
+QMap<QString, QRect> ActorDataReader::GetEmoteOverlays(const QString& outfit, const QString& emoteName)
+{
+  if(m_Outfits.contains(outfit))
   {
-    return mOutfits[currentOutfit]->mEmotes;
+    for (const DREmote& emote : m_Outfits[outfit]->m_Emotes)
+      if (emote.comment == emoteName) return emote.emoteOverlays;
   }
   return {};
 }
 
-QString ActorDataReader::getSelectedImage(DREmote t_emote)
+OutfitReader *ActorDataReader::GetEmoteOutfit(const QString& emotePath)
 {
-  QString currentOutfit = GetOutfit();
-  QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("outfits/" + currentOutfit + "/emotions/selected.png"));
-  return l_texture;
-}
+  if (!emotePath.contains("outfits/"))
+    return nullptr;
 
-QStringList ActorDataReader::getOutfitNames()
-{
-  return mOutfitNames;
-}
-
-void ActorDataReader::switchOutfit(QString t_outfit)
-{
-  QString currentOutfit = GetOutfit();
-  if(mOutfitNames.contains(t_outfit) || t_outfit == "<All>")
-  {
-    ActorData::switchOutfit(t_outfit);
-  }
-}
-
-QMap<QString, QRect> ActorDataReader::GetEmoteOverlays(QString outfit, QString emoteName)
-{
-  if(mOutfits.contains(outfit))
-  {
-    for(DREmote emote : mOutfits[outfit]->mEmotes)
-    {
-      if(emote.comment == emoteName)
-      {
-        return emote.emoteOverlays;
-      }
-    }
-  }
-  return {};
-}
-
-OutfitReader *ActorDataReader::GetEmoteOutfit(QString emoteName)
-{
-  if(!emoteName.contains("outfits/")) return nullptr;
-  QStringList parts = emoteName.split('/');
+  const QStringList parts = emotePath.split('/');
   if (parts.size() < 3) return nullptr;
-  QString outfitName = parts[1];
-  if(mOutfits.contains(outfitName)) return mOutfits[outfitName];
-  return nullptr;
+
+  const QString& outfit = parts[1];
+  return m_Outfits.value(outfit, nullptr);
 }
 
-
-
-void LegacyActorReader::loadActor(QString folder)
+void LegacyActorReader::LoadActor(const QString& folder)
 {
-  mFolder = folder;
-  SetShowname(AOApplication::getInstance()->read_char_ini(mFolder, "options", "showname", mFolder).toString());
-  SetSide(AOApplication::getInstance()->read_char_ini(mFolder, "options", "side", "wit").toString());
+  SetFolder(folder);
+  auto* app = AOApplication::getInstance();
+  SetShowname(app->read_char_ini(folder, "options", "showname", folder).toString());
+  SetSide(app->read_char_ini(folder, "options", "side", "wit").toString());
   SetGender("male");
 }
 
-QString LegacyActorReader::drLookupKey(const QStringList &keyList, const QString &targetKey)
+QString LegacyActorReader::DRLookupKey(const QStringList &keys, const QString &target)
 {
-  const QString finalTargetKey = targetKey.toLower();
-  for (const QString &i_key : qAsConst(keyList))
-    if (i_key.toLower() == finalTargetKey)
-      return i_key;
-  return targetKey;
+  const QString targetLower = target.toLower();
+  for (const QString& key : keys)
+    if (key.toLower() == targetLower)
+      return key;
+  return target;
 }
 
-QVector<DREmote> LegacyActorReader::getEmotes()
+QVector<DREmote> LegacyActorReader::GetEmotes()
 {
   QVector<DREmote> r_emote_list;
 
-  QStringList l_chr_list = AOApplication::getInstance()->get_char_include(mFolder);
-  l_chr_list.append(mFolder);
+  QStringList l_chr_list = AOApplication::getInstance()->get_char_include(GetFolder());
+  l_chr_list.append(GetFolder());
 
 #ifdef QT_DEBUG
-  qDebug().noquote() << QString("Compiling char.ini for character <%1>").arg(mFolder);
+  qDebug().noquote() << QString("Compiling char.ini for character <%1>").arg(GetFolder());
 #endif
 
   for (const QString &i_chr : l_chr_list)
@@ -277,7 +238,7 @@ QVector<DREmote> LegacyActorReader::getEmotes()
     if (!FS::Checks::DirectoryExists(AOApplication::getInstance()->get_character_folder_path(i_chr)))
     {
       qWarning().noquote()
-      << QString("Parent character <%1> not found, character <%2> cannot use it.").arg(i_chr, mFolder);
+      << QString("Parent character <%1> not found, character <%2> cannot use it.").arg(i_chr, GetFolder());
       continue;
     }
 #ifdef QT_DEBUG
@@ -295,8 +256,8 @@ QVector<DREmote> LegacyActorReader::getEmotes()
       l_chrini.endGroup();
 
              // remove keywords
-      l_keys.removeAll(drLookupKey(l_keys, "firstmode"));
-      l_keys.removeAll(drLookupKey(l_keys, "number"));
+      l_keys.removeAll(DRLookupKey(l_keys, "firstmode"));
+      l_keys.removeAll(DRLookupKey(l_keys, "number"));
 
              // remove all negative and non-numbers
       for (int i = 0; i < l_keys.length(); ++i)
@@ -378,12 +339,7 @@ QVector<DREmote> LegacyActorReader::getEmotes()
   return r_emote_list;
 }
 
-QString LegacyActorReader::getEmoteSprite(DREmote t_emote)
-{
-  return "";
-}
-
-QString LegacyActorReader::getEmoteButton(DREmote t_emote, bool t_enabled)
+QString LegacyActorReader::GetEmoteButton(const DREmote& t_emote, bool t_enabled)
 {
   QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("emotions/button%1_off.png").arg(t_emote.key));
 
@@ -391,26 +347,21 @@ QString LegacyActorReader::getEmoteButton(DREmote t_emote, bool t_enabled)
   return l_texture;
 }
 
-QString LegacyActorReader::getSelectedImage(DREmote t_emote)
+QString LegacyActorReader::GetSelectedImage(const DREmote& t_emote)
 {
   QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, "emotions/selected.png");
   return l_texture;
 }
 
 
-OutfitReader::OutfitReader(QString t_character, QString t_outfit)
+OutfitReader::OutfitReader(const QString& character, const QString& outfit) : m_CharacterName(character), m_OutfitName(outfit), m_OutfitPath(AOApplication::getInstance()->get_character_folder_path(character) + "/outfits/" + outfit)
 {
-  mOutfitName = t_outfit;
-  mCharacterName = t_character;
-  mOutfitPath = AOApplication::getInstance()->get_character_folder_path(t_character) + "/outfits/" + t_outfit;
+  const QString outfitJsonPath = m_OutfitPath + "/outfit.json";
+  if(!FS::Checks::FileExists(outfitJsonPath)) return;
 
-  if(!FS::Checks::FileExists(mOutfitPath + "/outfit.json")) return;
+  ReadFromFile(outfitJsonPath);
 
-  ReadFromFile(mOutfitPath  + "/outfit.json");
-
-  QJsonArray overlayArray = getArrayValue("overlays");
-
-  for(QJsonValueRef overlayData : overlayArray)
+  for(QJsonValueRef overlayData : getArrayValue("overlays"))
   {
     SetTargetObject(overlayData.toObject());
     QString overlayName = getStringValue("name");
@@ -438,52 +389,48 @@ void OutfitReader::ReadSettings()
 void OutfitReader::ReadEmotes()
 {
   ResetTargetObject();
-  QJsonArray l_emotesArray = getArrayValue("emotes");
 
-  for(QJsonValueRef l_emoteData : l_emotesArray)
+  for(QJsonValueRef emoteDataRef : getArrayValue("emotes"))
   {
-    SetTargetObject(l_emoteData.toObject());
+    const QJsonObject emoteObject = emoteDataRef.toObject();
+    SetTargetObject(emoteObject);
 
-    const QString emoteName = getStringValue("name");
-    const QString animName = getStringValue("pre");
-    const QString videoName = getStringValue("video");
-    const QString soundFile = getStringValue("sfx");
-    const int delayMilliseconds = getIntValue("sfx_delay");
-    const int delayTicks = getIntValue("sfx_delay_ticks");
+    const QString emoteName   = getStringValue("name");
+    const QString animName    = getStringValue("pre");
+    const QString videoFile   = getStringValue("video");
+    const QString soundFile   = getStringValue("sfx");
+    const int sfxDelayMs      = getIntValue("sfx_delay");
+    const int sfxDelayTicks   = getIntValue("sfx_delay_ticks");
 
+    DREmote emote;
+    emote.character   = m_CharacterName;
+    emote.outfitName  = m_OutfitName;
+    emote.emoteName   = emoteName;
+    emote.comment     = emoteName;
+    emote.anim        = animName.isEmpty() ? "" : QString("outfits/%1/%2").arg(m_OutfitName, animName);
+    emote.dialog      = QString("outfits/%1/%2").arg(m_OutfitName, emoteName);
 
-    DREmote newEmote;
-    newEmote.character = mCharacterName;
-    newEmote.outfitName = mOutfitName;
-    newEmote.comment = emoteName;
-    newEmote.anim = animName.isEmpty() ? "" : "outfits/" + mOutfitName + "/" + animName;
-    newEmote.emoteName = emoteName;
-    newEmote.dialog = "outfits/" + mOutfitName + "/" + emoteName;
+    if(emoteObject.contains("image"))
+      emote.dialog = QString("outfits/%1/%2").arg(m_OutfitName, getStringValue("image"));
 
-    if(l_emoteData.toObject().contains("image")) newEmote.dialog = "outfits/" + mOutfitName + "/" + getStringValue("image");
-
-    newEmote.desk_modifier = isValueExists("desk") ? getBoolValue("desk") : m_RuleDesk;
-    newEmote.ignore_offsets = isValueExists("ignore_offsets") ? getBoolValue("ignore_offsets") : m_RuleOffsets;
-    newEmote.modifier = 0;
-
-    newEmote.sound_file = soundFile;
-    newEmote.sound_delay = (delayTicks == 0) ? delayMilliseconds : delayTicks * 60;
-    newEmote.sound_delay = qMax(0, newEmote.sound_delay);
-
-    newEmote.video_file = videoName;
+    emote.desk_modifier   = isValueExists("desk") ? getBoolValue("desk") : m_RuleDesk;
+    emote.ignore_offsets  = isValueExists("ignore_offsets") ? getBoolValue("ignore_offsets") : m_RuleOffsets;
+    emote.modifier        = 0;
+    emote.sound_file      = soundFile;
+    emote.sound_delay     = (sfxDelayTicks == 0) ? sfxDelayMs : sfxDelayTicks * 60;
+    emote.sound_delay     = qMax(0, emote.sound_delay);
+    emote.video_file      = videoFile;
 
     SetTargetObject("overlays");
 
-    for(QString overlayName : m_OverlayRectangles.keys())
+    for(const QString& overlayName : m_OverlayRectangles.keys())
     {
-      QString overlayImage = getStringValue(overlayName);
-      if(!overlayImage.trimmed().isEmpty())
-      {
-        newEmote.emoteOverlays[overlayImage] = m_OverlayRectangles[overlayName];
-      }
+      const QString overlayImage = getStringValue(overlayName).trimmed();
+      if (!overlayImage.isEmpty())
+        emote.emoteOverlays.insert(overlayImage, m_OverlayRectangles[overlayName]);
     }
 
-    mEmotes.append(newEmote);
+    m_Emotes.append(emote);
 
   }
 }

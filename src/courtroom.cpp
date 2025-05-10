@@ -333,8 +333,8 @@ void Courtroom::enter_courtroom(int p_cid)
   if(!actor->GetScalingPresets().empty())
   {
     ActorScalingPreset preset = actor->GetScalingPresets().at(0);
-    ui_slider_scale->setValue(preset.Scale);
-    ui_slider_vertical_axis->setValue(preset.VerticalAlign);
+    ui_slider_scale->setValue(preset.scale);
+    ui_slider_vertical_axis->setValue(preset.verticalAlign);
   }
   else
   {
@@ -1973,7 +1973,7 @@ void Courtroom::setup_chat()
   if(FS::Checks::FileExists(l_jsonPath))
   {
     ActorData *speakerActor = new ActorDataReader();
-    speakerActor->loadActor(m_chatmessage[CMChrName]);
+    speakerActor->LoadActor(m_chatmessage[CMChrName]);
     f_gender = speakerActor->GetGender();
   }
   else
