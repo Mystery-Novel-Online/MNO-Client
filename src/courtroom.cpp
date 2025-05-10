@@ -3220,6 +3220,95 @@ void Courtroom::closeEvent(QCloseEvent *event)
   Q_EMIT closing();
 }
 
+
+
+void Courtroom::keyPressEvent(QKeyEvent *event)
+{
+  if (event)
+  {
+    int key = event->key();
+    QString keyText = QKeySequence(event->key()).toString();
+    LuaBridge::LuaEventCall("OnKeyPressed", keyText.toStdString(), key);
+  }
+}
+
+void Courtroom::keyReleaseEvent(QKeyEvent *event)
+{
+  if (event)
+  {
+    int key = event->key();
+    QString keyText = QKeySequence(event->key()).toString();
+    LuaBridge::LuaEventCall("OnKeyReleased", keyText.toStdString(), key);
+  }
+}
+
+void Courtroom::mousePressEvent(QMouseEvent *event)
+{
+  if (event)
+  {
+    LuaBridge::LuaEventCall("OnMousePressed", event->button(), event->x(), event->y());
+  }
+}
+
+void Courtroom::mouseReleaseEvent(QMouseEvent *event)
+{
+  if (event)
+  {
+    LuaBridge::LuaEventCall("OnMouseReleased", event->button(), event->x(), event->y());
+  }
+}
+
+void Courtroom::mouseMoveEvent(QMouseEvent *event)
+{
+  if (event)
+  {
+    LuaBridge::LuaEventCall("OnMouseMoved", event->x(), event->y());
+  }
+}
+
+void Courtroom::wheelEvent(QWheelEvent *event)
+{
+  if (event)
+  {
+    QPoint delta = event->angleDelta();
+    LuaBridge::LuaEventCall("OnMouseWheel", delta.x(), delta.y());
+  }
+}
+
+void Courtroom::focusInEvent(QFocusEvent *event)
+{
+  if (event)
+  {
+    LuaBridge::LuaEventCall("OnWindowFocusChange", true);
+  }
+}
+
+void Courtroom::focusOutEvent(QFocusEvent *event)
+{
+  if (event)
+  {
+    LuaBridge::LuaEventCall("OnWindowFocusChange", false);
+  }
+
+}void Courtroom::resizeEvent(QResizeEvent *event)
+{
+  if (event)
+  {
+    QSize size = event->size();
+    LuaBridge::LuaEventCall("OnWindowResized", size.width(), size.height());
+  }
+}
+
+void Courtroom::moveEvent(QMoveEvent *event)
+{
+  if (event)
+  {
+    QPoint pos = event->pos();
+    LuaBridge::LuaEventCall("OnWindowMoved", pos.x(), pos.y());
+  }
+}
+
+
 void Courtroom::on_set_notes_clicked()
 {
   if (ui_note_scroll_area->isHidden())

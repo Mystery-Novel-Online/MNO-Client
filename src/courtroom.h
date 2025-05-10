@@ -975,6 +975,17 @@ private:
 
 protected:
   void keyPressEvent(QKeyEvent* event) override;
+  void keyReleaseEvent(QKeyEvent* event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void wheelEvent(QWheelEvent *event) override;
+  void focusInEvent(QFocusEvent *event) override;
+  void focusOutEvent(QFocusEvent *event) override;
+  void resizeEvent(QResizeEvent *event) override;
+  void moveEvent(QMoveEvent *event) override;
+
+
   void changeEvent(QEvent *) override;
   void closeEvent(QCloseEvent *event) override;
 };

@@ -25,13 +25,3 @@ void Courtroom::stop_all_audio()
     for (auto &stream : family->get_stream_list())
       stream->stop();
 }
-
-void Courtroom::keyPressEvent(QKeyEvent *event)
-{
-  if (event)
-  {
-    int key = event->key();
-    QString keyText = QKeySequence(event->key()).toString();
-    LuaBridge::LuaEventCall("OnKeyboardInput", keyText.toStdString(), key);
-  }
-}
