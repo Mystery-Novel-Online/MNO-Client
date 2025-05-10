@@ -6,7 +6,7 @@
 #include "debug_functions.h"
 #include "drdiscord.h"
 #include "dro/fs/fs_writing.h"
-#include "dro/system/rp_audio.h"
+#include "dro/system/audio.h"
 #include "drpacket.h"
 #include "drserversocket.h"
 #include "dro/fs/fs_reading.h"
@@ -53,7 +53,7 @@ AOApplication::AOApplication(int &argc, char **argv)
 
   m_server_socket = new DRServerSocket(this);
   setInstance(this);
-  RPAudio::Initialize();
+  audio::Initialize();
 
   connect(ao_config, SIGNAL(theme_changed(QString)), this, SLOT(handle_theme_modification()));
   connect(ao_config, SIGNAL(gamemode_changed(QString)), this, SLOT(handle_theme_modification()));

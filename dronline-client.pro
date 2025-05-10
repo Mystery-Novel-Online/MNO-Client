@@ -67,7 +67,7 @@ HEADERS += \
   src/drmasterclient.h \
   src/drmediatester.h \
   src/drmovie.h \
-  src/dro/system/rp_audio.h \
+  src/dro/system/audio.h \
   src/dro/system/runtime_loop.h \
   src/dro/system/theme_scripting.h \
   src/dro/tools/button_maker.h \
@@ -186,7 +186,7 @@ SOURCES += \
   src/drmasterclient.cpp \
   src/drmediatester.cpp \
   src/drmovie.cpp \
-  src/dro/system/rp_audio.cpp \
+  src/dro/system/audio.cpp \
   src/dro/system/runtime_loop.cpp \
   src/dro/system/theme_scripting.cpp \
   src/dro/tools/button_maker.cpp \

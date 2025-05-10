@@ -1,6 +1,6 @@
 #include "theme_scripting.h"
 #include "dro/fs/fs_reading.h"
-#include "dro/system/rp_audio.h"
+#include "dro/system/audio.h"
 #include "dro/interface/courtroom_layout.h"
 #include <modules/theme/thememanager.h>
 #include "modules/managers/notify_manager.h"
@@ -31,21 +31,21 @@ namespace ThemeScripting
       sol::table audioTable = s_themeScript.create_named_table("Audio");
 
       sol::table systemAudioTable = s_themeScript.create_table();
-      systemAudioTable.set_function("Play", &RPAudio::PlaySystem);
+      systemAudioTable.set_function("Play", &audio::system::Play);
 
       sol::table sfxTable = s_themeScript.create_table();
-      sfxTable.set_function("Play", &RPAudio::PlayEffect);
+      sfxTable.set_function("Play", &audio::effect::Play);
 
       sol::table bgmTable = s_themeScript.create_table();
-      bgmTable.set_function("Play", &RPAudio::PlayBGM);
-      bgmTable.set_function("SetSpeed", &RPAudio::SetBGMSpeed);
-      bgmTable.set_function("SetPitch", &RPAudio::SetBGMPitch);
-      bgmTable.set_function("ToggleReverb", &RPAudio::SetBGMReverb);
+      bgmTable.set_function("Play", &audio::bgm::Play);
+      bgmTable.set_function("SetSpeed", &audio::bgm::SetSpeed);
+      bgmTable.set_function("SetPitch", &audio::bgm::SetPitch);
+      bgmTable.set_function("ToggleReverb", &audio::bgm::SetReverb);
 
       sol::table blipTable = s_themeScript.create_table();
-      blipTable.set_function("Tick", &RPAudio::BlipTick);
-      blipTable.set_function("SetGender", &RPAudio::SetBlipGender);
-      blipTable.set_function("SetSound", &RPAudio::SetBlipSound);
+      blipTable.set_function("Tick", &audio::blip::Tick);
+      blipTable.set_function("SetGender", &audio::blip::SetGender);
+      blipTable.set_function("SetSound", &audio::blip::SetSound);
 
       audioTable.set("BGM", bgmTable);
       audioTable.set("Blip", blipTable);
@@ -135,18 +135,15 @@ namespace LuaFunctions
 
   void AlertUser(bool playSound)
   {
-    if(playSound) RPAudio::PlaySystem(AOApplication::getInstance()->get_sfx("word_call").toUtf8());
+    if(playSound) audio::system::Play(AOApplication::getInstance()->get_sfx("word_call").toUtf8());
+
     Courtroom *courtroom = AOApplication::getInstance()->get_courtroom();
     Lobby *lobby = AOApplication::getInstance()->get_lobby();
-    if(courtroom != nullptr)
-    {
-      AOApplication::getInstance()->alert(courtroom);
-    }
-    else if(lobby != nullptr)
-    {
-      AOApplication::getInstance()->alert(lobby);
-    }
 
+    if(courtroom != nullptr)
+      AOApplication::getInstance()->alert(courtroom);
+    else if(lobby != nullptr)
+      AOApplication::getInstance()->alert(lobby);
   }
 
   void SetNotificationText(const char *text, bool show)

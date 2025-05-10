@@ -2,7 +2,7 @@
 #include "modules/theme/thememanager.h"
 #include "modules/managers/scene_manager.h"
 
-#include "dro/system/rp_audio.h"
+#include "dro/system/audio.h"
 
 ScreenshotButton::ScreenshotButton(QWidget *parent, AOApplication *p_ao_app) : AOButton(parent, p_ao_app)
 {
@@ -19,6 +19,6 @@ void ScreenshotButton::UpdateDimensions()
 
 void ScreenshotButton::OnButtonClicked()
 {
-  RPAudio::PlayEffect("screenshot");
+  audio::effect::Play("screenshot");
   SceneManager::get().ScreenshotViewport();
 }

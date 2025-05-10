@@ -40,7 +40,7 @@
 #include "dro/fs/fs_reading.h"
 #include "dro/network/server_metadata.h"
 #include "dro/system/theme_scripting.h"
-#include "dro/system/rp_audio.h"
+#include "dro/system/audio.h"
 #include "dro/interface/courtroom_layout.h"
 
 #include <QCheckBox>
@@ -1640,7 +1640,7 @@ void Courtroom::handle_chatmessage_3()
   {
     if (f_message.contains(word, Qt::CaseInsensitive))
     {
-      RPAudio::PlaySystem(ao_app->get_sfx("word_call").toUtf8());
+      audio::system::Play(ao_app->get_sfx("word_call").toUtf8());
       ao_app->alert(this);
       const QString name = "CLIENT";
       const QString message = ui_vp_showname->toPlainText() + " has called you via your callword \"" + word + "\": \"" + f_message + "\"";
@@ -1981,7 +1981,7 @@ void Courtroom::setup_chat()
     f_gender = ao_app->get_gender(m_chatmessage[CMChrName]);
   }
 
-  RPAudio::SetBlipGender(f_gender.toUtf8());
+  audio::blip::SetGender(f_gender.toUtf8());
 
   // means text is currently ticking
   text_state = 1;
@@ -2183,7 +2183,7 @@ void Courtroom::next_chat_letter()
       m_blip_step = 0;
       if(!LuaBridge::LuaEventCall("BlipTickEvent"))
       {
-        RPAudio::BlipTick();
+        audio::blip::Tick();
         LuaBridge::LuaEventCall("OnBlipTick");
       }
     }
@@ -2291,7 +2291,7 @@ void Courtroom::handle_song(QStringList p_contents)
 
   if(!LuaBridge::SongChangeEvent(l_song.toStdString(), l_song_meta.title().toStdString(), l_showname.toStdString()))
   {
-    RPAudio::PlayBGM(l_song.toUtf8());
+    audio::bgm::Play(l_song.toUtf8());
 
     if (l_chr_id >= 0 && l_chr_id < CharacterManager::get().mServerCharacters.length())
     {
@@ -2404,7 +2404,7 @@ void Courtroom::mod_called(QString p_ip)
   ui_ooc_chatlog->append(p_ip);
   if (ao_config->server_alerts_enabled())
   {
-    RPAudio::PlaySystem(ao_app->get_sfx("mod_call").toUtf8());
+    audio::system::Play(ao_app->get_sfx("mod_call").toUtf8());
     ao_app->alert(this);
     if (ao_config->log_is_recording_enabled())
       save_textlog("(OOC)(MOD CALL)" + p_ip);
@@ -2689,7 +2689,7 @@ void Courtroom::on_cycle_clicked()
   }
 
   if (ao_app->current_theme->read_config_bool("enable_cycle_ding"))
-    RPAudio::PlaySystem(ao_app->get_sfx("cycle").toUtf8());
+    audio::system::Play(ao_app->get_sfx("cycle").toUtf8());
 
   set_shouts();
   ui_ic_chat_message_field->setFocus();

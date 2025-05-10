@@ -367,8 +367,6 @@ OutfitReader::OutfitReader(const QString& character, const QString& outfit) : m_
     QString overlayName = getStringValue("name");
     QRect overlayRect = getRectangleValue("rect");
     m_OverlayRectangles[overlayName] = overlayRect;
-
-
   }
 
   ReadSettings();
