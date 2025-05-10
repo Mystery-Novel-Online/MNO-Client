@@ -5,9 +5,12 @@
 #include <drchatlog.h>
 #include <QString>
 #include "modules/theme/thememanager.h"
+#include "dro/system/theme_scripting.h"
 
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
 static QVector<DRStickerViewer *> s_CourtroomStickers = {};
+static QVector<AOButton *> s_CourtroomButtons = {};
+
 namespace Layout::Courtroom
 {
 
@@ -23,6 +26,19 @@ namespace Layout::Courtroom
       }
       delete sticker;
     }
+
+    for (AOButton *button : s_CourtroomButtons)
+    {
+      auto it = s_CourtroomWidgets.begin();
+      while (it != s_CourtroomWidgets.end())
+      {
+        if (it.value() == button) it = s_CourtroomWidgets.erase(it);
+        else ++it;
+      }
+      delete button;
+    }
+
+    s_CourtroomButtons.clear();
     s_CourtroomStickers.clear();
   }
 
@@ -126,6 +142,46 @@ namespace Layout::Courtroom
     sliderWidget = dynamic_cast<QSlider*>(s_CourtroomWidgets["pair_offset"]);
     if(sliderWidget == nullptr) return;
     sliderWidget->setValue(horizontalValue);
+  }
+
+  void CreateButton(const char *name, int axisX, int axisY, int sizeX, int sizeY)
+  {
+    if(!s_CourtroomWidgets.contains("courtroom")) return;
+    QString widgetName = "button_" + QString(name);
+
+    AOButton *targetButton = nullptr;
+    if(!s_CourtroomWidgets.contains(widgetName))
+    {
+      targetButton = new AOButton(s_CourtroomWidgets["courtroom"], AOApplication::getInstance());
+      targetButton->setObjectName(widgetName);
+      s_CourtroomButtons.append(targetButton);
+      s_CourtroomWidgets.insert(widgetName, targetButton);
+      targetButton->raise();
+      targetButton->show();
+
+      QObject::connect(targetButton, &QPushButton::clicked, [=]()
+      {
+        QString eventName = QString(name) + "ButtonEvent";
+        LuaBridge::LuaEventCall(eventName.toUtf8());
+      });
+    }
+    else
+    {
+      QWidget *buttonWidget = s_CourtroomWidgets[widgetName];
+      targetButton = dynamic_cast<AOButton*>(buttonWidget);
+      if(targetButton == nullptr) return;
+    }
+    float resizeFactor = ThemeManager::get().getResize();
+
+    int l_scaledWidth = static_cast<int>(sizeX * resizeFactor);
+    int l_scaledHeight = static_cast<int>(sizeY * resizeFactor);
+    int l_scaledX = static_cast<int>(axisX * resizeFactor);
+    int l_scaledY = static_cast<int>(axisY * resizeFactor);
+
+    targetButton->resize(l_scaledWidth, l_scaledHeight);
+    targetButton->move(l_scaledX, l_scaledY);
+    targetButton->set_theme_image(name, widgetName + ".png", "courtroom", name);
+
   }
 
 

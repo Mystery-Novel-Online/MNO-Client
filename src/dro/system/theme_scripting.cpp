@@ -57,6 +57,7 @@ namespace ThemeScripting
       widgetTable.set_function("Move", &Layout::Courtroom::MoveWidget);
       widgetTable.set_function("Raise", &Layout::Courtroom::RaiseWidget);
       widgetTable.set_function("SetVisible", &Layout::Courtroom::ToggleWidgetVisibility);
+      widgetTable.set_function("CreateButton", &Layout::Courtroom::CreateButton);
 
       sol::table dialogTable = s_themeScript.create_named_table("ChoiceDialog");
       dialogTable.set_function("TriggerCustom", &LuaFunctions::CustomChoiceDialog);

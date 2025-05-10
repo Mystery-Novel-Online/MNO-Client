@@ -11,6 +11,7 @@ namespace Layout::Courtroom
   void AddToWidgetList(QString name, QWidget* widget);
 
   void CreateSticker(const char *name, const char *image, int axisX, int axisY, int sizeX, int sizeY);
+  void CreateButton(const char *name, int axisX, int axisY, int sizeX, int sizeY);
   void MoveWidget(const char* name, int axisX, int axisY);
   void ToggleWidgetVisibility(const char* name, bool visibleState);
   void RaiseWidget(const char* name);
