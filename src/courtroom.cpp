@@ -41,6 +41,7 @@
 #include "dro/network/server_metadata.h"
 #include "dro/system/theme_scripting.h"
 #include "dro/system/rp_audio.h"
+#include "dro/interface/courtroom_layout.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -101,6 +102,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
 
 Courtroom::~Courtroom()
 {
+  Layout::Courtroom::Cleanup();
   cleanup_preload_readers();
   ao_config->set_gamemode(nullptr);
   ao_config->set_timeofday(nullptr);
@@ -123,8 +125,8 @@ void Courtroom::set_music_list(QStringList p_music_list)
 void Courtroom::setup_courtroom()
 {
   TimeDebugger::get().StartTimer("Courtroom Setup");
+  Layout::Courtroom::Cleanup();
   load_shouts();
-
   load_free_blocks();
   load_sfx_list_theme();
 

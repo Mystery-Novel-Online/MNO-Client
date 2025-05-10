@@ -5,6 +5,7 @@
 
 namespace Layout::Courtroom
 {
+  void Cleanup();
 
   void SetWidgetList(QHash<QString, QWidget *> widgetList);
   void AddToWidgetList(QString name, QWidget* widget);

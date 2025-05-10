@@ -11,6 +11,21 @@ static QVector<DRStickerViewer *> s_CourtroomStickers = {};
 namespace Layout::Courtroom
 {
 
+  void Cleanup()
+  {
+    for (DRStickerViewer *sticker : s_CourtroomStickers)
+    {
+      auto it = s_CourtroomWidgets.begin();
+      while (it != s_CourtroomWidgets.end())
+      {
+        if (it.value() == sticker) it = s_CourtroomWidgets.erase(it);
+        else ++it;
+      }
+      delete sticker;
+    }
+    s_CourtroomStickers.clear();
+  }
+
   void SetWidgetList(QHash<QString, QWidget *> widgetList)
   {
     s_CourtroomWidgets = widgetList;
@@ -112,6 +127,7 @@ namespace Layout::Courtroom
     if(sliderWidget == nullptr) return;
     sliderWidget->setValue(horizontalValue);
   }
+
 
 
 }
