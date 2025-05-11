@@ -43,9 +43,9 @@ namespace audio
 
   namespace bgm
   {
-    void Play(const char *name)
+    void Play(const std::string& name)
     {
-      s_musicPlayer->play(name);
+      s_musicPlayer->play(QString::fromStdString(name));
     }
 
     void SetSpeed(float speed)
@@ -62,6 +62,12 @@ namespace audio
     {
       s_musicPlayer->toggleReverb(reverb);
     }
+
+    void Stop()
+    {
+      s_musicPlayer->stop();
+    }
+
   }
 
   namespace blip

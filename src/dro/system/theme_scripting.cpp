@@ -38,6 +38,7 @@ namespace ThemeScripting
 
       sol::table bgmTable = s_themeScript.create_table();
       bgmTable.set_function("Play", &audio::bgm::Play);
+      bgmTable.set_function("Stop", &audio::bgm::Stop);
       bgmTable.set_function("SetSpeed", &audio::bgm::SetSpeed);
       bgmTable.set_function("SetPitch", &audio::bgm::SetPitch);
       bgmTable.set_function("ToggleReverb", &audio::bgm::SetReverb);

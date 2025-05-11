@@ -1,6 +1,9 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
+#include <string>
+
+
 namespace audio
 {
   void Initialize();
@@ -17,7 +20,8 @@ namespace audio
 
   namespace bgm
   {
-    void Play(const char *name);
+    void Play(const std::string& name);
+    void Stop();
     void SetSpeed(float speed);
     void SetPitch(float speed);
     void SetReverb(bool reverb);
