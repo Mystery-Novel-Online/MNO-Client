@@ -22,6 +22,7 @@ HEADERS += \
   src/dro/interface/menus/char_menu.h \
   src/dro/interface/menus/emote_menu.h \
   src/dro/interface/widgets/bgm_filter.h \
+  src/dro/interface/widgets/health_bar.h \
   src/dro/interface/widgets/screenshot_button.h \
   src/dro/network/area_metadata.h \
   src/dro/network/server_metadata.h \
@@ -137,6 +138,7 @@ SOURCES += \
   src/dro/interface/menus/char_menu.cpp \
   src/dro/interface/menus/emote_menu.cpp \
   src/dro/interface/widgets/bgm_filter.cpp \
+  src/dro/interface/widgets/health_bar.cpp \
   src/dro/interface/widgets/screenshot_button.cpp \
   src/dro/network/area_metadata.cpp \
   src/dro/network/server_metadata.cpp \

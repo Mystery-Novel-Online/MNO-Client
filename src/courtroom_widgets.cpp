@@ -305,8 +305,8 @@ void Courtroom::create_widgets()
 
   construct_emotes();
 
-  ui_defense_bar = new AOImageDisplay(this, ao_app);
-  ui_prosecution_bar = new AOImageDisplay(this, ao_app);
+  ui_defense_bar = new HealthBar("defense", ao_app, this);
+  ui_prosecution_bar = new HealthBar("prosecution", ao_app, this);
 
   ui_shout_up = setupButtonWidget("shout_up", "shoutup.png", "");
   ui_shout_up->setProperty("cycle_id", 1);
@@ -511,10 +511,10 @@ void Courtroom::connect_widgets()
   connect(ui_wtce_up, SIGNAL(clicked(bool)), this, SLOT(on_cycle_clicked()));
   connect(ui_wtce_down, SIGNAL(clicked(bool)), this, SLOT(on_cycle_clicked()));
 
-  connect(ui_defense_minus, SIGNAL(clicked()), this, SLOT(on_defense_minus_clicked()));
-  connect(ui_defense_plus, SIGNAL(clicked()), this, SLOT(on_defense_plus_clicked()));
-  connect(ui_prosecution_minus, SIGNAL(clicked()), this, SLOT(on_prosecution_minus_clicked()));
-  connect(ui_prosecution_plus, SIGNAL(clicked()), this, SLOT(on_prosecution_plus_clicked()));
+  connect(ui_defense_minus, SIGNAL(clicked()), ui_defense_bar, SLOT(OnSubtractClicked()));
+  connect(ui_defense_plus, SIGNAL(clicked()), ui_defense_bar, SLOT(OnAddClicked()));
+  connect(ui_prosecution_minus, SIGNAL(clicked()), ui_prosecution_bar, SLOT(OnSubtractClicked()));
+  connect(ui_prosecution_plus, SIGNAL(clicked()), ui_prosecution_bar, SLOT(OnAddClicked()));
 
   connect(ui_text_color, SIGNAL(currentIndexChanged(int)), this, SLOT(on_text_color_changed(int)));
 
@@ -1159,8 +1159,8 @@ void Courtroom::set_widgets()
   set_stylesheet(ui_pos_dropdown, "[POS DROPDOWN]", COURTROOM_STYLESHEETS_CSS, ao_app);
 
 
-  setupWidgetElement(ui_defense_bar, "defense_bar", "defensebar" + QString::number(defense_bar_state) + ".png", true);
-  setupWidgetElement(ui_prosecution_bar, "prosecution_bar", "prosecutionbar" + QString::number(prosecution_bar_state) + ".png", true);
+  setupWidgetElement(ui_defense_bar, "defense_bar", "defensebar" + QString::number(ui_defense_bar->GetValue()) + ".png", true);
+  setupWidgetElement(ui_prosecution_bar, "prosecution_bar", "prosecutionbar" + QString::number(ui_prosecution_bar->GetValue()) + ".png", true);
 
   for (int i = 0; i < shout_names.size(); ++i)
   {

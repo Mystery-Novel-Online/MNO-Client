@@ -8,6 +8,7 @@
 #include "dro/interface/menus/char_menu.h"
 #include "dro/interface/widgets/bgm_filter.h"
 #include "dro/interface/widgets/screenshot_button.h"
+#include "dro/interface/widgets/health_bar.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"
@@ -434,9 +435,6 @@ private:
   bool is_judge = false;
   bool is_system_speaking = false;
 
-  int defense_bar_state = 0;
-  int prosecution_bar_state = 0;
-
   int m_current_chr_page = 0;
   QPoint CharaSSSpacing;
   int char_columns = 10;
@@ -581,8 +579,8 @@ private:
   };
   QComboBox *ui_pos_dropdown = nullptr;
 
-  AOImageDisplay *ui_defense_bar = nullptr;
-  AOImageDisplay *ui_prosecution_bar = nullptr;
+  HealthBar *ui_defense_bar = nullptr;
+  HealthBar *ui_prosecution_bar = nullptr;
 
   // buttons to cycle through shouts
   AOButton *ui_shout_up = nullptr;
@@ -846,11 +844,6 @@ private slots:
   void reset_effect_buttons();
   void on_effect_button_clicked(const bool);
   void on_effect_button_toggled(const bool);
-
-  void on_defense_minus_clicked();
-  void on_defense_plus_clicked();
-  void on_prosecution_minus_clicked();
-  void on_prosecution_plus_clicked();
 
   void on_text_color_changed(int p_color);
 

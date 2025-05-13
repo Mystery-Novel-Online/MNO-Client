@@ -636,7 +636,6 @@ bool Courtroom::is_area_music_list_separated()
 
 void Courtroom::list_music()
 {
-
   const QBrush l_song_brush = ao_app->current_theme->get_widget_settings_color("music_list", "courtroom", "found_song", "found_song_color");
   const QBrush l_missing_song_brush = ao_app->current_theme->get_widget_settings_color("music_list", "courtroom", "missing_song", "missing_song_color");
 
@@ -2258,7 +2257,6 @@ void Courtroom::set_ban(int p_cid)
   ao_app->destruct_courtroom();
 }
 
-
 void Courtroom::handle_song(QStringList p_contents)
 {
   if (p_contents.size() < 4)
@@ -2291,7 +2289,7 @@ void Courtroom::handle_song(QStringList p_contents)
 
   if(!LuaBridge::SongChangeEvent(l_song.toStdString(), l_song_meta.title().toStdString(), l_showname.toStdString()))
   {
-    audio::bgm::Play(l_song.toUtf8());
+    audio::bgm::Play(l_song.toStdString());
 
     if (l_chr_id >= 0 && l_chr_id < CharacterManager::get().mServerCharacters.length())
     {
@@ -2339,13 +2337,11 @@ void Courtroom::set_hp_bar(int p_bar, int p_state)
 
   if (p_bar == 1)
   {
-    ui_defense_bar->set_theme_image("defensebar" + QString::number(p_state) + ".png");
-    defense_bar_state = p_state;
+    ui_defense_bar->SetValue(p_state);
   }
   else if (p_bar == 2)
   {
-    ui_prosecution_bar->set_theme_image("prosecutionbar" + QString::number(p_state) + ".png");
-    prosecution_bar_state = p_state;
+    ui_prosecution_bar->SetValue(p_state);
   }
 }
 
@@ -2784,48 +2780,15 @@ void Courtroom::on_effect_button_toggled(const bool p_checked)
     l_button->setText(l_name);
 }
 
-void Courtroom::on_defense_minus_clicked()
-{
-  int f_state = defense_bar_state - 1;
-
-  if (f_state >= 0)
-    ao_app->send_server_packet(DRPacket("HP", {QString::number(1), QString::number(f_state)}));
-}
-
-void Courtroom::on_defense_plus_clicked()
-{
-  int f_state = defense_bar_state + 1;
-
-  if (f_state <= 10)
-    ao_app->send_server_packet(DRPacket("HP", {QString::number(1), QString::number(f_state)}));
-}
-
-void Courtroom::on_prosecution_minus_clicked()
-{
-  int f_state = prosecution_bar_state - 1;
-
-  if (f_state >= 0)
-    ao_app->send_server_packet(DRPacket("HP", {QString::number(2), QString::number(f_state)}));
-}
-
-void Courtroom::on_prosecution_plus_clicked()
-{
-  int f_state = prosecution_bar_state + 1;
-
-  if (f_state <= 10)
-    ao_app->send_server_packet(DRPacket("HP", {QString::number(2), QString::number(f_state)}));
-}
-
 void Courtroom::on_text_color_changed(int p_color)
 {
   m_text_color = p_color;
   ui_ic_chat_message_field->setFocus();
 }
 
-
 void Courtroom::on_chat_type_changed(int p_type)
 {
-    m_current_chat_type = static_cast<ChatTypes>(p_type);
+  m_current_chat_type = static_cast<ChatTypes>(p_type);
   ui_ic_chat_message_field->setFocus();
 }
 
@@ -2996,7 +2959,6 @@ void Courtroom::OnCharRandomClicked()
     enter_courtroom(get_character_id());
     return;
   }
-
 
   QString char_json_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_JSON);
   QString char_ini_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_INI);
@@ -3174,7 +3136,6 @@ bool Courtroom::ui_in_current_toggle(QString p_ui_name)
   return true;
 }
 
-
 void Courtroom::on_note_button_clicked()
 {
   if (!is_note_shown)
@@ -3221,8 +3182,6 @@ void Courtroom::closeEvent(QCloseEvent *event)
   QWidget::closeEvent(event);
   Q_EMIT closing();
 }
-
-
 
 void Courtroom::keyPressEvent(QKeyEvent *event)
 {
@@ -3292,7 +3251,9 @@ void Courtroom::focusOutEvent(QFocusEvent *event)
     LuaBridge::LuaEventCall("OnWindowFocusChange", false);
   }
 
-}void Courtroom::resizeEvent(QResizeEvent *event)
+}
+
+void Courtroom::resizeEvent(QResizeEvent *event)
 {
   if (event)
   {
@@ -3309,7 +3270,6 @@ void Courtroom::moveEvent(QMoveEvent *event)
     LuaBridge::LuaEventCall("OnWindowMoved", pos.x(), pos.y());
   }
 }
-
 
 void Courtroom::on_set_notes_clicked()
 {
@@ -3514,7 +3474,6 @@ void Courtroom::write_area_desc()
     is_bold = ao_app->get_font_property(QString("area_desc_bold"), COURTROOM_FONTS_INI);
   }
 
-
   ui_area_desc->ensurePolished();
   QTextCharFormat formatting = QTextCharFormat();
 
@@ -3532,8 +3491,4 @@ void Courtroom::write_area_desc()
   ui_area_desc->clear();
   QTextCursor l_cursor = ui_area_desc->textCursor();
   l_cursor.insertText(m_area_description, formatting);
-
-
 }
-
-
