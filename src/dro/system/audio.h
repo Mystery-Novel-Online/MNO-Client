@@ -3,19 +3,29 @@
 
 #include <string>
 
-
 namespace audio
 {
   void Initialize();
+  bool IsSuppressed();
+  void Suppress(bool enabled);
+  void StopAll();
 
   namespace effect
   {
-    void Play(const char *name);
+    void Play(const std::string& name);
+    void PlayCharacter(const std::string& character, const std::string& name);
+    void PlayAmbient(const std::string& filepath);
+    void StopAll();
   }
 
   namespace system
   {
     void Play(const char *name);
+  }
+
+  namespace shout
+  {
+    void Play(const std::string& character, const std::string& name);
   }
 
   namespace bgm

@@ -9,6 +9,7 @@
 #include "dro/interface/widgets/bgm_filter.h"
 #include "dro/interface/widgets/screenshot_button.h"
 #include "dro/interface/widgets/health_bar.h"
+#include "dro/network/metadata/user_metadata.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"
@@ -73,6 +74,8 @@ class QLabel;
 
 #include <modules/widgets/rpnotifymenu.h>
 #include <modules/widgets/viewport_overlay.h>
+
+using namespace dro::network;
 
 class Courtroom : public QWidget
 {
@@ -191,7 +194,6 @@ public:
   void UpdateIniswapIcons(bool reset, int batch_count, int starting_index = 0);
   int currentIniswapIconIndex = 0;
 
-  QString get_character();
   QString get_character_ini();
   QString get_character_content_url();
   void update_iniswap_list();
@@ -314,7 +316,6 @@ signals:
 
 public:
   AOConfig *ao_config = nullptr;
-  bool is_spectating();
 
 private:
   bool m_first_theme_loading = true;
@@ -903,24 +904,12 @@ private slots:
   // character
   // ===========================================================================
 
-public:
-  using CharacterId = int;
-  enum : CharacterId
-  {
-    SpectatorId = -1,
-  };
-
-
-
-  int get_character_id();
 public slots:
   void set_character_id(const int);
 signals:
   void character_id_changed(int);
 
 private:
-  // character id, which index of the char_list the player is
-  CharacterId m_chr_id = SpectatorId;
 
   // sfx
 
@@ -951,20 +940,6 @@ private slots:
    * =============================================================================
    * AUDIO SYSTEM
    */
-
-public:
-  bool is_audio_suppressed() const;
-
-public slots:
-  void suppress_audio(bool p_enabled);
-  void stop_all_audio();
-
-private:
-  AOSfxPlayer *m_effects_player = nullptr;
-  AOShoutPlayer *m_shouts_player = nullptr;
-  bool is_audio_muted = false;
-
-  // QWidget interface
 
 protected:
   void keyPressEvent(QKeyEvent* event) override;

@@ -227,9 +227,9 @@ void Courtroom::SwitchCharacterByName(const char *characterName)
   QString characterPathIni = ao_app->get_character_path(characterName, CHARACTER_CHAR_INI);
   QString characterPathJson = ao_app->get_character_path(characterName, CHARACTER_CHAR_JSON);
 
-  if (get_character() == characterName)
+  if (metadata::user::GetCharacterName() == characterName)
   {
-    enter_courtroom(get_character_id());
+    enter_courtroom(metadata::user::GetCharacterId());
     return;
   }
 
@@ -257,9 +257,9 @@ void Courtroom::SwitchCharacterByName(const char *characterName)
 
 void Courtroom::char_clicked(int n_char)
 {
-  if (get_character() == UIFilteredCharButton.at(n_char)->character())
+  if (metadata::user::GetCharacterName() == UIFilteredCharButton.at(n_char)->character())
   {
-    enter_courtroom(get_character_id());
+    enter_courtroom(metadata::user::GetCharacterId());
     return;
   }
 

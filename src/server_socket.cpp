@@ -20,6 +20,7 @@
 #include "dro/network/server_metadata.h"
 #include "dro/network/area_metadata.h"
 #include "dro/system/theme_scripting.h"
+#include "dro/system/audio.h"
 
 
 void AOApplication::connect_to_server(DRServerInfo p_server)
@@ -64,7 +65,7 @@ void AOApplication::_p_handle_server_state_update(DRServerSocket::ConnectionStat
       m_server_status = Disconnected;
       if (is_courtroom_constructed)
       {
-        m_courtroom->stop_all_audio();
+        audio::StopAll();
         call_notice(LocalizationManager::get().getLocalizationText("NOTICE_DISCONNECT"));
         construct_lobby();
         destruct_courtroom();
@@ -422,7 +423,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   {
     if (is_courtroom_constructed && l_content.size() > 0)
     {
-      int f_cid = m_courtroom->get_character_id();
+      int f_cid = metadata::user::GetCharacterId();
       int remote_cid = l_content.at(0).toInt();
 
       if (f_cid != remote_cid && remote_cid != -1)

@@ -74,9 +74,6 @@ void Courtroom::create_widgets()
 
   char_button_mapper = new QSignalMapper(this);
 
-  m_effects_player = new AOSfxPlayer(ao_app, this);
-  m_shouts_player = new AOShoutPlayer(ao_app, this);
-
   ui_background = new AOImageDisplay(this, ao_app);
 
   ThemeManager::get().setCourtroomBackground(ui_background);

@@ -5,6 +5,7 @@
 #include <aoblipplayer.h>
 #include <aosfxplayer.h>
 #include <aosystemplayer.h>
+#include "aoshoutplayer.h"
 
 #include <QString>
 
@@ -12,7 +13,9 @@ static AOMusicPlayer *s_musicPlayer;
 static AOSfxPlayer *s_effectsPlayer;
 static AOSystemPlayer *s_systemPlayer;
 static AOBlipPlayer *s_blipPlayer;
+static AOShoutPlayer *s_shoutPlayer;
 
+bool s_AudioMuted = false;
 
 namespace audio
 {
@@ -23,14 +26,53 @@ namespace audio
     s_effectsPlayer = new AOSfxPlayer(AOApplication::getInstance());
     s_systemPlayer = new AOSystemPlayer(AOApplication::getInstance());
     s_blipPlayer = new AOBlipPlayer(AOApplication::getInstance());
+    s_shoutPlayer = new AOShoutPlayer(AOApplication::getInstance());
+  }
+
+  bool IsSuppressed()
+  {
+    return s_AudioMuted;
+  }
+
+  void Suppress(bool enabled)
+  {
+    s_AudioMuted = enabled;
+
+    for (auto &family : DRAudioEngine::get_family_list())
+    {
+      family->set_suppressed(s_AudioMuted);
+    }
+  }
+
+  void StopAll()
+  {
+    for (auto &family : DRAudioEngine::get_family_list())
+      for (auto &stream : family->get_stream_list())
+        stream->stop();
   }
 
   namespace effect
   {
-    void Play(const char *name)
+    void Play(const std::string& name)
     {
-      s_effectsPlayer->play_effect(name);
+      s_effectsPlayer->play_effect(QString::fromStdString(name));
     }
+
+    void PlayCharacter(const std::string& character, const std::string& name)
+    {
+      s_effectsPlayer->play_character_effect(QString::fromStdString(character), QString::fromStdString(name));
+    }
+
+    void PlayAmbient(const std::string &filepath)
+    {
+      s_effectsPlayer->play_ambient(QString::fromStdString(filepath));
+    }
+
+    void StopAll()
+    {
+      s_effectsPlayer->stop_all();
+    }
+
   }
 
   namespace system
@@ -88,8 +130,12 @@ namespace audio
     }
   }
 
-
-
-
+  namespace shout
+  {
+    void Play(const std::string& character, const std::string& name)
+    {
+      s_shoutPlayer->play(QString::fromStdString(character), QString::fromStdString(name));
+    }
+  }
 
 }

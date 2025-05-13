@@ -18,6 +18,7 @@
 #include <QRegularExpressionMatch>
 
 #include "dro/fs/fs_reading.h"
+#include "dro/system/audio.h"
 
 #include <optional>
 
@@ -149,7 +150,7 @@ void Courtroom::on_sfx_list_context_menu_requested(QPoint p_point)
 
 void Courtroom::on_sfx_menu_preview_triggered()
 {
-  m_effects_player->play_effect(current_sfx_file());
+  audio::effect::Play(current_sfx_file().toStdString());
 }
 
 void Courtroom::on_sfx_menu_insert_file_name_triggered()

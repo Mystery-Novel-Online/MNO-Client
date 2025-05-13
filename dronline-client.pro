@@ -25,6 +25,7 @@ HEADERS += \
   src/dro/interface/widgets/health_bar.h \
   src/dro/interface/widgets/screenshot_button.h \
   src/dro/network/area_metadata.h \
+  src/dro/network/metadata/user_metadata.h \
   src/dro/network/server_metadata.h \
   src/dro/network/tracklist_metadata.h \
   src/dro/param/actor/actor_loader.h \
@@ -141,6 +142,7 @@ SOURCES += \
   src/dro/interface/widgets/health_bar.cpp \
   src/dro/interface/widgets/screenshot_button.cpp \
   src/dro/network/area_metadata.cpp \
+  src/dro/network/metadata/user_metadata.cpp \
   src/dro/network/server_metadata.cpp \
   src/dro/network/tracklist_metadata.cpp \
   src/dro/param/actor/actor_loader.cpp \
@@ -164,7 +166,6 @@ SOURCES += \
   src/aoshoutplayer.cpp \
   src/aosystemplayer.cpp \
   src/aotimer.cpp \
-  src/audio_functions.cpp \
   src/charselect.cpp \
   src/commondefs.cpp \
   src/courtroom.cpp \
