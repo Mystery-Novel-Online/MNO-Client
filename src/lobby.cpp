@@ -7,7 +7,6 @@
 #include "commondefs.h"
 #include "datatypes.h"
 #include "modules/managers/localization_manager.h"
-#include "modules/managers/emotion_manager.h"
 #include "debug_functions.h"
 #include "drchatlog.h"
 #include "drmasterclient.h"
@@ -138,7 +137,6 @@ Lobby::Lobby(AOApplication *p_ao_app)
   m_master_client->set_address(ao_config->server_advertiser());
   set_choose_a_server();
 
-  EmotionManager::get().wEmoteList = {};
   ThemeManager::get().ResetWidgetLists();
 }
 

@@ -2,7 +2,6 @@
 #include "aoemotebutton.h"
 #include "commondefs.h"
 #include "dro/fs/fs_reading.h"
-#include "emotion_manager.h"
 
 #include <AOApplication.h>
 #include <QCheckBox>
@@ -71,12 +70,7 @@ void CharacterManager::setOutfitList(QStringList t_outfits)
 
 void CharacterManager::setOutfitIndex(int t_index)
 {
-  if(mCharacterOutfits.length() > t_index && t_index != -1)
-  {
-    p_SelectedCharacter->SwitchOutfit(mCharacterOutfits[t_index]);
-  }
-  EmotionManager::get().refreshEmoteSelection(false);
-  EmotionManager::get().refreshEmotePage();
+
 }
 
 QVector<char_type> CharacterManager::GetCharList()

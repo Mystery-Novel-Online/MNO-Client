@@ -14,7 +14,7 @@ class AOSfxPlayer : public AOObject
 public:
   static const int DEFAULT_FADE_DURATION = 5000;
 
-  AOSfxPlayer(AOApplication *ao_app, QObject *parent = nullptr);
+  AOSfxPlayer(QObject *parent = nullptr);
 
   void play(QString filename);
   void play_effect(QString effect);

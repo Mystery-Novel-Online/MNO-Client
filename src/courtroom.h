@@ -70,7 +70,7 @@ class QLabel;
 #include <mk2/drplayer.h>
 
 #include <modules/theme/widgets/dro_line_edit.h>
-#include <modules/theme/widgets/droemotebuttons.h>
+#include "dro/interface/widgets/emotion_selector.h"
 
 #include <modules/widgets/rpnotifymenu.h>
 #include <modules/widgets/viewport_overlay.h>
@@ -552,7 +552,7 @@ private:
 
   QLineEdit *ui_sfx_search = nullptr;
 
-  DROEmoteButtons *ui_emotes = nullptr;
+  EmotionSelector *ui_emotes = nullptr;
 
 
   QWidget * ui_player_list = nullptr;
@@ -806,9 +806,6 @@ private slots:
   void on_music_search_edited(QString);
   void on_music_search_edited();
 
-  void select_emote(int p_id);
-
-  void on_emote_clicked(int id);
   void show_emote_tooltip(int id, QPoint global_pos);
   void on_emote_preview_toggled(bool);
 

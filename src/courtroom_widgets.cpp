@@ -686,6 +686,7 @@ void Courtroom::reset_widget_names()
       {"sfx_search", ui_sfx_search},
       {"ic_chat_name", ui_ic_chat_showname},
       {"ao2_ic_chat_message", ui_ic_chat_message},
+      {"ao2_ic_chat_message_field", ui_ic_chat_message_field},
       {"notify_popup", pNotifyPopup},
       // ui_muted
       {"ooc_chat_message", ui_ooc_chat_message},

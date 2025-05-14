@@ -22,11 +22,11 @@ namespace audio
 
   void Initialize()
   {
-    s_musicPlayer = new AOMusicPlayer(AOApplication::getInstance());
-    s_effectsPlayer = new AOSfxPlayer(AOApplication::getInstance());
-    s_systemPlayer = new AOSystemPlayer(AOApplication::getInstance());
-    s_blipPlayer = new AOBlipPlayer(AOApplication::getInstance());
-    s_shoutPlayer = new AOShoutPlayer(AOApplication::getInstance());
+    s_musicPlayer = new AOMusicPlayer();
+    s_effectsPlayer = new AOSfxPlayer();
+    s_systemPlayer = new AOSystemPlayer();
+    s_blipPlayer = new AOBlipPlayer();
+    s_shoutPlayer = new AOShoutPlayer();
   }
 
   bool IsSuppressed()

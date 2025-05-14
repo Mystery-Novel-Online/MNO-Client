@@ -6,8 +6,8 @@
 #include "draudiotrackmetadata.h"
 #include <QDebug>
 
-AOMusicPlayer::AOMusicPlayer(AOApplication *p_ao_app, QObject *p_parent)
-    : AOObject(p_ao_app, p_parent)
+AOMusicPlayer::AOMusicPlayer(QObject *p_parent)
+    : AOObject(p_parent)
 {
   m_family = DRAudioEngine::get_family(DRAudio::Family::FMusic);
   m_family->set_capacity(1); // a single song is needed

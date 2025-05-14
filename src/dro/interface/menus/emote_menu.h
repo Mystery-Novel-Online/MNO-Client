@@ -6,12 +6,13 @@
 #include <QWidget>
 #include "dro/tools/button_maker.h"
 
+class EmotionSelector;
 
 class EmoteMenu : public QMenu
 {
   Q_OBJECT
 public:
-  EmoteMenu(QWidget *parent = nullptr);
+  EmoteMenu(EmotionSelector *parent = nullptr);
   void EmoteChange(DREmote emote);
 
   static bool isRealtime();
@@ -30,6 +31,7 @@ public slots:
   void ApplyPreset(const QString& presetName);
 
 private:
+  EmotionSelector *m_EmotionSelector = nullptr;
   ButtonMaker *m_buttonMaker = nullptr;
   bool m_DoubleSize = false;
   bool m_Realtime = false;

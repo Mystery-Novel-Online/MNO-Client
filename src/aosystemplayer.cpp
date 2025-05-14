@@ -5,8 +5,8 @@
 #include "dro/fs/fs_reading.h"
 #include "dro/fs/fs_reading.h"
 
-AOSystemPlayer::AOSystemPlayer(AOApplication *p_ao_app, QObject *p_parent)
-    : AOObject(p_ao_app, p_parent)
+AOSystemPlayer::AOSystemPlayer(QObject *p_parent)
+    : AOObject(p_parent)
 {}
 
 void AOSystemPlayer::play(QString p_name)

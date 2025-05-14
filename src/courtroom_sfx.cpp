@@ -10,7 +10,6 @@
 #include <QColor>
 #include "modules/managers/localization_manager.h"
 #include "modules/managers/character_manager.h"
-#include "modules/managers/emotion_manager.h"
 #include <QLineEdit>
 #include <QListWidget>
 #include <QMenu>
@@ -32,7 +31,7 @@ std::optional<DRSfx> Courtroom::current_sfx()
 
 QString Courtroom::current_sfx_file()
 {
-  const QString l_current_emote_file = EmotionManager::get().getCurrentEmote().sound_file;
+  const QString l_current_emote_file = ui_emotes->getSelectedEmote().sound_file;
   const std::optional<DRSfx> l_optional_sfx = current_sfx();
   if (!l_optional_sfx.has_value())
     return l_current_emote_file;

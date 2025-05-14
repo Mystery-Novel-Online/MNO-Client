@@ -12,7 +12,6 @@
 #include "aonotearea.h"
 #include "aonotepicker.h"
 #include "aosfxplayer.h"
-#include "modules/managers/emotion_manager.h"
 #include "modules/managers/pair_manager.h"
 #include "aoshoutplayer.h"
 #include "aosystemplayer.h"
@@ -324,7 +323,7 @@ void Courtroom::enter_courtroom(int p_cid)
   const QString l_chr_name = get_character_ini();
 
   ActorData *actor = CharacterManager::get().SwitchCharacter(l_chr_name);
-  ui_emotes->ActorChange(actor);
+  ui_emotes->actorChange(actor);
   if(!actor->GetScalingPresets().empty())
   {
     ActorScalingPreset preset = actor->GetScalingPresets().at(0);
@@ -362,8 +361,8 @@ void Courtroom::enter_courtroom(int p_cid)
   select_base_character_iniswap();
   refresh_character_content_url();
 
-  EmotionManager::get().refreshEmoteSelection(l_changed_chr);
-  EmotionManager::get().refreshEmotePage();
+  ui_emotes->refreshSelection(l_changed_chr);
+  ui_emotes->refreshEmotes(false);
 
   load_current_character_sfx_list();
   select_default_sfx();
@@ -872,7 +871,7 @@ void Courtroom::on_ic_message_return_pressed()
 
   QStringList packet_contents;
 
-  const DREmote &l_emote = EmotionManager::get().getCurrentEmote();
+  const DREmote &l_emote = ui_emotes->getSelectedEmote();
 
   const QString l_desk_modifier = l_emote.desk_modifier == -1 ? QString("chat") : QString::number(l_emote.desk_modifier);
   packet_contents.append(l_desk_modifier);
@@ -2778,7 +2777,18 @@ void Courtroom::on_chat_type_changed(int p_type)
 
 void Courtroom::onOutfitChanged(int t_outfitIndex)
 {
-  CharacterManager::get().setOutfitIndex(t_outfitIndex);
+  t_outfitIndex -= 1;
+  if(t_outfitIndex == -1)
+  {
+    CharacterManager::get().p_SelectedCharacter->SwitchOutfit("<All>");
+  }
+  else if(CharacterManager::get().p_SelectedCharacter->GetOutfitNames().length() > t_outfitIndex && t_outfitIndex != -1)
+  {
+    CharacterManager::get().p_SelectedCharacter->SwitchOutfit(CharacterManager::get().p_SelectedCharacter->GetOutfitNames()[t_outfitIndex]);
+  }
+
+  ui_emotes->refreshSelection(false);
+  ui_emotes->refreshEmotes(false);
 
   const QString l_chr_name = get_character_ini();
   const QString l_showname = CharacterManager::get().p_SelectedCharacter->GetShowname();

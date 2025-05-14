@@ -16,7 +16,7 @@ class AOBlipPlayer : public AOObject
 public:
   static const int BLIP_COUNT;
 
-  AOBlipPlayer(AOApplication *p_ao_app, QObject *p_parent = nullptr);
+  AOBlipPlayer(QObject *p_parent = nullptr);
 
 public slots:
   void set_blips(QString p_sfx);

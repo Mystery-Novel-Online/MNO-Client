@@ -4,8 +4,8 @@
 
 const int AOBlipPlayer::BLIP_COUNT = 5;
 
-AOBlipPlayer::AOBlipPlayer(AOApplication *p_ao_app, QObject *p_parent)
-    : AOObject(p_ao_app, p_parent)
+AOBlipPlayer::AOBlipPlayer(QObject *p_parent)
+    : AOObject(p_parent)
 {
   m_family = DRAudioEngine::get_family(DRAudio::Family::FBlip);
   m_family->set_capacity(BLIP_COUNT);

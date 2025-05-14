@@ -9,7 +9,7 @@ class AOObject : public QObject
   Q_OBJECT
 
 public:
-  AOObject(AOApplication *p_ao_app, QObject *p_parent = nullptr);
+  AOObject(QObject *p_parent = nullptr);
 
 protected:
   AOApplication *ao_app = nullptr;

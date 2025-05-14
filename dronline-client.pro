@@ -23,7 +23,9 @@ HEADERS += \
   src/dro/interface/menus/emote_menu.h \
   src/dro/interface/widgets/bgm_filter.h \
   src/dro/interface/widgets/health_bar.h \
+  src/dro/interface/widgets/rp_widget.h \
   src/dro/interface/widgets/screenshot_button.h \
+  src/dro/interface/widgets/emotion_selector.h \
   src/dro/network/area_metadata.h \
   src/dro/network/metadata/user_metadata.h \
   src/dro/network/server_metadata.h \
@@ -108,7 +110,6 @@ HEADERS += \
   src/modules/json/theme_module_reader.h \
   src/modules/json/theme_reader.h \
   src/modules/managers/character_manager.h \
-  src/modules/managers/emotion_manager.h \
   src/modules/managers/localization_manager.h \
   src/modules/managers/notify_manager.h \
   src/modules/managers/pair_manager.h \
@@ -119,7 +120,6 @@ HEADERS += \
   src/modules/theme/widgets/characterselectwidget.h \
   src/modules/theme/widgets/dro_combo_box.h \
   src/modules/theme/widgets/dro_line_edit.h \
-  src/modules/theme/widgets/droemotebuttons.h \
   src/modules/theme/widgets/tab_toggle_button.h \
   src/modules/widgets/rpnotifymenu.h \
   src/modules/widgets/tabgroupingwidget.h \
@@ -140,7 +140,9 @@ SOURCES += \
   src/dro/interface/menus/emote_menu.cpp \
   src/dro/interface/widgets/bgm_filter.cpp \
   src/dro/interface/widgets/health_bar.cpp \
+  src/dro/interface/widgets/rp_widget.cpp \
   src/dro/interface/widgets/screenshot_button.cpp \
+  src/dro/interface/widgets/emotion_selector.cpp \
   src/dro/network/area_metadata.cpp \
   src/dro/network/metadata/user_metadata.cpp \
   src/dro/network/server_metadata.cpp \
@@ -228,7 +230,6 @@ SOURCES += \
   src/modules/json/theme_module_reader.cpp \
   src/modules/json/theme_reader.cpp \
   src/modules/managers/character_manager.cpp \
-  src/modules/managers/emotion_manager.cpp \
   src/modules/managers/localization_manager.cpp \
   src/modules/managers/notify_manager.cpp \
   src/modules/managers/pair_manager.cpp \
@@ -239,7 +240,6 @@ SOURCES += \
   src/modules/theme/widgets/characterselectwidget.cpp \
   src/modules/theme/widgets/dro_combo_box.cpp \
   src/modules/theme/widgets/dro_line_edit.cpp \
-  src/modules/theme/widgets/droemotebuttons.cpp \
   src/modules/theme/widgets/tab_toggle_button.cpp \
   src/modules/widgets/rpnotifymenu.cpp \
   src/modules/widgets/tabgroupingwidget.cpp \

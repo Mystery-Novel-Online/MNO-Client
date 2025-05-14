@@ -5,12 +5,12 @@ static bool s_renderSprites = false;
 
 #include "aoapplication.h"
 #include "courtroom.h"
-#include "modules/managers/emotion_manager.h"
 #include "modules/managers/character_manager.h"
 #include "dro/interface/courtroom_layout.h"
 
-EmoteMenu::EmoteMenu(QWidget *parent) : QMenu(parent)
+EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
 {
+  m_EmotionSelector = parent;
   p_SizeAction = addAction(tr("Resize"));
   p_RenderAction = addAction(tr("Use Sprite Images"));
   addSeparator();
@@ -90,7 +90,7 @@ void EmoteMenu::OnRealtimeTriggered()
     p_RenderAction->setText("Use Button Images");
     s_renderSprites = true;
   }
-  EmotionManager::get().refreshEmotePage(true);
+  m_EmotionSelector->refreshEmotes(true);
 }
 
 void EmoteMenu::OnButtonMakerTriggered()
@@ -108,7 +108,6 @@ void EmoteMenu::OnOffsetResetTriggered()
 
 void EmoteMenu::ApplyPreset(const QString &presetName)
 {
-
   for(ActorScalingPreset presetData : CharacterManager::get().p_SelectedCharacter->GetScalingPresets())
   {
     if(presetData.name == presetName)
@@ -117,5 +116,4 @@ void EmoteMenu::ApplyPreset(const QString &presetName)
       courtroom::sliders::setVertical(presetData.verticalAlign);
     }
   }
-  qDebug() << "Presets applied";
 }

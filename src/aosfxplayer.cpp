@@ -9,8 +9,8 @@
 #include <QDebug>
 #include <cstddef>
 
-AOSfxPlayer::AOSfxPlayer(AOApplication *p_ao_app, QObject *p_parent)
-    : AOObject(p_ao_app, p_parent)
+AOSfxPlayer::AOSfxPlayer(QObject *p_parent)
+    : AOObject(p_parent)
     , m_player(DRAudioEngine::get_family(DRAudio::Family::FEffect))
 {}
 
