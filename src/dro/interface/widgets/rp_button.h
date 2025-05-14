@@ -1,16 +1,16 @@
-#ifndef AOBUTTON_H
-#define AOBUTTON_H
+#ifndef RP_BUTTON_H
+#define RP_BUTTON_H
 
 class AOApplication;
 
 #include <QPushButton>
 
-class AOButton : public QPushButton
+class RPButton : public QPushButton
 {
   Q_OBJECT
 
 public:
-  AOButton(QWidget *parent, AOApplication *p_ao_app);
+  RPButton(QWidget *parent, AOApplication *p_ao_app);
 
   QString get_image();
   bool has_image();
@@ -33,4 +33,4 @@ private:
   QString fallback_text;
 };
 
-#endif // AOBUTTON_H
+#endif // RP_BUTTON_H

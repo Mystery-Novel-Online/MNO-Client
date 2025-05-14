@@ -1,14 +1,12 @@
 #ifndef THEMEMANAGER_H
 #define THEMEMANAGER_H
 
-#include <AOButton.h>
 #include <QHash>
-#include <aoimagedisplay.h>
-#include "dro/interface/widgets/dro_combo_box.h"
+#include "dro/interface/widgets/image_display.h"
+#include "dro/interface/widgets/rp_combo_box.h"
 #include "dro/interface/widgets/dro_line_edit.h"
+#include "dro/interface/widgets/rp_button.h"
 #include "dro/param/theme_reader.h"
-
-
 
 class ThemeManager
 {
@@ -62,7 +60,7 @@ public:
   void setViewporResize(double size);
   double getViewporResize();
 
-  void addButton(QString name, AOButton* button);
+  void addButton(QString name, RPButton* button);
   void refreshButtons();
 
   void addLineEdit(QString name, DROLineEdit* lineEdit);
@@ -87,7 +85,7 @@ public:
   }
 
   QWidget *getWidget(QString name);
-  AOButton *GetButton(QString t_name);
+  RPButton *GetButton(QString t_name);
 
   ThemeReader mCurrentThemeReader = ThemeReader();
 
@@ -104,7 +102,7 @@ private:
   QMap<QString, QWidget *> m_TabDeletionQueue = {};
 
   QHash<QString, QWidget *> m_WidgetNames = {};
-  QHash<QString, AOButton*> mButtonWidgets { };
+  QHash<QString, RPButton*> mButtonWidgets { };
   QHash<QString, DROLineEdit*> mLineEditWidgets { };
   QHash<QString, DROComboBox*> mComboBoxWidgets { };
 

@@ -1,5 +1,5 @@
 #include "character_manager.h"
-#include "aoemotebutton.h"
+#include "dro/interface/widgets/emotion_button.h"
 #include "commondefs.h"
 #include "dro/fs/fs_reading.h"
 

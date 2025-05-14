@@ -1,8 +1,8 @@
-#ifndef AONOTEPICKER_H
-#define AONOTEPICKER_H
+#ifndef NOTE_PICKER_H
+#define NOTE_PICKER_H
 
 class AOApplication;
-class AOButton;
+class RPButton;
 
 #include <QLabel>
 
@@ -19,9 +19,9 @@ public:
   QString m_file;
 
   QLineEdit *ui_line = nullptr;
-  AOButton *ui_button = nullptr;
-  AOButton *ui_delete_button = nullptr;
-  AOButton *ui_hover = nullptr;
+  RPButton *ui_button = nullptr;
+  RPButton *ui_delete_button = nullptr;
+  RPButton *ui_hover = nullptr;
   QHBoxLayout *ui_layout = nullptr;
 
   void set_active(bool p_active);
@@ -33,4 +33,4 @@ private:
   bool m_active = false;
 };
 
-#endif // AONOTEPICKER_H
+#endif // NOTE_PICKER_H

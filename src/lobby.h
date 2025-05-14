@@ -9,7 +9,7 @@
 #include <optional>
 
 class AOApplication;
-class AOButton;
+class RPButton;
 class AOConfig;
 class AOImageDisplay;
 class DRChatLog;
@@ -58,8 +58,8 @@ private:
 
   // ui
   AOImageDisplay *ui_background = nullptr;
-  AOButton *ui_public_server_filter = nullptr;
-  AOButton *ui_favorite_server_filter = nullptr;
+  RPButton *ui_public_server_filter = nullptr;
+  RPButton *ui_favorite_server_filter = nullptr;
   enum ServerFilter
   {
     NoFilter,
@@ -68,12 +68,12 @@ private:
   };
   ServerFilter m_server_filter = NoFilter;
 
-  AOButton *ui_refresh = nullptr;
-  AOButton *ui_toggle_favorite = nullptr;
-  AOButton *ui_connect = nullptr;
+  RPButton *ui_refresh = nullptr;
+  RPButton *ui_toggle_favorite = nullptr;
+  RPButton *ui_connect = nullptr;
 
   DRTextEdit *ui_version = nullptr;
-  AOButton *ui_config_panel = nullptr;
+  RPButton *ui_config_panel = nullptr;
   QListWidget *ui_server_list = nullptr;
   DRTextEdit *ui_player_count = nullptr;
   QTextBrowser *ui_description = nullptr;
@@ -81,7 +81,7 @@ private:
   AOImageDisplay *ui_loading_background = nullptr;
   DRTextEdit *ui_loading_text = nullptr;
   QProgressBar *ui_progress_bar = nullptr;
-  AOButton *ui_cancel = nullptr;
+  RPButton *ui_cancel = nullptr;
 
   QMenu *ui_server_menu;
   std::optional<int> m_server_index;

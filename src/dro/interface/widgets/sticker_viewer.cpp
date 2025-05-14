@@ -1,4 +1,4 @@
-#include "drstickerviewer.h"
+#include "sticker_viewer.h"
 
 #include "aoapplication.h"
 #include "drtheme.h"

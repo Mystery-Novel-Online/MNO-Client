@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
-#include <drstickerviewer.h>
+#include "dro/interface/widgets/sticker_viewer.h"
 
 class AOApplication;
 

@@ -1,9 +1,9 @@
-#ifndef DRPLAYERLISTENTRY_H
-#define DRPLAYERLISTENTRY_H
+#ifndef PLAYER_LIST_SLOT_H
+#define PLAYER_LIST_SLOT_H
 class AOApplication;
 
-#include "aoimagedisplay.h"
-#include "aolabel.h"
+#include "dro/interface/widgets/image_display.h"
+#include "dro/interface/widgets/rp_label.h"
 
 #include <QWidget>
 
@@ -57,4 +57,4 @@ private:
 
 };
 
-#endif // DRPLAYERLISTENTRY_H
+#endif // PLAYER_LIST_SLOT_H

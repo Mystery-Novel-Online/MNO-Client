@@ -1,5 +1,5 @@
-#ifndef DRTEXTEDIT_H
-#define DRTEXTEDIT_H
+#ifndef RP_TEXT_EDIT_H
+#define RP_TEXT_EDIT_H
 
 #include <QTextEdit>
 
@@ -43,4 +43,4 @@ private slots:
   void on_text_changed();
 };
 
-#endif // DRTEXTEDIT_H
+#endif // RP_TEXT_EDIT_H

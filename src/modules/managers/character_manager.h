@@ -1,7 +1,7 @@
 #ifndef CHARACTERMANAGER_H
 #define CHARACTERMANAGER_H
 
-#include <aoemotebutton.h>
+#include <dro/interface/widgets/emotion_button.h>
 #include <datatypes.h>
 
 #include "dro/param/actor/actor_loader.h"

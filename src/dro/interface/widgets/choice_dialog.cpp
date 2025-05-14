@@ -13,8 +13,8 @@ ChoiceDialog::ChoiceDialog(QWidget *parent)
     : RPWidget{parent}
 {
   m_choiceText = new DRTextEdit(this);
-  m_acceptButton = new AOButton(this, m_App);
-  m_declineButton = new AOButton(this, m_App);
+  m_acceptButton = new RPButton(this, m_App);
+  m_declineButton = new RPButton(this, m_App);
 
   setDragable(true);
 
@@ -43,7 +43,7 @@ void ChoiceDialog::ThemeReload()
   SetupButton(m_declineButton, 125, 100, 100, 30, "Decline");
 }
 
-void ChoiceDialog::SetupButton(AOButton *t_button, int t_x, int t_y, int t_width, int t_height, QString name)
+void ChoiceDialog::SetupButton(RPButton *t_button, int t_x, int t_y, int t_width, int t_height, QString name)
 {
   ThemeManager::get().setWidgetPosition(t_button, t_x, t_y);
   ThemeManager::get().setWidgetDimensions(t_button, t_width, t_height);

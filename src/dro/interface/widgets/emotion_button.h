@@ -1,5 +1,5 @@
-#ifndef AOEMOTEBUTTON_H
-#define AOEMOTEBUTTON_H
+#ifndef EMOTION_BUTTON_H
+#define EMOTION_BUTTON_H
 
 // src
 #include "datatypes.h"
@@ -8,6 +8,7 @@
 class AOApplication;
 
 // qt
+#include <QObject>
 #include <QPushButton>
 #include <QWheelEvent>
 
@@ -52,4 +53,4 @@ protected:
   void paintEvent(QPaintEvent *event) final;
 };
 
-#endif // AOEMOTEBUTTON_H
+#endif // EMOTION_BUTTON_H

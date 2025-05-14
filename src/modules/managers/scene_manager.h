@@ -1,7 +1,7 @@
 #ifndef SCENEMANAGER_H
 #define SCENEMANAGER_H
 
-#include "src/aolabel.h"
+#include "src/dro/interface/widgets/rp_label.h"
 #include "src/drgraphicscene.h"
 
 #include <mk2/drplayer.h>

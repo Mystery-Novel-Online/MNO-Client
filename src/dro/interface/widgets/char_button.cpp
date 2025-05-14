@@ -1,7 +1,7 @@
-#include "aocharbutton.h"
+#include "char_button.h"
 
 #include "aoapplication.h"
-#include "aoimagedisplay.h"
+#include "dro/interface/widgets/image_display.h"
 #include <QDesktopServices>
 #include "modules/managers/character_manager.h"
 #include "dro/system/localization.h"

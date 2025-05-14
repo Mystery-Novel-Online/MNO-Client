@@ -5,7 +5,7 @@
 
 #include <QMenu>
 
-TabToggleButton::TabToggleButton(QWidget *parent, AOApplication *p_ao_app) : AOButton(parent, p_ao_app)
+TabToggleButton::TabToggleButton(QWidget *parent, AOApplication *p_ao_app) : RPButton(parent, p_ao_app)
 {
 
   this->setContextMenuPolicy(Qt::CustomContextMenu);

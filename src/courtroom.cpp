@@ -1,16 +1,16 @@
 #include "courtroom.h"
-#include "drplayerlistentry.h"
+#include "dro/interface/widgets/player_list_slot.h"
 #include "modules/theme/thememanager.h"
 #include "aoapplication.h"
 #include "aoblipplayer.h"
 #include "dro/system/debug/time_debugger.h"
-#include "aobutton.h"
+#include "dro/interface/widgets/rp_button.h"
 #include "aoconfig.h"
-#include "aoimagedisplay.h"
+#include "dro/interface/widgets/image_display.h"
 #include "aomusicplayer.h"
 #include "modules/managers/character_manager.h"
-#include "aonotearea.h"
-#include "aonotepicker.h"
+#include "dro/interface/widgets/note_area.h"
+#include "dro/interface/widgets/note_picker.h"
 #include "aosfxplayer.h"
 #include "modules/managers/pair_manager.h"
 #include "aoshoutplayer.h"
@@ -21,7 +21,7 @@
 #include "dro/system/localization.h"
 #include "draudiotrackmetadata.h"
 #include "drcharactermovie.h"
-#include "drchatlog.h"
+#include "dro/interface/widgets/chat_log.h"
 #include "drdiscord.h"
 #include "drtheme.h"
 #include "dreffectmovie.h"
@@ -29,7 +29,7 @@
 #include "drscenemovie.h"
 #include "drshoutmovie.h"
 #include "drsplashmovie.h"
-#include "drstickerviewer.h"
+#include "dro/interface/widgets/sticker_viewer.h"
 #include "dro/fs/fs_reading.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "mk2/spritedynamicreader.h"
@@ -2596,14 +2596,14 @@ void Courtroom::send_mc_packet(QString p_song)
  */
 void Courtroom::reset_shout_buttons()
 {
-  for (AOButton *i_button : qAsConst(ui_shouts))
+  for (RPButton *i_button : qAsConst(ui_shouts))
     i_button->setChecked(false);
   m_shout_state = 0;
 }
 
 void Courtroom::on_shout_button_clicked(const bool p_checked)
 {
-  AOButton *l_button = dynamic_cast<AOButton *>(sender());
+  RPButton *l_button = dynamic_cast<RPButton *>(sender());
   if (l_button == nullptr)
     return;
 
@@ -2613,7 +2613,7 @@ void Courtroom::on_shout_button_clicked(const bool p_checked)
     return;
 
   // disable all other buttons
-  for (AOButton *i_button : qAsConst(ui_shouts))
+  for (RPButton *i_button : qAsConst(ui_shouts))
   {
     if (i_button == l_button)
       continue;
@@ -2626,7 +2626,7 @@ void Courtroom::on_shout_button_clicked(const bool p_checked)
 
 void Courtroom::on_shout_button_toggled(const bool p_checked)
 {
-  AOButton *l_button = dynamic_cast<AOButton *>(sender());
+  RPButton *l_button = dynamic_cast<RPButton *>(sender());
   if (l_button == nullptr)
     return;
 
@@ -2642,7 +2642,7 @@ void Courtroom::on_shout_button_toggled(const bool p_checked)
 
 void Courtroom::on_cycle_clicked()
 {
-  AOButton *f_cycle_button = static_cast<AOButton *>(sender());
+  RPButton *f_cycle_button = static_cast<RPButton *>(sender());
   int f_cycle_id = f_cycle_button->property("cycle_id").toInt();
 
   switch (f_cycle_id)
@@ -2721,14 +2721,14 @@ void Courtroom::cycle_wtce(int p_delta)
  */
 void Courtroom::reset_effect_buttons()
 {
-  for (AOButton *i_button : qAsConst(ui_effects))
+  for (RPButton *i_button : qAsConst(ui_effects))
     i_button->setChecked(false);
   m_effect_state = 0;
 }
 
 void Courtroom::on_effect_button_clicked(const bool p_checked)
 {
-  AOButton *l_button = dynamic_cast<AOButton *>(sender());
+  RPButton *l_button = dynamic_cast<RPButton *>(sender());
   if (l_button == nullptr)
     return;
 
@@ -2738,7 +2738,7 @@ void Courtroom::on_effect_button_clicked(const bool p_checked)
     return;
 
   // disable all other buttons
-  for (AOButton *i_button : qAsConst(ui_effects))
+  for (RPButton *i_button : qAsConst(ui_effects))
   {
     if (i_button == l_button)
       continue;
@@ -2751,7 +2751,7 @@ void Courtroom::on_effect_button_clicked(const bool p_checked)
 
 void Courtroom::on_effect_button_toggled(const bool p_checked)
 {
-  AOButton *l_button = dynamic_cast<AOButton *>(sender());
+  RPButton *l_button = dynamic_cast<RPButton *>(sender());
   if (l_button == nullptr)
     return;
 
@@ -2816,7 +2816,7 @@ void Courtroom::reset_wtce_buttons()
   {
     const QString l_name = wtce_names.at(i);
     const QString l_file = l_name + ".png";
-    AOButton *l_button = ui_wtce.at(i);
+    RPButton *l_button = ui_wtce.at(i);
     l_button->set_image(l_file);
     l_button->setText(!l_button->has_image() ? l_name : nullptr);
   }
@@ -2835,7 +2835,7 @@ void Courtroom::on_wtce_clicked()
   if (is_client_muted)
     return;
 
-  AOButton *f_sig = static_cast<AOButton *>(sender());
+  RPButton *f_sig = static_cast<RPButton *>(sender());
   QString id = f_sig->property("wtce_id").toString();
 
   ao_app->send_server_packet(DRPacket("RT", {QString("testimony%1").arg(id)}));

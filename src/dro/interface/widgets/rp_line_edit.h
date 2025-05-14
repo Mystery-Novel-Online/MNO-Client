@@ -1,5 +1,5 @@
-#ifndef AOLINEEDIT_H
-#define AOLINEEDIT_H
+#ifndef RP_LINE_EDIT_H
+#define RP_LINE_EDIT_H
 
 #include <QLineEdit>
 
@@ -20,4 +20,4 @@ private slots:
   void on_enter_pressed();
 };
 
-#endif // AOLINEEDIT_H
+#endif // RP_LINE_EDIT_H

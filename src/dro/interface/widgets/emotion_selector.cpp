@@ -2,7 +2,7 @@
 #include "courtroom.h"
 #include "modules/theme/thememanager.h"
 #include "modules/managers/character_manager.h"
-#include "aoemotebutton.h"
+#include "dro/interface/widgets/emotion_button.h"
 #include <QCheckBox>
 #include <QListWidget>
 #include <QWheelEvent>
@@ -90,8 +90,8 @@ void EmotionSelector::constructEmotes()
 
 void EmotionSelector::refreshEmotes(bool scrollToCurrent)
 {
-  AOButton* l_emotesLeft = ThemeManager::get().GetButton("emote_left");
-  AOButton* l_emotesRight = ThemeManager::get().GetButton("emote_right");
+  RPButton* l_emotesLeft = ThemeManager::get().GetButton("emote_left");
+  RPButton* l_emotesRight = ThemeManager::get().GetButton("emote_right");
 
   l_emotesLeft->hide();
   l_emotesRight->hide();

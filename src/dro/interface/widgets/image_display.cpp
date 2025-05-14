@@ -1,4 +1,4 @@
-#include "aoimagedisplay.h"
+#include "dro/interface/widgets/image_display.h"
 
 #include <QDebug>
 

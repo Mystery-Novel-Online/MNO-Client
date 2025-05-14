@@ -1,4 +1,4 @@
-#include "drtextedit.h"
+#include "rp_text_edit.h"
 #include "debug_functions.h"
 
 #include <QDebug>

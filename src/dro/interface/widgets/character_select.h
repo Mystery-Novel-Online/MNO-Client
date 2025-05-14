@@ -1,5 +1,5 @@
-#ifndef CHARACTERSELECTWIDGET_H
-#define CHARACTERSELECTWIDGET_H
+#ifndef CHARACTER_SELECT_H
+#define CHARACTER_SELECT_H
 
 #include <AOApplication.h>
 #include <QObject>
@@ -19,4 +19,4 @@ private:
 
 };
 
-#endif // CHARACTERSELECTWIDGET_H
+#endif // CHARACTER_SELECT_H

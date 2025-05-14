@@ -1,5 +1,5 @@
-#ifndef AOIMAGEDISPLAY_H
-#define AOIMAGEDISPLAY_H
+#ifndef IMAGE_DISPLAY_H
+#define IMAGE_DISPLAY_H
 
 class AOApplication;
 
@@ -22,4 +22,4 @@ private:
   QString m_image;
 };
 
-#endif // AOIMAGEDISPLAY_H
+#endif // IMAGE_DISPLAY_H

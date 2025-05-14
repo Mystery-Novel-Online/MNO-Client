@@ -1,4 +1,4 @@
-#include "aolabel.h"
+#include "dro/interface/widgets/rp_label.h"
 
 #include "aoapplication.h"
 

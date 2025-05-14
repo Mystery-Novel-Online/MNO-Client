@@ -3,9 +3,9 @@
 
 #include <QObject>
 #include <QWidget>
-#include <aobutton.h>
+#include "dro/interface/widgets/rp_button.h"
 
-class ScreenshotButton : public AOButton
+class ScreenshotButton : public RPButton
 {
   Q_OBJECT
 public:

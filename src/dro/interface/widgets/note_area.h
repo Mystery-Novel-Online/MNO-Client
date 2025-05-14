@@ -1,10 +1,10 @@
-#ifndef AONOTEAREA_H
-#define AONOTEAREA_H
+#ifndef NOTE_AREA_H
+#define NOTE_AREA_H
 
-#include "aoimagedisplay.h"
+#include "dro/interface/widgets/image_display.h"
 
 class AOApplication;
-class AOButton;
+class RPButton;
 
 class QVBoxLayout;
 
@@ -13,7 +13,7 @@ class AONoteArea : public AOImageDisplay
   Q_OBJECT
 
 public:
-  AOButton *add_button = nullptr;
+  RPButton *add_button = nullptr;
   QVBoxLayout *m_layout = nullptr;
 
   AONoteArea(QWidget *p_parent, AOApplication *p_ao_app);
@@ -24,4 +24,4 @@ private:
   void set_layout();
 };
 
-#endif // AONOTEAREA_H
+#endif // NOTE_AREA_H

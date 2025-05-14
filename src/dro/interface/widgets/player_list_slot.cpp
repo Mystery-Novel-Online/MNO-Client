@@ -1,4 +1,4 @@
-#include "drplayerlistentry.h"
+#include "player_list_slot.h"
 #include "aoapplication.h"
 #include "commondefs.h"
 #include "dro/fs/fs_reading.h"

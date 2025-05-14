@@ -19,7 +19,7 @@
 
 class AOApplication;
 class AOBlipPlayer;
-class AOButton;
+class RPButton;
 class AOCharButton;
 class AOConfig;
 class AOEmoteButton;
@@ -65,7 +65,7 @@ class QSignalMapper;
 class QLabel;
 
 #include <optional>
-#include "drplayerlistentry.h"
+#include "dro/interface/widgets/player_list_slot.h"
 
 #include <mk2/drplayer.h>
 #include "dro/interface/widgets/emotion_selector.h"
@@ -516,8 +516,8 @@ private:
   DRTextEdit *ui_ic_chatlog = nullptr;
   QList<DRChatRecord> m_ic_record_list;
   QQueue<DRChatRecord> m_ic_record_queue;
-  AOButton *ui_ic_chatlog_scroll_topdown = nullptr;
-  AOButton *ui_ic_chatlog_scroll_bottomup = nullptr;
+  RPButton *ui_ic_chatlog_scroll_topdown = nullptr;
+  RPButton *ui_ic_chatlog_scroll_bottomup = nullptr;
 
   DRChatLog *ui_ooc_chatlog = nullptr;
 
@@ -555,8 +555,8 @@ private:
   QWidget * ui_player_list = nullptr;
 
 
-  AOButton *ui_emote_left = nullptr;
-  AOButton *ui_emote_right = nullptr;
+  RPButton *ui_emote_left = nullptr;
+  RPButton *ui_emote_right = nullptr;
   DRGraphicsView *ui_emote_preview;
   DRThemeMovie *ui_emote_preview_background;
   DRCharacterMovie *ui_emote_preview_character;
@@ -581,21 +581,21 @@ private:
   HealthBar *ui_prosecution_bar = nullptr;
 
   // buttons to cycle through shouts
-  AOButton *ui_shout_up = nullptr;
-  AOButton *ui_shout_down = nullptr;
+  RPButton *ui_shout_up = nullptr;
+  RPButton *ui_shout_down = nullptr;
   // buttons to cycle through effects
-  AOButton *ui_effect_up = nullptr;
-  AOButton *ui_effect_down = nullptr;
+  RPButton *ui_effect_up = nullptr;
+  RPButton *ui_effect_down = nullptr;
   // buttons to cycle through wtce
-  AOButton *ui_wtce_up = nullptr;
-  AOButton *ui_wtce_down = nullptr;
+  RPButton *ui_wtce_up = nullptr;
+  RPButton *ui_wtce_down = nullptr;
 
   // holds all the shout button objects
-  QVector<AOButton *> ui_shouts;
+  QVector<RPButton *> ui_shouts;
   // holds all the effect button objects
-  QVector<AOButton *> ui_effects;
+  QVector<RPButton *> ui_effects;
   // holds all the shout buttons objects
-  QVector<AOButton *> ui_wtce;
+  QVector<RPButton *> ui_wtce;
   // holds all the free block objects
   QVector<DRStickerViewer *> ui_free_blocks;
 
@@ -615,14 +615,14 @@ private:
   QVector<bool> free_blocks_enabled;
 
   CharMenu *p_CharacterContextMenu;
-  AOButton *ui_change_character = nullptr;
+  RPButton *ui_change_character = nullptr;
 
-  AOButton *ui_call_mod = nullptr;
-  AOButton *ui_switch_area_music = nullptr;
+  RPButton *ui_call_mod = nullptr;
+  RPButton *ui_switch_area_music = nullptr;
 
-  AOButton *ui_config_panel = nullptr;
+  RPButton *ui_config_panel = nullptr;
 
-  AOButton *ui_set_notes = nullptr;
+  RPButton *ui_set_notes = nullptr;
 
   QCheckBox *ui_pre = nullptr;
   QCheckBox *ui_flip = nullptr;
@@ -633,18 +633,18 @@ private:
   QVector<AOImageDisplay *> ui_label_images;
   QVector<QString> label_images = {"Pre", "Flip", "Hidden"};
 
-  AOButton *ui_effect_flash = nullptr;
-  AOButton *ui_effect_gloom = nullptr;
+  RPButton *ui_effect_flash = nullptr;
+  RPButton *ui_effect_gloom = nullptr;
 
-  AOButton *ui_defense_plus = nullptr;
-  AOButton *ui_defense_minus = nullptr;
+  RPButton *ui_defense_plus = nullptr;
+  RPButton *ui_defense_minus = nullptr;
 
-  AOButton *ui_prosecution_plus = nullptr;
-  AOButton *ui_prosecution_minus = nullptr;
+  RPButton *ui_prosecution_plus = nullptr;
+  RPButton *ui_prosecution_minus = nullptr;
 
   QComboBox *ui_text_color = nullptr;
 
-  AOButton *ui_note_button = nullptr;
+  RPButton *ui_note_button = nullptr;
 
   AOImageDisplay *ui_char_select_background = nullptr;
 
@@ -657,15 +657,15 @@ private:
   QLineEdit *pCharaSelectSearch = nullptr;
   QComboBox *pCharaSelectSeries = nullptr;
 
-  AOButton *ui_back_to_lobby = nullptr;
+  RPButton *ui_back_to_lobby = nullptr;
   bool m_back_to_lobby_clicked = false;
 
-  AOButton *ui_chr_select_left = nullptr;
-  AOButton *ui_chr_select_right = nullptr;
+  RPButton *ui_chr_select_left = nullptr;
+  RPButton *ui_chr_select_right = nullptr;
 
-  AOButton *ui_spectator = nullptr;
-  AOButton *pBtnCharSelectRefresh = nullptr;
-  AOButton *pBtnCharSelectRandom = nullptr;
+  RPButton *ui_spectator = nullptr;
+  RPButton *pBtnCharSelectRefresh = nullptr;
+  RPButton *pBtnCharSelectRandom = nullptr;
 
 
   QHash<QString, QString> mDefaultWidgetCSS
@@ -681,9 +681,9 @@ private:
 
 
 
-  AOButton *ui_player_list_left = nullptr;
-  AOButton *ui_player_list_right = nullptr;
-  AOButton *ui_area_look = nullptr;
+  RPButton *ui_player_list_left = nullptr;
+  RPButton *ui_player_list_right = nullptr;
+  RPButton *ui_area_look = nullptr;
 
   ScreenshotButton *p_ScreenshotBtn = nullptr;
 
@@ -700,7 +700,7 @@ private:
   void create_widgets();
 
   QComboBox* setupComboBoxWidget(const QStringList& items, QString name, QString cssHeader);
-  AOButton* setupButtonWidget(const QString name, QString image, QString fallback, QWidget* parent = nullptr);
+  RPButton* setupButtonWidget(const QString name, QString image, QString fallback, QWidget* parent = nullptr);
   QLineEdit* setupLineEditWidget(const QString name, QString image, QString legacy_css, QString text, QWidget* parent = nullptr);
 
 

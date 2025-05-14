@@ -1,5 +1,5 @@
 #include "lobby_layout.h"
-#include "aobutton.h"
+#include "dro/interface/widgets/rp_button.h"
 #include "lobby.h"
 #include "aoapplication.h"
 #include "theme.h"
@@ -16,9 +16,9 @@ namespace Layout::ServerSelect
     s_AOApplication = application;
   }
 
-  AOButton *CreateButton(QString name, QString image, std::function<void()> releasedFunction)
+  RPButton *CreateButton(QString name, QString image, std::function<void()> releasedFunction)
   {
-    AOButton* newButton = new AOButton(s_ConstructedLobby, s_AOApplication);
+    RPButton* newButton = new RPButton(s_ConstructedLobby, s_AOApplication);
     set_size_and_pos(newButton, name, LOBBY_DESIGN_INI, s_AOApplication);
     newButton->set_image(image + ".png");
 

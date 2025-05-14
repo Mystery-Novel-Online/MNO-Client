@@ -2,10 +2,10 @@
 #define CHOICE_DIALOG_H
 
 #include <QWidget>
-#include <aobutton.h>
-#include <drstickerviewer.h>
-#include <drtextedit.h>
+#include "dro/interface/widgets/sticker_viewer.h"
+#include "dro/interface/widgets/rp_text_edit.h"
 #include "dro/interface/widgets/rp_widget.h"
+#include "dro/interface/widgets/rp_button.h"
 
 enum ChoiceEvent
 {
@@ -23,7 +23,7 @@ class ChoiceDialog : public RPWidget
 public:
   explicit ChoiceDialog(QWidget *parent = nullptr);
   void ThemeReload();
-  void SetupButton(AOButton* t_button, int t_x, int t_y, int t_width, int t_height, QString name);
+  void SetupButton(RPButton* t_button, int t_x, int t_y, int t_width, int t_height, QString name);
 
   void setText(QString message);
 
@@ -37,8 +37,8 @@ private slots:
 
 private:
   DRTextEdit *m_choiceText = nullptr;
-  AOButton *m_acceptButton = nullptr;
-  AOButton *m_declineButton = nullptr;
+  RPButton *m_acceptButton = nullptr;
+  RPButton *m_declineButton = nullptr;
 
   QString m_senderKey = "";
   int m_senderId = -1;

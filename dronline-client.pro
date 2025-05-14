@@ -22,14 +22,26 @@ HEADERS += \
   src/dro/interface/menus/char_menu.h \
   src/dro/interface/menus/emote_menu.h \
   src/dro/interface/widgets/bgm_filter.h \
+  src/dro/interface/widgets/char_button.h \
+  src/dro/interface/widgets/character_select.h \
+  src/dro/interface/widgets/chat_log.h \
+  src/dro/interface/widgets/emotion_button.h \
   src/dro/interface/widgets/health_bar.h \
+  src/dro/interface/widgets/image_display.h \
+  src/dro/interface/widgets/note_area.h \
+  src/dro/interface/widgets/note_picker.h \
+  src/dro/interface/widgets/player_list_slot.h \
+  src/dro/interface/widgets/rp_button.h \
+  src/dro/interface/widgets/rp_combo_box.h \
+  src/dro/interface/widgets/rp_label.h \
+  src/dro/interface/widgets/rp_line_edit.h \
+  src/dro/interface/widgets/rp_text_edit.h \
   src/dro/interface/widgets/rp_widget.h \
   src/dro/interface/widgets/screenshot_button.h \
   src/dro/interface/widgets/emotion_selector.h \
   src/dro/interface/widgets/choice_dialog.h \
+  src/dro/interface/widgets/sticker_viewer.h \
   src/dro/interface/widgets/viewport_overlay.h \
-  src/dro/interface/widgets/characterselectwidget.h \
-  src/dro/interface/widgets/dro_combo_box.h \
   src/dro/interface/widgets/dro_line_edit.h \
   src/dro/interface/widgets/tab_toggle_button.h \
   src/dro/network/json_packet.h \
@@ -48,18 +60,10 @@ HEADERS += \
   src/dro/param/background/legacy_background_reader.h \
   src/aoapplication.h \
   src/aoblipplayer.h \
-  src/aobutton.h \
-  src/aocharbutton.h \
   src/aoconfig.h \
   src/aoconfigpanel.h \
-  src/aoemotebutton.h \
   src/aoguiloader.h \
-  src/aoimagedisplay.h \
-  src/aolabel.h \
-  src/aolineedit.h \
   src/aomusicplayer.h \
-  src/aonotearea.h \
-  src/aonotepicker.h \
   src/aoobject.h \
   src/aopixmap.h \
   src/aosfxplayer.h \
@@ -79,7 +83,6 @@ HEADERS += \
   src/draudiostreamfamily.h \
   src/draudiotrackmetadata.h \
   src/drcharactermovie.h \
-  src/drchatlog.h \
   src/drdiscord.h \
   src/dreffectmovie.h \
   src/drgraphicscene.h \
@@ -93,15 +96,12 @@ HEADERS += \
   src/dro/system/debug/time_debugger.h \
   src/dro/tools/button_maker.h \
   src/drpacket.h \
-  src/drplayerlistentry.h \
   src/drposition.h \
   src/drscenemovie.h \
   src/drserverinfoeditor.h \
   src/drserversocket.h \
   src/drshoutmovie.h \
   src/drsplashmovie.h \
-  src/drstickerviewer.h \
-  src/drtextedit.h \
   src/drtheme.h \
   src/drthememovie.h \
   src/hardware_functions.h \
@@ -138,14 +138,26 @@ SOURCES += \
   src/dro/interface/menus/char_menu.cpp \
   src/dro/interface/menus/emote_menu.cpp \
   src/dro/interface/widgets/bgm_filter.cpp \
+  src/dro/interface/widgets/char_button.cpp \
+  src/dro/interface/widgets/character_select.cpp \
+  src/dro/interface/widgets/chat_log.cpp \
+  src/dro/interface/widgets/emotion_button.cpp \
   src/dro/interface/widgets/health_bar.cpp \
+  src/dro/interface/widgets/image_display.cpp \
+  src/dro/interface/widgets/note_area.cpp \
+  src/dro/interface/widgets/note_picker.cpp \
+  src/dro/interface/widgets/player_list_slot.cpp \
+  src/dro/interface/widgets/rp_button.cpp \
+  src/dro/interface/widgets/rp_combo_box.cpp \
+  src/dro/interface/widgets/rp_label.cpp \
+  src/dro/interface/widgets/rp_line_edit.cpp \
+  src/dro/interface/widgets/rp_text_edit.cpp \
   src/dro/interface/widgets/rp_widget.cpp \
   src/dro/interface/widgets/screenshot_button.cpp \
   src/dro/interface/widgets/emotion_selector.cpp \
   src/dro/interface/widgets/choice_dialog.cpp \
+  src/dro/interface/widgets/sticker_viewer.cpp \
   src/dro/interface/widgets/viewport_overlay.cpp \
-  src/dro/interface/widgets/characterselectwidget.cpp \
-  src/dro/interface/widgets/dro_combo_box.cpp \
   src/dro/interface/widgets/dro_line_edit.cpp \
   src/dro/interface/widgets/tab_toggle_button.cpp \
   src/dro/network/json_packet.cpp \
@@ -164,18 +176,10 @@ SOURCES += \
   src/dro/param/background/legacy_background_reader.cpp \
   src/aoapplication.cpp \
   src/aoblipplayer.cpp \
-  src/aobutton.cpp \
-  src/aocharbutton.cpp \
   src/aoconfig.cpp \
   src/aoconfigpanel.cpp \
-  src/aoemotebutton.cpp \
   src/aoguiloader.cpp \
-  src/aoimagedisplay.cpp \
-  src/aolabel.cpp \
-  src/aolineedit.cpp \
   src/aomusicplayer.cpp \
-  src/aonotearea.cpp \
-  src/aonotepicker.cpp \
   src/aoobject.cpp \
   src/aopixmap.cpp \
   src/aosfxplayer.cpp \
@@ -199,7 +203,6 @@ SOURCES += \
   src/draudiostreamfamily.cpp \
   src/draudiotrackmetadata.cpp \
   src/drcharactermovie.cpp \
-  src/drchatlog.cpp \
   src/dreffectmovie.cpp \
   src/drgraphicscene.cpp \
   src/drmasterclient.cpp \
@@ -212,15 +215,12 @@ SOURCES += \
   src/dro/system/debug/time_debugger.cpp \
   src/dro/tools/button_maker.cpp \
   src/drpacket.cpp \
-  src/drplayerlistentry.cpp \
   src/drposition.cpp \
   src/drscenemovie.cpp \
   src/drserverinfoeditor.cpp \
   src/drserversocket.cpp \
   src/drshoutmovie.cpp \
   src/drsplashmovie.cpp \
-  src/drstickerviewer.cpp \
-  src/drtextedit.cpp \
   src/drdiscord.cpp \
   src/drtheme.cpp \
   src/drthememovie.cpp \

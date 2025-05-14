@@ -12,8 +12,8 @@
 #include "aoapplication.h"
 #include "commondefs.h"
 #include "datatypes.h"
-#include "drstickerviewer.h"
-#include "drtextedit.h"
+#include "dro/interface/widgets/sticker_viewer.h"
+#include "dro/interface/widgets/rp_text_edit.h"
 #include "drtheme.h"
 
 #include <modules/theme/thememanager.h>

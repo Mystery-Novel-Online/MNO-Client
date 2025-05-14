@@ -2,28 +2,28 @@
 
 #include "aoapplication.h"
 #include "aoblipplayer.h"
-#include "aobutton.h"
+#include "dro/interface/widgets/rp_button.h"
 #include "aoconfig.h"
-#include "aoimagedisplay.h"
-#include "aolabel.h"
+#include "dro/interface/widgets/image_display.h"
+#include "dro/interface/widgets/rp_label.h"
 #include "modules/managers/pair_manager.h"
 #include "aomusicplayer.h"
-#include "aonotearea.h"
-#include "aonotepicker.h"
+#include "dro/interface/widgets/note_area.h"
+#include "dro/interface/widgets/note_picker.h"
 #include "aosfxplayer.h"
 #include "aoshoutplayer.h"
 #include "aosystemplayer.h"
 #include "aotimer.h"
 #include "commondefs.h"
 #include "drcharactermovie.h"
-#include "drchatlog.h"
+#include "dro/interface/widgets/chat_log.h"
 #include "drtheme.h"
 #include "dreffectmovie.h"
 #include "drscenemovie.h"
 #include "drshoutmovie.h"
 #include "drsplashmovie.h"
-#include "drstickerviewer.h"
-#include "drtextedit.h"
+#include "dro/interface/widgets/sticker_viewer.h"
+#include "dro/interface/widgets/rp_text_edit.h"
 #include "dro/fs/fs_reading.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "modules/managers/notify_manager.h"
@@ -48,7 +48,7 @@
 
 #include <modules/theme/thememanager.h>
 
-#include "dro/interface/widgets/dro_combo_box.h"
+#include "dro/interface/widgets/rp_combo_box.h"
 #include "dro/interface/widgets/dro_line_edit.h"
 #include "dro/system/debug/time_debugger.h"
 #include "dro/system/localization.h"
@@ -246,7 +246,7 @@ void Courtroom::create_widgets()
   ui_ic_chat_showname->setFrame(false);
 
   ui_note_area = new AONoteArea(this, ao_app);
-  ui_note_area->add_button = new AOButton(ui_note_area, ao_app);
+  ui_note_area->add_button = new RPButton(ui_note_area, ao_app);
   ui_note_area->m_layout = new QVBoxLayout(ui_note_area);
 
   ui_slider_horizontal_axis = new QSlider(Qt::Horizontal, this);
@@ -300,7 +300,7 @@ void Courtroom::create_widgets()
   ui_note_scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_note_scroll_area->setWidgetResizable(true);
 
-  ui_set_notes = new AOButton(this, ao_app);
+  ui_set_notes = new RPButton(this, ao_app);
 
   construct_emotes();
 
@@ -420,11 +420,11 @@ QComboBox *Courtroom::setupComboBoxWidget(const QStringList& items, QString name
   return comboBox;
 }
 
-AOButton *Courtroom::setupButtonWidget(const QString name, QString image, QString fallback, QWidget* parent)
+RPButton *Courtroom::setupButtonWidget(const QString name, QString image, QString fallback, QWidget* parent)
 {
-  AOButton *button;
-  if(parent == nullptr) button = new AOButton(this, ao_app);
-  else button = new AOButton(parent, ao_app);
+  RPButton *button;
+  if(parent == nullptr) button = new RPButton(this, ao_app);
+  else button = new RPButton(parent, ao_app);
 
   button->set_theme_image(name, image, "courtroom", fallback);
 
@@ -1344,7 +1344,7 @@ void Courtroom::set_widgets()
   // This is used to force already existing notepicker elements to reset their image and theme setting
   for (AONotePicker *notepicker : ui_note_area->findChildren<AONotePicker *>())
   {
-    for (AOButton *button : notepicker->findChildren<AOButton *>())
+    for (RPButton *button : notepicker->findChildren<RPButton *>())
     {
       button->refresh_image();
     }
@@ -1555,7 +1555,7 @@ void Courtroom::load_effects()
 
   for (int i = 0; i < ui_effects.size(); ++i)
   {
-    AOButton *l_button = new AOButton(this, ao_app);
+    RPButton *l_button = new RPButton(this, ao_app);
     ui_effects.replace(i, l_button);
     l_button->setCheckable(true);
     l_button->setProperty("effect_id", i + 1);
@@ -1575,7 +1575,7 @@ void Courtroom::load_effects()
     {
       const QString l_name = names.at(0).trimmed();
       effect_names.append(l_name);
-      AOButton *l_button = ui_effects.at(i - 1);
+      RPButton *l_button = ui_effects.at(i - 1);
       l_button->setProperty("effect_name", l_name);
       Q_EMIT l_button->toggled(l_button->isChecked());
     }
@@ -1628,7 +1628,7 @@ void Courtroom::load_shouts()
   shout_names.clear();
   for (int i = 0; i < ui_shouts.size(); ++i)
   {
-    AOButton *l_button = new AOButton(this, ao_app);
+    RPButton *l_button = new RPButton(this, ao_app);
     ui_shouts.replace(i, l_button);
     l_button->setCheckable(true);
     l_button->setProperty("shout_id", i + 1);
@@ -1643,7 +1643,7 @@ void Courtroom::load_shouts()
     if(!shout_name.isEmpty())
     {
       shout_names.append(shout_name);
-      AOButton *l_button = ui_shouts.at(i);
+      RPButton *l_button = ui_shouts.at(i);
       widget_names.insert(shout_name, l_button);
       l_button->setObjectName(shout_name);
       l_button->setProperty("shout_name", shout_name);
@@ -1666,7 +1666,7 @@ void Courtroom::load_wtce()
   wtce_names.clear();
   for (int i = 0; i < l_wtce_count; ++i)
   {
-    AOButton *l_button = new AOButton(this, ao_app);
+    RPButton *l_button = new RPButton(this, ao_app);
     ui_wtce.append(l_button);
     l_button->setProperty("wtce_id", i + 1);
     l_button->stackUnder(ui_wtce_up);
@@ -1755,7 +1755,7 @@ void Courtroom::set_judge_wtce()
   }
   else
   {
-    for (AOButton *i_wtce : qAsConst(ui_wtce))
+    for (RPButton *i_wtce : qAsConst(ui_wtce))
       i_wtce->show();
   }
 }

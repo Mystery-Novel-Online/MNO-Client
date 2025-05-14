@@ -1,14 +1,13 @@
 #ifndef TABTOGGLEBUTTON_H
 #define TABTOGGLEBUTTON_H
 
-#include <aobutton.h>
+#include "dro/interface/widgets/rp_button.h"
 
-class TabToggleButton : public AOButton
+class TabToggleButton : public RPButton
 {
   Q_OBJECT
 public:
   TabToggleButton(QWidget *parent, AOApplication *p_ao_app);
-
 
   void refreshButtonStatus();
   void setTabName(QString t_name);

@@ -1,10 +1,10 @@
 #include "courtroom.h"
 
 #include "aoapplication.h"
-#include "aobutton.h"
-#include "aocharbutton.h"
+#include "dro/interface/widgets/rp_button.h"
+#include "dro/interface/widgets/char_button.h"
 #include "aoconfig.h"
-#include "aoimagedisplay.h"
+#include "dro/interface/widgets/image_display.h"
 #include "commondefs.h"
 #include "debug_functions.h"
 #include "dro/system/localization.h"
@@ -21,7 +21,7 @@
 #include <QtMath>
 #include <QLineEdit>
 
-#include "dro/interface/widgets/characterselectwidget.h"
+#include "dro/interface/widgets/character_select.h"
 
 void Courtroom::construct_char_select()
 {

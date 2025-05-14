@@ -320,7 +320,7 @@ double ThemeManager::getViewporResize()
   return mViewportResize;
 }
 
-void ThemeManager::addButton(QString name, AOButton *button)
+void ThemeManager::addButton(QString name, RPButton *button)
 {
   mButtonWidgets[name] = button;
 }
@@ -332,7 +332,7 @@ void ThemeManager:: addLineEdit(QString name, DROLineEdit* lineEdit)
 
 void ThemeManager::refreshButtons()
 {
-  for(AOButton* button : mButtonWidgets)
+  for(RPButton* button : mButtonWidgets)
   {
     button->set_theme_image();
     button->refresh_position();
@@ -376,7 +376,7 @@ QWidget *ThemeManager::getWidget(QString name)
   return nullptr;
 }
 
-AOButton *ThemeManager::GetButton(QString t_name)
+RPButton *ThemeManager::GetButton(QString t_name)
 {
-  return dynamic_cast<AOButton*>(ThemeManager::get().getWidget(t_name));
+  return dynamic_cast<RPButton*>(ThemeManager::get().getWidget(t_name));
 }

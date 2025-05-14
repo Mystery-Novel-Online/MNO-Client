@@ -1,15 +1,15 @@
 #include "courtroom_layout.h"
 
-#include <DRStickerViewer.h>
+#include "dro/interface/widgets/sticker_viewer.h"
 #include <aoapplication.h>
-#include <drchatlog.h>
+#include "dro/interface/widgets/chat_log.h"
 #include <QString>
 #include "modules/theme/thememanager.h"
 #include "dro/system/theme_scripting.h"
 
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
 static QVector<DRStickerViewer *> s_CourtroomStickers = {};
-static QVector<AOButton *> s_CourtroomButtons = {};
+static QVector<RPButton *> s_CourtroomButtons = {};
 
 namespace courtroom
 {
@@ -27,7 +27,7 @@ namespace courtroom
       delete sticker;
     }
 
-    for (AOButton *button : s_CourtroomButtons)
+    for (RPButton *button : s_CourtroomButtons)
     {
       auto it = s_CourtroomWidgets.begin();
       while (it != s_CourtroomWidgets.end())
@@ -80,10 +80,10 @@ namespace courtroom
       if(!s_CourtroomWidgets.contains("courtroom")) return;
       QString widgetName = "button_" + QString(qName);
 
-      AOButton *targetButton = nullptr;
+      RPButton *targetButton = nullptr;
       if(!s_CourtroomWidgets.contains(widgetName))
       {
-        targetButton = new AOButton(s_CourtroomWidgets["courtroom"], AOApplication::getInstance());
+        targetButton = new RPButton(s_CourtroomWidgets["courtroom"], AOApplication::getInstance());
         targetButton->setObjectName(widgetName);
         s_CourtroomButtons.append(targetButton);
         s_CourtroomWidgets.insert(widgetName, targetButton);
@@ -99,7 +99,7 @@ namespace courtroom
       else
       {
         QWidget *buttonWidget = s_CourtroomWidgets[widgetName];
-        targetButton = dynamic_cast<AOButton*>(buttonWidget);
+        targetButton = dynamic_cast<RPButton*>(buttonWidget);
         if(targetButton == nullptr) return;
       }
       float resizeFactor = ThemeManager::get().getResize();

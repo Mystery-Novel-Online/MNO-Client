@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
-#include "aoimagedisplay.h"
+#include "dro/interface/widgets/image_display.h"
 
 class HealthBar : public AOImageDisplay
 {

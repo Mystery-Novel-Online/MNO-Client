@@ -1,5 +1,5 @@
-#ifndef AOCHARBUTTON_H
-#define AOCHARBUTTON_H
+#ifndef CHAR_BUTTON_H
+#define CHAR_BUTTON_H
 
 class AOApplication;
 class AOImageDisplay;
@@ -42,4 +42,4 @@ private:
   void showContextMenu(QPoint pos);
 };
 
-#endif // AOCHARBUTTON_H
+#endif // CHAR_BUTTON_H

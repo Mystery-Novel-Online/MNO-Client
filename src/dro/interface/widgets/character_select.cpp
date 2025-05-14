@@ -1,4 +1,4 @@
-#include "characterselectwidget.h"
+#include "character_select.h"
 
 #include <QPaintEvent>
 #include "courtroom.h"

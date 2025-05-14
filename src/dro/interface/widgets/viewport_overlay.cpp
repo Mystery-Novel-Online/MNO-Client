@@ -2,7 +2,7 @@
 #include "drtheme.h"
 #include <AOApplication.h>
 #include <QMenu>
-#include <aoimagedisplay.h>
+#include <dro/interface/widgets/image_display.h>
 #include <modules/theme/thememanager.h>
 
 ViewportOverlay::ViewportOverlay(QWidget *parent)

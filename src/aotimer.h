@@ -1,7 +1,7 @@
 #ifndef AOTIMER_H
 #define AOTIMER_H
 
-#include "drtextedit.h"
+#include "dro/interface/widgets/rp_text_edit.h"
 
 #include <QTime>
 
