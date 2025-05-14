@@ -3,7 +3,7 @@
 #include "modules/theme/thememanager.h"
 #include "aoapplication.h"
 #include "aoblipplayer.h"
-#include "modules/debug/time_debugger.h"
+#include "dro/system/debug/time_debugger.h"
 #include "aobutton.h"
 #include "aoconfig.h"
 #include "aoimagedisplay.h"
@@ -18,7 +18,7 @@
 #include "aotimer.h"
 #include "commondefs.h"
 #include "debug_functions.h"
-#include "modules/managers/localization_manager.h"
+#include "dro/system/localization.h"
 #include "draudiotrackmetadata.h"
 #include "drcharactermovie.h"
 #include "drchatlog.h"
@@ -37,7 +37,7 @@
 #include "src/datatypes.h"
 #include "theme.h"
 #include "dro/fs/fs_reading.h"
-#include "dro/network/server_metadata.h"
+#include "dro/network/metadata/server_metadata.h"
 #include "dro/system/theme_scripting.h"
 #include "dro/system/audio.h"
 #include "dro/interface/courtroom_layout.h"
@@ -63,6 +63,8 @@
 
 const int Courtroom::DEFAULT_WIDTH = 714;
 const int Courtroom::DEFAULT_HEIGHT = 668;
+
+using namespace dro::system;
 
 Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
     : QWidget(parent)
@@ -818,7 +820,7 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
 
 void Courtroom::on_showname_placeholder_changed(QString p_showname_placeholder)
 {
-  const QString l_showname(p_showname_placeholder.trimmed().isEmpty() ? LocalizationManager::get().getLocalizationText("TEXTBOX_SHOWNAME") : p_showname_placeholder);
+  const QString l_showname(p_showname_placeholder.trimmed().isEmpty() ? localization::getText("TEXTBOX_SHOWNAME") : p_showname_placeholder);
   ui_ic_chat_showname->setPlaceholderText(l_showname);
   ui_ic_chat_showname->setToolTip(l_showname);
 }
@@ -2242,7 +2244,7 @@ void Courtroom::set_ban(int p_cid)
   if (p_cid != metadata::user::GetCharacterId() && p_cid != SpectatorId)
     return;
 
-  call_notice(LocalizationManager::get().getLocalizationText("NOTICE_BANNED"));
+  call_notice(localization::getText("NOTICE_BANNED"));
 
   ao_app->construct_lobby();
   ao_app->destruct_courtroom();
@@ -2371,7 +2373,7 @@ void Courtroom::send_ooc_packet(QString ooc_message)
 
   if (ooc_message.trimmed().isEmpty())
   {
-    append_server_chatmessage("CLIENT",  LocalizationManager::get().getLocalizationText("OOC_EMPTY"));
+    append_server_chatmessage("CLIENT",  localization::getText("OOC_EMPTY"));
     return;
   }
   QStringList l_content{ao_config->username(), ooc_message};
@@ -2415,7 +2417,7 @@ void Courtroom::on_ooc_message_return_pressed()
 
   if (l_message.startsWith("/rainbow") && !is_rainbow_enabled)
   {
-    ui_text_color->addItem(LocalizationManager::get().getLocalizationText("COLOR_RAINBOW"));
+    ui_text_color->addItem(localization::getText("COLOR_RAINBOW"));
     ui_ooc_chat_message->clear();
     is_rainbow_enabled = true;
     return;
@@ -3350,19 +3352,19 @@ void Courtroom::construct_playerlist_layout()
     switch(m_current_reportcard_reason)
     {
       case ReportCardReason::Blackout:
-      prompt_reason->set_reason(LocalizationManager::get().getLocalizationText("REASON_BLACKOUT"));
+      prompt_reason->set_reason(localization::getText("REASON_BLACKOUT"));
         break;
 
       case ReportCardReason::Blinded:
-        prompt_reason->set_reason(LocalizationManager::get().getLocalizationText("REASON_BLINDED"));
+        prompt_reason->set_reason(localization::getText("REASON_BLINDED"));
         break;
 
       case ReportCardReason::PendingLook:
-        prompt_reason->set_reason(LocalizationManager::get().getLocalizationText("REASON_PENDING"));
+        prompt_reason->set_reason(localization::getText("REASON_PENDING"));
         break;
 
       case ReportCardReason::NoPlayerList:
-        prompt_reason->set_reason(LocalizationManager::get().getLocalizationText("REASON_DISABLED"));
+        prompt_reason->set_reason(localization::getText("REASON_DISABLED"));
         break;
 
       default:

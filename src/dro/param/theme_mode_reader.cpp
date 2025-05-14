@@ -1,6 +1,6 @@
 #include "theme_mode_reader.h"
 #include "dro/fs/fs_reading.h"
-#include "modules/managers/localization_manager.h"
+#include "dro/system/localization.h"
 #include <AOApplication.h>
 #include <QDir>
 
@@ -263,7 +263,7 @@ QStringList ThemeModeReader::getThemeDirOrder()
   {
     if(module == nullptr) continue;
     QString l_moduleDir = module->getDirectoryPath();
-    dirs.append(l_moduleDir + "/localization/" + LocalizationManager::get().getLocalizationCode());
+    dirs.append(l_moduleDir + "/localization/" + dro::system::localization::getCode());
     dirs.append(l_moduleDir);
   }
   return dirs;

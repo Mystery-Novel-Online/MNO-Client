@@ -6,12 +6,14 @@
 #include "theme.h"
 #include "dro/fs/fs_reading.h"
 #include "modules/managers/pair_manager.h"
-#include "modules/managers/localization_manager.h"
+#include "dro/system/localization.h"
 
 #include <QMenu>
 #include <QUrl>
 #include <QDesktopServices>
 #include <QClipboard>
+
+using namespace dro::system;
 
 DrPlayerListEntry::DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y)
     : QWidget(p_parent)
@@ -223,19 +225,19 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
 
   if(PairManager::get().GetCanPair())
   {
-      QAction *pairRequest = new QAction(LocalizationManager::get().getLocalizationText("PLAYER_LIST_PAIR"));
+      QAction *pairRequest = new QAction(localization::getText("PLAYER_LIST_PAIR"));
       QObject::connect(pairRequest, &QAction::triggered, [this](){sendPairRequest() ;});
       menu->addAction(pairRequest);
   }
   else
   {
-      QAction *pairRequest = new QAction(LocalizationManager::get().getLocalizationText("PLAYER_LIST_UNPAIR"));
+      QAction *pairRequest = new QAction(localization::getText("PLAYER_LIST_UNPAIR"));
       QObject::connect(pairRequest, &QAction::triggered, [this](){sendUnpairRequest() ;});
       menu->addAction(pairRequest);
   }
 
 
-  QAction *a = new QAction(LocalizationManager::get().getLocalizationText("OPEN_CHAR_FOLDER"));
+  QAction *a = new QAction(localization::getText("OPEN_CHAR_FOLDER"));
   QObject::connect(a, &QAction::triggered, [this](){openCharacterFolder();});
   menu->addAction(a);
 
@@ -249,19 +251,19 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
 
   if(!mHDID.isEmpty())
   {
-      QAction *copyHDIDaction = new QAction(LocalizationManager::get().getLocalizationText("MOD_COPY_HDID") + " [" + mHDID + "]");
+      QAction *copyHDIDaction = new QAction(localization::getText("MOD_COPY_HDID") + " [" + mHDID + "]");
       QObject::connect(copyHDIDaction, &QAction::triggered, [this](){copyHDID();});
       menu->addAction(copyHDIDaction);
   }
 
   if(!mIPID.isEmpty())
   {
-      QAction *copyHDIDaction = new QAction(LocalizationManager::get().getLocalizationText("MOD_COPY_IPID") + " [" + mIPID + "]");
+      QAction *copyHDIDaction = new QAction(localization::getText("MOD_COPY_IPID") + " [" + mIPID + "]");
       QObject::connect(copyHDIDaction, &QAction::triggered, [this](){copyIPID();});
       menu->addAction(copyHDIDaction);
   }
 
-  QAction *copyIDAction = new QAction(LocalizationManager::get().getLocalizationText("PLAYER_LIST_ID"));
+  QAction *copyIDAction = new QAction(localization::getText("PLAYER_LIST_ID"));
   QObject::connect(copyIDAction, &QAction::triggered, [this](){copyID();});
   menu->addAction(copyIDAction);
 

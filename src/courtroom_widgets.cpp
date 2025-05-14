@@ -48,13 +48,15 @@
 
 #include <modules/theme/thememanager.h>
 
-#include <modules/theme/widgets/dro_combo_box.h>
-#include <modules/theme/widgets/dro_line_edit.h>
-#include "modules/debug/time_debugger.h"
+#include "dro/interface/widgets/dro_combo_box.h"
+#include "dro/interface/widgets/dro_line_edit.h"
+#include "dro/system/debug/time_debugger.h"
+#include "dro/system/localization.h"
 
-#include <modules/managers/localization_manager.h>
 #include "dro/fs/fs_reading.h"
 #include "dro/interface/courtroom_layout.h"
+
+using namespace dro::system;
 
 void Courtroom::create_widgets()
 {
@@ -193,11 +195,11 @@ void Courtroom::create_widgets()
 
   ui_area_search = new QLineEdit(this);
   ui_area_search->setFrame(false);
-  ui_area_search->setPlaceholderText(LocalizationManager::get().getLocalizationText("TEXTBOX_AREA"));
+  ui_area_search->setPlaceholderText(localization::getText("TEXTBOX_AREA"));
 
   ui_music_list = new QListWidget(this);
   ui_music_list->setContextMenuPolicy(Qt::CustomContextMenu);
-  ui_music_search = setupLineEditWidget("music_search", LocalizationManager::get().getLocalizationText("TEXTBOX_MUSIC"), "[MUSIC SEARCH]", "");
+  ui_music_search = setupLineEditWidget("music_search", localization::getText("TEXTBOX_MUSIC"), "[MUSIC SEARCH]", "");
   ui_music_search->setFrame(false);
   p_MenuBGM = new BGMMenu(this);
 
@@ -208,18 +210,18 @@ void Courtroom::create_widgets()
   ui_sfx_search->setFrame(false);
 
   ui_sfx_menu = new QMenu(this);
-  ui_sfx_menu_preview = ui_sfx_menu->addAction(LocalizationManager::get().getLocalizationText("SFX_PREVIEW"));
-  ui_sfx_menu_insert_file_name = ui_sfx_menu->addAction(LocalizationManager::get().getLocalizationText("SFX_FILENAME"));
-  ui_sfx_menu_insert_caption = ui_sfx_menu->addAction(LocalizationManager::get().getLocalizationText("SFX_CAPTION"));
+  ui_sfx_menu_preview = ui_sfx_menu->addAction(localization::getText("SFX_PREVIEW"));
+  ui_sfx_menu_insert_file_name = ui_sfx_menu->addAction(localization::getText("SFX_FILENAME"));
+  ui_sfx_menu_insert_caption = ui_sfx_menu->addAction(localization::getText("SFX_CAPTION"));
 
   ui_ic_chat_message = new QWidget(this);
 
   ui_ic_chat_message_field = new QLineEdit(ui_ic_chat_message);
   ui_ic_chat_message_field->setFrame(false);
-  ui_ic_chat_message_field->setPlaceholderText(LocalizationManager::get().getLocalizationText("CHATBOX_IC"));
+  ui_ic_chat_message_field->setPlaceholderText(localization::getText("CHATBOX_IC"));
   ui_ic_chat_message_field->setMaxLength(255);
 
-  ui_ooc_chat_message = setupLineEditWidget("ooc_chat_message", LocalizationManager::get().getLocalizationText("CHATBOX_OOC"), "[OOC LINE]", "");
+  ui_ooc_chat_message = setupLineEditWidget("ooc_chat_message", localization::getText("CHATBOX_OOC"), "[OOC LINE]", "");
   ui_ooc_chat_message->setFrame(false);
   ui_ooc_chat_message->setMaxLength(1023);
 
@@ -237,10 +239,10 @@ void Courtroom::create_widgets()
 
   ui_ic_chat_message_counter->hide();
 
-  ui_ooc_chat_name = setupLineEditWidget("ooc_chat_name", LocalizationManager::get().getLocalizationText("TEXTBOX_OOC_NAME") , "[OOC NAME LINE]", ao_config->username());
+  ui_ooc_chat_name = setupLineEditWidget("ooc_chat_name", localization::getText("TEXTBOX_OOC_NAME") , "[OOC NAME LINE]", ao_config->username());
   ui_ooc_chat_name->setFrame(false);
 
-  ui_ic_chat_showname = setupLineEditWidget("ic_chat_name", LocalizationManager::get().getLocalizationText("TEXTBOX_SHOWNAME"), "[IC NAME LINE]", ao_config->showname());
+  ui_ic_chat_showname = setupLineEditWidget("ic_chat_name", localization::getText("TEXTBOX_SHOWNAME"), "[IC NAME LINE]", ao_config->showname());
   ui_ic_chat_showname->setFrame(false);
 
   ui_note_area = new AONoteArea(this, ao_app);
@@ -325,7 +327,7 @@ void Courtroom::create_widgets()
   ui_change_character->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(ui_change_character, &QWidget::customContextMenuRequested, p_CharacterContextMenu, &CharMenu::OnMenuRequested);
 
-  ui_call_mod = setupButtonWidget("call_mod", "callmod.png", LocalizationManager::get().getLocalizationText("PING_MODS"));
+  ui_call_mod = setupButtonWidget("call_mod", "callmod.png", localization::getText("PING_MODS"));
   ui_switch_area_music = setupButtonWidget("switch_area_music", "switch_area_music.png", "A/M");
 
   ui_config_panel = setupButtonWidget("config_panel", "config_panel.png", "Config");
@@ -339,17 +341,17 @@ void Courtroom::create_widgets()
   }
 
   ui_pre = new QCheckBox(this);
-  ui_pre->setText(LocalizationManager::get().getLocalizationText("TITLE_PRE"));
-  ui_pre->setToolTip(LocalizationManager::get().getLocalizationText("TOOLTIP_PRE"));
+  ui_pre->setText(localization::getText("TITLE_PRE"));
+  ui_pre->setToolTip(localization::getText("TOOLTIP_PRE"));
 
   ui_flip = new QCheckBox(this);
-  ui_flip->setText(LocalizationManager::get().getLocalizationText("TITLE_FLIP"));
-  ui_flip->setToolTip(LocalizationManager::get().getLocalizationText("TOOLTIP_FLIP"));
+  ui_flip->setText(localization::getText("TITLE_FLIP"));
+  ui_flip->setToolTip(localization::getText("TOOLTIP_FLIP"));
   ui_flip->hide();
 
   ui_hide_character = new QCheckBox(this);
-  ui_hide_character->setText(LocalizationManager::get().getLocalizationText("TITLE_HIDE"));
-  ui_hide_character->setToolTip(LocalizationManager::get().getLocalizationText("TOOLTIP_HIDE"));
+  ui_hide_character->setText(localization::getText("TITLE_HIDE"));
+  ui_hide_character->setToolTip(localization::getText("TOOLTIP_HIDE"));
 
   // filling vectors with existing label/checkbox pointers
   ui_checks.push_back(ui_pre);
@@ -365,23 +367,23 @@ void Courtroom::create_widgets()
   //Setup Combo Boxes
   QStringList l_colorNames =
   {
-      LocalizationManager::get().getLocalizationText("COLOR_WHITE"),
-      LocalizationManager::get().getLocalizationText("COLOR_GREEN"),
-      LocalizationManager::get().getLocalizationText("COLOR_RED"),
-      LocalizationManager::get().getLocalizationText("COLOR_ORANGE"),
-      LocalizationManager::get().getLocalizationText("COLOR_BLUE"),
-      LocalizationManager::get().getLocalizationText("COLOR_YELLOW"),
-      LocalizationManager::get().getLocalizationText("COLOR_PURPLE"),
-      LocalizationManager::get().getLocalizationText("COLOR_PINK")
+    localization::getText("COLOR_WHITE"),
+    localization::getText("COLOR_GREEN"),
+    localization::getText("COLOR_RED"),
+    localization::getText("COLOR_ORANGE"),
+    localization::getText("COLOR_BLUE"),
+    localization::getText("COLOR_YELLOW"),
+    localization::getText("COLOR_PURPLE"),
+    localization::getText("COLOR_PINK")
   };
 
   ui_text_color = setupComboBoxWidget(l_colorNames, "text_color", "[TEXT COLOR]");
 
   QStringList l_chatTypes =
   {
-      LocalizationManager::get().getLocalizationText("CHAT_TALK"),
-      LocalizationManager::get().getLocalizationText("CHAT_SHOUT"),
-      LocalizationManager::get().getLocalizationText("CHAT_THINK")
+      localization::getText("CHAT_TALK"),
+      localization::getText("CHAT_SHOUT"),
+      localization::getText("CHAT_THINK")
   };
 
   ui_chat_type_dropdown = setupComboBoxWidget(l_chatTypes, "chat_type", "[CHAT TYPE]");
@@ -398,7 +400,7 @@ void Courtroom::create_widgets()
 
   ui_player_list_left = setupButtonWidget("player_list_left", "arrow_left.png", "<-");
   ui_player_list_right = setupButtonWidget("player_list_right", "arrow_right.png", "->");
-  ui_area_look = setupButtonWidget("area_look", "area_look.png", LocalizationManager::get().getLocalizationText("TITLE_LOOK"));
+  ui_area_look = setupButtonWidget("area_look", "area_look.png", localization::getText("TITLE_LOOK"));
   p_ScreenshotBtn = new ScreenshotButton(this, ao_app);
   ThemeManager::get().addButton("screenshot", p_ScreenshotBtn);
 

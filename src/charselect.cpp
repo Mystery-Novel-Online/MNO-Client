@@ -7,7 +7,7 @@
 #include "aoimagedisplay.h"
 #include "commondefs.h"
 #include "debug_functions.h"
-#include "modules/managers/localization_manager.h"
+#include "dro/system/localization.h"
 #include "drpacket.h"
 #include "dro/fs/fs_reading.h"
 #include "hardware_functions.h"
@@ -19,8 +19,9 @@
 #include <QDebug>
 #include <QSignalMapper>
 #include <QtMath>
+#include <QLineEdit>
 
-#include <modules/theme/widgets/characterselectwidget.h>
+#include "dro/interface/widgets/characterselectwidget.h"
 
 void Courtroom::construct_char_select()
 {
@@ -32,17 +33,17 @@ void Courtroom::construct_char_select()
   ui_char_button_selector->setAttribute(Qt::WA_TransparentForMouseEvents);
   ui_char_button_selector->resize(62, 62);
 
-  ui_back_to_lobby = setupButtonWidget("back_to_lobby", "lobby_return.png", LocalizationManager::get().getLocalizationText("CSS_DISCONNECT"), ui_char_select_background);
+  ui_back_to_lobby = setupButtonWidget("back_to_lobby", "lobby_return.png", dro::system::localization::getText("CSS_DISCONNECT"), ui_char_select_background);
 
   ui_chr_select_left = setupButtonWidget("char_select_left", "arrow_left.png", "", ui_char_select_background);
   ui_chr_select_right = setupButtonWidget("char_select_right", "arrow_right.png", "", ui_char_select_background);
 
-  ui_spectator = setupButtonWidget("spectator", "spectator.png", LocalizationManager::get().getLocalizationText("CSS_SPECTATE"), ui_char_select_background);
+  ui_spectator = setupButtonWidget("spectator", "spectator.png", dro::system::localization::getText("CSS_SPECTATE"), ui_char_select_background);
 
-  pBtnCharSelectRandom = setupButtonWidget("char_select_random", "char_random.png", LocalizationManager::get().getLocalizationText("CSS_RANDOM"), ui_char_select_background);
-  pBtnCharSelectRefresh = setupButtonWidget("char_select_refresh", "char_refresh.png", LocalizationManager::get().getLocalizationText("REFRESH"), ui_char_select_background);
+  pBtnCharSelectRandom = setupButtonWidget("char_select_random", "char_random.png", dro::system::localization::getText("CSS_RANDOM"), ui_char_select_background);
+  pBtnCharSelectRefresh = setupButtonWidget("char_select_refresh", "char_refresh.png", dro::system::localization::getText("REFRESH"), ui_char_select_background);
 
-  pCharaSelectSearch = setupLineEditWidget("character_search", LocalizationManager::get().getLocalizationText("CSS_SEARCH"), "[CHARA SEARCH]", "", ui_char_select_background);
+  pCharaSelectSearch = setupLineEditWidget("character_search", dro::system::localization::getText("CSS_SEARCH"), "[CHARA SEARCH]", "", ui_char_select_background);
   pCharaSelectSeries = setupComboBoxWidget(CharacterManager::get().GetCharacterPackages() , "character_packages", "[PACKAGE FILTER]");
 
   connect(char_button_mapper, SIGNAL(mapped(int)), this, SLOT(char_clicked(int)));

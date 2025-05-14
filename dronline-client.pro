@@ -27,11 +27,25 @@ HEADERS += \
   src/dro/interface/widgets/screenshot_button.h \
   src/dro/interface/widgets/emotion_selector.h \
   src/dro/interface/widgets/choice_dialog.h \
-  src/dro/network/area_metadata.h \
+  src/dro/interface/widgets/viewport_overlay.h \
+  src/dro/interface/widgets/characterselectwidget.h \
+  src/dro/interface/widgets/dro_combo_box.h \
+  src/dro/interface/widgets/dro_line_edit.h \
+  src/dro/interface/widgets/tab_toggle_button.h \
+  src/dro/network/json_packet.h \
+  src/dro/network/metadata/area_metadata.h \
   src/dro/network/metadata/user_metadata.h \
-  src/dro/network/server_metadata.h \
-  src/dro/network/tracklist_metadata.h \
+  src/dro/network/metadata/server_metadata.h \
+  src/dro/network/metadata/tracklist_metadata.h \
+  src/dro/param/json_reader.h \
+  src/dro/param/localization_reader.h \
+  src/dro/param/theme_mode_reader.h \
+  src/dro/param/theme_module_reader.h \
+  src/dro/param/theme_reader.h \
   src/dro/param/actor/actor_loader.h \
+  src/dro/param/background/background_data.h \
+  src/dro/param/background/background_reader.h \
+  src/dro/param/background/legacy_background_reader.h \
   src/aoapplication.h \
   src/aoblipplayer.h \
   src/aobutton.h \
@@ -73,8 +87,10 @@ HEADERS += \
   src/drmediatester.h \
   src/drmovie.h \
   src/dro/system/audio.h \
+  src/dro/system/localization.h \
   src/dro/system/runtime_loop.h \
   src/dro/system/theme_scripting.h \
+  src/dro/system/debug/time_debugger.h \
   src/dro/tools/button_maker.h \
   src/drpacket.h \
   src/drplayerlistentry.h \
@@ -101,28 +117,12 @@ HEADERS += \
   src/mk2/spritereadersynchronizer.h \
   src/mk2/spriteseekingreader.h \
   src/mk2/spriteviewer.h \
-  src/modules/background/background_data.h \
-  src/modules/background/background_reader.h \
-  src/modules/background/legacy_background_reader.h \
-  src/modules/debug/time_debugger.h \
-  src/modules/json/json_reader.h \
-  src/modules/json/localization_reader.h \
-  src/modules/json/theme_mode_reader.h \
-  src/modules/json/theme_module_reader.h \
-  src/modules/json/theme_reader.h \
   src/modules/managers/character_manager.h \
-  src/modules/managers/localization_manager.h \
   src/modules/managers/notify_manager.h \
   src/modules/managers/pair_manager.h \
   src/modules/managers/scene_manager.h \
-  src/modules/networking/json_packet.h \
   src/modules/theme/theme_scene.h \
   src/modules/theme/thememanager.h \
-  src/modules/theme/widgets/characterselectwidget.h \
-  src/modules/theme/widgets/dro_combo_box.h \
-  src/modules/theme/widgets/dro_line_edit.h \
-  src/modules/theme/widgets/tab_toggle_button.h \
-  src/modules/widgets/viewport_overlay.h \
   src/theme.h \
   src/utils.h \
   src/version.h
@@ -143,11 +143,25 @@ SOURCES += \
   src/dro/interface/widgets/screenshot_button.cpp \
   src/dro/interface/widgets/emotion_selector.cpp \
   src/dro/interface/widgets/choice_dialog.cpp \
-  src/dro/network/area_metadata.cpp \
+  src/dro/interface/widgets/viewport_overlay.cpp \
+  src/dro/interface/widgets/characterselectwidget.cpp \
+  src/dro/interface/widgets/dro_combo_box.cpp \
+  src/dro/interface/widgets/dro_line_edit.cpp \
+  src/dro/interface/widgets/tab_toggle_button.cpp \
+  src/dro/network/json_packet.cpp \
+  src/dro/network/metadata/area_metadata.cpp \
   src/dro/network/metadata/user_metadata.cpp \
-  src/dro/network/server_metadata.cpp \
-  src/dro/network/tracklist_metadata.cpp \
+  src/dro/network/metadata/server_metadata.cpp \
+  src/dro/network/metadata/tracklist_metadata.cpp \
+  src/dro/param/json_reader.cpp \
+  src/dro/param/localization_reader.cpp \
+  src/dro/param/theme_mode_reader.cpp \
+  src/dro/param/theme_module_reader.cpp \
+  src/dro/param/theme_reader.cpp \
   src/dro/param/actor/actor_loader.cpp \
+  src/dro/param/background/background_data.cpp \
+  src/dro/param/background/background_reader.cpp \
+  src/dro/param/background/legacy_background_reader.cpp \
   src/aoapplication.cpp \
   src/aoblipplayer.cpp \
   src/aobutton.cpp \
@@ -192,8 +206,10 @@ SOURCES += \
   src/drmediatester.cpp \
   src/drmovie.cpp \
   src/dro/system/audio.cpp \
+  src/dro/system/localization.cpp \
   src/dro/system/runtime_loop.cpp \
   src/dro/system/theme_scripting.cpp \
+  src/dro/system/debug/time_debugger.cpp \
   src/dro/tools/button_maker.cpp \
   src/drpacket.cpp \
   src/drplayerlistentry.cpp \
@@ -220,28 +236,12 @@ SOURCES += \
   src/mk2/spritedynamicreader.cpp \
   src/mk2/spriteplayer.cpp \
   src/mk2/spriteseekingreader.cpp \
-  src/modules/background/background_data.cpp \
-  src/modules/background/background_reader.cpp \
-  src/modules/background/legacy_background_reader.cpp \
-  src/modules/debug/time_debugger.cpp \
-  src/modules/json/json_reader.cpp \
-  src/modules/json/localization_reader.cpp \
-  src/modules/json/theme_mode_reader.cpp \
-  src/modules/json/theme_module_reader.cpp \
-  src/modules/json/theme_reader.cpp \
   src/modules/managers/character_manager.cpp \
-  src/modules/managers/localization_manager.cpp \
   src/modules/managers/notify_manager.cpp \
   src/modules/managers/pair_manager.cpp \
   src/modules/managers/scene_manager.cpp \
-  src/modules/networking/json_packet.cpp \
   src/modules/theme/theme_scene.cpp \
   src/modules/theme/thememanager.cpp \
-  src/modules/theme/widgets/characterselectwidget.cpp \
-  src/modules/theme/widgets/dro_combo_box.cpp \
-  src/modules/theme/widgets/dro_line_edit.cpp \
-  src/modules/theme/widgets/tab_toggle_button.cpp \
-  src/modules/widgets/viewport_overlay.cpp \
   src/path_functions.cpp \
   src/server_socket.cpp \
   src/mk2/spritereader.cpp \

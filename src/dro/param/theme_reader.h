@@ -1,7 +1,7 @@
 #ifndef THEMEREADER_H
 #define THEMEREADER_H
 
-#include "theme_mode_reader.h"
+#include "dro/param/theme_mode_reader.h"
 
 class ThemeReader
 {

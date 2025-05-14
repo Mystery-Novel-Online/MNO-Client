@@ -3,7 +3,7 @@
 
 #include <qstring.h>
 
-#include <modules/json/json_reader.h>
+#include "dro/param/json_reader.h"
 
 class JsonPacket
 {

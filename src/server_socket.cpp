@@ -6,22 +6,23 @@
 #include "courtroom.h"
 #include "debug_functions.h"
 #include "drdiscord.h"
-#include "dro/network/tracklist_metadata.h"
+#include "dro/network/metadata/tracklist_metadata.h"
 #include "drpacket.h"
 #include "modules/managers/character_manager.h"
-#include "modules/managers/localization_manager.h"
+#include "dro/system/localization.h"
 #include "drserversocket.h"
 #include "dro/fs/fs_reading.h"
 #include "hardware_functions.h"
 #include "lobby.h"
 #include "version.h"
-#include "modules/networking/json_packet.h"
 #include "dro/fs/fs_reading.h"
-#include "dro/network/server_metadata.h"
-#include "dro/network/area_metadata.h"
+#include "dro/network/metadata/server_metadata.h"
+#include "dro/network/metadata/area_metadata.h"
+#include "dro/network/json_packet.h"
 #include "dro/system/theme_scripting.h"
 #include "dro/system/audio.h"
 
+using namespace dro::system;
 
 void AOApplication::connect_to_server(DRServerInfo p_server)
 {
@@ -66,7 +67,7 @@ void AOApplication::_p_handle_server_state_update(DRServerSocket::ConnectionStat
       if (is_courtroom_constructed)
       {
         audio::StopAll();
-        call_notice(LocalizationManager::get().getLocalizationText("NOTICE_DISCONNECT"));
+        call_notice(localization::getText("NOTICE_DISCONNECT"));
         construct_lobby();
         destruct_courtroom();
       }
@@ -429,7 +430,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       if (f_cid != remote_cid && remote_cid != -1)
         return;
 
-      call_notice(LocalizationManager::get().getLocalizationText("NOTICE_KICKED"));
+      call_notice(localization::getText("NOTICE_KICKED"));
       leave_server();
       construct_lobby();
       destruct_courtroom();
@@ -442,7 +443,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   }
   else if (l_header == "BD")
   {
-    call_notice(LocalizationManager::get().getLocalizationText("NOTICE_BANNED_2"));
+    call_notice(localization::getText("NOTICE_BANNED_2"));
   }
   else if (l_header == "ZZ")
   {

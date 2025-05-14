@@ -4,8 +4,8 @@
 #include <courtroom.h>
 #include "aoapplication.h"
 #include "dro/fs/fs_reading.h"
-#include "modules/background/background_reader.h"
-#include "modules/background/legacy_background_reader.h"
+#include "dro/param/background/background_reader.h"
+#include "dro/param/background/legacy_background_reader.h"
 #include <modules/theme/thememanager.h>
 
 SceneManager SceneManager::s_Instance;

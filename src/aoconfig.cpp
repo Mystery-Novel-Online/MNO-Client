@@ -6,7 +6,7 @@
 #include "dro/fs/fs_reading.h"
 #include "mk2/spritedynamicreader.h"
 #include "modules/managers/scene_manager.h"
-#include "modules/managers/localization_manager.h"
+#include "dro/system/localization.h"
 
 // qt
 #include <QApplication>
@@ -171,7 +171,8 @@ void AOConfigPrivate::load_file()
   language = cfg.value("language").toString();
   if (language.trimmed().isEmpty())
     language = "English";
-  LocalizationManager::get().setLanguage(language);
+
+  dro::system::localization::switchLanguage(language);
 
   theme = cfg.value("theme").toString();
   if (theme.trimmed().isEmpty())

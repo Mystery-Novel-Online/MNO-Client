@@ -4,7 +4,7 @@
 #include "dro/interface/courtroom_layout.h"
 #include <modules/theme/thememanager.h>
 #include "modules/managers/notify_manager.h"
-#include "dro/network/area_metadata.h"
+#include "dro/network/metadata/area_metadata.h"
 #include "courtroom.h"
 #include <lobby.h>
 

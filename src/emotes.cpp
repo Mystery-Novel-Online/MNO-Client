@@ -4,7 +4,7 @@
 #include "aobutton.h"
 #include "aoconfig.h"
 #include "aoemotebutton.h"
-#include "modules/managers/localization_manager.h"
+#include "dro/system/localization.h"
 #include "aoimagedisplay.h"
 #include "commondefs.h"
 #include "drcharactermovie.h"
@@ -24,6 +24,7 @@
 #include <dro/interface/menus/emote_menu.h>
 
 int s_emotePreviewIndex = -1;
+using namespace dro;
 
 void Courtroom::construct_emotes()
 {
@@ -48,13 +49,13 @@ void Courtroom::construct_emotes()
 
   ui_emote_dropdown = new QComboBox(this);
   ui_pos_dropdown = new QComboBox(this);
-  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("DEFAULT"));
-  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_WIT"), "wit");
-  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_DEF"), "def");
-  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_PRO"), "pro");
-  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_JUD"), "jud");
-  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_DEF_ASS"), "hld");
-  ui_pos_dropdown->addItem(LocalizationManager::get().getLocalizationText("POS_PRO_ASS"), "hlp");
+  ui_pos_dropdown->addItem(system::localization::getText("DEFAULT"));
+  ui_pos_dropdown->addItem(system::localization::getText("POS_WIT"), "wit");
+  ui_pos_dropdown->addItem(system::localization::getText("POS_DEF"), "def");
+  ui_pos_dropdown->addItem(system::localization::getText("POS_PRO"), "pro");
+  ui_pos_dropdown->addItem(system::localization::getText("POS_JUD"), "jud");
+  ui_pos_dropdown->addItem(system::localization::getText("POS_DEF_ASS"), "hld");
+  ui_pos_dropdown->addItem(system::localization::getText("POS_PRO_ASS"), "hlp");
 }
 
 void Courtroom::construct_emote_page_layout()

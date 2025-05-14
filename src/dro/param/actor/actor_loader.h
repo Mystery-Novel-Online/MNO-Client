@@ -2,7 +2,7 @@
 #define ACTOR_LOADER_H
 
 #include <datatypes.h>
-#include <modules/json/json_reader.h>
+#include "dro/param/json_reader.h"
 
 struct ActorScalingPreset
 {

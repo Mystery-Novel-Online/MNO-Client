@@ -2,7 +2,7 @@
 #define THEMEMODEREADER_H
 
 #include "json_reader.h"
-#include "modules/json/theme_module_reader.h"
+#include "dro/param/theme_module_reader.h"
 
 #include <aopixmap.h>
 #include <datatypes.h>

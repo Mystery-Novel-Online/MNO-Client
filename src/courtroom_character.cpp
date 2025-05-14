@@ -8,6 +8,7 @@
 
 #include <QAbstractItemView>
 #include <QComboBox>
+#include <QLineEdit>
 #include <QCompleter>
 #include <QDir>
 #include <QFile>
@@ -16,8 +17,6 @@
 #include <QListView>
 #include <QPixmap>
 #include <QUrl>
-#include "modules/debug/time_debugger.h"
-#include "modules/managers/character_manager.h"
 #include <QtConcurrent/QtConcurrent>
 #include "dro/fs/fs_reading.h"
 #include "dro/fs/fs_mounting.h"

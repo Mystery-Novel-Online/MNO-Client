@@ -1,5 +1,5 @@
 #include "bgm_filter.h"
-#include "dro/network/tracklist_metadata.h"
+#include "dro/network/metadata/tracklist_metadata.h"
 
 
 BGMFilter::BGMFilter(QWidget* parent) : QComboBox(parent)

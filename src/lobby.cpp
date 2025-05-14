@@ -6,7 +6,7 @@
 #include "aoimagedisplay.h"
 #include "commondefs.h"
 #include "datatypes.h"
-#include "modules/managers/localization_manager.h"
+#include "dro/system/localization.h"
 #include "debug_functions.h"
 #include "drchatlog.h"
 #include "drmasterclient.h"
@@ -40,6 +40,8 @@
 
 #include <modules/theme/thememanager.h>
 
+using namespace dro::system;
+
 Lobby::Lobby(AOApplication *p_ao_app)
     : QMainWindow()
 {
@@ -72,11 +74,11 @@ Lobby::Lobby(AOApplication *p_ao_app)
 
   ui_server_menu = new QMenu(this);
   ui_server_menu->addSection(tr("Server"));
-  ui_create_server = ui_server_menu->addAction(LocalizationManager::get().getLocalizationText("SERVER_FAVORITES_ADD"));
-  ui_modify_server = ui_server_menu->addAction(LocalizationManager::get().getLocalizationText("SERVER_FAVORITES_EDIT"));
-  ui_move_up_server = ui_server_menu->addAction(LocalizationManager::get().getLocalizationText("SERVER_FAVORITES_UP"));
-  ui_move_down_server = ui_server_menu->addAction(LocalizationManager::get().getLocalizationText("SERVER_FAVORITES_DOWN"));
-  ui_delete_server = ui_server_menu->addAction(LocalizationManager::get().getLocalizationText("SERVER_FAVORITES_REMOVE"));
+  ui_create_server = ui_server_menu->addAction(localization::getText("SERVER_FAVORITES_ADD"));
+  ui_modify_server = ui_server_menu->addAction(localization::getText("SERVER_FAVORITES_EDIT"));
+  ui_move_up_server = ui_server_menu->addAction(localization::getText("SERVER_FAVORITES_UP"));
+  ui_move_down_server = ui_server_menu->addAction(localization::getText("SERVER_FAVORITES_DOWN"));
+  ui_delete_server = ui_server_menu->addAction(localization::getText("SERVER_FAVORITES_REMOVE"));
 
   ui_player_count = new DRTextEdit(this);
   ui_player_count->setFrameStyle(QFrame::NoFrame);
@@ -658,12 +660,12 @@ void Lobby::move_down_server()
 void Lobby::_p_update_description()
 {
   QMap<AOApplication::ServerStatus, QString> l_report_map{
-      {AOApplication::NotConnected, LocalizationManager::get().getLocalizationText("CONNECTION_NOT")},
-      {AOApplication::Connecting, LocalizationManager::get().getLocalizationText("CONNECTION_CONNECTING")},
-      {AOApplication::Connected, LocalizationManager::get().getLocalizationText("CONNECTION_CONNECTED")},
-      {AOApplication::Joined, LocalizationManager::get().getLocalizationText("CONNECTION_JOINED")},
-      {AOApplication::TimedOut, LocalizationManager::get().getLocalizationText("CONNECTION_TIMEDOUT")},
-      {AOApplication::Disconnected, LocalizationManager::get().getLocalizationText("CONNECTION_NOT")},
+      {AOApplication::NotConnected, localization::getText("CONNECTION_NOT")},
+      {AOApplication::Connecting, localization::getText("CONNECTION_CONNECTING")},
+      {AOApplication::Connected, localization::getText("CONNECTION_CONNECTED")},
+      {AOApplication::Joined, localization::getText("CONNECTION_JOINED")},
+      {AOApplication::TimedOut, localization::getText("CONNECTION_TIMEDOUT")},
+      {AOApplication::Disconnected, localization::getText("CONNECTION_NOT")},
   };
 
   QString l_message = l_report_map[ao_app->last_server_status()];

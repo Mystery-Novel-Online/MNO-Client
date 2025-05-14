@@ -36,7 +36,7 @@ public:
   int         getIntValue(QString string);
   double      getDoubleValue(QString string);
 
-         //Strings
+  //Strings
   QString     getStringValue(QString string);
   QStringList getStringArrayValue(QString string);
 

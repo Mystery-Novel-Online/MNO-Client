@@ -26,8 +26,10 @@
 
 #include <modules/theme/thememanager.h>
 
-#include <modules/managers/localization_manager.h>
+#include "dro/system/localization.h"
 #include "dro/fs/fs_mounting.h"
+
+using namespace dro::system;
 
 AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
     : QWidget(p_parent)
@@ -446,7 +448,7 @@ void AOConfigPanel::showEvent(QShowEvent *event)
 void AOConfigPanel::refreshLanguageList()
 {
   wSettingsLanguage->clear();
-  for (const QString &r_langauge : LocalizationManager::get().getLanguageNames())
+  for (const QString &r_langauge : localization::getAvailableLanguages())
   {
     wSettingsLanguage->addItem(r_langauge);
   }
@@ -592,10 +594,10 @@ void AOConfigPanel::update_audio_device_list()
 void AOConfigPanel::updateLanguage(QString t_data)
 {
   QString l_language = t_data;
-  LocalizationManager::get().setLanguage(l_language);
+  localization::switchLanguage(l_language);
   m_config->setLanguage(l_language);
 
-  QString l_translators = LocalizationManager::get().getLocalizationCredit();
+  QString l_translators = localization::getCredit();
   if(l_translators.isEmpty())
   {
     wLanguageCredits->hide();

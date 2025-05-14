@@ -21,7 +21,7 @@
 #include <QRegularExpression>
 
 #include <modules/managers/character_manager.h>
-#include <modules/managers/localization_manager.h>
+#include "dro/system/localization.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/system/runtime_loop.h"
 
@@ -45,7 +45,7 @@ AOApplication::AOApplication(int &argc, char **argv)
   DirUtils::CreateInitialFolders();
 
   SceneManager::get().pConfigAO = ao_config;
-  LocalizationManager::get().execLoadLanguages();
+  dro::system::localization::initialize();
 
   ao_config_panel = new AOConfigPanel(this);
 

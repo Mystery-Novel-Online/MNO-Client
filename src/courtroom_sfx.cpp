@@ -8,7 +8,7 @@
 
 #include <QCheckBox>
 #include <QColor>
-#include "modules/managers/localization_manager.h"
+#include "dro/system/localization.h"
 #include "modules/managers/character_manager.h"
 #include <QLineEdit>
 #include <QListWidget>
@@ -54,8 +54,8 @@ void Courtroom::load_current_character_sfx_list()
 
   // items
   m_sfx_list.clear();
-  m_sfx_list.append(DRSfx(LocalizationManager::get().getLocalizationText("DEFAULT"), m_sfx_default_file));
-  m_sfx_list.append(DRSfx(LocalizationManager::get().getLocalizationText("SFX_SILENCE"), nullptr));
+  m_sfx_list.append(DRSfx(dro::system::localization::getText("DEFAULT"), m_sfx_default_file));
+  m_sfx_list.append(DRSfx(dro::system::localization::getText("SFX_SILENCE"), nullptr));
 
   const QStringList l_sfx_list = ao_app->get_sfx_list();
   for (const QString &i_sfx_line : l_sfx_list)

@@ -68,11 +68,9 @@ class QLabel;
 #include "drplayerlistentry.h"
 
 #include <mk2/drplayer.h>
-
-#include <modules/theme/widgets/dro_line_edit.h>
 #include "dro/interface/widgets/emotion_selector.h"
 #include "dro/interface/widgets/choice_dialog.h"
-#include <modules/widgets/viewport_overlay.h>
+#include "dro/interface/widgets/viewport_overlay.h"
 
 using namespace dro::network;
 

@@ -4,7 +4,7 @@
 #include "aoimagedisplay.h"
 #include <QDesktopServices>
 #include "modules/managers/character_manager.h"
-#include "modules/managers/localization_manager.h"
+#include "dro/system/localization.h"
 #include "dro/fs/fs_reading.h"
 
 #include <QFile>
@@ -39,17 +39,15 @@ void AOCharButton::showContextMenu(QPoint pos)
 {
   QMenu *menu = new QMenu(this);
 
-
-  QAction *a = new QAction(LocalizationManager::get().getLocalizationText("CSS_FAVORITES_ADD"));
+  QAction *a = new QAction(dro::system::localization::getText("CSS_FAVORITES_ADD"));
   QObject::connect(a, &QAction::triggered, [this](){addToFavorites();});
   menu->addAction(a);
 
-
-  QAction *copyIDAction = new QAction(LocalizationManager::get().getLocalizationText("CSS_FAVORITES_REMOVE"));
+  QAction *copyIDAction = new QAction(dro::system::localization::getText("CSS_FAVORITES_REMOVE"));
   QObject::connect(copyIDAction, &QAction::triggered, [this](){removeFavorites();});
   menu->addAction(copyIDAction);
 
-  QAction *opencharfolder = new QAction(LocalizationManager::get().getLocalizationText("OPEN_CHAR_FOLDER"));
+  QAction *opencharfolder = new QAction(dro::system::localization::getText("OPEN_CHAR_FOLDER"));
   QObject::connect(opencharfolder, &QAction::triggered, [this](){openCharacterFolder();});
   menu->addAction(opencharfolder);
 

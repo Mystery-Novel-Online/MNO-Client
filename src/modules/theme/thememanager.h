@@ -4,10 +4,9 @@
 #include <AOButton.h>
 #include <QHash>
 #include <aoimagedisplay.h>
-
-#include <modules/theme/widgets/dro_combo_box.h>
-#include <modules/theme/widgets/dro_line_edit.h>
-#include "modules/json/theme_reader.h"
+#include "dro/interface/widgets/dro_combo_box.h"
+#include "dro/interface/widgets/dro_line_edit.h"
+#include "dro/param/theme_reader.h"
 
 
 
