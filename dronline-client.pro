@@ -3,7 +3,7 @@ QT += core gui widgets uitools network multimedia multimediawidgets
 CONFIG += c++17
 
 TEMPLATE = app
-VERSION = 1.6.0
+VERSION = 1.7.1
 TARGET = dro-client
 
 RC_ICONS = icon.ico
@@ -26,6 +26,7 @@ HEADERS += \
   src/dro/interface/widgets/rp_widget.h \
   src/dro/interface/widgets/screenshot_button.h \
   src/dro/interface/widgets/emotion_selector.h \
+  src/dro/interface/widgets/choice_dialog.h \
   src/dro/network/area_metadata.h \
   src/dro/network/metadata/user_metadata.h \
   src/dro/network/server_metadata.h \
@@ -121,8 +122,6 @@ HEADERS += \
   src/modules/theme/widgets/dro_combo_box.h \
   src/modules/theme/widgets/dro_line_edit.h \
   src/modules/theme/widgets/tab_toggle_button.h \
-  src/modules/widgets/rpnotifymenu.h \
-  src/modules/widgets/tabgroupingwidget.h \
   src/modules/widgets/viewport_overlay.h \
   src/theme.h \
   src/utils.h \
@@ -143,6 +142,7 @@ SOURCES += \
   src/dro/interface/widgets/rp_widget.cpp \
   src/dro/interface/widgets/screenshot_button.cpp \
   src/dro/interface/widgets/emotion_selector.cpp \
+  src/dro/interface/widgets/choice_dialog.cpp \
   src/dro/network/area_metadata.cpp \
   src/dro/network/metadata/user_metadata.cpp \
   src/dro/network/server_metadata.cpp \
@@ -241,8 +241,6 @@ SOURCES += \
   src/modules/theme/widgets/dro_combo_box.cpp \
   src/modules/theme/widgets/dro_line_edit.cpp \
   src/modules/theme/widgets/tab_toggle_button.cpp \
-  src/modules/widgets/rpnotifymenu.cpp \
-  src/modules/widgets/tabgroupingwidget.cpp \
   src/modules/widgets/viewport_overlay.cpp \
   src/path_functions.cpp \
   src/server_socket.cpp \

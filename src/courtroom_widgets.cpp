@@ -289,7 +289,7 @@ void Courtroom::create_widgets()
 
   PairManager::get().SetSlider(ui_slider_horizontal_axis);
 
-  pNotifyPopup = new RPNotifyMenu(this);
+  pNotifyPopup = new ChoiceDialog(this);
 
   NotifyManager::get().ThemeSetupPopup(pNotifyPopup);
 

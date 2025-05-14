@@ -3,7 +3,7 @@
 
 #include <QString>
 
-#include <modules/widgets/rpnotifymenu.h>
+#include "dro/interface/widgets/choice_dialog.h"
 
 
 
@@ -17,7 +17,7 @@ public:
     return s_Instance;
   }
 
-  void ThemeSetupPopup(RPNotifyMenu *notify);
+  void ThemeSetupPopup(ChoiceDialog *notify);
 
   void SetLuaNotification(QString dialog, QString eventName);
   void SetPairNotifcation();
@@ -39,12 +39,12 @@ private:
   QString mSenderCharacter = "SYSTEM";
   QString mSenderName = "SYSTEM";
   QString mCurrentNotificationMessage = "";
-  NotificationType mCurrentNotification = INVALID;
+  ChoiceEvent mCurrentNotification = ChoiceEvent_Invalid;
 
   NotifyManager() {}
   static NotifyManager s_Instance;
 
-  RPNotifyMenu *pNotificationPopup;
+  ChoiceDialog *pNotificationPopup;
 
 };
 

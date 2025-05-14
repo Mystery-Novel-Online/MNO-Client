@@ -3,7 +3,7 @@
 #include "drtheme.h"
 #include "aoapplication.h"
 #include "widgets/tab_toggle_button.h"
-#include "../widgets/tabgroupingwidget.h"
+#include "dro/interface/widgets/rp_widget.h"
 #include "dro/system/theme_scripting.h"
 #include "dro/interface/courtroom_layout.h"
 
@@ -44,7 +44,7 @@ void ThemeManager::createTabParent()
     {
       tabParent = nullptr;
     }
-    TabGroupingWidget *l_newTab = new TabGroupingWidget(tabParent);
+    RPWidget *l_newTab = new RPWidget(tabParent);
 
 
     QString l_buttonName = r_tabInfo.m_Name + "_toggle";
@@ -64,7 +64,7 @@ void ThemeManager::createTabParent()
     }
 
     l_newTab->resize(l_panelPosition.width, l_panelPosition.height);
-    l_newTab->setBackgroundImage(r_tabInfo.m_Name);
+    l_newTab->setBackgroundImage(r_tabInfo.m_Name + "_panel");
     l_newTab->setDragable(r_tabInfo.m_DragEnabled);
 
     addWidgetName(l_panelName, l_newTab);

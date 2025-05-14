@@ -2775,16 +2775,17 @@ void Courtroom::on_chat_type_changed(int p_type)
   ui_ic_chat_message_field->setFocus();
 }
 
-void Courtroom::onOutfitChanged(int t_outfitIndex)
+void Courtroom::onOutfitChanged(int outfitIndex)
 {
-  t_outfitIndex -= 1;
-  if(t_outfitIndex == -1)
+  if(outfitIndex == -1) return;
+  int trueOutfitIndex = outfitIndex -1;
+  if(trueOutfitIndex == -1)
   {
     CharacterManager::get().p_SelectedCharacter->SwitchOutfit("<All>");
   }
-  else if(CharacterManager::get().p_SelectedCharacter->GetOutfitNames().length() > t_outfitIndex && t_outfitIndex != -1)
+  else if(CharacterManager::get().p_SelectedCharacter->GetOutfitNames().length() > trueOutfitIndex && trueOutfitIndex != -1)
   {
-    CharacterManager::get().p_SelectedCharacter->SwitchOutfit(CharacterManager::get().p_SelectedCharacter->GetOutfitNames()[t_outfitIndex]);
+    CharacterManager::get().p_SelectedCharacter->SwitchOutfit(CharacterManager::get().p_SelectedCharacter->GetOutfitNames()[trueOutfitIndex]);
   }
 
   ui_emotes->refreshSelection(false);

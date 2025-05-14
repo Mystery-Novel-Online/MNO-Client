@@ -71,8 +71,7 @@ class QLabel;
 
 #include <modules/theme/widgets/dro_line_edit.h>
 #include "dro/interface/widgets/emotion_selector.h"
-
-#include <modules/widgets/rpnotifymenu.h>
+#include "dro/interface/widgets/choice_dialog.h"
 #include <modules/widgets/viewport_overlay.h>
 
 using namespace dro::network;
@@ -351,7 +350,7 @@ private:
   bool contains_add_button = false;
 
 
-  RPNotifyMenu *pNotifyPopup = nullptr;
+  ChoiceDialog *pNotifyPopup = nullptr;
 
   //////////////
   QScrollArea *ui_note_scroll_area = nullptr;

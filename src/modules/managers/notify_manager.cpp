@@ -5,7 +5,7 @@ NotifyManager NotifyManager::s_Instance;
 
 
 
-void NotifyManager::ThemeSetupPopup(RPNotifyMenu *notify)
+void NotifyManager::ThemeSetupPopup(ChoiceDialog *notify)
 {
   pNotificationPopup = notify;
   HideNotification();
@@ -13,14 +13,14 @@ void NotifyManager::ThemeSetupPopup(RPNotifyMenu *notify)
 
 void NotifyManager::SetLuaNotification(QString dialog, QString eventName)
 {
-  mCurrentNotification = LuaEvent;
+  mCurrentNotification = ChoiceEvent_Lua;
   SetRequestKey(eventName);
   SetText(dialog, true);
 }
 
 void NotifyManager::SetPairNotifcation()
 {
-  mCurrentNotification = PairRequest;
+  mCurrentNotification = ChoiceEvent_Pair;
 
   if(!LuaBridge::LuaEventCall("PairRequestEvent", mSenderName.toStdString()))
   {
@@ -32,9 +32,9 @@ void NotifyManager::SetPairNotifcation()
 
 void NotifyManager::ShowNotification()
 {
-  pNotificationPopup->SetNotificationType(mCurrentNotification);
-  pNotificationPopup->SetNotificationKey(mRequestKey);
-  pNotificationPopup->SetNotificationSender(mSenderId);
+  pNotificationPopup->setEventType(mCurrentNotification);
+  pNotificationPopup->setKey(mRequestKey);
+  pNotificationPopup->setSenderId(mSenderId);
   pNotificationPopup->show();
 }
 
@@ -75,6 +75,6 @@ void NotifyManager::SetText(QString text, bool show)
 {
   if(pNotificationPopup == nullptr) return;
   mCurrentNotificationMessage = text;
-  pNotificationPopup->SetNotificationText(text);
+  pNotificationPopup->setText(text);
   if(show) ShowNotification();
 }
