@@ -122,7 +122,7 @@ void Courtroom::create_widgets()
   ui_vp_music_display_a = new AOImageDisplay(this, ao_app);
   ui_vp_music_display_b = new AOImageDisplay(this, ao_app);
   ui_vp_music_area = new QWidget(ui_vp_music_display_a);
-  ui_vp_music_name = new RPTextEdit(ui_vp_music_area);
+  ui_vp_music_name = new RPTextEdit("music_name", ui_vp_music_area);
   ui_vp_music_name->setFrameStyle(QFrame::NoFrame);
   ui_vp_music_name->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_vp_music_name->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -134,12 +134,12 @@ void Courtroom::create_widgets()
 
   ui_vp_chatbox = new DRStickerViewer(ao_app, this);
   chatbox_anim = new QPropertyAnimation(ui_vp_chatbox, "pos", this);
-  ui_vp_showname = new RPTextEdit(ui_vp_chatbox);
+  ui_vp_showname = new RPTextEdit("showname", ui_vp_chatbox);
   ui_vp_showname->setFrameStyle(QFrame::NoFrame);
   ui_vp_showname->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_vp_showname->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_vp_showname->setReadOnly(true);
-  ui_vp_message = new RPTextEdit(ui_vp_chatbox);
+  ui_vp_message = new RPTextEdit("message", ui_vp_chatbox);
   ui_vp_message->setFrameStyle(QFrame::NoFrame);
   ui_vp_message->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_vp_message->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -167,13 +167,13 @@ void Courtroom::create_widgets()
     l_view->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
   }
 
-  ui_ic_chatlog = new RPTextEdit(this);
+  ui_ic_chatlog = new RPTextEdit("ic_chatlog", this);
   ui_ic_chatlog->setReadOnly(true);
   ui_ic_chatlog->set_auto_align(false);
   ui_ic_chatlog_scroll_topdown = new RPButton("ic_chatlog_scroll_topdown", "ic_chatlog_scroll_topdown.png", "", this);
   ui_ic_chatlog_scroll_bottomup = new RPButton("ic_chatlog_scroll_bottomup", "ic_chatlog_scroll_bottomup.png", "", this);
 
-  ui_area_desc = new RPTextEdit(this);
+  ui_area_desc = new RPTextEdit("area_desc", this);
   ui_area_desc->setReadOnly(true);
   ui_area_desc->set_auto_align(false);
 
@@ -360,11 +360,11 @@ void Courtroom::create_widgets()
 
 
   ui_vp_notepad_image = new AOImageDisplay(this, ao_app);
-  ui_vp_notepad = new RPTextEdit(this);
+  ui_vp_notepad = new RPTextEdit("notepad", this);
   ui_vp_notepad->setFrameStyle(QFrame::NoFrame);
 
   ui_timers.resize(1);
-  ui_timers[0] = new AOTimer(this);
+  ui_timers[0] = new AOTimer("timer", this);
 
 
   ui_player_list_left = new RPButton("player_list_left", "arrow_left.png", "<-", this);
@@ -801,6 +801,10 @@ void Courtroom::set_widget_layers()
       l_widget->setParent(l_parent);
 
       if (l_visible) l_widget->setVisible(l_visible);
+
+      if(l_child_name == "char_select")
+        widget_names.value("notify_popup")->raise();
+
       l_widget->raise();
 
       if(l_child_name == "viewport")
@@ -984,8 +988,6 @@ void Courtroom::set_widgets()
   set_size_and_pos(ui_area_desc, "area_desc", COURTROOM_DESIGN_INI, ao_app);
 
   if(ao_app->current_theme->get_widget_settings_bool("area_desc", "courtroom", "hide_frame")) ui_area_desc->setFrameStyle(QFrame::NoFrame);
-
-  NotifyManager::get().ReloadNotification();
 
   set_size_and_pos(ui_ooc_chatlog, "server_chatlog", COURTROOM_DESIGN_INI, ao_app);
 
@@ -1365,7 +1367,7 @@ int Courtroom::adapt_numbered_items(QVector<T *> &item_vector, QString config_it
     item_vector.resize(new_item_number);
     for (int i = current_item_number; i < new_item_number; i++)
     {
-      item_vector[i] = new T(this);
+      item_vector[i] = new T("timer", this);
       item_vector[i]->stackUnder(item_vector[i - 1]);
       // index i-1 exists as i >= current_item_number == item_vector.size() >= 1
     }

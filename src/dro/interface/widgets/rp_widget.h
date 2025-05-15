@@ -11,18 +11,20 @@ class RPWidget : public QWidget
 {
   Q_OBJECT
 public:
-  explicit RPWidget(QWidget *parent = nullptr);
+  explicit RPWidget(const QString &name, QWidget *parent = nullptr);
   void setDragable(bool dragable);
   void setBackgroundImage(QString imageName);
+  virtual void resetTransform();
 
 public:
-  AOApplication *m_App = nullptr;
+  AOApplication *m_app = nullptr;
 
 protected:
   void mousePressEvent(QMouseEvent *event) override;
   void mouseMoveEvent(QMouseEvent *event) override;
 
 private:
+  QString m_friendlyName = "";
   DRStickerViewer *m_backgroundImage = nullptr;
   QPoint m_dragStartPosition;
   bool m_dragEnabled = false;

@@ -42,7 +42,7 @@ class AOTimer : public RPTextEdit
   Q_OBJECT
 
 public:
-  AOTimer(QWidget *p_parent);
+  AOTimer(QString name, QWidget *p_parent);
 
 public slots:
   void update_time();

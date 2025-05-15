@@ -2065,9 +2065,6 @@ void Courtroom::next_chat_letter()
       calculate_chat_tick_interval();
   }
 
-
-
-
   if (!is_ignore_next_letter && f_character == Qt::Key_Backslash)
   {
     ++m_tick_step;

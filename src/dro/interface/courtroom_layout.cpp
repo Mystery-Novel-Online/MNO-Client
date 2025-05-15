@@ -49,10 +49,15 @@ namespace courtroom
     auto it = s_CourtroomWidgets.begin();
     while (it != s_CourtroomWidgets.end())
     {
+      RPWidget *widget = dynamic_cast<RPWidget*>(it.value());
       RPLineEdit *lineEdit = dynamic_cast<RPLineEdit*>(it.value());
       RPButton* rpButton = dynamic_cast<RPButton*>(it.value());
       RPComboBox* comboBox = dynamic_cast<RPComboBox*>(it.value());
 
+      if(widget != nullptr)
+      {
+        widget->resetTransform();
+      }
       if(lineEdit != nullptr)
       {
         lineEdit->refreshPosition();

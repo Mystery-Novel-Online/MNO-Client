@@ -43,14 +43,6 @@ void NotifyManager::HideNotification()
   pNotificationPopup->hide();
 }
 
-void NotifyManager::ReloadNotification()
-{
-  if(pNotificationPopup != nullptr)
-  {
-    pNotificationPopup->ThemeReload();
-  }
-}
-
 void NotifyManager::SetSenderId(int id)
 {
   mSenderId = id;

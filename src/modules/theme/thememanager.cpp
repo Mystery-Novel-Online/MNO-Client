@@ -41,7 +41,7 @@ void ThemeManager::createTabParent()
     {
       tabParent = nullptr;
     }
-    RPWidget *l_newTab = new RPWidget(tabParent);
+    RPWidget *l_newTab = new RPWidget(l_panelName, tabParent);
 
 
     QString l_buttonName = r_tabInfo.m_Name + "_toggle";

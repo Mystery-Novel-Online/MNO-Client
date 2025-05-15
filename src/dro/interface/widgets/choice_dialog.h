@@ -22,7 +22,8 @@ class ChoiceDialog : public RPWidget
   Q_OBJECT
 public:
   explicit ChoiceDialog(QWidget *parent = nullptr);
-  void ThemeReload();
+  void resetTransform() override;
+
   void SetupButton(RPButton* t_button, int t_x, int t_y, int t_width, int t_height, QString name);
 
   void setText(QString message);

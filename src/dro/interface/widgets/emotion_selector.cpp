@@ -10,7 +10,7 @@
 #include "qmath.h"
 
 EmotionSelector::EmotionSelector(QWidget *parent)
-    : RPWidget{parent}
+    : RPWidget{"emotes", parent}
 {
   m_ContextMenu = new EmoteMenu(this);
   setContextMenuPolicy(Qt::CustomContextMenu);
@@ -44,7 +44,7 @@ void EmotionSelector::constructEmotes()
   while (!m_EmotionButtons.isEmpty())
     delete m_EmotionButtons.takeLast();
 
-  QPoint f_spacing = m_App->current_theme->get_widget_settings_spacing("emotes", "courtroom", "emote_button_spacing");
+  QPoint f_spacing = m_app->current_theme->get_widget_settings_spacing("emotes", "courtroom", "emote_button_spacing");
 
   float buttonSize = EmoteMenu::isDoubleSize() ? 82 : 40;
 
@@ -66,7 +66,7 @@ void EmotionSelector::constructEmotes()
     int x_pos = (button_width + x_spacing) * x_mod_count;
     int y_pos = (button_height + y_spacing) * y_mod_count;
 
-    AOEmoteButton *f_emote = new AOEmoteButton(this, m_App, x_pos, y_pos);
+    AOEmoteButton *f_emote = new AOEmoteButton(this, m_app, x_pos, y_pos);
     m_EmotionButtons.append(f_emote);
 
     f_emote->set_emote_number(n);

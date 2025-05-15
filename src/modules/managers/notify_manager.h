@@ -23,7 +23,6 @@ public:
   void SetPairNotifcation();
   void ShowNotification();
   void HideNotification();
-  void ReloadNotification();
 
   void SetSenderId(int id);
   void SetSenderName(QString sender);

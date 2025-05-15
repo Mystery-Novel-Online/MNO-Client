@@ -64,7 +64,7 @@ Lobby::Lobby(AOApplication *p_ao_app)
 
   ui_config_panel = new RPButton(this);
 
-  ui_version = new RPTextEdit(this);
+  ui_version = new RPTextEdit("version", this);
   ui_version->setFrameStyle(QFrame::NoFrame);
   ui_version->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_version->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -80,7 +80,7 @@ Lobby::Lobby(AOApplication *p_ao_app)
   ui_move_down_server = ui_server_menu->addAction(localization::getText("SERVER_FAVORITES_DOWN"));
   ui_delete_server = ui_server_menu->addAction(localization::getText("SERVER_FAVORITES_REMOVE"));
 
-  ui_player_count = new RPTextEdit(this);
+  ui_player_count = new RPTextEdit("player_count", this);
   ui_player_count->setFrameStyle(QFrame::NoFrame);
   ui_player_count->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_player_count->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -96,7 +96,7 @@ Lobby::Lobby(AOApplication *p_ao_app)
   ui_chatbox->setReadOnly(true);
 
   ui_loading_background = new AOImageDisplay(this, ao_app);
-  ui_loading_text = new RPTextEdit(ui_loading_background);
+  ui_loading_text = new RPTextEdit("loading_label", ui_loading_background);
   ui_progress_bar = new QProgressBar(ui_loading_background);
 
   ui_progress_bar->setMinimum(0);

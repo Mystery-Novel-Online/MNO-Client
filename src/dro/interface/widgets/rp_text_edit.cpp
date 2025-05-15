@@ -1,14 +1,23 @@
 #include "rp_text_edit.h"
 #include "debug_functions.h"
+#include "commondefs.h"
+#include "aoapplication.h"
+#include "theme.h"
 
 #include <QDebug>
 #include <QTextBlock>
 
-RPTextEdit::RPTextEdit(QWidget *parent)
-    : QTextEdit(parent)
+RPTextEdit::RPTextEdit(const QString &name, QWidget *parent)
+    : QTextEdit(parent), m_friendlyName(name)
 {
+  m_app = AOApplication::getInstance();
   connect(this, SIGNAL(textChanged()), this, SLOT(on_text_changed()));
   connect(this, SIGNAL(text_alignment_changed(Qt::Alignment)), this, SLOT(on_text_changed()));
+}
+
+void RPTextEdit::resetTransform()
+{
+  set_size_and_pos(this, m_friendlyName, COURTROOM_DESIGN_INI, m_app);
 }
 
 void RPTextEdit::set_outline(bool p_enabled, int outlineWidth, QColor outlineColor)
