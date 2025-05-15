@@ -7,6 +7,7 @@
 #include "dro/system/theme_scripting.h"
 #include "dro/interface/courtroom_layout.h"
 
+
 ThemeManager ThemeManager::s_Instance;
 
 void ThemeManager::ResetWidgetLists()
@@ -26,11 +27,7 @@ void ThemeManager::createTabParent()
   m_TabWidgets = {};
   for(QString oldTabs : m_TabDeletionQueue.keys())
   {
-    QString oldtabToggle = oldTabs + "_toggle";
-    if(mButtonWidgets.contains(oldtabToggle))
-    {
-      mButtonWidgets.remove(oldtabToggle);
-    }
+    courtroom::tabs::deleteToggle(oldTabs);
   }
 
   for(ThemeTabInfo r_tabInfo : ThemeManager::get().getTabsInfo())
@@ -84,7 +81,6 @@ void ThemeManager::createTabParent()
     l_newButton->resize(l_buttonDimensions.width, l_buttonDimensions.height);
 
     addWidgetName(l_buttonName,  l_newButton);
-    addButton(l_buttonName, l_newButton);
   };
 
 
@@ -318,36 +314,6 @@ void ThemeManager::setViewporResize(double size)
 double ThemeManager::getViewporResize()
 {
   return mViewportResize;
-}
-
-void ThemeManager::addButton(QString name, RPButton *button)
-{
-  mButtonWidgets[name] = button;
-}
-
-void ThemeManager:: addLineEdit(QString name, DROLineEdit* lineEdit)
-{
-  mLineEditWidgets[name] = lineEdit;
-}
-
-void ThemeManager::refreshButtons()
-{
-  for(RPButton* button : mButtonWidgets)
-  {
-    button->set_theme_image();
-    button->refresh_position();
-    button->show();
-  }
-}
-
-void ThemeManager::refreshLineEdit()
-{
-  for(DROLineEdit* lineEdit : mLineEditWidgets)
-  {
-    lineEdit->refreshPosition();
-    lineEdit->refreshCSS();
-    lineEdit->show();
-  }
 }
 
 void ThemeManager::addComboBox(QString name, DROComboBox *comboBox)

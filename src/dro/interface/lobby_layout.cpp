@@ -18,7 +18,7 @@ namespace Layout::ServerSelect
 
   RPButton *CreateButton(QString name, QString image, std::function<void()> releasedFunction)
   {
-    RPButton* newButton = new RPButton(s_ConstructedLobby, s_AOApplication);
+    RPButton* newButton = new RPButton(s_ConstructedLobby);
     set_size_and_pos(newButton, name, LOBBY_DESIGN_INI, s_AOApplication);
     newButton->set_image(image + ".png");
 

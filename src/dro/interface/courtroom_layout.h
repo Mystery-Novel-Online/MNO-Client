@@ -6,6 +6,7 @@
 namespace courtroom
 {
   void cleanup();
+  void reload();
 
   namespace layout
   {
@@ -15,6 +16,12 @@ namespace courtroom
     void raiseWidget(const char* name);
     void setVisibility(const char* name, bool visible);
     void setParent(const std::string& parent, const std::string& child);
+    void deleteTab();
+  }
+
+  namespace tabs
+  {
+    void deleteToggle(const QString& name);
   }
 
   namespace ooc

@@ -42,7 +42,6 @@ HEADERS += \
   src/dro/interface/widgets/choice_dialog.h \
   src/dro/interface/widgets/sticker_viewer.h \
   src/dro/interface/widgets/viewport_overlay.h \
-  src/dro/interface/widgets/dro_line_edit.h \
   src/dro/interface/widgets/tab_toggle_button.h \
   src/dro/network/json_packet.h \
   src/dro/network/metadata/area_metadata.h \
@@ -158,7 +157,6 @@ SOURCES += \
   src/dro/interface/widgets/choice_dialog.cpp \
   src/dro/interface/widgets/sticker_viewer.cpp \
   src/dro/interface/widgets/viewport_overlay.cpp \
-  src/dro/interface/widgets/dro_line_edit.cpp \
   src/dro/interface/widgets/tab_toggle_button.cpp \
   src/dro/network/json_packet.cpp \
   src/dro/network/metadata/area_metadata.cpp \

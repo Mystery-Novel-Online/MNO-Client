@@ -25,7 +25,6 @@ class AOConfig;
 class AOEmoteButton;
 class AOImageDisplay;
 class AOLabel;
-class AOLineEdit;
 class AOMovie;
 class AOMusicPlayer;
 class AONoteArea;
@@ -700,9 +699,6 @@ private:
   void create_widgets();
 
   QComboBox* setupComboBoxWidget(const QStringList& items, QString name, QString cssHeader);
-  RPButton* setupButtonWidget(const QString name, QString image, QString fallback, QWidget* parent = nullptr);
-  QLineEdit* setupLineEditWidget(const QString name, QString image, QString legacy_css, QString text, QWidget* parent = nullptr);
-
 
   void connect_widgets();
   void set_widget_names();

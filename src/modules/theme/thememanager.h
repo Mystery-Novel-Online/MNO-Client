@@ -4,7 +4,7 @@
 #include <QHash>
 #include "dro/interface/widgets/image_display.h"
 #include "dro/interface/widgets/rp_combo_box.h"
-#include "dro/interface/widgets/dro_line_edit.h"
+#include "dro/interface/widgets/rp_line_edit.h"
 #include "dro/interface/widgets/rp_button.h"
 #include "dro/param/theme_reader.h"
 
@@ -60,12 +60,7 @@ public:
   void setViewporResize(double size);
   double getViewporResize();
 
-  void addButton(QString name, RPButton* button);
-  void refreshButtons();
-
-  void addLineEdit(QString name, DROLineEdit* lineEdit);
   void addComboBox(QString name, DROComboBox* lineEdit);
-  void refreshLineEdit();
   void refreshComboBox();
 
   void setCourtroomBackground(AOImageDisplay *t_background);

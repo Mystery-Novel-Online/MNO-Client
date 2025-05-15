@@ -4,7 +4,7 @@
 
 #include "dro/system/audio.h"
 
-ScreenshotButton::ScreenshotButton(QWidget *parent, AOApplication *p_ao_app) : RPButton(parent, p_ao_app)
+ScreenshotButton::ScreenshotButton(QWidget *parent, AOApplication *p_ao_app) : RPButton(parent)
 {
   connect(this, SIGNAL(clicked()), this, SLOT(OnButtonClicked()));
   UpdateDimensions();

@@ -9,10 +9,21 @@
 
 #include <QDebug>
 
-RPButton::RPButton(QWidget *parent, AOApplication *p_ao_app)
-    : QPushButton(parent)
+RPButton::RPButton(QWidget *parent) : QPushButton(parent), m_app(AOApplication::getInstance()) { }
+
+RPButton::RPButton(const QString& name, QWidget *parent) : QPushButton(parent), m_app(AOApplication::getInstance())
 {
-  ao_app = p_ao_app;
+  set_theme_image(name, "", "courtroom", name);
+}
+
+RPButton::RPButton(const QString &name, const QString &image, QWidget *parent) : QPushButton(parent), m_app(AOApplication::getInstance())
+{
+  set_theme_image(name, image, "courtroom", name);
+}
+
+RPButton::RPButton(const QString &name, const QString &image, const QString &fallback, QWidget *parent) : QPushButton(parent), m_app(AOApplication::getInstance())
+{
+  set_theme_image(name, image, "courtroom", fallback);
 }
 
 QString RPButton::get_image()
@@ -27,14 +38,14 @@ bool RPButton::has_image()
 
 void RPButton::set_image(QString p_image)
 {
-  QString path = ao_app->find_theme_asset_path(p_image);
+  QString path = m_app->find_theme_asset_path(p_image);
   if(m_image == path) return;
   m_image_stem = p_image;
   m_image = path;
 
   // Get the path of the found image without the extension
   const QString l_image_name = p_image.left(p_image.lastIndexOf(QChar('.')));
-  QString l_hover_image = ao_app->find_theme_asset_path(l_image_name + "_hover.png");
+  QString l_hover_image = m_app->find_theme_asset_path(l_image_name + "_hover.png");
   if (l_hover_image.isEmpty())
   {
     l_hover_image = m_image;
@@ -49,19 +60,19 @@ void RPButton::set_image(QString p_image)
 
 void RPButton::set_theme_image(QString widgetName, QString p_image, QString scene, QString fallbackText)
 {
-  fallback_image = p_image;
-  widget_name = widgetName;
-  scene_type = scene;
-  set_image(ao_app->current_theme->get_widget_image(widgetName, p_image, scene));
+  m_fallbackImage = p_image;
+  m_friendlyName = widgetName;
+  m_targetScene = scene;
+  set_image(m_app->current_theme->get_widget_image(widgetName, p_image, scene));
   if (get_image().isEmpty()) setText(fallbackText);
   else setText("");
-  fallback_text = fallbackText;
+  m_fallbackText = fallbackText;
 }
 
 void RPButton::set_theme_image()
 {
-  set_image(ao_app->current_theme->get_widget_image(widget_name, fallback_image, scene_type));
-  if (get_image().isEmpty()) setText(fallback_text);
+  set_image(m_app->current_theme->get_widget_image(m_friendlyName, m_fallbackImage, m_targetScene));
+  if (get_image().isEmpty()) setText(m_fallbackText);
   else setText("");
 }
 
@@ -78,5 +89,5 @@ void RPButton::refresh_image()
 
 void RPButton::refresh_position()
 {
-  set_size_and_pos(this, widget_name, COURTROOM_DESIGN_INI, ao_app);
+  set_size_and_pos(this, m_friendlyName, COURTROOM_DESIGN_INI, m_app);
 }

@@ -10,6 +10,7 @@
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
 static QVector<DRStickerViewer *> s_CourtroomStickers = {};
 static QVector<RPButton *> s_CourtroomButtons = {};
+static QHash<QString, QWidget *> s_TabWidgets = {};
 
 namespace courtroom
 {
@@ -40,6 +41,39 @@ namespace courtroom
 
     s_CourtroomButtons.clear();
     s_CourtroomStickers.clear();
+  }
+
+  void reload()
+  {
+    auto it = s_CourtroomWidgets.begin();
+    while (it != s_CourtroomWidgets.end())
+    {
+      DROLineEdit *lineEdit = dynamic_cast<DROLineEdit*>(it.value());
+      RPButton* rpButton = dynamic_cast<RPButton*>(it.value());
+      DROComboBox* comboBox = dynamic_cast<DROComboBox*>(it.value());
+
+      if(lineEdit != nullptr)
+      {
+        lineEdit->refreshPosition();
+        lineEdit->refreshCSS();
+        lineEdit->show();
+      }
+
+      if(rpButton != nullptr)
+      {
+        rpButton->set_theme_image();
+        rpButton->refresh_position();
+        rpButton->show();
+      }
+
+      if(comboBox != nullptr)
+      {
+        comboBox->refreshPosition();
+        comboBox->refreshCSS();
+        comboBox->show();
+      }
+      ++it;
+    }
   }
 
   namespace sliders
@@ -83,7 +117,7 @@ namespace courtroom
       RPButton *targetButton = nullptr;
       if(!s_CourtroomWidgets.contains(widgetName))
       {
-        targetButton = new RPButton(s_CourtroomWidgets["courtroom"], AOApplication::getInstance());
+        targetButton = new RPButton(s_CourtroomWidgets["courtroom"]);
         targetButton->setObjectName(widgetName);
         s_CourtroomButtons.append(targetButton);
         s_CourtroomWidgets.insert(widgetName, targetButton);
@@ -158,6 +192,21 @@ namespace courtroom
     }
   }
 
+  namespace tabs
+  {
+
+    void deleteToggle(const QString &name)
+    {
+      QString toggleName = name + "_toggle";
+      if(s_TabWidgets.contains(toggleName))
+      {
+        delete s_TabWidgets[toggleName];
+        s_TabWidgets.remove(toggleName);
+      }
+    }
+
+  }
+
   namespace ooc
   {
     void appendMessage(const char *name, const char *message)
@@ -196,6 +245,7 @@ namespace courtroom
 
     void addWidget(QString& name, QWidget *widget)
     {
+      if(name.endsWith("_toggle")) s_TabWidgets[name] = widget;
       s_CourtroomWidgets[name] = widget;
     }
 

@@ -27,10 +27,10 @@ void Courtroom::on_add_button_clicked()
     return;
 
   AONotePicker *f_notepicker = new AONotePicker(ui_note_area, ao_app);
-  RPButton *f_button = new RPButton(f_notepicker, ao_app);
-  RPButton *f_delete = new RPButton(f_notepicker, ao_app);
+  RPButton *f_button = new RPButton(f_notepicker);
+  RPButton *f_delete = new RPButton(f_notepicker);
   QLineEdit *f_line = new QLineEdit(f_notepicker);
-  RPButton *f_hover = new RPButton(f_notepicker, ao_app);
+  RPButton *f_hover = new RPButton(f_notepicker);
   QHBoxLayout *f_layout = new QHBoxLayout(f_notepicker);
 
   f_notepicker->ui_line = f_line;

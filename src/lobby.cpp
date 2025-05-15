@@ -54,15 +54,15 @@ Lobby::Lobby(AOApplication *p_ao_app)
 
   ui_background = new AOImageDisplay(this, ao_app);
 
-  ui_public_server_filter = new RPButton(this, ao_app);
+  ui_public_server_filter = new RPButton(this);
 
-  ui_favorite_server_filter = new RPButton(this, ao_app);
+  ui_favorite_server_filter = new RPButton(this);
 
   ui_toggle_favorite = Layout::ServerSelect::CreateButton("add_to_fav", "addtofav", [this]() {this->on_add_to_fav_released();});
   ui_refresh = Layout::ServerSelect::CreateButton("refresh", "refresh", [this]() {this->on_refresh_released();});
   ui_connect = Layout::ServerSelect::CreateButton("connect", "connect", [this]() {this->on_connect_released();});
 
-  ui_config_panel = new RPButton(this, ao_app);
+  ui_config_panel = new RPButton(this);
 
   ui_version = new DRTextEdit(this);
   ui_version->setFrameStyle(QFrame::NoFrame);
@@ -103,7 +103,7 @@ Lobby::Lobby(AOApplication *p_ao_app)
   ui_progress_bar->setMaximum(100);
   ui_progress_bar->setStyleSheet("QProgressBar{ color: white; }");
 
-  ui_cancel = new RPButton(ui_loading_background, ao_app);
+  ui_cancel = new RPButton(ui_loading_background);
 
   connect(ao_app, SIGNAL(reload_theme()), this, SLOT(update_widgets()));
   connect(ao_app, &AOApplication::server_status_changed, this, &Lobby::_p_update_description);

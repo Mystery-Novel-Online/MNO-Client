@@ -1,23 +1,33 @@
-#ifndef RP_LINE_EDIT_H
-#define RP_LINE_EDIT_H
+#ifndef DROLINEEDIT_H
+#define DROLINEEDIT_H
 
+#include <AOApplication.h>
 #include <QLineEdit>
+#include <QWidget>
+#include "theme.h"
 
-class AOLineEdit : public QLineEdit
+class DROLineEdit : public QLineEdit
 {
   Q_OBJECT
 
 public:
-  AOLineEdit(QWidget *parent);
+  DROLineEdit(const QString &name, const QString &placeholder, const QString &cssHeader, QWidget *parent);
+  DROLineEdit(const QString &name, const QString &cssHeader, QWidget *parent);
 
-protected:
-  void mouseDoubleClickEvent(QMouseEvent *e);
+  void set_theme_settings(QString widgetName, QString legacyCSS, QString scene);
 
-signals:
-  void double_clicked();
+  void setDefaultCSS(QString css);
 
-private slots:
-  void on_enter_pressed();
+  void refreshPosition();
+  void refreshCSS();
+
+private:
+  AOApplication *m_app = nullptr;
+  QString m_friendlyName = "widget";
+  QString m_cssHeader = "[default]";
+  QString m_targetScene = "courtroom";
+  QString m_fallbackCSS = "";
 };
 
-#endif // RP_LINE_EDIT_H
+#endif // DROLINEEDIT_H
+

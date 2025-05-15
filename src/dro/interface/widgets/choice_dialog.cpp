@@ -13,8 +13,8 @@ ChoiceDialog::ChoiceDialog(QWidget *parent)
     : RPWidget{parent}
 {
   m_choiceText = new DRTextEdit(this);
-  m_acceptButton = new RPButton(this, m_App);
-  m_declineButton = new RPButton(this, m_App);
+  m_acceptButton = new RPButton(this);
+  m_declineButton = new RPButton(this);
 
   setDragable(true);
 

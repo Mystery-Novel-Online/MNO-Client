@@ -20,7 +20,6 @@ public:
   }
 
   void execLoadPlayerBackground(QString t_backgroundName);
-  int getBackgroundPosition();
   QString getBackgroundPath(QString t_position);
   QString getForegroundPath(QString t_position);
   DRBackgroundSettings getBackgroundSettings();

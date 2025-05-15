@@ -49,7 +49,7 @@
 #include <modules/theme/thememanager.h>
 
 #include "dro/interface/widgets/rp_combo_box.h"
-#include "dro/interface/widgets/dro_line_edit.h"
+#include "dro/interface/widgets/rp_line_edit.h"
 #include "dro/system/debug/time_debugger.h"
 #include "dro/system/localization.h"
 
@@ -175,8 +175,8 @@ void Courtroom::create_widgets()
   ui_ic_chatlog = new DRTextEdit(this);
   ui_ic_chatlog->setReadOnly(true);
   ui_ic_chatlog->set_auto_align(false);
-  ui_ic_chatlog_scroll_topdown = setupButtonWidget("ic_chatlog_scroll_topdown", "ic_chatlog_scroll_topdown.png", "");
-  ui_ic_chatlog_scroll_bottomup = setupButtonWidget("ic_chatlog_scroll_bottomup", "ic_chatlog_scroll_bottomup.png", "");
+  ui_ic_chatlog_scroll_topdown = new RPButton("ic_chatlog_scroll_topdown", "ic_chatlog_scroll_topdown.png", "", this);
+  ui_ic_chatlog_scroll_bottomup = new RPButton("ic_chatlog_scroll_bottomup", "ic_chatlog_scroll_bottomup.png", "", this);
 
   ui_area_desc = new DRTextEdit(this);
   ui_area_desc->setReadOnly(true);
@@ -199,14 +199,14 @@ void Courtroom::create_widgets()
 
   ui_music_list = new QListWidget(this);
   ui_music_list->setContextMenuPolicy(Qt::CustomContextMenu);
-  ui_music_search = setupLineEditWidget("music_search", localization::getText("TEXTBOX_MUSIC"), "[MUSIC SEARCH]", "");
+  ui_music_search = new DROLineEdit("music_search", localization::getText("TEXTBOX_MUSIC"), "[MUSIC SEARCH]", this);
   ui_music_search->setFrame(false);
   p_MenuBGM = new BGMMenu(this);
 
   ui_sfx_list = new QListWidget(this);
   ui_sfx_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
-  ui_sfx_search = setupLineEditWidget("sfx_search", "", "[SFX SEARCH]", "");
+  ui_sfx_search = new DROLineEdit("sfx_search", "[SFX SEARCH]", this);
   ui_sfx_search->setFrame(false);
 
   ui_sfx_menu = new QMenu(this);
@@ -221,7 +221,7 @@ void Courtroom::create_widgets()
   ui_ic_chat_message_field->setPlaceholderText(localization::getText("CHATBOX_IC"));
   ui_ic_chat_message_field->setMaxLength(255);
 
-  ui_ooc_chat_message = setupLineEditWidget("ooc_chat_message", localization::getText("CHATBOX_OOC"), "[OOC LINE]", "");
+  ui_ooc_chat_message = new DROLineEdit("ooc_chat_message", localization::getText("CHATBOX_OOC"), "[OOC LINE]", this);
   ui_ooc_chat_message->setFrame(false);
   ui_ooc_chat_message->setMaxLength(1023);
 
@@ -239,14 +239,16 @@ void Courtroom::create_widgets()
 
   ui_ic_chat_message_counter->hide();
 
-  ui_ooc_chat_name = setupLineEditWidget("ooc_chat_name", localization::getText("TEXTBOX_OOC_NAME") , "[OOC NAME LINE]", ao_config->username());
+  ui_ooc_chat_name = new DROLineEdit("ooc_chat_name", localization::getText("TEXTBOX_OOC_NAME"), "[OOC NAME LINE]", this);
+  ui_ooc_chat_name->setText(ao_config->username());
   ui_ooc_chat_name->setFrame(false);
 
-  ui_ic_chat_showname = setupLineEditWidget("ic_chat_name", localization::getText("TEXTBOX_SHOWNAME"), "[IC NAME LINE]", ao_config->showname());
+  ui_ic_chat_showname = new DROLineEdit("ic_chat_name", localization::getText("TEXTBOX_SHOWNAME"), "[IC NAME LINE]", this);
+  ui_ic_chat_showname->setText(ao_config->showname());
   ui_ic_chat_showname->setFrame(false);
 
   ui_note_area = new AONoteArea(this, ao_app);
-  ui_note_area->add_button = new RPButton(ui_note_area, ao_app);
+  ui_note_area->add_button = new RPButton(ui_note_area);
   ui_note_area->m_layout = new QVBoxLayout(ui_note_area);
 
   ui_slider_horizontal_axis = new QSlider(Qt::Horizontal, this);
@@ -300,38 +302,38 @@ void Courtroom::create_widgets()
   ui_note_scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_note_scroll_area->setWidgetResizable(true);
 
-  ui_set_notes = new RPButton(this, ao_app);
+  ui_set_notes = new RPButton(this);
 
   construct_emotes();
 
   ui_defense_bar = new HealthBar("defense", ao_app, this);
   ui_prosecution_bar = new HealthBar("prosecution", ao_app, this);
 
-  ui_shout_up = setupButtonWidget("shout_up", "shoutup.png", "");
+  ui_shout_up = new RPButton("shout_up", "shoutup.png", "", this);
   ui_shout_up->setProperty("cycle_id", 1);
-  ui_shout_down = setupButtonWidget("shout_down", "shoutdown.png", "");
+  ui_shout_down = new RPButton("shout_down", "shoutdown.png", "", this);
   ui_shout_down->setProperty("cycle_id", 0);
 
-  ui_effect_down = setupButtonWidget("effect_down", "effectdown.png", "");
+  ui_effect_down = new RPButton("effect_down", "effectdown.png", "", this);
   ui_effect_down->setProperty("cycle_id", 2);
-  ui_effect_up = setupButtonWidget("effect_up", "effectup.png", "");
+  ui_effect_up = new RPButton("effect_up", "effectup.png", "", this);
   ui_effect_up->setProperty("cycle_id", 3);
 
-  ui_wtce_up = setupButtonWidget("wtce_up", "wtceup.png", "");
+  ui_wtce_up = new RPButton("wtce_up", "wtceup.png", "", this);
   ui_wtce_up->setProperty("cycle_id", 5);
-  ui_wtce_down = setupButtonWidget("wtce_down", "wtcedown.png", "");
+  ui_wtce_down = new RPButton("wtce_down", "wtcedown.png", "", this);
   ui_wtce_down->setProperty("cycle_id", 4);
 
   p_CharacterContextMenu = new CharMenu(this);
-  ui_change_character = setupButtonWidget("change_character", "changecharacter.png", "Change Character");
+  ui_change_character = new RPButton("change_character", "changecharacter.png", "Change Character", this);
   ui_change_character->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(ui_change_character, &QWidget::customContextMenuRequested, p_CharacterContextMenu, &CharMenu::OnMenuRequested);
 
-  ui_call_mod = setupButtonWidget("call_mod", "callmod.png", localization::getText("PING_MODS"));
-  ui_switch_area_music = setupButtonWidget("switch_area_music", "switch_area_music.png", "A/M");
+  ui_call_mod = new RPButton("call_mod", "callmod.png", localization::getText("PING_MODS"), this);
+  ui_switch_area_music = new RPButton("switch_area_music", "switch_area_music.png", "A/M", this);
 
-  ui_config_panel = setupButtonWidget("config_panel", "config_panel.png", "Config");
-  ui_note_button = setupButtonWidget("note_button", "notebutton.png", "Notes");
+  ui_config_panel = new RPButton("config_panel", "config_panel.png", "Config", this);
+  ui_note_button = new RPButton("note_button", "notebutton.png", "Notes", this);
 
 
   ui_label_images.resize(label_images.size());
@@ -358,11 +360,11 @@ void Courtroom::create_widgets()
   ui_checks.push_back(ui_flip);
   ui_checks.push_back(ui_hide_character);
 
-  ui_defense_plus = setupButtonWidget("defense_plus", "defplus.png", "");
-  ui_defense_minus = setupButtonWidget("defense_minus", "defminus.png", "");
+  ui_defense_plus = new RPButton("defense_plus", "defplus.png", "", this);
+  ui_defense_minus = new RPButton("defense_minus", "defminus.png", "", this);
 
-  ui_prosecution_plus = setupButtonWidget("prosecution_plus", "proplus.png", "");
-  ui_prosecution_minus = setupButtonWidget("prosecution_minus", "prominus.png", "");
+  ui_prosecution_plus = new RPButton("prosecution_plus", "proplus.png", "", this);
+  ui_prosecution_minus = new RPButton("prosecution_minus", "prominus.png", "", this);
 
   //Setup Combo Boxes
   QStringList l_colorNames =
@@ -398,11 +400,10 @@ void Courtroom::create_widgets()
   ui_timers[0] = new AOTimer(this);
 
 
-  ui_player_list_left = setupButtonWidget("player_list_left", "arrow_left.png", "<-");
-  ui_player_list_right = setupButtonWidget("player_list_right", "arrow_right.png", "->");
-  ui_area_look = setupButtonWidget("area_look", "area_look.png", localization::getText("TITLE_LOOK"));
+  ui_player_list_left = new RPButton("player_list_left", "arrow_left.png", "<-", this);
+  ui_player_list_right = new RPButton("player_list_right", "arrow_right.png", "->", this);
+  ui_area_look = new RPButton("area_look", "area_look.png", localization::getText("TITLE_LOOK"), this);
   p_ScreenshotBtn = new ScreenshotButton(this, ao_app);
-  ThemeManager::get().addButton("screenshot", p_ScreenshotBtn);
 
   construct_playerlist();
 
@@ -420,37 +421,6 @@ QComboBox *Courtroom::setupComboBoxWidget(const QStringList& items, QString name
   return comboBox;
 }
 
-RPButton *Courtroom::setupButtonWidget(const QString name, QString image, QString fallback, QWidget* parent)
-{
-  RPButton *button;
-  if(parent == nullptr) button = new RPButton(this, ao_app);
-  else button = new RPButton(parent, ao_app);
-
-  button->set_theme_image(name, image, "courtroom", fallback);
-
-  ThemeManager::get().addButton(name, button);
-  return button;
-
-}
-
-QLineEdit *Courtroom::setupLineEditWidget(const QString name, QString placeholder, QString legacy_css, QString text,  QWidget *parent)
-{
-  DROLineEdit *lineEdit;
-
-  if(parent == nullptr) lineEdit = new DROLineEdit(this, ao_app);
-  else lineEdit = new DROLineEdit(parent, ao_app);
-
-  lineEdit->set_theme_settings(name, legacy_css, "courtroom");
-
-  if(mDefaultWidgetCSS.contains(name)) lineEdit->setDefaultCSS(mDefaultWidgetCSS[name]);
-
-  lineEdit->setPlaceholderText(placeholder);
-  lineEdit->setText(text);
-
-  ThemeManager::get().addLineEdit(name, lineEdit);
-
-  return lineEdit;
-}
 
 void Courtroom::connect_widgets()
 {
@@ -1004,16 +974,9 @@ void Courtroom::set_widgets()
 
   ui_background->move(0, 0);
   ui_background->resize(m_default_size);
-  TimeDebugger::get().CheckpointTimer("Courtroom Setup", "Set Resize");
   ui_background->set_theme_image(ao_app->current_theme->get_widget_image("courtroom", "courtroombackground.png", "courtroom"));
 
-  TimeDebugger::get().CheckpointTimer("Courtroom Setup", "Set Background");
-
-  ThemeManager::get().refreshButtons();
-  TimeDebugger::get().CheckpointTimer("Courtroom Setup", "SetWidget-BUttons");
-  ThemeManager::get().refreshLineEdit();
-  ThemeManager::get().refreshComboBox();
-  TimeDebugger::get().CheckpointTimer("Courtroom Setup", "SetWidget-ComboBox");
+  courtroom::reload();
 
   setupWidgetElement(ui_viewport, "viewport");
   setupWidgetElement(SceneManager::get().GetTransition(), "viewport");
@@ -1555,7 +1518,7 @@ void Courtroom::load_effects()
 
   for (int i = 0; i < ui_effects.size(); ++i)
   {
-    RPButton *l_button = new RPButton(this, ao_app);
+    RPButton *l_button = new RPButton(this);
     ui_effects.replace(i, l_button);
     l_button->setCheckable(true);
     l_button->setProperty("effect_id", i + 1);
@@ -1628,7 +1591,7 @@ void Courtroom::load_shouts()
   shout_names.clear();
   for (int i = 0; i < ui_shouts.size(); ++i)
   {
-    RPButton *l_button = new RPButton(this, ao_app);
+    RPButton *l_button = new RPButton(this);
     ui_shouts.replace(i, l_button);
     l_button->setCheckable(true);
     l_button->setProperty("shout_id", i + 1);
@@ -1666,7 +1629,7 @@ void Courtroom::load_wtce()
   wtce_names.clear();
   for (int i = 0; i < l_wtce_count; ++i)
   {
-    RPButton *l_button = new RPButton(this, ao_app);
+    RPButton *l_button = new RPButton(this);
     ui_wtce.append(l_button);
     l_button->setProperty("wtce_id", i + 1);
     l_button->stackUnder(ui_wtce_up);

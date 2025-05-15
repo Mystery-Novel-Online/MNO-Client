@@ -10,7 +10,10 @@ class RPButton : public QPushButton
   Q_OBJECT
 
 public:
-  RPButton(QWidget *parent, AOApplication *p_ao_app);
+  RPButton(QWidget *parent = nullptr);
+  RPButton(const QString& name, QWidget *parent = nullptr);
+  RPButton(const QString& name, const QString& image, QWidget *parent = nullptr);
+  RPButton(const QString& name, const QString& image, const QString& fallback, QWidget *parent = nullptr);
 
   QString get_image();
   bool has_image();
@@ -22,15 +25,15 @@ public:
   void refresh_position();
 
 private:
-  AOApplication *ao_app = nullptr;
+  AOApplication *m_app = nullptr;
   QString m_image;
   QString m_image_stem;
   QString m_text;
 
-  QString widget_name;
-  QString fallback_image;
-  QString scene_type;
-  QString fallback_text;
+  QString m_friendlyName = "widget";
+  QString m_fallbackImage = "";
+  QString m_fallbackText = "";
+  QString m_targetScene = "courtroom";
 };
 
 #endif // RP_BUTTON_H
