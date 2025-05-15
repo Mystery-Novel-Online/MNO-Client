@@ -35,6 +35,7 @@ HEADERS += \
   src/dro/interface/widgets/rp_combo_box.h \
   src/dro/interface/widgets/rp_label.h \
   src/dro/interface/widgets/rp_line_edit.h \
+  src/dro/interface/widgets/rp_slider.h \
   src/dro/interface/widgets/rp_text_edit.h \
   src/dro/interface/widgets/rp_widget.h \
   src/dro/interface/widgets/screenshot_button.h \
@@ -43,11 +44,23 @@ HEADERS += \
   src/dro/interface/widgets/sticker_viewer.h \
   src/dro/interface/widgets/viewport_overlay.h \
   src/dro/interface/widgets/tab_toggle_button.h \
+  src/dro/interface/widgets/aotimer.h \
   src/dro/network/json_packet.h \
   src/dro/network/metadata/area_metadata.h \
   src/dro/network/metadata/user_metadata.h \
   src/dro/network/metadata/server_metadata.h \
   src/dro/network/metadata/tracklist_metadata.h \
+  src/dro/system/audio.h \
+  src/dro/system/audio/blip_player.h \
+  src/dro/system/audio/music_player.h \
+  src/dro/system/audio/sfx_player.h \
+  src/dro/system/audio/shout_player.h \
+  src/dro/system/audio/system_player.h \
+  src/dro/system/localization.h \
+  src/dro/system/runtime_loop.h \
+  src/dro/system/theme_scripting.h \
+  src/dro/system/debug/time_debugger.h \
+  src/dro/tools/button_maker.h \
   src/dro/param/json_reader.h \
   src/dro/param/localization_reader.h \
   src/dro/param/theme_mode_reader.h \
@@ -58,17 +71,11 @@ HEADERS += \
   src/dro/param/background/background_reader.h \
   src/dro/param/background/legacy_background_reader.h \
   src/aoapplication.h \
-  src/aoblipplayer.h \
   src/aoconfig.h \
   src/aoconfigpanel.h \
   src/aoguiloader.h \
-  src/aomusicplayer.h \
   src/aoobject.h \
   src/aopixmap.h \
-  src/aosfxplayer.h \
-  src/aoshoutplayer.h \
-  src/aosystemplayer.h \
-  src/aotimer.h \
   src/commondefs.h \
   src/courtroom.h \
   src/datatypes.h \
@@ -88,12 +95,6 @@ HEADERS += \
   src/drmasterclient.h \
   src/drmediatester.h \
   src/drmovie.h \
-  src/dro/system/audio.h \
-  src/dro/system/localization.h \
-  src/dro/system/runtime_loop.h \
-  src/dro/system/theme_scripting.h \
-  src/dro/system/debug/time_debugger.h \
-  src/dro/tools/button_maker.h \
   src/drpacket.h \
   src/drposition.h \
   src/drscenemovie.h \
@@ -150,6 +151,7 @@ SOURCES += \
   src/dro/interface/widgets/rp_combo_box.cpp \
   src/dro/interface/widgets/rp_label.cpp \
   src/dro/interface/widgets/rp_line_edit.cpp \
+  src/dro/interface/widgets/rp_slider.cpp \
   src/dro/interface/widgets/rp_text_edit.cpp \
   src/dro/interface/widgets/rp_widget.cpp \
   src/dro/interface/widgets/screenshot_button.cpp \
@@ -158,11 +160,23 @@ SOURCES += \
   src/dro/interface/widgets/sticker_viewer.cpp \
   src/dro/interface/widgets/viewport_overlay.cpp \
   src/dro/interface/widgets/tab_toggle_button.cpp \
+  src/dro/interface/widgets/aotimer.cpp \
   src/dro/network/json_packet.cpp \
   src/dro/network/metadata/area_metadata.cpp \
   src/dro/network/metadata/user_metadata.cpp \
   src/dro/network/metadata/server_metadata.cpp \
   src/dro/network/metadata/tracklist_metadata.cpp \
+  src/dro/system/audio.cpp \
+  src/dro/system/audio/blip_player.cpp \
+  src/dro/system/audio/music_player.cpp \
+  src/dro/system/audio/sfx_player.cpp \
+  src/dro/system/audio/shout_player.cpp \
+  src/dro/system/audio/system_player.cpp \
+  src/dro/system/localization.cpp \
+  src/dro/system/runtime_loop.cpp \
+  src/dro/system/theme_scripting.cpp \
+  src/dro/system/debug/time_debugger.cpp \
+  src/dro/tools/button_maker.cpp \
   src/dro/param/json_reader.cpp \
   src/dro/param/localization_reader.cpp \
   src/dro/param/theme_mode_reader.cpp \
@@ -173,17 +187,11 @@ SOURCES += \
   src/dro/param/background/background_reader.cpp \
   src/dro/param/background/legacy_background_reader.cpp \
   src/aoapplication.cpp \
-  src/aoblipplayer.cpp \
   src/aoconfig.cpp \
   src/aoconfigpanel.cpp \
   src/aoguiloader.cpp \
-  src/aomusicplayer.cpp \
   src/aoobject.cpp \
   src/aopixmap.cpp \
-  src/aosfxplayer.cpp \
-  src/aoshoutplayer.cpp \
-  src/aosystemplayer.cpp \
-  src/aotimer.cpp \
   src/charselect.cpp \
   src/commondefs.cpp \
   src/courtroom.cpp \
@@ -206,12 +214,6 @@ SOURCES += \
   src/drmasterclient.cpp \
   src/drmediatester.cpp \
   src/drmovie.cpp \
-  src/dro/system/audio.cpp \
-  src/dro/system/localization.cpp \
-  src/dro/system/runtime_loop.cpp \
-  src/dro/system/theme_scripting.cpp \
-  src/dro/system/debug/time_debugger.cpp \
-  src/dro/tools/button_maker.cpp \
   src/drpacket.cpp \
   src/drposition.cpp \
   src/drscenemovie.cpp \

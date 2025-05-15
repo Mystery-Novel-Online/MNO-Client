@@ -46,6 +46,11 @@ namespace courtroom
     void setVertical(int value);
   }
 
+  namespace viewport
+  {
+    void screenshot();
+  }
+
 }
 
 #endif // COURTROOM_LAYOUT_H

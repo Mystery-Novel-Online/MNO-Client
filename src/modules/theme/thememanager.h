@@ -60,7 +60,7 @@ public:
   void setViewporResize(double size);
   double getViewporResize();
 
-  void addComboBox(QString name, DROComboBox* lineEdit);
+  void addComboBox(QString name, RPComboBox* lineEdit);
   void refreshComboBox();
 
   void setCourtroomBackground(AOImageDisplay *t_background);
@@ -98,8 +98,8 @@ private:
 
   QHash<QString, QWidget *> m_WidgetNames = {};
   QHash<QString, RPButton*> mButtonWidgets { };
-  QHash<QString, DROLineEdit*> mLineEditWidgets { };
-  QHash<QString, DROComboBox*> mComboBoxWidgets { };
+  QHash<QString, RPLineEdit*> mLineEditWidgets { };
+  QHash<QString, RPComboBox*> mComboBoxWidgets { };
 
   bool mRequiresReload = true;
   AOImageDisplay *wCourtroomBackground = nullptr;

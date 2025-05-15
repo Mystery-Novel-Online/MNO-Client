@@ -23,6 +23,7 @@
 
 #include "dro/interface/widgets/character_select.h"
 #include <dro/interface/widgets/rp_line_edit.h>
+#include "dro/interface/widgets/rp_widget.h"
 
 void Courtroom::construct_char_select()
 {
@@ -44,7 +45,7 @@ void Courtroom::construct_char_select()
   pBtnCharSelectRandom = new RPButton("char_select_random", "char_random.png", dro::system::localization::getText("CSS_RANDOM"), ui_char_select_background);
   pBtnCharSelectRefresh = new RPButton("char_select_refresh", "char_refresh.png", dro::system::localization::getText("REFRESH"), ui_char_select_background);
 
-  pCharaSelectSearch = new DROLineEdit("character_search", dro::system::localization::getText("CSS_SEARCH"), "[CHARA SEARCH]", ui_char_select_background);
+  pCharaSelectSearch = new RPLineEdit("character_search", dro::system::localization::getText("CSS_SEARCH"), "[CHARA SEARCH]", ui_char_select_background);
   pCharaSelectSeries = setupComboBoxWidget(CharacterManager::get().GetCharacterPackages() , "character_packages", "[PACKAGE FILTER]");
 
   connect(char_button_mapper, SIGNAL(mapped(int)), this, SLOT(char_clicked(int)));

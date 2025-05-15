@@ -17,8 +17,6 @@ public:
     return s_Instance;
   }
 
-  void SetSlider(QSlider *slider);
-
   bool GetUsePairData();
   void SetPairData(QString character, QString emote, int selfOffset, int pairOffset, bool flipped, int scale, int vertical);
   double GetOffsetSelf();
@@ -36,7 +34,6 @@ public:
   bool GetCanPair();
   bool GetSpriteIsVisible();
 
-
   void ThemeReload();
 
   pos_size_type GetElementAlignment(QString name, QString alighment);
@@ -44,11 +41,12 @@ private:
   PairManager() {}
   static PairManager s_Instance;
 
-  bool mPairUsed = true;
-  bool mIsFlipped = false;
+  bool m_pairActive = true;
+  bool m_pairFlipped = false;
 
   QString mCharacter = "DUMMY";
   QString mEmote = "DUMMY";
+
   int mSelfOffset = 0;
   int mPairOffset = 0;
   int mScaleOffset = 1000;
@@ -57,9 +55,7 @@ private:
   int mLocalPair = -1;
   int mLocalOffset = 0;
 
-  QSlider *pSliderWidget = nullptr;
-
-  QHash<QString, pos_size_type> mPairChatboxPositions = {};
+  QHash<QString, pos_size_type> m_chatboxOffsetTransforms = {};
 };
 
 #endif // PAIRMANAGER_H

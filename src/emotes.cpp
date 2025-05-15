@@ -58,12 +58,6 @@ void Courtroom::construct_emotes()
   ui_pos_dropdown->addItem(system::localization::getText("POS_PRO_ASS"), "hlp");
 }
 
-void Courtroom::construct_emote_page_layout()
-{
-  set_size_and_pos(ui_emotes, "emotes", COURTROOM_DESIGN_INI, ao_app);
-  ui_emotes->constructEmotes();
-}
-
 void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
 {
   if (!ao_config->emote_preview_enabled())

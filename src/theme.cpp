@@ -142,7 +142,7 @@ void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOAppli
   p_widget->setStyleSheet(style_sheet_string);
 }
 
-void set_drtextedit_font(DRTextEdit *p_widget, QString p_identifier, QString p_ini_file, AOApplication *ao_app)
+void set_drtextedit_font(RPTextEdit *p_widget, QString p_identifier, QString p_ini_file, AOApplication *ao_app)
 {
   QString l_scene = "lobby";
   if(p_ini_file == COURTROOM_FONTS_INI) l_scene = "courtroom";
@@ -215,7 +215,7 @@ void set_sticker_play_once(DRStickerViewer *p_sticker, QString p_identifier, QSt
   }
 }
 
-void setShownameFont(DRTextEdit *widget, QString identifier, QString align)
+void setShownameFont(RPTextEdit *widget, QString identifier, QString align)
 {
   widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.getPairingFont(identifier, align);
 

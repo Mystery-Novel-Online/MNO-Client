@@ -4,6 +4,7 @@
 #include <aoapplication.h>
 #include "dro/interface/widgets/chat_log.h"
 #include <QString>
+#include <courtroom.h>
 #include "modules/theme/thememanager.h"
 #include "dro/system/theme_scripting.h"
 
@@ -48,9 +49,9 @@ namespace courtroom
     auto it = s_CourtroomWidgets.begin();
     while (it != s_CourtroomWidgets.end())
     {
-      DROLineEdit *lineEdit = dynamic_cast<DROLineEdit*>(it.value());
+      RPLineEdit *lineEdit = dynamic_cast<RPLineEdit*>(it.value());
       RPButton* rpButton = dynamic_cast<RPButton*>(it.value());
-      DROComboBox* comboBox = dynamic_cast<DROComboBox*>(it.value());
+      RPComboBox* comboBox = dynamic_cast<RPComboBox*>(it.value());
 
       if(lineEdit != nullptr)
       {
@@ -267,6 +268,28 @@ namespace courtroom
 
   }
 
+  namespace viewport
+  {
+    void screenshot()
+    {
+      Courtroom *courtroom = dynamic_cast<Courtroom*>(s_CourtroomWidgets["courtroom"]);
+      DRGraphicsView *viewport = dynamic_cast<DRGraphicsView*>(s_CourtroomWidgets["viewport"]);
+
+      if(courtroom != nullptr && viewport != nullptr)
+      {
+        QPixmap courtroomRender = courtroom->grab();
+
+        QRect viewportArea(viewport->x(), viewport->y(), viewport->width(), viewport->height());
+        QPixmap viewportCrop = courtroomRender.copy(viewportArea);
+
+        QString outputFilename = QDateTime::currentDateTime().toString("yyyy-MM-dd (hh.mm.ss.z)'.png'");
+        QString outputPath = "base/screenshots/" + outputFilename;
+
+        if (!viewportCrop.save(outputPath, "PNG"))
+          qWarning("Failed to save the screenshot.");
+      }
+    }
+  }
 }
 
 

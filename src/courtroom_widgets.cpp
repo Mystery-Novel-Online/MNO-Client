@@ -1,19 +1,14 @@
 #include "courtroom.h"
 
 #include "aoapplication.h"
-#include "aoblipplayer.h"
 #include "dro/interface/widgets/rp_button.h"
 #include "aoconfig.h"
 #include "dro/interface/widgets/image_display.h"
 #include "dro/interface/widgets/rp_label.h"
 #include "modules/managers/pair_manager.h"
-#include "aomusicplayer.h"
 #include "dro/interface/widgets/note_area.h"
 #include "dro/interface/widgets/note_picker.h"
-#include "aosfxplayer.h"
-#include "aoshoutplayer.h"
-#include "aosystemplayer.h"
-#include "aotimer.h"
+#include "dro/interface/widgets/aotimer.h"
 #include "commondefs.h"
 #include "drcharactermovie.h"
 #include "dro/interface/widgets/chat_log.h"
@@ -127,7 +122,7 @@ void Courtroom::create_widgets()
   ui_vp_music_display_a = new AOImageDisplay(this, ao_app);
   ui_vp_music_display_b = new AOImageDisplay(this, ao_app);
   ui_vp_music_area = new QWidget(ui_vp_music_display_a);
-  ui_vp_music_name = new DRTextEdit(ui_vp_music_area);
+  ui_vp_music_name = new RPTextEdit(ui_vp_music_area);
   ui_vp_music_name->setFrameStyle(QFrame::NoFrame);
   ui_vp_music_name->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_vp_music_name->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -139,12 +134,12 @@ void Courtroom::create_widgets()
 
   ui_vp_chatbox = new DRStickerViewer(ao_app, this);
   chatbox_anim = new QPropertyAnimation(ui_vp_chatbox, "pos", this);
-  ui_vp_showname = new DRTextEdit(ui_vp_chatbox);
+  ui_vp_showname = new RPTextEdit(ui_vp_chatbox);
   ui_vp_showname->setFrameStyle(QFrame::NoFrame);
   ui_vp_showname->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_vp_showname->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_vp_showname->setReadOnly(true);
-  ui_vp_message = new DRTextEdit(ui_vp_chatbox);
+  ui_vp_message = new RPTextEdit(ui_vp_chatbox);
   ui_vp_message->setFrameStyle(QFrame::NoFrame);
   ui_vp_message->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_vp_message->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -172,13 +167,13 @@ void Courtroom::create_widgets()
     l_view->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
   }
 
-  ui_ic_chatlog = new DRTextEdit(this);
+  ui_ic_chatlog = new RPTextEdit(this);
   ui_ic_chatlog->setReadOnly(true);
   ui_ic_chatlog->set_auto_align(false);
   ui_ic_chatlog_scroll_topdown = new RPButton("ic_chatlog_scroll_topdown", "ic_chatlog_scroll_topdown.png", "", this);
   ui_ic_chatlog_scroll_bottomup = new RPButton("ic_chatlog_scroll_bottomup", "ic_chatlog_scroll_bottomup.png", "", this);
 
-  ui_area_desc = new DRTextEdit(this);
+  ui_area_desc = new RPTextEdit(this);
   ui_area_desc->setReadOnly(true);
   ui_area_desc->set_auto_align(false);
 
@@ -199,14 +194,14 @@ void Courtroom::create_widgets()
 
   ui_music_list = new QListWidget(this);
   ui_music_list->setContextMenuPolicy(Qt::CustomContextMenu);
-  ui_music_search = new DROLineEdit("music_search", localization::getText("TEXTBOX_MUSIC"), "[MUSIC SEARCH]", this);
+  ui_music_search = new RPLineEdit("music_search", localization::getText("TEXTBOX_MUSIC"), "[MUSIC SEARCH]", this);
   ui_music_search->setFrame(false);
   p_MenuBGM = new BGMMenu(this);
 
   ui_sfx_list = new QListWidget(this);
   ui_sfx_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
-  ui_sfx_search = new DROLineEdit("sfx_search", "[SFX SEARCH]", this);
+  ui_sfx_search = new RPLineEdit("sfx_search", "[SFX SEARCH]", this);
   ui_sfx_search->setFrame(false);
 
   ui_sfx_menu = new QMenu(this);
@@ -221,7 +216,7 @@ void Courtroom::create_widgets()
   ui_ic_chat_message_field->setPlaceholderText(localization::getText("CHATBOX_IC"));
   ui_ic_chat_message_field->setMaxLength(255);
 
-  ui_ooc_chat_message = new DROLineEdit("ooc_chat_message", localization::getText("CHATBOX_OOC"), "[OOC LINE]", this);
+  ui_ooc_chat_message = new RPLineEdit("ooc_chat_message", localization::getText("CHATBOX_OOC"), "[OOC LINE]", this);
   ui_ooc_chat_message->setFrame(false);
   ui_ooc_chat_message->setMaxLength(1023);
 
@@ -239,11 +234,11 @@ void Courtroom::create_widgets()
 
   ui_ic_chat_message_counter->hide();
 
-  ui_ooc_chat_name = new DROLineEdit("ooc_chat_name", localization::getText("TEXTBOX_OOC_NAME"), "[OOC NAME LINE]", this);
+  ui_ooc_chat_name = new RPLineEdit("ooc_chat_name", localization::getText("TEXTBOX_OOC_NAME"), "[OOC NAME LINE]", this);
   ui_ooc_chat_name->setText(ao_config->username());
   ui_ooc_chat_name->setFrame(false);
 
-  ui_ic_chat_showname = new DROLineEdit("ic_chat_name", localization::getText("TEXTBOX_SHOWNAME"), "[IC NAME LINE]", this);
+  ui_ic_chat_showname = new RPLineEdit("ic_chat_name", localization::getText("TEXTBOX_SHOWNAME"), "[IC NAME LINE]", this);
   ui_ic_chat_showname->setText(ao_config->showname());
   ui_ic_chat_showname->setFrame(false);
 
@@ -251,47 +246,19 @@ void Courtroom::create_widgets()
   ui_note_area->add_button = new RPButton(ui_note_area);
   ui_note_area->m_layout = new QVBoxLayout(ui_note_area);
 
-  ui_slider_horizontal_axis = new QSlider(Qt::Horizontal, this);
+  ui_slider_horizontal_axis = new RPSlider(Qt::Horizontal, this);
   ui_slider_horizontal_axis->setMinimum(1);
   ui_slider_horizontal_axis->setMaximum(960);
 
-  ui_slider_horizontal_axis->setContextMenuPolicy(Qt::CustomContextMenu);
-  QObject::connect(ui_slider_horizontal_axis, &QSlider::customContextMenuRequested, this, [this](const QPoint &pos)
-  {
-    bool ok;
-    int val = QInputDialog::getInt(ui_slider_horizontal_axis, "Set Value", "Value:", ui_slider_horizontal_axis->value(), ui_slider_horizontal_axis->minimum(), ui_slider_horizontal_axis->maximum(), 1, &ok);
-    if (ok) ui_slider_horizontal_axis->setValue(val);
-  });
-
-
-  ui_slider_vertical_axis = new QSlider(Qt::Horizontal, this);
+  ui_slider_vertical_axis = new RPSlider(Qt::Horizontal, this);
   ui_slider_vertical_axis->setMinimum(-1000);
   ui_slider_vertical_axis->setMaximum(1000);
   ui_slider_vertical_axis->setSliderPosition(0);
 
-  ui_slider_vertical_axis->setContextMenuPolicy(Qt::CustomContextMenu);
-  QObject::connect(ui_slider_vertical_axis, &QSlider::customContextMenuRequested, this, [this](const QPoint &pos)
-  {
-    bool ok;
-    int val = QInputDialog::getInt(ui_slider_vertical_axis, "Set Value", "Value:", ui_slider_vertical_axis->value(), ui_slider_vertical_axis->minimum(), ui_slider_vertical_axis->maximum(), 1, &ok);
-    if (ok) ui_slider_vertical_axis->setValue(val);
-  });
-
-
-  ui_slider_scale = new QSlider(Qt::Horizontal, this);
+  ui_slider_scale = new RPSlider(Qt::Horizontal, this);
   ui_slider_scale->setMinimum(1);
   ui_slider_scale->setMaximum(2000);
   ui_slider_scale->setSliderPosition(1000);
-
-  ui_slider_scale->setContextMenuPolicy(Qt::CustomContextMenu);
-  QObject::connect(ui_slider_scale, &QSlider::customContextMenuRequested, this, [this](const QPoint &pos)
-  {
-    bool ok;
-    int val = QInputDialog::getInt(ui_slider_scale, "Set Value", "Value:", ui_slider_scale->value(), ui_slider_scale->minimum(), ui_slider_scale->maximum(), 1, &ok);
-    if (ok) ui_slider_scale->setValue(val);
-  });
-
-  PairManager::get().SetSlider(ui_slider_horizontal_axis);
 
   pNotifyPopup = new ChoiceDialog(this);
 
@@ -393,7 +360,7 @@ void Courtroom::create_widgets()
 
 
   ui_vp_notepad_image = new AOImageDisplay(this, ao_app);
-  ui_vp_notepad = new DRTextEdit(this);
+  ui_vp_notepad = new RPTextEdit(this);
   ui_vp_notepad->setFrameStyle(QFrame::NoFrame);
 
   ui_timers.resize(1);
@@ -414,7 +381,7 @@ void Courtroom::create_widgets()
 
 QComboBox *Courtroom::setupComboBoxWidget(const QStringList& items, QString name, QString cssHeader)
 {
-  DROComboBox *comboBox = new DROComboBox(this, ao_app);
+  RPComboBox *comboBox = new RPComboBox(this, ao_app);
   comboBox->addItems(items);
   comboBox->setWidgetInfo(name, cssHeader, "courtroom");
   ThemeManager::get().addComboBox(name, comboBox);
@@ -1084,7 +1051,7 @@ void Courtroom::set_widgets()
 
   // emotes
   set_size_and_pos(ui_emotes, "emotes", COURTROOM_DESIGN_INI, ao_app);
-  construct_emote_page_layout();
+  ui_emotes->constructEmotes();
 
 
 
@@ -1338,7 +1305,7 @@ void Courtroom::setupWidgetElement(AOImageDisplay *widget, QString name, QString
   if(!visible) widget->hide();
 }
 
-void Courtroom::setupWidgetElement(DRTextEdit *widget, QString name, QString defaultText, Qt::TextInteractionFlag flag, bool visible)
+void Courtroom::setupWidgetElement(RPTextEdit *widget, QString name, QString defaultText, Qt::TextInteractionFlag flag, bool visible)
 {
   set_size_and_pos(widget, name, COURTROOM_DESIGN_INI, ao_app);
 

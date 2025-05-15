@@ -25,8 +25,8 @@ public:
   DRBackgroundSettings getBackgroundSettings();
 
 
-  AOLabel *CreateTransition(QWidget *parents, AOApplication* ao_app, DRGraphicsView *viewport);
-  AOLabel *GetTransition();
+  RPLabel *CreateTransition(QWidget *parents, AOApplication* ao_app, DRGraphicsView *viewport);
+  RPLabel *GetTransition();
 
   void RenderTransition();
   void AnimateTransition();
@@ -37,14 +37,12 @@ public:
   QVector<DrPlayer> mPlayerDataList;
 
   AOConfig *pConfigAO = nullptr;
-
-  void ScreenshotViewport();
 private:
   SceneManager() {}
   static SceneManager s_Instance;
 
   int mFadeDuration = 200;
-  AOLabel *pUiTransition = nullptr;
+  RPLabel *pUiTransition = nullptr;
   DRGraphicsView *pViewport = nullptr;
 
 

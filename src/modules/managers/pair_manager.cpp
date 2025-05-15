@@ -4,17 +4,13 @@
 #include <AOApplication.h>
 
 #include <modules/theme/thememanager.h>
+#include "dro/interface/courtroom_layout.h"
 
 PairManager PairManager::s_Instance;
 
-void PairManager::SetSlider(QSlider *slider)
-{
-  pSliderWidget = slider;
-}
-
 bool PairManager::GetUsePairData()
 {
-  return mPairUsed;
+  return m_pairActive;
 }
 
 void PairManager::SetPairData(QString character, QString emote, int selfOffset, int pairOffset, bool flipped, int scale, int vertical)
@@ -35,8 +31,8 @@ void PairManager::SetPairData(QString character, QString emote, int selfOffset, 
 
   mCharacter = character;
   mEmote = emote;
-  mPairUsed = true;
-  mIsFlipped = flipped;
+  m_pairActive = true;
+  m_pairFlipped = flipped;
   if(scale != 0) mScaleOffset = scale;
   else mScaleOffset = 1000;
   mVerticalOffset = vertical;
@@ -72,12 +68,12 @@ QString PairManager::GetCharacterFolder()
 
 bool PairManager::GetCharacterFlipped()
 {
-  return mIsFlipped;
+  return m_pairFlipped;
 }
 
 void PairManager::DisableUpcomingPair()
 {
-  mPairUsed = false;
+  m_pairActive = false;
   double l_CourtroomWidth = static_cast<double>(ThemeManager::get().getWidget("viewport")->width());
   mPairOffset = static_cast<int>(l_CourtroomWidth / 2);
   mSelfOffset = mPairOffset;
@@ -89,11 +85,11 @@ void PairManager::SetUserPair(int partner, int offset)
   mLocalOffset = offset;
   if(partner == -1)
   {
-    pSliderWidget->setValue(480);
+    courtroom::sliders::setHorizontal(480);
   }
   else
   {
-    pSliderWidget->setValue(mLocalOffset);
+    courtroom::sliders::setHorizontal(mLocalOffset);
   }
   //if(partner != -1) pSliderWidget->show();
   //else{ pSliderWidget->hide();}
@@ -109,12 +105,12 @@ bool PairManager::GetSpriteIsVisible()
   if(mEmote == "../../misc/blank") return false;
   if(mEmote.isEmpty()) return false;
 
-  return mPairUsed;
+  return m_pairActive;
 }
 
 void PairManager::ThemeReload()
 {
-  mPairChatboxPositions = {};
+  m_chatboxOffsetTransforms = {};
   QStringList shownameElements = {"showname", "ao2_chatbox", "message", "chat_arrow"};
   QStringList alignmentElements = {"", "_left", "_right"};
 
@@ -126,7 +122,7 @@ void PairManager::ThemeReload()
       pos_size_type sizing = AOApplication::getInstance()->get_element_dimensions(fullName, COURTROOM_DESIGN_INI);
       if(sizing.height != 0 && sizing.width != 0)
       {
-        mPairChatboxPositions[fullName] = sizing;
+        m_chatboxOffsetTransforms[fullName] = sizing;
       }
     }
   }
@@ -137,8 +133,8 @@ pos_size_type PairManager::GetElementAlignment(QString name, QString alighment)
 {
   QString alignmentName = name + "_" + alighment;
 
-  if(mPairChatboxPositions.contains(alignmentName)) return mPairChatboxPositions[alignmentName];
-  else if(mPairChatboxPositions.contains(name)) return mPairChatboxPositions[name];
+  if(m_chatboxOffsetTransforms.contains(alignmentName)) return m_chatboxOffsetTransforms[alignmentName];
+  else if(m_chatboxOffsetTransforms.contains(name)) return m_chatboxOffsetTransforms[name];
 
   pos_size_type return_value;
   return_value.x = 0;

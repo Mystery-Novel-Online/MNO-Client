@@ -14,7 +14,6 @@ EmotionSelector::EmotionSelector(QWidget *parent)
 {
   m_ContextMenu = new EmoteMenu(this);
   setContextMenuPolicy(Qt::CustomContextMenu);
-
   connect(this, &QWidget::customContextMenuRequested, m_ContextMenu, &EmoteMenu::OnMenuRequested);
 }
 

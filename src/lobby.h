@@ -14,7 +14,7 @@ class AOConfig;
 class AOImageDisplay;
 class DRChatLog;
 class DRMasterClient;
-class DRTextEdit;
+class RPTextEdit;
 
 class QListWidget;
 class QLineEdit;
@@ -72,14 +72,14 @@ private:
   RPButton *ui_toggle_favorite = nullptr;
   RPButton *ui_connect = nullptr;
 
-  DRTextEdit *ui_version = nullptr;
+  RPTextEdit *ui_version = nullptr;
   RPButton *ui_config_panel = nullptr;
   QListWidget *ui_server_list = nullptr;
-  DRTextEdit *ui_player_count = nullptr;
+  RPTextEdit *ui_player_count = nullptr;
   QTextBrowser *ui_description = nullptr;
   DRChatLog *ui_chatbox = nullptr;
   AOImageDisplay *ui_loading_background = nullptr;
-  DRTextEdit *ui_loading_text = nullptr;
+  RPTextEdit *ui_loading_text = nullptr;
   QProgressBar *ui_progress_bar = nullptr;
   RPButton *ui_cancel = nullptr;
 

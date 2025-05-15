@@ -9,6 +9,7 @@
 #include "dro/interface/widgets/bgm_filter.h"
 #include "dro/interface/widgets/screenshot_button.h"
 #include "dro/interface/widgets/health_bar.h"
+#include "dro/interface/widgets/rp_slider.h"
 #include "dro/network/metadata/user_metadata.h"
 #include "drposition.h"
 #include "drthememovie.h"
@@ -24,7 +25,7 @@ class AOCharButton;
 class AOConfig;
 class AOEmoteButton;
 class AOImageDisplay;
-class AOLabel;
+class RPLabel;
 class AOMovie;
 class AOMusicPlayer;
 class AONoteArea;
@@ -41,7 +42,7 @@ class DRSceneMovie;
 class DRShoutMovie;
 class DRSplashMovie;
 class DRStickerViewer;
-class DRTextEdit;
+class RPTextEdit;
 #include <QMainWindow>
 #include <QMap>
 #include <QModelIndex>
@@ -126,7 +127,7 @@ public:
   void set_widgets();
   void setupWidgetElement(QWidget *widget, QString name, bool visible = true);
   void setupWidgetElement(AOImageDisplay *widget, QString name, QString image, bool visible = true);
-  void setupWidgetElement(DRTextEdit *widget, QString name, QString defaultText, Qt::TextInteractionFlag flag = Qt::TextEditable, bool visible = true);
+  void setupWidgetElement(RPTextEdit *widget, QString name, QString defaultText, Qt::TextInteractionFlag flag = Qt::TextEditable, bool visible = true);
 
   // helper function that calls above function on the relevant widgets
   void set_fonts();
@@ -200,7 +201,6 @@ public:
   void update_character_content_url(QString url);
   void construct_playerlist_layout();
   void construct_emotes();
-  void construct_emote_page_layout();
   void write_area_desc();
 
   // Set the showname of the client
@@ -377,6 +377,8 @@ private:
   QStringList m_chatmessage;
   int m_speaker_chr_id = SpectatorId;
   QString m_speaker_showname;
+  int m_messageSender = -1;
+  bool m_appendMessage = false;
   bool m_hide_character = false;
   bool m_play_pre = false;
   bool m_play_zoom = false;
@@ -468,16 +470,16 @@ private:
 
   ViewportOverlay *w_ViewportOverlay = nullptr;
 
-  QSlider *ui_slider_horizontal_axis = nullptr;
-  QSlider *ui_slider_vertical_axis = nullptr;
-  QSlider *ui_slider_scale = nullptr;
+  RPSlider *ui_slider_horizontal_axis = nullptr;
+  RPSlider *ui_slider_vertical_axis = nullptr;
+  RPSlider *ui_slider_scale = nullptr;
 
   AOImageDisplay *ui_vp_notepad_image = nullptr;
-  DRTextEdit *ui_vp_notepad = nullptr;
+  RPTextEdit *ui_vp_notepad = nullptr;
 
   DRStickerViewer *ui_vp_chatbox = nullptr;
-  DRTextEdit *ui_vp_showname = nullptr;
-  DRTextEdit *ui_vp_message = nullptr;
+  RPTextEdit *ui_vp_showname = nullptr;
+  RPTextEdit *ui_vp_message = nullptr;
   DREffectMovie *ui_vp_effect = nullptr;
   DRSplashMovie *ui_vp_wtce = nullptr;
   DRShoutMovie *ui_vp_objection = nullptr;
@@ -504,7 +506,7 @@ private:
 
   AOImageDisplay *ui_vp_showname_image = nullptr;
 
-  DRTextEdit *ui_vp_music_name = nullptr;
+  RPTextEdit *ui_vp_music_name = nullptr;
   QPropertyAnimation *music_anim = nullptr;
 
   QWidget *ui_vp_music_area = nullptr;
@@ -512,7 +514,7 @@ private:
   DRStickerViewer *ui_vp_clock = nullptr;
   QVector<AOTimer *> ui_timers;
 
-  DRTextEdit *ui_ic_chatlog = nullptr;
+  RPTextEdit *ui_ic_chatlog = nullptr;
   QList<DRChatRecord> m_ic_record_list;
   QQueue<DRChatRecord> m_ic_record_queue;
   RPButton *ui_ic_chatlog_scroll_topdown = nullptr;
@@ -628,7 +630,7 @@ private:
   QCheckBox *ui_hide_character = nullptr;
 
   QVector<QCheckBox *> ui_checks; // 0 = pre, 1 = flip, 2 = hidden
-  QVector<AOLabel *> ui_labels;   // 0 = music, 1 = sfx, 2 = blip
+  QVector<RPLabel *> ui_labels;   // 0 = music, 1 = sfx, 2 = blip
   QVector<AOImageDisplay *> ui_label_images;
   QVector<QString> label_images = {"Pre", "Flip", "Hidden"};
 
@@ -686,7 +688,7 @@ private:
 
   ScreenshotButton *p_ScreenshotBtn = nullptr;
 
-  DRTextEdit *ui_area_desc = nullptr;
+  RPTextEdit *ui_area_desc = nullptr;
 
 
   QVector<DrPlayerListEntry *> m_player_list;

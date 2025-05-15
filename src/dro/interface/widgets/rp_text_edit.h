@@ -3,14 +3,14 @@
 
 #include <QTextEdit>
 
-class DRTextEdit : public QTextEdit
+class RPTextEdit : public QTextEdit
 {
   Q_OBJECT
 
   Q_PROPERTY(Qt::Alignment text_alignment READ get_text_alignment WRITE set_text_alignment NOTIFY text_alignment_changed)
 
 public:
-  DRTextEdit(QWidget *p_parent = nullptr);
+  RPTextEdit(QWidget *p_parent = nullptr);
 
   Qt::Alignment get_text_alignment() const;
 

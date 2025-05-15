@@ -1,19 +1,18 @@
 #include "audio.h"
-#include "aomusicplayer.h"
-
 #include <aoapplication.h>
-#include <aoblipplayer.h>
-#include <aosfxplayer.h>
-#include <aosystemplayer.h>
-#include "aoshoutplayer.h"
+#include "dro/system/audio/blip_player.h"
+#include "dro/system/audio/music_player.h"
+#include "dro/system/audio/sfx_player.h"
+#include "dro/system/audio/system_player.h"
+#include "dro/system/audio/shout_player.h"
 
 #include <QString>
 
+static AOBlipPlayer *s_blipPlayer;
 static AOMusicPlayer *s_musicPlayer;
 static AOSfxPlayer *s_effectsPlayer;
-static AOSystemPlayer *s_systemPlayer;
-static AOBlipPlayer *s_blipPlayer;
 static AOShoutPlayer *s_shoutPlayer;
+static AOSystemPlayer *s_systemPlayer;
 
 bool s_AudioMuted = false;
 

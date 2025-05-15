@@ -5,10 +5,10 @@ class AOApplication;
 
 #include <QLabel>
 
-class AOLabel : public QLabel
+class RPLabel : public QLabel
 {
 public:
-  AOLabel(QWidget *parent, AOApplication *p_ao_app);
+  RPLabel(QWidget *parent, AOApplication *p_ao_app);
 
   void set_image(QString p_image);
 

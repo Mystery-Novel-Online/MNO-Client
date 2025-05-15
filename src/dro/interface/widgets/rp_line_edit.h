@@ -6,13 +6,13 @@
 #include <QWidget>
 #include "theme.h"
 
-class DROLineEdit : public QLineEdit
+class RPLineEdit : public QLineEdit
 {
   Q_OBJECT
 
 public:
-  DROLineEdit(const QString &name, const QString &placeholder, const QString &cssHeader, QWidget *parent);
-  DROLineEdit(const QString &name, const QString &cssHeader, QWidget *parent);
+  RPLineEdit(const QString &name, const QString &placeholder, const QString &cssHeader, QWidget *parent);
+  RPLineEdit(const QString &name, const QString &cssHeader, QWidget *parent);
 
   void set_theme_settings(QString widgetName, QString legacyCSS, QString scene);
 

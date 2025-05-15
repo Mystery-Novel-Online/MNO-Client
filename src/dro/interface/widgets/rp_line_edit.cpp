@@ -10,36 +10,36 @@ QHash<QString, QString> s_defaultLineEditCSS
 };
 
 
-DROLineEdit::DROLineEdit(const QString &name, const QString &placeholder, const QString &cssHeader, QWidget *parent) : QLineEdit(parent), m_app(AOApplication::getInstance()), m_friendlyName(name), m_cssHeader(cssHeader), m_targetScene("courtroom")
+RPLineEdit::RPLineEdit(const QString &name, const QString &placeholder, const QString &cssHeader, QWidget *parent) : QLineEdit(parent), m_app(AOApplication::getInstance()), m_friendlyName(name), m_cssHeader(cssHeader), m_targetScene("courtroom")
 {
   if(s_defaultLineEditCSS.contains(m_friendlyName)) setDefaultCSS(s_defaultLineEditCSS[m_friendlyName]);
   setPlaceholderText(placeholder);
 }
 
-DROLineEdit::DROLineEdit(const QString &name, const QString &cssHeader, QWidget *parent) : QLineEdit(parent), m_app(AOApplication::getInstance()), m_friendlyName(name), m_cssHeader(cssHeader), m_targetScene("courtroom")
+RPLineEdit::RPLineEdit(const QString &name, const QString &cssHeader, QWidget *parent) : QLineEdit(parent), m_app(AOApplication::getInstance()), m_friendlyName(name), m_cssHeader(cssHeader), m_targetScene("courtroom")
 {
   if(s_defaultLineEditCSS.contains(m_friendlyName)) setDefaultCSS(s_defaultLineEditCSS[m_friendlyName]);
 }
 
-void DROLineEdit::set_theme_settings(QString name, QString cssHeader, QString scene)
+void RPLineEdit::set_theme_settings(QString name, QString cssHeader, QString scene)
 {
   m_cssHeader = cssHeader;
   m_friendlyName = name;
   m_targetScene = scene;
 }
 
-void DROLineEdit::setDefaultCSS(QString css)
+void RPLineEdit::setDefaultCSS(QString css)
 {
   m_fallbackCSS = css;
 }
 
-void DROLineEdit::refreshPosition()
+void RPLineEdit::refreshPosition()
 {
   set_size_and_pos(this, m_friendlyName, COURTROOM_DESIGN_INI, m_app);
   set_text_alignment(this, m_friendlyName, COURTROOM_FONTS_INI, m_app);
 }
 
-void DROLineEdit::refreshCSS()
+void RPLineEdit::refreshCSS()
 {
   if (!set_stylesheet(this, "[" + m_friendlyName + "]", COURTROOM_STYLESHEETS_CSS, m_app))
   {

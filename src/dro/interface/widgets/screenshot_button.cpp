@@ -1,7 +1,6 @@
 #include "screenshot_button.h"
 #include "modules/theme/thememanager.h"
-#include "modules/managers/scene_manager.h"
-
+#include "dro/interface/courtroom_layout.h"
 #include "dro/system/audio.h"
 
 ScreenshotButton::ScreenshotButton(QWidget *parent, AOApplication *p_ao_app) : RPButton(parent)
@@ -20,5 +19,5 @@ void ScreenshotButton::UpdateDimensions()
 void ScreenshotButton::OnButtonClicked()
 {
   audio::effect::Play("screenshot");
-  SceneManager::get().ScreenshotViewport();
+  courtroom::viewport::screenshot();
 }

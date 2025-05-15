@@ -31,7 +31,7 @@ DrPlayerListEntry::DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app,
 
     this->move(p_x, p_y);
 
-    ui_showname = new AOLabel(this, ao_app);
+    ui_showname = new RPLabel(this, ao_app);
     ui_showname->move(resize_height, 7);
     ui_showname->resize(m_entrywidth-resize_height, 16);
     set_stylesheet(ui_showname, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
@@ -59,7 +59,7 @@ DrPlayerListEntry::DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app,
     if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
 
     //Prompt (For Blackouts / Look)
-    m_prompt = new AOLabel(this, ao_app);
+    m_prompt = new RPLabel(this, ao_app);
     m_prompt->move(5, 5);
     m_prompt->resize(m_entrywidth, resize_height);
     m_prompt->setWordWrap(true);

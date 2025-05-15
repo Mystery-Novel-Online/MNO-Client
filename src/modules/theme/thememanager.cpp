@@ -316,14 +316,14 @@ double ThemeManager::getViewporResize()
   return mViewportResize;
 }
 
-void ThemeManager::addComboBox(QString name, DROComboBox *comboBox)
+void ThemeManager::addComboBox(QString name, RPComboBox *comboBox)
 {
   mComboBoxWidgets[name] = comboBox;
 }
 
 void ThemeManager::refreshComboBox()
 {
-  for(DROComboBox* comboBox : mComboBoxWidgets)
+  for(RPComboBox* comboBox : mComboBoxWidgets)
   {
     comboBox->refreshPosition();
     comboBox->refreshCSS();

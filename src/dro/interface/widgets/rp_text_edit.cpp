@@ -4,14 +4,14 @@
 #include <QDebug>
 #include <QTextBlock>
 
-DRTextEdit::DRTextEdit(QWidget *parent)
+RPTextEdit::RPTextEdit(QWidget *parent)
     : QTextEdit(parent)
 {
   connect(this, SIGNAL(textChanged()), this, SLOT(on_text_changed()));
   connect(this, SIGNAL(text_alignment_changed(Qt::Alignment)), this, SLOT(on_text_changed()));
 }
 
-void DRTextEdit::set_outline(bool p_enabled, int outlineWidth, QColor outlineColor)
+void RPTextEdit::set_outline(bool p_enabled, int outlineWidth, QColor outlineColor)
 {
   if (has_outline == p_enabled)
     return;
@@ -24,14 +24,14 @@ void DRTextEdit::set_outline(bool p_enabled, int outlineWidth, QColor outlineCol
   setCurrentCharFormat(widget_format);
 }
 
-void DRTextEdit::set_auto_align(bool p_enabled)
+void RPTextEdit::set_auto_align(bool p_enabled)
 {
   if (is_auto_align == p_enabled)
     return;
   is_auto_align = p_enabled;
 }
 
-void DRTextEdit::set_text_alignment(Qt::Alignment p_align)
+void RPTextEdit::set_text_alignment(Qt::Alignment p_align)
 {
   if (m_text_align == p_align)
     return;
@@ -39,7 +39,7 @@ void DRTextEdit::set_text_alignment(Qt::Alignment p_align)
   Q_EMIT text_alignment_changed(m_text_align);
 }
 
-void DRTextEdit::realign_text()
+void RPTextEdit::realign_text()
 {
   if (m_status == Status::InProgress)
     return;
@@ -50,19 +50,19 @@ void DRTextEdit::realign_text()
   m_status = Status::Done;
 }
 
-Qt::Alignment DRTextEdit::get_text_alignment() const
+Qt::Alignment RPTextEdit::get_text_alignment() const
 {
   return m_text_align;
 }
 
-void DRTextEdit::on_text_changed()
+void RPTextEdit::on_text_changed()
 {
   if (!is_auto_align)
     return;
   realign_text();
 }
 
-void DRTextEdit::refresh_horizontal_alignment()
+void RPTextEdit::refresh_horizontal_alignment()
 {
   // This stores the number of blocks. We use blocks here as Qt makes its horizontal
   // alignment based on blocks (rather than apparent line breaks/places where words wrap).
@@ -85,7 +85,7 @@ void DRTextEdit::refresh_horizontal_alignment()
   setAlignment(m_text_align);
 }
 
-void DRTextEdit::refresh_vertical_alignment()
+void RPTextEdit::refresh_vertical_alignment()
 {
   // This stores the total height of the totality of the text saved.
   int new_document_height = document()->size().height();

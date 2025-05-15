@@ -1,4 +1,4 @@
-#include "aoblipplayer.h"
+#include "blip_player.h"
 
 #include "aoapplication.h"
 

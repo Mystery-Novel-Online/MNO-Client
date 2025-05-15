@@ -2,20 +2,15 @@
 #include "dro/interface/widgets/player_list_slot.h"
 #include "modules/theme/thememanager.h"
 #include "aoapplication.h"
-#include "aoblipplayer.h"
 #include "dro/system/debug/time_debugger.h"
 #include "dro/interface/widgets/rp_button.h"
 #include "aoconfig.h"
 #include "dro/interface/widgets/image_display.h"
-#include "aomusicplayer.h"
 #include "modules/managers/character_manager.h"
 #include "dro/interface/widgets/note_area.h"
 #include "dro/interface/widgets/note_picker.h"
-#include "aosfxplayer.h"
 #include "modules/managers/pair_manager.h"
-#include "aoshoutplayer.h"
-#include "aosystemplayer.h"
-#include "aotimer.h"
+#include "dro/interface/widgets/aotimer.h"
 #include "commondefs.h"
 #include "debug_functions.h"
 #include "dro/system/localization.h"
@@ -1058,7 +1053,11 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
     l_showname = m_SpeakerActor->GetShowname();
   }
 
-  const QString l_message = QString(p_chatmessage[CMMessage]).remove(QRegularExpression("(?<!\\\\)(\\{|\\})")).replace(QRegularExpression("\\\\(\\{|\\})"), "\\1");
+  QString l_message = QString(p_chatmessage[CMMessage]).remove(QRegularExpression("(?<!\\\\)(\\{|\\})")).replace(QRegularExpression("\\\\(\\{|\\})"), "\\1");
+  if(l_message.startsWith("<a>"))
+  {
+    l_message = l_message.mid(3);
+  }
   if (l_message_chr_id == SpectatorId)
   {
     append_system_text(l_showname, l_message);
@@ -1186,6 +1185,23 @@ void Courtroom::start_chatmessage()
 
   m_tick_timer->stop();
   m_chatmessage = m_pre_chatmessage;
+
+  m_appendMessage = m_chatmessage[CMMessage].startsWith("<a>");
+
+  if(m_appendMessage)
+  {
+    QString appendPrefix = ui_vp_message->toPlainText().right(1) == " " ? "" : " ";
+    m_chatmessage[CMMessage] = appendPrefix + m_chatmessage[CMMessage].mid(3);
+  }
+
+
+  int incomingSender = m_chatmessage[CMClientId].toInt();
+
+  if(m_messageSender != incomingSender)
+    m_appendMessage = false;
+
+  m_messageSender = incomingSender;
+
   m_game_state = GameState::Processing;
 
   handle_chatmessage();
@@ -1264,7 +1280,9 @@ void Courtroom::handle_chatmessage()
   ui_vp_effect->stop();
   ui_vp_effect->hide();
 
-  ui_vp_message->clear();
+  if(!m_appendMessage)
+    ui_vp_message->clear();
+
   ui_vp_chatbox->hide();
   ui_vp_showname->hide();
   ui_vp_showname_image->hide();
@@ -1919,7 +1937,8 @@ void Courtroom::realization_done()
 
 void Courtroom::setup_chat()
 {
-  ui_vp_message->clear();
+  if(!m_appendMessage)
+    ui_vp_message->clear();
 
   set_text_color();
   m_rainbow_step = 0;
@@ -2070,6 +2089,14 @@ void Courtroom::next_chat_letter()
     is_ignore_next_letter = false;
     ++m_tick_step;
     play_screenshake_anim();
+    next_chat_letter();
+    return;
+  }
+  else if (is_ignore_next_letter && f_character == 'n')
+  {
+    is_ignore_next_letter = false;
+    ++m_tick_step;
+    ui_vp_message->textCursor().insertText(QString('\n'), vp_message_format);
     next_chat_letter();
     return;
   }

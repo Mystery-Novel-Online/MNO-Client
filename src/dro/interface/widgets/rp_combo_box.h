@@ -6,11 +6,11 @@
 #include <QObject>
 #include <QWidget>
 
-class DROComboBox : public QComboBox
+class RPComboBox : public QComboBox
 {
   Q_OBJECT
 public:
-  DROComboBox(QWidget *parent, AOApplication *p_ao_app);
+  RPComboBox(QWidget *parent, AOApplication *p_ao_app);
 
   void setWidgetInfo(QString widgetName, QString legacyCSS, QString scene);
   void refreshPosition();

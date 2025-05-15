@@ -1,5 +1,5 @@
-#ifndef AOSHOUTPLAYER_H
-#define AOSHOUTPLAYER_H
+#ifndef SHOUT_PLAYER_H
+#define SHOUT_PLAYER_H
 
 #include "aoobject.h"
 
@@ -13,4 +13,4 @@ public:
   void play(QString character, QString shout);
 };
 
-#endif // AOSHOUTPLAYER_H
+#endif // SHOUT_PLAYER_H

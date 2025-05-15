@@ -66,16 +66,8 @@ void EmoteMenu::OnMenuRequested(QPoint p_point)
 
 void EmoteMenu::OnDoubleSizeTriggered()
 {
-  if(s_sizeDoubled)
-  {
-    s_sizeDoubled = false;
-  }
-  else
-  {
-    s_sizeDoubled = true;
-  }
-
-  AOApplication::getInstance()->get_courtroom()->construct_emote_page_layout();
+  s_sizeDoubled = s_sizeDoubled == false;
+  m_EmotionSelector->constructEmotes();
 }
 
 void EmoteMenu::OnRealtimeTriggered()

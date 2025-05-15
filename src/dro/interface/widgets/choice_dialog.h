@@ -36,7 +36,7 @@ private slots:
   void OnDeclineClicked();
 
 private:
-  DRTextEdit *m_choiceText = nullptr;
+  RPTextEdit *m_choiceText = nullptr;
   RPButton *m_acceptButton = nullptr;
   RPButton *m_declineButton = nullptr;
 

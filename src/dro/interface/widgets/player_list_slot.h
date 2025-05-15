@@ -21,8 +21,8 @@ public:
     void setMod(QString ipid, QString hdid);
     AOImageDisplay *pCharacterBorderDisplay = nullptr;
     AOImageDisplay *ui_user_image = nullptr;
-    AOLabel *ui_showname = nullptr;
-    AOLabel *m_prompt = nullptr;
+    RPLabel *ui_showname = nullptr;
+    RPLabel *m_prompt = nullptr;
 
     AOImageDisplay *pStatusDisplay = nullptr;
 

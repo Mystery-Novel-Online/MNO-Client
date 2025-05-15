@@ -37,7 +37,7 @@ private:
   int timestep_length;
 };
 
-class AOTimer : public DRTextEdit
+class AOTimer : public RPTextEdit
 {
   Q_OBJECT
 

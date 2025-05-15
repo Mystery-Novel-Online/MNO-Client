@@ -2,25 +2,25 @@
 #include "commondefs.h"
 #include "theme.h"
 
-DROComboBox::DROComboBox(QWidget *parent, AOApplication *p_ao_app)
+RPComboBox::RPComboBox(QWidget *parent, AOApplication *p_ao_app)
     : QComboBox(parent)
 {
   ao_app = p_ao_app;
 }
 
-void DROComboBox::setWidgetInfo(QString widgetName, QString legacyCSS, QString scene)
+void RPComboBox::setWidgetInfo(QString widgetName, QString legacyCSS, QString scene)
 {
   mLegacyCSSHeader = legacyCSS;
   mWidgetName = widgetName;
   mScene = scene;
 }
 
-void DROComboBox::refreshPosition()
+void RPComboBox::refreshPosition()
 {
   set_size_and_pos(this, mWidgetName, COURTROOM_DESIGN_INI, ao_app);
 }
 
-void DROComboBox::refreshCSS()
+void RPComboBox::refreshCSS()
 {
   if (!set_stylesheet(this, "[" + mWidgetName + "]", COURTROOM_STYLESHEETS_CSS, ao_app))
   {

@@ -1,4 +1,4 @@
-#include "aosfxplayer.h"
+#include "sfx_player.h"
 
 #include "aoapplication.h"
 #include "draudioengine.h"
