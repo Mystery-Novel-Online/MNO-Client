@@ -74,6 +74,12 @@ namespace ThemeScripting
       sol::table buttonsTable = s_themeScript.create_named_table("Button");
       buttonsTable.set_function("Create", &courtroom::buttons::create);
 
+      sol::table slidersTable = s_themeScript.create_named_table("Slider");
+      slidersTable.set_function("Create", &courtroom::sliders::create);
+      slidersTable.set_function("SetValue", &courtroom::sliders::setValue);
+      slidersTable.set_function("GetValue", &courtroom::sliders::getValue);
+
+
       sol::table stickerTable = s_themeScript.create_named_table("Sticker");
       stickerTable.set_function("Create", &courtroom::stickers::create);
 
@@ -93,7 +99,6 @@ namespace ThemeScripting
 
       //Out of Character
       sol::table chatlogTable = s_themeScript.create_named_table("PlayerChat");
-
       sol::table oocLog = s_themeScript.create_table();
       oocLog.set_function("Append", &courtroom::ooc::appendMessage);
       chatlogTable.set("Log", oocLog);

@@ -37,6 +37,11 @@ namespace courtroom
     void appendMessage(const char* sender, const char* message);
   }
 
+  namespace choice
+  {
+    //void notifyPair(const char* sender, const char* message);
+  }
+
   namespace stickers
   {
     void create(const std::string& name, const std::string& image, int x, int y, int width, int height);
@@ -49,6 +54,9 @@ namespace courtroom
 
   namespace sliders
   {
+    void create(const std::string& name, int x, int y, int width, int height, int min, int max);
+    int  getValue(const std::string& name);
+    void setValue(const std::string& name, int value);
     void setScale(int value);
     void setHorizontal(int value);
     void setVertical(int value);

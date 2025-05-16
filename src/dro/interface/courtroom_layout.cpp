@@ -9,39 +9,39 @@
 #include "dro/system/theme_scripting.h"
 
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
+static QHash<QString, QWidget *> s_TabWidgets = {};
+
 static QVector<DRStickerViewer *> s_CourtroomStickers = {};
 static QVector<RPButton *> s_CourtroomButtons = {};
-static QHash<QString, QWidget *> s_TabWidgets = {};
+static QVector<RPSlider *> s_CourtroomSliders = {};
+
+template <typename T>
+void cleanupWidgets(QVector<T*> &list)
+{
+  for (T *item : list)
+  {
+    auto it = s_CourtroomWidgets.begin();
+    while (it != s_CourtroomWidgets.end())
+    {
+      if (it.value() == item)
+        it = s_CourtroomWidgets.erase(it);
+      else
+        ++it;
+    }
+    delete item;
+  }
+  list.clear();
+}
+
 
 namespace courtroom
 {
 
   void cleanup()
   {
-    for (DRStickerViewer *sticker : s_CourtroomStickers)
-    {
-      auto it = s_CourtroomWidgets.begin();
-      while (it != s_CourtroomWidgets.end())
-      {
-        if (it.value() == sticker) it = s_CourtroomWidgets.erase(it);
-        else ++it;
-      }
-      delete sticker;
-    }
-
-    for (RPButton *button : s_CourtroomButtons)
-    {
-      auto it = s_CourtroomWidgets.begin();
-      while (it != s_CourtroomWidgets.end())
-      {
-        if (it.value() == button) it = s_CourtroomWidgets.erase(it);
-        else ++it;
-      }
-      delete button;
-    }
-
-    s_CourtroomButtons.clear();
-    s_CourtroomStickers.clear();
+    cleanupWidgets(s_CourtroomStickers);
+    cleanupWidgets(s_CourtroomButtons);
+    cleanupWidgets(s_CourtroomSliders);
   }
 
   void reload()
@@ -87,26 +87,66 @@ namespace courtroom
 
     void setScale(int scaleValue)
     {
-      QSlider *sliderWidget = nullptr;
-      sliderWidget = dynamic_cast<QSlider*>(s_CourtroomWidgets["scale_offset"]);
-      if(sliderWidget == nullptr) return;
-      sliderWidget->setValue(scaleValue);
+      setValue("scale_offset", scaleValue);
     }
 
     void setVertical(int verticalValue)
     {
-      QSlider *sliderWidget = nullptr;
-      sliderWidget = dynamic_cast<QSlider*>(s_CourtroomWidgets["vertical_offset"]);
-      if(sliderWidget == nullptr) return;
-      sliderWidget->setValue(verticalValue);
+      setValue("vertical_offset", verticalValue);
     }
 
     void setHorizontal(int horizontalValue)
     {
-      QSlider *sliderWidget = nullptr;
-      sliderWidget = dynamic_cast<QSlider*>(s_CourtroomWidgets["pair_offset"]);
-      if(sliderWidget == nullptr) return;
-      sliderWidget->setValue(horizontalValue);
+      setValue("pair_offset", horizontalValue);
+    }
+
+    void create(const std::string &name, int x, int y, int width, int height, int min, int max)
+    {
+      if(!s_CourtroomWidgets.contains("courtroom")) return;
+      const QString qName = QString::fromStdString(name);
+      QString widgetName = "slider_" + QString(qName);
+
+      RPSlider *slider = qobject_cast<RPSlider *>(s_CourtroomWidgets.value(widgetName));
+      if(!slider)
+      {
+        slider = new RPSlider(Qt::Orientation::Horizontal, s_CourtroomWidgets["courtroom"]);
+        s_CourtroomSliders.append(slider);
+        s_CourtroomWidgets.insert(widgetName, slider);
+        slider->raise();
+        slider->show();
+
+        QObject::connect(slider, &QAbstractSlider::valueChanged, [=](int value)
+        {
+          QString eventName = qName + "ValueChanged";
+          LuaBridge::LuaEventCall(eventName.toUtf8(), value);
+        });
+      }
+
+      float resizeFactor = ThemeManager::get().getResize();
+
+      int l_scaledWidth = static_cast<int>(width * resizeFactor);
+      int l_scaledHeight = static_cast<int>(height * resizeFactor);
+      int l_scaledX = static_cast<int>(x * resizeFactor);
+      int l_scaledY = static_cast<int>(y * resizeFactor);
+
+      slider->resize(l_scaledWidth, l_scaledHeight);
+      slider->move(l_scaledX, l_scaledY);
+      slider->setMinimum(min);
+      slider->setMaximum(max);
+
+    }
+
+    int getValue(const std::string &name)
+    {
+      if (auto *slider = qobject_cast<QSlider *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+        return slider->value();
+      return 0;
+    }
+
+    void setValue(const std::string &name, int value)
+    {
+      if (auto *slider = qobject_cast<QSlider *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+        slider->setValue(value);
     }
 
   }
