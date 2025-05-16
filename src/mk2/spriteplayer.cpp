@@ -364,32 +364,16 @@ void SpritePlayer::scale_current_frame()
         break;
 
       case StretchScaling:
-        l_image = l_image.scaled(m_size, Qt::IgnoreAspectRatio, m_transform);
+        l_image = l_image.scaled(m_size * m_scale, Qt::IgnoreAspectRatio, m_transform);
         break;
 
       case WidthScaling:
-        l_image = l_image.scaledToWidth(m_size.width(), m_transform);
+        l_image = l_image.scaledToWidth(m_size.width() * m_scale, m_transform);
         break;
 
       case HeightScaling:
-        l_image = l_image.scaledToHeight(m_size.height(), m_transform);
+        l_image = l_image.scaledToHeight(m_size.height() * m_scale, m_transform);
         break;
-    }
-
-    if (m_scale != 1.0)
-    {
-      if(l_image.isNull()) return;
-      QImage src = l_image.convertToFormat(QImage::Format_RGBA8888);
-      QSize newSize(static_cast<int>(l_image.width() * m_scale), static_cast<int>(l_image.height() * m_scale) );
-      QImage dst(newSize.width(), newSize.height(), QImage::Format_RGBA8888);
-
-      stbir_resize_uint8_linear(
-          src.constBits(), src.width(), src.height(), src.bytesPerLine(),
-          dst.bits(), newSize.width(), newSize.height(), dst.bytesPerLine(),
-          STBIR_BGRA
-          );
-
-      l_image = dst;
     }
 
   }
