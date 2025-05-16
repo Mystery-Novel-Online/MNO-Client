@@ -80,8 +80,23 @@ namespace ThemeScripting
       sol::table tabTable = s_themeScript.create_named_table("Tabs");
       tabTable.set_function("Change", &LuaFunctions::ChangeTab);
 
-      sol::table chatlogTable = s_themeScript.create_named_table("Chatlog");
-      chatlogTable.set_function("AppendOOC", &courtroom::ooc::appendMessage);
+      //In Character Functions
+      sol::table incharacterTable = s_themeScript.create_named_table("CharacterChat");
+
+      sol::table icFieldTable = s_themeScript.create_table();
+      icFieldTable.set_function("Focus", &courtroom::ic::focusMessageBox);
+      icFieldTable.set_function("GetText", &courtroom::ic::getMessageBoxContents);
+      icFieldTable.set_function("SetText", &courtroom::ic::setMessageBox);
+      icFieldTable.set_function("Append", &courtroom::ic::appendMessageBox);
+
+      incharacterTable.set("InputField", icFieldTable);
+
+      //Out of Character
+      sol::table chatlogTable = s_themeScript.create_named_table("PlayerChat");
+
+      sol::table oocLog = s_themeScript.create_table();
+      oocLog.set_function("Append", &courtroom::ooc::appendMessage);
+      chatlogTable.set("Log", oocLog);
 
       sol::table systemTable = s_themeScript.create_named_table("System");
       systemTable.set_function("Alert", &LuaFunctions::AlertUser);

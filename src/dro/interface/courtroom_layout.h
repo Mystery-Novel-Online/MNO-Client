@@ -19,6 +19,14 @@ namespace courtroom
     void deleteTab();
   }
 
+  namespace ic
+  {
+    void focusMessageBox();
+    std::string getMessageBoxContents();
+    void setMessageBox(const std::string& text);
+    void appendMessageBox(const std::string& text);
+  }
+
   namespace tabs
   {
     void deleteToggle(const QString& name);

@@ -8,6 +8,7 @@
 #include <QWheelEvent>
 #include "drtheme.h"
 #include "qmath.h"
+#include "dro/interface/courtroom_layout.h"
 
 EmotionSelector::EmotionSelector(QWidget *parent)
     : RPWidget{"emotes", parent}
@@ -238,7 +239,6 @@ void EmotionSelector::emoteClicked(int id)
   selectEmote(id);
 
   QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
-  QLineEdit* lineEditField = dynamic_cast<QLineEdit*>(ThemeManager::get().getWidget("ao2_ic_chat_message_field"));
   QListWidget* sfxList = dynamic_cast<QListWidget*>(ThemeManager::get().getWidget("sfx_list"));
   if (sfxList != nullptr && sfxList->count() != 0)
   {
@@ -249,8 +249,7 @@ void EmotionSelector::emoteClicked(int id)
   emotionChange(getSelectedEmote());
 
   if(emoteCombobox != nullptr) emoteCombobox->setCurrentIndex(getSelectedIndex());
-
-  if(lineEditField != nullptr) lineEditField->setFocus();
+  courtroom::ic::focusMessageBox();
 }
 
 void EmotionSelector::showEmoteTooltip(int id, QPoint pos)
