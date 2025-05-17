@@ -124,6 +124,11 @@ void GraphicsSpriteItem::setVerticalOffset(int t_offset)
   mVerticalVPOffset = -t_offset;
 }
 
+void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
+{
+  m_HorizontalOffset = t_offset;
+}
+
 void GraphicsSpriteItem::stop()
 {
   m_player->stop();
@@ -141,7 +146,7 @@ bool GraphicsSpriteItem::is_running() const
 
 QRectF GraphicsSpriteItem::boundingRect() const
 {
-  return QRectF(0, 0, m_player->get_size().width(), m_player->get_size().height());
+  return QRectF(0, 0, m_player->get_size().width() * 2, m_player->get_size().height() * 2);
 }
 
 void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
@@ -160,7 +165,7 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
     if (auto *l_scene = scene())
     {
       const QPointF l_center = l_scene->sceneRect().center() - m_player->get_scaled_bounding_rect().center();
-      l_horizontal_center.setX(l_center.x());
+      l_horizontal_center.setX(l_center.x() + m_HorizontalOffset);
       l_horizontal_center.setY((l_scene->sceneRect().height() - m_player->get_scaled_bounding_rect().height()) + mVerticalVPOffset);
     }
 

@@ -807,7 +807,7 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
     double l_CourtroomWidth = static_cast<double>(ui_viewport->width());
     double l_HalfCourtroomWidth = l_CourtroomWidth / 2.0;
     double offsetValue = (static_cast<double>(ui_slider_horizontal_axis->value()) / referenceWidth) * l_CourtroomWidth - l_HalfCourtroomWidth;
-    ui_vp_player_char->setPos(offsetValue, ui_vp_player_char->y());
+    ui_vp_player_char->setHorizontalOffset(offsetValue);
     ui_vp_player_char->start(targetScaling, playerScale);
 
   }
@@ -1377,7 +1377,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
   if(m_chatmessage[CMOffsetH].isEmpty())
   {
-    ui_vp_player_char->setPos(selfOffset, ui_vp_player_char->y());
+    ui_vp_player_char->setHorizontalOffset(selfOffset);
   }
   else
   {
@@ -1390,17 +1390,17 @@ void Courtroom::handle_chatmessage_2() // handles IC
     if(hOffset != 0)
     {
       double offsetValue = (static_cast<double>(hOffset) / referenceWidth) * l_CourtroomWidth - l_HalfCourtroomWidth;
-      ui_vp_player_char->setPos(offsetValue, ui_vp_player_char->y());
+      ui_vp_player_char->setHorizontalOffset(offsetValue);
     }
     else
     {
-      ui_vp_player_char->setPos(selfOffset, ui_vp_player_char->y());
+      ui_vp_player_char->setHorizontalOffset(selfOffset);
     };
 
   }
 
 
-  ui_vp_player_pair->setPos(otherOffset, ui_vp_player_pair->y());
+  ui_vp_player_pair->setHorizontalOffset(otherOffset);
 
   int verticalValue = m_chatmessage[CMOffsetV].trimmed().toInt();
 
@@ -1412,10 +1412,10 @@ void Courtroom::handle_chatmessage_2() // handles IC
   else
   {
     double verticalOffset = (double)verticalValue / (double)1000;
-    ui_vp_player_char->setVerticalOffset(544 * verticalOffset);
+    ui_vp_player_char->setVerticalOffset(verticalOffset * (double)ui_viewport->height());
   }
 
-  ui_vp_player_pair->setVerticalOffset(544 * PairManager::get().GetVerticalOffset());
+  ui_vp_player_pair->setVerticalOffset((double)ui_viewport->height() * PairManager::get().GetVerticalOffset());
   setup_screenshake_anim(selfOffset);
   qDebug() << "handle_chatmessage_2";
   ui_vp_player_char->stop();

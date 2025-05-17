@@ -77,6 +77,7 @@ public slots:
   void start(ScalingMode scaling = ScalingMode::AutomaticScaling, double scale = 1.0f);
   void restart();
   void setVerticalOffset(int t_offset);
+  void setHorizontalOffset(int t_offset);
   void stop();
 
 signals:
@@ -92,6 +93,7 @@ signals:
 private:
   QScopedPointer<SpritePlayer> m_player;
   int mVerticalVPOffset = 0;
+  int m_HorizontalOffset = 0;
 
 private slots:
   void notify_size();
