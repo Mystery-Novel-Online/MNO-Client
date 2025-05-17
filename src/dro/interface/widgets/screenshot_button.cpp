@@ -18,6 +18,6 @@ void ScreenshotButton::UpdateDimensions()
 
 void ScreenshotButton::OnButtonClicked()
 {
-  audio::effect::Play("screenshot");
+  audio::system::Play("screenshot");
   courtroom::viewport::screenshot();
 }
