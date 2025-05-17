@@ -21,7 +21,7 @@ public:
   void SetPairData(QString character, QString emote, int selfOffset, int pairOffset, bool flipped, int scale, int vertical);
   double GetOffsetSelf();
   double GetOffsetOther();
-  double GetVerticalOffset() {return (double)mVerticalOffset / (double)1000.0f; }
+  double GetVerticalOffset() {return (double)mVerticalOffset; }
   double GetScaleoffset() {return (double)mScaleOffset / (double)1000.0f; }
 
   QString GetEmoteName();

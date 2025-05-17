@@ -168,7 +168,7 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
       const QRectF  scaledRect = m_player->get_scaled_bounding_rect();
       const QPointF center = sceneRect.center() - scaledRect.center();
 
-      const float t = mVerticalVPOffset / sceneRect.height();
+      const float t = mVerticalVPOffset / 1000.0f;
       const float maxOffset = sceneRect.height() + scaledRect.height();
       const float result = t * (maxOffset / 2.0f);
 

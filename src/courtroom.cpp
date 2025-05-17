@@ -786,8 +786,7 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
   int speakerClientId = m_chatmessage[CMClientId].toInt(&intParse);
   if(speakerClientId == metadata::user::getClientId())
   {
-    double verticalOffset = (double)ui_slider_vertical_axis->value() / (double)1000;
-    ui_vp_player_char->setVerticalOffset(verticalOffset * (double)ui_viewport->height());
+    ui_vp_player_char->setVerticalOffset(ui_slider_vertical_axis->value());
 
     double playerScale = (double)ui_slider_scale->value() / 1000.0f;
     mk2::SpritePlayer::ScalingMode targetScaling = mk2::SpritePlayer::AutomaticScaling;
@@ -1414,11 +1413,10 @@ void Courtroom::handle_chatmessage_2() // handles IC
   }
   else
   {
-    double verticalOffset = (double)verticalValue / (double)1000;
-    ui_vp_player_char->setVerticalOffset(verticalOffset * (double)ui_viewport->height());
+    ui_vp_player_char->setVerticalOffset(verticalValue);
   }
 
-  ui_vp_player_pair->setVerticalOffset((double)ui_viewport->height() * PairManager::get().GetVerticalOffset());
+  ui_vp_player_pair->setVerticalOffset((int)PairManager::get().GetVerticalOffset());
   setup_screenshake_anim(selfOffset);
   qDebug() << "handle_chatmessage_2";
   ui_vp_player_char->stop();
