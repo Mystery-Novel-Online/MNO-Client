@@ -254,7 +254,7 @@ void Courtroom::SwitchCharacterByName(const char *characterName)
   }
 
   ao_app->send_server_packet(
-      DRPacket("CC", {QString::number(ao_app->get_client_id()), QString::number(serverCharacterId), "HDID"}));
+      DRPacket("CC", {QString::number(metadata::user::getClientId()), QString::number(serverCharacterId), "HDID"}));
 
 }
 
@@ -292,7 +292,7 @@ void Courtroom::char_clicked(int n_char)
   }
 
   ao_app->send_server_packet(
-      DRPacket("CC", {QString::number(ao_app->get_client_id()), QString::number(n_real_char), "HDID"}));
+      DRPacket("CC", {QString::number(metadata::user::getClientId()), QString::number(n_real_char), "HDID"}));
 }
 
 void Courtroom::char_mouse_entered(AOCharButton *p_caller)

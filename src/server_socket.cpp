@@ -119,7 +119,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (l_content.size() < 2)
       return;
 
-    m_client_id = l_content.at(0).toInt();
+    metadata::user::setClientId(l_content.at(0).toInt());
     m_server_software = l_content.at(1);
 
     send_server_packet(DRPacket("ID", {"DRO", get_version_string()}));

@@ -19,6 +19,7 @@
 #include <QVector>
 
 #include <modules/theme/thememanager.h>
+#include "dro/network/metadata/user_metadata.h"
 
 /*!
     We have to suffer through a lot of boilerplate code
@@ -792,6 +793,7 @@ void AOConfig::set_showname(QString p_value)
   if (d->showname == l_simplified_value && !l_simplified_value.isEmpty())
     return;
   d->showname = l_simplified_value;
+  dro::network::metadata::user::setShowname(p_value);
   d->invoke_signal("showname_changed", Q_ARG(QString, d->showname));
 }
 

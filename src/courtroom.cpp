@@ -784,7 +784,7 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
   if(!ServerMetadata::FeatureSupported("outfits")) return;
   bool intParse = false;
   int speakerClientId = m_chatmessage[CMClientId].toInt(&intParse);
-  if(speakerClientId == ao_app->get_client_id())
+  if(speakerClientId == metadata::user::getClientId())
   {
     double verticalOffset = (double)ui_slider_vertical_axis->value() / (double)1000;
     ui_vp_player_char->setVerticalOffset(verticalOffset * (double)ui_viewport->height());
@@ -1076,7 +1076,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   { // clear interface if required
     bool l_ok;
     const int l_client_id = p_chatmessage[CMClientId].toInt(&l_ok);
-    if (l_ok && l_client_id == ao_app->get_client_id())
+    if (l_ok && l_client_id == metadata::user::getClientId())
     {
       handle_acknowledged_ms();
     }
@@ -2329,8 +2329,6 @@ void Courtroom::handle_song(QStringList p_contents)
   }
 
 
-
-
 }
 
 void Courtroom::handle_wtce(QString p_wtce)
@@ -2949,7 +2947,7 @@ void Courtroom::on_back_to_lobby_clicked()
 
 void Courtroom::on_spectator_clicked()
 {
-  ao_app->send_server_packet(DRPacket("CC", {QString::number(ao_app->get_client_id()), "-1", "HDID"}));
+  ao_app->send_server_packet(DRPacket("CC", {QString::number(metadata::user::getClientId()), "-1", "HDID"}));
 }
 
 void Courtroom::OnCharRefreshClicked()
@@ -3005,7 +3003,7 @@ void Courtroom::OnCharRandomClicked()
   }
 
   ao_app->send_server_packet(
-      DRPacket("CC", {QString::number(ao_app->get_client_id()), QString::number(n_real_char), "HDID"}));
+      DRPacket("CC", {QString::number(metadata::user::getClientId()), QString::number(n_real_char), "HDID"}));
 }
 
 void Courtroom::SwitchRandomCharacter(QString list)
@@ -3051,7 +3049,7 @@ void Courtroom::SwitchRandomCharacter(QString list)
   }
 
   ao_app->send_server_packet(
-      DRPacket("CC", {QString::number(ao_app->get_client_id()), QString::number(n_real_char), "HDID"}));
+      DRPacket("CC", {QString::number(metadata::user::getClientId()), QString::number(n_real_char), "HDID"}));
 }
 
 void Courtroom::on_call_mod_clicked()

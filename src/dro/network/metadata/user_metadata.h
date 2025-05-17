@@ -16,6 +16,13 @@ namespace dro::network::metadata::user
   bool SetCharacterId(int id);
   bool ChangeCharacterId(int id);
   QString GetCharacterName();
+
+  void setShowname(QString showname);
+  std::string getIniswap();
+  std::string getShowname();
+
+  int getClientId();
+  void setClientId(int id);
 }
 
 

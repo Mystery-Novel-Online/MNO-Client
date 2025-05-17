@@ -65,6 +65,8 @@ namespace ThemeScripting
       dialogTable.set_function("SetText", &LuaFunctions::SetNotificationText);
 
       sol::table characterTable = s_themeScript.create_named_table("Character");
+      characterTable.set_function("GetShowname", &metadata::user::getShowname);
+      characterTable.set_function("GetIniswap", &metadata::user::getIniswap);
       characterTable.set_function("Exists", &FS::Checks::CharacterExists);
       characterTable.set_function("Switch", &LuaFunctions::SwitchCharacter);
       characterTable.set_function("SetScale", &courtroom::sliders::setScale);
@@ -86,6 +88,11 @@ namespace ThemeScripting
       sol::table tabTable = s_themeScript.create_named_table("Tabs");
       tabTable.set_function("Change", &LuaFunctions::ChangeTab);
 
+      sol::table serverTable = s_themeScript.create_named_table("Server");
+      tabTable.set_function("GetClientId", &metadata::user::getClientId);
+      tabTable.set_function("GetCharacterId", &metadata::user::GetCharacterId);
+      tabTable.set_function("GetCurrentCharacter", &metadata::user::GetCharacterName);
+
       //In Character Functions
       sol::table incharacterTable = s_themeScript.create_named_table("CharacterChat");
 
@@ -98,7 +105,9 @@ namespace ThemeScripting
       incharacterTable.set("InputField", icFieldTable);
 
       //Out of Character
-      sol::table chatlogTable = s_themeScript.create_named_table("PlayerChat");
+      sol::table chatlogTable = s_themeScript.create_named_table("OOC");
+      chatlogTable.set_function("GetName", &courtroom::ooc::getDisplayName);
+      chatlogTable.set_function("GetInputField", &courtroom::ooc::getInputFieldContents);
       sol::table oocLog = s_themeScript.create_table();
       oocLog.set_function("Append", &courtroom::ooc::appendMessage);
       chatlogTable.set("Log", oocLog);

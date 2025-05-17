@@ -93,16 +93,6 @@ AOApplication::~AOApplication()
   destruct_courtroom();
 }
 
-int AOApplication::get_client_id() const
-{
-  return m_client_id;
-}
-
-void AOApplication::set_client_id(int id)
-{
-  m_client_id = id;
-}
-
 void AOApplication::leave_server()
 {
   m_server_status = NotConnected;

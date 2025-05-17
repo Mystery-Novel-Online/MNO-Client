@@ -96,15 +96,11 @@ void JsonPacket::ProcessPairPacket(JSONReader& jsonReader)
   int pair_left = jsonReader.getIntValue("pair_left");
   int pair_right = jsonReader.getIntValue("pair_right");
 
-  if(pair_left == AOApplication::getInstance()->get_client_id())
-  {
-    int offset = jsonReader.getIntValue("offset_left");
-    PairManager::get().SetUserPair(pair_right, offset);
-  }
+  int localClientId = metadata::user::getClientId();
 
-  if(pair_right == AOApplication::getInstance()->get_client_id())
-  {
-    int offset = jsonReader.getIntValue("offset_right");
-    PairManager::get().SetUserPair(pair_left, offset);
-  }
+  if(pair_left == localClientId)
+    PairManager::get().SetUserPair(pair_right, jsonReader.getIntValue("offset_left"));
+
+  if(pair_right == localClientId)
+    PairManager::get().SetUserPair(pair_left, jsonReader.getIntValue("offset_right"));
 }

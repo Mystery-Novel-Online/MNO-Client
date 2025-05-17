@@ -39,9 +39,6 @@ public:
   AOApplication(int &argc, char **argv);
   ~AOApplication();
 
-  int get_client_id() const;
-  void set_client_id(int id);
-
   void leave_server();
   void connect_to_server(DRServerInfo server);
   void send_server_packet(DRPacket packet);
@@ -223,9 +220,6 @@ private:
   VersionStatus m_server_client_version_status = VersionStatus::Ok;
 
   ///////////////loading info///////////////////
-  // player number, it's hardly used but might be needed for some old servers
-  int m_client_id = 0;
-
   QString m_server_software;
 
   int m_character_count = 0;

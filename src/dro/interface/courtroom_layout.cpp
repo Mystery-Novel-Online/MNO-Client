@@ -297,6 +297,21 @@ namespace courtroom
       if(oocChatlog == nullptr) return;
       oocChatlog->append_chatmessage(name, message);
     }
+
+    std::string getInputFieldContents()
+    {
+      if (auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_message")))
+        return box->text().toStdString();
+      return "";
+    }
+
+    std::string getDisplayName()
+    {
+      if (auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_name")))
+        return box->text().toStdString();
+      return "";
+    }
+
   }
 
   namespace layout
