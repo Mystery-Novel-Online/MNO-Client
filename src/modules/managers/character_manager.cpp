@@ -299,7 +299,7 @@ int CharacterManager::GetFilteredId(QString name)
 
 int CharacterManager::GetAvaliablePersona()
 {
-  for(int i = 0; i < 25; i++)
+  for(int i = 0; i <= 25; i++)
   {
     QString personaName = QString("Persona" + QString::number(i));
     if(CharacterTaken.contains(personaName))

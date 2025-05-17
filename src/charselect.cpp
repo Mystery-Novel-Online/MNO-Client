@@ -246,6 +246,7 @@ void Courtroom::SwitchCharacterByName(const char *characterName)
   if(!CharacterManager::get().GetCharacterInServer(characterName))
   {
     serverCharacterId = CharacterManager::get().GetAvaliablePersona();
+    if(serverCharacterId == -1) return;
     ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(serverCharacterId), characterName);
   }
   else
@@ -284,6 +285,7 @@ void Courtroom::char_clicked(int n_char)
   {
     int filtered_char = n_real_char;
     n_real_char = CharacterManager::get().GetAvaliablePersona();
+    if(n_real_char == -1) return;
     ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(n_real_char), CharacterManager::get().GetFilteredCharaName(filtered_char));
   }
   else

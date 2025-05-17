@@ -2995,6 +2995,7 @@ void Courtroom::OnCharRandomClicked()
   if(!CharacterManager::get().GetCharacterInServer(selectedChar.name))
   {
     n_real_char = CharacterManager::get().GetAvaliablePersona();
+    if(n_real_char == -1) return;
     ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(n_real_char), selectedChar.name);
   }
   else
@@ -3041,6 +3042,7 @@ void Courtroom::SwitchRandomCharacter(QString list)
   if(!CharacterManager::get().GetCharacterInServer(selectedChar.name))
   {
     n_real_char = CharacterManager::get().GetAvaliablePersona();
+    if(n_real_char == -1) return;
     ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(n_real_char), selectedChar.name);
   }
   else
