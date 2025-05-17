@@ -361,6 +361,7 @@ void SpritePlayer::scale_current_frame()
       case NoScaling:
         [[fallthrough]];
       default:
+        l_image = l_image.scaledToWidth(l_image.width() * m_scale, m_transform);
         break;
 
       case StretchScaling:
