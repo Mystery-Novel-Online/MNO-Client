@@ -35,7 +35,9 @@ namespace courtroom
   namespace ooc
   {
     std::string getInputFieldContents();
+    void setInputFieldContents(const std::string& text);
     std::string getDisplayName();
+    void setDisplayName(const std::string& text);
     void appendMessage(const char* sender, const char* message);
   }
 

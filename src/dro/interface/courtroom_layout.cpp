@@ -305,11 +305,23 @@ namespace courtroom
       return "";
     }
 
+    void setInputFieldContents(const std::string &text)
+    {
+      if (auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_message")))
+        box->setText(QString::fromStdString(text));
+    }
+
     std::string getDisplayName()
     {
       if (auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_name")))
         return box->text().toStdString();
       return "";
+    }
+
+    void setDisplayName(const std::string &text)
+    {
+      if (auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_name")))
+        box->setText(QString::fromStdString(text));
     }
 
   }

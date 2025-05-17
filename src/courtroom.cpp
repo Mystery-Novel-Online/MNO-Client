@@ -3013,6 +3013,7 @@ void Courtroom::SwitchRandomCharacter(QString list)
   std::srand(std::time(nullptr));
 
   QVector<char_type> randomList = CharacterManager::get().GetCharList(list);
+  if(randomList.isEmpty()) return;
 
   int randomCount = randomList.length();
 

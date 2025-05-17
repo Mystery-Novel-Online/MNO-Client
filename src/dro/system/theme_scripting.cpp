@@ -28,31 +28,27 @@ namespace ThemeScripting
     if(FS::Checks::FileExists(filePath))
     {
 
-      sol::table audioTable = s_themeScript.create_named_table("Audio");
+      {
+        sol::table audio = s_themeScript.create_named_table("Audio");
 
-      sol::table systemAudioTable = s_themeScript.create_table();
-      systemAudioTable.set_function("Play", &audio::system::Play);
+        sol::table bgm = audio.create_named("BGM");
+        sol::table blip = audio.create_named("Blip");
+        sol::table sfx = audio.create_named("SFX");
+        sol::table system = audio.create_named("System");
+        system.set_function("Play", &audio::system::Play);
 
-      sol::table sfxTable = s_themeScript.create_table();
-      sfxTable.set_function("Play", &audio::effect::Play);
+        sfx.set_function("Play", &audio::effect::Play);
 
-      sol::table bgmTable = s_themeScript.create_table();
-      bgmTable.set_function("Play", &audio::bgm::Play);
-      bgmTable.set_function("Stop", &audio::bgm::Stop);
-      bgmTable.set_function("SetSpeed", &audio::bgm::SetSpeed);
-      bgmTable.set_function("SetPitch", &audio::bgm::SetPitch);
-      bgmTable.set_function("ToggleReverb", &audio::bgm::SetReverb);
+        bgm.set_function("Play", &audio::bgm::Play);
+        bgm.set_function("Stop", &audio::bgm::Stop);
+        bgm.set_function("SetSpeed", &audio::bgm::SetSpeed);
+        bgm.set_function("SetPitch", &audio::bgm::SetPitch);
+        bgm.set_function("ToggleReverb", &audio::bgm::SetReverb);
 
-      sol::table blipTable = s_themeScript.create_table();
-      blipTable.set_function("Tick", &audio::blip::Tick);
-      blipTable.set_function("SetGender", &audio::blip::SetGender);
-      blipTable.set_function("SetSound", &audio::blip::SetSound);
-
-      audioTable.set("BGM", bgmTable);
-      audioTable.set("Blip", blipTable);
-      audioTable.set("SFX", sfxTable);
-      audioTable.set("System", systemAudioTable);
-
+        blip.set_function("Tick", &audio::blip::Tick);
+        blip.set_function("SetGender", &audio::blip::SetGender);
+        blip.set_function("SetSound", &audio::blip::SetSound);
+      }
 
       sol::table widgetTable = s_themeScript.create_named_table("Widget");
       widgetTable.set_function("Move", &courtroom::layout::moveWidget);
@@ -93,24 +89,31 @@ namespace ThemeScripting
       tabTable.set_function("GetCharacterId", &metadata::user::GetCharacterId);
       tabTable.set_function("GetCurrentCharacter", &metadata::user::GetCharacterName);
 
-      //In Character Functions
-      sol::table incharacterTable = s_themeScript.create_named_table("CharacterChat");
+      {
+        sol::table ic = s_themeScript.create_named_table("IC");
+        sol::table inputField = ic.create_named("InputField");
 
-      sol::table icFieldTable = s_themeScript.create_table();
-      icFieldTable.set_function("Focus", &courtroom::ic::focusMessageBox);
-      icFieldTable.set_function("GetText", &courtroom::ic::getMessageBoxContents);
-      icFieldTable.set_function("SetText", &courtroom::ic::setMessageBox);
-      icFieldTable.set_function("Append", &courtroom::ic::appendMessageBox);
+        inputField.set_function("Focus", &courtroom::ic::focusMessageBox);
+        inputField.set_function("GetText", &courtroom::ic::getMessageBoxContents);
+        inputField.set_function("SetText", &courtroom::ic::setMessageBox);
+        inputField.set_function("Append", &courtroom::ic::appendMessageBox);
+      }
 
-      incharacterTable.set("InputField", icFieldTable);
+      {
+        sol::table ooc = s_themeScript.create_named_table("OOC");
 
-      //Out of Character
-      sol::table chatlogTable = s_themeScript.create_named_table("OOC");
-      chatlogTable.set_function("GetName", &courtroom::ooc::getDisplayName);
-      chatlogTable.set_function("GetInputField", &courtroom::ooc::getInputFieldContents);
-      sol::table oocLog = s_themeScript.create_table();
-      oocLog.set_function("Append", &courtroom::ooc::appendMessage);
-      chatlogTable.set("Log", oocLog);
+        sol::table log = ooc.create_named("Log");
+        sol::table name = ooc.create_named("Name");
+        sol::table inputField = ooc.create_named("InputField");
+
+        log.set_function("Append", &courtroom::ooc::appendMessage);
+
+        name.set_function("Get", &courtroom::ooc::getDisplayName);
+        name.set_function("Set", &courtroom::ooc::setDisplayName);
+
+        inputField.set_function("GetText", &courtroom::ooc::getInputFieldContents);
+        inputField.set_function("SetText", &courtroom::ooc::setInputFieldContents);
+      }
 
       sol::table systemTable = s_themeScript.create_named_table("System");
       systemTable.set_function("Alert", &LuaFunctions::AlertUser);
