@@ -9,6 +9,7 @@
 #include "courtroom.h"
 #include "qmath.h"
 #include <QTextStream>
+#include "dro/system/theme_scripting.h"
 
 #include <modules/theme/thememanager.h>
 
@@ -32,8 +33,8 @@ ActorData *CharacterManager::ReadCharacter(QString t_folder)
 
 ActorData *CharacterManager::SwitchCharacter(QString t_folder)
 {
+  LuaBridge::LuaEventCall("OnCharacterLoad", t_folder.toStdString());
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");
-
   QStringList l_OutfitNames = {"<All>"};
 
 

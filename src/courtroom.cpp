@@ -866,6 +866,8 @@ void Courtroom::on_ic_message_return_pressed()
       return;
   }
 
+  LuaBridge::LuaEventCall("OnICMessageSend");
+
   QStringList packet_contents;
 
   const DREmote &l_emote = ui_emotes->getSelectedEmote();
@@ -972,6 +974,7 @@ void Courtroom::on_ic_message_return_pressed()
 
 void Courtroom::handle_ic_message_length()
 {
+  LuaBridge::LuaEventCall("OnICTextChanged");
   const int l_length = ui_ic_chat_message_field->text().length();
   const int l_max_length = ui_ic_chat_message_field->maxLength();
   ui_ic_chat_message_counter->setText(QString::number(l_max_length - l_length));
@@ -2435,6 +2438,7 @@ void Courtroom::on_ooc_name_editing_finished()
 
 void Courtroom::on_ooc_message_return_pressed()
 {
+  LuaBridge::LuaEventCall("OnOOCMessageSend");
   const QString l_message = ui_ooc_chat_message->text();
 
   if (l_message.startsWith("/rainbow") && !is_rainbow_enabled)
@@ -2521,7 +2525,6 @@ void Courtroom::on_ooc_message_return_pressed()
       }
     }
   }
-
 
   send_ooc_packet(l_message);
   ui_ooc_chat_message->clear();
