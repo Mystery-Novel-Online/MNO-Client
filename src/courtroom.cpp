@@ -2193,9 +2193,15 @@ void Courtroom::next_chat_letter()
   QScrollBar *scroll = ui_vp_message->verticalScrollBar();
   scroll->setValue(scroll->maximum());
 
+
+
   if ((f_message.at(m_tick_step) != ' ' || ao_config->blank_blips_enabled()))
   {
-    if (m_blip_step % ao_config->blip_rate() == 0)
+
+    int overideBlipRate = audio::blip::getBlipRate();
+    overideBlipRate = overideBlipRate == -1 ? ao_config->blip_rate() : overideBlipRate;
+
+    if (m_blip_step % overideBlipRate == 0)
     {
       m_blip_step = 0;
       if(!LuaBridge::LuaEventCall("BlipTickEvent"))

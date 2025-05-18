@@ -39,6 +39,9 @@ namespace audio
 
   namespace blip
   {
+    int getBlipRate();
+    void setBlipRate(int rate);
+
     void Tick();
     void SetSound(const char *sound);
     void SetGender(const char *gender);

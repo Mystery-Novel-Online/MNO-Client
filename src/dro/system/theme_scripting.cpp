@@ -21,6 +21,7 @@ namespace ThemeScripting
 
   void InitializeLua(QString themePath)
   {
+    audio::blip::setBlipRate(-1);
     s_registeredFunctions.clear();
     s_themeScript = sol::state();
     s_themeScript.open_libraries(sol::lib::base, sol::lib::io, sol::lib::math, sol::lib::string, sol::lib::table);
@@ -46,6 +47,7 @@ namespace ThemeScripting
         bgm.set_function("ToggleReverb", &audio::bgm::SetReverb);
 
         blip.set_function("Tick", &audio::blip::Tick);
+        blip.set_function("SetRate", &audio::blip::setBlipRate);
         blip.set_function("SetGender", &audio::blip::SetGender);
         blip.set_function("SetSound", &audio::blip::SetSound);
       }

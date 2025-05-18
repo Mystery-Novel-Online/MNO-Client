@@ -9,6 +9,8 @@
 #include <QString>
 
 static AOBlipPlayer *s_blipPlayer;
+static int s_blipRateOverride = -1;
+
 static AOMusicPlayer *s_musicPlayer;
 static AOSfxPlayer *s_effectsPlayer;
 static AOShoutPlayer *s_shoutPlayer;
@@ -127,6 +129,17 @@ namespace audio
     {
       s_blipPlayer->set_blips(sound);
     }
+
+    int getBlipRate()
+    {
+      return s_blipRateOverride;
+    }
+
+    void setBlipRate(int rate)
+    {
+      s_blipRateOverride = rate;
+    }
+
   }
 
   namespace shout
