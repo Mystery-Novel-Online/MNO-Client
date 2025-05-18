@@ -10,6 +10,7 @@
 #include <QFileDialog>
 #include "aoapplication.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/interface/courtroom_layout.h"
 #include <QSlider>
 
 ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
@@ -90,6 +91,7 @@ void ButtonMaker::SetEmote(DREmote emote)
     {
       m_EmoteIndex = i;
       m_CharacterSprite->play_idle(m_Emotes.at(m_EmoteIndex).character, m_Emotes.at(m_EmoteIndex).dialog);
+      m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
       m_CharacterSprite->start(DRCharacterMovie::ScalingMode::WidthSmoothScaling, 1.0f);
       return;
     }
@@ -120,6 +122,7 @@ void ButtonMaker::SetCharacter(QString character)
   }
 
   m_CharacterSprite->play_idle(m_Emotes.at(m_EmoteIndex).character, m_Emotes.at(m_EmoteIndex).dialog);
+  m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
   m_CharacterSprite->start(DRCharacterMovie::ScalingMode::WidthSmoothScaling, 1.0f);
 }
 
@@ -199,6 +202,7 @@ void ButtonMaker::onGenerateClicked()
 
 
   m_CharacterSprite->play_idle(m_Emotes.at(m_EmoteIndex).character, m_Emotes.at(m_EmoteIndex).dialog);
+  m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
   m_CharacterSprite->start(DRCharacterMovie::ScalingMode::WidthSmoothScaling, 1.0f);
 }
 
