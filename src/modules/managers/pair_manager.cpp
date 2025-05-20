@@ -38,22 +38,18 @@ void PairManager::SetPairData(QString character, QString emote, int selfOffset, 
   mVerticalOffset = vertical;
 }
 
-double PairManager::GetOffsetSelf()
+int PairManager::GetOffsetSelf()
 {
-  double l_CourtroomWidth = static_cast<double>(ThemeManager::get().getWidget("viewport")->width());
-  double l_HalfCourtroomWidth = static_cast<double>(l_CourtroomWidth / 2);
-
-  return static_cast<double>(((double)mSelfOffset / l_CourtroomWidth) * l_CourtroomWidth - l_HalfCourtroomWidth);
-
-  //return ((double)mSelfOffset / 960) * 960 - 480;
+  int courtroomWidth = ThemeManager::get().getWidget("viewport")->width();
+  int halfWidth = courtroomWidth / 2;
+  return mSelfOffset - halfWidth;
 }
 
-double PairManager::GetOffsetOther()
+int PairManager::GetOffsetOther()
 {
-  double l_CourtroomWidth = static_cast<double>(ThemeManager::get().getWidget("viewport")->width());
-  double l_HalfCourtroomWidth = static_cast<double>(l_CourtroomWidth / 2);
-
-  return static_cast<double>(((double)mPairOffset / l_CourtroomWidth) * l_CourtroomWidth - l_HalfCourtroomWidth);
+  int courtroomWidth = ThemeManager::get().getWidget("viewport")->width();
+  int halfWidth = courtroomWidth / 2;
+  return mPairOffset - halfWidth;
 }
 
 QString PairManager::GetEmoteName()

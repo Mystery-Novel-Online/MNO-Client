@@ -76,6 +76,7 @@ namespace ThemeScripting
 
       sol::table slidersTable = s_themeScript.create_named_table("Slider");
       slidersTable.set_function("Create", &courtroom::sliders::create);
+      slidersTable.set_function("CreateVertical", &courtroom::sliders::createVertical);
       slidersTable.set_function("SetValue", &courtroom::sliders::setValue);
       slidersTable.set_function("GetValue", &courtroom::sliders::getValue);
 

@@ -149,6 +149,41 @@ namespace courtroom
         slider->setValue(value);
     }
 
+    void createVertical(const std::string &name, int x, int y, int width, int height, int min, int max)
+    {
+      if(!s_CourtroomWidgets.contains("courtroom")) return;
+      const QString qName = QString::fromStdString(name);
+      QString widgetName = "slider_" + QString(qName);
+
+      RPSlider *slider = qobject_cast<RPSlider *>(s_CourtroomWidgets.value(widgetName));
+      if(!slider)
+      {
+        slider = new RPSlider(Qt::Orientation::Vertical, s_CourtroomWidgets["courtroom"]);
+        s_CourtroomSliders.append(slider);
+        s_CourtroomWidgets.insert(widgetName, slider);
+        slider->raise();
+        slider->show();
+
+        QObject::connect(slider, &QAbstractSlider::valueChanged, [=](int value)
+                         {
+                           QString eventName = qName + "ValueChanged";
+                           LuaBridge::LuaEventCall(eventName.toUtf8(), value);
+                         });
+      }
+
+      float resizeFactor = ThemeManager::get().getResize();
+
+      int l_scaledWidth = static_cast<int>(width * resizeFactor);
+      int l_scaledHeight = static_cast<int>(height * resizeFactor);
+      int l_scaledX = static_cast<int>(x * resizeFactor);
+      int l_scaledY = static_cast<int>(y * resizeFactor);
+
+      slider->resize(l_scaledWidth, l_scaledHeight);
+      slider->move(l_scaledX, l_scaledY);
+      slider->setMinimum(min);
+      slider->setMaximum(max);
+    }
+
   }
 
   namespace buttons

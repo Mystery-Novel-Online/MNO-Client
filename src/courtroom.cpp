@@ -1366,11 +1366,8 @@ void Courtroom::objection_done()
 void Courtroom::handle_chatmessage_2() // handles IC
 {
 
-  double selfOffset = PairManager::get().GetOffsetSelf();
-  double otherOffset = PairManager::get().GetOffsetOther();
-
-
-
+  int selfOffset = PairManager::get().GetOffsetSelf();
+  int otherOffset = PairManager::get().GetOffsetOther();
 
   QString offsetTextbox = "left";
 
@@ -1407,14 +1404,11 @@ void Courtroom::handle_chatmessage_2() // handles IC
   int verticalValue = m_chatmessage[CMOffsetV].trimmed().toInt();
 
   qDebug() << verticalValue;
+
   if(m_chatmessage[CMOffsetV].isEmpty())
-  {
     ui_vp_player_char->setVerticalOffset(0);
-  }
   else
-  {
     ui_vp_player_char->setVerticalOffset(verticalValue);
-  }
 
   ui_vp_player_pair->setVerticalOffset((int)PairManager::get().GetVerticalOffset());
   setup_screenshake_anim(selfOffset);
@@ -1618,7 +1612,7 @@ void Courtroom::handle_chatmessage_3()
       {
         QStringList offset = ao_app->get_effect_offset(f_char, l_effect_index);
 
-        double selfOffset = PairManager::get().GetOffsetSelf();
+        int selfOffset = PairManager::get().GetOffsetSelf();
         if(ao_app->current_theme->getEffectPairOffset(l_effect_index)) ui_vp_effect->setPos(selfOffset, offset.at(1).toInt());
         else ui_vp_effect->setPos(0, offset.at(1).toInt());
 

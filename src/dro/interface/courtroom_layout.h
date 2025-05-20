@@ -59,6 +59,7 @@ namespace courtroom
   namespace sliders
   {
     void create(const std::string& name, int x, int y, int width, int height, int min, int max);
+    void createVertical(const std::string& name, int x, int y, int width, int height, int min, int max);
     int  getValue(const std::string& name);
     void setValue(const std::string& name, int value);
     void setScale(int value);
