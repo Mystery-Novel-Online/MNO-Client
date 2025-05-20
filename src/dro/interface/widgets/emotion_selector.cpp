@@ -72,9 +72,13 @@ void EmotionSelector::constructEmotes()
 
     f_emote->set_emote_number(n);
 
+    Courtroom *courtroom = static_cast<Courtroom*>(ThemeManager::get().getWidget("courtroom"));
     connect(f_emote, SIGNAL(emote_clicked(int)), this, SLOT(emoteClicked(int)));
-    connect(f_emote, SIGNAL(tooltip_requested(int, QPoint)), parent(), SLOT(show_emote_tooltip(int, QPoint)));
-    connect(f_emote, SIGNAL(mouse_left(int)), parent(), SLOT(hide_emote_tooltip(int)));
+    if(courtroom != nullptr)
+    {
+      connect(f_emote, SIGNAL(tooltip_requested(int, QPoint)), courtroom, SLOT(show_emote_tooltip(int, QPoint)));
+      connect(f_emote, SIGNAL(mouse_left(int)), courtroom, SLOT(hide_emote_tooltip(int)));
+    }
 
     ++x_mod_count;
 
