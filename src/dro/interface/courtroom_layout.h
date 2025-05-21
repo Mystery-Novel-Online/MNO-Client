@@ -29,6 +29,7 @@ namespace courtroom
 
   namespace tabs
   {
+    void cleanupToggles();
     void deleteToggle(const QString& name);
   }
 

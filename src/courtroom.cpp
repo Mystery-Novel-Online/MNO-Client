@@ -99,6 +99,8 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
 Courtroom::~Courtroom()
 {
   courtroom::cleanup();
+  courtroom::tabs::cleanupToggles();
+  ThemeManager::get().ResetWidgetLists();
   cleanup_preload_readers();
   ao_config->set_gamemode(nullptr);
   ao_config->set_timeofday(nullptr);

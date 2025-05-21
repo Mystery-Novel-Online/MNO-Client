@@ -286,6 +286,15 @@ namespace courtroom
       }
     }
 
+    void cleanupToggles()
+    {
+      for(QString toggle : s_TabWidgets.keys())
+      {
+        delete s_TabWidgets[toggle];
+        s_TabWidgets.remove(toggle);
+      }
+    }
+
   }
 
   namespace ic
