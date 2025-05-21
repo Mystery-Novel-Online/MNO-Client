@@ -1380,16 +1380,13 @@ void Courtroom::handle_chatmessage_2() // handles IC
   }
   else
   {
-    constexpr double referenceWidth = 960.0;
-
-    double l_CourtroomWidth = static_cast<double>(ui_viewport->width());
-    double l_HalfCourtroomWidth = l_CourtroomWidth / 2.0;
     int hOffset = m_chatmessage[CMOffsetH].toInt();
 
     if(hOffset != 0)
     {
-      double offsetValue = (static_cast<double>(hOffset) / referenceWidth) * l_CourtroomWidth - l_HalfCourtroomWidth;
-      ui_vp_player_char->setHorizontalOffset(offsetValue);
+      int courtroomWidth = ui_viewport->width();
+      int halfWidth = courtroomWidth / 2;
+      ui_vp_player_char->setHorizontalOffset(hOffset - halfWidth);
     }
     else
     {
@@ -1402,8 +1399,6 @@ void Courtroom::handle_chatmessage_2() // handles IC
   ui_vp_player_pair->setHorizontalOffset(otherOffset);
 
   int verticalValue = m_chatmessage[CMOffsetV].trimmed().toInt();
-
-  qDebug() << verticalValue;
 
   if(m_chatmessage[CMOffsetV].isEmpty())
     ui_vp_player_char->setVerticalOffset(0);
