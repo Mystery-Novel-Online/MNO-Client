@@ -70,6 +70,7 @@ namespace courtroom
 
   namespace viewport
   {
+    void update();
     void screenshot();
   }
 

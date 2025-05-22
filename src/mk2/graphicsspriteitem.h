@@ -24,6 +24,7 @@
 
 #include <QGraphicsObject>
 #include <QObject>
+#include "dro/animation/keyframe_sequence.h"
 
 namespace mk2
 {
@@ -92,6 +93,7 @@ signals:
 
 private:
   QScopedPointer<SpritePlayer> m_player;
+  KeyframeSequence m_KeyframeSequence;
   int mVerticalVPOffset = 0;
   int m_HorizontalOffset = 0;
 

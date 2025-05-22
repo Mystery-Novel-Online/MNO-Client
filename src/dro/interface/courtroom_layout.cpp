@@ -439,6 +439,16 @@ namespace courtroom
           qWarning("Failed to save the screenshot.");
       }
     }
+
+    void update()
+    {
+      DRGraphicsView *viewport = dynamic_cast<DRGraphicsView*>(s_CourtroomWidgets["viewport"]);
+      if(viewport != nullptr)
+      {
+        viewport->scene()->update();
+      }
+    }
+
   }
 }
 

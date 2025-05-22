@@ -12,6 +12,8 @@ INCLUDEPATH += $$PWD/include $$PWD/src $$PWD/3rd $$PWD/3rd/lua
 DEPENDPATH += $$PWD/include $$PWD/src $$PWD/3rd
 
 HEADERS += \
+  src/dro/animation/keyframe_channel.h \
+  src/dro/animation/keyframe_sequence.h \
   src/dro/fs/fs_mounting.h \
   src/dro/fs/fs_reading.h \
   src/dro/fs/fs_writing.h \
@@ -50,6 +52,7 @@ HEADERS += \
   src/dro/network/metadata/user_metadata.h \
   src/dro/network/metadata/server_metadata.h \
   src/dro/network/metadata/tracklist_metadata.h \
+  src/dro/system/animation.h \
   src/dro/system/audio.h \
   src/dro/system/audio/blip_player.h \
   src/dro/system/audio/music_player.h \
@@ -128,6 +131,8 @@ HEADERS += \
   src/version.h
 
 SOURCES += \
+  src/dro/animation/keyframe_channel.cpp \
+  src/dro/animation/keyframe_sequence.cpp \
   src/dro/fs/fs_mounting.cpp \
   src/dro/fs/fs_reading.cpp \
   src/dro/fs/fs_writing.cpp \
@@ -166,6 +171,7 @@ SOURCES += \
   src/dro/network/metadata/user_metadata.cpp \
   src/dro/network/metadata/server_metadata.cpp \
   src/dro/network/metadata/tracklist_metadata.cpp \
+  src/dro/system/animation.cpp \
   src/dro/system/audio.cpp \
   src/dro/system/audio/blip_player.cpp \
   src/dro/system/audio/music_player.cpp \

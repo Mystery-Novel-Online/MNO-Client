@@ -21,6 +21,7 @@
 
 #include <QGraphicsScene>
 #include <QPainter>
+#include <QVector3D>
 
 #include <functional>
 
@@ -127,6 +128,12 @@ void GraphicsSpriteItem::setVerticalOffset(int t_offset)
 void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
 {
   m_HorizontalOffset = t_offset;
+  m_KeyframeSequence.Cleanup();
+  auto positionChannel = std::make_unique<KeyframeChannel<QVector3D>>();
+  positionChannel->AddKeyframe(0.0f, {0.0f, 0.0f, 10.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+  positionChannel->AddKeyframe(1000.0f, {300.0f, 200.0f, 2.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+
+  m_KeyframeSequence.AddChannel("position", std::move(positionChannel));
 }
 
 void GraphicsSpriteItem::stop()
@@ -172,8 +179,17 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
       const float maxOffset = sceneRect.height() + scaledRect.height();
       const float result = t * (maxOffset / 2.0f);
 
-      l_horizontal_center.setX(center.x() + m_HorizontalOffset);
-      l_horizontal_center.setY(center.y() + result);
+
+      QVector3D animationVector;
+      std::unordered_map<std::string, QVariant> evaluatedValues;
+      m_KeyframeSequence.Evaluate(evaluatedValues);
+      if (evaluatedValues.find("position") != evaluatedValues.end())
+      {
+        animationVector = evaluatedValues["position"].value<QVector3D>();
+      }
+
+      l_horizontal_center.setX(center.x() + m_HorizontalOffset + animationVector.x());
+      l_horizontal_center.setY(center.y() + result + animationVector.y());
     }
 
     painter->drawImage(l_horizontal_center, m_player->get_current_frame());
