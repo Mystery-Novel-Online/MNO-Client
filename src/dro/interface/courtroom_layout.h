@@ -68,6 +68,12 @@ namespace courtroom
     void setVertical(int value);
   }
 
+  namespace lists
+  {
+    void setAnimations(const QStringList& animations);
+    std::string getAnimation();
+  }
+
   namespace viewport
   {
     void update();

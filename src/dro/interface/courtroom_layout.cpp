@@ -3,6 +3,7 @@
 #include "dro/interface/widgets/sticker_viewer.h"
 #include <aoapplication.h>
 #include "dro/interface/widgets/chat_log.h"
+#include <QListWidget>
 #include <QString>
 #include <courtroom.h>
 #include "modules/theme/thememanager.h"
@@ -182,6 +183,31 @@ namespace courtroom
       slider->move(l_scaledX, l_scaledY);
       slider->setMinimum(min);
       slider->setMaximum(max);
+    }
+
+  }
+
+  namespace lists
+  {
+    void setAnimations(const QStringList &animations)
+    {
+      if (auto *list = qobject_cast<QListWidget *>(s_CourtroomWidgets.value("chara_animations")))
+      {
+        list->clear();
+        list->addItems(animations);
+      }
+    }
+
+    std::string getAnimation()
+    {
+      if (auto *list = qobject_cast<QListWidget *>(s_CourtroomWidgets.value("chara_animations")))
+      {
+        if(list->currentItem() != nullptr)
+        {
+          return list->currentItem()->text().toStdString();
+        }
+      }
+      return "";
     }
 
   }
@@ -450,6 +476,8 @@ namespace courtroom
     }
 
   }
+
+
 }
 
 

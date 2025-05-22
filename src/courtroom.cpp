@@ -970,6 +970,12 @@ void Courtroom::on_ic_message_return_pressed()
     }
   }
 
+
+  if(ServerMetadata::FeatureSupported("sequence"))
+  {
+    packet_contents.append(QString::fromStdString(courtroom::lists::getAnimation()));
+  }
+
   ao_app->send_server_packet(DRPacket("MS", packet_contents));
 }
 
@@ -1397,7 +1403,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
   }
 
-
+  ui_vp_player_char->setCharacterAnimation(m_chatmessage[CMAnimSequence]);
   ui_vp_player_pair->setHorizontalOffset(otherOffset);
 
   int verticalValue = m_chatmessage[CMOffsetV].trimmed().toInt();

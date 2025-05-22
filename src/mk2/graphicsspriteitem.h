@@ -79,6 +79,7 @@ public slots:
   void restart();
   void setVerticalOffset(int t_offset);
   void setHorizontalOffset(int t_offset);
+  void setCharacterAnimation(QString name);
   void stop();
 
 signals:

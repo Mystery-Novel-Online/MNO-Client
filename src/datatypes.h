@@ -302,7 +302,8 @@ enum ChatMessage : int32_t
   CMClientId,
   CMOffsetH,
   CMOffsetV,
-  CMOffsetS
+  CMOffsetS,
+  CMAnimSequence
 };
 
 enum EmoteMod

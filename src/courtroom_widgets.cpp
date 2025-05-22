@@ -198,6 +198,8 @@ void Courtroom::create_widgets()
   ui_music_search->setFrame(false);
   p_MenuBGM = new BGMMenu(this);
 
+  animList = new QListWidget(this);
+
   ui_sfx_list = new QListWidget(this);
   ui_sfx_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
@@ -692,7 +694,8 @@ void Courtroom::reset_widget_names()
       {"viewport_transition", SceneManager::get().GetTransition()},
       {"viewport_overlay", w_ViewportOverlay},
       {"outfit_selector", wOutfitDropdown},
-      {"screenshot", p_ScreenshotBtn}
+      {"screenshot", p_ScreenshotBtn},
+      {"chara_animations", animList}
   };
 
     courtroom::layout::setWidgetList(widget_names);
@@ -997,6 +1000,8 @@ void Courtroom::set_widgets()
   }
 
   set_size_and_pos(ui_sfx_list, "sfx_list", COURTROOM_DESIGN_INI, ao_app);
+  set_size_and_pos(animList, "chara_animations", COURTROOM_DESIGN_INI, ao_app);
+
 
 
   set_size_and_pos(ui_ic_chat_message, "ao2_ic_chat_message", COURTROOM_DESIGN_INI, ao_app);
@@ -1709,6 +1714,7 @@ void Courtroom::set_fonts()
   ui_ooc_chatlog->reset_message_format();
 
   set_font(ui_music_list, "music_list", COURTROOM_FONTS_INI, ao_app);
+  set_font(animList, "chara_animations", COURTROOM_FONTS_INI, ao_app);
   set_font(ui_area_list, "area_list", COURTROOM_FONTS_INI, ao_app);
   set_font(ui_sfx_list, "sfx_list", COURTROOM_FONTS_INI, ao_app);
   set_drtextedit_font(ui_vp_music_name, "music_name", COURTROOM_FONTS_INI, ao_app);

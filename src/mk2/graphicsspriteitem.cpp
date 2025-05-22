@@ -26,6 +26,8 @@
 #include <functional>
 
 #include <modules/managers/scene_manager.h>
+#include "dro/param/animation_reader.h"
+#include "dro/interface/courtroom_layout.h"
 
 using namespace mk2;
 
@@ -128,12 +130,11 @@ void GraphicsSpriteItem::setVerticalOffset(int t_offset)
 void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
 {
   m_HorizontalOffset = t_offset;
-  m_KeyframeSequence.Cleanup();
-  auto positionChannel = std::make_unique<KeyframeChannel<QVector3D>>();
-  positionChannel->AddKeyframe(0.0f, {0.0f, 0.0f, 10.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
-  positionChannel->AddKeyframe(1000.0f, {300.0f, 200.0f, 2.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+}
 
-  m_KeyframeSequence.AddChannel("position", std::move(positionChannel));
+void GraphicsSpriteItem::setCharacterAnimation(QString name)
+{
+  AnimationReader(name, m_KeyframeSequence);
 }
 
 void GraphicsSpriteItem::stop()

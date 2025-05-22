@@ -52,6 +52,7 @@ HEADERS += \
   src/dro/network/metadata/user_metadata.h \
   src/dro/network/metadata/server_metadata.h \
   src/dro/network/metadata/tracklist_metadata.h \
+  src/dro/param/animation_reader.h \
   src/dro/system/animation.h \
   src/dro/system/audio.h \
   src/dro/system/audio/blip_player.h \
@@ -171,6 +172,7 @@ SOURCES += \
   src/dro/network/metadata/user_metadata.cpp \
   src/dro/network/metadata/server_metadata.cpp \
   src/dro/network/metadata/tracklist_metadata.cpp \
+  src/dro/param/animation_reader.cpp \
   src/dro/system/animation.cpp \
   src/dro/system/audio.cpp \
   src/dro/system/audio/blip_player.cpp \

@@ -10,6 +10,7 @@
 #include "qmath.h"
 #include <QTextStream>
 #include "dro/system/theme_scripting.h"
+#include "dro/interface/courtroom_layout.h"
 
 #include <modules/theme/thememanager.h>
 
@@ -33,10 +34,10 @@ ActorData *CharacterManager::ReadCharacter(QString t_folder)
 
 ActorData *CharacterManager::SwitchCharacter(QString t_folder)
 {
+  courtroom::lists::setAnimations({"None", "tinyhop"});
   LuaBridge::LuaEventCall("OnCharacterLoad", t_folder.toStdString());
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");
   QStringList l_OutfitNames = {"<All>"};
-
 
   if(FS::Checks::FileExists(l_jsonPath))
   {
@@ -51,6 +52,8 @@ ActorData *CharacterManager::SwitchCharacter(QString t_folder)
   p_SelectedCharacter = new LegacyActorReader();
   p_SelectedCharacter->LoadActor(t_folder);
   setOutfitList(l_OutfitNames);
+
+
   return p_SelectedCharacter;
 }
 

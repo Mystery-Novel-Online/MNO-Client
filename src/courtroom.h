@@ -530,6 +530,7 @@ private:
 
   AreaMenu *p_AreaContextMenu = nullptr;
 
+  QListWidget *animList = nullptr;
   QListWidget *ui_sfx_list = nullptr;
   QVector<DRSfx> m_sfx_list;
   const QString m_sfx_default_file = "__DEFAULT__";
