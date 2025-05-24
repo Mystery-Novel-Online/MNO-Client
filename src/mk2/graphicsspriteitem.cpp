@@ -181,14 +181,19 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
       const float result = t * (maxOffset / 2.0f);
 
 
-      QVector3D animationVector;
       std::unordered_map<std::string, QVariant> evaluatedValues;
       m_KeyframeSequence.Evaluate(evaluatedValues);
-      if (evaluatedValues.find("position") != evaluatedValues.end())
-      {
-        animationVector = evaluatedValues["position"].value<QVector3D>();
-      }
 
+      QVector3D animationVector;
+      float alpha = 1.0f;
+
+      if (evaluatedValues.find("alpha") != evaluatedValues.end())
+        alpha = evaluatedValues["alpha"].toFloat();
+
+      if (evaluatedValues.find("position") != evaluatedValues.end())
+        animationVector = evaluatedValues["position"].value<QVector3D>();
+
+      painter->setOpacity(alpha);
       l_horizontal_center.setX(center.x() + m_HorizontalOffset + animationVector.x());
       l_horizontal_center.setY(center.y() + result + animationVector.y());
     }

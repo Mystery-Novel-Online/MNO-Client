@@ -44,6 +44,26 @@ AnimationReader::AnimationReader(QString name, KeyframeSequence &sequence)
 
       sequence.AddChannel(channelName.toStdString(), std::move(frameChannel));
     }
+    else if(channelType == "float")
+    {
+      auto frameChannel = std::make_unique<KeyframeChannel<float>>();
+
+      for(QJsonValueRef frameValueRef : getArrayValue("frames"))
+      {
+        const QJsonObject frameObject = frameValueRef.toObject();
+        SetTargetObject(frameObject);
+
+        int frameTime = getIntValue("time");
+        float frameValue = getDoubleValue("value");
+        KeyframeCurve frameCurveIn = KeyframeCurve::CurveEase;
+        KeyframeCurve frameCurveOut = KeyframeCurve::CurveEase;
+
+
+        frameChannel->AddKeyframe(frameTime, frameValue, frameCurveIn, frameCurveOut);
+      }
+
+      sequence.AddChannel(channelName.toStdString(), std::move(frameChannel));
+    }
 
   }
 
