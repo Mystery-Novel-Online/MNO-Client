@@ -203,6 +203,7 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   if (!l_image.isNull())
   {
     double scale = m_player->getScaledAmount();
+    float alpha = 1.0f;
 
     painter->save();
     painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -223,7 +224,6 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
       m_KeyframeSequence.Evaluate(evaluatedValues);
 
       QVector3D animationVector;
-      float alpha = 1.0f;
 
       if (evaluatedValues.find("alpha") != evaluatedValues.end())
         alpha = evaluatedValues["alpha"].toFloat();
@@ -236,38 +236,40 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
       l_horizontal_center.setY(center.y() + result + animationVector.y());
     }
 
-    if (!m_spriteLayersBelow.isEmpty())
+    if(alpha != 0.0f)
     {
-      for (SpriteLayer *layer : m_spriteLayersBelow)
+      if (!m_spriteLayersBelow.isEmpty())
       {
-        layer->start(scale);
-        if (!layer->spritePlayer.get_current_frame().isNull())
+        for (SpriteLayer *layer : m_spriteLayersBelow)
         {
-          QRectF drawRect = layer->targetRect;
-          drawRect = QRectF(drawRect.left() * scale, drawRect.top() * scale, drawRect.width() * scale, drawRect.height() * scale );
-          drawRect.moveTopLeft(drawRect.topLeft() + l_horizontal_center);
-          painter->drawImage(drawRect, layer->spritePlayer.get_current_frame());
+          layer->start(scale);
+          if (!layer->spritePlayer.get_current_frame().isNull())
+          {
+            QRectF drawRect = layer->targetRect;
+            drawRect = QRectF(drawRect.left() * scale, drawRect.top() * scale, drawRect.width() * scale, drawRect.height() * scale );
+            drawRect.moveTopLeft(drawRect.topLeft() + l_horizontal_center);
+            painter->drawImage(drawRect, layer->spritePlayer.get_current_frame());
+          }
+        }
+      }
+
+      painter->drawImage(l_horizontal_center, l_image);
+
+      if (!m_spriteLayers.isEmpty())
+      {
+        for (SpriteLayer *layer : m_spriteLayers)
+        {
+          layer->start(scale);
+          if (!layer->spritePlayer.get_current_frame().isNull())
+          {
+            QRectF drawRect = layer->targetRect;
+            drawRect = QRectF(drawRect.left() * scale, drawRect.top() * scale, drawRect.width() * scale, drawRect.height() * scale );
+            drawRect.moveTopLeft(drawRect.topLeft() + l_horizontal_center);
+            painter->drawImage(drawRect, layer->spritePlayer.get_current_frame());
+          }
         }
       }
     }
-
-    painter->drawImage(l_horizontal_center, l_image);
-
-    if (!m_spriteLayers.isEmpty())
-    {
-      for (SpriteLayer *layer : m_spriteLayers)
-      {
-        layer->start(scale);
-        if (!layer->spritePlayer.get_current_frame().isNull())
-        {
-          QRectF drawRect = layer->targetRect;
-          drawRect = QRectF(drawRect.left() * scale, drawRect.top() * scale, drawRect.width() * scale, drawRect.height() * scale );
-          drawRect.moveTopLeft(drawRect.topLeft() + l_horizontal_center);
-          painter->drawImage(drawRect, layer->spritePlayer.get_current_frame());
-        }
-      }
-    }
-
 
     painter->restore();
   }
