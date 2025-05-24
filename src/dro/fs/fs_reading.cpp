@@ -123,5 +123,47 @@ QString FindDirectory(const QString &directoryPath, bool allowPackages, bool abs
   return "base/" + directoryPath;
 }
 
+QStringList GetFileList(const QString &directoryPath, const QString& extensionFilter, bool includePackages, bool includeExtension)
+{
+  QStringList returnValues = {};
+
+  QDir targetDirectory("base/" + directoryPath);
+  QStringList fileList = targetDirectory.entryList(QStringList() << "*." + extensionFilter, QDir::Files);
+
+  for (const QString &fileName : fileList)
+  {
+    if (includeExtension)
+      returnValues.append(fileName);
+    else
+      returnValues.append(fileName.section('.', 0, 0)); // Removes extension
+  }
+
+  if(includePackages)
+  {
+    QVector<QString> searchArchives = Packages::CachedNames();
+  }
+
+  return returnValues;
+}
+
+QStringList GetDirectoryList(const QString &directoryPath, bool includePackages)
+{
+  QStringList returnValues = {};
+
+  QDir targetDirectory("base/" + directoryPath);
+  QStringList subDirectories = targetDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+  for (const QString &directoryName : subDirectories)
+  {
+    returnValues.append(directoryName);
+  }
+
+  if(includePackages)
+  {
+    QVector<QString> searchArchives = Packages::CachedNames();
+  }
+
+  return returnValues;
+}
+
 
 }

@@ -1,6 +1,9 @@
 #ifndef FS_READING_H
 #define FS_READING_H
 
+#include <QString>
+
+
 class QString;
 class QStringList;
 
@@ -19,6 +22,8 @@ namespace FS::Paths
   QString Package(const QString& packageName);
   QString FindFile(const QString& filePath, bool allowPackages = true);
   QString FindDirectory(const QString& directoryPath, bool allowPackages = true, bool absolutePath = true);
+  QStringList GetDirectoryList(const QString& directoryPath, bool includePackages = true);
+  QStringList GetFileList(const QString& directoryPath, const QString& extensionFilter = "", bool includePackages = true, bool includeExtension = false);
 }
 
 namespace FS::Formats
