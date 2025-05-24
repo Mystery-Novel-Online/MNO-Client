@@ -58,6 +58,7 @@ public:
   SpritePlayer::ScalingMode get_scaling_mode() const;
 
   QSize get_size() const;
+  double getScaledAmount() const;
 
   QString get_file_name() const;
 
@@ -109,6 +110,7 @@ private:
   SpriteReader::ptr m_reader;
   SpriteFrame m_current_frame;
   QImage m_scaled_current_frame;
+  double m_overallScale = 1.0;
   double m_scale = 1.0;
   SpritePlayer::ScalingMode m_scaling_mode;
   SpritePlayer::ScalingMode m_resolved_scaling_mode;

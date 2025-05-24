@@ -89,6 +89,11 @@ QSize SpritePlayer::get_size() const
   return m_size;
 }
 
+double SpritePlayer::getScaledAmount() const
+{
+  return m_overallScale;
+}
+
 void SpritePlayer::set_file_name(QString p_file_name)
 {
   if (!p_file_name.isEmpty() && p_file_name == get_file_name())
@@ -353,6 +358,7 @@ void SpritePlayer::fetch_next_frame()
 void SpritePlayer::scale_current_frame()
 {
   QImage l_image = m_current_frame.image;
+  QSizeF originalSize = l_image.size();
 
   if (!l_image.isNull())
   {
@@ -376,7 +382,7 @@ void SpritePlayer::scale_current_frame()
         l_image = l_image.scaledToHeight(m_size.height() * m_scale, m_transform);
         break;
     }
-
+    m_overallScale = static_cast<double>(l_image.width()) / originalSize.width();
   }
 
   // slow operation...

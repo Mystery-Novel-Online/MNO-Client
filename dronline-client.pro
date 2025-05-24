@@ -62,6 +62,7 @@ HEADERS += \
   src/dro/system/audio/system_player.h \
   src/dro/system/localization.h \
   src/dro/system/runtime_loop.h \
+  src/dro/system/text_encoding.h \
   src/dro/system/theme_scripting.h \
   src/dro/system/debug/time_debugger.h \
   src/dro/tools/button_maker.h \
@@ -182,6 +183,7 @@ SOURCES += \
   src/dro/system/audio/system_player.cpp \
   src/dro/system/localization.cpp \
   src/dro/system/runtime_loop.cpp \
+  src/dro/system/text_encoding.cpp \
   src/dro/system/theme_scripting.cpp \
   src/dro/system/debug/time_debugger.cpp \
   src/dro/tools/button_maker.cpp \

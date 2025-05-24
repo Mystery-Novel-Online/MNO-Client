@@ -10,6 +10,7 @@
 
 void JsonPacket::ProcessJson(QString p_jsonString)
 {
+  if(AOApplication::getInstance()->m_courtroom == nullptr) return;
   JSONReader jsonReader = JSONReader();
   jsonReader.ReadFromString(p_jsonString);
 

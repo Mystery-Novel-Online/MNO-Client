@@ -26,6 +26,19 @@
 #include <QObject>
 #include "dro/animation/keyframe_sequence.h"
 
+class SpriteLayer
+{
+public:
+  SpriteLayer(QString name, const QRectF &rect);
+  void start(double scale);
+
+  mk2::SpritePlayer spritePlayer;
+  QRectF targetRect;
+
+private:
+  double m_currentScale = 0.0f;
+};
+
 namespace mk2
 {
 class GraphicsSpriteItem : public QGraphicsObject
@@ -57,6 +70,9 @@ public:
   bool is_running() const;
 
   QRectF boundingRect() const final;
+
+  void createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect);
+  void clearImageLayers();
 
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
 
@@ -93,6 +109,8 @@ signals:
   void finished();
 
 private:
+  QVector<SpriteLayer*> m_spriteLayers;
+  QVector<SpriteLayer*> m_spriteLayersBelow;
   QScopedPointer<SpritePlayer> m_player;
   KeyframeSequence m_KeyframeSequence;
   int mVerticalVPOffset = 0;

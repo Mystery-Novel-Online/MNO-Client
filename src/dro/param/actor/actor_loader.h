@@ -20,7 +20,8 @@ public:
   void ReadEmotes();
 
   QVector<DREmote> m_Emotes = {};
-  QMap<QString, QRect> m_OverlayRectangles = {};
+  QMap<QString, QRect> m_LayerOffsets = {};
+  QMap<QString, QString> m_LayerRenderOrder = {};
 
 private:
   QString m_CharacterName = "";
@@ -67,7 +68,7 @@ public:
   virtual void LoadActor(const QString& folder) = 0;
   virtual void SwitchOutfit(const QString& t_outfit);
 
-  virtual QMap<QString, QRect> GetEmoteOverlays(const QString& outfit, const QString& emoteName) = 0;
+  virtual QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) = 0;
   virtual OutfitReader* GetEmoteOutfit(const QString& emoteName) = 0;
 
 private:
@@ -93,7 +94,7 @@ public:
   void SwitchOutfit(const QString& t_outfit) override;
 
   QVector<DREmote> GetEmotes() override;
-  QMap<QString, QRect> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override;
+  QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override;
   OutfitReader* GetEmoteOutfit(const QString& emoteName) override;
 
 private:
@@ -118,7 +119,7 @@ public:
   QString GetEmoteSprite(const DREmote& emote) override { return ""; };
   QString GetEmoteButton(const DREmote& t_emote, bool t_enabled) override;
   QString GetSelectedImage(const DREmote& t_emote) override;
-  QMap<QString, QRect> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override { return {}; };
+  QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override { return {}; };
   OutfitReader* GetEmoteOutfit(const QString& emoteName) override { return nullptr; };
 
 };

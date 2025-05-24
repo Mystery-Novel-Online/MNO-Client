@@ -34,6 +34,7 @@
 #include "dro/fs/fs_reading.h"
 #include "dro/network/metadata/server_metadata.h"
 #include "dro/system/theme_scripting.h"
+#include "dro/system/text_encoding.h"
 #include "dro/system/audio.h"
 #include "dro/interface/courtroom_layout.h"
 
@@ -974,6 +975,12 @@ void Courtroom::on_ic_message_return_pressed()
   if(ServerMetadata::FeatureSupported("sequence"))
   {
     packet_contents.append(QString::fromStdString(courtroom::lists::getAnimation()));
+    QStringList layers;
+    for(const EmoteLayer &layer : l_emote.emoteOverlays)
+    {
+      layers.append(dro::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height())}));
+    }
+    packet_contents.append(dro::system::encoding::text::EncodeBase64(layers));
   }
 
   ao_app->send_server_packet(DRPacket("MS", packet_contents));
@@ -1138,6 +1145,22 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
   l_file_list.insert(ViewportCharacterTalk, ao_app->get_character_sprite_talk_path(l_character, l_emote));
 
   l_file_list.insert(ViewportPairCharacterIdle, ao_app->get_character_sprite_idle_path(PairManager::get().GetCharacterFolder(), PairManager::get().GetEmoteName()));
+
+  ui_vp_player_char->clearImageLayers();
+
+
+  for(const QString& layerOffset : encoding::text::DecodeBase64(m_pre_chatmessage[CMSpriteLayers]))
+  {
+    QStringList offsetData = encoding::text::DecodePacketContents(layerOffset);
+    if(offsetData.length() == 6)
+    {
+      ui_vp_player_char->createOverlay(offsetData[0], offsetData[1], QRectF(offsetData[2].toInt(), offsetData[3].toInt(), offsetData[4].toInt(), offsetData[5].toInt()));
+    }
+
+
+  }
+
+
 
   // shouts
   l_file_list.insert(ViewportShout, ao_app->get_shout_sprite_path(l_character, get_shout_name(l_shout_id)));

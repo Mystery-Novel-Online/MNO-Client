@@ -182,7 +182,7 @@ QVector<DREmote> ActorDataReader::GetEmotes()
   return m_Outfits.contains(currentOutfit) ? m_Outfits[currentOutfit]->m_Emotes : QVector<DREmote>();
 }
 
-QMap<QString, QRect> ActorDataReader::GetEmoteOverlays(const QString& outfit, const QString& emoteName)
+QVector<EmoteLayer> ActorDataReader::GetEmoteOverlays(const QString& outfit, const QString& emoteName)
 {
   if(m_Outfits.contains(outfit))
   {
@@ -361,12 +361,14 @@ OutfitReader::OutfitReader(const QString& character, const QString& outfit) : m_
 
   ReadFromFile(outfitJsonPath);
 
-  for(QJsonValueRef overlayData : getArrayValue("overlays"))
+  for(QJsonValueRef overlayData : getArrayValue("layers"))
   {
     SetTargetObject(overlayData.toObject());
     QString overlayName = getStringValue("name");
-    QRect overlayRect = getRectangleValue("rect");
-    m_OverlayRectangles[overlayName] = overlayRect;
+    QRect overlayRect = getRectangleValue("offset");
+    QString overlayRender = getStringValue("order");
+    m_LayerOffsets[overlayName] = overlayRect;
+    m_LayerRenderOrder[overlayName] = overlayRender;
   }
 
   ReadSettings();
@@ -419,13 +421,13 @@ void OutfitReader::ReadEmotes()
     emote.sound_delay     = qMax(0, emote.sound_delay);
     emote.video_file      = videoFile;
 
-    SetTargetObject("overlays");
-
-    for(const QString& overlayName : m_OverlayRectangles.keys())
+    for(const QString& overlayName : m_LayerOffsets.keys())
     {
       const QString overlayImage = getStringValue(overlayName).trimmed();
       if (!overlayImage.isEmpty())
-        emote.emoteOverlays.insert(overlayImage, m_OverlayRectangles[overlayName]);
+      {
+        emote.emoteOverlays.append({overlayImage, m_LayerRenderOrder[overlayName], m_LayerOffsets[overlayName]});
+      }
     }
 
     m_Emotes.append(emote);

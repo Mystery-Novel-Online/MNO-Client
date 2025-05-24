@@ -45,6 +45,13 @@ public:
   QString mForeground = "";
 };
 
+struct EmoteLayer
+{
+  QString spriteName;
+  QString spriteOrder;
+  QRect layerOffset;
+};
+
 
 class DREmote
 {
@@ -62,7 +69,7 @@ public:
   QString video_file;
   QString outfitName = "";
   QString emoteName = "";
-  QMap<QString, QRect> emoteOverlays = {};
+  QVector<EmoteLayer> emoteOverlays = {};
 };
 
 class DRAreaBackground
@@ -303,7 +310,8 @@ enum ChatMessage : int32_t
   CMOffsetH,
   CMOffsetV,
   CMOffsetS,
-  CMAnimSequence
+  CMAnimSequence,
+  CMSpriteLayers
 };
 
 enum EmoteMod
