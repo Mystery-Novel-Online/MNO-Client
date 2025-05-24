@@ -1,5 +1,6 @@
 #include "keyframe_sequence.h"
 #include "dro/system/animation.h"
+#include "dro/system/audio.h"
 
 KeyframeSequence::KeyframeSequence()
 {
@@ -13,9 +14,21 @@ KeyframeSequence::~KeyframeSequence()
 
 void KeyframeSequence::Cleanup()
 {
+  m_SoundEffect = "";
+  m_Loop = false;
   m_SequenceLength = 0;
   m_Timestamp = 0;
   m_Channels.clear();
+}
+
+void KeyframeSequence::SetSound(QString name)
+{
+  m_SoundEffect = name;
+}
+
+void KeyframeSequence::SetLoop(bool isLoop)
+{
+  m_Loop = isLoop;
 }
 
 void KeyframeSequence::AddChannel(const std::string &name, std::unique_ptr<KeyframeChannelTemplate> channel)
@@ -28,8 +41,14 @@ void KeyframeSequence::AddChannel(const std::string &name, std::unique_ptr<Keyfr
 void KeyframeSequence::RunSequence(float deltaTime)
 {
   if(m_SequenceLength == 0) return;
+  if(m_Timestamp > m_SequenceLength && !m_Loop) return;
+  if(m_Timestamp == 0) audio::effect::Play(m_SoundEffect.toStdString());
   m_Timestamp += deltaTime;
-  while(m_Timestamp > m_SequenceLength) m_Timestamp -= m_SequenceLength;
+  while(m_Timestamp > m_SequenceLength)
+  {
+    if(!m_Loop) return;
+    m_Timestamp -= m_SequenceLength;
+  }
 }
 
 void KeyframeSequence::Evaluate(std::unordered_map<std::string, QVariant> &outValues) const

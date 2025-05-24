@@ -14,7 +14,9 @@ AnimationReader::AnimationReader(QString name, KeyframeSequence &sequence)
   ReadFromFile(animationPath);
 
   bool animationLoop = getBoolValue("loop");
-
+  QString animationSound = getStringValue("sound");
+  sequence.SetSound(animationSound);
+  sequence.SetLoop(animationLoop);
   for(QJsonValueRef channelValueRef : getArrayValue("channels"))
   {
     const QJsonObject channelObject = channelValueRef.toObject();
