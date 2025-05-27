@@ -217,7 +217,7 @@ Plays an audio file located in `sounds/general/` on the `System` audio track.
   ```
 
   
-# ⚙ Widgets
+# 📦 Widgets
 
 ## Widget.Move
 Moves a widget to the specified coordinates.
@@ -275,7 +275,7 @@ Raises the specified widget to the top of the render stack.
   Widget.Raise("char_select")
   ```
 
-# ⚙ Stickers
+# 🔖 Stickers
 
 ## Sticker.Create
 Create a sticker widget that will be rendered on the client. 
@@ -318,7 +318,7 @@ Creates a button that can call an event when clicked.
   end
   ```
 
-# ⚙ Sliders
+# 🎚 Sliders
 
 ## Slider.Create
 Creates a slider that can call an event when the value is changed. 
