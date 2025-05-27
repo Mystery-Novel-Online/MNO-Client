@@ -4,11 +4,8 @@ This is an outline of functions that you can call from within a lua script in a 
 
 ---
 
-
-# 📁 Audio Functions
-
-## 🔊 BGM
-### [Audio.BGM.Play](#Audio.BGM.Play)  
+# 🔊 Music Audio
+## [Audio.BGM.Play](#Audio.BGM.Play)  
 Plays an audio file located in the `sounds/music/` directory on the `Music` track.
 
 - **Parameters:**
@@ -26,7 +23,7 @@ Plays an audio file located in the `sounds/music/` directory on the `Music` trac
 
 ---
 
-### [Audio.BGM.Stop](#Audio.BGM.Stop)  
+## [Audio.BGM.Stop](#Audio.BGM.Stop)  
 Completely stops the audio that is being played on the music track.
 
 - **Parameters:** None
@@ -88,9 +85,9 @@ Toggles the reverb on the audio currently being played on the music track.
   Audio.BGM.ToggleReverb(true)
   ```
 
-## 🔔 SFX
+# 🔔 SFX Audio
 
-### [Audio.SFX.Play](#Audio.SFX.Play)  
+## [Audio.SFX.Play](#Audio.SFX.Play)  
 Plays an audio file located in the `sounds/general/` directory on the `Effects` track.
 
 - **Parameters:**
@@ -103,9 +100,9 @@ Plays an audio file located in the `sounds/general/` directory on the `Effects` 
   Audio.SFX.Play("DRding")
   ```
 
-## 💬 Blip
+# 💬 Blip Audio
 
-### [Audio.Blip.Tick](#Audio.Blip.Tick)  
+## [Audio.Blip.Tick](#Audio.Blip.Tick)  
 Plays the currently set blip file once. 
 
 - **Parameters:** None
@@ -116,7 +113,7 @@ Plays the currently set blip file once.
   ```
 ---
 
-### [Audio.Blip.SetRate](#Audio.Blip.SetRate)    
+## [Audio.Blip.SetRate](#Audio.Blip.SetRate)    
 Sets how often blips will play when typing a message. 
 
 - **Parameters:**
@@ -130,7 +127,7 @@ Sets how often blips will play when typing a message.
   ```
 ---
 
-### [Audio.Blip.SetSound](#Audio.Blip.SetSound)   
+## [Audio.Blip.SetSound](#Audio.Blip.SetSound)   
 Sets the current blip to a file located in `sounds/general/`. 
 
 - **Parameters:**
@@ -144,7 +141,7 @@ Sets the current blip to a file located in `sounds/general/`.
   ```
 --- 
 
-### [Audio.Blip.SetGender](#Audio.Blip.SetGender)    
+## [Audio.Blip.SetGender](#Audio.Blip.SetGender)    
 Sets the current blip to a file based on the specified gender similarly to the default implementation. 
 
 - **Parameters:**
@@ -157,9 +154,9 @@ Sets the current blip to a file based on the specified gender similarly to the d
   Audio.Blip.SetGender("female")
   ```
 
-## ⚙ System
+# ⚙ System Audio
 
-### [Audio.System.Play](#Audio.System.Play)  
+## [Audio.System.Play](#Audio.System.Play)  
 Plays an audio file located in `sounds/general/` on the `System` audio track. 
 
 - **Parameters:**
