@@ -9,7 +9,7 @@ This is an outline of functions that you can call from within a lua script in a 
 
 ## 🔊 BGM
 ### [Audio.BGM.Play](#Audio.BGM.Play)  
-Plays an audio file located in the `sounds/music/` directory on the music track.
+Plays an audio file located in the `sounds/music/` directory on the `Music` track.
 
 - **Parameters:**
 
@@ -91,7 +91,7 @@ Toggles the reverb on the audio currently being played on the music track.
 ## 🔔 SFX
 
 ### [Audio.SFX.Play](#Audio.SFX.Play)  
-Plays an audio file located in the `sounds/general/` directory on the sound effect track.
+Plays an audio file located in the `sounds/general/` directory on the `Effects` track.
 
 - **Parameters:**
   | Name       | Type     | Description                 |
@@ -150,14 +150,24 @@ Sets the current blip to a file based on the specified gender similarly to the d
 - **Parameters:**
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
-  | `gender`| `String` | The name of the sound effect you wish to play. |
+  | `gender`| `String` | The gender of the blip file you wish to use. |
 - **Returns:** None
 - **Example:**
   ```lua
   Audio.Blip.SetGender("female")
   ```
----
 
 ## ⚙ System
 
 ### [Audio.System.Play](#Audio.System.Play)  
+Plays an audio file located in `sounds/general/` on the `System` audio track. 
+
+- **Parameters:**
+  | Name       | Type     | Description                 |
+  |------------|----------|-----------------------------|
+  | `effectName`| `String` | The name of the sound effect you wish to play. |
+- **Returns:** None
+- **Example:**
+  ```lua
+  Audio.System.Play("screenshot")
+  ```
