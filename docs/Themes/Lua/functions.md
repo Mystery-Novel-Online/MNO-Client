@@ -8,7 +8,6 @@ This is an outline of functions that you can call from within a lua script in a 
 # 📁 Audio Functions
 
 ## 🔊 BGM
----
 ### [Audio.BGM.Play](#Audio.BGM.Play)  
 Plays an audio file located in the `sounds/music/` directory on the music track.
 
@@ -89,12 +88,23 @@ Toggles the reverb on the audio currently being played on the music track.
   Audio.BGM.ToggleReverb(true)
   ```
 
----
-
-
 ## 🔔 SFX
 
 ### [Audio.SFX.Play](#Audio.SFX.Play)  
+Plays an audio file located in the `sounds/general/` directory on the sound effect track.
+
+- **Parameters:**
+
+  | Name       | Type     | Description                 |
+  |------------|----------|-----------------------------|
+  | `effectName`| `String` | The name of the sound effect you wish to play. |
+- **Returns:** None
+- **Example:**
+  ```lua
+  Audio.SFX.Play("DRding")
+  ```
+
+---
 
 ## 💬 Blip
 
