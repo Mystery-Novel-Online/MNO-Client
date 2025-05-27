@@ -1,61 +1,61 @@
-# Lua API Functions
+# Lua Theme Functions
 
 This is an outline of functions that you can call from within a lua script in a theme.
 
 ## 📑 Table of Contents
 
-- [🔊 Music Audio](#-music-audio)
+- 🔊 Music Audio
     - [Audio.BGM.Play](#audiobgmplay)
     - [Audio.BGM.Stop](#audiobgmstop)
     - [Audio.BGM.SetSpeed](#audiobgmsetspeed)
     - [Audio.BGM.SetPitch](#audiobgmsetpitch)
     - [Audio.BGM.ToggleReverb](#audiobgmtogglereverb)
-- [🔔 SFX Audio](#-sfx-audio)
+- 🔔 SFX Audio
     - [Audio.SFX.Play](#audiosfxplay)
-- [💬 Blip Audio](#-blip-audio)
+- 💬 Blip Audio
     - [Audio.Blip.Tick](#audiobliptick)
     - [Audio.Blip.SetRate](#audioblipsetrate)
     - [Audio.Blip.SetSound](#audioblipsetsound)
     - [Audio.Blip.SetGender](#audioblipsetgender)
-- [⚙ System Audio](#-system-audio)
+- ⚙ System Audio
     - [Audio.System.Play](#audiosystemplay)
-- [📦 Widgets](#widgets)
+- 📦 Widgets
   - [Widget.Move](#widgetmove)
   - [Widget.Raise](#widgetraise)
   - [Widget.SetVisible](#widgetsetvisible)
   - [Widget.SetParent](#widgetsetparent)
-- [🔖 Stickers](#sticker)
+- 🔖 Stickers
   - [Sticker.Create](#stickercreate)
-- [🕹 Buttons](#button)
+- 🕹 Buttons
   - [Button.Create](#buttoncreate)
-- [🎚 Sliders](#slider)
+- 🎚 Sliders
   - [Slider.Create](#slidercreate)
   - [Slider.CreateVertical](#slidercreatevertical)
   - [Slider.GetValue](#slidergetvalue)
   - [Slider.SetValue](#slidersetvalue)
-- [📁 Tabs](#tabs)
+- 📁 Tabs
   - [Tabs.Change](#tabschange)
-- [💬 ChoiceDialog](#choicedialog)
+- 💬 ChoiceDialog
   - [ChoiceDialog.TriggerCustom](#choicedialogtriggercustom)
   - [ChoiceDialog.SetText](#choicedialogsettext)
-- [📝 In Character](#icinputfield)
+- 📝 In Character
   - [IC.InputField.Focus](#icinputfieldfocus)
   - [IC.InputField.GetText](#icinputfieldgettext)
   - [IC.InputField.SetText](#icinputfieldsettext)
   - [IC.InputField.Append](#icinputfieldappend)
-- [💭 Out of Character](#ooclog)
+- 💭 Out of Character
   - [OOC.Log.Append](#ooclogappend)
   - [OOC.Name.Get](#oocnameget)
   - [OOC.Name.Set](#oocnameset)
   - [OOC.InputField.GetText](#oocinputfieldgettext)
   - [OOC.InputField.SetText](#oocinputfieldsettext)
-- [🚨 System](#system)
+- 🚨 System
   - [System.Alert](#systemalert)
-- [🌐 Server](#server)
+- 🌐 Server
   - [Server.GetClientId](#servergetclientid)
   - [Server.GetCharacterId](#servergetcharacterid)
   - [Server.GetCurrentCharacter](#servergetcurrentcharacter)
-- [👤 Character](#character)
+- 👤 Character
   - [Character.GetShowname](#charactergetshowname)
   - [Character.GetIniswap](#charactergetiniswap)
   - [Character.Exists](#characterexists)
