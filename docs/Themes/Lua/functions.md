@@ -94,7 +94,6 @@ Toggles the reverb on the audio currently being played on the music track.
 Plays an audio file located in the `sounds/general/` directory on the sound effect track.
 
 - **Parameters:**
-
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `effectName`| `String` | The name of the sound effect you wish to play. |
@@ -104,17 +103,60 @@ Plays an audio file located in the `sounds/general/` directory on the sound effe
   Audio.SFX.Play("DRding")
   ```
 
----
-
 ## 💬 Blip
 
 ### [Audio.Blip.Tick](#Audio.Blip.Tick)  
+Plays the currently set blip file once. 
 
-### [Audio.Blip.SetSound](#Audio.Blip.SetSound)  
+- **Parameters:** None
+- **Returns:** None
+- **Example:**
+  ```lua
+  Audio.Blip.Tick()
+  ```
+---
 
-### [Audio.Blip.SetRate](#Audio.Blip.SetRate)  
+### [Audio.Blip.SetRate](#Audio.Blip.SetRate)    
+Sets how often blips will play when typing a message. 
 
-### [Audio.Blip.SetGender](#Audio.Blip.SetGender)  
+- **Parameters:**
+  | Name       | Type     | Description                 |
+  |------------|----------|-----------------------------|
+  | `blipRate`| `Int` | The specified amount of characters need to be typed out before the sound is played again. |
+- **Returns:** None
+- **Example:**
+  ```lua
+  Audio.Blip.SetRate(14)
+  ```
+---
+
+### [Audio.Blip.SetSound](#Audio.Blip.SetSound)   
+Sets the current blip to a file located in `sounds/general/`. 
+
+- **Parameters:**
+  | Name       | Type     | Description                 |
+  |------------|----------|-----------------------------|
+  | `soundFile`| `String` | The file name of the sound effect to be used as a blip. |
+- **Returns:** None
+- **Example:**
+  ```lua
+  Audio.Blip.SetSound("sfx-blipfemale.opus")
+  ```
+--- 
+
+### [Audio.Blip.SetGender](#Audio.Blip.SetGender)    
+Sets the current blip to a file based on the specified gender similarly to the default implementation. 
+
+- **Parameters:**
+  | Name       | Type     | Description                 |
+  |------------|----------|-----------------------------|
+  | `gender`| `String` | The name of the sound effect you wish to play. |
+- **Returns:** None
+- **Example:**
+  ```lua
+  Audio.Blip.SetGender("female")
+  ```
+---
 
 ## ⚙ System
 
