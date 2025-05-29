@@ -3,10 +3,13 @@
 #include "aoapplication.h"
 #include "courtroom.h"
 #include "dro/param/json_reader.h"
+#include "dro/network/metadata/message_metadata.h"
+#include "dro/interface/courtroom_layout.h"
 #include "modules/managers/notify_manager.h"
 #include "modules/managers/pair_manager.h"
 #include <qjsondocument.h>
 
+using namespace dro::network;
 
 void JsonPacket::ProcessJson(QString p_jsonString)
 {
@@ -88,7 +91,7 @@ void JsonPacket::ProcessPairDataPacket(JSONReader& jsonReader)
   int offsetVertical = jsonReader.getIntValue("pair_vertical");
   int offsetScale = jsonReader.getIntValue("pair_scale");
 
-  PairManager::get().SetPairData(charat, emote, offsetSelf, offsetPair, isFlipped, offsetScale, offsetVertical);
+  metadata::message::setPairMetadata(charat, emote, offsetSelf, offsetPair, isFlipped, offsetScale, offsetVertical);
 }
 
 void JsonPacket::ProcessPairPacket(JSONReader& jsonReader)
@@ -100,8 +103,15 @@ void JsonPacket::ProcessPairPacket(JSONReader& jsonReader)
   int localClientId = metadata::user::getClientId();
 
   if(pair_left == localClientId)
-    PairManager::get().SetUserPair(pair_right, jsonReader.getIntValue("offset_left"));
+  {
+    metadata::user::partner::setPartner(pair_right);
+    courtroom::sliders::setHorizontal(jsonReader.getIntValue("offset_left"));
+  }
 
   if(pair_right == localClientId)
-    PairManager::get().SetUserPair(pair_left, jsonReader.getIntValue("offset_right"));
+  {
+    metadata::user::partner::setPartner(pair_left);
+    courtroom::sliders::setHorizontal(jsonReader.getIntValue("offset_right"));
+  }
+
 }

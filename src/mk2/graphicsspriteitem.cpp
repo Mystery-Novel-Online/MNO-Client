@@ -131,7 +131,7 @@ void GraphicsSpriteItem::setVerticalOffset(int t_offset)
 
 void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
 {
-  m_HorizontalOffset = t_offset;
+  m_HorizontalOffset = t_offset - 500;
 }
 
 void GraphicsSpriteItem::setCharacterAnimation(QString name)
@@ -216,9 +216,19 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
       const QRectF  scaledRect = m_player->get_scaled_bounding_rect();
       const QPointF center = sceneRect.center() - scaledRect.center();
 
-      const float t = mVerticalVPOffset / 1000.0f;
-      const float maxOffset = sceneRect.height() + scaledRect.height();
-      const float result = t * (maxOffset / 2.0f);
+      float verticalOffsetResult = 0.0f;
+      {
+        const float t = mVerticalVPOffset / 1000.0f;
+        const float maxOffset = sceneRect.height() + scaledRect.height();
+        verticalOffsetResult = t * (maxOffset / 2.0f);
+      }
+
+      float horizontalOffsetResult = 0.0f;
+      {
+        const float t = m_HorizontalOffset / 1000.0f;
+        const float maxOffset = sceneRect.width() + scaledRect.width();
+        horizontalOffsetResult = t * (maxOffset / 2.0f);
+      }
 
       std::unordered_map<std::string, QVariant> evaluatedValues;
       m_KeyframeSequence.Evaluate(evaluatedValues);
@@ -232,8 +242,8 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
         animationVector = evaluatedValues["position"].value<QVector3D>();
 
       painter->setOpacity(alpha);
-      l_horizontal_center.setX(center.x() + m_HorizontalOffset + animationVector.x());
-      l_horizontal_center.setY(center.y() + result + animationVector.y());
+      l_horizontal_center.setX(center.x() + horizontalOffsetResult + animationVector.x());
+      l_horizontal_center.setY(center.y() + verticalOffsetResult + animationVector.y());
     }
 
     if(alpha != 0.0f)

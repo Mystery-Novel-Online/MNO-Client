@@ -1,0 +1,49 @@
+#ifndef MESSAGE_METADATA_H
+#define MESSAGE_METADATA_H
+
+#include <QString>
+
+struct PairMetadata
+{
+  QString characterFolder = "";
+  QString characterEmote = "";
+  int offsetScale = 1000;
+  int offsetHorizontal = 500;
+  int offsetVertical = 0;
+
+  bool spriteVisible = false;
+  bool spriteFlipped = false;
+
+  // sequenceName = "";
+  // characterLayers = "";
+};
+
+struct ICMessageMetadata
+{
+  int offsetScale = 1000;
+  int offsetHorizontal = 500;
+  int offsetVertical = 0;
+
+  PairMetadata pairData;
+};
+
+namespace dro::network::metadata::message
+{
+  int horizontalOffset();
+
+  namespace pair
+  {
+    bool isActive();
+    bool isFlipped();
+    bool isVisible();
+    int verticalOffset();
+    int horizontalOffset();
+    double scaleOffset();
+    const QString &getEmote();
+    const QString &getCharacter();
+    void disable();
+  }
+  void setPairMetadata(QString character, QString emote, int selfOffset, int pairOffset, bool flipped, int scale, int vertical);
+}
+
+#endif // MESSAGE_METADATA_H

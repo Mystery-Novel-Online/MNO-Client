@@ -3,11 +3,28 @@
 
 CharacterId s_UserCharId = SpectatorId;
 int s_clientId = 0;
+static int s_partnerClientId = -1;
+
 
 QString s_showname = "";
 
 namespace dro::network::metadata::user
 {
+  namespace partner
+  {
+
+    void setPartner(int clientId)
+    {
+      s_partnerClientId = clientId;
+    }
+
+    bool isUnpaired()
+    {
+      return s_partnerClientId == -1;
+    }
+
+  }
+
   bool IsSpectator()
   {
     return s_UserCharId == SpectatorId;

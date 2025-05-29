@@ -7,12 +7,14 @@
 #include "dro/fs/fs_reading.h"
 #include "modules/managers/pair_manager.h"
 #include "dro/system/localization.h"
+#include "dro/network/metadata/user_metadata.h"
 
 #include <QMenu>
 #include <QUrl>
 #include <QDesktopServices>
 #include <QClipboard>
 
+using namespace dro::network::metadata;
 using namespace dro::system;
 
 DrPlayerListEntry::DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y)
@@ -223,17 +225,17 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
   QMenu *menu = new QMenu(this);
   menu->addAction("[" + QString::number(mID) + "] " + m_showname);
 
-  if(PairManager::get().GetCanPair())
+  if(user::partner::isUnpaired())
   {
-      QAction *pairRequest = new QAction(localization::getText("PLAYER_LIST_PAIR"));
-      QObject::connect(pairRequest, &QAction::triggered, [this](){sendPairRequest() ;});
-      menu->addAction(pairRequest);
+    QAction *pairRequest = new QAction(localization::getText("PLAYER_LIST_PAIR"));
+    QObject::connect(pairRequest, &QAction::triggered, [this](){sendPairRequest() ;});
+    menu->addAction(pairRequest);
   }
   else
   {
-      QAction *pairRequest = new QAction(localization::getText("PLAYER_LIST_UNPAIR"));
-      QObject::connect(pairRequest, &QAction::triggered, [this](){sendUnpairRequest() ;});
-      menu->addAction(pairRequest);
+    QAction *pairRequest = new QAction(localization::getText("PLAYER_LIST_UNPAIR"));
+    QObject::connect(pairRequest, &QAction::triggered, [this](){sendUnpairRequest() ;});
+    menu->addAction(pairRequest);
   }
 
 

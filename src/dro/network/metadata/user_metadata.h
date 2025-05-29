@@ -11,6 +11,12 @@ enum : CharacterId
 
 namespace dro::network::metadata::user
 {
+  namespace partner
+  {
+    void setPartner(int clientId);
+    bool isUnpaired();
+  }
+
   bool IsSpectator();
   int GetCharacterId();
   bool SetCharacterId(int id);

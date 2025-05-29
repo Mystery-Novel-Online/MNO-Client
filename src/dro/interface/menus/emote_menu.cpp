@@ -95,7 +95,7 @@ void EmoteMenu::OnOffsetResetTriggered()
 {
   courtroom::sliders::setScale(1000);
   courtroom::sliders::setVertical(0);
-  courtroom::sliders::setHorizontal(480);
+  courtroom::sliders::setHorizontal(500);
 }
 
 void EmoteMenu::ApplyPreset(const QString &presetName)

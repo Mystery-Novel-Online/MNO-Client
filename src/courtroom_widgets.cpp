@@ -250,7 +250,7 @@ void Courtroom::create_widgets()
 
   ui_slider_horizontal_axis = new RPSlider(Qt::Horizontal, this);
   ui_slider_horizontal_axis->setMinimum(1);
-  ui_slider_horizontal_axis->setMaximum(960);
+  ui_slider_horizontal_axis->setMaximum(1000);
 
   ui_slider_vertical_axis = new RPSlider(Qt::Horizontal, this);
   ui_slider_vertical_axis->setMinimum(-1000);

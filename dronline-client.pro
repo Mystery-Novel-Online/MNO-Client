@@ -49,6 +49,7 @@ HEADERS += \
   src/dro/interface/widgets/aotimer.h \
   src/dro/network/json_packet.h \
   src/dro/network/metadata/area_metadata.h \
+  src/dro/network/metadata/message_metadata.h \
   src/dro/network/metadata/user_metadata.h \
   src/dro/network/metadata/server_metadata.h \
   src/dro/network/metadata/tracklist_metadata.h \
@@ -170,6 +171,7 @@ SOURCES += \
   src/dro/interface/widgets/aotimer.cpp \
   src/dro/network/json_packet.cpp \
   src/dro/network/metadata/area_metadata.cpp \
+  src/dro/network/metadata/message_metadata.cpp \
   src/dro/network/metadata/user_metadata.cpp \
   src/dro/network/metadata/server_metadata.cpp \
   src/dro/network/metadata/tracklist_metadata.cpp \

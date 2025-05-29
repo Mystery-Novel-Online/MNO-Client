@@ -33,6 +33,7 @@
 #include "theme.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/network/metadata/server_metadata.h"
+#include "dro/network/metadata/message_metadata.h"
 #include "dro/system/theme_scripting.h"
 #include "dro/system/text_encoding.h"
 #include "dro/system/audio.h"
@@ -94,7 +95,8 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   set_char_select();
   load_audiotracks();
   reset_viewport();
-  PairManager::get().SetUserPair(-1, 480);
+  metadata::user::partner::setPartner(-1);
+  ui_slider_horizontal_axis->setValue(500);
 }
 
 Courtroom::~Courtroom()
@@ -796,7 +798,9 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
     if(m_SpeakerActor != nullptr)
     {
       QString scalingMode = m_SpeakerActor->GetScalingMode();
-      if(scalingMode == "width_smooth") targetScaling = mk2::SpritePlayer::WidthSmoothScaling;
+
+      if(scalingMode == "width_smooth")
+        targetScaling = mk2::SpritePlayer::WidthSmoothScaling;
     }
 
     if (ui_vp_player_char->is_running())
@@ -804,12 +808,7 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
       ui_vp_player_char->stop();
     }
 
-    constexpr double referenceWidth = 960.0;
-
-    double l_CourtroomWidth = static_cast<double>(ui_viewport->width());
-    double l_HalfCourtroomWidth = l_CourtroomWidth / 2.0;
-    double offsetValue = (static_cast<double>(ui_slider_horizontal_axis->value()) / referenceWidth) * l_CourtroomWidth - l_HalfCourtroomWidth;
-    ui_vp_player_char->setHorizontalOffset(offsetValue);
+    ui_vp_player_char->setHorizontalOffset(ui_slider_horizontal_axis->value());
     ui_vp_player_char->start(targetScaling, playerScale);
 
   }
@@ -959,7 +958,7 @@ void Courtroom::on_ic_message_return_pressed()
   {
     if(l_emote.ignore_offsets)
     {
-      packet_contents.append(QString::number(480));
+      packet_contents.append(QString::number(500));
       packet_contents.append(QString::number(0));
       packet_contents.append(QString::number(1000));
     }
@@ -1027,9 +1026,9 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
 
   m_SpeakerActor = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
-  if(PairManager::get().GetUsePairData())
+  if(metadata::message::pair::isActive())
   {
-    m_PairActor = CharacterManager::get().ReadCharacter(PairManager::get().GetCharacterFolder());
+    m_PairActor = CharacterManager::get().ReadCharacter(metadata::message::pair::getCharacter());
 
     m_PairScaling = mk2::SpritePlayer::AutomaticScaling;
 
@@ -1037,7 +1036,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
     {
       QString scalingMode = m_PairActor->GetScalingMode();
       if(scalingMode == "width_smooth") m_PairScaling = mk2::SpritePlayer::WidthSmoothScaling;
-      m_PairScale = PairManager::get().GetScaleoffset();
+      m_PairScale = metadata::message::pair::scaleOffset();
     }
 
   }
@@ -1144,7 +1143,7 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
   l_file_list.insert(ViewportCharacterIdle, ao_app->get_character_sprite_idle_path(l_character, l_emote));
   l_file_list.insert(ViewportCharacterTalk, ao_app->get_character_sprite_talk_path(l_character, l_emote));
 
-  l_file_list.insert(ViewportPairCharacterIdle, ao_app->get_character_sprite_idle_path(PairManager::get().GetCharacterFolder(), PairManager::get().GetEmoteName()));
+  l_file_list.insert(ViewportPairCharacterIdle, ao_app->get_character_sprite_idle_path(metadata::message::pair::getCharacter(), metadata::message::pair::getEmote()));
 
   ui_vp_player_char->clearImageLayers();
 
@@ -1398,8 +1397,8 @@ void Courtroom::objection_done()
 void Courtroom::handle_chatmessage_2() // handles IC
 {
 
-  int selfOffset = PairManager::get().GetOffsetSelf();
-  int otherOffset = PairManager::get().GetOffsetOther();
+  int selfOffset = metadata::message::horizontalOffset();
+  int otherOffset = metadata::message::pair::horizontalOffset();
 
   QString offsetTextbox = "left";
 
@@ -1418,7 +1417,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
     {
       int courtroomWidth = ui_viewport->width();
       int halfWidth = courtroomWidth / 2;
-      ui_vp_player_char->setHorizontalOffset(hOffset - halfWidth);
+      ui_vp_player_char->setHorizontalOffset(hOffset);
     }
     else
     {
@@ -1437,7 +1436,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
   else
     ui_vp_player_char->setVerticalOffset(verticalValue);
 
-  ui_vp_player_pair->setVerticalOffset((int)PairManager::get().GetVerticalOffset());
+  ui_vp_player_pair->setVerticalOffset(metadata::message::pair::verticalOffset());
   setup_screenshake_anim(selfOffset);
   qDebug() << "handle_chatmessage_2";
   ui_vp_player_char->stop();
@@ -1445,7 +1444,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    if(!PairManager::get().GetUsePairData())
+    if(!metadata::message::pair::isActive())
     {
       ui_vp_player_pair->hide();
       pos_size_type showname = ThemeManager::get().resizePosition(PairManager::get().GetElementAlignment("showname", "center"), ThemeManager::get().getViewporResize());
@@ -1493,7 +1492,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
   }
 
 
-  ui_vp_player_pair->set_mirrored(PairManager::get().GetCharacterFlipped());
+  ui_vp_player_pair->set_mirrored(metadata::message::pair::isFlipped());
 
   if (m_chatmessage[CMFlipState].toInt() == 1)
     ui_vp_player_char->set_mirrored(true);
@@ -1517,7 +1516,7 @@ void Courtroom::handle_chatmessage_3()
 
   ui_vp_player_char->set_play_once(false);
 
-  if(PairManager::get().GetUsePairData())
+  if(metadata::message::pair::isActive())
   {
     ui_vp_player_pair->set_play_once(false);
   }
@@ -1579,7 +1578,7 @@ void Courtroom::handle_chatmessage_3()
   }
 
   //Setup Partner
-  if(PairManager::get().GetSpriteIsVisible())
+  if(metadata::message::pair::isVisible())
   {
     ui_vp_player_pair->hide();
     if(ui_vp_player_pair->is_running())
@@ -1639,7 +1638,7 @@ void Courtroom::handle_chatmessage_3()
       {
         QStringList offset = ao_app->get_effect_offset(f_char, l_effect_index);
 
-        int selfOffset = PairManager::get().GetOffsetSelf();
+        int selfOffset = metadata::message::horizontalOffset();
         if(ao_app->current_theme->getEffectPairOffset(l_effect_index)) ui_vp_effect->setPos(selfOffset, offset.at(1).toInt());
         else ui_vp_effect->setPos(0, offset.at(1).toInt());
 
@@ -1687,7 +1686,7 @@ void Courtroom::handle_chatmessage_3()
 
   LuaBridge::LuaEventCall("OnMessageStart");
   start_chat_timer();
-  PairManager::get().DisableUpcomingPair();
+  metadata::message::pair::disable();
 }
 
 void Courtroom::on_chat_config_changed()
