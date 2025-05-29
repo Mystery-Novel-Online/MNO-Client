@@ -15,6 +15,7 @@ public:
   void SetLoop(bool isLoop);
   void AddChannel(const std::string& name, std::unique_ptr<KeyframeChannelTemplate> channel);
 
+  void SequenceJumpEnd();
   void RunSequence(float deltaTime);
   void Evaluate(std::unordered_map<std::string, QVariant>& outValues) const;
 

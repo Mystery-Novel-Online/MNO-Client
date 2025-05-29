@@ -7,12 +7,14 @@ struct PairMetadata
 {
   QString characterFolder = "";
   QString characterEmote = "";
+  QString characterSequence = "";
+  QString characterLayers = "";
   int offsetScale = 1000;
   int offsetHorizontal = 500;
   int offsetVertical = 0;
 
-  bool spriteVisible = false;
   bool spriteFlipped = false;
+  bool spriteVisible = false;
 
   // sequenceName = "";
   // characterLayers = "";
@@ -41,9 +43,11 @@ namespace dro::network::metadata::message
     double scaleOffset();
     const QString &getEmote();
     const QString &getCharacter();
+    const QString &getLayers();
+    const QString &getAnimation();
     void disable();
   }
-  void setPairMetadata(QString character, QString emote, int selfOffset, int pairOffset, bool flipped, int scale, int vertical);
+  void setPairMetadata(const PairMetadata &data, int selfOffset);
 }
 
 #endif // MESSAGE_METADATA_H

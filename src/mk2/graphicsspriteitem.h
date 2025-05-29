@@ -95,7 +95,7 @@ public slots:
   void restart();
   void setVerticalOffset(int t_offset);
   void setHorizontalOffset(int t_offset);
-  void setCharacterAnimation(QString name);
+  void setCharacterAnimation(QString name, bool startFromEnd = false);
   void stop();
 
 signals:

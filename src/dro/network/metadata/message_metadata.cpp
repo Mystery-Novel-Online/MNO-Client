@@ -6,24 +6,13 @@ static bool s_MsgPairActive = false;
 
 namespace dro::network::metadata::message
 {
-  void setPairMetadata(QString character, QString emote, int offsetSelfHorizontal, int offsetPairHorizontal, bool flipped, int scale, int vertical)
+
+  void setPairMetadata(const PairMetadata &data, int selfOffset)
   {
-    s_CurrentMessage.offsetHorizontal = offsetSelfHorizontal;
-
     s_MsgPairActive = true;
-
-    s_CurrentMessage.pairData.characterFolder = character;
-    s_CurrentMessage.pairData.characterEmote = emote;
-
-    s_CurrentMessage.pairData.spriteFlipped = flipped;
-
-    if(scale != 0)
-      s_CurrentMessage.pairData.offsetScale = scale;
-    else
-      s_CurrentMessage.pairData.offsetScale = 1000;
-
-    s_CurrentMessage.pairData.offsetVertical = vertical;
-    s_CurrentMessage.pairData.offsetHorizontal = offsetPairHorizontal;
+    s_CurrentMessage.offsetHorizontal = selfOffset;
+    s_CurrentMessage.pairData = data;
+    if(data.offsetScale == 0) s_CurrentMessage.pairData.offsetScale = 1000;
   }
 
   namespace pair
@@ -76,6 +65,16 @@ namespace dro::network::metadata::message
     double scaleOffset()
     {
       return (double)s_CurrentMessage.pairData.offsetScale / (double)1000.0f;
+    }
+
+    const QString &getLayers()
+    {
+      return s_CurrentMessage.pairData.characterLayers;
+    }
+
+    const QString &getAnimation()
+    {
+      return s_CurrentMessage.pairData.characterSequence;
     }
 
   }

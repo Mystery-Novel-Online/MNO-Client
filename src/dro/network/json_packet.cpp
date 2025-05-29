@@ -83,15 +83,21 @@ void JsonPacket::ProcessNotifyRequestPacket(JSONReader& jsonReader)
 void JsonPacket::ProcessPairDataPacket(JSONReader& jsonReader)
 {
   jsonReader.SetTargetObject("data");
-  int offsetPair = jsonReader.getIntValue("offset_pair");
-  int offsetSelf = jsonReader.getIntValue("self_offset");
-  QString charat = jsonReader.getStringValue("character");
-  QString emote = jsonReader.getStringValue("last_sprite");
-  bool isFlipped = jsonReader.getBoolValue("flipped");
-  int offsetVertical = jsonReader.getIntValue("pair_vertical");
-  int offsetScale = jsonReader.getIntValue("pair_scale");
 
-  metadata::message::setPairMetadata(charat, emote, offsetSelf, offsetPair, isFlipped, offsetScale, offsetVertical);
+  const PairMetadata metadata =
+  {
+    jsonReader.getStringValue("character"),
+    jsonReader.getStringValue("last_sprite"),
+    jsonReader.getStringValue("sequence"),
+    jsonReader.getStringValue("layers"),
+    jsonReader.getIntValue("pair_scale"),
+    jsonReader.getIntValue("offset_pair"),
+    jsonReader.getIntValue("pair_vertical"),
+    jsonReader.getBoolValue("flipped"),
+    true
+  };
+  int offsetSelf = jsonReader.getIntValue("self_offset");
+  metadata::message::setPairMetadata(metadata, offsetSelf);
 }
 
 void JsonPacket::ProcessPairPacket(JSONReader& jsonReader)

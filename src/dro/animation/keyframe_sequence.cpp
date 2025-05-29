@@ -38,6 +38,11 @@ void KeyframeSequence::AddChannel(const std::string &name, std::unique_ptr<Keyfr
   if(channelLength > m_SequenceLength) m_SequenceLength = channelLength;
 }
 
+void KeyframeSequence::SequenceJumpEnd()
+{
+  m_Timestamp = m_SequenceLength;
+}
+
 void KeyframeSequence::RunSequence(float deltaTime)
 {
   if(m_SequenceLength == 0) return;

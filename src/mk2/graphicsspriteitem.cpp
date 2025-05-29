@@ -134,9 +134,10 @@ void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
   m_HorizontalOffset = t_offset - 500;
 }
 
-void GraphicsSpriteItem::setCharacterAnimation(QString name)
+void GraphicsSpriteItem::setCharacterAnimation(QString name, bool startFromEnd)
 {
   AnimationReader(name, m_KeyframeSequence);
+  if(startFromEnd) m_KeyframeSequence.SequenceJumpEnd();
 }
 
 void GraphicsSpriteItem::stop()
