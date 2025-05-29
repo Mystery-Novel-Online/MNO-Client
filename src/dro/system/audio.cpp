@@ -111,6 +111,11 @@ namespace audio
       s_musicPlayer->stop();
     }
 
+    void PlayMode(const std::string &name, BGMPlayback playbackType)
+    {
+      s_musicPlayer->play(QString::fromStdString(name), playbackType);
+    }
+
   }
 
   namespace blip

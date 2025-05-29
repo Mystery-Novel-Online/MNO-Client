@@ -14,14 +14,20 @@ public:
 public slots:
   void OnMenuRequested(QPoint p_point);
   void OnInsertTriggered();
-  void OnPlayTriggered();
   void OnPinTriggered();
+  void OnSmoothPlayAction();
+  void OnInstantPlayAction();
+  void OnSyncPlayAction();
+
 
 private:
   QString m_TargetTrack = "";
   QAction *p_InsertAction = nullptr;
-  QAction *p_PlayAction = nullptr;
   QAction *p_PinAction = nullptr;
+
+  QAction *m_PlaySmooth = nullptr;
+  QAction *m_PlayInstant = nullptr;
+  QAction *m_PlaySync = nullptr;
 
 };
 

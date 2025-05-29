@@ -67,6 +67,26 @@ void DRAudioStream::play()
   }
 }
 
+void DRAudioStream::playSynced(const DRAudioStream *reference)
+{
+  if (!ensure_init() || !reference || !reference->ensure_init())
+  {
+    play();
+    return;
+  }
+  QWORD refPosition = BASS_ChannelGetPosition(reference->m_hstream, BASS_POS_BYTE);
+
+  if (!BASS_ChannelSetPosition(m_hstream, refPosition, BASS_POS_BYTE))
+  {
+    qWarning() << "error: failed to sync position with reference stream:" << DRAudio::get_last_bass_error();
+  }
+
+  if (!BASS_ChannelPlay(m_hstream, FALSE)) {
+    qWarning() << QString("error: failed to play synced stream: %1 (file: \"%2\")").arg(DRAudio::get_last_bass_error(), m_filename);
+    Q_EMIT finished();
+  }
+}
+
 void DRAudioStream::stop()
 {
   if (!ensure_init())

@@ -11,6 +11,7 @@
 #include "dro/interface/widgets/health_bar.h"
 #include "dro/interface/widgets/rp_slider.h"
 #include "dro/network/metadata/user_metadata.h"
+#include "dro/system/audio/music_player.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"
@@ -750,7 +751,7 @@ public slots:
   void on_char_select_left_clicked();
   void on_char_select_right_clicked();
   void hide_emote_tooltip(int id);
-  void send_mc_packet(QString p_song);
+  void send_mc_packet(QString p_song, BGMPlayback playbackType = BGMPlayback_Standard);
   void SwitchCharacterByName(const char* characterName);
   void SwitchRandomCharacter(QString list);
 

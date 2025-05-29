@@ -1,6 +1,7 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
+#include "dro/system/audio/music_player.h"
 #include <string>
 
 namespace audio
@@ -31,6 +32,7 @@ namespace audio
   namespace bgm
   {
     void Play(const std::string& name);
+    void PlayMode(const std::string& name, BGMPlayback playbackType);
     void Stop();
     void SetSpeed(float speed);
     void SetPitch(float speed);

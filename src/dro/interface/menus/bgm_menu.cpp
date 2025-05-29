@@ -5,14 +5,25 @@
 #include <modules/theme/thememanager.h>
 #include "courtroom.h"
 #include "dro/network/metadata/tracklist_metadata.h"
+#include "dro/interface/courtroom_layout.h"
 
 BGMMenu::BGMMenu(QWidget *parent) : QMenu(parent)
 {
-  p_PlayAction = addAction(tr("Play"));
+
+  QMenu *playMenu = new QMenu(tr("Play"), this);
+  addMenu(playMenu);
+
+  m_PlaySmooth = playMenu->addAction((tr("Smooth Play")));
+  m_PlayInstant = playMenu->addAction((tr("Instant Play")));
+  m_PlaySync = playMenu->addAction((tr("Sync Playback")));
+
+
   p_InsertAction = addAction(tr("Insert into OOC"));
   p_PinAction = addAction(tr("Pin"));
 
-  connect(p_PlayAction, &QAction::triggered, this, &BGMMenu::OnPlayTriggered);
+  connect(m_PlaySmooth, &QAction::triggered, this, &BGMMenu::OnSmoothPlayAction);
+  connect(m_PlayInstant, &QAction::triggered, this, &BGMMenu::OnInstantPlayAction);
+  connect(m_PlaySync, &QAction::triggered, this, &BGMMenu::OnSyncPlayAction);
   connect(p_InsertAction, &QAction::triggered, this, &BGMMenu::OnInsertTriggered);
   connect(p_PinAction, &QAction::triggered, this, &BGMMenu::OnPinTriggered);
 }
@@ -39,11 +50,25 @@ void BGMMenu::OnInsertTriggered()
   oocChat->setFocus();
 }
 
-void BGMMenu::OnPlayTriggered()
+void BGMMenu::OnSmoothPlayAction()
 {
   if(m_TargetTrack.isEmpty()) return;
-  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack);
-  //ui_ic_chat_message_field->setFocus();
+  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback_Standard);
+  courtroom::ic::focusMessageBox();
+}
+
+void BGMMenu::OnInstantPlayAction()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback_NoFade);
+  courtroom::ic::focusMessageBox();
+}
+
+void BGMMenu::OnSyncPlayAction()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback_Continue);
+  courtroom::ic::focusMessageBox();
 }
 
 void BGMMenu::OnPinTriggered()

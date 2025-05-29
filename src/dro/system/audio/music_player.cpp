@@ -13,43 +13,51 @@ AOMusicPlayer::AOMusicPlayer(QObject *p_parent)
   m_family->set_capacity(1); // a single song is needed
 }
 
-void AOMusicPlayer::play(QString p_song)
+void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
 {
-  stop();
-
   m_filename = p_song;
 
-  if(mLastSong != nullptr)
+  QSharedPointer<DRAudioStream> newSong = m_family->create_stream(ao_app->get_music_path(p_song));
+  if (!newSong) return;
+
+  DRAudiotrackMetadata metadata(p_song);
+  if (!metadata.play_once())
   {
-    mLastSong->stop();
+    newSong->set_repeatable(true);
+    newSong->set_loop(metadata.loop_start(), metadata.loop_end());
   }
-  mLastSong = mCurrentSong;
 
-  if(mLastSong != nullptr)
+  switch(playbackType)
   {
-    mLastSong->fadeOut(3000);
+    case BGMPlayback_NoFade:
+      stop();
+      newSong->play();
+      break;
+
+    case BGMPlayback_Continue:
+      if (mCurrentSong)
+        mCurrentSong->fadeOut(300);
+      newSong->fadeIn(250);
+      newSong->playSynced(mCurrentSong.data());
+      break;
+
+    case BGMPlayback_Standard:
+    default:
+      if (mCurrentSong)
+        mCurrentSong->fadeOut(300);
+      newSong->fadeIn(300);
+      newSong->play();
+      break;
   }
 
-  mCurrentSong = m_family->create_stream(ao_app->get_music_path(p_song));
-  if (mCurrentSong)
-  {
-    DRAudiotrackMetadata l_audiotrack(p_song);
-    if (!l_audiotrack.play_once())
-    {
-      mCurrentSong->set_repeatable(true);
-      mCurrentSong->set_loop(l_audiotrack.loop_start(), l_audiotrack.loop_end());
-    }
+    if (newSong->is_playing())
+      qDebug() << "playing" << newSong->get_file_name();
 
-    mCurrentSong->fadeIn(3000);
-    mCurrentSong->play();
+    newSong->set_speed(0.0f);
+    newSong->toggle_reverb(false);
 
-    if (mCurrentSong->is_playing())
-    {
-      qDebug() << "playing" << mCurrentSong->get_file_name();
-    }
-    mCurrentSong->set_speed(0.0f);
-    mCurrentSong->toggle_reverb(false);
-  };
+    mLastSong = mCurrentSong;
+    mCurrentSong = newSong;
 }
 
 void AOMusicPlayer::setSpeed(float speed)
@@ -81,9 +89,8 @@ void AOMusicPlayer::setPitch(float pitch)
 
 void AOMusicPlayer::stop()
 {
-  //if(mLastSong == nullptr)
-  //{
-  //  for (auto &song : m_family->get_stream_list())
-  //    song->stop();
-  //}
+  if(mLastSong)
+    mLastSong->stop();
+  if(mCurrentSong)
+    mCurrentSong->stop();
 }

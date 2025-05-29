@@ -72,6 +72,7 @@ public slots:
   void fadeOut(int duration);
 
   void play();
+  void playSynced(const DRAudioStream* reference);
   void stop();
 
 signals:

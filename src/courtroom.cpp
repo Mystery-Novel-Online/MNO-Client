@@ -2334,7 +2334,11 @@ void Courtroom::handle_song(QStringList p_contents)
 
   if(!LuaBridge::SongChangeEvent(l_song.toStdString(), l_song_meta.title().toStdString(), l_showname.toStdString()))
   {
-    audio::bgm::Play(l_song.toStdString());
+    if(p_contents.length() > 4)
+    {
+      audio::bgm::PlayMode(l_song.toStdString(), BGMPlayback(p_contents.at(4).toInt()));
+    }
+
 
     if (l_chr_id >= 0 && l_chr_id < CharacterManager::get().mServerCharacters.length())
     {
@@ -2630,11 +2634,18 @@ void Courtroom::on_music_search_edited()
   on_music_search_edited(ui_music_search->text());
 }
 
-void Courtroom::send_mc_packet(QString p_song)
+void Courtroom::send_mc_packet(QString p_song, BGMPlayback playbackType)
 {
   if (is_client_muted)
     return;
-  ao_app->send_server_packet(DRPacket("MC", {p_song, QString::number(metadata::user::GetCharacterId())}));
+
+  QStringList contents = {p_song, QString::number(metadata::user::GetCharacterId())};
+  if(ServerMetadata::FeatureSupported("outfits"))
+  {
+    contents.append(QString::number(playbackType));
+  }
+
+  ao_app->send_server_packet(DRPacket("MC", contents));
 }
 
 /**
