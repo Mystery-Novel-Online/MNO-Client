@@ -46,8 +46,8 @@ void ThemeManager::createTabParent()
 
     QString l_buttonName = r_tabInfo.m_Name + "_toggle";
 
-    pos_size_type l_panelPosition = mCurrentThemeReader.getWidgetPosition(COURTROOM, l_panelName);
-    pos_size_type l_buttonDimensions = mCurrentThemeReader.getWidgetPosition(COURTROOM, l_buttonName);
+    pos_size_type l_panelPosition = mCurrentThemeReader.GetWidgetTransform(COURTROOM, l_panelName);
+    pos_size_type l_buttonDimensions = mCurrentThemeReader.GetWidgetTransform(COURTROOM, l_buttonName);
 
 
 
@@ -243,9 +243,9 @@ void ThemeManager::setWidgetDimensions(QWidget *t_widget, int t_width, int t_hei
   t_widget->resize(l_PositionWidth, l_PositionHeight);
 }
 
-void ThemeManager::AssignDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene)
+void ThemeManager::AssignDimensions(QWidget *t_widget, QString t_name, RPSceneType t_scene)
 {
-  pos_size_type lPositionData = mCurrentThemeReader.getWidgetPosition(t_scene, t_name);
+  pos_size_type lPositionData = mCurrentThemeReader.GetWidgetTransform(t_scene, t_name);
   lPositionData.width = static_cast<int>(lPositionData.width);
   lPositionData.height = static_cast<int>(lPositionData.height);
   lPositionData.x = static_cast<int>(lPositionData.x);
@@ -273,7 +273,7 @@ QVector<ThemeTabInfo> ThemeManager::getTabsInfo()
 
 bool ThemeManager::getConfigBool(QString value)
 {
-  return mCurrentThemeReader.getConfigBool(value);
+  return mCurrentThemeReader.GetConfigBool(value);
 }
 
 bool ThemeManager::getReloadPending()

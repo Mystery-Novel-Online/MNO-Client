@@ -1,12 +1,13 @@
 #include "theme_module_reader.h"
 #include "dro/fs/fs_reading.h"
 
+using namespace FS::Checks;
 ThemeModuleReader::ThemeModuleReader(QString t_moduleDirectory, QString t_moduleName)
 {
   m_moduleDirectory = t_moduleDirectory;
   QString modulePath = m_moduleDirectory + "/" + t_moduleName;
 
-  if(FS::Checks::FileExists(modulePath))
+  if(FileExists(modulePath))
   {
     ReadFromFile(modulePath);
     ParseModule();
@@ -21,6 +22,8 @@ void ThemeModuleReader::ParseModule()
   ParseModuleConfig();
   m_CourtroomScene = ParseScene("courtroom");
   m_LobbyScene = ParseScene("lobby");
+  m_ReplaysScene = ParseScene("replays");
+  m_ViewportScene = ParseScene("viewport");
   ParseLayers();
   ParseTabs();
 }
@@ -80,6 +83,7 @@ void ThemeModuleReader::ParseLayers()
 
       if(widget_name == "viewport")
       {
+        layerInfo.append("opengl_display");
         layerInfo.append("viewport_transition");
       }
 
@@ -110,8 +114,6 @@ void ThemeModuleReader::ParseTabs()
     SetTargetObject(tabObject.toObject());
     ThemeTabInfo themeTab;
     themeTab.m_Name = getStringValue("tab_name").toLower();
-    themeTab.m_DragEnabled = getBoolValue("drag_enabled");
-    themeTab.m_ToggleEnabled = getBoolValue("is_toggle");
     themeTab.m_WidgetContents = getStringArrayValue("widgets");
 
     if(tabObject.toObject().contains("group"))
@@ -150,6 +152,8 @@ ThemeScene *ThemeModuleReader::ParseScene(QString t_scene)
       widgetTransform.x = obj["position"].toObject()["x"].toInt(); widgetTransform.y = obj["position"].toObject()["y"].toInt();
       widgetTransform.width = obj["position"].toObject()["width"].toInt(); widgetTransform.height = obj["position"].toObject()["height"].toInt();
       newScene->setWidgetTransform(key, widgetTransform);
+
+      newScene->setWidgetRotation(key, obj["position"].toObject()["rotation"].toDouble());
     }
 
     if(obj.contains("settings"))
@@ -198,16 +202,6 @@ ThemeScene *ThemeModuleReader::ParseScene(QString t_scene)
       widgetFont->sharp = widgetFontObject["sharp"].toBool();
       widgetFont->outline = widgetFontObject["outline"].toBool();
 
-      if(widgetFontObject.contains("outline_color"))
-      {
-        widgetFont->outlineColor = QColor(widgetFontObject["outline_color"].toString());
-      }
-
-      if(widgetFontObject.contains("outline_size"))
-      {
-        widgetFont->outlineSize = widgetFontObject["outline_size"].toInt();
-      }
-
       newScene->setWidgetFont(key, widgetFont);
 
       if(key == "ic_chatlog")
@@ -242,19 +236,43 @@ void ThemeModuleReader::SwitchModuleTarget(QString t_target)
   SetTargetObject(t_target);
 }
 
-ThemeScene *ThemeModuleReader::getThemeScene(ThemeSceneType t_scene)
+ThemeScene *ThemeModuleReader::getThemeScene(RPSceneType t_scene)
 {
   switch (t_scene)
   {
     case LOBBY:
       return m_LobbyScene;
 
+    case SceneType_Replay:
+      return m_ReplaysScene;
+
     case COURTROOM:
-    return m_CourtroomScene;
+      return m_CourtroomScene;
+
+    case SceneType_Viewport:
+      return m_ViewportScene;
 
     default:
       return nullptr;
     }
+}
+
+bool ThemeModuleReader::getContainsSceneWidget(RPSceneType t_scene, QString t_name)
+{
+    ThemeScene *l_scene = getThemeScene(t_scene);
+
+    if(l_scene == nullptr) return false;
+    WidgetThemeData* l_widgetData = l_scene->getWidgetData(t_name);
+
+    if(l_widgetData == nullptr) return false;
+
+    pos_size_type position = l_widgetData->Transform;
+    if(position.height != -1 && position.width != -1)
+    {
+      return true;
+    }
+
+    return false;
 }
 
 bool ThemeModuleReader::getContainsLayers()
@@ -296,3 +314,4 @@ QString ThemeModuleReader::getDirectoryPath()
 {
   return m_moduleDirectory;
 }
+

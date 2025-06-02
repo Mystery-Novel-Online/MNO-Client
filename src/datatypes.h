@@ -8,6 +8,36 @@
 #include <QRect>
 #include <QColor>
 
+class MessageEffect
+{
+public:
+  MessageEffect() = default;
+  MessageEffect(QString t_name)
+  {
+    name = t_name;
+  };
+
+  QString name = "";
+  bool loops = false;
+  bool ignorePair = false;
+  int legacyId = -1;
+};
+
+struct ReplayOperation
+{
+  QString operation = "";
+  int timestamp = 0;
+  QMap<QString, QString> variables;
+};
+
+enum class ChatTypes
+{
+  Talk,
+  Shout,
+  Think,
+  CG,
+  Narrator
+};
 
 class VariableMappedString
 {
@@ -20,12 +50,13 @@ public:
 };
 
 
-enum ThemeSceneType
+enum RPSceneType
 {
   LOBBY,
   COURTROOM,
   TESTINGLABS,
-  REPLAYS
+  SceneType_Replay,
+  SceneType_Viewport
 };
 
 class DRBackgroundSettings
@@ -253,6 +284,7 @@ struct widgetFontStruct
 struct WidgetThemeData
 {
   pos_size_type Transform;
+  double Rotation = 0;
   widgetFontStruct *Font = nullptr;
   QVector2D Spacing = QVector2D(-1, -1);
 };

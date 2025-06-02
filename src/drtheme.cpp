@@ -21,7 +21,7 @@ void DRTheme::InitTheme()
   QString currentThemeName = ao_app->getCurrentTheme();
   ThemeManager::get().loadTheme(currentThemeName);
   ThemeManager::get().LoadGamemode(ao_app->getCurrentGamemode());
-  ThemeManager::get().mCurrentThemeReader.SetTime(ao_app->getCurrentTime());
+  ThemeManager::get().mCurrentThemeReader.SetTimeOfDay(ao_app->getCurrentTime());
   const QString l_json_path = ao_app->find_theme_asset_path(THEME_JSON);
   m_themePath = ao_app->find_current_theme_path();
 
@@ -53,7 +53,7 @@ void DRTheme::InitTheme()
 
 void DRTheme::setup_layers()
 {
-  widget_layers = ThemeManager::get().mCurrentThemeReader.getLayers();
+  widget_layers = ThemeManager::get().mCurrentThemeReader.GetLayers();
   return;
 }
 
@@ -200,18 +200,18 @@ int DRTheme::read_config_int(QString p_setting_name)
 
 QVector<QStringList>DRTheme::get_highlight_characters()
 {
-  return ThemeManager::get().mCurrentThemeReader.getHighlights();
+  return ThemeManager::get().mCurrentThemeReader.GetColorsHighlights();
 }
 
 pos_size_type DRTheme::get_element_dimensions(QString p_identifier, QString p_scene)
 {
   if(p_scene == "courtroom")
   {
-    return ThemeManager::get().mCurrentThemeReader.getWidgetPosition(COURTROOM, p_identifier);
+    return ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(COURTROOM, p_identifier);
   }
   else
   {
-    return ThemeManager::get().mCurrentThemeReader.getWidgetPosition(LOBBY, p_identifier);
+    return ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(LOBBY, p_identifier);
   }
 
 }
@@ -244,9 +244,9 @@ QString DRTheme::get_widget_font_string_setting(QString p_identifier, QString p_
     return ao_app->read_theme_ini(fallback, p_scene);
   }
 
-  ThemeSceneType sceneType = COURTROOM;
+  RPSceneType sceneType = COURTROOM;
   if(p_scene == LOBBY_FONTS_INI) sceneType = LOBBY;
-  return ThemeManager::get().mCurrentThemeReader.getFont(sceneType, p_identifier).align;
+  return ThemeManager::get().mCurrentThemeReader.GetFontData(sceneType, p_identifier).align;
 }
 
 bool DRTheme::get_widget_font_bool(QString p_identifier, QString p_scene, QString p_param, QString p_type)
@@ -349,7 +349,7 @@ QColor DRTheme::get_widget_settings_color(QString p_identifier, QString p_scene,
     return ao_app->get_color(ini_fallback, COURTROOM_DESIGN_INI);
   }
 
-  QString l_color = ThemeManager::get().mCurrentThemeReader.getSoundName(p_type + "_color");
+  QString l_color = ThemeManager::get().mCurrentThemeReader.GetConfigSoundName(p_type + "_color");
   if(l_color.isEmpty())
   {
     return ao_app->get_color(ini_fallback, COURTROOM_DESIGN_INI);
@@ -368,7 +368,7 @@ QPoint DRTheme::get_widget_settings_spacing(QString p_identifier, QString p_scen
     return ao_app->get_button_spacing(ini_fallback, COURTROOM_DESIGN_INI);
   }
 
-  QVector2D spacing = ThemeManager::get().mCurrentThemeReader.getWidgetSpacing(p_identifier);
+  QVector2D spacing = ThemeManager::get().mCurrentThemeReader.GetWidgetSpacing(p_identifier);
   QPoint return_value = QPoint(spacing.x(),spacing.y());
   return return_value;
 }
@@ -392,7 +392,7 @@ QMap<DR::Color, DR::ColorInfo> DRTheme::get_chat_colors()
   QJsonArray array = item["colors"].toArray();
 
 
-  QMap<QString, DR::ColorInfo> color_replacement_map = ThemeManager::get().mCurrentThemeReader.getTextColors();
+  QMap<QString, DR::ColorInfo> color_replacement_map = ThemeManager::get().mCurrentThemeReader.GetColorsDefault();
 
   for (DR::Color &i_color : color_map.keys())
   {
@@ -411,7 +411,7 @@ QString DRTheme::get_sfx_file(QString p_identifier)
 {
   if(!m_jsonLoaded) return ao_app->read_theme_ini(p_identifier, COURTROOM_SOUNDS_INI);
 
-  return ThemeManager::get().mCurrentThemeReader.getSoundName(p_identifier);
+  return ThemeManager::get().mCurrentThemeReader.GetConfigSoundName(p_identifier);
 }
 
 QStringList DRTheme::get_effect(int index)

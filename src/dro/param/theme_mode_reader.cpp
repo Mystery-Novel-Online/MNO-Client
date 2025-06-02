@@ -1,14 +1,14 @@
 #include "theme_mode_reader.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/system/localization.h"
-#include <AOApplication.h>
+#include <aoapplication.h>
 #include <QDir>
 
 ThemeModeReader::ThemeModeReader(QString filePath)
 {
 
-  mTimeModes = {};
-  mFilePath = filePath;
+  m_TimeOfDayReaders = {};
+  m_FilePath = filePath;
   //Load Images
   QDir directory(filePath);
 
@@ -30,24 +30,15 @@ ThemeModeReader::ThemeModeReader(QString filePath)
 
     ReadFromFile(filePath + "/theme.json");
     SetTargetObject("config");
-    QStringList boolConfigs = {"enable_single_shout" , "enable_music_and_area_list_separation", "detatchable_viewport", "enable_single_effect", "enable_single_wtce", "enable_const_music_speed", "enable_showname_image", "enable_highlighting", "enable_button_images", "enable_label_images", "enable_cycle_ding", "use_toggles"};
-
-    for (const QString& boolName : boolConfigs)
-    {
-      if (isValueExists(boolName))
-      {
-        mConfigToggles[boolName] = getBoolValue(boolName);
-      }
-    }
 
     if(isValueExists("music_scroll_speed"))
     {
-      mMusicScrollSpeed = getIntValue("music_scroll_speed");
+      m_MusicDisplayScrollSpeed = getIntValue("music_scroll_speed");
     }
 
     if(isValueExists("timer_number"))
     {
-      mTimerNumber = getIntValue("timer_number");
+      m_TimerCount = getIntValue("timer_number");
     }
 
 
@@ -58,145 +49,15 @@ ThemeModeReader::ThemeModeReader(QString filePath)
     for(QJsonValueRef colourObject : jsonColoursArray)
     {
       SetTargetObject(colourObject.toObject());
-      mTextColours[getStringValue("color")].code = getStringValue("code");
-    }
-
-    for(QJsonValueRef soundObject : jsonSoundsArray)
-    {
-      SetTargetObject(soundObject.toObject());
-      mSounds[getStringValue("sound")] = getStringValue("file");
+      m_CourtroomFontColorsDefault[getStringValue("color")].code = getStringValue("code");
     }
 
     for(QJsonValueRef highlights : jsonHighlightsArray)
     {
       SetTargetObject(highlights.toObject());
-      mCourtroomFontHighlights[getStringValue("chars")].chars = getStringValue("chars");
-      mCourtroomFontHighlights[getStringValue("chars")].color = getStringValue("color");
-      mCourtroomFontHighlights[getStringValue("chars")].keepCharacters = getBoolValue("keep_characters");
-    }
-
-    SetThemeJsonObject("courtroom");
-    mCourtroomWidgetPositions = {};
-    mCourtroomWidgetFonts = {};
-
-    for (const QString &key : mTargetObject.keys())
-    {
-      QJsonObject obj = mTargetObject[key].toObject();
-
-      if(obj.contains("position"))
-      {
-        pos_size_type return_value;
-        return_value.x = obj["position"].toObject()["x"].toInt();
-        return_value.y = obj["position"].toObject()["y"].toInt();
-        return_value.width = obj["position"].toObject()["width"].toInt();
-        return_value.height = obj["position"].toObject()["height"].toInt();
-        mCourtroomWidgetPositions[key] = return_value;
-      }
-
-      if(obj.contains("settings"))
-      {
-        if(obj["settings"].toObject().contains("spacing"))
-        {
-          mWidgetSpacings[key].setX(obj["settings"].toObject()["spacing"].toObject()["x"].toInt());
-          mWidgetSpacings[key].setY(obj["settings"].toObject()["spacing"].toObject()["y"].toInt());
-        }
-      }
-
-      if(obj.contains("font"))
-      {
-        widgetFontStruct widgetFont;
-
-        if(obj["font"].toObject().contains("name")) widgetFont.font = obj["font"].toObject()["name"].toString();
-        if(obj["font"].toObject().contains("color")) widgetFont.color = obj["font"].toObject()["color"].toString();
-        if(obj["font"].toObject().contains("align")) widgetFont.align = obj["font"].toObject()["align"].toString();
-
-
-        widgetFont.size = obj["font"].toObject()["size"].toInt();
-        widgetFont.bold = obj["font"].toObject()["bold"].toBool();
-        widgetFont.sharp = obj["font"].toObject()["sharp"].toBool();
-        widgetFont.outline = obj["font"].toObject()["outline"].toBool();
-        if(obj["font"].toObject().contains("outline_color"))
-        {
-          widgetFont.outlineColor = QColor(obj["font"].toObject()["outline_color"].toString());
-        }
-
-        if(obj["font"].toObject().contains("outline_size"))
-        {
-          widgetFont.outlineSize = obj["font"].toObject()["outline_size"].toInt();
-        }
-
-        mCourtroomWidgetFonts[key] = widgetFont;
-
-
-      }
-    }
-
-    SetThemeJsonObject("lobby");
-    mLobbyWidgetPositions = {};
-    mLobbyWidgetFonts = {};
-
-    for (const QString &key : mTargetObject.keys())
-    {
-      QJsonObject obj = mTargetObject[key].toObject();
-
-      if(obj.contains("position"))
-      {
-        pos_size_type return_value;
-        return_value.x = obj["position"].toObject()["x"].toInt();
-        return_value.y = obj["position"].toObject()["y"].toInt();
-        return_value.width = obj["position"].toObject()["width"].toInt();
-        return_value.height = obj["position"].toObject()["height"].toInt();
-        mLobbyWidgetPositions[key] = return_value;
-
-      }
-
-      if(obj.contains("font"))
-      {
-        widgetFontStruct widgetFont;
-
-        if(obj["font"].toObject().contains("name")) widgetFont.font = obj["font"].toObject()["name"].toString();
-
-        if(obj["font"].toObject().contains("color")) widgetFont.color = obj["font"].toObject()["color"].toString();
-
-        if(obj["font"].toObject().contains("align")) widgetFont.align = obj["font"].toObject()["align"].toString();
-
-
-        widgetFont.size = obj["font"].toObject()["size"].toInt();
-        widgetFont.bold = obj["font"].toObject()["bold"].toBool();
-        widgetFont.sharp = obj["font"].toObject()["sharp"].toBool();
-        widgetFont.outline = obj["font"].toObject()["outline"].toBool();
-
-        if(obj["font"].toObject().contains("outline_color"))
-        {
-          widgetFont.outlineColor = QColor(obj["font"].toObject()["outline_color"].toString());
-        }
-
-        if(obj["font"].toObject().contains("outline_size"))
-        {
-          widgetFont.outlineSize = obj["font"].toObject()["outline_size"].toInt();
-        }
-
-        mLobbyWidgetFonts[key] = widgetFont;
-
-
-      }
-    }
-
-    QJsonArray tabsArray = mMainObject["tabs"].toArray();
-    mTabWidgets = {};
-    for(QJsonValueRef tabData : tabsArray)
-    {
-      SetTargetObject(tabData.toObject());
-      mTabWidgets[getStringValue("tab_name").toLower()] = getStringArrayValue("widgets");
-    }
-
-
-    QJsonArray layersArray = mMainObject["layers"].toArray();
-    mWidgetLayers = {};
-    for(QJsonValueRef widgetLayer : layersArray)
-    {
-      SetTargetObject(widgetLayer.toObject());
-      mWidgetLayers[getStringValue("widget_name").toLower()] = getStringArrayValue("children");
+      m_CourtroomFontColorsHighlights[getStringValue("chars")].chars = getStringValue("chars");
+      m_CourtroomFontColorsHighlights[getStringValue("chars")].color = getStringValue("color");
+      m_CourtroomFontColorsHighlights[getStringValue("chars")].keepCharacters = getBoolValue("keep_characters");
     }
 
   }
@@ -218,13 +79,13 @@ void ThemeModeReader::SetThemeJsonObject(QString category)
 void ThemeModeReader::LoadTimeMode()
 {
   m_TimeModules = {};
-  QString gameModesPath = mFilePath + "/times/";
+  QString gameModesPath = m_FilePath + "/times/";
   for (const QString &i_folder : QDir(AOApplication::getInstance()->get_case_sensitive_path(gameModesPath)).entryList(QDir::Dirs))
   {
     if (i_folder == "." || i_folder == "..")
       continue;
-    mTimeModes[i_folder] = new ThemeModeReader(mFilePath + "/times/" + i_folder);
-    m_TimeModules[i_folder] = new ThemeModuleReader(mFilePath + "/times/" + i_folder, "theme.json");
+    m_TimeOfDayReaders[i_folder] = new ThemeModeReader(m_FilePath + "/times/" + i_folder);
+    m_TimeModules[i_folder] = new ThemeModuleReader(m_FilePath + "/times/" + i_folder, "theme.json");
   }
 }
 
@@ -233,7 +94,7 @@ void ThemeModeReader::LoadModules()
   m_ModuleNames.clear();
   m_ThemeModules = {};
 
-  QDir modulesDirectory(mFilePath + "/modules");
+  QDir modulesDirectory(m_FilePath + "/modules");
   QStringList moduleSubDirectories = modulesDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
   for (const QString &moduleDirectory : moduleSubDirectories)
@@ -254,7 +115,7 @@ void ThemeModeReader::LoadModules()
 
 }
 
-QStringList ThemeModeReader::getThemeDirOrder()
+QStringList ThemeModeReader::GetDirectoryLoadOrder()
 {
   QStringList dirs = {};
 
@@ -269,17 +130,17 @@ QStringList ThemeModeReader::getThemeDirOrder()
   return dirs;
 }
 
-void ThemeModeReader::SetTime(QString time)
+void ThemeModeReader::SetTimeOfDay(QString time)
 {
-  if(mTimeModes.contains(time))
+  if(m_TimeOfDayReaders.contains(time))
   {
-    mCurrentTimeName = time;
-    mCurrentTime = mTimeModes[time];
+    m_TimeOfDayCurrentName = time;
+    m_TimeOfDayCurrent = m_TimeOfDayReaders[time];
   }
   else
   {
-    mCurrentTimeName = "default";
-    mCurrentTime = nullptr;
+    m_TimeOfDayCurrentName = "default";
+    m_TimeOfDayCurrent = nullptr;
   }
 }
 
@@ -355,12 +216,12 @@ QVector<QStringList> ThemeModeReader::getLayers()
   return {};
 }
 
-QHash<QString, dialogueHighlights> ThemeModeReader::getHighlightColors()
+QHash<QString, dialogueHighlights> ThemeModeReader::GetFontColorsHighlights()
 {
-  QHash<QString, dialogueHighlights> returnValue = mCourtroomFontHighlights;
-  if(mCurrentTime != nullptr)
+  QHash<QString, dialogueHighlights> returnValue = m_CourtroomFontColorsHighlights;
+  if(m_TimeOfDayCurrent != nullptr)
   {
-    QHashIterator<QString, dialogueHighlights> i(mCurrentTime->mCourtroomFontHighlights);
+    QHashIterator<QString, dialogueHighlights> i(m_TimeOfDayCurrent->m_CourtroomFontColorsHighlights);
     while (i.hasNext())
     {
       i.next();
@@ -373,12 +234,12 @@ QHash<QString, dialogueHighlights> ThemeModeReader::getHighlightColors()
 
 }
 
-QMap<QString, DR::ColorInfo> ThemeModeReader::getTextColors()
+QMap<QString, DR::ColorInfo> ThemeModeReader::GetFontColorsDefault()
 {
-  QMap<QString, DR::ColorInfo> returnValue = mTextColours;
-  if(mCurrentTime != nullptr)
+  QMap<QString, DR::ColorInfo> returnValue = m_CourtroomFontColorsDefault;
+  if(m_TimeOfDayCurrent != nullptr)
   {
-    QMapIterator<QString, DR::ColorInfo> i(mCurrentTime->mTextColours);
+    QMapIterator<QString, DR::ColorInfo> i(m_TimeOfDayCurrent->m_CourtroomFontColorsDefault);
     while (i.hasNext())
     {
       i.next();
@@ -386,55 +247,6 @@ QMap<QString, DR::ColorInfo> ThemeModeReader::getTextColors()
     }
   }
   return returnValue;
-}
-
-bool ThemeModeReader::containsSoundName(QString t_soundName)
-{
-  QVector<ThemeModuleReader *> modulesList = getModuleLoadOrder();
-  for(ThemeModuleReader * module : modulesList)
-  {
-    if(module == nullptr) continue;
-    if(module->getContainsSound(t_soundName)) return true;
-  }
-  return false;
-}
-
-QString ThemeModeReader::getSoundName(QString t_soundName)
-{
-  QVector<ThemeModuleReader *> modulesList = getModuleLoadOrder();
-
-  for(ThemeModuleReader * module : modulesList)
-  {
-    if(module == nullptr) continue;
-    if(module->getContainsSound(t_soundName)) return module->getSoundFile(t_soundName);
-  }
-
-  return "";
-}
-
-bool ThemeModeReader::containsSettingBool(QString t_setting)
-{
-  QVector<ThemeModuleReader *> modulesList = getModuleLoadOrder();
-  for(ThemeModuleReader * module : modulesList)
-  {
-    if(module == nullptr) continue;
-    if(module->getContainsBool(t_setting)) return true;
-  }
-  return false;
-}
-
-bool ThemeModeReader::getSettingBool(QString t_setting)
-{
-
-  QVector<ThemeModuleReader *> modulesList = getModuleLoadOrder();
-
-  for(ThemeModuleReader * module : modulesList)
-  {
-    if(module == nullptr) continue;
-    if(module->getContainsBool(t_setting)) return module->getSettingBool(t_setting);
-  }
-
-  return false;
 }
 
 QVector2D ThemeModeReader::getWidgetSpacing(QString t_name)
@@ -455,106 +267,61 @@ QVector2D ThemeModeReader::getWidgetSpacing(QString t_name)
 
 int ThemeModeReader::getMusicScrollSpeed()
 {
-  if(mCurrentTime != nullptr)
+  if(m_TimeOfDayCurrent != nullptr)
   {
-    if(mCurrentTime->mMusicScrollSpeed != -1) return mCurrentTime->mMusicScrollSpeed;
+    if(m_TimeOfDayCurrent->m_MusicDisplayScrollSpeed != -1) return m_TimeOfDayCurrent->m_MusicDisplayScrollSpeed;
   }
-  if(mMusicScrollSpeed != -1)
+  if(m_MusicDisplayScrollSpeed != -1)
   {
-    return mMusicScrollSpeed;
+    return m_MusicDisplayScrollSpeed;
   }
   return -1;
 }
 
 int ThemeModeReader::getTimerNumber()
 {
-  if(mCurrentTime != nullptr)
+  if(m_TimeOfDayCurrent != nullptr)
   {
-    if(mCurrentTime->mTimerNumber != -1) return mCurrentTime->mTimerNumber;
+    if(m_TimeOfDayCurrent->m_TimerCount != -1) return m_TimeOfDayCurrent->m_TimerCount;
   }
-  if(mTimerNumber != -1)
+  if(m_TimerCount != -1)
   {
-    return mTimerNumber;
+    return m_TimerCount;
   }
   return -1;
 }
 
-bool ThemeModeReader::containsWidgetPosition(ThemeSceneType sceneType, QString name)
+bool ThemeModeReader::containsWidgetPosition(RPSceneType sceneType, QString name)
 {
-  if(sceneType == COURTROOM) return containsCourtroomWidgetPosition(name);
+  if(m_TimeOfDayCurrent != nullptr)
+  {
+    if(m_TimeOfDayCurrent->m_GamemodeModule != nullptr)
+    {
+      bool l_timeHasWidget = m_TimeOfDayCurrent->m_GamemodeModule->getContainsSceneWidget(sceneType, name);
+      if(l_timeHasWidget) return true;
+    }
+  }
 
-  if(sceneType == LOBBY) return containsLobbyWidgetPosition(name);
+  for(QString module : m_ModuleNames)
+  {
+    if(m_ThemeModules[module].contains("default.json"))
+    {
+      bool l_modHasWidget = m_ThemeModules[module]["default.json"]->getContainsSceneWidget(sceneType, name);
+      if(l_modHasWidget) return true;
+    }
+  }
+
+  if(m_GamemodeModule != nullptr) return m_GamemodeModule->getContainsSceneWidget(sceneType, name);
+
   return false;
 }
 
-pos_size_type ThemeModeReader::getWidgetPosition(ThemeSceneType sceneType, QString name)
+pos_size_type ThemeModeReader::getWidgetPosition(RPSceneType sceneType, QString name)
 {
   return getWidgetDimensions(getSceneLoadOrder(sceneType), name);
 }
 
-bool ThemeModeReader::containsCourtroomWidgetPosition(QString widget_name)
-{
-  if(mCurrentTime != nullptr)
-  {
-    if(mCurrentTime->mCourtroomWidgetPositions.contains(widget_name)) return true;
-  }
-
-  for(QString module : m_ModuleNames)
-  {
-    if(m_ThemeModules[module].contains("default.json"))
-    {
-      ThemeScene *scene = m_ThemeModules[module]["default.json"]->getThemeScene(COURTROOM);
-      if(scene == nullptr) continue;
-      WidgetThemeData* widgetData = scene->getWidgetData(widget_name);
-      if(widgetData == nullptr) continue;
-
-      pos_size_type position = widgetData->Transform;
-      if(position.height != -1 && position.width != -1)
-      {
-        return true;
-      }
-
-    }
-  }
-
-  if(mCourtroomWidgetPositions.contains(widget_name)) return true;
-
-
-  return false;
-}
-
-bool ThemeModeReader::containsLobbyWidgetPosition(QString widget_name)
-{
-  if(mCurrentTime != nullptr)
-  {
-    if(mCurrentTime->mLobbyWidgetPositions.contains(widget_name)) return true;
-  }
-
-  for(QString module : m_ModuleNames)
-  {
-    if(m_ThemeModules[module].contains("default.json"))
-    {
-      ThemeScene *scene = m_ThemeModules[module]["default.json"]->getThemeScene(LOBBY);
-      if(scene == nullptr) continue;
-      WidgetThemeData* widgetData = scene->getWidgetData(widget_name);
-      if(widgetData == nullptr) continue;
-
-      pos_size_type position = widgetData->Transform;
-      if(position.height != -1 && position.width != -1)
-      {
-        return true;
-      }
-
-    }
-  }
-
-  if(mLobbyWidgetPositions.contains(widget_name)) return true;
-
-
-  return false;
-}
-
-bool ThemeModeReader::containsWidgetFont(ThemeSceneType t_sceneType, QString widget_name)
+bool ThemeModeReader::containsWidgetFont(RPSceneType t_sceneType, QString widget_name)
 {
   QVector<ThemeScene*> readOrder = getSceneLoadOrder(t_sceneType);
 
@@ -570,7 +337,7 @@ bool ThemeModeReader::containsWidgetFont(ThemeSceneType t_sceneType, QString wid
 }
 
 
-widgetFontStruct ThemeModeReader::getWidgetFont(ThemeSceneType t_sceneType, QString t_name)
+widgetFontStruct ThemeModeReader::getWidgetFont(RPSceneType t_sceneType, QString t_name)
 {
   QVector<ThemeScene*> readOrder = getSceneLoadOrder(t_sceneType);
 
@@ -587,19 +354,21 @@ widgetFontStruct ThemeModeReader::getWidgetFont(ThemeSceneType t_sceneType, QStr
 
 pos_size_type ThemeModeReader::getWidgetDimensions(QVector<ThemeScene *> t_readOrder, QString t_name)
 {
-  for (ThemeScene *scene : t_readOrder)
+  for (ThemeScene *r_SceneToRead : t_readOrder)
   {
-    if(scene == nullptr) continue;
-    WidgetThemeData* widgetData = scene->getWidgetData(t_name);
-    if(widgetData == nullptr) continue;
-    pos_size_type position = widgetData->Transform;
+    if(r_SceneToRead == nullptr) continue;
+
+    WidgetThemeData* l_WidgetThemeData = r_SceneToRead->getWidgetData(t_name);
+    if(l_WidgetThemeData == nullptr) continue;
+
+    pos_size_type position = l_WidgetThemeData->Transform;
     if(position.height != -1 && position.width != -1) return position;
   }
   return pos_size_type();
 }
 
 
-QVector<ThemeScene*> ThemeModeReader::getSceneLoadOrder(ThemeSceneType t_type)
+QVector<ThemeScene*> ThemeModeReader::getSceneLoadOrder(RPSceneType t_type)
 {
   QVector<ThemeScene*> returnValue = {};
 
@@ -619,9 +388,9 @@ QVector<ThemeModuleReader *> ThemeModeReader::getModuleLoadOrder()
 {
   QVector<ThemeModuleReader*> returnValue = {};
 
-  if(m_TimeModules.contains(mCurrentTimeName))
+  if(m_TimeModules.contains(m_TimeOfDayCurrentName))
   {
-    if(m_TimeModules[mCurrentTimeName] != nullptr) returnValue.append(m_TimeModules[mCurrentTimeName]);
+    if(m_TimeModules[m_TimeOfDayCurrentName] != nullptr) returnValue.append(m_TimeModules[m_TimeOfDayCurrentName]);
   }
 
   for(QString module : m_ModuleNames)
@@ -639,3 +408,5 @@ QVector<ThemeModuleReader *> ThemeModeReader::getModuleLoadOrder()
 
   return returnValue;
 }
+
+

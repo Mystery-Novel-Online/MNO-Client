@@ -39,6 +39,8 @@
 #include "dro/interface/lobby_layout.h"
 
 #include <modules/theme/thememanager.h>
+#include "dro/interface/scenes/replay_window.h"
+#include "dro/system/replay_playback.h"
 
 using namespace dro::system;
 
@@ -54,6 +56,11 @@ Lobby::Lobby(AOApplication *p_ao_app)
 
   ui_background = new AOImageDisplay(this, ao_app);
 
+
+  ui_gallery_background = new AOImageDisplay(this, ao_app);
+  ui_gallery_preview = new AOImageDisplay(ui_gallery_background, ao_app);
+
+  \
   ui_public_server_filter = new RPButton(this);
 
   ui_favorite_server_filter = new RPButton(this);
@@ -61,6 +68,9 @@ Lobby::Lobby(AOApplication *p_ao_app)
   ui_toggle_favorite = Layout::ServerSelect::CreateButton("add_to_fav", "addtofav", [this]() {this->on_add_to_fav_released();});
   ui_refresh = Layout::ServerSelect::CreateButton("refresh", "refresh", [this]() {this->on_refresh_released();});
   ui_connect = Layout::ServerSelect::CreateButton("connect", "connect", [this]() {this->on_connect_released();});
+  ui_gallery_toggle = Layout::ServerSelect::CreateButton("toggle_gallery", "toggle_gallery", [this]() {this->onGalleryToggle();});
+  ui_gallery_play = Layout::ServerSelect::CreateButton("play_replay", "play_replay", [this]() {this->onGalleryPlay();});
+  ui_gallery_play->setParent(ui_gallery_background);
 
   ui_config_panel = new RPButton(this);
 
@@ -105,6 +115,19 @@ Lobby::Lobby(AOApplication *p_ao_app)
 
   ui_cancel = new RPButton(ui_loading_background);
 
+
+  ui_replay_list = new QListWidget(ui_gallery_background);
+  ui_replay_list->setContextMenuPolicy(Qt::CustomContextMenu);
+
+  ui_gallery_packages = new QComboBox(ui_gallery_background);
+  ui_gallery_categories = new QComboBox(ui_gallery_background);
+
+
+  connect(ui_gallery_categories, SIGNAL(currentIndexChanged(int)), this, SLOT(onGalleryCategoryChanged(int)));
+  connect(ui_gallery_packages, SIGNAL(currentIndexChanged(int)), this, SLOT(onGalleryPackageChanged(int)));
+
+  connect(ui_replay_list, SIGNAL(currentRowChanged(int)), this, SLOT(onReplayRowChanged(int)));
+
   connect(ao_app, SIGNAL(reload_theme()), this, SLOT(update_widgets()));
   connect(ao_app, &AOApplication::server_status_changed, this, &Lobby::_p_update_description);
 
@@ -140,6 +163,10 @@ Lobby::Lobby(AOApplication *p_ao_app)
   set_choose_a_server();
 
   ThemeManager::get().ResetWidgetLists();
+  m_replayWindow = new ReplayWindow();
+  m_replayWindow->hide();
+  ui_gallery_packages->clear();
+  ui_gallery_packages->addItems(dro::system::replays::io::packageNames());
 }
 
 Lobby::~Lobby()
@@ -170,6 +197,14 @@ void Lobby::update_widgets()
   set_size_and_pos(ui_background, "lobby", LOBBY_DESIGN_INI, ao_app);
   ui_background->set_theme_image("lobbybackground.png");
 
+  set_size_and_pos(ui_gallery_background, "lobby", LOBBY_DESIGN_INI, ao_app);
+  ui_gallery_background->set_theme_image("replaybackground.png");
+  ui_gallery_background->raise();
+  ui_gallery_background->hide();
+
+  set_size_and_pos(ui_gallery_preview, "replay_preview", LOBBY_DESIGN_INI, ao_app);
+  ui_gallery_preview->set_theme_image("replay_preview.png");
+
   set_size_and_pos(ui_public_server_filter, "public_servers", LOBBY_DESIGN_INI, ao_app);
   ui_public_server_filter->set_image(m_server_filter == PublicOnly ? "publicservers_selected.png" : "publicservers.png");
 
@@ -188,7 +223,15 @@ void Lobby::update_widgets()
     ui_config_panel->show();
   }
 
+  set_size_and_pos(ui_gallery_categories, "replay_category", LOBBY_DESIGN_INI, ao_app);
+
+  set_size_and_pos(ui_gallery_packages, "replay_packages", LOBBY_DESIGN_INI, ao_app);
+
   set_size_and_pos(ui_server_list, "server_list", LOBBY_DESIGN_INI, ao_app);
+  ui_server_list->setStyleSheet("background-color: rgba(0, 0, 0, 0);"
+                                "font: bold;");
+
+  set_size_and_pos(ui_replay_list, "replay_list", LOBBY_DESIGN_INI, ao_app);
   ui_server_list->setStyleSheet("background-color: rgba(0, 0, 0, 0);"
                                 "font: bold;");
 
@@ -223,6 +266,7 @@ void Lobby::update_widgets()
 
   ui_loading_background->hide();
 
+  ui_gallery_toggle->raise();
   set_fonts();
   set_stylesheets();
   update_server_listing();
@@ -237,6 +281,9 @@ void Lobby::set_fonts()
   set_font(ui_chatbox, "chatbox", LOBBY_FONTS_INI, ao_app);
   set_drtextedit_font(ui_loading_text, "loading_text", LOBBY_FONTS_INI, ao_app);
   set_font(ui_server_list, "server_list", LOBBY_FONTS_INI, ao_app);
+  set_font(ui_replay_list, "replay_list", LOBBY_FONTS_INI, ao_app);
+  set_font(ui_gallery_packages, "replay_packages", LOBBY_FONTS_INI, ao_app);
+  set_font(ui_gallery_categories, "replay_category", LOBBY_FONTS_INI, ao_app);
 }
 
 void Lobby::set_stylesheet(QWidget *widget, QString target_tag)
@@ -254,6 +301,9 @@ void Lobby::set_stylesheets()
   set_stylesheet(ui_chatbox, "[CHAT BOX]");
   set_stylesheet(ui_loading_text, "[LOADING TEXT]");
   set_stylesheet(ui_server_list, "[SERVER LIST]");
+  set_stylesheet(ui_replay_list, "[REPLAY LIST]");
+  set_stylesheet(ui_gallery_packages, "[REPLAY PACKAGES]");
+  set_stylesheet(ui_gallery_categories, "[REPLAY PACKAGES]");
 }
 
 void Lobby::show_loading_overlay()
@@ -463,6 +513,68 @@ void Lobby::select_current_server()
       break;
     }
   }
+}
+
+void Lobby::onReplayRowChanged(int row)
+{
+  if (row == -1) return;
+
+  //QString lImagePath = ReplayManager::get().getReplayImagePath(mCurrentPackage, mCurrentCategory, pUiReplayList->item(row)->text());
+  //
+  //if(!file_exists(lImagePath))
+  //{
+  //  pUIReplayPreview->set_theme_image("replay_preview.png");
+  //}
+  //else
+  //{
+  //  pUIReplayPreview->set_image(lImagePath);
+  //}
+}
+
+void Lobby::onGalleryPackageChanged(int index)
+{
+  ui_replay_list->clear();
+  if(index == 0)
+  {
+    m_currentPackage = "";
+    ui_gallery_categories->clear();
+    ui_gallery_categories->addItem("Default");
+  }
+  else
+  {
+    m_currentPackage = ui_gallery_packages->currentText();
+    ui_gallery_categories->clear();
+    ui_gallery_categories->addItem("Default");
+
+    ui_gallery_categories->addItems(dro::system::replays::io::packageCategories(m_currentPackage));
+  }
+}
+
+void Lobby::onGalleryCategoryChanged(int index)
+{
+  ui_replay_list->clear();
+  if(index == 0)
+  {
+    m_currentCategory = "";
+  }
+  else
+  {
+    m_currentCategory = ui_gallery_categories->currentText();
+  }
+
+  QStringList lReplays = dro::system::replays::io::packageContents(m_currentPackage, m_currentCategory);
+  ui_replay_list->addItems(lReplays);
+}
+
+void Lobby::onGalleryToggle()
+{
+  ui_gallery_background->setVisible(!ui_gallery_background->isVisible());
+}
+
+void Lobby::onGalleryPlay()
+{
+  dro::system::replays::playback::load(ui_replay_list->currentItem()->text(), m_currentPackage, m_currentCategory);
+  m_replayWindow->show();
 }
 
 void Lobby::toggle_public_server_filter()

@@ -7,8 +7,11 @@
 #include "dro/animation/keyframe_sequence.h"
 #include "dro/system/animation.h"
 #include "dro/interface/courtroom_layout.h"
+#include "dro/interface/widgets/rp_typewriter.h"
 
 static int s_FrameRate = 60;
+static int s_uptime = 0;
+static RPTypewriter *s_typewriter = nullptr;
 
 void RuntimeLoop::Update()
 {
@@ -25,6 +28,8 @@ void RuntimeLoop::Update()
   qint64 elapsedNano = timer.nsecsElapsed();
   timer.restart();
 
+  int elapsedMillis = static_cast<int>(elapsedNano / 1e6);
+  s_uptime += elapsedMillis;
 
   double deltaTime = elapsedNano / 1e9;
   LuaBridge::LuaEventCall("OnUpdate", deltaTime);
@@ -38,7 +43,21 @@ void RuntimeLoop::Update()
 
   accumulatedTime -= targetDelta;
 
-  dro::system::animation::runAll(elapsedNano / 1e6);
+  dro::system::animation::runAll(elapsedMillis);
   courtroom::viewport::update();
+  if(s_typewriter != nullptr)
+  {
+    s_typewriter->update();
+  }
 
+}
+
+int RuntimeLoop::uptime()
+{
+  return s_uptime;
+}
+
+void RuntimeLoop::assignTypewriter(RPTypewriter *widget)
+{
+  s_typewriter = widget;
 }

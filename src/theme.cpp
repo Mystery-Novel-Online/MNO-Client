@@ -81,8 +81,9 @@ void set_text_alignment(QWidget *p_widget, QString p_identifier, QString p_ini_f
 void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOApplication *ao_app)
 {
 
-  ThemeSceneType l_scene = LOBBY;
+  RPSceneType l_scene = LOBBY;
   if(ini_file == COURTROOM_FONTS_INI) l_scene = COURTROOM;
+  else if(ini_file == VIEWPORT_FONTS_INI) l_scene = SceneType_Viewport;
 
 
   QString class_name = p_widget->metaObject()->className();
@@ -102,7 +103,7 @@ void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOAppli
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontdata = ThemeManager::get().mCurrentThemeReader.getFont(l_scene, p_identifier);
+    widgetFontStruct fontdata = ThemeManager::get().mCurrentThemeReader.GetFontData(l_scene, p_identifier);
     font_name = fontdata.font;
     is_bold = fontdata.bold;
     is_antialias = fontdata.sharp;
@@ -156,7 +157,7 @@ void set_drtextedit_font(RPTextEdit *p_widget, QString p_identifier, QString p_i
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.getFont(COURTROOM, p_identifier);
+    widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontData(COURTROOM, p_identifier);
     outline = fontData.outline;
     outlineWidth = fontData.outlineSize;
     outlineColor = fontData.outlineColor;
@@ -217,7 +218,7 @@ void set_sticker_play_once(DRStickerViewer *p_sticker, QString p_identifier, QSt
 
 void setShownameFont(RPTextEdit *widget, QString identifier, QString align)
 {
-  widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.getPairingFont(identifier, align);
+  widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontDataPairing(identifier, align);
 
   fontData.size = static_cast<int>(fontData.size * ThemeManager::get().getViewporResize());
 

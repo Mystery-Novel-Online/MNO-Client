@@ -27,5 +27,10 @@ const QString COURTROOM_STYLESHEETS_CSS = "courtroom_stylesheets.css";
 const QString LOBBY_DESIGN_INI = "lobby_design.ini";
 const QString LOBBY_FONTS_INI = "lobby_fonts.ini";
 
+
+const QString REPLAY_DESIGN_INI = "replay_design.ini";
+const QString VIEWPORT_DESIGN_INI = "viewport_design.ini";
+const QString VIEWPORT_FONTS_INI = "viewport_fonts.ini";
+
 const QString SAVE_FAVORITES = "configs/character_favorites.ini";
 const QString THEME_JSON = "theme.json";

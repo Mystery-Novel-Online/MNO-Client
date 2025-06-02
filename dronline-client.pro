@@ -23,6 +23,7 @@ HEADERS += \
   src/dro/interface/menus/bgm_menu.h \
   src/dro/interface/menus/char_menu.h \
   src/dro/interface/menus/emote_menu.h \
+  src/dro/interface/scenes/replay_window.h \
   src/dro/interface/widgets/bgm_filter.h \
   src/dro/interface/widgets/char_button.h \
   src/dro/interface/widgets/character_select.h \
@@ -35,10 +36,12 @@ HEADERS += \
   src/dro/interface/widgets/player_list_slot.h \
   src/dro/interface/widgets/rp_button.h \
   src/dro/interface/widgets/rp_combo_box.h \
+  src/dro/interface/widgets/rp_hover_widget.h \
   src/dro/interface/widgets/rp_label.h \
   src/dro/interface/widgets/rp_line_edit.h \
   src/dro/interface/widgets/rp_slider.h \
   src/dro/interface/widgets/rp_text_edit.h \
+  src/dro/interface/widgets/rp_typewriter.h \
   src/dro/interface/widgets/rp_widget.h \
   src/dro/interface/widgets/screenshot_button.h \
   src/dro/interface/widgets/emotion_selector.h \
@@ -47,6 +50,8 @@ HEADERS += \
   src/dro/interface/widgets/viewport_overlay.h \
   src/dro/interface/widgets/tab_toggle_button.h \
   src/dro/interface/widgets/aotimer.h \
+  src/dro/interface/widgets/viewports/legacy_viewport.h \
+  src/dro/interface/widgets/viewports/rp_viewport.h \
   src/dro/network/json_packet.h \
   src/dro/network/metadata/area_metadata.h \
   src/dro/network/metadata/message_metadata.h \
@@ -54,6 +59,7 @@ HEADERS += \
   src/dro/network/metadata/server_metadata.h \
   src/dro/network/metadata/tracklist_metadata.h \
   src/dro/param/animation_reader.h \
+  src/dro/param/replay_reader.h \
   src/dro/system/animation.h \
   src/dro/system/audio.h \
   src/dro/system/audio/blip_player.h \
@@ -61,11 +67,14 @@ HEADERS += \
   src/dro/system/audio/sfx_player.h \
   src/dro/system/audio/shout_player.h \
   src/dro/system/audio/system_player.h \
+  src/dro/system/effects.h \
   src/dro/system/localization.h \
+  src/dro/system/replay_playback.h \
   src/dro/system/runtime_loop.h \
   src/dro/system/text_encoding.h \
   src/dro/system/theme_scripting.h \
   src/dro/system/debug/time_debugger.h \
+  src/dro/themes/theme_scene.h \
   src/dro/tools/button_maker.h \
   src/dro/param/json_reader.h \
   src/dro/param/localization_reader.h \
@@ -145,6 +154,7 @@ SOURCES += \
   src/dro/interface/menus/bgm_menu.cpp \
   src/dro/interface/menus/char_menu.cpp \
   src/dro/interface/menus/emote_menu.cpp \
+  src/dro/interface/scenes/replay_window.cpp \
   src/dro/interface/widgets/bgm_filter.cpp \
   src/dro/interface/widgets/char_button.cpp \
   src/dro/interface/widgets/character_select.cpp \
@@ -157,10 +167,12 @@ SOURCES += \
   src/dro/interface/widgets/player_list_slot.cpp \
   src/dro/interface/widgets/rp_button.cpp \
   src/dro/interface/widgets/rp_combo_box.cpp \
+  src/dro/interface/widgets/rp_hover_widget.cpp \
   src/dro/interface/widgets/rp_label.cpp \
   src/dro/interface/widgets/rp_line_edit.cpp \
   src/dro/interface/widgets/rp_slider.cpp \
   src/dro/interface/widgets/rp_text_edit.cpp \
+  src/dro/interface/widgets/rp_typewriter.cpp \
   src/dro/interface/widgets/rp_widget.cpp \
   src/dro/interface/widgets/screenshot_button.cpp \
   src/dro/interface/widgets/emotion_selector.cpp \
@@ -169,6 +181,8 @@ SOURCES += \
   src/dro/interface/widgets/viewport_overlay.cpp \
   src/dro/interface/widgets/tab_toggle_button.cpp \
   src/dro/interface/widgets/aotimer.cpp \
+  src/dro/interface/widgets/viewports/legacy_viewport.cpp \
+  src/dro/interface/widgets/viewports/rp_viewport.cpp \
   src/dro/network/json_packet.cpp \
   src/dro/network/metadata/area_metadata.cpp \
   src/dro/network/metadata/message_metadata.cpp \
@@ -176,6 +190,7 @@ SOURCES += \
   src/dro/network/metadata/server_metadata.cpp \
   src/dro/network/metadata/tracklist_metadata.cpp \
   src/dro/param/animation_reader.cpp \
+  src/dro/param/replay_reader.cpp \
   src/dro/system/animation.cpp \
   src/dro/system/audio.cpp \
   src/dro/system/audio/blip_player.cpp \
@@ -183,11 +198,14 @@ SOURCES += \
   src/dro/system/audio/sfx_player.cpp \
   src/dro/system/audio/shout_player.cpp \
   src/dro/system/audio/system_player.cpp \
+  src/dro/system/effects.cpp \
   src/dro/system/localization.cpp \
+  src/dro/system/replay_playback.cpp \
   src/dro/system/runtime_loop.cpp \
   src/dro/system/text_encoding.cpp \
   src/dro/system/theme_scripting.cpp \
   src/dro/system/debug/time_debugger.cpp \
+  src/dro/themes/theme_scene.cpp \
   src/dro/tools/button_maker.cpp \
   src/dro/param/json_reader.cpp \
   src/dro/param/localization_reader.cpp \

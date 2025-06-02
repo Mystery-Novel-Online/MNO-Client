@@ -42,7 +42,7 @@ public:
   virtual QString GetSelectedImage(const DREmote& t_emote);
 
   virtual void SetShowname(const QString& showname) { m_Showname = showname;};
-  virtual QString GetShowname() {return m_Showname;};
+  virtual QString GetShowname() { return m_Showname.isEmpty() ? m_Folder : m_Showname;};
 
   virtual void SetGender(const QString& gender) { m_Gender = gender;};
   virtual QString GetGender() {return m_Gender;};

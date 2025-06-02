@@ -26,6 +26,9 @@ extern const QString COURTROOM_STYLESHEETS_CSS;
 
 extern const QString LOBBY_DESIGN_INI;
 extern const QString LOBBY_FONTS_INI;
+extern const QString REPLAY_DESIGN_INI;
+extern const QString VIEWPORT_DESIGN_INI;
+extern const QString VIEWPORT_FONTS_INI;
 
 extern const QString SAVE_FAVORITES;
 extern const QString THEME_JSON;

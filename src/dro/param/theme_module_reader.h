@@ -2,7 +2,7 @@
 #define THEMEMODULEREADER_H
 
 #include "json_reader.h"
-#include "modules/theme/theme_scene.h"
+#include "dro/themes/theme_scene.h"
 
 #include <datatypes.h>
 
@@ -21,7 +21,9 @@ public:
 
   void SwitchModuleTarget(QString t_target);
 
-  ThemeScene *getThemeScene(ThemeSceneType t_scene);
+  ThemeScene *getThemeScene(RPSceneType t_scene);
+
+  bool getContainsSceneWidget(RPSceneType t_scene, QString t_name);
 
   //layers
   bool getContainsLayers();
@@ -51,6 +53,8 @@ private:
   //Scenes
   ThemeScene *m_CourtroomScene = nullptr;
   ThemeScene *m_LobbyScene = nullptr;
+  ThemeScene *m_ReplaysScene = nullptr;
+  ThemeScene *m_ViewportScene = nullptr;
 
   //Other
   QHash<QString, widgetFontStruct*> m_ChatlogColours = {};

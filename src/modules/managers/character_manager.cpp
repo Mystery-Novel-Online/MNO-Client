@@ -35,7 +35,7 @@ ActorData *CharacterManager::ReadCharacter(QString t_folder)
 ActorData *CharacterManager::SwitchCharacter(QString t_folder)
 {
   QStringList animations = {"None"};
-  animations.append(FS::Paths::GetFileList("animations/characters", "json"));
+  animations.append(FS::Paths::GetFileList("animations/characters", true, "json"));
   courtroom::lists::setAnimations(animations);
   LuaBridge::LuaEventCall("OnCharacterLoad", t_folder.toStdString());
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");

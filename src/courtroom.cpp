@@ -38,6 +38,7 @@
 #include "dro/system/text_encoding.h"
 #include "dro/system/audio.h"
 #include "dro/interface/courtroom_layout.h"
+#include "dro/system/replay_playback.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -169,6 +170,7 @@ void Courtroom::setup_courtroom()
   TimeDebugger::get().EndTimer("Courtroom Setup");
   PairManager::get().ThemeReload();
   LuaBridge::LuaEventCall("OnCourtroomSetup");
+  replays::recording::start();
 }
 
 void Courtroom::map_viewers()
@@ -525,6 +527,7 @@ DRAreaBackground Courtroom::get_background()
 
 void Courtroom::set_background(DRAreaBackground p_background)
 {
+  replays::recording::backgroundChange(p_background.background);
   m_background = p_background;
 
   QStringList l_background_list{m_background.background};
@@ -746,6 +749,8 @@ void Courtroom::append_server_chatmessage(QString p_name, QString p_message)
     ui_ooc_chatlog->append_chatmessage(p_name, p_message);
     if (ao_config->log_is_recording_enabled())
       save_textlog("(OOC)" + p_name + ": " + p_message);
+
+    replays::recording::messageSystem(p_name, p_message);
     LuaBridge::LuaEventCall("OnOOCMessage", p_name.toStdString(), p_message.toStdString());
   }
 }
@@ -1021,6 +1026,8 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   {
     p_chatmessage.append(QString{});
   }
+
+  metadata::message::incomingMessage(p_chatmessage);
 
   const int l_message_chr_id = p_chatmessage[CMChrId].toInt();
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
@@ -2008,7 +2015,7 @@ void Courtroom::setup_chat()
   // Cache these so chat_tick performs better
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct messageFont = ThemeManager::get().mCurrentThemeReader.getFont(COURTROOM, "message");
+    widgetFontStruct messageFont = ThemeManager::get().mCurrentThemeReader.GetFontData(COURTROOM, "message");
     m_chatbox_message_outline = messageFont.outline;
     m_messageOutlineColor = messageFont.outlineColor;
     m_messageOutlineSize = messageFont.outlineSize;
@@ -2352,6 +2359,7 @@ void Courtroom::handle_song(QStringList p_contents)
   }
   m_current_song = l_song;
 
+  replays::recording::musicChange(l_song);
   DRAudiotrackMetadata l_song_meta(l_song);
 
   if(!LuaBridge::SongChangeEvent(l_song.toStdString(), l_song_meta.title().toStdString(), l_showname.toStdString()))
@@ -3542,7 +3550,7 @@ void Courtroom::write_area_desc()
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontstruct = ThemeManager::get().mCurrentThemeReader.getFont(COURTROOM, "area_desc");
+    widgetFontStruct fontstruct = ThemeManager::get().mCurrentThemeReader.GetFontData(COURTROOM, "area_desc");
     l_color = fontstruct.color;
     is_bold = fontstruct.bold;
   }

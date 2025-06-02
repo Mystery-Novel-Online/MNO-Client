@@ -18,7 +18,22 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
   m_filename = p_song;
 
   QSharedPointer<DRAudioStream> newSong = m_family->create_stream(ao_app->get_music_path(p_song));
-  if (!newSong) return;
+
+  if(!newSong)
+  {
+    switch(playbackType)
+    {
+      case BGMPlayback_NoFade:
+        stop();
+        break;
+
+      default:
+        if (mCurrentSong)
+          mCurrentSong->fadeOut(300);
+        break;
+    }
+    return;
+  }
 
   DRAudiotrackMetadata metadata(p_song);
   if (!metadata.play_once())

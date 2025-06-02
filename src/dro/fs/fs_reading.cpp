@@ -123,7 +123,7 @@ QString FindDirectory(const QString &directoryPath, bool allowPackages, bool abs
   return "base/" + directoryPath;
 }
 
-QStringList GetFileList(const QString &directoryPath, const QString& extensionFilter, bool includePackages, bool includeExtension)
+QStringList GetFileList(const QString &directoryPath, bool includePackages, const QString& extensionFilter, bool includeExtension)
 {
   QStringList returnValues = {};
 
@@ -135,7 +135,7 @@ QStringList GetFileList(const QString &directoryPath, const QString& extensionFi
     if (includeExtension)
       returnValues.append(fileName);
     else
-      returnValues.append(fileName.section('.', 0, 0)); // Removes extension
+      returnValues.append(fileName.left(fileName.lastIndexOf('.')));
   }
 
   if(includePackages)
@@ -160,6 +160,24 @@ QStringList GetDirectoryList(const QString &directoryPath, bool includePackages)
   if(includePackages)
   {
     QVector<QString> searchArchives = Packages::CachedNames();
+  }
+
+  return returnValues;
+}
+
+QStringList GetFileList(const QString &directoryPath, const QString &packageName, const QString &extensionFilter, bool includeExtension)
+{
+  QStringList returnValues = {};
+
+  QDir targetDirectory("packages/" + packageName + "/" + directoryPath);
+  QStringList fileList = targetDirectory.entryList(QStringList() << "*." + extensionFilter, QDir::Files);
+
+  for (const QString &fileName : fileList)
+  {
+    if (includeExtension)
+      returnValues.append(fileName);
+    else
+      returnValues.append(fileName.left(fileName.lastIndexOf('.')));
   }
 
   return returnValues;

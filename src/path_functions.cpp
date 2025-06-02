@@ -14,6 +14,7 @@
 #include <modules/theme/thememanager.h>
 #include "dro/fs/fs_reading.h"
 #include "dro/fs/fs_mounting.h"
+#include "dro/system/replay_playback.h"
 
 // Copied over from Vanilla.
 // As said in the comments there, this is a *super broad* definition.
@@ -28,6 +29,7 @@
 void AOApplication::reload_packages()
 {
   CharacterManager::get().ResetPackages();
+  dro::system::replays::io::resetCache();
   QVector<QString> packageNames = FS::Packages::Scan();
   QString packagesPath = FS::Paths::ApplicationPath() + "/packages/";
 
@@ -59,6 +61,14 @@ void AOApplication::reload_packages()
         packageCharacters.append(std::move(packageChar));
       }
       CharacterManager::get().SetCharList(packageName, packageCharacters);
+    }
+
+    QDir replaysDirectory(packagesPath + packageName + "/replays");
+    if (replaysDirectory.exists())
+    {
+      QVector<QString> l_replayGroups;
+      QStringList l_folderGroups = replaysDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+      dro::system::replays::io::cachePackage(packageName, l_folderGroups);
     }
   }
 

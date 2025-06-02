@@ -12,7 +12,7 @@ ScreenshotButton::ScreenshotButton(QWidget *parent, AOApplication *p_ao_app) : R
 
 void ScreenshotButton::UpdateDimensions()
 {
-  ThemeManager::get().AssignDimensions(this, "screenshot", ThemeSceneType::COURTROOM);
+  ThemeManager::get().AssignDimensions(this, "screenshot", RPSceneType::COURTROOM);
   set_theme_image("screenshot", "screenshot.png", "courtroom", "Screenshot");
 }
 

@@ -23,7 +23,8 @@ namespace FS::Paths
   QString FindFile(const QString& filePath, bool allowPackages = true);
   QString FindDirectory(const QString& directoryPath, bool allowPackages = true, bool absolutePath = true);
   QStringList GetDirectoryList(const QString& directoryPath, bool includePackages = true);
-  QStringList GetFileList(const QString& directoryPath, const QString& extensionFilter = "", bool includePackages = true, bool includeExtension = false);
+  QStringList GetFileList(const QString& directoryPath, bool includePackages = true, const QString& extensionFilter = "", bool includeExtension = false);
+  QStringList GetFileList(const QString& directoryPath, const QString& packageName, const QString& extensionFilter = "", bool includeExtension = false);
 }
 
 namespace FS::Formats

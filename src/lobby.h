@@ -2,7 +2,9 @@
 #define LOBBY_H
 
 #include "datatypes.h"
+#include "dro/interface/scenes/replay_window.h"
 
+#include <QComboBox>
 #include <QMainWindow>
 #include <QModelIndex>
 
@@ -47,6 +49,9 @@ signals:
   void combined_server_list_changed();
 
 private:
+  QString m_currentCategory = "";
+  QString m_currentPackage = "";
+
   AOApplication *ao_app = nullptr;
   AOConfig *ao_config = nullptr;
 
@@ -67,6 +72,15 @@ private:
     FavoriteOnly,
   };
   ServerFilter m_server_filter = NoFilter;
+
+  AOImageDisplay *ui_gallery_background = nullptr;
+  AOImageDisplay *ui_gallery_preview = nullptr;
+  RPButton *ui_gallery_play = nullptr;
+  RPButton *ui_gallery_toggle = nullptr;
+
+  QListWidget *ui_replay_list = nullptr;
+  QComboBox *ui_gallery_packages = nullptr;
+  QComboBox *ui_gallery_categories = nullptr;
 
   RPButton *ui_refresh = nullptr;
   RPButton *ui_toggle_favorite = nullptr;
@@ -98,6 +112,8 @@ private:
   QAction *ui_move_up_server;
   QAction *ui_move_down_server;
 
+  ReplayWindow *m_replayWindow = nullptr;
+
   void load_settings();
   void save_settings();
 
@@ -120,6 +136,11 @@ private slots:
   void filter_server_listing();
   void select_current_server();
 
+  void onReplayRowChanged(int row);
+  void onGalleryPackageChanged(int index);
+  void onGalleryCategoryChanged(int index);
+  void onGalleryToggle();
+  void onGalleryPlay();
   void on_refresh_released();
   void on_add_to_fav_released();
   void on_connect_released();
