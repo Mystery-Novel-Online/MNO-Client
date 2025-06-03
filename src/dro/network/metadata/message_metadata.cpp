@@ -119,7 +119,7 @@ namespace dro::network::metadata::message
     s_CurrentMessage.characterFolder = operation.variables["char"];
     s_CurrentMessage.sfxName = operation.variables["sound"];
     s_CurrentMessage.characterShout = operation.variables["shout"];
-
+    s_CurrentMessage.characterLayers = operation.variables["layers"];
     s_CurrentMessage.characterEmote = operation.variables["emote"];
     s_CurrentMessage.characterPre = operation.variables["pre"];
     s_CurrentMessage.characterVideo = operation.variables["video"];
@@ -128,6 +128,10 @@ namespace dro::network::metadata::message
     s_CurrentMessage.modifiers.Flipped = operation.variables["flip"] == "1";
     s_CurrentMessage.effect = dro::system::effects::effectByName(operation.variables["effect"]);
     s_CurrentMessage.textContent = operation.variables["msg"];
+
+    s_CurrentMessage.offsetScale = operation.variables.contains("offset_s") ? operation.variables["offset_s"].toInt() : 1000;
+    s_CurrentMessage.offsetHorizontal = operation.variables.contains("offset_h") ? operation.variables["offset_h"].toInt() : 500;
+    s_CurrentMessage.offsetVertical = operation.variables.contains("offset_v") ? operation.variables["offset_v"].toInt() : 0;
   }
 
   MessageMetadata &recentMessage()

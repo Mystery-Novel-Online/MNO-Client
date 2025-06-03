@@ -15,6 +15,7 @@
 class RPTypewriter;
 class DRSceneMovie;
 class DRCharacterMovie;
+class ActorData;
 
 class LegacyViewport : public RPViewport
 {
@@ -63,6 +64,8 @@ private:
   //Backgrounds
   BackgroundData *m_backgroundData = nullptr;
   QString m_backgroundName = "Blackout_HD";
+
+  ActorData *m_currentActor = nullptr;
 
 };
 

@@ -1152,44 +1152,9 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
 
   l_file_list.insert(ViewportPairCharacterIdle, ao_app->get_character_sprite_idle_path(metadata::message::pair::getCharacter(), metadata::message::pair::getEmote()));
 
-  {
-    ui_vp_player_char->clearImageLayers();
 
-    QString path = QFileInfo(l_emote).path();
-    if (!path.isEmpty()) path += "/";
-
-    for(const QString& layerOffset : encoding::text::DecodeBase64(m_pre_chatmessage[CMSpriteLayers]))
-    {
-      QStringList offsetData = encoding::text::DecodePacketContents(layerOffset);
-      if(offsetData.length() == 6)
-      {
-        QString filePath = ao_app->get_character_sprite_idle_path(l_character, path + offsetData[0]);
-        ui_vp_player_char->createOverlay(filePath, offsetData[1], QRectF(offsetData[2].toInt(), offsetData[3].toInt(), offsetData[4].toInt(), offsetData[5].toInt()));
-      }
-    }
-  }
-
-  {
-    ui_vp_player_pair->clearImageLayers();
-
-    if(metadata::message::pair::isActive())
-    {
-      QString path = QFileInfo(metadata::message::pair::getEmote()).path();
-      if (!path.isEmpty()) path += "/";
-
-      for(const QString& layerOffset : encoding::text::DecodeBase64(metadata::message::pair::getLayers()))
-      {
-        QStringList offsetData = encoding::text::DecodePacketContents(layerOffset);
-        if(offsetData.length() == 6)
-        {
-          QString filePath = ao_app->get_character_sprite_idle_path(metadata::message::pair::getCharacter(), path + offsetData[0]);
-          ui_vp_player_pair->createOverlay(filePath, offsetData[1], QRectF(offsetData[2].toInt(), offsetData[3].toInt(), offsetData[4].toInt(), offsetData[5].toInt()));
-        }
-      }
-    }
-  }
-
-
+  ui_vp_player_char->processOverlays(m_pre_chatmessage[CMSpriteLayers], l_character, l_emote);
+  ui_vp_player_pair->processOverlays(metadata::message::pair::getLayers(), metadata::message::pair::getCharacter(), metadata::message::pair::getEmote());
 
   // shouts
   l_file_list.insert(ViewportShout, ao_app->get_shout_sprite_path(l_character, get_shout_name(l_shout_id)));

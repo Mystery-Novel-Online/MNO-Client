@@ -71,6 +71,7 @@ public:
 
   QRectF boundingRect() const final;
 
+  void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath);
   void createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect);
   void clearImageLayers();
 

@@ -19,6 +19,7 @@
 **************************************************************************/
 #include "graphicsspriteitem.h"
 
+#include <QFileInfo>
 #include <QGraphicsScene>
 #include <QPainter>
 #include <QVector3D>
@@ -30,6 +31,8 @@
 #include "dro/interface/courtroom_layout.h"
 #include "spritedynamicreader.h"
 #include "spriteseekingreader.h"
+#include "aoapplication.h"
+#include "dro/system/text_encoding.h"
 
 using namespace mk2;
 
@@ -158,6 +161,24 @@ bool GraphicsSpriteItem::is_running() const
 QRectF GraphicsSpriteItem::boundingRect() const
 {
   return QRectF(0, 0, m_player->get_size().width() * 2, m_player->get_size().height() * 2);
+}
+
+void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QString& character, const QString& emotePath)
+{
+  clearImageLayers();
+
+  QString path = QFileInfo(emotePath).path();
+  if (!path.isEmpty()) path += "/";
+
+  for(const QString& layerOffset : dro::system::encoding::text::DecodeBase64(overlayString))
+  {
+    QStringList offsetData = dro::system::encoding::text::DecodePacketContents(layerOffset);
+    if(offsetData.length() == 6)
+    {
+      QString filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, path + offsetData[0]);
+      createOverlay(filePath, offsetData[1], QRectF(offsetData[2].toInt(), offsetData[3].toInt(), offsetData[4].toInt(), offsetData[5].toInt()));
+    }
+  }
 }
 
 void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect)

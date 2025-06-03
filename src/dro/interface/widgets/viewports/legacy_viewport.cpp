@@ -57,13 +57,14 @@ void LegacyViewport::constructViewport()
 void LegacyViewport::loadCurrentMessage()
 {
   MessageMetadata &message = dro::network::metadata::message::recentMessage();
+  m_currentActor = CharacterManager::get().ReadCharacter(message.characterFolder);
   if(message.characterPre.trimmed().isEmpty()) message.characterPre = "-";
   m_message->setInput("");
   toggleChatbox(false);
 
   if(message.userShowname.isEmpty())
   {
-    m_showname->setText(CharacterManager::get().ReadCharacter(message.characterFolder)->GetShowname());
+    m_showname->setText(m_currentActor->GetShowname());
   }
   else
   {
@@ -144,13 +145,15 @@ void LegacyViewport::onVideoDone()
   if (m_videoScreen->isVisible()) m_videoScreen->hide();
 
   MessageMetadata &message = dro::network::metadata::message::recentMessage();
+  m_characterSprite->setHorizontalOffset(message.offsetHorizontal);
+  m_characterSprite->setVerticalOffset(message.offsetVertical);
+  m_characterSprite->processOverlays(message.characterLayers, message.characterFolder, message.characterEmote);
 
   if (message.characterShout.isEmpty())
   {
     onObjectionDone();
     return;
   }
-
   message.modifiers.PreAnimation = true;
   m_shoutMovie->set_play_once(true);
   m_shoutMovie->set_file_name(AOApplication::getInstance()->get_shout_sprite_path(message.characterFolder, message.characterShout));
@@ -164,7 +167,8 @@ void LegacyViewport::onObjectionDone()
   {
     m_characterSprite->set_play_once(true);
     m_characterSprite->set_file_name(AOApplication::getInstance()->get_character_sprite_pre_path(message.characterFolder, message.characterPre));
-    m_characterSprite->start();
+    mk2::SpritePlayer::ScalingMode targetScaling = m_currentActor->GetScalingMode() == "width_smooth" ? mk2::SpritePlayer::WidthSmoothScaling : mk2::SpritePlayer::AutomaticScaling;
+    m_characterSprite->start(targetScaling, (double)message.offsetScale / 1000.0f);
   }
 
   QString effectName = message.effect.name;
@@ -199,7 +203,8 @@ void LegacyViewport::onPreanimDone()
     m_characterSprite->show();
     m_characterSprite->set_play_once(false);
     m_characterSprite->set_file_name(AOApplication::getInstance()->get_character_sprite_idle_path(message.characterFolder, message.characterEmote));
-    m_characterSprite->start();
+    mk2::SpritePlayer::ScalingMode targetScaling = m_currentActor->GetScalingMode() == "width_smooth" ? mk2::SpritePlayer::WidthSmoothScaling : mk2::SpritePlayer::AutomaticScaling;
+    m_characterSprite->start(targetScaling, (double)message.offsetScale / 1000.0f);
   }
 }
 
