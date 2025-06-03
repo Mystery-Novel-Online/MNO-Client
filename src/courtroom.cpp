@@ -1467,7 +1467,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
     ui_vp_player_char->setVerticalOffset(verticalValue);
 
   ui_vp_player_pair->setVerticalOffset(metadata::message::pair::verticalOffset());
-  setup_screenshake_anim(selfOffset);
+  setup_screenshake_anim(0);
   qDebug() << "handle_chatmessage_2";
   ui_vp_player_char->stop();
   ui_vp_player_pair->stop();
