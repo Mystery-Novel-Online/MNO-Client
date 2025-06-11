@@ -120,6 +120,7 @@ namespace dro::network::metadata::message
     s_CurrentMessage.sfxName = operation.variables["sound"];
     s_CurrentMessage.characterShout = operation.variables["shout"];
     s_CurrentMessage.characterLayers = operation.variables["layers"];
+    s_CurrentMessage.characterSequence = operation.variables["sequence"];
     s_CurrentMessage.characterEmote = operation.variables["emote"];
     s_CurrentMessage.characterPre = operation.variables["pre"];
     s_CurrentMessage.characterVideo = operation.variables["video"];

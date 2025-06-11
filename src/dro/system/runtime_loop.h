@@ -2,6 +2,7 @@
 #define RUNTIME_LOOP_H
 
 class RPTypewriter;
+class RPViewport;
 
 namespace RuntimeLoop
 {
@@ -9,6 +10,7 @@ namespace RuntimeLoop
   void Update();
 
   void assignTypewriter(RPTypewriter *widget);
+  void assignViewport(RPViewport *viewport);
 };
 
 #endif // RUNTIME_LOOP_H

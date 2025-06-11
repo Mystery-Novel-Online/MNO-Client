@@ -24,6 +24,7 @@ public:
   LegacyViewport(QWidget *parent = nullptr);
 
 public:
+  void update() override;
   void constructViewport() override;
   void loadCurrentMessage() override;
   void loadBackground(QString background) override;

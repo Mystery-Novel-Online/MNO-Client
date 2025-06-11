@@ -14,6 +14,7 @@
 
 #include <modules/theme/thememanager.h>
 #include "modules/managers/character_manager.h"
+#include "dro/system/runtime_loop.h"
 
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsProxyWidget>
@@ -23,6 +24,12 @@ LegacyViewport::LegacyViewport(QWidget *parent) : RPViewport(parent)
 {
   m_graphicsView = new DRGraphicsView(parent);
   set_size_and_pos(m_graphicsView, "viewport", REPLAY_DESIGN_INI, AOApplication::getInstance());
+  RuntimeLoop::assignViewport(this);
+}
+
+void LegacyViewport::update()
+{
+  m_graphicsView->scene()->update();
 }
 
 void LegacyViewport::constructViewport()
@@ -185,6 +192,8 @@ void LegacyViewport::onObjectionDone()
   }
 
   audio::effect::PlayCharacter(message.sfxName.toStdString(), message.characterFolder.toStdString());
+
+  m_characterSprite->setCharacterAnimation(message.characterSequence);
 }
 
 void LegacyViewport::onPreanimDone()

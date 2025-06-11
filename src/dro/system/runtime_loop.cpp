@@ -8,10 +8,12 @@
 #include "dro/system/animation.h"
 #include "dro/interface/courtroom_layout.h"
 #include "dro/interface/widgets/rp_typewriter.h"
+#include "dro/interface/widgets/viewports/legacy_viewport.h"
 
 static int s_FrameRate = 60;
 static int s_uptime = 0;
 static RPTypewriter *s_typewriter = nullptr;
+static RPViewport *s_viewport = nullptr;
 
 void RuntimeLoop::Update()
 {
@@ -44,11 +46,14 @@ void RuntimeLoop::Update()
   accumulatedTime -= targetDelta;
 
   dro::system::animation::runAll(elapsedMillis);
+
   courtroom::viewport::update();
-  if(s_typewriter != nullptr)
-  {
+
+  if(s_viewport)
+    s_viewport->update();
+
+  if(s_typewriter)
     s_typewriter->update();
-  }
 
 }
 
@@ -60,4 +65,9 @@ int RuntimeLoop::uptime()
 void RuntimeLoop::assignTypewriter(RPTypewriter *widget)
 {
   s_typewriter = widget;
+}
+
+void RuntimeLoop::assignViewport(RPViewport *viewport)
+{
+  s_viewport = viewport;
 }
