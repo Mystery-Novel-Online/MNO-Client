@@ -395,6 +395,7 @@ void OutfitReader::ReadEmotes()
     const QJsonObject emoteObject = emoteDataRef.toObject();
     SetTargetObject(emoteObject);
 
+    const QString sharedOutfit = isValueExists("outfit") ? getStringValue("outfit") : m_OutfitName;
     const QString emoteName   = getStringValue("name");
     const QString animName    = getStringValue("pre");
     const QString videoFile   = getStringValue("video");
@@ -402,16 +403,19 @@ void OutfitReader::ReadEmotes()
     const int sfxDelayMs      = getIntValue("sfx_delay");
     const int sfxDelayTicks   = getIntValue("sfx_delay_ticks");
 
+    const QString outfitPath = sharedOutfit.isEmpty() ? "" : QString("outfits/%1/").arg(sharedOutfit);
+
+
     DREmote emote;
     emote.character   = m_CharacterName;
-    emote.outfitName  = m_OutfitName;
+    emote.outfitName  = sharedOutfit;
     emote.emoteName   = emoteName;
     emote.comment     = emoteName;
-    emote.anim        = animName.isEmpty() ? "" : QString("outfits/%1/%2").arg(m_OutfitName, animName);
-    emote.dialog      = QString("outfits/%1/%2").arg(m_OutfitName, emoteName);
+    emote.anim        = animName.isEmpty() ? "" : QString("%1%2").arg(outfitPath, animName);
+    emote.dialog      = QString("%1%2").arg(outfitPath, emoteName);
 
     if(emoteObject.contains("image"))
-      emote.dialog = QString("outfits/%1/%2").arg(m_OutfitName, getStringValue("image"));
+      emote.dialog = QString("%1%2").arg(outfitPath, getStringValue("image"));
 
     emote.desk_modifier   = isValueExists("desk") ? getBoolValue("desk") : m_RuleDesk;
     emote.ignore_offsets  = isValueExists("ignore_offsets") ? getBoolValue("ignore_offsets") : m_RuleOffsets;
