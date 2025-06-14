@@ -16,6 +16,9 @@ class OutfitReader : public JSONReader
 public:
   OutfitReader(const QString& character, const QString& outfit);
 
+  void SetShowname(const QString& showname) { m_Showname = showname;};
+  QString GetShowname() { return m_Showname;};
+
   void ReadSettings();
   void ReadEmotes();
 
@@ -24,6 +27,7 @@ public:
   QMap<QString, QString> m_LayerRenderOrder = {};
 
 private:
+  QString m_Showname = "";
   QString m_CharacterName = "";
   QString m_OutfitName = "";
   QString m_OutfitPath = "";
@@ -92,6 +96,7 @@ public:
   QString GetSelectedImage(const DREmote& t_emote) override;
   QStringList GetOutfitNames() override;
   void SwitchOutfit(const QString& t_outfit) override;
+  QString GetShowname() override;
 
   QVector<DREmote> GetEmotes() override;
   QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override;
@@ -100,6 +105,7 @@ public:
 private:
   void LoadOutfits();
 
+  QString m_Showname = "";
   QMap<QString, OutfitReader*> m_Outfits = {};
   QStringList m_OutfitNames = {};
   QStringList m_OutfitsOrder = {};

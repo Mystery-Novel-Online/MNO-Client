@@ -133,6 +133,14 @@ void ActorDataReader::SwitchOutfit(const QString& outfit)
     ActorData::SwitchOutfit(outfit);
 }
 
+QString ActorDataReader::GetShowname()
+{
+  const QString currentOutfit = GetOutfit();
+  if(!m_Outfits.contains(currentOutfit)) return ActorData::GetShowname();
+  const QString outfitShowname = m_Outfits[currentOutfit]->GetShowname();
+  return outfitShowname.isEmpty() ? ActorData::GetShowname() : outfitShowname;
+}
+
 void ActorDataReader::LoadOutfits()
 {
   m_OutfitNames.clear();
@@ -360,6 +368,8 @@ OutfitReader::OutfitReader(const QString& character, const QString& outfit) : m_
   if(!FS::Checks::FileExists(outfitJsonPath)) return;
 
   ReadFromFile(outfitJsonPath);
+
+  SetShowname(getStringValue("showname"));
 
   for(QJsonValueRef overlayData : getArrayValue("layers"))
   {
