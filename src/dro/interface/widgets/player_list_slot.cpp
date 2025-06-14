@@ -199,6 +199,16 @@ void DrPlayerListEntry::sendUnpairRequest()
   ao_app->send_server_packet(DRPacket("UPR", {QString::number(mID)}));
 }
 
+void DrPlayerListEntry::sendLayerFront()
+{
+  ao_app->send_server_packet(DRPacket("PAIRL", {QString::number(1)}));
+}
+
+void DrPlayerListEntry::sendLayerBack()
+{
+  ao_app->send_server_packet(DRPacket("PAIRL", {QString::number(0)}));
+}
+
 void DrPlayerListEntry::copyID()
 {
   QClipboard *clipboard = QGuiApplication::clipboard();
@@ -225,49 +235,59 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
   QMenu *menu = new QMenu(this);
   menu->addAction("[" + QString::number(mID) + "] " + m_showname);
 
+  menu->addSeparator();
+
   if(user::partner::isUnpaired())
   {
-    QAction *pairRequest = new QAction(localization::getText("PLAYER_LIST_PAIR"));
-    QObject::connect(pairRequest, &QAction::triggered, [this](){sendPairRequest() ;});
-    menu->addAction(pairRequest);
+    QAction *pairRequest = menu->addAction(localization::getText("PLAYER_LIST_PAIR"));
+    connect(pairRequest, &QAction::triggered, this, &DrPlayerListEntry::sendPairRequest);
   }
   else
   {
-    QAction *pairRequest = new QAction(localization::getText("PLAYER_LIST_UNPAIR"));
-    QObject::connect(pairRequest, &QAction::triggered, [this](){sendUnpairRequest() ;});
-    menu->addAction(pairRequest);
+    QMenu *pairMenu = menu->addMenu("Pair Options");
+
+    QAction *frontAction = pairMenu->addAction("Move Front");
+    connect(frontAction, &QAction::triggered, this, &DrPlayerListEntry::sendLayerFront);
+
+    QAction *backAction = pairMenu->addAction("Move Back");
+    connect(backAction, &QAction::triggered, this, &DrPlayerListEntry::sendLayerBack);
+
+    QAction *unpairAction = pairMenu->addAction(localization::getText("PLAYER_LIST_UNPAIR"));
+    connect(unpairAction, &QAction::triggered, this, &DrPlayerListEntry::sendUnpairRequest);
   }
 
 
-  QAction *a = new QAction(localization::getText("OPEN_CHAR_FOLDER"));
-  QObject::connect(a, &QAction::triggered, [this](){openCharacterFolder();});
-  menu->addAction(a);
+  menu->addSeparator();
+
+  QAction *openFolderAction = menu->addAction(localization::getText("OPEN_CHAR_FOLDER"));
+  connect(openFolderAction, &QAction::triggered, this, &DrPlayerListEntry::openCharacterFolder);
+
+  menu->addSeparator();
 
   if(!mURL.isEmpty())
   {
-      QUrl url(mURL);
-      QAction *browserOpen = new QAction("Open " + url.host() + " in Browser");
-      QObject::connect(browserOpen, &QAction::triggered, [this](){openBrowserURL();});
-      menu->addAction(browserOpen);
+    QUrl url(mURL);
+    QString label = "Open " + url.host() + " in Browser";
+    QAction *browserAction = menu->addAction(label);
+    connect(browserAction, &QAction::triggered, this, &DrPlayerListEntry::openBrowserURL);
   }
 
-  if(!mHDID.isEmpty())
+  if (!mHDID.isEmpty())
   {
-      QAction *copyHDIDaction = new QAction(localization::getText("MOD_COPY_HDID") + " [" + mHDID + "]");
-      QObject::connect(copyHDIDaction, &QAction::triggered, [this](){copyHDID();});
-      menu->addAction(copyHDIDaction);
+    QString label = localization::getText("MOD_COPY_HDID") + " [" + mHDID + "]";
+    QAction *copyHDID = menu->addAction(label);
+    connect(copyHDID, &QAction::triggered, this, &DrPlayerListEntry::copyHDID);
   }
 
-  if(!mIPID.isEmpty())
+  if (!mIPID.isEmpty())
   {
-      QAction *copyHDIDaction = new QAction(localization::getText("MOD_COPY_IPID") + " [" + mIPID + "]");
-      QObject::connect(copyHDIDaction, &QAction::triggered, [this](){copyIPID();});
-      menu->addAction(copyHDIDaction);
+    QString label = localization::getText("MOD_COPY_IPID") + " [" + mIPID + "]";
+    QAction *copyIPID = menu->addAction(label);
+    connect(copyIPID, &QAction::triggered, this, &DrPlayerListEntry::copyIPID);
   }
 
-  QAction *copyIDAction = new QAction(localization::getText("PLAYER_LIST_ID"));
-  QObject::connect(copyIDAction, &QAction::triggered, [this](){copyID();});
-  menu->addAction(copyIDAction);
+  QAction *copyIDAction = menu->addAction(localization::getText("PLAYER_LIST_ID"));
+  connect(copyIDAction, &QAction::triggered, this, &DrPlayerListEntry::copyID);
 
   menu->popup(this->mapToGlobal(pos));
 }

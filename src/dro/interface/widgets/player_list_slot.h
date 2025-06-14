@@ -35,6 +35,8 @@ public:
   void openBrowserURL();
   void sendPairRequest();
   void sendUnpairRequest();
+  void sendLayerFront();
+  void sendLayerBack();
   void copyID();
   void copyHDID();
   void copyIPID();
