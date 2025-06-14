@@ -40,6 +40,7 @@ namespace courtroom
 
   void cleanup()
   {
+    s_CourtroomWidgets.remove("viewport");
     cleanupWidgets(s_CourtroomStickers);
     cleanupWidgets(s_CourtroomButtons);
     cleanupWidgets(s_CourtroomSliders);
