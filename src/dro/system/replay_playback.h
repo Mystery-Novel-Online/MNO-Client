@@ -32,7 +32,10 @@ namespace dro::system::replays
   {
     void loadFile(QString name);
     void load(const QString &name, const QString &package, const QString &category);
+    void setNextUpdate(int nextUpdate);
+    void autoUpdate(const int &uptime);
     void progress();
+    void progressSingle();
     void setTimestamp(int index);
     void stop();
   }

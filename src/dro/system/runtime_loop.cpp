@@ -9,6 +9,7 @@
 #include "dro/interface/courtroom_layout.h"
 #include "dro/interface/widgets/rp_typewriter.h"
 #include "dro/interface/widgets/viewports/legacy_viewport.h"
+#include "dro/system/replay_playback.h"
 
 static int s_FrameRate = 60;
 static int s_uptime = 0;
@@ -39,6 +40,8 @@ void RuntimeLoop::Update()
   accumulatedTime += deltaTime;
 
   const double targetDelta = 1.0 / s_FrameRate;
+
+  dro::system::replays::playback::autoUpdate(s_uptime);
 
   if (accumulatedTime < targetDelta)
     return;

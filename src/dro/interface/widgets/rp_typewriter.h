@@ -25,6 +25,9 @@ public:
   void update();
   bool typingComplete();
 
+signals:
+  void typingDone();
+
 private:
   int m_currentIndex = 0;
 

@@ -146,6 +146,11 @@ void LegacyViewport::crossfadeRender()
   m_transitionWidget->setPixmap(QPixmap::fromImage(image));
 }
 
+void LegacyViewport::onTypingDone()
+{
+  emit textDone();
+}
+
 void LegacyViewport::onVideoDone()
 {
   emit videoDone();
@@ -201,6 +206,7 @@ void LegacyViewport::onPreanimDone()
   emit preanimDone();
   MessageMetadata &message = dro::network::metadata::message::recentMessage();
   if(!message.textContent.trimmed().isEmpty()) toggleChatbox(true);
+  else onTypingDone();
   m_message->setInput(message.textContent);
 
   if(message.modifiers.Hidden)
@@ -252,6 +258,7 @@ void LegacyViewport::constructInterface()
   set_drtextedit_font(m_message, "message", VIEWPORT_FONTS_INI, aoApp);
 
   m_message->raise();
+  connect(m_message, &RPTypewriter::typingDone, this, &LegacyViewport::onTypingDone);
 
   m_showname = new RPTextEdit("showname");
   set_size_and_pos(m_showname, "showname", VIEWPORT_DESIGN_INI, AOApplication::getInstance());

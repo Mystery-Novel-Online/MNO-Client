@@ -22,6 +22,10 @@ static bool s_recordingActive = true;
 static int s_recordingStartTime = 0;
 static QVector<ReplayOperation> s_recordingOperations = {};
 
+//Auto Variables
+static bool s_autoModeSingle = false;
+static int s_nextAutoUpdate = 0;
+
 namespace dro::system::replays
 {
   void assignWindow(ReplayWindow *window)
@@ -249,6 +253,54 @@ namespace dro::system::replays
         l_position -= 1;
         if(m_BGFound && m_BGMFound && m_MSGFound) l_position = 0;
       }
+    }
+
+    void autoUpdate(const int &uptime)
+    {
+      if(s_nextAutoUpdate == 0) return;
+      if(uptime < s_nextAutoUpdate) return;
+      s_nextAutoUpdate = 0;
+      if(s_autoModeSingle)
+        progressSingle();
+      else
+        progress();
+    }
+
+    void progressSingle()
+    {
+      if(!s_replayViewport) return;
+      if(!s_replayWindow) return;
+
+      if(s_playbackOperations.count() == s_playbackTimestamp + 1) return;
+      s_autoModeSingle = true;
+      const ReplayOperation &currentOperation = s_playbackOperations[s_playbackTimestamp];
+      s_playbackTimestamp += 1;
+      const ReplayOperation &nextOperation = s_playbackOperations[s_playbackTimestamp];
+
+      if(nextOperation.operation == "msg")
+      {
+        dro::network::metadata::message::incomingMessage(s_playbackOperations[s_playbackTimestamp]);
+        s_replayViewport->loadCurrentMessage();
+      }
+
+      if(nextOperation.operation == "bgm")
+        audio::bgm::Play(s_playbackOperations[s_playbackTimestamp].variables["track"].toStdString());
+
+      if(nextOperation.operation == "bg")
+        s_replayViewport->loadBackground(s_playbackOperations[s_playbackTimestamp].variables["name"]);
+
+      s_replayWindow->setScrubberPosition(s_playbackTimestamp);
+
+      s_nextAutoUpdate = RuntimeLoop::uptime() + (nextOperation.timestamp - currentOperation.timestamp);
+    }
+
+    void setNextUpdate(int nextUpdate)
+    {
+      s_autoModeSingle = false;
+      if(nextUpdate == 0)
+        s_nextAutoUpdate = 0;
+      else
+        s_nextAutoUpdate = nextUpdate + RuntimeLoop::uptime();
     }
 
   }

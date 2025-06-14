@@ -115,6 +115,11 @@ void RPTypewriter::update()
 
   m_currentIndex += 1;
   m_lastUpdate = currentUptime;
+
+  if(typingComplete())
+  {
+    emit typingDone();
+  }
 }
 
 bool RPTypewriter::typingComplete()

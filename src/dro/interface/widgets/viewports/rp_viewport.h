@@ -17,6 +17,7 @@ public:
   virtual void toggleChatbox(bool state) = 0;
 
 signals:
+  void textDone();
   void videoDone();
   void preanimDone();
 };

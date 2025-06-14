@@ -35,6 +35,7 @@ public:
   void crossfadeRender();
 
 public slots:
+  void onTypingDone();
   void onVideoDone();
   void onObjectionDone();
   void onPreanimDone();
