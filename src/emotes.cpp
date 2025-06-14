@@ -69,6 +69,7 @@ void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
   const int l_real_id = ui_emotes->calculateTrueIndex(p_id);
   const DREmote &l_emote =  ui_emotes->getEmote(l_real_id);
   ui_emote_preview_character->set_mirrored(ui_flip->isChecked());
+  ui_emote_preview_character->processOverlays(l_emote.emoteOverlays, l_emote.character, l_emote.dialog);
   ui_emote_preview_character->play_idle(l_emote.character, l_emote.dialog);
 
   QScreen *screen = QApplication::screenAt(p_global_pos);
