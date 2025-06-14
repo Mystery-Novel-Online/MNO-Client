@@ -47,12 +47,26 @@ void ReplayWindow::constructLayout()
   m_scrubberHover->addWidget(m_playbackScrubber);
 
 
+  connect(m_playbackScrubber, SIGNAL(sliderPressed()), this, SLOT(onScrubberPressed()));
   connect(m_playbackScrubber, SIGNAL(sliderReleased()), this, SLOT(onScrubberReleased()));
+  connect(m_playbackScrubber, SIGNAL(valueChanged(int)), this, SLOT(onScrubberValue()));
+
+}
+
+void ReplayWindow::onScrubberPressed()
+{
+  m_DraggingSlider = true;
 }
 
 void ReplayWindow::onScrubberReleased()
 {
+  m_DraggingSlider = false;
   playback::setTimestamp(m_playbackScrubber->value());
+}
+
+void ReplayWindow::onScrubberValue()
+{
+  if(!m_DraggingSlider) playback::setTimestamp(m_playbackScrubber->value());
 }
 
 void ReplayWindow::keyPressEvent(QKeyEvent *event)

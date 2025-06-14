@@ -18,12 +18,15 @@ private:
   void constructLayout();
 
 public slots:
+  void onScrubberPressed();
   void onScrubberReleased();
+  void onScrubberValue();
 
 private:
   RPViewport *m_viewport = nullptr;
   RPHoverWidget *m_scrubberHover = nullptr;
   QSlider *m_playbackScrubber = nullptr;
+  bool m_DraggingSlider = false;
 
 protected:
   void keyPressEvent(QKeyEvent *event) override;
