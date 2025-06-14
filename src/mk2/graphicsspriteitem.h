@@ -24,6 +24,7 @@
 
 #include <QGraphicsObject>
 #include <QObject>
+#include <datatypes.h>
 #include "dro/animation/keyframe_sequence.h"
 
 class SpriteLayer
@@ -72,6 +73,7 @@ public:
   QRectF boundingRect() const final;
 
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath);
+  void processOverlays(const QVector<EmoteLayer>& emoteLayers, const QString& character, const QString& emotePath);
   void createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect);
   void clearImageLayers();
 

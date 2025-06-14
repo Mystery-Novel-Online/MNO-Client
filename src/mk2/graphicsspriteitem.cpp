@@ -181,6 +181,21 @@ void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QSt
   }
 }
 
+void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers, const QString& character, const QString& emotePath)
+{
+  clearImageLayers();
+
+  QString path = QFileInfo(emotePath).path();
+  if (!path.isEmpty()) path += "/";
+
+  for(const EmoteLayer &layer : emoteLayers)
+  {
+    QString filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, path + layer.spriteName);
+    createOverlay(filePath, layer.spriteOrder, layer.layerOffset);
+  }
+
+}
+
 void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect)
 {
   mk2::SpriteReader::ptr l_new_reader;
