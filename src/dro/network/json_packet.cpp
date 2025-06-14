@@ -93,6 +93,7 @@ void JsonPacket::ProcessPairDataPacket(JSONReader& jsonReader)
     jsonReader.getIntValue("pair_scale"),
     jsonReader.getIntValue("offset_pair"),
     jsonReader.getIntValue("pair_vertical"),
+    jsonReader.getBoolValue("is_leader"),
     jsonReader.getBoolValue("flipped"),
     true
   };

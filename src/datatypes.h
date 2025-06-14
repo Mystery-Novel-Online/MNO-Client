@@ -318,6 +318,17 @@ enum ViewportSprite
 
 SpriteCategory viewport_sprite_to_sprite_category(ViewportSprite p_type);
 
+enum ViewportLayers
+{
+  ViewportLayers_BG = 0,
+  ViewportLayers_PlayerBack = 1,
+  ViewportLayers_PlayerFront = 2,
+  ViewportLayers_Desk = 3,
+  ViewportLayers_Effect = 4,
+  ViewportLayers_WTCE = 5,
+  ViewportLayers_Objection = 6,
+  ViewportLayers_Video = 7
+};
 enum ChatMessage : int32_t
 {
   CMDeskModifier = 0,

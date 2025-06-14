@@ -78,6 +78,11 @@ namespace dro::network::metadata::message
       return s_CurrentMessage.pairData.characterSequence;
     }
 
+    bool isLeader()
+    {
+      return s_CurrentMessage.pairData.isLeader;
+    }
+
   }
 
   int horizontalOffset()

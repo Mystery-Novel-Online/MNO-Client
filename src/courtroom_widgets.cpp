@@ -117,6 +117,16 @@ void Courtroom::create_widgets()
     }
   }
 
+
+  ui_vp_background->setZValue(ViewportLayers_BG);
+  ui_vp_player_pair->setZValue(ViewportLayers_PlayerBack);
+  ui_vp_player_char->setZValue(ViewportLayers_PlayerFront);
+  ui_vp_desk->setZValue(ViewportLayers_Desk);
+  ui_vp_effect->setZValue(ViewportLayers_Effect);
+  ui_vp_wtce->setZValue(ViewportLayers_WTCE);
+  ui_vp_objection->setZValue(ViewportLayers_Objection);
+  ui_video->setZValue(ViewportLayers_Video);
+
   w_ViewportOverlay = new ViewportOverlay(ui_viewport);
 
   ui_vp_music_display_a = new AOImageDisplay(this, ao_app);

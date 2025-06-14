@@ -1404,6 +1404,17 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
   if(selfOffset > otherOffset) offsetTextbox = "right";
 
+  if(metadata::message::pair::isLeader())
+  {
+    ui_vp_player_char->setZValue(ViewportLayers_PlayerBack);
+    ui_vp_player_pair->setZValue(ViewportLayers_PlayerFront);
+  }
+  else
+  {
+    ui_vp_player_char->setZValue(ViewportLayers_PlayerFront);
+    ui_vp_player_pair->setZValue(ViewportLayers_PlayerBack);
+  }
+
 
   if(m_chatmessage[CMOffsetH].isEmpty())
   {

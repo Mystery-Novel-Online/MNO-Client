@@ -28,6 +28,7 @@ struct PairMetadata
   int offsetHorizontal = 500;
   int offsetVertical = 0;
 
+  bool isLeader = false;
   bool spriteFlipped = false;
   bool spriteVisible = false;
 };
@@ -74,6 +75,7 @@ namespace dro::network::metadata::message
     bool isActive();
     bool isFlipped();
     bool isVisible();
+    bool isLeader();
     int verticalOffset();
     int horizontalOffset();
     double scaleOffset();
