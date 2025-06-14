@@ -978,6 +978,7 @@ void Courtroom::on_ic_message_return_pressed()
 
   if(ServerMetadata::FeatureSupported("sequence"))
   {
+    packet_contents.append(CharacterManager::get().p_SelectedCharacter->GetOutfit());
     packet_contents.append(QString::fromStdString(courtroom::lists::getAnimation()));
     QStringList layers;
     for(const EmoteLayer &layer : l_emote.emoteOverlays)
@@ -1033,6 +1034,11 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
 
   m_SpeakerActor = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
+  if(!p_chatmessage[CMOutfitName].isEmpty())
+  {
+    m_SpeakerActor->SwitchOutfit(p_chatmessage[CMOutfitName]);
+  }
+
   if(metadata::message::pair::isActive())
   {
     m_PairActor = CharacterManager::get().ReadCharacter(metadata::message::pair::getCharacter());

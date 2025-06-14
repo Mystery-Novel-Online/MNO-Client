@@ -342,6 +342,7 @@ enum ChatMessage : int32_t
   CMOffsetH,
   CMOffsetV,
   CMOffsetS,
+  CMOutfitName,
   CMAnimSequence,
   CMSpriteLayers
 };
