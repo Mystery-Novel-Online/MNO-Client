@@ -252,6 +252,7 @@ public:
   QString get_character_sprite_talk_path(QString character, QString emote);
   QString get_background_sprite_path(QString background, QString image);
   QString get_background_sprite_noext_path(QString background, QString image);
+  QString getWeatherSprite(QString weather);
   QString get_shout_sprite_path(QString character, QString shout);
   QString get_theme_sprite_path(QString file_name, QString character);
   QString get_theme_sprite_path(QString file_name);

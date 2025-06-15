@@ -5,6 +5,7 @@
 #include "dro/system/audio/sfx_player.h"
 #include "dro/system/audio/system_player.h"
 #include "dro/system/audio/shout_player.h"
+#include "dro/system/audio/ambience_player.h"
 
 #include <QString>
 
@@ -13,6 +14,7 @@ static int s_blipRateOverride = -1;
 
 static AOMusicPlayer *s_musicPlayer;
 static AOSfxPlayer *s_effectsPlayer;
+static RPAmbiencePlayer *s_weatherPlayer;
 static AOShoutPlayer *s_shoutPlayer;
 static AOSystemPlayer *s_systemPlayer;
 
@@ -25,6 +27,7 @@ namespace audio
   {
     s_musicPlayer = new AOMusicPlayer();
     s_effectsPlayer = new AOSfxPlayer();
+    s_weatherPlayer = new RPAmbiencePlayer();
     s_systemPlayer = new AOSystemPlayer();
     s_blipPlayer = new AOBlipPlayer();
     s_shoutPlayer = new AOShoutPlayer();
@@ -69,9 +72,19 @@ namespace audio
       s_effectsPlayer->play_ambient(QString::fromStdString(filepath));
     }
 
+    void PlayWeather(const std::string &filepath)
+    {
+      s_weatherPlayer->play(QString::fromStdString(filepath));
+    }
+
     void StopAll()
     {
       s_effectsPlayer->stop_all();
+    }
+
+    void stopWeather()
+    {
+      s_weatherPlayer->stop();
     }
 
   }

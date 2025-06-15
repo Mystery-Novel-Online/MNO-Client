@@ -139,6 +139,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   m_cache_checkbox_map.insert(SpriteShout, ui_cache_shouts);
   m_cache_checkbox_map.insert(SpriteGUI, ui_cache_gui);
   m_cache_checkbox_map.insert(SpriteSticker, ui_cache_stickers);
+  m_cache_checkbox_map.insert(SpriteWeather, ui_cache_backgrounds);
 
   // audio
   ui_device = AO_GUI_WIDGET(QComboBox, "device");

@@ -62,6 +62,7 @@ HEADERS += \
   src/dro/param/replay_reader.h \
   src/dro/system/animation.h \
   src/dro/system/audio.h \
+  src/dro/system/audio/ambience_player.h \
   src/dro/system/audio/blip_player.h \
   src/dro/system/audio/music_player.h \
   src/dro/system/audio/sfx_player.h \
@@ -193,6 +194,7 @@ SOURCES += \
   src/dro/param/replay_reader.cpp \
   src/dro/system/animation.cpp \
   src/dro/system/audio.cpp \
+  src/dro/system/audio/ambience_player.cpp \
   src/dro/system/audio/blip_player.cpp \
   src/dro/system/audio/music_player.cpp \
   src/dro/system/audio/sfx_player.cpp \

@@ -3,7 +3,6 @@
 #include "aoobject.h"
 #include "draudioengine.h"
 
-
 enum BGMPlayback
 {
   BGMPlayback_Standard = 0,

@@ -98,6 +98,9 @@ void Courtroom::create_widgets()
     ui_vp_desk = new DRSceneMovie(ao_app);
     l_scene->addItem(ui_vp_desk);
 
+    ui_vp_weather = new DRSceneMovie(ao_app);
+    l_scene->addItem(ui_vp_weather);
+
     ui_vp_effect = new DREffectMovie(ao_app);
     l_scene->addItem(ui_vp_effect);
 
@@ -122,6 +125,7 @@ void Courtroom::create_widgets()
   ui_vp_player_pair->setZValue(ViewportLayers_PlayerBack);
   ui_vp_player_char->setZValue(ViewportLayers_PlayerFront);
   ui_vp_desk->setZValue(ViewportLayers_Desk);
+  ui_vp_weather->setZValue(ViewportLayers_Weather);
   ui_vp_effect->setZValue(ViewportLayers_Effect);
   ui_vp_wtce->setZValue(ViewportLayers_WTCE);
   ui_vp_objection->setZValue(ViewportLayers_Objection);

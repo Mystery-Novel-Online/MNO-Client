@@ -343,6 +343,16 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
     m_courtroom->reset_viewport();
   }
+  else if (l_header == "WEA")
+  {
+    if (l_content.size() < 1)
+      return;
+
+    if (!is_courtroom_constructed)
+      return;
+
+    m_courtroom->updateWeather(l_content.at(0));
+  }
   else if (l_header == "BN")
   {
     if (l_content.size() < 1)

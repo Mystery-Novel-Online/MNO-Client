@@ -39,6 +39,7 @@
 #include "dro/system/audio.h"
 #include "dro/interface/courtroom_layout.h"
 #include "dro/system/replay_playback.h"
+#include <mk2/spritecachingreader.h>
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -185,6 +186,10 @@ void Courtroom::map_viewers()
   });
 
   // backgrounds
+  m_mapped_viewer_list[SpriteWeather].append({
+    ui_vp_weather->get_player()
+  });
+
   m_mapped_viewer_list[SpriteStage].append({
       ui_vp_background->get_player(),
       ui_vp_desk->get_player(),
@@ -436,6 +441,36 @@ QString Courtroom::get_current_background() const
   }
 
   return m_background.background_tod_map.value(l_tod, m_background.background);
+}
+
+void Courtroom::updateWeather(QString weatherName)
+{
+  const QString weatherDirectory = FS::Paths::FindDirectory("animations/weather/" + weatherName + "/");
+
+  if(!FS::Checks::DirectoryExists(weatherDirectory) || weatherName.trimmed().isEmpty())
+  {
+    ui_vp_weather->set_file_name("");
+    ui_vp_weather->stop();
+    ui_vp_weather->hide();
+    audio::effect::PlayWeather("");
+    return;
+  }
+
+  const QString weatherAnimPath = weatherDirectory + "overlay.webp";
+  auto l_viewer = ui_vp_weather->get_reader();
+  const QString l_current_file_name = l_viewer->get_file_name();
+
+  if (weatherAnimPath != l_current_file_name)
+  {
+    JSONReader weatherParam = JSONReader();
+    weatherParam.ReadFromFile(weatherDirectory + "param.json");
+    audio::effect::PlayWeather(ao_app->get_ambient_sfx_path(weatherParam.getStringValue("sound")).toStdString());
+
+    ui_vp_weather->set_reader(mk2::SpriteReader::ptr(new mk2::SpriteCachingReader));
+    ui_vp_weather->set_file_name(weatherAnimPath);
+  }
+  ui_vp_weather->start();
+  ui_vp_weather->show();
 }
 
 void Courtroom::update_background_scene()

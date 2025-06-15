@@ -85,6 +85,7 @@ const QMap<SpriteCategory, QString> s_sprite_category_string_map{
     {SpriteEffect, "effect"},
     {SpriteShout, "shout"},
     {SpriteSticker, "sticker"},
+    {SpriteWeather, "weather"},
 };
 
 SpriteCategory string_to_sprite_category(QString p_category)
@@ -113,6 +114,7 @@ SpriteCategory viewport_sprite_to_sprite_category(ViewportSprite p_type)
       {ViewportPairCharacterIdle, SpritePairCharacter},
       {ViewportEffect, SpriteEffect},
       {ViewportShout, SpriteShout},
+      {ViewportWeather, SpriteWeather},
   }
       .value(p_type, SpriteGUI);
 }

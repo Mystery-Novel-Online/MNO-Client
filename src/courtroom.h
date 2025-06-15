@@ -158,6 +158,8 @@ public:
 
   QString get_current_background() const;
 
+  void updateWeather(QString weatherName);
+
   // updates background based on the position given from the chatmessage; will reset preloading if active
   void update_background_scene();
 
@@ -465,6 +467,7 @@ private:
   DRCharacterMovie *ui_vp_player_char = nullptr;
   DRCharacterMovie *ui_vp_player_pair = nullptr;
   DRSceneMovie *ui_vp_desk = nullptr;
+  DRSceneMovie *ui_vp_weather = nullptr;
 
   AONoteArea *ui_note_area = nullptr;
 

@@ -298,6 +298,7 @@ enum SpriteCategory
   SpriteEffect,
   SpriteShout,
   SpriteSticker,
+  SpriteWeather
 };
 
 SpriteCategory string_to_sprite_category(QString p_category);
@@ -314,6 +315,7 @@ enum ViewportSprite
   ViewportPairCharacterIdle,
   ViewportEffect,
   ViewportShout,
+  ViewportWeather,
 };
 
 SpriteCategory viewport_sprite_to_sprite_category(ViewportSprite p_type);
@@ -324,10 +326,11 @@ enum ViewportLayers
   ViewportLayers_PlayerBack = 1,
   ViewportLayers_PlayerFront = 2,
   ViewportLayers_Desk = 3,
-  ViewportLayers_Effect = 4,
-  ViewportLayers_WTCE = 5,
-  ViewportLayers_Objection = 6,
-  ViewportLayers_Video = 7
+  ViewportLayers_Weather = 4,
+  ViewportLayers_Effect = 5,
+  ViewportLayers_WTCE = 6,
+  ViewportLayers_Objection = 7,
+  ViewportLayers_Video = 8
 };
 enum ChatMessage : int32_t
 {
