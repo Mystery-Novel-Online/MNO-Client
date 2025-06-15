@@ -37,6 +37,7 @@ private:
   ReplayState m_currentState = ReplayState_Manual;
   RPButton *m_autoToggle = nullptr;
   RPViewport *m_viewport = nullptr;
+  RPHoverWidget *m_playbackHover = nullptr;
   RPHoverWidget *m_scrubberHover = nullptr;
   QSlider *m_playbackScrubber = nullptr;
   bool m_DraggingSlider = false;

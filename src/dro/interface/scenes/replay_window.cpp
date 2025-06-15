@@ -41,23 +41,25 @@ void ReplayWindow::setState(ReplayState state)
   {
   case ReplayState_Realtime:
     m_currentState = ReplayState_Realtime;
-    m_autoToggle->setText("Realtime");
+    m_autoToggle->set_image("playback_realtime.png");
     dro::system::replays::playback::progressSingle();
     break;
 
   case ReplayState_Automatic:
     m_currentState = ReplayState_Automatic;
     dro::system::replays::playback::setNextUpdate(2000);
-    m_autoToggle->setText("Automatic");
+    m_autoToggle->set_image("playback_auto.png");
     break;
 
   case ReplayState_Manual:
   default:
     m_currentState = ReplayState_Manual;
-    m_autoToggle->setText("Manual");
+    m_autoToggle->set_image("playback_manual.png");
     dro::system::replays::playback::setNextUpdate(0);
     break;
   }
+
+  this->setFocus();
 }
 
 void ReplayWindow::constructLayout()
@@ -65,6 +67,11 @@ void ReplayWindow::constructLayout()
   m_viewport = new LegacyViewport(this);
   set_size_and_pos(this, "replay_window", REPLAY_DESIGN_INI, AOApplication::getInstance());
   m_viewport->constructViewport();
+
+
+  m_playbackHover = new RPHoverWidget(this);
+  set_size_and_pos(m_playbackHover, "playback_hover_field", REPLAY_DESIGN_INI, AOApplication::getInstance());
+  m_playbackHover->show();
 
   m_scrubberHover = new RPHoverWidget(this);
   set_size_and_pos(m_scrubberHover, "controller", REPLAY_DESIGN_INI, AOApplication::getInstance());
@@ -76,8 +83,8 @@ void ReplayWindow::constructLayout()
   m_scrubberHover->addWidget(m_playbackScrubber);
 
   m_autoToggle = new RPButton("auto", "", "Manual", this);
-  m_autoToggle->move(824, 10);
-  m_autoToggle->resize(116, 36);
+  set_size_and_pos(m_autoToggle, "playback_mode", REPLAY_DESIGN_INI, AOApplication::getInstance());
+  m_playbackHover->addWidget(m_autoToggle);
   setState(ReplayState_Manual);
 
   connect(m_autoToggle, &QPushButton::clicked, this, &ReplayWindow::onAutoToggle);
