@@ -155,6 +155,57 @@ namespace dro::system::replays
       save();
     }
 
+    void weatherChange(QString name, QString environment)
+    {
+      const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
+      ReplayOperation weatherOperation = {"weather", timestampElapsed, {}};
+
+      weatherOperation.variables["name"] = name;
+      weatherOperation.variables["environment"] = environment;
+      s_recordingOperations.append(weatherOperation);
+      save();
+    }
+
+    void splashAnimation(const QString &splash)
+    {
+      const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
+      ReplayOperation splashOperation = {"wtce", timestampElapsed, {}};
+      splashOperation.variables["name"] = splash;
+
+      s_recordingOperations.append(splashOperation);
+      save();
+    }
+
+    void gamemodeChange(const QString &mode)
+    {
+      const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
+      ReplayOperation modeOperation = {"gamemode", timestampElapsed, {}};
+      modeOperation.variables["name"] = mode;
+
+      s_recordingOperations.append(modeOperation);
+      save();
+    }
+
+    void hourChange(const QString &hour)
+    {
+      const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
+      ReplayOperation hourOperation = {"clock", timestampElapsed, {}};
+      hourOperation.variables["hour"] = hour;
+
+      s_recordingOperations.append(hourOperation);
+      save();
+    }
+
+    void todChange(const QString &timeOfDay)
+    {
+      const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
+      ReplayOperation periodOperation = {"period", timestampElapsed, {}};
+      periodOperation.variables["value"] = timeOfDay;
+
+      s_recordingOperations.append(periodOperation);
+      save();
+    }
+
   }
 
   namespace playback

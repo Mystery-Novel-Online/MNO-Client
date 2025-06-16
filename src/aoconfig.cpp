@@ -20,6 +20,7 @@
 
 #include <modules/theme/thememanager.h>
 #include "dro/network/metadata/user_metadata.h"
+#include "dro/system/replay_playback.h"
 
 /*!
     We have to suffer through a lot of boilerplate code
@@ -924,6 +925,7 @@ void AOConfig::set_timeofday(QString p_string)
     return;
   d->timeofday = p_string;
   d->invoke_signal("timeofday_changed", Q_ARG(QString, p_string));
+  dro::system::replays::recording::todChange(p_string);
 }
 
 void AOConfig::set_manual_timeofday(QString p_string)
@@ -932,6 +934,7 @@ void AOConfig::set_manual_timeofday(QString p_string)
     return;
   d->manual_timeofday = p_string;
   d->invoke_signal("manual_timeofday_changed", Q_ARG(QString, p_string));
+  dro::system::replays::recording::todChange(p_string);
 }
 
 void AOConfig::set_manual_timeofday_selection_enabled(bool p_enabled)

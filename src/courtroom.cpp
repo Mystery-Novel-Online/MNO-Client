@@ -447,6 +447,7 @@ void Courtroom::updateWeather(QString weatherName)
 {
   const QString weatherDirectory = FS::Paths::FindDirectory("animations/weather/" + weatherName + "/");
 
+  replays::recording::weatherChange(weatherName, "");
   if(!FS::Checks::DirectoryExists(weatherDirectory) || weatherName.trimmed().isEmpty())
   {
     ui_vp_weather->set_file_name("");
@@ -455,6 +456,7 @@ void Courtroom::updateWeather(QString weatherName)
     audio::effect::PlayWeather("");
     return;
   }
+
 
   const QString weatherAnimPath = weatherDirectory + "overlay.webp";
   auto l_viewer = ui_vp_weather->get_reader();
@@ -635,6 +637,8 @@ void Courtroom::handle_clock(QString time)
   qInfo() << QString("Clock time changed to %1").arg(m_current_clock);
 
   ui_vp_clock->hide();
+
+  replays::recording::hourChange(time);
 
   if (m_current_clock == -1)
   {
@@ -2419,6 +2423,7 @@ void Courtroom::handle_wtce(QString p_wtce)
     if (p_wtce == "testimony")
     {
       audio::effect::Play(ao_app->get_sfx(wtce_names[index - 1]).toStdString());
+      replays::recording::splashAnimation(wtce_names[index - 1]);
       ui_vp_wtce->play(wtce_names[index - 1]);
     }
   }

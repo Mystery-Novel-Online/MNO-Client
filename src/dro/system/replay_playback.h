@@ -19,11 +19,11 @@ namespace dro::system::replays
     void backgroundChange(QString background);
     void messageCharacter();
     void messageSystem(QString name, QString message);
-    void splashAnimation();
-    void weatherChange();
-    void gamemodeChange();
-    void hourChange();
-    void todChange();
+    void weatherChange(QString name, QString environment);
+    void splashAnimation(const QString &splash);
+    void gamemodeChange(const QString &mode);
+    void hourChange(const QString &hour);
+    void todChange(const QString &timeOfDay);
 
     void save();
   }
