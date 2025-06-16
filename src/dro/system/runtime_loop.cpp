@@ -13,13 +13,13 @@
 
 static int s_FrameRate = 60;
 static int s_uptime = 0;
+static double s_accumulatedTime = 0.0;
 static RPTypewriter *s_typewriter = nullptr;
 static RPViewport *s_viewport = nullptr;
 
 void RuntimeLoop::Update()
 {
   static QElapsedTimer timer;
-  static double accumulatedTime = 0.0;
   static bool firstCall = true;
 
   if (firstCall) {
@@ -37,18 +37,18 @@ void RuntimeLoop::Update()
   double deltaTime = elapsedNano / 1e9;
   LuaBridge::LuaEventCall("OnUpdate", deltaTime);
 
-  accumulatedTime += deltaTime;
+  s_accumulatedTime += deltaTime;
 
   const double targetDelta = 1.0 / s_FrameRate;
 
   dro::system::replays::playback::autoUpdate(s_uptime);
 
-  if (accumulatedTime < targetDelta)
+  dro::system::animation::runAll(elapsedMillis);
+
+  if (s_accumulatedTime < targetDelta)
     return;
 
-  accumulatedTime -= targetDelta;
-
-  dro::system::animation::runAll(elapsedMillis);
+  s_accumulatedTime -= targetDelta;
 
   courtroom::viewport::update();
 
@@ -73,4 +73,11 @@ void RuntimeLoop::assignTypewriter(RPTypewriter *widget)
 void RuntimeLoop::assignViewport(RPViewport *viewport)
 {
   s_viewport = viewport;
+}
+
+void RuntimeLoop::setWindowFocus(bool focus)
+{
+  s_accumulatedTime = 0.0;
+  if(focus) s_FrameRate = 60;
+  else s_FrameRate = 15;
 }

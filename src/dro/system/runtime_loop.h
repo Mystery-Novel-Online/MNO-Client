@@ -8,6 +8,7 @@ namespace RuntimeLoop
 {
   int uptime();
   void Update();
+  void setWindowFocus(bool focus);
 
   void assignTypewriter(RPTypewriter *widget);
   void assignViewport(RPViewport *viewport);

@@ -71,6 +71,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
 {
   ao_app = p_ao_app;
   ao_config = new AOConfig(this);
+  RuntimeLoop::setWindowFocus(true);
 
   m_preloader_sync = new mk2::SpriteReaderSynchronizer(this);
   m_preloader_sync->set_threshold(ao_config->caching_threshold());
@@ -3318,6 +3319,15 @@ bool Courtroom::event(QEvent *event)
   case QEvent::Wheel:
     resetAFKTimer();
     break;
+
+  case QEvent::WindowActivate:
+    RuntimeLoop::setWindowFocus(true);
+    break;
+
+  case QEvent::WindowDeactivate:
+    RuntimeLoop::setWindowFocus(false);
+    break;
+
   default:
     break;
   }
@@ -3404,6 +3414,7 @@ void Courtroom::focusInEvent(QFocusEvent *event)
   if (event)
   {
     LuaBridge::LuaEventCall("OnWindowFocusChange", true);
+    RuntimeLoop::setWindowFocus(true);
   }
 }
 
@@ -3412,6 +3423,7 @@ void Courtroom::focusOutEvent(QFocusEvent *event)
   if (event)
   {
     LuaBridge::LuaEventCall("OnWindowFocusChange", false);
+    RuntimeLoop::setWindowFocus(false);
   }
 
 }
