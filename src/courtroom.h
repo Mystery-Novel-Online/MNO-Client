@@ -158,7 +158,7 @@ public:
 
   QString get_current_background() const;
 
-  void updateWeather(QString weatherName);
+  void updateWeather(QString weatherName, const QString &environment);
 
   // updates background based on the position given from the chatmessage; will reset preloading if active
   void update_background_scene();

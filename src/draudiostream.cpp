@@ -224,6 +224,9 @@ void DRAudioStream::fade_sync(HSYNC hsync, DWORD ch, DWORD data, void *userdata)
   DRAudioStream *l_stream = static_cast<DRAudioStream *>(userdata);
   l_stream->m_fade_running = false;
   emit l_stream->faded(l_stream->m_fade);
+
+  if (l_stream->m_fade == FadeOut)
+    l_stream->stop();
 }
 
 bool DRAudioStream::ensure_init()

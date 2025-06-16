@@ -450,11 +450,11 @@ QString Courtroom::get_current_background() const
   return m_background.background_tod_map.value(l_tod, m_background.background);
 }
 
-void Courtroom::updateWeather(QString weatherName)
+void Courtroom::updateWeather(QString weatherName, const QString &environment)
 {
   const QString weatherDirectory = FS::Paths::FindDirectory("animations/weather/" + weatherName + "/");
 
-  replays::recording::weatherChange(weatherName, "");
+  replays::recording::weatherChange(weatherName, environment);
   if(!FS::Checks::DirectoryExists(weatherDirectory) || weatherName.trimmed().isEmpty())
   {
     ui_vp_weather->set_file_name("");
@@ -464,22 +464,44 @@ void Courtroom::updateWeather(QString weatherName)
     return;
   }
 
-
   const QString weatherAnimPath = weatherDirectory + "overlay.webp";
   auto l_viewer = ui_vp_weather->get_reader();
   const QString l_current_file_name = l_viewer->get_file_name();
 
-  if (weatherAnimPath != l_current_file_name)
-  {
-    JSONReader weatherParam = JSONReader();
-    weatherParam.ReadFromFile(weatherDirectory + "param.json");
-    audio::effect::PlayWeather(ao_app->get_ambient_sfx_path(weatherParam.getStringValue("sound")).toStdString());
+  JSONReader weatherParam = JSONReader();
+  weatherParam.ReadFromFile(weatherDirectory + "param.json");
 
-    ui_vp_weather->set_reader(mk2::SpriteReader::ptr(new mk2::SpriteCachingReader));
-    ui_vp_weather->set_file_name(weatherAnimPath);
+  bool hideAnimation = false;
+  QString soundName = weatherParam.getStringValue("sound");
+
+  if(weatherParam.isValueExists(environment))
+  {
+    weatherParam.SetTargetObject(environment);
+    if(weatherParam.isValueExists("sound"))
+    {
+      soundName = weatherParam.getStringValue("sound");
+    }
+    hideAnimation = weatherParam.getBoolValue("hide");
   }
-  ui_vp_weather->start();
-  ui_vp_weather->show();
+
+  audio::effect::PlayWeather(ao_app->get_ambient_sfx_path(soundName).toStdString());
+
+  if(!hideAnimation)
+  {
+    if (weatherAnimPath != l_current_file_name)
+    {
+      ui_vp_weather->set_reader(mk2::SpriteReader::ptr(new mk2::SpriteCachingReader));
+      ui_vp_weather->set_file_name(weatherAnimPath);
+    }
+    ui_vp_weather->start();
+    ui_vp_weather->show();
+  }
+  else
+  {
+    ui_vp_weather->set_file_name("");
+    ui_vp_weather->stop();
+    ui_vp_weather->hide();
+  }
 }
 
 void Courtroom::update_background_scene()

@@ -345,13 +345,13 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   }
   else if (l_header == "WEA")
   {
-    if (l_content.size() < 1)
+    if (l_content.size() < 2)
       return;
 
     if (!is_courtroom_constructed)
       return;
 
-    m_courtroom->updateWeather(l_content.at(0));
+    m_courtroom->updateWeather(l_content.at(0), l_content.at(1));
   }
   else if (l_header == "BN")
   {

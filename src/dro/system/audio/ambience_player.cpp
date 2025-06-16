@@ -13,6 +13,7 @@ RPAmbiencePlayer::RPAmbiencePlayer(QObject *p_parent)
 
 void RPAmbiencePlayer::play(QString ambienceName)
 {
+  if(ambienceName == m_filename) return;
   m_filename = ambienceName;
 
   QSharedPointer<DRAudioStream> newAmbience = m_family->create_stream(ambienceName);
