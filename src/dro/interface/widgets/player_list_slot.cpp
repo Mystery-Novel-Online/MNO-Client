@@ -79,12 +79,24 @@ DrPlayerListEntry::DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app,
 }
 
 
-void DrPlayerListEntry::set_character(QString p_character)
+void DrPlayerListEntry::set_character(QString p_character, bool afkState)
 {
 
   m_character = p_character;
+  m_afk = afkState;
   QString characterIconPath = "";
+  const QString afkBoarderImagePath = ao_app->find_theme_asset_path("char_border_afk.png");
+  const QString nonAfkBoarderPath = ao_app->find_theme_asset_path("char_border.png");
 
+  if(m_afk && FS::Checks::FileExists(afkBoarderImagePath))
+  {
+    pCharacterBorderDisplay->set_image(afkBoarderImagePath);
+  }
+  else
+  {
+    if (FS::Checks::FileExists(nonAfkBoarderPath))
+      pCharacterBorderDisplay->set_image(nonAfkBoarderPath);
+  }
 
   if(!m_CharacterOutfit.isEmpty())
   {
@@ -103,8 +115,16 @@ void DrPlayerListEntry::set_character(QString p_character)
   if(FS::Checks::FileExists(characterIconPath))
   {
       ui_user_image->set_image(characterIconPath);
-      const QString l_selected_texture = ao_app->get_character_path(p_character, "char_border.png");
-      if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
+      if(m_afk && FS::Checks::FileExists(afkBoarderImagePath))
+      {
+        pCharacterBorderDisplay->set_image(afkBoarderImagePath);
+      }
+      else
+      {
+        const QString l_selected_texture = ao_app->get_character_path(p_character, "char_border.png");
+        if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
+      }
+
   }
   else
   {
@@ -125,7 +145,7 @@ void DrPlayerListEntry::set_character(QString p_character)
 void DrPlayerListEntry::setOutfit(QString outfitName)
 {
   m_CharacterOutfit = outfitName;
-  set_character(m_character);
+  set_character(m_character, m_afk);
 }
 
 void DrPlayerListEntry::set_name(QString showname)

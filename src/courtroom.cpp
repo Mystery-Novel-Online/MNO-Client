@@ -39,6 +39,7 @@
 #include "dro/system/audio.h"
 #include "dro/interface/courtroom_layout.h"
 #include "dro/system/replay_playback.h"
+#include "dro/system/runtime_loop.h"
 #include <mk2/spritecachingreader.h>
 
 #include <QCheckBox>
@@ -99,6 +100,11 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   reset_viewport();
   metadata::user::partner::setPartner(-1);
   ui_slider_horizontal_axis->setValue(500);
+  resetAFKTimer();
+
+  if (!ServerMetadata::FeatureSupported("sequence")) return;
+  connect(&m_checkTimer, &QTimer::timeout, this, &Courtroom::checkAFKStatus);
+  m_checkTimer.start(1000);
 }
 
 Courtroom::~Courtroom()
@@ -2529,6 +2535,13 @@ void Courtroom::on_ooc_message_return_pressed()
     is_rainbow_enabled = true;
     return;
   }
+  if (l_message.startsWith("/afk") && !m_isAfk)
+  {
+    m_isAfk = true;
+    ao_app->send_server_packet(DRPacket("STATUS", {QString::number(UserState_AFK), QString::number(true)}));
+    ui_ooc_chat_message->clear();
+    return;
+  }
   else if (l_message.startsWith("/switch_am"))
   {
     on_switch_area_music_clicked();
@@ -3295,6 +3308,44 @@ void Courtroom::closeEvent(QCloseEvent *event)
   Q_EMIT closing();
 }
 
+bool Courtroom::event(QEvent *event)
+{
+  switch (event->type()) {
+  case QEvent::MouseMove:
+  case QEvent::KeyPress:
+  case QEvent::MouseButtonPress:
+  case QEvent::MouseButtonRelease:
+  case QEvent::Wheel:
+    resetAFKTimer();
+    break;
+  default:
+    break;
+  }
+
+  return QWidget::event(event);
+}
+
+void Courtroom::resetAFKTimer()
+{
+  if (!ServerMetadata::FeatureSupported("sequence")) return;
+  if (m_isAfk)
+  {
+    m_isAfk = false;
+    ao_app->send_server_packet(DRPacket("STATUS", {QString::number(UserState_AFK), QString::number(false)}));
+  }
+  m_lastActivityTimestamp = RuntimeLoop::uptime();
+}
+
+void Courtroom::checkAFKStatus()
+{
+  if (!ServerMetadata::FeatureSupported("sequence")) return;
+  if (!m_isAfk && (RuntimeLoop::uptime() - m_lastActivityTimestamp) >= m_afkThresholdMs) {
+    m_isAfk = true;
+
+    ao_app->send_server_packet(DRPacket("STATUS", {QString::number(UserState_AFK), QString::number(true)}));
+  }
+}
+
 void Courtroom::keyPressEvent(QKeyEvent *event)
 {
   if (event)
@@ -3521,7 +3572,7 @@ void Courtroom::construct_playerlist_layout()
     DrPlayerListEntry* ui_playername = new DrPlayerListEntry(ui_player_list, ao_app, 1, y_pos);
 
     DrPlayer playerData = SceneManager::get().mPlayerDataList.at(n);
-    ui_playername->set_character(playerData.m_character);
+    ui_playername->set_character(playerData.m_character, playerData.m_Afk);
     ui_playername->set_name(playerData.m_showname);
     ui_playername->setURL(playerData.mURL);
     ui_playername->setID(playerData.m_id);

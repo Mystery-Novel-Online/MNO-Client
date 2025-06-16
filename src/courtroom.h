@@ -953,6 +953,20 @@ protected:
 
   void changeEvent(QEvent *) override;
   void closeEvent(QCloseEvent *event) override;
+  bool event(QEvent *event) override;
+
+
+
+private:
+  QTimer m_checkTimer;
+  int m_lastActivityTimestamp = 0;
+  bool m_isAfk = false;
+  const int m_afkThresholdMs = 5 * 60 * 1000;
+
+  void resetAFKTimer();
+
+private slots:
+  void checkAFKStatus();
 };
 
 template <typename T>

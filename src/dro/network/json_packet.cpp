@@ -50,6 +50,7 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
     QString charaURL = jsonReader.getStringValue("url");
     QString statusPlayer = jsonReader.getStringValue("status");
     QString characterOutfit = jsonReader.getStringValue("outfit");
+    bool isAfk = jsonReader.getStringValue("afk") == "True";
     if(characterOutfit == "<All>") characterOutfit = "";
 
     QString charaIPID = jsonReader.getStringValue("IPID");
@@ -57,6 +58,7 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
 
     DrPlayer* drp = new DrPlayer(playerId, showname, characterName, charaURL, statusPlayer, characterOutfit);
     drp->setMod(charaIPID, charaHDID);
+    drp->setAfk(isAfk);
     SceneManager::get().mPlayerDataList.append(*drp);
   }
   if(AOApplication::getInstance()->m_courtroom != nullptr)

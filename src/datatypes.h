@@ -320,6 +320,12 @@ enum ViewportSprite
 
 SpriteCategory viewport_sprite_to_sprite_category(ViewportSprite p_type);
 
+enum UserState
+{
+  UserState_AFK,
+  UserState_Typing
+};
+
 enum ViewportLayers
 {
   ViewportLayers_BG = 0,

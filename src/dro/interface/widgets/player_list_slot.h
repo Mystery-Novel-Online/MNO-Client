@@ -11,7 +11,7 @@ class DrPlayerListEntry : public QWidget
 {
 public:
     DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y);
-    void set_character(QString p_character);
+    void set_character(QString p_character, bool afkState);
     void setOutfit(QString outfitName);
     void set_name(QString showname);
     void set_reason(QString p_reason);
@@ -48,6 +48,7 @@ private:
   QImage m_texture;
   QString m_showname;
   QString m_character;
+  bool m_afk = false;
   QString m_CharacterOutfit = "";
   QString mStatus = "";
   QString mURL = "";
