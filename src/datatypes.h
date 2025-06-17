@@ -91,6 +91,7 @@ public:
   QString key;
   QString comment;
   QString anim;
+  QString sequence;
   QString dialog;
   int modifier = 0;
   int desk_modifier = -1;

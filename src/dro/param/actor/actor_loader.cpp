@@ -410,6 +410,7 @@ void OutfitReader::ReadEmotes()
     const QString animName    = getStringValue("pre");
     const QString videoFile   = getStringValue("video");
     const QString soundFile   = getStringValue("sfx");
+    const QString sequenceFile   = getStringValue("sequence");
     const int sfxDelayMs      = getIntValue("sfx_delay");
     const int sfxDelayTicks   = getIntValue("sfx_delay_ticks");
 
@@ -418,9 +419,10 @@ void OutfitReader::ReadEmotes()
 
     DREmote emote;
     emote.character   = m_CharacterName;
-    emote.outfitName  = sharedOutfit;
+    emote.outfitName  = m_OutfitName;
     emote.emoteName   = emoteName;
     emote.comment     = emoteName;
+    emote.sequence = sequenceFile;
     emote.anim        = animName.isEmpty() ? "" : QString("%1%2").arg(outfitPath, animName);
     emote.dialog      = QString("%1%2").arg(outfitPath, emoteName);
 

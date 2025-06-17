@@ -244,9 +244,20 @@ void EmotionSelector::emoteClicked(int id)
 
   QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
   QListWidget* sfxList = dynamic_cast<QListWidget*>(ThemeManager::get().getWidget("sfx_list"));
+  QListWidget* animList = dynamic_cast<QListWidget*>(ThemeManager::get().getWidget("chara_animations"));
   if (sfxList != nullptr && sfxList->count() != 0)
   {
     sfxList->setCurrentRow(0);
+  }
+  if (animList != nullptr && animList->count() != 0)
+  {
+    animList->setCurrentRow(0);
+    const QString &sequenceName = getSelectedEmote().sequence;
+    for(QListWidgetItem *item : animList->findItems(sequenceName, Qt::MatchExactly))
+    {
+      animList->setCurrentItem(item);
+    };
+
   }
 
 
