@@ -1723,10 +1723,9 @@ void Courtroom::handle_chatmessage_3()
       if (!l_effect_name.isEmpty() && l_effect_name != "effect_shake") // check to prevent crashing
       {
         QStringList offset = ao_app->get_effect_offset(f_char, l_effect_index);
-
+        ui_vp_effect->setPos(0, offset.at(1).toInt());
         int selfOffset = metadata::message::horizontalOffset();
-        if(ao_app->current_theme->getEffectPairOffset(l_effect_index)) ui_vp_effect->setPos(selfOffset, offset.at(1).toInt());
-        else ui_vp_effect->setPos(0, offset.at(1).toInt());
+        if(ao_app->current_theme->getEffectPairOffset(l_effect_index)) ui_vp_effect->setHorizontalOffset(selfOffset);
 
         QString s_eff = effect_names.at(l_effect_index - 1);
         QStringList f_eff = ao_app->get_effect(l_effect_index);
