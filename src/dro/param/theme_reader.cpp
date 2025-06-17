@@ -338,7 +338,7 @@ pos_size_type ThemeReader::GetWidgetTransform(RPSceneType sceneType, QString ele
 {
   pos_size_type return_value;
 
-  double resize = 1.0;
+  double resize = ThemeManager::get().getResize();
 
   if(m_GameModeCurrent != nullptr)
   {

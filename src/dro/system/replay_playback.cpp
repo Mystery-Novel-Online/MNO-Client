@@ -109,7 +109,7 @@ namespace dro::system::replays
 
       if(s_limitEarliestMessage == 0) s_limitEarliestMessage = timestampElapsed;
       s_limitLatestMessage = timestampElapsed;
-      if(message.textContent.length() > 3) s_limitMessageCount += 1;
+      if(message.textContent.trimmed().length() > 3) s_limitMessageCount += 1;
 
 
       ReplayOperation lNewOperation = {"msg", timestampElapsed, {}};
