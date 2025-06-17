@@ -22,6 +22,11 @@ static bool s_recordingActive = true;
 static int s_recordingStartTime = 0;
 static QVector<ReplayOperation> s_recordingOperations = {};
 
+// Saving Limits
+static int s_limitEarliestMessage = 0;
+static int s_limitLatestMessage = 0;
+static int s_limitMessageCount = 0;
+
 //Auto Variables
 static bool s_autoModeSingle = false;
 static int s_nextAutoUpdate = 0;
@@ -49,10 +54,17 @@ namespace dro::system::replays
       s_recordingStartTime = RuntimeLoop::uptime();
       s_recordingActive = true;
       s_recordingOperations.clear();
+
+      s_limitEarliestMessage = 0;
+      s_limitLatestMessage = 0;
+      s_limitMessageCount = 0;
     }
 
     void save()
     {
+      if((s_limitLatestMessage - s_limitEarliestMessage) < 240000 ) return;
+      if(s_limitMessageCount < 5 ) return;
+
       QJsonObject replayJson;
 
       QJsonArray replayOperations;
@@ -94,6 +106,12 @@ namespace dro::system::replays
     {
       const MessageMetadata message = dro::network::metadata::message::recentMessage();
       const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
+
+      if(s_limitEarliestMessage == 0) s_limitEarliestMessage = timestampElapsed;
+      s_limitLatestMessage = timestampElapsed;
+      if(message.textContent.length() > 3) s_limitMessageCount += 1;
+
+
       ReplayOperation lNewOperation = {"msg", timestampElapsed, {}};
 
       lNewOperation.variables["pre"] = message.characterPre;

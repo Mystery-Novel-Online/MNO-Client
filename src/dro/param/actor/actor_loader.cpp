@@ -442,7 +442,7 @@ void OutfitReader::ReadEmotes()
       const QString overlayImage = getStringValue(overlayName).trimmed();
       if (!overlayImage.isEmpty())
       {
-        emote.emoteOverlays.append({overlayImage, m_LayerRenderOrder[overlayName], m_LayerOffsets[overlayName]});
+        emote.emoteOverlays.append({overlayName, overlayImage, m_LayerRenderOrder[overlayName], m_LayerOffsets[overlayName]});
       }
     }
 

@@ -176,7 +176,7 @@ void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QSt
   for(const QString& layerOffset : dro::system::encoding::text::DecodeBase64(overlayString))
   {
     QStringList offsetData = dro::system::encoding::text::DecodePacketContents(layerOffset);
-    if(offsetData.length() == 6)
+    if(offsetData.length() == 7)
     {
       QString filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, path + offsetData[0]);
       if(!outfitName.isEmpty())

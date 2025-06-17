@@ -78,6 +78,7 @@ public:
 
 struct EmoteLayer
 {
+  QString offsetName;
   QString spriteName;
   QString spriteOrder;
   QRect layerOffset;
