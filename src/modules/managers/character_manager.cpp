@@ -47,7 +47,20 @@ ActorData *CharacterManager::SwitchCharacter(QString t_folder)
     file.close();
   }
 
+
+  QFile characterAnimations(FS::Paths::FindFile("characters/" + t_folder + "/animations.ini"));
+  if (characterAnimations.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    QTextStream in(&characterAnimations);
+    while (!in.atEnd())
+    {
+      QString line = in.readLine().trimmed();
+      if (!line.isEmpty()) animations.append(line);
+    }
+    characterAnimations.close();
+  }
+
   animations.append(FS::Paths::GetFileList("characters/" + t_folder + "/animations", true, "json"));
+
 
   courtroom::lists::setAnimations(animations);
   LuaBridge::LuaEventCall("OnCharacterLoad", t_folder.toStdString());
