@@ -89,6 +89,7 @@ void JsonPacket::ProcessPairDataPacket(JSONReader& jsonReader)
   const PairMetadata metadata =
   {
     jsonReader.getStringValue("character"),
+    jsonReader.getStringValue("outfit"),
     jsonReader.getStringValue("last_sprite"),
     jsonReader.getStringValue("sequence"),
     jsonReader.getStringValue("layers"),

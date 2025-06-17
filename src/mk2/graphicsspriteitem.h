@@ -31,6 +31,7 @@ class SpriteLayer
 {
 public:
   SpriteLayer(QString name, const QRectF &rect);
+  ~SpriteLayer();
   void start(double scale);
 
   mk2::SpritePlayer spritePlayer;
@@ -72,8 +73,8 @@ public:
 
   QRectF boundingRect() const final;
 
-  void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath);
-  void processOverlays(const QVector<EmoteLayer>& emoteLayers, const QString& character, const QString& emotePath);
+  void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
+  void processOverlays(const QVector<EmoteLayer>& emoteLayers, const QString& character, const QString& emotePath, const QString& outfitName);
   void createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect);
   void clearImageLayers();
 

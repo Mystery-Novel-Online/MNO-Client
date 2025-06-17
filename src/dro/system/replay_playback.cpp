@@ -99,6 +99,7 @@ namespace dro::system::replays
       lNewOperation.variables["pre"] = message.characterPre;
       lNewOperation.variables["char"] = message.characterFolder;
       lNewOperation.variables["emote"] = message.characterEmote;
+      lNewOperation.variables["outfit"] = message.characterOutfit;
       lNewOperation.variables["msg"] = message.textContent;
       lNewOperation.variables["pos"] = message.backgroundPosition;
       lNewOperation.variables["sound"] = message.sfxName;

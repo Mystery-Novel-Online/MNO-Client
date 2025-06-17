@@ -92,7 +92,7 @@ void ButtonMaker::SetEmote(DREmote emote)
       m_EmoteIndex = i;
       m_CharacterSprite->play_idle(checkEmote.character, checkEmote.dialog);
       m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
-      m_CharacterSprite->processOverlays(checkEmote.emoteOverlays, checkEmote.character, checkEmote.dialog);
+      m_CharacterSprite->processOverlays(checkEmote.emoteOverlays, checkEmote.character, checkEmote.dialog, checkEmote.outfitName);
       m_CharacterSprite->start(DRCharacterMovie::ScalingMode::WidthSmoothScaling, 1.0f);
       return;
     }

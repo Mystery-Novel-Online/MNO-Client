@@ -33,6 +33,7 @@
 #include "spriteseekingreader.h"
 #include "aoapplication.h"
 #include "dro/system/text_encoding.h"
+#include "dro/fs/fs_reading.h"
 
 using namespace mk2;
 
@@ -165,7 +166,7 @@ QRectF GraphicsSpriteItem::boundingRect() const
   return QRectF(0, 0, m_player->get_size().width() * 2, m_player->get_size().height() * 2);
 }
 
-void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QString& character, const QString& emotePath)
+void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName)
 {
   clearImageLayers();
 
@@ -178,12 +179,22 @@ void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QSt
     if(offsetData.length() == 6)
     {
       QString filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, path + offsetData[0]);
+      if(!outfitName.isEmpty())
+      {
+        const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, "outfits/" + outfitName +  "/" + offsetData[0]);
+        if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
+      }
+      else
+      {
+        const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, offsetData[0]);
+        if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
+      }
       createOverlay(filePath, offsetData[1], QRectF(offsetData[2].toInt(), offsetData[3].toInt(), offsetData[4].toInt(), offsetData[5].toInt()));
     }
   }
 }
 
-void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers, const QString& character, const QString& emotePath)
+void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers, const QString& character, const QString& emotePath, const QString& outfitName)
 {
   clearImageLayers();
 
@@ -193,6 +204,16 @@ void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers,
   for(const EmoteLayer &layer : emoteLayers)
   {
     QString filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, path + layer.spriteName);
+    if(!outfitName.isEmpty())
+    {
+      const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, "outfits/" + outfitName +  "/" + layer.spriteName);
+      if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
+    }
+    else
+    {
+      const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.spriteName);
+      if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
+    }
     createOverlay(filePath, layer.spriteOrder, layer.layerOffset);
   }
 
@@ -343,6 +364,12 @@ SpriteLayer::SpriteLayer(QString name, const QRectF &rect)
   targetRect = rect;
   spritePlayer.set_size(targetRect.size().toSize());
   start(1.0f);
+}
+
+SpriteLayer::~SpriteLayer()
+{
+  spritePlayer.set_file_name("");
+  spritePlayer.start();
 }
 
 void SpriteLayer::start(double scale)

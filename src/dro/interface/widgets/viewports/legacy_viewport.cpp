@@ -159,7 +159,7 @@ void LegacyViewport::onVideoDone()
   MessageMetadata &message = dro::network::metadata::message::recentMessage();
   m_characterSprite->setHorizontalOffset(message.offsetHorizontal);
   m_characterSprite->setVerticalOffset(message.offsetVertical);
-  m_characterSprite->processOverlays(message.characterLayers, message.characterFolder, message.characterEmote);
+  m_characterSprite->processOverlays(message.characterLayers, message.characterFolder, message.characterEmote, message.characterOutfit);
 
   if (message.characterShout.isEmpty())
   {

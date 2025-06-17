@@ -20,6 +20,7 @@ struct MessageModifiers
 struct PairMetadata
 {
   QString characterFolder = "";
+  QString characterOutfit = "";
   QString characterEmote = "";
   QString characterSequence = "";
   QString characterLayers = "";
@@ -37,6 +38,7 @@ struct MessageMetadata
 {
   QString characterPre = "";
   QString characterFolder = "";
+  QString characterOutfit = "";
   QString characterEmote = "";
   QString characterSequence = "";
   QString characterLayers = "";
@@ -79,6 +81,7 @@ namespace dro::network::metadata::message
     int verticalOffset();
     int horizontalOffset();
     double scaleOffset();
+    const QString &getOutfit();
     const QString &getEmote();
     const QString &getCharacter();
     const QString &getLayers();

@@ -83,6 +83,11 @@ namespace dro::network::metadata::message
       return s_CurrentMessage.pairData.isLeader;
     }
 
+    const QString &getOutfit()
+    {
+      return s_CurrentMessage.pairData.characterOutfit;
+    }
+
   }
 
   int horizontalOffset()
@@ -98,6 +103,7 @@ namespace dro::network::metadata::message
 
     s_CurrentMessage.characterLayers = message[CMSpriteLayers];
     s_CurrentMessage.characterSequence = message[CMAnimSequence];
+    s_CurrentMessage.characterOutfit = message[CMOutfitName];
     s_CurrentMessage.characterPre = message[CMPreAnim];
     s_CurrentMessage.characterFolder = message[CMChrName];
     s_CurrentMessage.characterEmote = message[CMEmote];
@@ -125,6 +131,7 @@ namespace dro::network::metadata::message
     s_CurrentMessage.sfxName = operation.variables["sound"];
     s_CurrentMessage.characterShout = operation.variables["shout"];
     s_CurrentMessage.characterLayers = operation.variables["layers"];
+    s_CurrentMessage.characterOutfit = operation.variables["outfit"];
     s_CurrentMessage.characterSequence = operation.variables["sequence"];
     s_CurrentMessage.characterEmote = operation.variables["emote"];
     s_CurrentMessage.characterPre = operation.variables["pre"];
