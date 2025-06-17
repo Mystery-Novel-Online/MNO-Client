@@ -924,9 +924,11 @@ public slots:
   void filter_sfx_list();
 
 private:
+  void setAnimItemColor(QListWidgetItem *item);
   void set_sfx_item_color(QListWidgetItem *item);
 
 private slots:
+  void onAnimListItemChanged(QListWidgetItem *current_item, QListWidgetItem *previous_item);
   void on_sfx_list_current_item_changed(QListWidgetItem *current_item, QListWidgetItem *previous_item);
   void on_sfx_list_context_menu_requested(QPoint point);
   void on_sfx_menu_preview_triggered();

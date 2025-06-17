@@ -92,6 +92,20 @@ void Courtroom::filter_sfx_list()
   filter_sfx_list(ui_sfx_search->text());
 }
 
+void Courtroom::setAnimItemColor(QListWidgetItem *item)
+{
+  if (item == nullptr) return;
+  QColor l_color = m_sfx_color_found;
+
+  if (item == animList->currentItem())
+  {
+    const double l_final_lightness = qMin(1.0, l_color.lightnessF() + 0.4);
+    l_color.setHslF(l_color.hueF(), l_color.saturationF(), l_final_lightness);
+  }
+
+  item->setBackground(l_color);
+}
+
 void Courtroom::select_default_sfx()
 {
   if (ui_sfx_list->count() == 0)
@@ -124,6 +138,13 @@ void Courtroom::set_sfx_item_color(QListWidgetItem *p_item)
   }
 
   p_item->setBackground(l_color);
+}
+
+void Courtroom::onAnimListItemChanged(QListWidgetItem *current_item, QListWidgetItem *previous_item)
+{
+  setAnimItemColor(current_item);
+  setAnimItemColor(previous_item);
+  ui_ic_chat_message_field->setFocus();
 }
 
 void Courtroom::update_all_sfx_item_color()
