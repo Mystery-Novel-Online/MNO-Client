@@ -137,10 +137,12 @@ void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
   m_HorizontalOffset = t_offset - 500;
 }
 
-void GraphicsSpriteItem::setCharacterAnimation(QString name, bool startFromEnd)
+bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, bool startFromEnd)
 {
-  AnimationReader(name, m_KeyframeSequence);
+  AnimationReader(name, m_KeyframeSequence, character);
   if(startFromEnd) m_KeyframeSequence.SequenceJumpEnd();
+
+  return m_KeyframeSequence.getLoopState();
 }
 
 void GraphicsSpriteItem::stop()

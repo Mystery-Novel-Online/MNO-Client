@@ -1505,8 +1505,13 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
   }
 
-  ui_vp_player_char->setCharacterAnimation(m_chatmessage[CMAnimSequence]);
-  ui_vp_player_pair->setCharacterAnimation(metadata::message::pair::getAnimation(), true);
+  bool animLoop = ui_vp_player_char->setCharacterAnimation(m_chatmessage[CMAnimSequence], m_chatmessage[CMChrName]);
+  if(!animLoop && m_chatmessage[CMClientId].toInt() == metadata::user::getClientId())
+  {
+    animList->setCurrentRow(0);
+  }
+
+  ui_vp_player_pair->setCharacterAnimation(metadata::message::pair::getAnimation(), metadata::message::pair::getCharacter(), true);
   ui_vp_player_pair->setHorizontalOffset(otherOffset);
 
   int verticalValue = m_chatmessage[CMOffsetV].trimmed().toInt();

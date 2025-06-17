@@ -141,6 +141,18 @@ QStringList GetFileList(const QString &directoryPath, bool includePackages, cons
   if(includePackages)
   {
     QVector<QString> searchArchives = Packages::CachedNames();
+    for(const QString& packageName : searchArchives)
+    {
+      QDir targetDirectory("packages/" + packageName + "/" + directoryPath);
+      QStringList fileList = targetDirectory.entryList(QStringList() << "*." + extensionFilter, QDir::Files);
+      for (const QString &fileName : fileList)
+      {
+        if (includeExtension)
+          returnValues.append(fileName);
+        else
+          returnValues.append(fileName.left(fileName.lastIndexOf('.')));
+      }
+    }
   }
 
   return returnValues;

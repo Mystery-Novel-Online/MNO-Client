@@ -8,7 +8,7 @@ class KeyframeSequence;
 class AnimationReader : public JSONReader
 {
 public:
-  AnimationReader(QString name, KeyframeSequence &sequence);
+  AnimationReader(const QString &name, KeyframeSequence &sequence, const QString &character);
 };
 
 #endif // ANIMATION_READER_H

@@ -198,7 +198,7 @@ void LegacyViewport::onObjectionDone()
 
   audio::effect::PlayCharacter(message.sfxName.toStdString(), message.characterFolder.toStdString());
 
-  m_characterSprite->setCharacterAnimation(message.characterSequence);
+  m_characterSprite->setCharacterAnimation(message.characterSequence, message.characterFolder);
 }
 
 void LegacyViewport::onPreanimDone()

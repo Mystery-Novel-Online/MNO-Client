@@ -65,3 +65,8 @@ void KeyframeSequence::Evaluate(std::unordered_map<std::string, QVariant> &outVa
     outValues[pair.first] = value;
   }
 }
+
+bool KeyframeSequence::getLoopState()
+{
+  return m_Loop;
+}

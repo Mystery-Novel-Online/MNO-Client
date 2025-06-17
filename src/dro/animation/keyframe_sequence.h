@@ -19,6 +19,8 @@ public:
   void RunSequence(float deltaTime);
   void Evaluate(std::unordered_map<std::string, QVariant>& outValues) const;
 
+  bool getLoopState();
+
 private:
   bool m_Loop = false;
   QString m_SoundEffect = "";

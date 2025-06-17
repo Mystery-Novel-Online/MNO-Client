@@ -35,7 +35,20 @@ ActorData *CharacterManager::ReadCharacter(QString t_folder)
 ActorData *CharacterManager::SwitchCharacter(QString t_folder)
 {
   QStringList animations = {"None"};
-  animations.append(FS::Paths::GetFileList("animations/characters", true, "json"));
+
+  QFile file("base/configs/default_animations.ini");
+  if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    QTextStream in(&file);
+    while (!in.atEnd())
+    {
+      QString line = in.readLine().trimmed();
+      if (!line.isEmpty()) animations.append(line);
+    }
+    file.close();
+  }
+
+  animations.append(FS::Paths::GetFileList("characters/" + t_folder + "/animations", true, "json"));
+
   courtroom::lists::setAnimations(animations);
   LuaBridge::LuaEventCall("OnCharacterLoad", t_folder.toStdString());
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");

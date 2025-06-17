@@ -4,12 +4,17 @@
 #include "dro/fs/fs_reading.h"
 #include "aoapplication.h"
 
-AnimationReader::AnimationReader(QString name, KeyframeSequence &sequence)
+AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence, const QString &character)
 {
   sequence.Cleanup();
-  const QString animationPath = FS::Paths::FindFile("animations/characters/" + name + ".json");
 
-  if(!FS::Checks::FileExists(animationPath)) return;
+  QString animationPath = FS::Paths::FindFile("characters/" + character + "/animations/" + name + ".json");
+
+  if(!FS::Checks::FileExists(animationPath))
+  {
+    animationPath = FS::Paths::FindFile("animations/characters/" + name + ".json");
+    if(!FS::Checks::FileExists(animationPath)) return;
+  }
 
   ReadFromFile(animationPath);
 
