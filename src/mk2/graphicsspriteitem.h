@@ -78,6 +78,9 @@ public:
   void createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect);
   void clearImageLayers();
 
+
+  QPointF computeDrawPosition(const QVector3D &animationOffset) const;
+  void drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale);
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
 
 public slots:

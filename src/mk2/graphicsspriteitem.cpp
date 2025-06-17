@@ -254,95 +254,98 @@ void GraphicsSpriteItem::clearImageLayers()
   update();
 }
 
+QPointF GraphicsSpriteItem::computeDrawPosition(const QVector3D &animationOffset) const
+{
+  if (!scene())
+    return QPointF();
+
+  const QRectF sceneRect = scene()->sceneRect();
+  const QRectF scaledRect = m_player->get_scaled_bounding_rect();
+  const QPointF centerOffset = sceneRect.center() - scaledRect.center();
+
+  const float verticalOffset = (mVerticalVPOffset / 1000.0f) * (sceneRect.height() + scaledRect.height()) / 2.0f;
+  const float horizontalOffset = (m_HorizontalOffset / 1000.0f) * (sceneRect.width() + scaledRect.width()) / 2.0f;
+
+  return centerOffset + QPointF(horizontalOffset + animationOffset.x(),
+                                verticalOffset + animationOffset.y());
+}
+
+void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale)
+{
+  for (SpriteLayer *layer : layers)
+  {
+    layer->start(scale);
+    const QImage frame = layer->spritePlayer.get_current_frame();
+    if (frame.isNull())
+      continue;
+
+    QRectF scaledRect(layer->targetRect);
+    scaledRect.setRect(scaledRect.left() * scale,
+                       scaledRect.top() * scale,
+                       scaledRect.width() * scale,
+                       scaledRect.height() * scale);
+    scaledRect.moveTopLeft(scaledRect.topLeft() + basePos);
+    painter->drawImage(scaledRect, frame);
+  }
+}
+
 void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
   Q_UNUSED(option);
   Q_UNUSED(widget);
 
-  const QImage l_image = m_player->get_current_frame();
-  if (!l_image.isNull())
+  const QImage baseImage = m_player->get_current_frame();
+
+  //Check if the main sprite is valid, otherwise no reason to paint.
+  if (baseImage.isNull()) return;
+
+  const double scale = m_player->getScaledAmount();
+  float alpha = 1.0f;
+  float animScale = 1.0f;
+  float rotation = 0.0f;
+  QVector3D animationOffset;
+
+  painter->save();
+  painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+
+  std::unordered_map<std::string, QVariant> evaluatedValues;
+  m_KeyframeSequence.Evaluate(evaluatedValues);
+
+  if (auto it = evaluatedValues.find("alpha"); it != evaluatedValues.end())
+    alpha = it->second.toFloat();
+  if (auto it = evaluatedValues.find("position"); it != evaluatedValues.end())
+    animationOffset = it->second.value<QVector3D>();
+  if (auto it = evaluatedValues.find("rotation"); it != evaluatedValues.end())
+    rotation = it->second.toFloat();
+  if (auto it = evaluatedValues.find("scale"); it != evaluatedValues.end())
+    animScale = it->second.toFloat();
+
+  if (alpha == 0.0f)
   {
-    double scale = m_player->getScaledAmount();
-    float alpha = 1.0f;
-
-    painter->save();
-    painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
-
-    // calculate center position
-    QPointF l_horizontal_center;
-    if (auto *l_scene = scene())
-    {
-      const QRectF  sceneRect = l_scene->sceneRect();
-      const QRectF  scaledRect = m_player->get_scaled_bounding_rect();
-      const QPointF center = sceneRect.center() - scaledRect.center();
-
-      float verticalOffsetResult = 0.0f;
-      {
-        const float t = mVerticalVPOffset / 1000.0f;
-        const float maxOffset = sceneRect.height() + scaledRect.height();
-        verticalOffsetResult = t * (maxOffset / 2.0f);
-      }
-
-      float horizontalOffsetResult = 0.0f;
-      {
-        const float t = m_HorizontalOffset / 1000.0f;
-        const float maxOffset = sceneRect.width() + scaledRect.width();
-        horizontalOffsetResult = t * (maxOffset / 2.0f);
-      }
-
-      std::unordered_map<std::string, QVariant> evaluatedValues;
-      m_KeyframeSequence.Evaluate(evaluatedValues);
-
-      QVector3D animationVector;
-
-      if (evaluatedValues.find("alpha") != evaluatedValues.end())
-        alpha = evaluatedValues["alpha"].toFloat();
-
-      if (evaluatedValues.find("position") != evaluatedValues.end())
-        animationVector = evaluatedValues["position"].value<QVector3D>();
-
-      painter->setOpacity(alpha);
-      l_horizontal_center.setX(center.x() + horizontalOffsetResult + animationVector.x());
-      l_horizontal_center.setY(center.y() + verticalOffsetResult + animationVector.y());
-    }
-
-    if(alpha != 0.0f)
-    {
-      if (!m_spriteLayersBelow.isEmpty())
-      {
-        for (SpriteLayer *layer : m_spriteLayersBelow)
-        {
-          layer->start(scale);
-          if (!layer->spritePlayer.get_current_frame().isNull())
-          {
-            QRectF drawRect = layer->targetRect;
-            drawRect = QRectF(drawRect.left() * scale, drawRect.top() * scale, drawRect.width() * scale, drawRect.height() * scale );
-            drawRect.moveTopLeft(drawRect.topLeft() + l_horizontal_center);
-            painter->drawImage(drawRect, layer->spritePlayer.get_current_frame());
-          }
-        }
-      }
-
-      painter->drawImage(l_horizontal_center, l_image);
-
-      if (!m_spriteLayers.isEmpty())
-      {
-        for (SpriteLayer *layer : m_spriteLayers)
-        {
-          layer->start(scale);
-          if (!layer->spritePlayer.get_current_frame().isNull())
-          {
-            QRectF drawRect = layer->targetRect;
-            drawRect = QRectF(drawRect.left() * scale, drawRect.top() * scale, drawRect.width() * scale, drawRect.height() * scale );
-            drawRect.moveTopLeft(drawRect.topLeft() + l_horizontal_center);
-            painter->drawImage(drawRect, layer->spritePlayer.get_current_frame());
-          }
-        }
-      }
-    }
-
     painter->restore();
+    return;
   }
+
+  painter->setOpacity(alpha);
+  painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+  const QRectF sceneRect = scene()->sceneRect();
+  QPointF pivot(sceneRect.center().x(), sceneRect.bottom());
+
+  painter->translate(pivot);
+  painter->scale(animScale, animScale);
+  painter->rotate(rotation);
+  painter->translate(-pivot);
+
+  const QPointF drawPos = computeDrawPosition(animationOffset);
+
+  drawSpriteLayers(painter, m_spriteLayersBelow, drawPos, scale);
+
+  painter->drawImage(drawPos, baseImage);
+
+  drawSpriteLayers(painter, m_spriteLayers, drawPos, scale);
+
+  painter->restore();
 }
 
 void GraphicsSpriteItem::notify_size()
