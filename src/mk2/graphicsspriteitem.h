@@ -33,11 +33,14 @@ public:
   SpriteLayer(QString name, const QRectF &rect);
   ~SpriteLayer();
   void start(double scale);
+  const QString& name();
+  void setName(const QString& name);
 
   mk2::SpritePlayer spritePlayer;
   QRectF targetRect;
 
 private:
+  QString m_name = "";
   double m_currentScale = 0.0f;
 };
 
@@ -75,12 +78,12 @@ public:
 
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
   void processOverlays(const QVector<EmoteLayer>& emoteLayers, const QString& character, const QString& emotePath, const QString& outfitName);
-  void createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect);
+  void createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect, const QString &layerName);
   void clearImageLayers();
 
 
   QPointF computeDrawPosition(const QVector3D &animationOffset) const;
-  void drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale);
+  void drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale, const std::unordered_map<std::string, QVariant>& evaluatedFrames);
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
 
 public slots:

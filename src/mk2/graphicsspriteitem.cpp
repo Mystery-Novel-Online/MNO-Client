@@ -189,7 +189,7 @@ void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QSt
         const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, offsetData[0]);
         if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
       }
-      createOverlay(filePath, offsetData[1], QRectF(offsetData[2].toInt(), offsetData[3].toInt(), offsetData[4].toInt(), offsetData[5].toInt()));
+      createOverlay(filePath, offsetData[1], QRectF(offsetData[2].toInt(), offsetData[3].toInt(), offsetData[4].toInt(), offsetData[5].toInt()), offsetData[6]);
     }
   }
 }
@@ -214,18 +214,19 @@ void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers,
       const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.spriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
-    createOverlay(filePath, layer.spriteOrder, layer.layerOffset);
+    createOverlay(filePath, layer.spriteOrder, layer.layerOffset, layer.offsetName);
   }
 
 }
 
-void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect)
+void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect, const QString &layerName)
 {
   mk2::SpriteReader::ptr l_new_reader;
   l_new_reader = mk2::SpriteReader::ptr(new mk2::SpriteSeekingReader);
   l_new_reader->set_file_name(imageName);
 
   SpriteLayer *layer = new SpriteLayer(imageName, rect);
+  layer->setName(layerName);
 
   if(imageOrder.toLower() == "below")
   {
@@ -270,7 +271,7 @@ QPointF GraphicsSpriteItem::computeDrawPosition(const QVector3D &animationOffset
                                 verticalOffset + animationOffset.y());
 }
 
-void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale)
+void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale, const std::unordered_map<std::string, QVariant>& evaluatedFrames)
 {
   for (SpriteLayer *layer : layers)
   {
@@ -279,9 +280,16 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
     if (frame.isNull())
       continue;
 
+
+    QVector3D newPosition;
+    std::string positionValue = QString(layer->name() + "_position").toStdString();
+
+    if (auto it = evaluatedFrames.find(positionValue); it != evaluatedFrames.end())
+      newPosition = it->second.value<QVector3D>();
+
     QRectF scaledRect(layer->targetRect);
-    scaledRect.setRect(scaledRect.left() * scale,
-                       scaledRect.top() * scale,
+    scaledRect.setRect((scaledRect.left() + newPosition.x()) * scale,
+                       (scaledRect.top() + newPosition.y()) * scale,
                        scaledRect.width() * scale,
                        scaledRect.height() * scale);
     scaledRect.moveTopLeft(scaledRect.topLeft() + basePos);
@@ -339,11 +347,11 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
   const QPointF drawPos = computeDrawPosition(animationOffset);
 
-  drawSpriteLayers(painter, m_spriteLayersBelow, drawPos, scale);
+  drawSpriteLayers(painter, m_spriteLayersBelow, drawPos, scale, evaluatedValues);
 
   painter->drawImage(drawPos, baseImage);
 
-  drawSpriteLayers(painter, m_spriteLayers, drawPos, scale);
+  drawSpriteLayers(painter, m_spriteLayers, drawPos, scale, evaluatedValues);
 
   painter->restore();
 }
@@ -380,4 +388,14 @@ void SpriteLayer::start(double scale)
   if(m_currentScale == scale) return;
   spritePlayer.start(SpritePlayer::WidthSmoothScaling, scale);
   m_currentScale = scale;
+}
+
+const QString &SpriteLayer::name()
+{
+  return m_name;
+}
+
+void SpriteLayer::setName(const QString &name)
+{
+  m_name = name;
 }

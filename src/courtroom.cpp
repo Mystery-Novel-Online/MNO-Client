@@ -2565,6 +2565,7 @@ void Courtroom::on_ooc_message_return_pressed()
   }
   if (l_message.startsWith("/afk") && !m_isAfk)
   {
+    m_lastActivityTimestamp = 1;
     m_isAfk = true;
     ao_app->send_server_packet(DRPacket("STATUS", {QString::number(UserState_AFK), QString::number(true)}));
     ui_ooc_chat_message->clear();
@@ -3365,7 +3366,7 @@ bool Courtroom::event(QEvent *event)
 void Courtroom::resetAFKTimer()
 {
   if (!ServerMetadata::FeatureSupported("sequence")) return;
-  if (m_isAfk)
+  if (m_isAfk && (RuntimeLoop::uptime() - m_lastActivityTimestamp) < m_afkThresholdMs)
   {
     m_isAfk = false;
     ao_app->send_server_packet(DRPacket("STATUS", {QString::number(UserState_AFK), QString::number(false)}));
