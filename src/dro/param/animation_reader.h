@@ -9,6 +9,7 @@ class AnimationReader : public JSONReader
 {
 public:
   AnimationReader(const QString &name, KeyframeSequence &sequence, const QString &character);
+  QVector<EmoteLayer> m_Layers = {};
 };
 
 #endif // ANIMATION_READER_H

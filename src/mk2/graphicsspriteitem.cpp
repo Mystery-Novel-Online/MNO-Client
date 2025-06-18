@@ -140,7 +140,12 @@ void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
 
 bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, bool startFromEnd)
 {
-  AnimationReader(name, m_KeyframeSequence, character);
+  for(const EmoteLayer &layer : AnimationReader(name, m_KeyframeSequence, character).m_Layers)
+  {
+    QString filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.offsetName);
+    createOverlay(filePath, layer.spriteOrder, layer.layerOffset, layer.offsetName);
+  }
+
   if(startFromEnd) m_KeyframeSequence.SequenceJumpEnd();
 
   return m_KeyframeSequence.getLoopState();
@@ -244,14 +249,14 @@ void GraphicsSpriteItem::clearImageLayers()
   for(SpriteLayer *layer : m_spriteLayers)
   {
     delete layer;
-    m_spriteLayers.removeAll(layer);
   }
 
   for(SpriteLayer *layer : m_spriteLayersBelow)
   {
     delete layer;
-    m_spriteLayersBelow.removeAll(layer);
   }
+  m_spriteLayers.clear();
+  m_spriteLayersBelow.clear();
   update();
 }
 

@@ -22,6 +22,18 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
   QString animationSound = getStringValue("sound");
   sequence.SetSound(animationSound);
   sequence.SetLoop(animationLoop);
+
+  for(QJsonValueRef overlayData : getArrayValue("layers"))
+  {
+    SetTargetObject(overlayData.toObject());
+    QString overlayName = getStringValue("name");
+    QRect overlayRect = getRectangleValue("offset");
+    QString overlayRender = getStringValue("order");
+    m_Layers.append({overlayName, "", overlayRender, overlayRect});
+  }
+
+  ResetTargetObject();
+
   for(QJsonValueRef channelValueRef : getArrayValue("channels"))
   {
     const QJsonObject channelObject = channelValueRef.toObject();

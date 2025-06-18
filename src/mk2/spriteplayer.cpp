@@ -204,7 +204,7 @@ void SpritePlayer::restart()
 void SpritePlayer::stop()
 {
   m_running = false;
-  m_frame_timer.stop();
+  if(m_frame_timer.isActive()) m_frame_timer.stop();
   m_frame_number = 0;
 }
 
