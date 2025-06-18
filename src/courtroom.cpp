@@ -3353,7 +3353,7 @@ bool Courtroom::event(QEvent *event)
     break;
 
   case QEvent::WindowDeactivate:
-    RuntimeLoop::setWindowFocus(false);
+    if(ao_config->focus_performance_mode_enabled()) RuntimeLoop::setWindowFocus(false);
     break;
 
   default:

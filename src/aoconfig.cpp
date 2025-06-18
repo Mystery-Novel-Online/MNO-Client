@@ -93,6 +93,7 @@ private:
   bool log_is_recording;
 
   // performance
+  bool focus_performance_mode;
   int system_memory_threshold;
   QMap<int, bool> sprite_caching;
   int loading_bar_delay;
@@ -165,6 +166,9 @@ void AOConfigPrivate::load_file()
   callwords = cfg.value("callwords").toString();
   server_advertiser = cfg.value("server_advertiser", "https://servers.aceattorneyonline.com").toString();
   server_alerts = cfg.value("server_alerts", true).toBool();
+
+
+  focus_performance_mode = cfg.value("focus_performance_mode", true).toBool();
 
   discord_presence = cfg.value("discord_presence", true).toBool();
   discord_hide_server = cfg.value("discord_hide_server", false).toBool();
@@ -316,6 +320,8 @@ void AOConfigPrivate::save_file()
   cfg.setValue("enable_logging", log_is_recording);
 
   // performance
+
+  cfg.setValue("focus_performance_mode", focus_performance_mode);
   {
     cfg.remove("sprite_caching");
     cfg.beginGroup("sprite_caching");
@@ -474,6 +480,11 @@ QString AOConfig::callwords() const
 QString AOConfig::server_advertiser() const
 {
   return d->server_advertiser;
+}
+
+bool AOConfig::focus_performance_mode_enabled() const
+{
+  return d->focus_performance_mode;
 }
 
 bool AOConfig::server_alerts_enabled() const
@@ -849,6 +860,14 @@ void AOConfig::set_server_alerts(bool p_enabled)
     return;
   d->server_alerts = p_enabled;
   d->invoke_signal("server_alerts_changed", Q_ARG(bool, p_enabled));
+}
+
+void AOConfig::set_focus_performance_mode(bool p_enabled)
+{
+  if (d->focus_performance_mode == p_enabled)
+    return;
+  d->focus_performance_mode = p_enabled;
+  d->invoke_signal("focus_performance_mode_changed", Q_ARG(bool, p_enabled));
 }
 
 void AOConfig::set_discord_presence(const bool p_enabled)

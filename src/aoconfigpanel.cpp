@@ -120,6 +120,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_log_is_recording = AO_GUI_WIDGET(QCheckBox, "log_recording");
 
   // performance
+  ui_focus_performance_mode = AO_GUI_WIDGET(QCheckBox, "focus_performance_mode");
   ui_cache_backgrounds = AO_GUI_WIDGET(QCheckBox, "cache_backgrounds");
   ui_cache_characters = AO_GUI_WIDGET(QCheckBox, "cache_characters");
   ui_cache_effects = AO_GUI_WIDGET(QCheckBox, "cache_effects");
@@ -388,6 +389,12 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_discord_hide_character->setChecked(m_config->discord_hide_character());
 
   // performance
+
+  connect(ui_focus_performance_mode, &QAbstractButton::toggled, m_config, &AOConfig::set_focus_performance_mode);
+  connect(m_config, &AOConfig::focus_performance_mode_changed, ui_focus_performance_mode, &QAbstractButton::setChecked);
+
+  ui_focus_performance_mode->setChecked(m_config->focus_performance_mode_enabled());
+
   connect(m_config, SIGNAL(sprite_caching_toggled(int, bool)), this, SLOT(set_sprite_caching_toggled(int, bool)));
   connect(this, SIGNAL(emit_sprite_caching_toggled(int, bool)), m_config, SLOT(set_sprite_caching(int, bool)));
   for (auto it = m_cache_checkbox_map.cbegin(); it != m_cache_checkbox_map.cend(); ++it)

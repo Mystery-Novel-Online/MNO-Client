@@ -31,6 +31,7 @@ public:
   QString character_ini(QString base_character) const;
   QString callwords() const;
   QString server_advertiser() const;
+  bool focus_performance_mode_enabled() const;
   bool server_alerts_enabled() const;
   bool discord_presence() const;
   bool discord_hide_server() const;
@@ -103,6 +104,7 @@ public slots:
   void set_callwords(QString p_string);
   void set_server_advertiser(QString address);
   void set_server_alerts(bool p_enabled);
+  void set_focus_performance_mode(bool p_enabled);
   void set_discord_presence(const bool p_enabled);
   void set_discord_hide_server(const bool p_enabled);
   void set_discord_hide_character(const bool p_enabled);
@@ -204,6 +206,7 @@ signals:
   void log_is_recording_changed(bool);
 
   // performance
+  void focus_performance_mode_changed(bool);
   void sprite_caching_toggled(int, bool);
   void system_memory_threshold_changed(int);
   void loading_bar_delay_changed(int);

@@ -62,7 +62,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>8</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -1441,7 +1441,7 @@
            </item>
           </layout>
          </item>
-         <item row="4" column="0" colspan="2">
+         <item row="5" column="0" colspan="2">
           <spacer name="verticalSpacer_6">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -1506,6 +1506,13 @@
              </widget>
             </item>
            </layout>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QCheckBox" name="focus_performance_mode">
+           <property name="text">
+            <string>Performance mode on Focus Lost</string>
+           </property>
           </widget>
          </item>
         </layout>
