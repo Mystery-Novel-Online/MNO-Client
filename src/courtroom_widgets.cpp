@@ -712,6 +712,10 @@ void Courtroom::reset_widget_names()
       {"screenshot", p_ScreenshotBtn},
       {"chara_animations", animList}
   };
+  for(RPButton* shoutButton : ui_shouts)
+  {
+    widget_names[shoutButton->objectName()] = shoutButton;
+  }
 
     courtroom::layout::setWidgetList(widget_names);
     ThemeManager::get().SetWidgetNames(widget_names);
@@ -1580,7 +1584,9 @@ void Courtroom::load_shouts()
   shout_names.clear();
   for (int i = 0; i < ui_shouts.size(); ++i)
   {
-    RPButton *l_button = new RPButton(this);
+    QString shout_name = ao_app->current_theme->get_shout(i + 1);
+
+    RPButton *l_button = new RPButton(shout_name, shout_name + ".png", this);
     ui_shouts.replace(i, l_button);
     l_button->setCheckable(true);
     l_button->setProperty("shout_id", i + 1);
@@ -1590,7 +1596,6 @@ void Courtroom::load_shouts()
     connect(l_button, SIGNAL(clicked(bool)), this, SLOT(on_shout_button_clicked(bool)));
     connect(l_button, SIGNAL(toggled(bool)), this, SLOT(on_shout_button_toggled(bool)));
 
-    QString shout_name = ao_app->current_theme->get_shout(i + 1);
 
     if(!shout_name.isEmpty())
     {
