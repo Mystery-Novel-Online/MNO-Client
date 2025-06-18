@@ -144,6 +144,8 @@ bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, 
   {
     QString filePath = FS::Paths::FindFile("characters/" + character + "/animations/assets/" + layer.offsetName + ".png");
     if(!FS::Checks::FileExists(filePath)) filePath = FS::Paths::FindFile("animations/assets/" + layer.offsetName + ".png");
+    if(!FS::Checks::FileExists(filePath)) AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.offsetName);
+
     createOverlay(filePath, layer.spriteOrder, layer.layerOffset, layer.offsetName);
   }
 

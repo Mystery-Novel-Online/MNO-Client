@@ -42,7 +42,20 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
     QString channelName = getStringValue("name");
     QString channelType = getStringValue("type");
 
-    if(channelType == "vec3")
+    if(channelName == "sounds")
+    {
+      for(QJsonValueRef frameValueRef : getArrayValue("frames"))
+      {
+        const QJsonObject frameObject = frameValueRef.toObject();
+        SetTargetObject(frameObject);
+
+        int frameTime = getIntValue("time");
+        QString frameValue = getStringValue("value");
+
+        sequence.AddTimedSound(frameTime, frameValue.toStdString());
+      }
+    }
+    else if(channelType == "vec3")
     {
       auto frameChannel = std::make_unique<KeyframeChannel<QVector3D>>();
 

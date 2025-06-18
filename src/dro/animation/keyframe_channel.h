@@ -11,6 +11,11 @@ enum KeyframeCurve
   CurveParametric
 };
 
+struct TimedSound {
+  float timestamp;
+  std::string sound;
+};
+
 class KeyframeChannelTemplate
 {
 public:
