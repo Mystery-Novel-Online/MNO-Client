@@ -279,7 +279,7 @@ QPointF GraphicsSpriteItem::computeDrawPosition(const QVector3D &animationOffset
                                 verticalOffset + animationOffset.y());
 }
 
-void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale, const std::unordered_map<std::string, QVariant>& evaluatedFrames)
+void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale, const std::unordered_map<std::string, QVariant>& evaluatedFrames, double alpha)
 {
   for (SpriteLayer *layer : layers)
   {
@@ -289,11 +289,19 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
       continue;
 
 
+    double alphaValue = alpha;
     QVector3D newPosition;
-    std::string positionValue = QString(layer->name() + "_position").toStdString();
+    std::string posChannelName = QString(layer->name() + "_position").toStdString();
+    std::string alphChannelName = QString(layer->name() + "_alpha").toStdString();
 
-    if (auto it = evaluatedFrames.find(positionValue); it != evaluatedFrames.end())
+    if (auto it = evaluatedFrames.find(posChannelName); it != evaluatedFrames.end())
       newPosition = it->second.value<QVector3D>();
+
+    if (auto it = evaluatedFrames.find(alphChannelName); it != evaluatedFrames.end())
+    {
+      alphaValue = it->second.toFloat();
+      painter->setOpacity(alphaValue);
+    }
 
     QRectF scaledRect(layer->targetRect);
     scaledRect.setRect((scaledRect.left() + newPosition.x()) * scale,
@@ -355,11 +363,11 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
   const QPointF drawPos = computeDrawPosition(animationOffset);
 
-  drawSpriteLayers(painter, m_spriteLayersBelow, drawPos, scale, evaluatedValues);
+  drawSpriteLayers(painter, m_spriteLayersBelow, drawPos, scale, evaluatedValues, alpha);
 
   painter->drawImage(drawPos, baseImage);
 
-  drawSpriteLayers(painter, m_spriteLayers, drawPos, scale, evaluatedValues);
+  drawSpriteLayers(painter, m_spriteLayers, drawPos, scale, evaluatedValues, alpha);
 
   painter->restore();
 }

@@ -29,7 +29,7 @@ VersionNumber get_version_number()
 
 QString get_post_version()
 {
-  return "b06";
+  return "b07";
 }
 
 QString get_version_string()
