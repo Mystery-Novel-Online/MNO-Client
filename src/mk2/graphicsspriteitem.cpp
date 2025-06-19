@@ -294,6 +294,7 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
 {
   for (SpriteLayer *layer : layers)
   {
+    painter->save();
     layer->start(scale);
     const QImage frame = layer->spritePlayer.get_current_frame();
     if (frame.isNull())
@@ -302,11 +303,13 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
 
     double alphaValue = alpha;
     double scaleValue = layer->detatched() ? 1.0 : scale;
+    double animScaleValue = 1.0f;
 
     QPointF basePosition = layer->detatched() ? QPointF(0, 0) : basePos;
     QVector3D newPosition;
     std::string posChannelName = QString(layer->name() + "_position").toStdString();
     std::string alphChannelName = QString(layer->name() + "_alpha").toStdString();
+    std::string scaleChannelName = QString(layer->name() + "_scale").toStdString();
 
     if (auto it = evaluatedFrames.find(posChannelName); it != evaluatedFrames.end())
       newPosition = it->second.value<QVector3D>();
@@ -316,6 +319,13 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
       alphaValue = it->second.toFloat();
       if(alphaValue == 0.0f) continue;
       painter->setOpacity(alphaValue);
+    }
+
+
+    if (auto it = evaluatedFrames.find(scaleChannelName); it != evaluatedFrames.end())
+    {
+      animScaleValue = it->second.toFloat();
+      painter->scale(animScaleValue, animScaleValue);
     }
 
     QRectF finalRect;
@@ -329,6 +339,8 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
     finalRect = scaledRect;
 
     painter->drawImage(finalRect, frame);
+
+    painter->restore();
   }
 }
 
@@ -373,14 +385,14 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
 
   const QRectF sceneRect = scene()->sceneRect();
-  QPointF pivot(sceneRect.center().x(), sceneRect.bottom());
+  QPointF pivot(sceneRect.center().x() + ((m_HorizontalOffset / 1000.0f) * (sceneRect.width() + baseImage.width()) / 2.0f), sceneRect.bottom());
+  const QPointF drawPos = computeDrawPosition(animationOffset);
 
   painter->translate(pivot);
   painter->scale(animScale, animScale);
   painter->rotate(rotation);
   painter->translate(-pivot);
 
-  const QPointF drawPos = computeDrawPosition(animationOffset);
 
   drawSpriteLayers(painter, m_spriteLayersBelow, drawPos, scale, evaluatedValues, alpha);
 
