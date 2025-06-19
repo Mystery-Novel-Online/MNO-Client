@@ -7,6 +7,7 @@
 #include "dro/fs/fs_reading.h"
 #include "modules/managers/pair_manager.h"
 #include "dro/system/localization.h"
+#include "courtroom.h"
 #include "dro/network/metadata/user_metadata.h"
 
 #include <QMenu>
@@ -250,6 +251,11 @@ void DrPlayerListEntry::copyIPID()
   clipboard->setText(mIPID);
 }
 
+void DrPlayerListEntry::followPlayer()
+{
+  AOApplication::getInstance()->get_courtroom()->send_ooc_packet("/follow " + QString::number(mID));
+}
+
 void DrPlayerListEntry::showContextMenu(QPoint pos)
 {
   QMenu *menu = new QMenu(this);
@@ -275,7 +281,10 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
     QAction *unpairAction = pairMenu->addAction(localization::getText("PLAYER_LIST_UNPAIR"));
     connect(unpairAction, &QAction::triggered, this, &DrPlayerListEntry::sendUnpairRequest);
   }
+  menu->addSeparator();
 
+  QAction *followUserAction = menu->addAction("Follow Player");
+  connect(followUserAction, &QAction::triggered, this, &DrPlayerListEntry::followPlayer);
 
   menu->addSeparator();
 

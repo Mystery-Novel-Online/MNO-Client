@@ -40,6 +40,7 @@ public:
   void copyID();
   void copyHDID();
   void copyIPID();
+  void followPlayer();
 
 private:
   AOApplication *ao_app = nullptr;
