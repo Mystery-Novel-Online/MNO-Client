@@ -23,13 +23,27 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
   sequence.SetSound(animationSound);
   sequence.SetLoop(animationLoop);
 
+  QRect targetResolution = getRectangleValue("target_resolution");
+
   for(QJsonValueRef overlayData : getArrayValue("layers"))
   {
     SetTargetObject(overlayData.toObject());
     QString overlayName = getStringValue("name");
     QRect overlayRect = getRectangleValue("offset");
     QString overlayRender = getStringValue("order");
-    m_Layers.append({overlayName, "", overlayRender, overlayRect});
+    bool detach = getBoolValue("detach");
+
+    if (detach)
+    {
+      const float xNorm = overlayRect.x() / float(targetResolution.width()) * 1000.0f;
+      const float yNorm = overlayRect.y() / float(targetResolution.height()) * 1000.0f;
+      const float wNorm = overlayRect.width() / float(targetResolution.width()) * 1000.0f;
+      const float hNorm = overlayRect.height() / float(targetResolution.height()) * 1000.0f;
+
+      overlayRect = QRect(int(xNorm), int(yNorm), int(wNorm), int(hNorm));
+    }
+
+    m_Layers.append({overlayName, "", overlayRender, overlayRect, detach});
   }
 
   ResetTargetObject();

@@ -82,6 +82,8 @@ struct EmoteLayer
   QString spriteName;
   QString spriteOrder;
   QRect layerOffset;
+
+  bool detachLayer;
 };
 
 

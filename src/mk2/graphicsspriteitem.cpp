@@ -146,7 +146,7 @@ bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, 
     if(!FS::Checks::FileExists(filePath)) filePath = FS::Paths::FindFile("animations/assets/" + layer.offsetName + ".png");
     if(!FS::Checks::FileExists(filePath)) AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.offsetName);
 
-    createOverlay(filePath, layer.spriteOrder, layer.layerOffset, layer.offsetName);
+    createOverlay(filePath, layer.spriteOrder, layer.layerOffset, layer.offsetName, layer.detachLayer);
   }
 
   if(startFromEnd) m_KeyframeSequence.SequenceJumpEnd();
@@ -222,19 +222,30 @@ void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers,
       const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.spriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
-    createOverlay(filePath, layer.spriteOrder, layer.layerOffset, layer.offsetName);
+    createOverlay(filePath, layer.spriteOrder, layer.layerOffset, layer.offsetName, layer.detachLayer);
   }
 
 }
 
-void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect, const QString &layerName)
+void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched)
 {
   mk2::SpriteReader::ptr l_new_reader;
   l_new_reader = mk2::SpriteReader::ptr(new mk2::SpriteSeekingReader);
   l_new_reader->set_file_name(imageName);
 
+  if(detatched)
+  {
+    const QRectF &normRect = rect;
+    const QRectF sceneRect = scene()->sceneRect();
+    rect.setLeft((normRect.left()) * sceneRect.width() / 1000.0);
+    rect.setTop((normRect.top()) * sceneRect.height() / 1000.0);
+    rect.setWidth(normRect.width() * sceneRect.width() / 1000.0);
+    rect.setHeight(normRect.height() * sceneRect.height() / 1000.0);
+  }
+
   SpriteLayer *layer = new SpriteLayer(imageName, rect);
   layer->setName(layerName);
+  layer->setDetatch(detatched);
 
   if(imageOrder.toLower() == "below")
   {
@@ -290,6 +301,9 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
 
 
     double alphaValue = alpha;
+    double scaleValue = layer->detatched() ? 1.0 : scale;
+
+    QPointF basePosition = layer->detatched() ? QPointF(0, 0) : basePos;
     QVector3D newPosition;
     std::string posChannelName = QString(layer->name() + "_position").toStdString();
     std::string alphChannelName = QString(layer->name() + "_alpha").toStdString();
@@ -300,16 +314,21 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
     if (auto it = evaluatedFrames.find(alphChannelName); it != evaluatedFrames.end())
     {
       alphaValue = it->second.toFloat();
+      if(alphaValue == 0.0f) continue;
       painter->setOpacity(alphaValue);
     }
 
+    QRectF finalRect;
+
     QRectF scaledRect(layer->targetRect);
-    scaledRect.setRect((scaledRect.left() + newPosition.x()) * scale,
-                       (scaledRect.top() + newPosition.y()) * scale,
-                       scaledRect.width() * scale,
-                       scaledRect.height() * scale);
-    scaledRect.moveTopLeft(scaledRect.topLeft() + basePos);
-    painter->drawImage(scaledRect, frame);
+    scaledRect.setRect((scaledRect.left() + newPosition.x()) * scaleValue,
+                       (scaledRect.top() + newPosition.y()) * scaleValue,
+                       scaledRect.width() * scaleValue,
+                       scaledRect.height() * scaleValue);
+    scaledRect.moveTopLeft(scaledRect.topLeft() + basePosition);
+    finalRect = scaledRect;
+
+    painter->drawImage(finalRect, frame);
   }
 }
 
@@ -414,4 +433,14 @@ const QString &SpriteLayer::name()
 void SpriteLayer::setName(const QString &name)
 {
   m_name = name;
+}
+
+bool SpriteLayer::detatched()
+{
+  return m_detatch;
+}
+
+void SpriteLayer::setDetatch(bool state)
+{
+  m_detatch = state;
 }

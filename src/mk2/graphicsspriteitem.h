@@ -35,11 +35,14 @@ public:
   void start(double scale);
   const QString& name();
   void setName(const QString& name);
+  bool detatched();
+  void setDetatch(bool state);
 
   mk2::SpritePlayer spritePlayer;
   QRectF targetRect;
 
 private:
+  bool m_detatch = false;
   QString m_name = "";
   double m_currentScale = 0.0f;
 };
@@ -78,7 +81,7 @@ public:
 
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
   void processOverlays(const QVector<EmoteLayer>& emoteLayers, const QString& character, const QString& emotePath, const QString& outfitName);
-  void createOverlay(const QString &imageName, const QString &imageOrder, const QRectF &rect, const QString &layerName);
+  void createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched = false);
   void clearImageLayers();
 
 
