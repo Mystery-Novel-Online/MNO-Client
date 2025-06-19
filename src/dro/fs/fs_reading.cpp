@@ -78,9 +78,16 @@ QString Package(const QString& packageName)
   return FS::Paths::ApplicationPath() + "/packages/" + packageName + "/";
 }
 
-QString FindFile(const QString &filePath, bool allowPackages)
+QString FindFile(const QString &filePath, bool allowPackages, const QStringList &extensions)
 {
   if(!allowPackages) return BasePath() + filePath;
+
+  QStringList appendedFileList = {filePath};
+
+  for(const QString &extension : extensions)
+  {
+    appendedFileList.append(filePath + extension);
+  }
 
   QVector<QString> packageNames = Packages::CachedNames();
   QVector<QString> disabledList = Packages::DisabledList();
@@ -89,14 +96,25 @@ QString FindFile(const QString &filePath, bool allowPackages)
   {
     if(!disabledList.contains(packageName))
     {
-      QString package_path = Paths::Package(packageName) + filePath;
-      if(Checks::FileExists(package_path))
+      for(const QString& path : appendedFileList)
       {
-        return package_path;
+        QString package_path = Paths::Package(packageName) + path;
+        if(Checks::FileExists(package_path))
+        {
+          return package_path;
+        }
       }
     }
   }
 
+  for(const QString& path : appendedFileList)
+  {
+    QString baseFilePath = BasePath() + path;
+    if(Checks::FileExists(baseFilePath))
+    {
+      return baseFilePath;
+    }
+  }
   return BasePath() + filePath;
 }
 

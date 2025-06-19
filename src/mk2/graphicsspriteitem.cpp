@@ -142,9 +142,11 @@ bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, 
 {
   for(const EmoteLayer &layer : AnimationReader(name, m_KeyframeSequence, character).m_Layers)
   {
-    QString filePath = FS::Paths::FindFile("characters/" + character + "/animations/assets/" + layer.offsetName + ".png");
-    if(!FS::Checks::FileExists(filePath)) filePath = FS::Paths::FindFile("animations/assets/" + layer.offsetName + ".png");
-    if(!FS::Checks::FileExists(filePath)) AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.offsetName);
+    QString filePath = FS::Paths::FindFile("characters/" + character + "/animations/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
+    if(!FS::Checks::FileExists(filePath))
+      filePath = FS::Paths::FindFile("animations/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
+    if(!FS::Checks::FileExists(filePath))
+      filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.offsetName);
 
     createOverlay(filePath, layer.spriteOrder, layer.layerOffset, layer.offsetName, layer.detachLayer);
   }
