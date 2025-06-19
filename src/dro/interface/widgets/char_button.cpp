@@ -6,6 +6,8 @@
 #include "modules/managers/character_manager.h"
 #include "dro/system/localization.h"
 #include "dro/fs/fs_reading.h"
+#include "aoconfig.h"
+#include "courtroom.h"
 
 #include <QFile>
 #include <QLabel>
@@ -50,6 +52,10 @@ void AOCharButton::showContextMenu(QPoint pos)
   QAction *opencharfolder = new QAction(dro::system::localization::getText("OPEN_CHAR_FOLDER"));
   QObject::connect(opencharfolder, &QAction::triggered, [this](){openCharacterFolder();});
   menu->addAction(opencharfolder);
+
+  QAction *clearIniswapAction = new QAction("Clear iniswap");
+  QObject::connect(clearIniswapAction, &QAction::triggered, [this](){clearIniswap();});
+  menu->addAction(clearIniswapAction);
 
   menu->popup(this->mapToGlobal(pos));
 }
@@ -97,6 +103,12 @@ void AOCharButton::openCharacterFolder()
 {
   QUrl folderUrl = QUrl::fromLocalFile(FS::Paths::FindDirectory("characters/" + m_character));
   QDesktopServices::openUrl(folderUrl);
+}
+
+void AOCharButton::clearIniswap()
+{
+  AOApplication::getInstance()->get_courtroom()->ao_config->set_character_ini_remote(m_character, m_character);
+  ui_character->hide();
 }
 
 void AOCharButton::enterEvent(QEvent *e)

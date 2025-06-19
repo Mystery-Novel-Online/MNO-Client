@@ -838,6 +838,21 @@ void AOConfig::set_character_ini(QString p_base_chr, QString p_target_chr)
   d->invoke_signal("character_ini_changed", Q_ARG(QString, p_base_chr));
 }
 
+void AOConfig::set_character_ini_remote(QString p_base_chr, QString p_target_chr)
+{
+  if (d->ini_map.contains(p_base_chr))
+  {
+    if (d->ini_map[p_base_chr] == p_target_chr)
+      return;
+  }
+  else if (p_base_chr == p_target_chr)
+    return;
+  if (p_base_chr == p_target_chr)
+    d->ini_map.remove(p_base_chr);
+  else
+    d->ini_map.insert(p_base_chr, p_target_chr);
+}
+
 void AOConfig::set_callwords(QString p_string)
 {
   if (d->callwords == p_string)

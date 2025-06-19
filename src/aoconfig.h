@@ -101,6 +101,7 @@ public slots:
   void set_showname_placeholder(QString p_string);
   void clear_showname_placeholder();
   void set_character_ini(QString base_character, QString target_character);
+  void set_character_ini_remote(QString base_character, QString target_character);
   void set_callwords(QString p_string);
   void set_server_advertiser(QString address);
   void set_server_alerts(bool p_enabled);

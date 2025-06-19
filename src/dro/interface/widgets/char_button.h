@@ -26,6 +26,7 @@ private slots:
   void addToFavorites();
   void removeFavorites();
   void openCharacterFolder();
+  void clearIniswap();
 
 protected:
   void enterEvent(QEvent *e);
