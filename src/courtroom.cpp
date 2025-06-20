@@ -860,6 +860,7 @@ void Courtroom::on_pair_offset_changed()
 void Courtroom::OnPlayerOffsetsChanged(int value)
 {
   if(!ServerMetadata::FeatureSupported("outfits")) return;
+  if(metadata::message::recentMessage().modifiers.Hidden) return;
   bool intParse = false;
   int speakerClientId = m_chatmessage[CMClientId].toInt(&intParse);
   if(speakerClientId == metadata::user::getClientId())
@@ -1634,15 +1635,7 @@ void Courtroom::handle_chatmessage_3()
     QString l_showname_image;
     if (ao_app->current_theme->read_config_bool("enable_showname_image"))
     {
-      if(f_emote.contains("outfits/"))
-      {
-        QStringList parts = f_emote.split('/');
-        if (parts.size() >= 3)
-        {
-          QString outfitName = parts[1];
-          l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname_" + outfitName, FS::Formats::StaticImages());
-        }
-      }
+      l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname_" + m_chatmessage[CMOutfitName], FS::Formats::StaticImages());
 
       if (l_showname_image.isEmpty())
         l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname", FS::Formats::StaticImages());
