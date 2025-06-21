@@ -51,6 +51,7 @@ public:
   ~SpritePlayer();
 
   QImage get_current_frame() const;
+  QPixmap getCurrentPixmap() const;
   QImage get_current_native_frame() const;
 
   QRectF get_scaled_bounding_rect() const;
@@ -110,6 +111,7 @@ private:
   SpriteReader::ptr m_reader;
   SpriteFrame m_current_frame;
   QImage m_scaled_current_frame;
+  QPixmap m_scaled_pixmap_frame;
   double m_overallScale = 1.0;
   double m_scale = 1.0;
   SpritePlayer::ScalingMode m_scaling_mode;

@@ -458,6 +458,7 @@ private:
 
   AOImageDisplay *ui_background = nullptr;
 
+  QOpenGLWidget *ui_opengl_viewport = nullptr;
   DRGraphicsView *ui_viewport = nullptr;
   QPropertyAnimation *background_anim = nullptr;
 

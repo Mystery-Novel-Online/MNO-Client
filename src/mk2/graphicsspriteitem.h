@@ -94,6 +94,7 @@ public:
   QPointF computeDrawPosition(const QVector3D &animationOffset) const;
   void drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale, const std::unordered_map<std::string, QVariant>& evaluatedFrames, double alpha);
   void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) final;
+  void paintGL();
 
 public slots:
   void set_scaling_mode(SpritePlayer::ScalingMode scaling_mode);

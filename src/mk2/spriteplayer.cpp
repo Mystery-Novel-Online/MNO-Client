@@ -59,6 +59,11 @@ QImage SpritePlayer::get_current_frame() const
   return m_scaled_current_frame;
 }
 
+QPixmap SpritePlayer::getCurrentPixmap() const
+{
+  return m_scaled_pixmap_frame;
+}
+
 QImage SpritePlayer::get_current_native_frame() const
 {
   return m_current_frame.image;
@@ -392,5 +397,6 @@ void SpritePlayer::scale_current_frame()
   }
 
   m_scaled_current_frame = l_image;
+  m_scaled_pixmap_frame = QPixmap::fromImage(m_scaled_current_frame);
   emit current_frame_changed();
 }

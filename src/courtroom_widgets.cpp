@@ -34,6 +34,8 @@
 #include <QInputDialog>
 #include <QListWidget>
 #include <QMenu>
+#include <QOpenGLContext>
+#include <QOpenGLWidget>
 #include <QPropertyAnimation>
 #include <QScrollArea>
 #include <QScrollBar>
@@ -76,6 +78,11 @@ void Courtroom::create_widgets()
   ThemeManager::get().setCourtroomBackground(ui_background);
 
   ui_viewport = new DRGraphicsView(this);
+  if(ao_config->opengl_enabled())
+  {
+    ui_opengl_viewport = new QOpenGLWidget();
+    ui_viewport->setViewport(ui_opengl_viewport);
+  }
 
   SceneManager::get().CreateTransition(this, ao_app, ui_viewport);
 

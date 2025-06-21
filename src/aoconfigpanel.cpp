@@ -120,6 +120,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_log_is_recording = AO_GUI_WIDGET(QCheckBox, "log_recording");
 
   // performance
+  ui_enable_opengl = AO_GUI_WIDGET(QCheckBox, "enable_opengl");
   ui_focus_performance_mode = AO_GUI_WIDGET(QCheckBox, "focus_performance_mode");
   ui_cache_backgrounds = AO_GUI_WIDGET(QCheckBox, "cache_backgrounds");
   ui_cache_characters = AO_GUI_WIDGET(QCheckBox, "cache_characters");
@@ -389,6 +390,10 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_discord_hide_character->setChecked(m_config->discord_hide_character());
 
   // performance
+
+  connect(ui_enable_opengl, &QAbstractButton::toggled, m_config, &AOConfig::set_opengl_enabled);
+  connect(m_config, &AOConfig::enable_opengl_changed, ui_enable_opengl, &QAbstractButton::setChecked);
+  ui_enable_opengl->setChecked(m_config->opengl_enabled());
 
   connect(ui_focus_performance_mode, &QAbstractButton::toggled, m_config, &AOConfig::set_focus_performance_mode);
   connect(m_config, &AOConfig::focus_performance_mode_changed, ui_focus_performance_mode, &QAbstractButton::setChecked);

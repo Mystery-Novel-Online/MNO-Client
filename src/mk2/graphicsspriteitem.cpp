@@ -21,6 +21,7 @@
 
 #include <QFileInfo>
 #include <QGraphicsScene>
+#include <QOpenGLContext>
 #include <QPainter>
 #include <QVector3D>
 
@@ -379,8 +380,8 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
 {
   for (SpriteLayer *layer : layers)
   {
-    const QImage frame = layer->spritePlayer.get_current_frame();
-    if (frame.isNull())
+    QPixmap pixmap = layer->spritePlayer.getCurrentPixmap();
+    if (pixmap.isNull())
       continue;
 
     //layer->start(scale);
@@ -441,7 +442,7 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
 
     QPainter::CompositionMode mode = layer->compositionMode();
     if(mode != QPainter::CompositionMode_SourceOver) painter->setCompositionMode(mode);
-    painter->drawImage(scaledRect, frame);
+    painter->drawPixmap(scaledRect, pixmap, QRectF(0, 0, pixmap.width(), pixmap.height()));
     painter->restore();
   }
 }
@@ -451,8 +452,8 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   Q_UNUSED(option);
   Q_UNUSED(widget);
 
-  const QImage baseImage = m_player->get_current_frame();
-  if (baseImage.isNull()) return;
+  QPixmap pixmap = m_player->getCurrentPixmap();
+  if (pixmap.isNull()) return;
 
   const double scale = m_player->getScaledAmount();
 
@@ -492,27 +493,34 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   if(m_LayersExist)
   {
     const QSize targetSize = sceneRect.size().toSize();
-    QImage combined(targetSize, QImage::Format_ARGB32_Premultiplied);
-    combined.fill(Qt::transparent);
+    QPixmap pixmapCombined(targetSize);
+    //QImage combined(targetSize, QImage::Format_ARGB32_Premultiplied);
+    pixmapCombined.fill(Qt::transparent);
 
-    QPainter combiner(&combined);
+    QPainter combiner(&pixmapCombined);
     combiner.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
     drawSpriteLayers(&combiner, m_spriteLayersBelow, drawPos, scale, evaluatedValues, 1.0);
 
-    combiner.drawImage(drawPos, baseImage);
+
+    combiner.drawPixmap(drawPos, pixmap);
 
     drawSpriteLayers(&combiner, m_spriteLayers, drawPos, scale, evaluatedValues, 1.0); // alpha=1.0 here
 
     combiner.end();
 
-    painter->drawImage(QPoint(0, 0), combined);
+    painter->drawPixmap(QPoint(0, 0), pixmapCombined);
   }
   else
   {
-    painter->drawImage(drawPos, baseImage);
+    painter->drawPixmap(drawPos, pixmap);
   }
   painter->restore();
+}
+
+void GraphicsSpriteItem::paintGL()
+{
+  qDebug() << QOpenGLContext::currentContext()->format();
 }
 
 void GraphicsSpriteItem::notify_size()

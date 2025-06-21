@@ -1441,7 +1441,7 @@
            </item>
           </layout>
          </item>
-         <item row="5" column="0" colspan="2">
+         <item row="6" column="0" colspan="2">
           <spacer name="verticalSpacer_6">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -1511,7 +1511,14 @@
          <item row="4" column="0">
           <widget class="QCheckBox" name="focus_performance_mode">
            <property name="text">
-            <string>Performance mode on Focus Lost</string>
+            <string>Performance Mode</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QCheckBox" name="enable_opengl">
+           <property name="text">
+            <string>Enable OpenGL</string>
            </property>
           </widget>
          </item>

@@ -94,6 +94,7 @@ private:
 
   // performance
   bool focus_performance_mode;
+  bool enable_opengl;
   int system_memory_threshold;
   QMap<int, bool> sprite_caching;
   int loading_bar_delay;
@@ -168,6 +169,7 @@ void AOConfigPrivate::load_file()
   server_alerts = cfg.value("server_alerts", true).toBool();
 
 
+  enable_opengl = cfg.value("enable_opengl", true).toBool();
   focus_performance_mode = cfg.value("focus_performance_mode", true).toBool();
 
   discord_presence = cfg.value("discord_presence", true).toBool();
@@ -321,6 +323,7 @@ void AOConfigPrivate::save_file()
 
   // performance
 
+  cfg.setValue("enable_opengl", enable_opengl);
   cfg.setValue("focus_performance_mode", focus_performance_mode);
   {
     cfg.remove("sprite_caching");
@@ -480,6 +483,11 @@ QString AOConfig::callwords() const
 QString AOConfig::server_advertiser() const
 {
   return d->server_advertiser;
+}
+
+bool AOConfig::opengl_enabled() const
+{
+  return d->enable_opengl;
 }
 
 bool AOConfig::focus_performance_mode_enabled() const
@@ -875,6 +883,14 @@ void AOConfig::set_server_alerts(bool p_enabled)
     return;
   d->server_alerts = p_enabled;
   d->invoke_signal("server_alerts_changed", Q_ARG(bool, p_enabled));
+}
+
+void AOConfig::set_opengl_enabled(bool p_enabled)
+{
+  if (d->enable_opengl == p_enabled)
+    return;
+  d->enable_opengl = p_enabled;
+  d->invoke_signal("enable_opengl_changed", Q_ARG(bool, p_enabled));
 }
 
 void AOConfig::set_focus_performance_mode(bool p_enabled)

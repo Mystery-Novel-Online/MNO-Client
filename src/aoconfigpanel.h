@@ -162,6 +162,7 @@ private:
   QCheckBox *ui_log_is_recording = nullptr;
 
   // performance
+  QCheckBox *ui_enable_opengl;
   QCheckBox *ui_focus_performance_mode;
   QCheckBox *ui_cache_backgrounds;
   QCheckBox *ui_cache_characters;

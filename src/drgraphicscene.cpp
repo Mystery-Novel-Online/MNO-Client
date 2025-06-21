@@ -22,6 +22,7 @@
 #include <QGraphicsItem>
 #include <QObject>
 #include <QResizeEvent>
+#include <QSurfaceFormat>
 
 #include <QDebug>
 
