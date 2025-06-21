@@ -1719,7 +1719,7 @@ void Courtroom::handle_chatmessage_3()
     break;
   }
 
-  ui_vp_player_char->processOverlays(m_pre_chatmessage[CMSpriteLayers], l_character, l_emote, l_outfit);
+  ui_vp_player_char->processOverlays(m_pre_chatmessage[CMSpriteLayers], m_pre_chatmessage[CMChrName], m_pre_chatmessage[CMEmote], m_pre_chatmessage[CMOutfitName]);
   ui_vp_player_pair->processOverlays(metadata::message::pair::getLayers(), metadata::message::pair::getCharacter(), metadata::message::pair::getEmote(), metadata::message::pair::getOutfit());
 
   {
