@@ -234,6 +234,7 @@ void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers,
 
 void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched)
 {
+  m_LayersExist = true;
   mk2::SpriteReader::ptr l_new_reader;
   l_new_reader = mk2::SpriteReader::ptr(new mk2::SpriteSeekingReader);
   l_new_reader->set_file_name(imageName);
@@ -276,6 +277,7 @@ void GraphicsSpriteItem::clearImageLayers()
   }
   m_spriteLayers.clear();
   m_spriteLayersBelow.clear();
+  m_LayersExist = false;
   update();
 }
 
@@ -299,68 +301,67 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
 {
   for (SpriteLayer *layer : layers)
   {
-    painter->save();
-    layer->start(scale);
     const QImage frame = layer->spritePlayer.get_current_frame();
     if (frame.isNull())
       continue;
 
+    //layer->start(scale);
+    //painter->save();
 
-    double alphaValue = alpha;
-    double scaleValue = layer->detatched() ? 1.0 : scale;
-    double animScaleValue = 1.0f;
-    double animRotationValue = 0.0f;
+    const bool isDetached = layer->detatched();
+    const double scaleValue = isDetached ? 1.0 : scale;
+    const QPointF basePosition = isDetached ? QPointF(0, 0) : basePos;
+    const QString name = layer->name();
 
-    QPointF basePosition = layer->detatched() ? QPointF(0, 0) : basePos;
+    // Channel keys
+    const std::string posKey = (name + "_position").toStdString();
+    const std::string alphaKey = (name + "_alpha").toStdString();
+    const std::string scaleKey = (name + "_scale").toStdString();
+    const std::string rotKey = (name + "_rotation").toStdString();
+
     QVector3D newPosition;
-    std::string posChannelName = QString(layer->name() + "_position").toStdString();
-    std::string alphChannelName = QString(layer->name() + "_alpha").toStdString();
-    std::string scaleChannelName = QString(layer->name() + "_scale").toStdString();
-    std::string rotateChannelName = QString(layer->name() + "_rotation").toStdString();
+    double alphaValue = alpha;
+    double animScaleValue = 1.0;
+    double animRotationValue = 0.0;
 
 
-    if (auto it = evaluatedFrames.find(posChannelName); it != evaluatedFrames.end())
+    if (auto it = evaluatedFrames.find(posKey); it != evaluatedFrames.end())
       newPosition = it->second.value<QVector3D>();
 
-    if (auto it = evaluatedFrames.find(alphChannelName); it != evaluatedFrames.end())
+    if (auto it = evaluatedFrames.find(alphaKey); it != evaluatedFrames.end())
     {
       alphaValue = it->second.toFloat();
-      if(alphaValue == 0.0f) continue;
-      painter->setOpacity(alphaValue);
+      if (alphaValue == 0.0f)
+        continue;
     }
 
-
-    if (auto it = evaluatedFrames.find(scaleChannelName); it != evaluatedFrames.end())
-    {
+    if (auto it = evaluatedFrames.find(scaleKey); it != evaluatedFrames.end())
       animScaleValue = it->second.toFloat();
-      painter->scale(animScaleValue, animScaleValue);
-    }
 
-    if (auto it = evaluatedFrames.find(rotateChannelName); it != evaluatedFrames.end())
-    {
+    if (auto it = evaluatedFrames.find(rotKey); it != evaluatedFrames.end())
       animRotationValue = it->second.toFloat();
-    }
 
 
-    QRectF finalRect;
+    painter->save();
+    painter->setOpacity(alphaValue);
+    painter->scale(animScaleValue, animScaleValue);
 
-    QRectF scaledRect(layer->targetRect);
-    scaledRect.setRect((scaledRect.left() + newPosition.x()) * scaleValue,
-                       (scaledRect.top() + newPosition.y()) * scaleValue,
-                       scaledRect.width() * scaleValue,
-                       scaledRect.height() * scaleValue);
+    QRectF target = layer->targetRect;
+    QRectF scaledRect(
+        (target.left() + newPosition.x()) * scaleValue,
+        (target.top() + newPosition.y()) * scaleValue,
+        target.width() * scaleValue,
+        target.height() * scaleValue
+        );
     scaledRect.moveTopLeft(scaledRect.topLeft() + basePosition);
-    finalRect = scaledRect;
 
-    QPointF pivot(scaledRect.x() + (scaledRect.width() / 2), scaledRect.height() + scaledRect.y());
+    const QPointF pivot(scaledRect.center().x(), scaledRect.bottom());
 
     painter->translate(pivot);
     painter->rotate(animRotationValue);
     painter->translate(-pivot);
 
-
-    painter->drawImage(finalRect, frame);
-
+    painter->drawImage(scaledRect, frame);
     painter->restore();
   }
 }
@@ -371,56 +372,66 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   Q_UNUSED(widget);
 
   const QImage baseImage = m_player->get_current_frame();
-
-  //Check if the main sprite is valid, otherwise no reason to paint.
   if (baseImage.isNull()) return;
 
   const double scale = m_player->getScaledAmount();
+
   float alpha = 1.0f;
   float animScale = 1.0f;
   float rotation = 0.0f;
   QVector3D animationOffset;
-
-  painter->save();
-  painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
 
   std::unordered_map<std::string, QVariant> evaluatedValues;
   m_KeyframeSequence.Evaluate(evaluatedValues);
 
   if (auto it = evaluatedValues.find("alpha"); it != evaluatedValues.end())
     alpha = it->second.toFloat();
+  if (alpha == 0.0f) return;
+
+  painter->save();
+  painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
+
   if (auto it = evaluatedValues.find("position"); it != evaluatedValues.end())
     animationOffset = it->second.value<QVector3D>();
-  if (auto it = evaluatedValues.find("rotation"); it != evaluatedValues.end())
-    rotation = it->second.toFloat();
   if (auto it = evaluatedValues.find("scale"); it != evaluatedValues.end())
     animScale = it->second.toFloat();
-
-  if (alpha == 0.0f)
-  {
-    painter->restore();
-    return;
-  }
-
-  painter->setOpacity(alpha);
-  painter->setRenderHint(QPainter::SmoothPixmapTransform, true);
+  if (auto it = evaluatedValues.find("rotation"); it != evaluatedValues.end())
+    rotation = it->second.toFloat();
 
   const QRectF sceneRect = scene()->sceneRect();
   const QPointF drawPos = computeDrawPosition(animationOffset);
-  QPointF pivot(sceneRect.center().x() + drawPos.x(), sceneRect.bottom());
+  const QPointF pivot(sceneRect.center().x() + drawPos.x(), sceneRect.bottom());
+
 
   painter->translate(pivot);
   painter->scale(animScale, animScale);
   painter->rotate(rotation);
   painter->translate(-pivot);
+  painter->setOpacity(alpha);
 
+  if(m_LayersExist)
+  {
+    const QSize targetSize = sceneRect.size().toSize();
+    QImage combined(targetSize, QImage::Format_ARGB32_Premultiplied);
+    combined.fill(Qt::transparent);
 
-  drawSpriteLayers(painter, m_spriteLayersBelow, drawPos, scale, evaluatedValues, alpha);
+    QPainter combiner(&combined);
+    combiner.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-  painter->drawImage(drawPos, baseImage);
+    drawSpriteLayers(&combiner, m_spriteLayersBelow, drawPos, scale, evaluatedValues, 1.0);
 
-  drawSpriteLayers(painter, m_spriteLayers, drawPos, scale, evaluatedValues, alpha);
+    combiner.drawImage(drawPos, baseImage);
 
+    drawSpriteLayers(&combiner, m_spriteLayers, drawPos, scale, evaluatedValues, 1.0); // alpha=1.0 here
+
+    combiner.end();
+
+    painter->drawImage(QPoint(0, 0), combined);
+  }
+  else
+  {
+    painter->drawImage(drawPos, baseImage);
+  }
   painter->restore();
 }
 

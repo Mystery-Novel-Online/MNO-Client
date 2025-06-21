@@ -128,6 +128,7 @@ private:
   KeyframeSequence m_KeyframeSequence;
   int mVerticalVPOffset = 0;
   int m_HorizontalOffset = 0;
+  bool m_LayersExist = false;
 
 private slots:
   void notify_size();
