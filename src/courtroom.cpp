@@ -1528,6 +1528,8 @@ void Courtroom::handle_chatmessage_2() // handles IC
     };
 
   }
+
+  ui_vp_player_pair->setHorizontalOffset(otherOffset);
   int verticalValue = m_chatmessage[CMOffsetV].trimmed().toInt();
 
   if(m_chatmessage[CMOffsetV].isEmpty())

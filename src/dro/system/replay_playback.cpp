@@ -129,6 +129,21 @@ namespace dro::system::replays
       lNewOperation.variables["effect"] = message.effect.name;
       lNewOperation.variables["shout"] = message.characterShout;
 
+      if(dro::network::metadata::message::pair::isActive())
+      {
+        lNewOperation.variables["pair_char"] = dro::network::metadata::message::pair::getCharacter();
+        lNewOperation.variables["pair_emote"] = dro::network::metadata::message::pair::getEmote();
+        lNewOperation.variables["pair_outfit"] = dro::network::metadata::message::pair::getOutfit();
+        lNewOperation.variables["pair_sequence"] = dro::network::metadata::message::pair::getAnimation();
+        lNewOperation.variables["pair_layers"] = dro::network::metadata::message::pair::getLayers();
+        lNewOperation.variables["pair_horizontal"] =  QString::number(dro::network::metadata::message::pair::horizontalOffset());
+        lNewOperation.variables["pair_vertical"] =  QString::number(dro::network::metadata::message::pair::verticalOffset());
+        lNewOperation.variables["pair_scale"] =  QString::number(dro::network::metadata::message::pair::scaleOffset());
+        lNewOperation.variables["pair_leader"] =  QString::number(dro::network::metadata::message::pair::isLeader());
+        lNewOperation.variables["pair_flipped"] =  QString::number(dro::network::metadata::message::pair::isFlipped());
+        lNewOperation.variables["pair_visible"] =  QString::number(dro::network::metadata::message::pair::isVisible());
+      }
+
       if(!message.characterSequence.isEmpty())
         lNewOperation.variables["sequence"] = message.characterSequence;
 
