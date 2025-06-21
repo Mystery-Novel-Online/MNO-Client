@@ -24,6 +24,7 @@
 
 #include <QGraphicsObject>
 #include <QObject>
+#include <QPainter>
 #include <datatypes.h>
 #include "dro/animation/keyframe_sequence.h"
 
@@ -34,9 +35,12 @@ public:
   ~SpriteLayer();
   void start(double scale);
   const QString& name();
-  void setName(const QString& name);
   bool detatched();
+  QPainter::CompositionMode compositionMode();
+
+  void setName(const QString& name);
   void setDetatch(bool state);
+  void setCompositionMode(QPainter::CompositionMode mode);
 
   mk2::SpritePlayer spritePlayer;
   QRectF targetRect;
@@ -45,6 +49,7 @@ private:
   bool m_detatch = false;
   QString m_name = "";
   double m_currentScale = 0.0f;
+  QPainter::CompositionMode m_compositionMode = QPainter::CompositionMode_SourceOver;
 };
 
 namespace mk2
@@ -82,6 +87,7 @@ public:
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
   void processOverlays(const QVector<EmoteLayer>& emoteLayers, const QString& character, const QString& emotePath, const QString& outfitName);
   void createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched = false);
+  void createOverlay(const EmoteLayer& layer, const QString &imagePath);
   void clearImageLayers();
 
 

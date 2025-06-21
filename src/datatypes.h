@@ -84,6 +84,8 @@ struct EmoteLayer
   QRect layerOffset;
 
   bool detachLayer;
+
+  QString blendMode;
 };
 
 

@@ -151,7 +151,7 @@ bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, 
     if(!FS::Checks::FileExists(filePath))
       filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.offsetName);
 
-    createOverlay(filePath, layer.spriteOrder, layer.layerOffset, layer.offsetName, layer.detachLayer);
+    createOverlay(layer, filePath);
   }
 
   if(startFromEnd) m_KeyframeSequence.SequenceJumpEnd();
@@ -227,7 +227,7 @@ void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers,
       const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.spriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
-    createOverlay(filePath, layer.spriteOrder, layer.layerOffset, layer.offsetName, layer.detachLayer);
+    createOverlay(layer, filePath);
   }
 
 }
@@ -260,6 +260,84 @@ void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &
   else
   {
     m_spriteLayers.append(layer);
+  }
+  update();
+}
+
+void GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QString &imagePath)
+{
+  m_LayersExist = true;
+  mk2::SpriteReader::ptr l_new_reader;
+  l_new_reader = mk2::SpriteReader::ptr(new mk2::SpriteSeekingReader);
+  l_new_reader->set_file_name(imagePath);
+
+  QRect targetRect = layer.layerOffset;
+  if(layer.detachLayer)
+  {
+    const QRectF &normRect = layer.layerOffset;
+    const QRectF sceneRect = scene()->sceneRect();
+    targetRect.setLeft((normRect.left()) * sceneRect.width() / 1000.0);
+    targetRect.setTop((normRect.top()) * sceneRect.height() / 1000.0);
+    targetRect.setWidth(normRect.width() * sceneRect.width() / 1000.0);
+    targetRect.setHeight(normRect.height() * sceneRect.height() / 1000.0);
+  }
+
+  SpriteLayer *layerData = new SpriteLayer(imagePath, targetRect);
+  layerData->setName(layer.offsetName);
+  layerData->setDetatch(layer.detachLayer);
+
+  static const QMap<QString, QPainter::CompositionMode> compositionTable
+  {
+    {"source_over", QPainter::CompositionMode_SourceOver},
+    {"destination_over", QPainter::CompositionMode_DestinationOver},
+    {"clear", QPainter::CompositionMode_Clear},
+    {"source", QPainter::CompositionMode_Source},
+    {"destination", QPainter::CompositionMode_Destination},
+    {"source_in", QPainter::CompositionMode_SourceIn},
+    {"destination_in", QPainter::CompositionMode_DestinationIn},
+    {"source_out", QPainter::CompositionMode_SourceOut},
+    {"destination_out", QPainter::CompositionMode_DestinationOut},
+    {"source_atop", QPainter::CompositionMode_SourceAtop},
+    {"destination_atop", QPainter::CompositionMode_DestinationAtop},
+    {"xor", QPainter::CompositionMode_Xor},
+
+    {"plus", QPainter::CompositionMode_Plus},
+    {"multiply", QPainter::CompositionMode_Multiply},
+    {"screen", QPainter::CompositionMode_Screen},
+    {"overlay", QPainter::CompositionMode_Overlay},
+    {"darken", QPainter::CompositionMode_Darken},
+    {"lighten", QPainter::CompositionMode_Lighten},
+    {"color_dodge", QPainter::CompositionMode_ColorDodge},
+    {"color_burn", QPainter::CompositionMode_ColorBurn},
+    {"hard_light", QPainter::CompositionMode_HardLight},
+    {"soft_light", QPainter::CompositionMode_SoftLight},
+    {"difference", QPainter::CompositionMode_Difference},
+    {"exclusion", QPainter::CompositionMode_Exclusion},
+
+    {"source_or_destination", QPainter::RasterOp_SourceOrDestination},
+    {"source_and_destination", QPainter::RasterOp_SourceAndDestination},
+    {"source_xor_destination", QPainter::RasterOp_SourceXorDestination},
+    {"not_source_and_not_destination", QPainter::RasterOp_NotSourceAndNotDestination},
+    {"not_source_or_not_destination", QPainter::RasterOp_NotSourceOrNotDestination},
+    {"not_source_xor_destination", QPainter::RasterOp_NotSourceXorDestination},
+    {"not_source", QPainter::RasterOp_NotSource},
+    {"not_source_and_destination", QPainter::RasterOp_NotSourceAndDestination},
+    {"source_and_not_destination", QPainter::RasterOp_SourceAndNotDestination},
+    {"not_source_or_destination", QPainter::RasterOp_NotSourceOrDestination},
+    {"source_or_not_destination", QPainter::RasterOp_SourceOrNotDestination},
+    {"clear_destination", QPainter::RasterOp_ClearDestination},
+    {"set_destination", QPainter::RasterOp_SetDestination},
+    {"not_destination", QPainter::RasterOp_NotDestination}
+  };
+  if(compositionTable.contains(layer.blendMode.toLower())) layerData->setCompositionMode(compositionTable.value(layer.blendMode.toLower()));
+
+  if(layer.spriteOrder.toLower() == "below")
+  {
+    m_spriteLayersBelow.append(layerData);
+  }
+  else
+  {
+    m_spriteLayers.append(layerData);
   }
   update();
 }
@@ -361,6 +439,8 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
     painter->rotate(animRotationValue);
     painter->translate(-pivot);
 
+    QPainter::CompositionMode mode = layer->compositionMode();
+    if(mode != QPainter::CompositionMode_SourceOver) painter->setCompositionMode(mode);
     painter->drawImage(scaledRect, frame);
     painter->restore();
   }
@@ -484,7 +564,17 @@ bool SpriteLayer::detatched()
   return m_detatch;
 }
 
+QPainter::CompositionMode SpriteLayer::compositionMode()
+{
+  return m_compositionMode;
+}
+
 void SpriteLayer::setDetatch(bool state)
 {
   m_detatch = state;
+}
+
+void SpriteLayer::setCompositionMode(QPainter::CompositionMode mode)
+{
+  m_compositionMode = mode;
 }

@@ -31,6 +31,7 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
     QString overlayName = getStringValue("name");
     QRect overlayRect = getRectangleValue("offset");
     QString overlayRender = getStringValue("order");
+    QString blendMode = getStringValue("blend_mode");
     bool detach = getBoolValue("detach");
 
     if (detach)
@@ -43,7 +44,7 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
       overlayRect = QRect(int(xNorm), int(yNorm), int(wNorm), int(hNorm));
     }
 
-    m_Layers.append({overlayName, "", overlayRender, overlayRect, detach});
+    m_Layers.append({overlayName, "", overlayRender, overlayRect, detach, blendMode});
   }
 
   ResetTargetObject();
