@@ -504,6 +504,21 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
   }
 }
 
+void Courtroom::playEffect(const QString &effectName, const QString &charaName)
+{
+  if (!effectName.isEmpty() && effectName != "effect_shake") // check to prevent crashing
+  {
+    bool once = true;
+
+    audio::effect::Play(ao_app->get_sfx(effectName).toStdString());
+    ui_vp_effect->stop();
+    ui_vp_effect->set_file_name(ao_app->get_effect_anim_path(effectName));
+
+    ui_vp_effect->set_play_once(once);
+    ui_vp_effect->start();
+  }
+}
+
 void Courtroom::update_background_scene()
 {
   const QString l_prev_background_name = m_background_name;
@@ -2185,6 +2200,14 @@ void Courtroom::next_chat_letter()
     is_ignore_next_letter = false;
     ++m_tick_step;
     play_screenshake_anim();
+    next_chat_letter();
+    return;
+  }
+  else if (is_ignore_next_letter && f_character == 'f')
+  {
+    is_ignore_next_letter = false;
+    ++m_tick_step;
+    playEffect("effect_flash", "");
     next_chat_letter();
     return;
   }
