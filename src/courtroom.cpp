@@ -1086,6 +1086,17 @@ void Courtroom::handle_ic_message_length()
   {
     QToolTip::showText(QCursor::pos(), QString(tr("Your message cannot be longer than %1 character(s).")).arg(ui_ic_chat_message_field->maxLength()));
   }
+
+  if(l_length == 0) return;
+  if(!ServerMetadata::FeatureSupported("sequence")) return;
+
+  const int currentUptime = RuntimeLoop::uptime();
+  if(m_lastTypingPacket == 0 || (currentUptime - m_lastTypingPacket) > (1000 * 10))
+  {
+    ao_app->send_server_packet(DRPacket("STATUS", {QString::number(UserState_Typing), QString::number(true)}));
+    m_lastTypingPacket = currentUptime;
+  }
+
 }
 
 void Courtroom::handle_acknowledged_ms()
@@ -1772,8 +1783,16 @@ void Courtroom::handle_chatmessage_3()
   start_chat_timer();
   metadata::message::pair::disable();
 
+  const int clientId = m_chatmessage[CMClientId].toInt();
+  const bool isLocalClient = clientId == metadata::user::getClientId();
+  if(isLocalClient) m_lastTypingPacket = 0;
+  else
+  {
+    setPlayerTyping(clientId, false);
+  }
+
   bool animLoop = ui_vp_player_char->setCharacterAnimation(m_chatmessage[CMAnimSequence], m_chatmessage[CMChrName]);
-  if(!animLoop && m_chatmessage[CMClientId].toInt() == metadata::user::getClientId())
+  if(!animLoop && isLocalClient)
   {
     animList->setCurrentRow(0);
   }
@@ -3621,6 +3640,18 @@ void Courtroom::construct_playerlist_layout()
     ui_playername->show();
 
     if(n == (starting_index + m_page_max_player_count)) break;
+  }
+}
+
+void Courtroom::setPlayerTyping(int client, bool active)
+{
+  for(DrPlayerListEntry* player : m_player_list)
+  {
+    if(player->clientId() == client)
+    {
+      player->toggleTyping(active);
+      return;
+    }
   }
 }
 

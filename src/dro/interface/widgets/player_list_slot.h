@@ -10,27 +10,33 @@ class AOApplication;
 class DrPlayerListEntry : public QWidget
 {
 public:
-    DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y);
-    void set_character(QString p_character, bool afkState);
-    void setOutfit(QString outfitName);
-    void set_name(QString showname);
-    void set_reason(QString p_reason);
-    void setURL(QString url);
-    void setID(int id);
-    void setStatus(QString status);
-    void setMod(QString ipid, QString hdid);
-    AOImageDisplay *pCharacterBorderDisplay = nullptr;
-    AOImageDisplay *ui_user_image = nullptr;
-    RPLabel *ui_showname = nullptr;
-    RPLabel *m_prompt = nullptr;
+  DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y);
 
-    AOImageDisplay *pStatusDisplay = nullptr;
+  void toggleTyping(bool status);
 
-    int m_entrywidth = 0;
+  void set_character(QString p_character, bool afkState);
+  void setOutfit(QString outfitName);
+  void set_name(QString showname);
+  void set_reason(QString p_reason);
+  void setURL(QString url);
+  void setID(int id);
+  void setStatus(QString status);
+  void setMod(QString ipid, QString hdid);
+  AOImageDisplay *pCharacterBorderDisplay = nullptr;
+  AOImageDisplay *ui_user_image = nullptr;
+  RPLabel *ui_showname = nullptr;
+  RPLabel *ui_typing = nullptr;
+  RPLabel *m_prompt = nullptr;
 
-    void setQUrl(const QUrl &newQUrl);
+  AOImageDisplay *pStatusDisplay = nullptr;
 
-  private slots:
+  void setQUrl(const QUrl &newQUrl);
+
+public:
+  int clientId();
+
+
+private slots:
   void openCharacterFolder();
   void openBrowserURL();
   void sendPairRequest();
@@ -41,6 +47,7 @@ public:
   void copyHDID();
   void copyIPID();
   void followPlayer();
+  void handleTypingTimeout();
 
 private:
   AOApplication *ao_app = nullptr;
@@ -55,7 +62,9 @@ private:
   QString mURL = "";
   QString mHDID = "";
   QString mIPID = "";
-  int mID = -1;
+  int m_clientId = -1;
+
+  QTimer* m_typingTimer = nullptr;
 
   void showContextMenu(QPoint pos);
 

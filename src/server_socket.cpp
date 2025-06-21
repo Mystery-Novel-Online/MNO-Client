@@ -386,6 +386,16 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
     m_courtroom->set_ambient(l_content.at(0));
   }
+  else if (l_header == "STATUS")
+  {
+    if (l_content.size() < 3)
+      return;
+
+    if (!is_courtroom_constructed)
+      return;
+
+    m_courtroom->setPlayerTyping(l_content.at(0).toInt(), true);
+  }
   else if (l_header == "chat_tick_rate")
   {
     if (l_content.size() < 1)

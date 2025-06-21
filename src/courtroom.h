@@ -204,6 +204,7 @@ public:
   void refresh_character_content_url();
   void update_character_content_url(QString url);
   void construct_playerlist_layout();
+  void setPlayerTyping(int client, bool active);
   void construct_emotes();
   void write_area_desc();
 
@@ -550,6 +551,8 @@ private:
   QWidget *ui_ic_chat_message = nullptr;
   QLineEdit *ui_ic_chat_message_field = nullptr;
   QLabel *ui_ic_chat_message_counter = nullptr;
+  int m_lastTypingPacket = 0;
+
 
   QLineEdit *ui_ooc_chat_name = nullptr;
   QLineEdit *ui_ooc_chat_message = nullptr;

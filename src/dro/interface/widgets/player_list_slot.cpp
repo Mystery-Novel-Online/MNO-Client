@@ -1,14 +1,12 @@
 #include "player_list_slot.h"
 #include "aoapplication.h"
+#include "courtroom.h"
 #include "commondefs.h"
-#include "dro/fs/fs_reading.h"
-#include "modules/theme/thememanager.h"
 #include "theme.h"
 #include "dro/fs/fs_reading.h"
-#include "modules/managers/pair_manager.h"
 #include "dro/system/localization.h"
-#include "courtroom.h"
 #include "dro/network/metadata/user_metadata.h"
+#include "modules/theme/thememanager.h"
 
 #include <QMenu>
 #include <QUrl>
@@ -18,65 +16,98 @@
 using namespace dro::network::metadata;
 using namespace dro::system;
 
-DrPlayerListEntry::DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y)
-    : QWidget(p_parent)
+namespace {
+constexpr int DEFAULT_HEIGHT = 50;
+constexpr int STATUS_ICON_SIZE = 26;
+constexpr int ICON_OFFSET = 5;
+constexpr int TEXT_HEIGHT = 18;
+constexpr int NAME_Y_OFFSET = 7;
+constexpr int TYPING_Y_OFFSET = 27;
+}
+
+DrPlayerListEntry::DrPlayerListEntry(QWidget *parent, AOApplication *p_ao_app, int p_x, int p_y)
+    : QWidget(parent)
 {
 
-  double themeResize = ThemeManager::get().getResize();
-  int resize_height = (int)((float)50 * ThemeManager::get().getResize());
+  const double themeResize = ThemeManager::get().getResize();
+  const int widgetHeight = static_cast<int>(DEFAULT_HEIGHT * themeResize);
+  const int widgetWidth = parent->size().width();
+  const int statusIconSize = static_cast<int>(STATUS_ICON_SIZE * themeResize);
+
+  ao_app = p_ao_app;
+  this->resize(widgetWidth, widgetHeight);
+  this->move(p_x, p_y);
+
+  ui_showname = new RPLabel(this, ao_app);
+  ui_showname->move(widgetHeight, 7);
+  ui_showname->resize(widgetWidth-widgetHeight, 18);
+  set_stylesheet(ui_showname, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
+
+  ui_typing = new RPLabel(this, ao_app);
+  ui_typing->move(widgetHeight + (widgetWidth-widgetHeight) / 2, 27);
+  ui_typing->resize((widgetWidth-widgetHeight) / 2, 18);
+  set_stylesheet(ui_typing, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
+
+  ui_user_image = new AOImageDisplay(this, ao_app);
+  ui_user_image->move((int)((float)5 * themeResize), (int)((float)5 * themeResize));
+  ui_user_image->resize((int)((float)40 * ThemeManager::get().getResize()), (int)((float)40 * ThemeManager::get().getResize()));
 
 
-  int statusResize = (int)((float)26 * ThemeManager::get().getResize());
+  pCharacterBorderDisplay = new AOImageDisplay(this, ao_app);
+  pCharacterBorderDisplay->move(0, 0);
+  pCharacterBorderDisplay->resize(widgetHeight, widgetHeight);
 
-    ao_app = p_ao_app;
-    m_entrywidth = p_parent->size().width();
-    this->resize(m_entrywidth, resize_height);
+  pStatusDisplay = new AOImageDisplay(this, ao_app);
+  pStatusDisplay->move((int)((float)30 * themeResize),(int)((float)23 * themeResize));
+  pStatusDisplay->resize(statusIconSize, statusIconSize);
 
-    this->move(p_x, p_y);
+  const QString lStatusImagePath = ao_app->find_theme_asset_path("player_list_status.png");
 
-    ui_showname = new RPLabel(this, ao_app);
-    ui_showname->move(resize_height, 7);
-    ui_showname->resize(m_entrywidth-resize_height, 16);
-    set_stylesheet(ui_showname, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
-
-    ui_user_image = new AOImageDisplay(this, ao_app);
-    ui_user_image->move((int)((float)5 * themeResize), (int)((float)5 * themeResize));
-    ui_user_image->resize((int)((float)40 * ThemeManager::get().getResize()), (int)((float)40 * ThemeManager::get().getResize()));
+  if (FS::Checks::FileExists(lStatusImagePath)) pStatusDisplay->set_image(lStatusImagePath);
 
 
-    pCharacterBorderDisplay = new AOImageDisplay(this, ao_app);
-    pCharacterBorderDisplay->move(0, 0);
-    pCharacterBorderDisplay->resize(resize_height, resize_height);
+  const QString l_selected_texture = ao_app->find_theme_asset_path("char_border.png");
 
-    pStatusDisplay = new AOImageDisplay(this, ao_app);
-    pStatusDisplay->move((int)((float)30 * themeResize),(int)((float)23 * themeResize));
-    pStatusDisplay->resize(statusResize, statusResize);
+  if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
 
-    const QString lStatusImagePath = ao_app->find_theme_asset_path("player_list_status.png");
+  //Prompt (For Blackouts / Look)
+  m_prompt = new RPLabel(this, ao_app);
+  m_prompt->move(5, 5);
+  m_prompt->resize(widgetWidth, widgetHeight);
+  m_prompt->setWordWrap(true);
+  set_stylesheet(m_prompt, "[PLAYER LIST PROMPT]", COURTROOM_STYLESHEETS_CSS, ao_app);
 
-    if (FS::Checks::FileExists(lStatusImagePath)) pStatusDisplay->set_image(lStatusImagePath);
+  ui_typing->setText("Typing...");
+  ui_typing->hide();
+  ui_showname->hide();
+  ui_user_image->hide();
+  pCharacterBorderDisplay->hide();
+  pStatusDisplay->hide();
+  m_prompt->hide();
+
+  this->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(this ,&QWidget::customContextMenuRequested, this, &DrPlayerListEntry::showContextMenu);
 
 
-    const QString l_selected_texture = ao_app->find_theme_asset_path("char_border.png");
+  m_typingTimer = new QTimer(this);
+  m_typingTimer->setSingleShot(true);
+  m_typingTimer->setInterval(11000);
 
-    if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
+  connect(m_typingTimer, &QTimer::timeout, this, &DrPlayerListEntry::handleTypingTimeout);
 
-    //Prompt (For Blackouts / Look)
-    m_prompt = new RPLabel(this, ao_app);
-    m_prompt->move(5, 5);
-    m_prompt->resize(m_entrywidth, resize_height);
-    m_prompt->setWordWrap(true);
-    set_stylesheet(m_prompt, "[PLAYER LIST PROMPT]", COURTROOM_STYLESHEETS_CSS, ao_app);
+}
 
-    ui_showname->hide();
-    ui_user_image->hide();
-    pCharacterBorderDisplay->hide();
-    pStatusDisplay->hide();
-    m_prompt->hide();
-
-    this->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(this ,&QWidget::customContextMenuRequested, this, &DrPlayerListEntry::showContextMenu);
-
+void DrPlayerListEntry::toggleTyping(bool status)
+{
+  if (status)
+  {
+    ui_typing->show();
+    m_typingTimer->start();
+  }
+  else
+  {
+    ui_typing->hide();
+  }
 }
 
 
@@ -161,6 +192,7 @@ void DrPlayerListEntry::set_name(QString showname)
 void DrPlayerListEntry::set_reason(QString p_reason)
 {
   ui_showname->hide();
+  ui_typing->hide();
   ui_user_image->hide();
   pCharacterBorderDisplay->hide();
   m_prompt->show();
@@ -175,7 +207,7 @@ void DrPlayerListEntry::setURL(QString url)
 
 void DrPlayerListEntry::setID(int id)
 {
-  mID = id;
+  m_clientId = id;
 }
 
 void DrPlayerListEntry::setStatus(QString status)
@@ -192,6 +224,11 @@ void DrPlayerListEntry::setMod(QString ipid, QString hdid)
 {
   mIPID = ipid;
   mHDID = hdid;
+}
+
+int DrPlayerListEntry::clientId()
+{
+  return m_clientId;
 }
 
 void DrPlayerListEntry::openCharacterFolder()
@@ -212,12 +249,12 @@ void DrPlayerListEntry::openBrowserURL()
 
 void DrPlayerListEntry::sendPairRequest()
 {
-  ao_app->send_server_packet(DRPacket("PR", {QString::number(mID)}));
+  ao_app->send_server_packet(DRPacket("PR", {QString::number(m_clientId)}));
 }
 
 void DrPlayerListEntry::sendUnpairRequest()
 {
-  ao_app->send_server_packet(DRPacket("UPR", {QString::number(mID)}));
+  ao_app->send_server_packet(DRPacket("UPR", {QString::number(m_clientId)}));
 }
 
 void DrPlayerListEntry::sendLayerFront()
@@ -234,7 +271,7 @@ void DrPlayerListEntry::copyID()
 {
   QClipboard *clipboard = QGuiApplication::clipboard();
 
-  clipboard->setText(QString::number(mID));
+  clipboard->setText(QString::number(m_clientId));
 }
 
 void DrPlayerListEntry::copyHDID()
@@ -253,13 +290,18 @@ void DrPlayerListEntry::copyIPID()
 
 void DrPlayerListEntry::followPlayer()
 {
-  AOApplication::getInstance()->get_courtroom()->send_ooc_packet("/follow " + QString::number(mID));
+  AOApplication::getInstance()->get_courtroom()->send_ooc_packet("/follow " + QString::number(m_clientId));
+}
+
+void DrPlayerListEntry::handleTypingTimeout()
+{
+  toggleTyping(false);
 }
 
 void DrPlayerListEntry::showContextMenu(QPoint pos)
 {
   QMenu *menu = new QMenu(this);
-  menu->addAction("[" + QString::number(mID) + "] " + m_showname);
+  menu->addAction("[" + QString::number(m_clientId) + "] " + m_showname);
 
   menu->addSeparator();
 
