@@ -17,9 +17,11 @@ static double s_accumulatedTime = 0.0;
 static RPTypewriter *s_typewriter = nullptr;
 static RPViewport *s_viewport = nullptr;
 
+static QElapsedTimer timer;
+static bool s_loopPaused = false;
+
 void RuntimeLoop::Update()
 {
-  static QElapsedTimer timer;
   static bool firstCall = true;
 
   if (firstCall) {
@@ -27,6 +29,8 @@ void RuntimeLoop::Update()
     firstCall = false;
     return;
   }
+
+  if(s_loopPaused) return;
 
   qint64 elapsedNano = timer.nsecsElapsed();
   timer.restart();
@@ -80,4 +84,11 @@ void RuntimeLoop::setWindowFocus(bool focus)
   s_accumulatedTime = 0.0;
   if(focus) s_FrameRate = 60;
   else s_FrameRate = 15;
+}
+
+void RuntimeLoop::setPause(bool pauseState)
+{
+  s_loopPaused = pauseState;
+  s_accumulatedTime = 0;
+  timer.restart();
 }

@@ -34,6 +34,7 @@
 #include "aoapplication.h"
 #include "dro/system/text_encoding.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/system/runtime_loop.h"
 
 using namespace mk2;
 
@@ -119,7 +120,9 @@ SpritePlayer *GraphicsSpriteItem::get_player() const
 
 void GraphicsSpriteItem::start(ScalingMode scaling, double scale)
 {
+  RuntimeLoop::setPause(true);
   m_player->start(scaling, scale);
+  RuntimeLoop::setPause(false);
 }
 
 void GraphicsSpriteItem::restart()
