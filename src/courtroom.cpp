@@ -1254,10 +1254,6 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
 
   l_file_list.insert(ViewportPairCharacterIdle, ao_app->get_character_sprite_idle_path(metadata::message::pair::getCharacter(), metadata::message::pair::getEmote()));
 
-
-  ui_vp_player_char->processOverlays(m_pre_chatmessage[CMSpriteLayers], l_character, l_emote, l_outfit);
-  ui_vp_player_pair->processOverlays(metadata::message::pair::getLayers(), metadata::message::pair::getCharacter(), metadata::message::pair::getEmote(), metadata::message::pair::getOutfit());
-
   // shouts
   l_file_list.insert(ViewportShout, ao_app->get_shout_sprite_path(l_character, get_shout_name(l_shout_id)));
 
@@ -1723,6 +1719,8 @@ void Courtroom::handle_chatmessage_3()
     break;
   }
 
+  ui_vp_player_char->processOverlays(m_pre_chatmessage[CMSpriteLayers], l_character, l_emote, l_outfit);
+  ui_vp_player_pair->processOverlays(metadata::message::pair::getLayers(), metadata::message::pair::getCharacter(), metadata::message::pair::getEmote(), metadata::message::pair::getOutfit());
 
   {
     bool l_effect_index_result;
