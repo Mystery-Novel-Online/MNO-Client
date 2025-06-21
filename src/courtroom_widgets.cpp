@@ -80,8 +80,8 @@ void Courtroom::create_widgets()
   ui_viewport = new DRGraphicsView(this);
   if(ao_config->opengl_enabled())
   {
-    ui_opengl_viewport = new QOpenGLWidget();
-    ui_viewport->setViewport(ui_opengl_viewport);
+    //ui_opengl_viewport = new QOpenGLWidget();
+    //ui_viewport->setViewport(ui_opengl_viewport);
   }
 
   SceneManager::get().CreateTransition(this, ao_app, ui_viewport);
