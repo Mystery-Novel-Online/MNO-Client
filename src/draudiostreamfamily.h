@@ -18,6 +18,7 @@ public:
   using stream_list = QVector<DRAudioStream::ptr>;
 
   DRAudioStream::ptr create_stream(QString p_file);
+  DRAudioStream::ptr create_url_stream(QString t_url);
   DRAudioStream::ptr play_stream(QString p_file);
 
   // get

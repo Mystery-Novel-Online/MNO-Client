@@ -2,6 +2,7 @@
 
 #include <QDebug>
 #include <QFileInfo>
+#include <QUrl>
 #include <QtMath>
 
 #include <bass/bass.h>
@@ -97,11 +98,25 @@ void DRAudioStream::stop()
 
 std::optional<DRAudioError> DRAudioStream::set_file_name(QString p_file_name)
 {
+  m_url.clear();
   m_filename = p_file_name;
   m_init_state = InitNotDone;
   if (!ensure_init())
   {
     return DRAudioError("failed to set file: " + p_file_name);
+  }
+  emit file_name_changed(m_filename);
+  return std::nullopt;
+}
+
+std::optional<DRAudioError> DRAudioStream::SetWebAddress(QString t_url)
+{
+  m_url = t_url;
+  m_filename.clear();
+  m_init_state = InitNotDone;
+  if (!ensure_init())
+  {
+    return DRAudioError("failed to set url: " + t_url);
   }
   emit file_name_changed(m_filename);
   return std::nullopt;
@@ -235,12 +250,20 @@ bool DRAudioStream::ensure_init()
     return m_init_state == InitFinished;
   m_init_state = InitError;
 
-  if (m_filename.isEmpty())
-    return false;
-
   HSTREAM stream;
-  
-  if (m_filename.endsWith("opus", Qt::CaseInsensitive))
+
+  if(!m_url.isEmpty())
+  {
+    QByteArray l_encoded = QUrl(m_url).toEncoded();
+    if (l_encoded.isEmpty()) {
+      qWarning() << "error:" << m_url << "was not a valid URL for streaming.";
+      stream = 0;
+    } else {
+      stream = BASS_StreamCreateURL(l_encoded.constData(), 0, 0, nullptr, nullptr);
+    }
+  }
+  else if (m_filename.isEmpty())  return false;
+  else if (m_filename.endsWith("opus", Qt::CaseInsensitive))
   {
     stream = BASS_OPUS_StreamCreateFile(FALSE, m_filename.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE);
   }
@@ -259,8 +282,7 @@ bool DRAudioStream::ensure_init()
 
   if (!m_hstream) {
     qWarning() << "error: failed to create tempo stream:" << DRAudio::get_last_bass_error();
-    BASS_StreamFree(stream);
-    return false;
+    m_hstream = stream;
   }
 
   BASS_ChannelSetSync(m_hstream, BASS_SYNC_END, 0, &end_sync, this);

@@ -119,6 +119,26 @@ DRAudioStream::ptr DRAudioStreamFamily::create_stream(QString p_filename)
   return l_stream;
 }
 
+DRAudioStream::ptr DRAudioStreamFamily::create_url_stream(QString t_url)
+{
+  DRAudioStream::ptr l_stream(new DRAudioStream(m_family));
+  if (auto err = l_stream->SetWebAddress(t_url); err)
+  {
+    qWarning() << err->what();
+    return nullptr;
+  }
+
+  m_stream_list.append(l_stream);
+
+  connect(l_stream.get(), SIGNAL(finished()), this, SLOT(on_stream_finished()));
+
+  update_capacity();
+
+  l_stream->set_volume(calculate_volume());
+
+  return l_stream;
+}
+
 DRAudioStream::ptr DRAudioStreamFamily::play_stream(QString p_filename)
 {
   DRAudioStream::ptr l_stream = create_stream(p_filename);

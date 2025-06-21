@@ -5,6 +5,7 @@
 #include "draudiostream.h"
 #include "draudiotrackmetadata.h"
 #include <QDebug>
+#include <QRegularExpression>
 
 AOMusicPlayer::AOMusicPlayer(QObject *p_parent)
     : AOObject(p_parent)
@@ -17,7 +18,21 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
 {
   m_filename = p_song;
 
-  QSharedPointer<DRAudioStream> newSong = m_family->create_stream(ao_app->get_music_path(p_song));
+
+  QRegularExpression urlRegex("(http|https|ftp)://[^\\s/$.?#].[^\\s]*");
+  QRegularExpressionMatch match = urlRegex.match(m_filename);
+
+
+  QSharedPointer<DRAudioStream> newSong;
+  if(match.hasMatch())
+  {
+    newSong = m_family->create_url_stream(p_song);
+  }
+  else
+  {
+    newSong = m_family->create_stream(ao_app->get_music_path(p_song));
+  }
+
 
   if(!newSong)
   {
