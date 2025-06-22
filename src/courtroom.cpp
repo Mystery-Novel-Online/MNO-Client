@@ -507,6 +507,7 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
 
 void Courtroom::playEffect(const QString &effectName, const QString &charaName)
 {
+  if(ui_vp_effect->is_running()) return;
   if (!effectName.isEmpty() && effectName != "effect_shake") // check to prevent crashing
   {
     bool once = true;
@@ -2569,8 +2570,11 @@ void Courtroom::on_ooc_name_editing_finished()
 
 void Courtroom::on_ooc_message_return_pressed()
 {
-  LuaBridge::LuaEventCall("OnOOCMessageSend");
   const QString l_message = ui_ooc_chat_message->text();
+  if (l_message.isEmpty())
+    return;
+
+  LuaBridge::LuaEventCall("OnOOCMessageSend");
 
   if (l_message.startsWith("/rainbow") && !is_rainbow_enabled)
   {
