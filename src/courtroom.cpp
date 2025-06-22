@@ -103,6 +103,8 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   ui_slider_horizontal_axis->setValue(500);
   resetAFKTimer();
 
+  replays::recording::start();
+
   if (!ServerMetadata::FeatureSupported("sequence")) return;
   connect(&m_checkTimer, &QTimer::timeout, this, &Courtroom::checkAFKStatus);
   m_checkTimer.start(1000);
@@ -178,7 +180,6 @@ void Courtroom::setup_courtroom()
   TimeDebugger::get().EndTimer("Courtroom Setup");
   PairManager::get().ThemeReload();
   LuaBridge::LuaEventCall("OnCourtroomSetup");
-  replays::recording::start();
 }
 
 void Courtroom::map_viewers()
