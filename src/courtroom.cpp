@@ -1595,12 +1595,12 @@ void Courtroom::handle_chatmessage_2() // handles IC
   }
 
 
-  ui_vp_player_pair->set_mirrored(metadata::message::pair::isFlipped());
+  ui_vp_player_pair->setMirrored(metadata::message::pair::isFlipped());
 
   if (m_chatmessage[CMFlipState].toInt() == 1)
-    ui_vp_player_char->set_mirrored(true);
+    ui_vp_player_char->setMirrored(true);
   else
-    ui_vp_player_char->set_mirrored(false);
+    ui_vp_player_char->setMirrored(false);
 
   SceneManager::get().AnimateTransition();
 

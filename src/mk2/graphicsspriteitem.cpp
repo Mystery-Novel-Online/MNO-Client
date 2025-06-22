@@ -165,6 +165,16 @@ void GraphicsSpriteItem::stop()
   m_player->stop();
 }
 
+void GraphicsSpriteItem::setFlipped(bool state)
+{
+  m_isFlipped = state;
+}
+
+void GraphicsSpriteItem::setMirrored(bool state)
+{
+  m_isMirrored = state;
+}
+
 bool GraphicsSpriteItem::is_valid() const
 {
   return m_player->is_valid();
@@ -485,7 +495,8 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
 
   painter->translate(pivot);
-  painter->scale(animScale, animScale);
+  if(m_isMirrored) painter->scale(-animScale, animScale);
+  else painter->scale(animScale, animScale);
   painter->rotate(rotation);
   painter->translate(-pivot);
   painter->setOpacity(alpha);

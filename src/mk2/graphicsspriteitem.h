@@ -79,7 +79,6 @@ public:
   SpritePlayer *get_player() const;
 
   bool is_valid() const;
-
   bool is_running() const;
 
   QRectF boundingRect() const final;
@@ -118,6 +117,9 @@ public slots:
   bool setCharacterAnimation(QString name, QString character, bool startFromEnd = false);
   void stop();
 
+  void setFlipped(bool state);
+  void setMirrored(bool state);
+
 signals:
   void size_changed(QSizeF);
 
@@ -136,6 +138,9 @@ private:
   int mVerticalVPOffset = 0;
   int m_HorizontalOffset = 0;
   bool m_LayersExist = false;
+
+  bool m_isMirrored = false;
+  bool m_isFlipped = false;
 
 private slots:
   void notify_size();
