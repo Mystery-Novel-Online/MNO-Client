@@ -35,6 +35,14 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
 
 void AnimationReader::loadData(KeyframeSequence &sequence)
 {
+  static const QMap<QString, KeyframeCurve> curveMap =
+  {
+    {"linear", CurveLinear},
+    {"ease", CurveEase},
+    {"bezier", CurveBezier},
+    {"parametric", CurveParametric}
+  };
+
   bool animationLoop = getBoolValue("loop");
   QString animationSound = getStringValue("sound");
   sequence.SetSound(animationSound);
@@ -102,6 +110,12 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
         KeyframeCurve frameCurveIn = KeyframeCurve::CurveEase;
         KeyframeCurve frameCurveOut = KeyframeCurve::CurveEase;
 
+        QString curveInValue = getStringValue("curve_in");
+        QString curveOutValue = getStringValue("curve_out");
+
+        if(curveMap.contains(curveInValue.toLower())) frameCurveIn = curveMap[curveInValue];
+        if(curveMap.contains(curveOutValue.toLower())) frameCurveOut = curveMap[curveOutValue];
+
 
         frameChannel->AddKeyframe(frameTime, frameValue, frameCurveIn, frameCurveOut);
       }
@@ -121,6 +135,12 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
         float frameValue = getDoubleValue("value");
         KeyframeCurve frameCurveIn = KeyframeCurve::CurveEase;
         KeyframeCurve frameCurveOut = KeyframeCurve::CurveEase;
+
+        QString curveInValue = getStringValue("curve_in");
+        QString curveOutValue = getStringValue("curve_out");
+
+        if(curveMap.contains(curveInValue.toLower())) frameCurveIn = curveMap[curveInValue];
+        if(curveMap.contains(curveOutValue.toLower())) frameCurveOut = curveMap[curveOutValue];
 
 
         frameChannel->AddKeyframe(frameTime, frameValue, frameCurveIn, frameCurveOut);
