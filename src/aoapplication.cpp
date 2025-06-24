@@ -342,9 +342,11 @@ QString AOApplication::getWeatherSprite(QString weather)
   return get_case_sensitive_path(FS::Paths::FindFile("animations/weather/" + weather + ".webp"));
 }
 
-QString AOApplication::get_shout_sprite_path(QString p_character, QString p_shout)
+QString AOApplication::get_shout_sprite_path(QString p_character, QString p_shout, const QString &outfit)
 {
   QStringList l_filepath_list{
+      get_character_path(p_character, "outfits/" + outfit + "/" + p_shout),
+      get_character_path(p_character, "outfits/" + outfit + "/" + p_shout + "_bubble"),
       get_character_path(p_character, p_shout),
       get_character_path(p_character, p_shout + "_bubble"),
   };

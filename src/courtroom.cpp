@@ -1071,7 +1071,7 @@ void Courtroom::on_ic_message_return_pressed()
 
   if(ServerMetadata::FeatureSupported("sequence"))
   {
-    packet_contents.append(CharacterManager::get().p_SelectedCharacter->GetOutfit());
+    packet_contents.append(l_emote.outfitName);
     packet_contents.append(QString::fromStdString(courtroom::lists::getAnimation()));
     QStringList layers;
     for(const EmoteLayer &layer : l_emote.emoteOverlays)
@@ -1264,7 +1264,7 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
   l_file_list.insert(ViewportPairCharacterIdle, ao_app->get_character_sprite_idle_path(metadata::message::pair::getCharacter(), metadata::message::pair::getEmote()));
 
   // shouts
-  l_file_list.insert(ViewportShout, ao_app->get_shout_sprite_path(l_character, get_shout_name(l_shout_id)));
+  l_file_list.insert(ViewportShout, ao_app->get_shout_sprite_path(l_character, get_shout_name(l_shout_id), l_outfit));
 
   // effects
   QString effect_name = get_effect_name(l_effect_id);

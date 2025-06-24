@@ -253,7 +253,7 @@ public:
   QString get_background_sprite_path(QString background, QString image);
   QString get_background_sprite_noext_path(QString background, QString image);
   QString getWeatherSprite(QString weather);
-  QString get_shout_sprite_path(QString character, QString shout);
+  QString get_shout_sprite_path(QString character, QString shout, const QString& outfit = "");
   QString get_theme_sprite_path(QString file_name, QString character);
   QString get_theme_sprite_path(QString file_name);
   QString get_effect_anim_path(QString file_name);
