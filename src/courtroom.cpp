@@ -1696,6 +1696,7 @@ void Courtroom::handle_chatmessage_3()
   // 3. No valid showname image was found
 
   ui_vp_player_char->hide();
+  ui_vp_player_char->clearImageLayers();
   if (ui_vp_player_char->is_running())
   {
     ui_vp_player_char->stop();
@@ -1707,6 +1708,7 @@ void Courtroom::handle_chatmessage_3()
     {
       swap_viewport_reader(ui_vp_player_char, ViewportCharacterTalk);
       ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
+      ui_vp_player_char->setLayerState(ViewportCharacterTalk);
     }
     anim_state = 2;
     break;
@@ -1718,6 +1720,7 @@ void Courtroom::handle_chatmessage_3()
     {
       swap_viewport_reader(ui_vp_player_char, ViewportCharacterIdle);
       ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
+      ui_vp_player_char->setLayerState(ViewportCharacterIdle);
     }
     anim_state = 3;
     break;
@@ -2356,6 +2359,7 @@ void Courtroom::post_chatmessage()
   if (!m_hide_character && !m_msg_is_first_person)
   {
     swap_viewport_reader(ui_vp_player_char, ViewportCharacterIdle);
+    ui_vp_player_char->setLayerState(ViewportCharacterIdle);
     ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
   }
 

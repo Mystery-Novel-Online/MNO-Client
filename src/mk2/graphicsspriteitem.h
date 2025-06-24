@@ -32,20 +32,28 @@ class SpriteLayer
 {
 public:
   SpriteLayer(QString name, const QRectF &rect);
+  SpriteLayer(QMap<ViewportSprite, mk2::SpriteReader::ptr> &readerMap, const QRectF &rect, ViewportSprite state);
   ~SpriteLayer();
   void start(double scale);
   const QString& name();
   bool detatched();
   QPainter::CompositionMode compositionMode();
 
+  void setState(ViewportSprite state);
   void setName(const QString& name);
   void setDetatch(bool state);
   void setCompositionMode(QPainter::CompositionMode mode);
+
 
   mk2::SpritePlayer spritePlayer;
   QRectF targetRect;
 
 private:
+
+  QMap<ViewportSprite, mk2::SpriteReader::ptr> m_readerMapping = {};
+  ViewportSprite m_ViewportState = ViewportCharacterIdle;
+
+
   bool m_detatch = false;
   QString m_name = "";
   double m_currentScale = 0.0f;
@@ -83,8 +91,11 @@ public:
 
   QRectF boundingRect() const final;
 
+  void setLayerState(ViewportSprite viewportState);
+
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
   void processOverlays(const QVector<EmoteLayer>& emoteLayers, const QString& character, const QString& emotePath, const QString& outfitName);
+  void createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings);
   void createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched = false);
   void createOverlay(const EmoteLayer& layer, const QString &imagePath);
   void clearImageLayers();
@@ -131,6 +142,7 @@ signals:
   void finished();
 
 private:
+  ViewportSprite m_spriteState = ViewportCharacterIdle;
   QVector<SpriteLayer*> m_spriteLayers;
   QVector<SpriteLayer*> m_spriteLayersBelow;
   QScopedPointer<SpritePlayer> m_player;

@@ -190,30 +190,31 @@ QRectF GraphicsSpriteItem::boundingRect() const
   return QRectF(0, 0, m_player->get_size().width() * 2, m_player->get_size().height() * 2);
 }
 
+void GraphicsSpriteItem::setLayerState(ViewportSprite viewportState)
+{
+  m_spriteState = viewportState;
+  for(SpriteLayer *layer : m_spriteLayers)
+  {
+    layer->setState(viewportState);
+  }
+
+  for(SpriteLayer *layer : m_spriteLayersBelow)
+  {
+    layer->setState(viewportState);
+  }
+
+}
+
 void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName)
 {
   clearImageLayers();
-
-  QString path = QFileInfo(emotePath).path();
-  if (!path.isEmpty()) path += "/";
 
   for(const QString& layerOffset : dro::system::encoding::text::DecodeBase64(overlayString))
   {
     QStringList offsetData = dro::system::encoding::text::DecodePacketContents(layerOffset);
     if(offsetData.length() == 7)
     {
-      QString filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, path + offsetData[0]);
-      if(!outfitName.isEmpty())
-      {
-        const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, "outfits/" + outfitName +  "/" + offsetData[0]);
-        if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
-      }
-      else
-      {
-        const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, offsetData[0]);
-        if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
-      }
-      createOverlay(filePath, offsetData[1], QRectF(offsetData[2].toInt(), offsetData[3].toInt(), offsetData[4].toInt(), offsetData[5].toInt()), offsetData[6]);
+      createOverlay(character, emotePath, outfitName, offsetData);
     }
   }
 }
@@ -243,12 +244,69 @@ void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers,
 
 }
 
+void GraphicsSpriteItem::createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings)
+{
+  m_LayersExist = true;
+
+  QMap<ViewportSprite, mk2::SpriteReader::ptr> stateSprites =
+  {
+    {ViewportSprite::ViewportCharacterIdle, mk2::SpriteReader::ptr(new mk2::SpriteSeekingReader)},
+    {ViewportSprite::ViewportCharacterTalk, mk2::SpriteReader::ptr(new mk2::SpriteSeekingReader)}
+  };
+
+  QRectF rect = QRectF(layerStrings[2].toInt(), layerStrings[3].toInt(), layerStrings[4].toInt(), layerStrings[5].toInt());
+
+  QString path = QFileInfo(emoteName).path();
+  if (!path.isEmpty()) path += "/";
+
+  //Create the fallback path.
+
+
+  QString filePath = FS::Paths::FindFile("characters/" + characterName + "/" + path + layerStrings[0], true, FS::Formats::AnimatedImages());
+  if(!FS::Checks::FileExists(filePath))
+  {
+    filePath = FS::Paths::FindFile("characters/" + characterName + "/outfits/" + outfitName + "/" + layerStrings[0], true, FS::Formats::AnimatedImages());
+    if(!FS::Checks::FileExists(filePath))
+    {
+      filePath = AOApplication::getInstance()->get_character_sprite_idle_path(characterName, layerStrings[0]);
+    }
+  }
+  stateSprites[ViewportCharacterIdle]->set_file_name(filePath);
+
+  const QString prefixedName = "(b)" + layerStrings[0];
+  QString talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/" + path + prefixedName, true, FS::Formats::AnimatedImages());
+  if(!FS::Checks::FileExists(talkingFilepath))
+  {
+    talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/outfits/" + outfitName + "/" + prefixedName, true, FS::Formats::AnimatedImages());
+    if(!FS::Checks::FileExists(talkingFilepath))
+    {
+      talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/" + prefixedName, true, FS::Formats::AnimatedImages());
+    }
+  }
+
+  if(FS::Checks::FileExists(talkingFilepath))
+    stateSprites[ViewportCharacterTalk]->set_file_name(talkingFilepath);
+  else
+    stateSprites[ViewportCharacterTalk]->set_file_name(filePath);
+
+  SpriteLayer *layer = new SpriteLayer(stateSprites, rect, m_spriteState);
+  layer->setName(layerStrings[0]);
+  layer->setDetatch(false);
+
+  if(layerStrings[1].toLower() == "below")
+  {
+    m_spriteLayersBelow.append(layer);
+  }
+  else
+  {
+    m_spriteLayers.append(layer);
+  }
+  update();
+}
+
 void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched)
 {
   m_LayersExist = true;
-  mk2::SpriteReader::ptr l_new_reader;
-  l_new_reader = mk2::SpriteReader::ptr(new mk2::SpriteSeekingReader);
-  l_new_reader->set_file_name(imageName);
 
   if(detatched)
   {
@@ -555,6 +613,20 @@ SpriteLayer::SpriteLayer(QString name, const QRectF &rect)
   start(1.0f);
 }
 
+SpriteLayer::SpriteLayer(QMap<ViewportSprite, mk2::SpriteReader::ptr> &readerMap, const QRectF &rect, ViewportSprite state)
+{
+  m_readerMapping = readerMap;
+  m_ViewportState = state;
+  targetRect = rect;
+
+  if(m_readerMapping.contains(state))
+  {
+    spritePlayer.set_reader(m_readerMapping[m_ViewportState]);
+    spritePlayer.set_size(targetRect.size().toSize());
+    start(1.0f);
+  }
+}
+
 SpriteLayer::~SpriteLayer()
 {
   spritePlayer.set_file_name("");
@@ -586,6 +658,19 @@ bool SpriteLayer::detatched()
 QPainter::CompositionMode SpriteLayer::compositionMode()
 {
   return m_compositionMode;
+}
+
+void SpriteLayer::setState(ViewportSprite state)
+{
+  m_ViewportState = state;
+  spritePlayer.stop();
+
+  if(m_readerMapping.contains(state))
+  {
+    spritePlayer.set_reader(m_readerMapping[m_ViewportState]);
+    spritePlayer.set_size(targetRect.size().toSize());
+    spritePlayer.start(SpritePlayer::WidthSmoothScaling, 1.0f);
+  }
 }
 
 void SpriteLayer::setDetatch(bool state)
