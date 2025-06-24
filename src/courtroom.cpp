@@ -461,6 +461,7 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
     ui_vp_weather->set_file_name("");
     ui_vp_weather->stop();
     ui_vp_weather->hide();
+    ui_vp_weather->setKeyframeAnimation("", "");
     audio::effect::PlayWeather("");
     return;
   }
@@ -474,6 +475,7 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
 
   bool hideAnimation = false;
   QString soundName = weatherParam.getStringValue("sound");
+  QString sequenceName = weatherParam.getStringValue("sequence");
 
   if(weatherParam.isValueExists(environment))
   {
@@ -483,6 +485,10 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
       soundName = weatherParam.getStringValue("sound");
     }
     hideAnimation = weatherParam.getBoolValue("hide");
+    if(weatherParam.isValueExists("sequence"))
+    {
+      sequenceName = weatherParam.getStringValue("sequence");
+    }
   }
 
   audio::effect::PlayWeather(ao_app->get_ambient_sfx_path(soundName).toStdString());
@@ -493,6 +499,7 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
     {
       ui_vp_weather->set_reader(mk2::SpriteReader::ptr(new mk2::SpriteCachingReader));
       ui_vp_weather->set_file_name(weatherAnimPath);
+      ui_vp_weather->setKeyframeAnimation("weather/" + weatherName, sequenceName);
     }
     ui_vp_weather->start();
     ui_vp_weather->show();

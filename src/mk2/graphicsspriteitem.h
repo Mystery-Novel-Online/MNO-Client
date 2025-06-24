@@ -125,6 +125,7 @@ public slots:
   void restart();
   void setVerticalOffset(int t_offset);
   void setHorizontalOffset(int t_offset);
+  bool setKeyframeAnimation(const QString &directory, const QString &animation);
   bool setCharacterAnimation(QString name, QString character, bool startFromEnd = false);
   void stop();
 

@@ -142,6 +142,22 @@ void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
   m_HorizontalOffset = t_offset - 500;
 }
 
+bool GraphicsSpriteItem::setKeyframeAnimation(const QString &directory, const QString &animation)
+{
+  clearImageLayers();
+  for(const EmoteLayer &layer : AnimationReader(directory + "/" + animation, m_KeyframeSequence).m_Layers)
+  {
+    QString filePath = FS::Paths::FindFile("animations/" + directory + "/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
+
+    if(!FS::Checks::FileExists(filePath))
+      filePath = FS::Paths::FindFile("animations/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
+
+    createOverlay(layer, filePath);
+  }
+
+  return m_KeyframeSequence.getLoopState();
+}
+
 bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, bool startFromEnd)
 {
   for(const EmoteLayer &layer : AnimationReader(name, m_KeyframeSequence, character).m_Layers)

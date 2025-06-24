@@ -4,6 +4,18 @@
 #include "dro/fs/fs_reading.h"
 #include "aoapplication.h"
 
+AnimationReader::AnimationReader(const QString &animPath, KeyframeSequence &sequence)
+{
+  sequence.Cleanup();
+
+  QString animationPath = FS::Paths::FindFile("animations/" + animPath + ".json");
+  if(!FS::Checks::FileExists(animationPath)) return;
+
+  ReadFromFile(animationPath);
+
+  loadData(sequence);
+}
+
 AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence, const QString &character)
 {
   sequence.Cleanup();
@@ -17,7 +29,12 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
   }
 
   ReadFromFile(animationPath);
+  loadData(sequence);
 
+}
+
+void AnimationReader::loadData(KeyframeSequence &sequence)
+{
   bool animationLoop = getBoolValue("loop");
   QString animationSound = getStringValue("sound");
   sequence.SetSound(animationSound);
@@ -111,7 +128,5 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
 
       sequence.AddChannel(channelName.toStdString(), std::move(frameChannel));
     }
-
   }
-
 }
