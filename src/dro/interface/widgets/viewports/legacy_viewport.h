@@ -52,6 +52,7 @@ private:
 
   DRSceneMovie *m_backgroundSprite = nullptr;
   DRCharacterMovie *m_characterSprite = nullptr;
+  DRCharacterMovie *m_pairSprite = nullptr;
   DRSceneMovie *m_weatherSprite = nullptr;
 
 
@@ -68,6 +69,7 @@ private:
   QString m_backgroundName = "Blackout_HD";
 
   ActorData *m_currentActor = nullptr;
+  ActorData *m_pairActor = nullptr;
 
 };
 

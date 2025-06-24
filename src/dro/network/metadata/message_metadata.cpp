@@ -88,6 +88,11 @@ namespace dro::network::metadata::message
       return s_CurrentMessage.pairData.characterOutfit;
     }
 
+    int scaleValue()
+    {
+      return s_CurrentMessage.pairData.offsetScale;
+    }
+
   }
 
   int horizontalOffset()
@@ -145,6 +150,20 @@ namespace dro::network::metadata::message
     s_CurrentMessage.offsetScale = operation.variables.contains("offset_s") ? operation.variables["offset_s"].toInt() : 1000;
     s_CurrentMessage.offsetHorizontal = operation.variables.contains("offset_h") ? operation.variables["offset_h"].toInt() : 500;
     s_CurrentMessage.offsetVertical = operation.variables.contains("offset_v") ? operation.variables["offset_v"].toInt() : 0;
+
+    s_CurrentMessage.pairData.characterFolder = operation.variables["pair_char"];
+    s_CurrentMessage.pairData.characterEmote = operation.variables["pair_emote"];
+    s_CurrentMessage.pairData.characterLayers = operation.variables["pair_layers"];
+    s_CurrentMessage.pairData.characterSequence = operation.variables["pair_sequence"];
+    s_CurrentMessage.pairData.characterOutfit = operation.variables["pair_outfit"];
+
+    s_CurrentMessage.pairData.offsetVertical = operation.variables.contains("pair_vertical") ? operation.variables["pair_vertical"].toInt() : 0;
+    s_CurrentMessage.pairData.offsetHorizontal = operation.variables.contains("pair_horizontal") ? operation.variables["pair_horizontal"].toInt() : 500;
+    s_CurrentMessage.pairData.offsetScale = operation.variables.contains("pair_scale") ? operation.variables["pair_scale"].toInt() : 1000;
+
+    s_CurrentMessage.pairData.spriteVisible = operation.variables["pair_visible"] == "1";
+    s_CurrentMessage.pairData.spriteFlipped = operation.variables["pair_flipped"] == "1";
+    s_CurrentMessage.pairData.isLeader = operation.variables["pair_leader"] == "1";
   }
 
   MessageMetadata &recentMessage()

@@ -81,6 +81,7 @@ namespace dro::network::metadata::message
     int verticalOffset();
     int horizontalOffset();
     double scaleOffset();
+    int scaleValue();
     const QString &getOutfit();
     const QString &getEmote();
     const QString &getCharacter();

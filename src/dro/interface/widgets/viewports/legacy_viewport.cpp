@@ -20,6 +20,8 @@
 #include <QGraphicsProxyWidget>
 #include <QPropertyAnimation>
 
+using namespace dro::network::metadata;
+
 LegacyViewport::LegacyViewport(QWidget *parent) : RPViewport(parent)
 {
   m_graphicsView = new DRGraphicsView(parent);
@@ -37,19 +39,39 @@ void LegacyViewport::constructViewport()
   AOApplication *aoApp = AOApplication::getInstance();
   m_backgroundSprite = new DRSceneMovie(aoApp);
   m_characterSprite = new DRCharacterMovie(aoApp);
+  m_pairSprite = new DRCharacterMovie(aoApp);
 
   m_videoScreen = new DRVideoScreen(aoApp);
   m_shoutMovie = new DRShoutMovie(aoApp);
   m_effectMovie = new DREffectMovie(aoApp);
 
   m_graphicsView->scene()->addItem(m_backgroundSprite);
+  m_graphicsView->scene()->addItem(m_pairSprite);
   m_graphicsView->scene()->addItem(m_characterSprite);
+
   m_graphicsView->scene()->addItem(m_effectMovie);
-  m_graphicsView->scene()->addItem(m_videoScreen);
   m_graphicsView->scene()->addItem(m_shoutMovie);
+  m_graphicsView->scene()->addItem(m_videoScreen);
+
+
+
+  m_backgroundSprite->setZValue(ViewportLayers_BG);
+  m_pairSprite->setZValue(ViewportLayers_PlayerBack);
+  m_characterSprite->setZValue(ViewportLayers_PlayerFront);
+
+  //ui_vp_desk->setZValue(ViewportLayers_Desk);
+  //ui_vp_weather->setZValue(ViewportLayers_Weather);
+
+  m_effectMovie->setZValue(ViewportLayers_Effect);
+
+  //ui_vp_wtce->setZValue(ViewportLayers_WTCE);
+
+  m_shoutMovie->setZValue(ViewportLayers_Objection);
+  m_videoScreen->setZValue(ViewportLayers_Video);
 
   m_backgroundSprite->start();
   m_characterSprite->start();
+  m_pairSprite->start();
 
   m_transitionWidget = new RPLabel(m_graphicsView, aoApp);
   m_transitionWidget->resize(m_graphicsView->width(), m_graphicsView->height());
@@ -63,8 +85,9 @@ void LegacyViewport::constructViewport()
 
 void LegacyViewport::loadCurrentMessage()
 {
-  MessageMetadata &message = dro::network::metadata::message::recentMessage();
+  MessageMetadata &message = message::recentMessage();
   m_currentActor = CharacterManager::get().ReadCharacter(message.characterFolder);
+  m_pairActor = CharacterManager::get().ReadCharacter(message.pairData.characterFolder);
   if(message.characterPre.trimmed().isEmpty()) message.characterPre = "-";
   m_message->setInput("");
   toggleChatbox(false);
@@ -86,6 +109,25 @@ void LegacyViewport::loadCurrentMessage()
 
   m_shoutMovie->stop();
   m_effectMovie->stop();
+  m_pairSprite->hide();
+
+  {
+    if(!message.pairData.characterFolder.trimmed().isEmpty())
+    {
+      m_pairSprite->set_play_once(false);
+      m_pairSprite->set_file_name(AOApplication::getInstance()->get_character_sprite_idle_path(message.pairData.characterFolder, message.pairData.characterEmote));
+
+      m_pairSprite->setHorizontalOffset(message::pair::horizontalOffset());
+      m_pairSprite->setVerticalOffset(message::pair::verticalOffset());
+
+      mk2::SpritePlayer::ScalingMode targetScaling = m_pairActor->GetScalingMode() == "width_smooth" ? mk2::SpritePlayer::WidthSmoothScaling : mk2::SpritePlayer::AutomaticScaling;
+      m_pairSprite->start(targetScaling, (double)message.pairData.offsetScale / 1000.0f);
+      m_pairSprite->processOverlays(message.pairData.characterLayers, message.pairData.characterFolder, message.pairData.characterEmote, message.pairData.characterOutfit);
+      m_pairSprite->setCharacterAnimation(message.pairData.characterSequence, message.pairData.characterFolder, true);
+      m_pairSprite->show();
+    }
+  }
+
   m_videoScreen->play_character_video(message.characterFolder, message.characterVideo);
 }
 

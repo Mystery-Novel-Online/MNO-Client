@@ -138,7 +138,7 @@ namespace dro::system::replays
         lNewOperation.variables["pair_layers"] = dro::network::metadata::message::pair::getLayers();
         lNewOperation.variables["pair_horizontal"] =  QString::number(dro::network::metadata::message::pair::horizontalOffset());
         lNewOperation.variables["pair_vertical"] =  QString::number(dro::network::metadata::message::pair::verticalOffset());
-        lNewOperation.variables["pair_scale"] =  QString::number(dro::network::metadata::message::pair::scaleOffset());
+        lNewOperation.variables["pair_scale"] =  QString::number(dro::network::metadata::message::pair::scaleValue());
         lNewOperation.variables["pair_leader"] =  QString::number(dro::network::metadata::message::pair::isLeader());
         lNewOperation.variables["pair_flipped"] =  QString::number(dro::network::metadata::message::pair::isFlipped());
         lNewOperation.variables["pair_visible"] =  QString::number(dro::network::metadata::message::pair::isVisible());
