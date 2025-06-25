@@ -330,6 +330,6 @@ target_link_libraries(dro-client
 
 if(WIN32)
     set_target_properties(dro-client PROPERTIES WIN32_EXECUTABLE TRUE)
-    set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/logo-client.rc")
+    set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/icons/logo-client.rc")
     target_sources(dro-client PRIVATE ${APP_ICON_RESOURCE_WINDOWS})
 endif()
