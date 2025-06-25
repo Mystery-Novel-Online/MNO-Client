@@ -137,7 +137,6 @@ HEADERS += \
   src/modules/managers/notify_manager.h \
   src/modules/managers/pair_manager.h \
   src/modules/managers/scene_manager.h \
-  src/modules/theme/theme_scene.h \
   src/modules/theme/thememanager.h \
   src/theme.h \
   src/utils.h \
@@ -272,7 +271,6 @@ SOURCES += \
   src/modules/managers/notify_manager.cpp \
   src/modules/managers/pair_manager.cpp \
   src/modules/managers/scene_manager.cpp \
-  src/modules/theme/theme_scene.cpp \
   src/modules/theme/thememanager.cpp \
   src/path_functions.cpp \
   src/server_socket.cpp \

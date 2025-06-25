@@ -3,8 +3,6 @@
 #include <qdebug.h>
 #include "theme_scripting.h"
 #include <QVector3D>
-#include "dro/animation/keyframe_channel.h"
-#include "dro/animation/keyframe_sequence.h"
 #include "dro/system/animation.h"
 #include "dro/interface/courtroom_layout.h"
 #include "dro/interface/widgets/rp_typewriter.h"
