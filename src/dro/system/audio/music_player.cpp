@@ -44,7 +44,7 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
 
       default:
         if (mCurrentSong)
-          mCurrentSong->fadeOut(300);
+          mCurrentSong->fadeOut(3000);
         break;
     }
     return;
@@ -74,8 +74,8 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
     case BGMPlayback_Standard:
     default:
       if (mCurrentSong)
-        mCurrentSong->fadeOut(300);
-      newSong->fadeIn(300);
+        mCurrentSong->fadeOut(3000);
+      newSong->fadeIn(3000);
       newSong->play();
       break;
   }
