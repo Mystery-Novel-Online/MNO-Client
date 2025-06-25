@@ -13,7 +13,7 @@ build/
 
 
 --- Project Excludes ---
-bin
+bin/*.exe
 3rd/**/*.h
 3rd/**/*.hpp
 3rd/**/*.lib
