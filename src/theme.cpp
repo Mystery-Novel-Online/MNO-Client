@@ -220,7 +220,7 @@ void setShownameFont(RPTextEdit *widget, QString identifier, QString align)
 {
   widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontDataPairing(identifier, align);
 
-  fontData.size = static_cast<int>(fontData.size * ThemeManager::get().getViewporResize());
+  fontData.size = static_cast<int>(fontData.size * ThemeManager::get().getResize());
 
   setThemeFont(widget, fontData);
 
