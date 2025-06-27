@@ -209,6 +209,11 @@ QRectF GraphicsSpriteItem::boundingRect() const
 void GraphicsSpriteItem::setLayerState(ViewportSprite viewportState)
 {
   m_spriteState = viewportState;
+  for(SpriteLayer *layer : m_spriteLayersStatic)
+  {
+    layer->setState(viewportState);
+  }
+
   for(SpriteLayer *layer : m_spriteLayers)
   {
     layer->setState(viewportState);
@@ -309,15 +314,12 @@ void GraphicsSpriteItem::createOverlay(const QString &characterName, const QStri
   layer->setName(layerStrings[0]);
   layer->setDetatch(false);
 
-  if(layerStrings[1].toLower() == "below")
-  {
-    m_spriteLayersBelow.append(layer);
-  }
-  else
-  {
-    m_spriteLayers.append(layer);
-  }
+  layer->setLayerPositioning(layerStrings[1].toLower());
+  m_spriteLayersStatic.append(layer);
+  m_player->addLayer(layer);
+
   update();
+  m_player->scale_current_frame();
 }
 
 void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched)
@@ -426,6 +428,7 @@ void GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QString &i
 
 void GraphicsSpriteItem::clearImageLayers()
 {
+  m_player->clearLayers();
   for(SpriteLayer *layer : m_spriteLayers)
   {
     delete layer;
@@ -435,6 +438,13 @@ void GraphicsSpriteItem::clearImageLayers()
   {
     delete layer;
   }
+
+  for(SpriteLayer *layer : m_spriteLayersStatic)
+  {
+    delete layer;
+  }
+
+  m_spriteLayersStatic.clear();
   m_spriteLayers.clear();
   m_spriteLayersBelow.clear();
   m_LayersExist = false;
@@ -658,9 +668,19 @@ const QString &SpriteLayer::name()
   return m_name;
 }
 
+const QString &SpriteLayer::layerPosition()
+{
+  return m_layerPosition;
+}
+
 void SpriteLayer::setName(const QString &name)
 {
   m_name = name;
+}
+
+void SpriteLayer::setLayerPositioning(const QString &name)
+{
+  m_layerPosition = name;
 }
 
 bool SpriteLayer::detatched()
@@ -695,3 +715,9 @@ void SpriteLayer::setCompositionMode(QPainter::CompositionMode mode)
 {
   m_compositionMode = mode;
 }
+
+SpritePlayer *SpriteLayer::spritePlayerReference()
+{
+  return &spritePlayer;
+}
+

@@ -36,13 +36,16 @@ public:
   ~SpriteLayer();
   void start(double scale);
   const QString& name();
+  const QString& layerPosition();
   bool detatched();
   QPainter::CompositionMode compositionMode();
 
   void setState(ViewportSprite state);
   void setName(const QString& name);
+  void setLayerPositioning(const QString& name);
   void setDetatch(bool state);
   void setCompositionMode(QPainter::CompositionMode mode);
+  mk2::SpritePlayer* spritePlayerReference();
 
 
   mk2::SpritePlayer spritePlayer;
@@ -56,6 +59,7 @@ private:
 
   bool m_detatch = false;
   QString m_name = "";
+  QString m_layerPosition = "";
   double m_currentScale = 0.0f;
   QPainter::CompositionMode m_compositionMode = QPainter::CompositionMode_SourceOver;
 };
@@ -144,6 +148,7 @@ signals:
 
 private:
   ViewportSprite m_spriteState = ViewportCharacterIdle;
+  QVector<SpriteLayer*> m_spriteLayersStatic;
   QVector<SpriteLayer*> m_spriteLayers;
   QVector<SpriteLayer*> m_spriteLayersBelow;
   QScopedPointer<SpritePlayer> m_player;

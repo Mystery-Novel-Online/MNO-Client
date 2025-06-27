@@ -28,6 +28,7 @@
 
 #include <QElapsedTimer>
 
+class SpriteLayer;
 namespace mk2
 {
 class SpritePlayer : public QObject
@@ -72,6 +73,9 @@ public:
   bool is_running() const;
 
   int get_frame();
+
+  void addLayer(SpriteLayer* layer);
+  void clearLayers();
 
 public slots:
   void set_play_once(bool enabled);
@@ -126,11 +130,12 @@ private:
   QElapsedTimer m_elapsed_timer;
   QTimer m_frame_timer;
   QTimer m_repaint_timer;
+  QVector<SpriteLayer*> m_layerPlayers;
 
   void resolve_scaling_mode(ScalingMode scalingMode = AutomaticScaling, double scale = 1.0f);
-
+public slots:
+  void scale_current_frame();
 private slots:
   void fetch_next_frame();
-  void scale_current_frame();
 };
 } // namespace mk2

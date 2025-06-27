@@ -22,9 +22,11 @@
 #include "mk2/spriteviewer.h"
 
 #include <QFile>
+#include <QPainter>
 #include <QResizeEvent>
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
+#include "graphicsspriteitem.h"
 #include "stb_image_resize2.h"
 
 using namespace mk2;
@@ -238,6 +240,18 @@ void SpritePlayer::restart(int p_start_frame)
   start(p_start_frame);
 }
 
+void SpritePlayer::addLayer(SpriteLayer *layer)
+{
+
+  connect(layer->spritePlayerReference(), &SpritePlayer::current_frame_changed, this, &SpritePlayer::scale_current_frame);
+  m_layerPlayers.append(layer);
+}
+
+void SpritePlayer::clearLayers()
+{
+  m_layerPlayers.clear();
+}
+
 int SpritePlayer::get_frame()
 {
   return m_frame_number;
@@ -365,38 +379,69 @@ void SpritePlayer::scale_current_frame()
   QImage l_image = m_current_frame.image;
   QSizeF originalSize = l_image.size();
 
-  if (!l_image.isNull())
+  if (l_image.isNull())
+    return;
+
+  QImage composed(l_image.size(), QImage::Format_ARGB32_Premultiplied);
+  composed.fill(Qt::transparent);
+
+  QPainter combiner(&composed);
+  combiner.setRenderHint(QPainter::SmoothPixmapTransform, true);
+
+  QList<SpriteLayer*> overlayQueue = {};
+
+  for (SpriteLayer* layer : m_layerPlayers)
   {
-    switch (m_resolved_scaling_mode)
+    if (!layer) continue;
+    if(layer->layerPosition() != "below")
     {
-      case NoScaling:
-        [[fallthrough]];
-      default:
-        l_image = l_image.scaledToWidth(l_image.width() * m_scale, m_transform);
-        break;
-
-      case StretchScaling:
-        l_image = l_image.scaled(m_size * m_scale, Qt::IgnoreAspectRatio, m_transform);
-        break;
-
-      case WidthScaling:
-        l_image = l_image.scaledToWidth(m_size.width() * m_scale, m_transform);
-        break;
-
-      case HeightScaling:
-        l_image = l_image.scaledToHeight(m_size.height() * m_scale, m_transform);
-        break;
+      overlayQueue.append(layer);
+      continue;
     }
-    m_overallScale = static_cast<double>(l_image.width()) / originalSize.width();
+
+    QImage layerImg = layer->spritePlayerReference()->get_current_native_frame();
+    if (!layerImg.isNull())
+    {
+      combiner.drawImage(layer->targetRect.x(), layer->targetRect.y(), layerImg);
+    }
   }
 
-  // slow operation...
-  if (m_mirror)
+  combiner.drawImage(0, 0, l_image);
+
+  for (SpriteLayer* layer : overlayQueue)
   {
-    l_image = l_image.mirrored(true, false);
+    QImage layerImg = layer->spritePlayerReference()->get_current_native_frame();
+    if (!layerImg.isNull())
+    {
+      combiner.drawImage(layer->targetRect.x(), layer->targetRect.y(), layerImg);
+    }
   }
 
-  m_scaled_current_frame = l_image;
+  combiner.end();
+
+  switch (m_resolved_scaling_mode)
+  {
+  case NoScaling:
+  default:
+    composed = composed.scaledToWidth(composed.width() * m_scale, m_transform);
+    break;
+  case StretchScaling:
+    composed = composed.scaled(m_size * m_scale, Qt::IgnoreAspectRatio, m_transform);
+    break;
+  case WidthScaling:
+    composed = composed.scaledToWidth(m_size.width() * m_scale, m_transform);
+    break;
+  case HeightScaling:
+    composed = composed.scaledToHeight(m_size.height() * m_scale, m_transform);
+    break;
+  }
+
+  m_overallScale = static_cast<double>(composed.width()) / originalSize.width();
+
+  if (m_mirror)
+    composed = composed.mirrored(true, false);
+
+  m_scaled_current_frame = composed;
   m_scaled_pixmap_frame = QPixmap::fromImage(m_scaled_current_frame);
   emit current_frame_changed();
 }
