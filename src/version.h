@@ -14,13 +14,13 @@ int get_major_version();
 int get_minor_version();
 
 /// @returns A `VersionNumber` object containing the client version number.
-VersionNumber get_version_number();
+VersionNumber get_version_number(int baseVersion = 0);
 
 /// @returns The post version of the client.
 QString get_post_version();
 
 /// @returns A string containing version information regarding the client.
-QString get_version_string();
+QString get_version_string(int baseVersion = 0);
 
 /// Builds an about message with the version of the client and some git details regarding the branch and commit hash.
 ///

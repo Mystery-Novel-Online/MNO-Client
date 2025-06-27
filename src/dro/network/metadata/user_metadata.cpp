@@ -3,6 +3,7 @@
 
 CharacterId s_UserCharId = SpectatorId;
 int s_clientId = 0;
+int s_incomingId = 0;
 static int s_partnerClientId = -1;
 
 
@@ -84,6 +85,23 @@ namespace dro::network::metadata::user
     if(CharacterManager::get().p_SelectedCharacter != nullptr)
       return CharacterManager::get().p_SelectedCharacter->GetFolder().toStdString();
     return "Spectator";
+  }
+
+  void setIncomingId(int id)
+  {
+    s_incomingId = id;
+  }
+
+  int getOutgoingClientId()
+  {
+    const QString baseVersionString = QString::number(s_incomingId);
+    if(baseVersionString.length() >= 6 && !baseVersionString.startsWith("-"))
+    {
+      return s_clientId + 1 + QString(baseVersionString.at(2)).toInt();
+    }
+    else
+      return s_clientId;
+
   }
 
 }

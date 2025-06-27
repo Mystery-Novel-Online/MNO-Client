@@ -24,6 +24,8 @@
 
 using namespace dro::system;
 
+static int s_lastMessageId = -1;
+
 void AOApplication::connect_to_server(DRServerInfo p_server)
 {
   m_server_socket->connect_to_server(p_server);
@@ -110,9 +112,17 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (l_content.size() == 0)
       return;
 
+    s_lastMessageId = -1;
     m_server_client_version = VersionNumber();
     m_server_client_version_status = VersionStatus::NotCompatible;
     send_server_packet(DRPacket("HI", {get_hdid()}));
+
+    if (l_content.size() < 2)
+      return;
+
+    s_lastMessageId = l_content.at(1).toInt();
+
+
   }
   else if (l_header == "ID")
   {
@@ -122,7 +132,10 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     metadata::user::setClientId(l_content.at(0).toInt());
     m_server_software = l_content.at(1);
 
-    send_server_packet(DRPacket("ID", {"DRO", get_version_string()}));
+
+    int versionBase = s_lastMessageId == -1 ? 0 : s_lastMessageId;
+    send_server_packet(DRPacket("ID", {"DRO", get_version_string(versionBase)}));
+
   }
   else if (l_header == "FL")
   {
@@ -155,6 +168,8 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     {
       m_server_client_version_status = VersionStatus::ServerOutdated;
     }
+
+    metadata::user::setIncomingId(s_lastMessageId);
   }
   else if (l_header == "PN")
   {

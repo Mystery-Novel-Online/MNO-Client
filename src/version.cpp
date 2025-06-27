@@ -22,9 +22,21 @@ int get_minor_version()
   return 0;
 }
 
-VersionNumber get_version_number()
+VersionNumber get_version_number(int baseVersion)
 {
-  return VersionNumber(get_release_version(), get_major_version(), get_minor_version());
+  int releaseBase = 0;
+  int majorBase = 0;
+  int minorBase = 0;
+
+  const QString baseVersionString = QString::number(baseVersion);
+  if(baseVersionString.length() >= 6 && !baseVersionString.startsWith("-"))
+  {
+    releaseBase = QString(baseVersionString.at(3)).toInt();
+    majorBase = QString(baseVersionString.at(1)).toInt();
+    minorBase = QString(baseVersionString.at(5)).toInt();
+  }
+
+  return VersionNumber(get_release_version() + releaseBase, get_major_version() + majorBase, get_minor_version() + minorBase);
 }
 
 QString get_post_version()
@@ -32,9 +44,9 @@ QString get_post_version()
   return "b10";
 }
 
-QString get_version_string()
+QString get_version_string(int baseVersion)
 {
-  QString l_version = get_version_number().to_string() + get_post_version();
+  QString l_version = get_version_number(baseVersion).to_string() + get_post_version();
   return l_version;
 }
 

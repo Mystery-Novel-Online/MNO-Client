@@ -28,7 +28,9 @@ namespace dro::network::metadata::user
   std::string getShowname();
 
   int getClientId();
+  int getOutgoingClientId();
   void setClientId(int id);
+  void setIncomingId(int id);
 }
 
 

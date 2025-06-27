@@ -3112,7 +3112,7 @@ void Courtroom::on_back_to_lobby_clicked()
 
 void Courtroom::on_spectator_clicked()
 {
-  ao_app->send_server_packet(DRPacket("CC", {QString::number(metadata::user::getClientId()), "-1", "HDID"}));
+  ao_app->send_server_packet(DRPacket("CC", {QString::number(metadata::user::getOutgoingClientId()), "-1", "HDID"}));
 }
 
 void Courtroom::OnCharRefreshClicked()
@@ -3169,7 +3169,7 @@ void Courtroom::OnCharRandomClicked()
   }
 
   ao_app->send_server_packet(
-      DRPacket("CC", {QString::number(metadata::user::getClientId()), QString::number(n_real_char), "HDID"}));
+      DRPacket("CC", {QString::number(metadata::user::getOutgoingClientId()), QString::number(n_real_char), "HDID"}));
 }
 
 void Courtroom::SwitchRandomCharacter(QString list)
@@ -3217,7 +3217,7 @@ void Courtroom::SwitchRandomCharacter(QString list)
   }
 
   ao_app->send_server_packet(
-      DRPacket("CC", {QString::number(metadata::user::getClientId()), QString::number(n_real_char), "HDID"}));
+      DRPacket("CC", {QString::number(metadata::user::getOutgoingClientId()), QString::number(n_real_char), "HDID"}));
 }
 
 void Courtroom::on_call_mod_clicked()
