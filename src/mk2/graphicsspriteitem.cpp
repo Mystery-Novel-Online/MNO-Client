@@ -352,9 +352,6 @@ void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &
 void GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QString &imagePath)
 {
   m_LayersExist = true;
-  mk2::SpriteReader::ptr l_new_reader;
-  l_new_reader = mk2::SpriteReader::ptr(new mk2::SpriteSeekingReader);
-  l_new_reader->set_file_name(imagePath);
 
   QRect targetRect = layer.layerOffset;
   if(layer.detachLayer)
@@ -679,10 +676,10 @@ QPainter::CompositionMode SpriteLayer::compositionMode()
 void SpriteLayer::setState(ViewportSprite state)
 {
   m_ViewportState = state;
-  spritePlayer.stop();
 
   if(m_readerMapping.contains(state))
   {
+    spritePlayer.stop();
     spritePlayer.set_reader(m_readerMapping[m_ViewportState]);
     spritePlayer.set_size(targetRect.size().toSize());
     spritePlayer.start(SpritePlayer::WidthSmoothScaling, 1.0f);
