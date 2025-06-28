@@ -2064,6 +2064,8 @@ void Courtroom::play_preanim()
   const QString l_anim_name = m_chatmessage[CMPreAnim];
   qDebug() << "[viewport] Playing character animation; character:" << l_chr_name << "animation: " << l_anim_name << "file:" << ui_vp_player_char->file_name();
   ui_vp_player_char->set_play_once(true);
+  ui_vp_player_char->clearImageLayers();
+  ui_vp_player_pair->clearImageLayers();
   swap_viewport_reader(ui_vp_player_char, ViewportCharacterPre);
   ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
 }
