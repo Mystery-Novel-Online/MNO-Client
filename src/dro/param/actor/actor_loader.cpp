@@ -153,15 +153,39 @@ void ActorDataReader::LoadOutfits()
 
   for (const QString &name : subdirs)
   {
-    if(!m_Outfits.contains(name))
+
+    QString fullOutfitPath = outfitPath + "/" + name + "/outfit.json";
+    QFileInfo outfitInfo(fullOutfitPath);
+    QDateTime modifiedTime = outfitInfo.lastModified();
+
+    bool needsReload = true;
+
+    if (m_Outfits.contains(name) && m_OutfitModifiedTimes.contains(name))
+    {
+      if (m_OutfitModifiedTimes[name] == modifiedTime)
+      {
+        needsReload = false;
+      }
+      else
+      {
+        delete m_Outfits[name];
+        m_Outfits.remove(name);
+      }
+    }
+
+    if (needsReload)
     {
       m_OutfitNames.append(name);
       m_Outfits[name] = new OutfitReader(GetFolder(), name);
+      m_OutfitModifiedTimes[name] = modifiedTime;
     }
-
+    else
+    {
+      m_OutfitNames.append(name);  // Still include in name list
+    }
   }
 
-  //Sort the list of outfits as configured in the char.json
+
   QStringList ordered;
   for (const QString &name : m_OutfitsOrder)
     if (m_OutfitNames.contains(name)) ordered.append(name);
@@ -173,6 +197,13 @@ void ActorDataReader::LoadOutfits()
   m_OutfitNames = ordered;
 
 }
+
+
+void ActorDataReader::reload()
+{
+  LoadOutfits();
+}
+
 
 QVector<DREmote> ActorDataReader::GetEmotes()
 {

@@ -280,13 +280,10 @@ void GraphicsSpriteItem::createOverlay(const QString &characterName, const QStri
   QString path = QFileInfo(emoteName).path();
   if (!path.isEmpty()) path += "/";
 
-  //Create the fallback path.
-
-
-  QString filePath = FS::Paths::FindFile("characters/" + characterName + "/" + path + layerStrings[0], true, FS::Formats::AnimatedImages());
+  QString filePath = FS::Paths::FindFile("characters/" + characterName + "/" + path + layerStrings[0], true, FS::Formats::SupportedImages());
   if(!FS::Checks::FileExists(filePath))
   {
-    filePath = FS::Paths::FindFile("characters/" + characterName + "/outfits/" + outfitName + "/" + layerStrings[0], true, FS::Formats::AnimatedImages());
+    filePath = FS::Paths::FindFile("characters/" + characterName + "/outfits/" + outfitName + "/" + layerStrings[0], true, FS::Formats::SupportedImages());
     if(!FS::Checks::FileExists(filePath))
     {
       filePath = AOApplication::getInstance()->get_character_sprite_idle_path(characterName, layerStrings[0]);
@@ -295,13 +292,13 @@ void GraphicsSpriteItem::createOverlay(const QString &characterName, const QStri
   stateSprites[ViewportCharacterIdle]->set_file_name(filePath);
 
   const QString prefixedName = "(b)" + layerStrings[0];
-  QString talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/" + path + prefixedName, true, FS::Formats::AnimatedImages());
+  QString talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/" + path + prefixedName, true, FS::Formats::SupportedImages());
   if(!FS::Checks::FileExists(talkingFilepath))
   {
-    talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/outfits/" + outfitName + "/" + prefixedName, true, FS::Formats::AnimatedImages());
+    talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/outfits/" + outfitName + "/" + prefixedName, true, FS::Formats::SupportedImages());
     if(!FS::Checks::FileExists(talkingFilepath))
     {
-      talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/" + prefixedName, true, FS::Formats::AnimatedImages());
+      talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/" + prefixedName, true, FS::Formats::SupportedImages());
     }
   }
 

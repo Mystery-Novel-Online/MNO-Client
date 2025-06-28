@@ -14,16 +14,37 @@
 
 #include <modules/theme/thememanager.h>
 
+#include <QFileInfo>
+
 CharacterManager CharacterManager::s_Instance;
 
 
 ActorData *CharacterManager::ReadCharacter(QString t_folder)
 {
+  static QMap<QString, QPair<QDateTime, ActorData*>> s_cache;
+
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");
+
   if(FS::Checks::FileExists(l_jsonPath))
   {
-    ActorData *l_returnData = new ActorDataReader();
+    QFileInfo fileInfo(l_jsonPath);
+    QDateTime lastModified = fileInfo.lastModified();
+
+    if (s_cache.contains(t_folder)) {
+      const auto& cached = s_cache[t_folder];
+      if (cached.first == lastModified)
+      {
+        cached.second->reload();
+        return cached.second;
+      } else
+      {
+        delete cached.second;
+      }
+    }
+
+    ActorData* l_returnData = new ActorDataReader();
     l_returnData->LoadActor(t_folder);
+    s_cache[t_folder] = qMakePair(lastModified, l_returnData);
     return l_returnData;
   }
 

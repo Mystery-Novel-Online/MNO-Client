@@ -72,6 +72,8 @@ public:
   virtual void LoadActor(const QString& folder) = 0;
   virtual void SwitchOutfit(const QString& t_outfit);
 
+  virtual void reload() {};
+
   virtual QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) = 0;
   virtual OutfitReader* GetEmoteOutfit(const QString& emoteName) = 0;
 
@@ -102,6 +104,8 @@ public:
   QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override;
   OutfitReader* GetEmoteOutfit(const QString& emoteName) override;
 
+  void reload() override;
+
 private:
   void LoadOutfits();
 
@@ -109,6 +113,8 @@ private:
   QMap<QString, OutfitReader*> m_Outfits = {};
   QStringList m_OutfitNames = {};
   QStringList m_OutfitsOrder = {};
+
+  QMap<QString, QDateTime> m_OutfitModifiedTimes;
 };
 
 
