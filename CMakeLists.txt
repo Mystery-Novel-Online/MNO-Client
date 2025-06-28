@@ -293,6 +293,7 @@ add_executable(dro-client
   ${HEADERS}
   ${SOURCES}
   ${RESOURCES}
+  src/dro/param/actor_repository.h src/dro/param/actor_repository.cpp
 )
 
 target_include_directories(dro-client PUBLIC

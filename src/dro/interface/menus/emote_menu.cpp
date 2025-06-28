@@ -15,9 +15,14 @@ EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
   p_RenderAction = addAction(tr("Use Sprite Images"));
   addSeparator();
 
-  p_ResetOffsetsAction = addAction(tr("Reset Offsets"));
-  m_presetsMenu = new QMenu(tr("Presets"), this);
+
+  m_presetsMenu = new QMenu(tr("Offsets"), this);
+  p_ResetOffsetsAction = new QAction(tr("Reset (Center)"), this);
   addMenu(m_presetsMenu);
+  m_presetsMenu->addAction(p_ResetOffsetsAction);
+
+  m_layersMenu = new QMenu(tr("Toggles"), this);
+  addMenu(m_layersMenu);
 
   p_makerAction = addAction(tr("Button Maker"));
 
@@ -50,12 +55,28 @@ bool EmoteMenu::isDoubleSize()
 void EmoteMenu::ClearPresets()
 {
   m_presetsMenu->clear();
+  m_presetsMenu->addAction(p_ResetOffsetsAction);
+  m_defaultVertical = 0;
+  m_defaultScale = 1000;
+  m_presetsClearedCheck = false;
 }
 
 void EmoteMenu::AddPreset(const QString &name)
 {
   QAction* action = m_presetsMenu->addAction(name);
   connect(action, &QAction::triggered, this, [=]() { ApplyPreset(name); });
+
+  if(m_presetsClearedCheck) return;
+
+  for(ActorScalingPreset presetData : CharacterManager::get().p_SelectedCharacter->GetScalingPresets())
+  {
+    if(presetData.name == name)
+    {
+      m_defaultVertical = presetData.verticalAlign;
+      m_defaultScale = presetData.scale;
+    }
+  }
+  m_presetsClearedCheck = true;
 }
 
 void EmoteMenu::OnMenuRequested(QPoint p_point)
@@ -93,8 +114,8 @@ void EmoteMenu::OnButtonMakerTriggered()
 
 void EmoteMenu::OnOffsetResetTriggered()
 {
-  courtroom::sliders::setScale(1000);
-  courtroom::sliders::setVertical(0);
+  courtroom::sliders::setScale(m_defaultScale);
+  courtroom::sliders::setVertical(m_defaultVertical);
   courtroom::sliders::setHorizontal(500);
 }
 
@@ -106,6 +127,8 @@ void EmoteMenu::ApplyPreset(const QString &presetName)
     {
       courtroom::sliders::setScale(presetData.scale);
       courtroom::sliders::setVertical(presetData.verticalAlign);
+      m_defaultVertical = presetData.verticalAlign;
+      m_defaultScale = presetData.scale;
     }
   }
 }

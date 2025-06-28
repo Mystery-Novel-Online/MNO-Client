@@ -43,7 +43,13 @@ private:
   QAction *p_ResetOffsetsAction = nullptr;
 
   QMenu* m_presetsMenu;
+  QMenu* m_layersMenu;
 
+
+  //
+  bool m_presetsClearedCheck = false;
+  int m_defaultVertical = 0;
+  int m_defaultScale = 1000;
 };
 
 #endif // EMOTE_MENU_H
