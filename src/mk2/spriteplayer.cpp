@@ -413,7 +413,7 @@ void SpritePlayer::scale_current_frame()
     QImage layerImg = layer->spritePlayerReference()->get_current_native_frame();
     if (!layerImg.isNull())
     {
-      combiner.drawImage(layer->targetRect.x(), layer->targetRect.y(), layerImg);
+      combiner.drawImage(layer->targetRect, layerImg);
     }
   }
 

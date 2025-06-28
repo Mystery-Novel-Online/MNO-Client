@@ -280,32 +280,33 @@ void GraphicsSpriteItem::createOverlay(const QString &characterName, const QStri
   QString path = QFileInfo(emoteName).path();
   if (!path.isEmpty()) path += "/";
 
-  QString filePath = FS::Paths::FindFile("characters/" + characterName + "/" + path + layerStrings[0], true, FS::Formats::SupportedImages());
-  if(!FS::Checks::FileExists(filePath))
-  {
-    filePath = FS::Paths::FindFile("characters/" + characterName + "/outfits/" + outfitName + "/" + layerStrings[0], true, FS::Formats::SupportedImages());
-    if(!FS::Checks::FileExists(filePath))
-    {
-      filePath = AOApplication::getInstance()->get_character_sprite_idle_path(characterName, layerStrings[0]);
-    }
-  }
+
+  const QString basePath = "characters/" + characterName + "/";
+  const QString outfitPath = basePath + "outfits/" + outfitName + "/";
+  const QString subfolder = layerStrings[6];
+  const QString layerName = layerStrings[0];
+
+  auto buildPaths = [&](const QString &prefix) -> QStringList {
+    return {
+      basePath + path + prefix,
+      basePath + path + subfolder + "/" + prefix,
+      outfitPath + prefix,
+      outfitPath + subfolder + "/" + prefix,
+      basePath + prefix,
+      basePath + subfolder + "/" + prefix
+    };
+  };
+
+  QStringList filePaths = buildPaths(layerName);
+  QString filePath = FS::Paths::FindFile(filePaths, true, FS::Formats::SupportedImages());
+  if(filePath.isEmpty()) filePath = AOApplication::getInstance()->get_character_sprite_idle_path(characterName, layerStrings[0]);
+
   stateSprites[ViewportCharacterIdle]->set_file_name(filePath);
 
-  const QString prefixedName = "(b)" + layerStrings[0];
-  QString talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/" + path + prefixedName, true, FS::Formats::SupportedImages());
-  if(!FS::Checks::FileExists(talkingFilepath))
-  {
-    talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/outfits/" + outfitName + "/" + prefixedName, true, FS::Formats::SupportedImages());
-    if(!FS::Checks::FileExists(talkingFilepath))
-    {
-      talkingFilepath = FS::Paths::FindFile("characters/" + characterName + "/" + prefixedName, true, FS::Formats::SupportedImages());
-    }
-  }
-
-  if(FS::Checks::FileExists(talkingFilepath))
-    stateSprites[ViewportCharacterTalk]->set_file_name(talkingFilepath);
-  else
-    stateSprites[ViewportCharacterTalk]->set_file_name(filePath);
+  QString prefixedName = "(b)" + layerName;
+  QStringList prefixedFilePaths = buildPaths(prefixedName);
+  QString talkingFilePath = FS::Paths::FindFile(prefixedFilePaths, true, FS::Formats::SupportedImages());
+  stateSprites[ViewportCharacterTalk]->set_file_name(talkingFilePath.isEmpty() ? filePath : talkingFilePath);
 
   SpriteLayer *layer = new SpriteLayer(stateSprites, rect, m_spriteState);
   layer->setName(layerStrings[0]);

@@ -465,6 +465,7 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
     ui_vp_weather->hide();
     ui_vp_weather->setKeyframeAnimation("", "");
     audio::effect::PlayWeather("");
+    LuaBridge::LuaEventCall("OnWeatherEnd");
     return;
   }
 
@@ -499,6 +500,7 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
   {
     if (weatherAnimPath != l_current_file_name)
     {
+      LuaBridge::LuaEventCall("OnWeatherChange", weatherName.toStdString());
       ui_vp_weather->set_reader(mk2::SpriteReader::ptr(new mk2::SpriteCachingReader));
       ui_vp_weather->set_file_name(weatherAnimPath);
       ui_vp_weather->setKeyframeAnimation("weather/" + weatherName, sequenceName);
