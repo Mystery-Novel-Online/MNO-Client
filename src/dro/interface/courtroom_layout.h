@@ -57,6 +57,21 @@ namespace courtroom
     void create(const std::string& name, int x, int y, int width, int height);
   }
 
+  namespace lineedit
+  {
+    void create(const std::string& name, const std::string& css, int x, int y, int width, int height);
+  }
+
+  namespace textedit
+  {
+    void create(const std::string& name, int x, int y, int width, int height);
+  }
+
+  namespace combobox
+  {
+    void create(const std::string& name, int x, int y, int width, int height);
+  }
+
   namespace sliders
   {
     void create(const std::string& name, int x, int y, int width, int height, int min, int max);

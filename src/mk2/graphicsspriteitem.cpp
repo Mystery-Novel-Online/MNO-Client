@@ -299,7 +299,7 @@ void GraphicsSpriteItem::createOverlay(const QString &characterName, const QStri
 
   QStringList filePaths = buildPaths(layerName);
   QString filePath = FS::Paths::FindFile(filePaths, true, FS::Formats::SupportedImages());
-  if(filePath.isEmpty()) filePath = AOApplication::getInstance()->get_character_sprite_idle_path(characterName, layerStrings[0]);
+  if(filePath.isEmpty()) filePath = AOApplication::getInstance()->get_character_sprite_idle_path(characterName, layerName);
 
   stateSprites[ViewportCharacterIdle]->set_file_name(filePath);
 
@@ -309,7 +309,7 @@ void GraphicsSpriteItem::createOverlay(const QString &characterName, const QStri
   stateSprites[ViewportCharacterTalk]->set_file_name(talkingFilePath.isEmpty() ? filePath : talkingFilePath);
 
   SpriteLayer *layer = new SpriteLayer(stateSprites, rect, m_spriteState);
-  layer->setName(layerStrings[0]);
+  layer->setName(layerName);
   layer->setDetatch(false);
 
   layer->setLayerPositioning(layerStrings[1].toLower());

@@ -71,6 +71,9 @@ namespace ThemeScripting
       sol::table buttonsTable = s_themeScript.create_named_table("Button");
       buttonsTable.set_function("Create", &courtroom::buttons::create);
 
+      sol::table lineeditTable = s_themeScript.create_named_table("LineEdit");
+      lineeditTable.set_function("Create", &courtroom::lineedit::create);
+
       sol::table slidersTable = s_themeScript.create_named_table("Slider");
       slidersTable.set_function("Create", &courtroom::sliders::create);
       slidersTable.set_function("CreateVertical", &courtroom::sliders::createVertical);

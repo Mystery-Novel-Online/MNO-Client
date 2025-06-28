@@ -8,6 +8,7 @@
 #include <courtroom.h>
 #include "modules/theme/thememanager.h"
 #include "dro/system/theme_scripting.h"
+#include "dro/interface/widgets/rp_line_edit.h"
 
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
 static QHash<QString, QWidget *> s_TabWidgets = {};
@@ -15,6 +16,10 @@ static QHash<QString, QWidget *> s_TabWidgets = {};
 static QVector<DRStickerViewer *> s_CourtroomStickers = {};
 static QVector<RPButton *> s_CourtroomButtons = {};
 static QVector<RPSlider *> s_CourtroomSliders = {};
+
+static QVector<QLineEdit *> s_CourtroomLineEdits = {};
+static QVector<QTextEdit *> s_CourtroomTextEdits = {};
+static QVector<QComboBox *> s_CourtroomComboBoxes = {};
 
 template <typename T>
 void cleanupWidgets(QVector<T*> &list)
@@ -44,6 +49,9 @@ namespace courtroom
     cleanupWidgets(s_CourtroomStickers);
     cleanupWidgets(s_CourtroomButtons);
     cleanupWidgets(s_CourtroomSliders);
+    cleanupWidgets(s_CourtroomLineEdits);
+    cleanupWidgets(s_CourtroomTextEdits);
+    cleanupWidgets(s_CourtroomComboBoxes);
   }
 
   void reload()
@@ -255,6 +263,82 @@ namespace courtroom
       targetButton->move(l_scaledX, l_scaledY);
       targetButton->set_theme_image(widgetName, widgetName + ".png", "courtroom", qName);
 
+    }
+  }
+
+
+  namespace lineedit
+  {
+    void create(const std::string& name, const std::string& css, int x, int y, int width, int height)
+    {
+      const QString qName = QString::fromStdString(name);
+      if (!s_CourtroomWidgets.contains("courtroom")) return;
+
+      if (!s_CourtroomWidgets.contains(qName))
+      {
+        RPLineEdit* lineEdit = new RPLineEdit(QString::fromStdString(name), "[" + QString::fromStdString(css) + "]", s_CourtroomWidgets["courtroom"]);
+        lineEdit->refreshCSS();
+        s_CourtroomWidgets.insert(qName, lineEdit);
+        lineEdit->raise();
+        lineEdit->show();
+
+        QObject::connect(lineEdit, &QLineEdit::textChanged, [=](const QString &text) {
+                           QString eventName = QString::fromStdString(name) + "TextChanged";
+                           LuaBridge::LuaEventCall(eventName.toUtf8(), text.toStdString());
+                         });
+
+        QObject::connect(lineEdit, &QLineEdit::returnPressed, [=]() {
+                           QString eventName = QString::fromStdString(name) + "ReturnPressed";
+                           LuaBridge::LuaEventCall(eventName.toUtf8());
+                         });
+
+      }
+
+      float resizeFactor = ThemeManager::get().getResize();
+      s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
+      s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
+    }
+  }
+
+  namespace textedit
+  {
+    void create(const std::string& name, int x, int y, int width, int height)
+    {
+      const QString qName = QString::fromStdString(name);
+      if (!s_CourtroomWidgets.contains("courtroom")) return;
+
+      if (!s_CourtroomWidgets.contains(qName))
+      {
+        QTextEdit* textEdit = new QTextEdit(s_CourtroomWidgets["courtroom"]);
+        s_CourtroomWidgets.insert(qName, textEdit);
+        textEdit->raise();
+        textEdit->show();
+      }
+
+      float resizeFactor = ThemeManager::get().getResize();
+      s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
+      s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
+    }
+  }
+
+  namespace combobox
+  {
+    void create(const std::string& name, int x, int y, int width, int height)
+    {
+      const QString qName = QString::fromStdString(name);
+      if (!s_CourtroomWidgets.contains("courtroom")) return;
+
+      if (!s_CourtroomWidgets.contains(qName))
+      {
+        QComboBox* comboBox = new QComboBox(s_CourtroomWidgets["courtroom"]);
+        s_CourtroomWidgets.insert(qName, comboBox);
+        comboBox->raise();
+        comboBox->show();
+      }
+
+      float resizeFactor = ThemeManager::get().getResize();
+      s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
+      s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
     }
   }
 
