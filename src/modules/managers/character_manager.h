@@ -13,8 +13,6 @@ class CharacterManager
 public:
   CharacterManager(const CharacterManager&) = delete;
 
-  ActorData *p_SelectedCharacter = nullptr;
-
   ActorData *ReadCharacter(QString t_folder);
   ActorData *SwitchCharacter(QString t_folder);
 

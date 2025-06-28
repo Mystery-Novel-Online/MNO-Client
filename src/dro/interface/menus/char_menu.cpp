@@ -7,6 +7,9 @@
 #include <QListWidget>
 #include "dro/fs/fs_reading.h"
 #include "modules/managers/character_manager.h"
+#include "dro/param/actor_repository.h"
+
+using namespace dro::actor::user;
 
 CharMenu::CharMenu(Courtroom *parent) : QMenu(parent), parentCourtroom(parent)
 {
@@ -54,7 +57,7 @@ void CharMenu::OnUpdateCharacterFilesTriggered()
 
 void CharMenu::OnOpenCharacterTriggered()
 {
-  QUrl folderUrl = QUrl::fromLocalFile(FS::Paths::FindDirectory("characters/" + CharacterManager::get().p_SelectedCharacter->GetFolder()));
+  QUrl folderUrl = QUrl::fromLocalFile(FS::Paths::FindDirectory("characters/" +  retrieve()->GetFolder()));
   QDesktopServices::openUrl(folderUrl);
 }
 

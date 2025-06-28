@@ -7,6 +7,9 @@ static bool s_renderSprites = false;
 #include "courtroom.h"
 #include "modules/managers/character_manager.h"
 #include "dro/interface/courtroom_layout.h"
+#include "dro/param/actor_repository.h"
+
+using namespace dro;
 
 EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
 {
@@ -21,7 +24,7 @@ EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
   addMenu(m_presetsMenu);
   m_presetsMenu->addAction(p_ResetOffsetsAction);
 
-  m_layersMenu = new QMenu(tr("Toggles"), this);
+  m_layersMenu = new QMenu(tr("Layers"), this);
   addMenu(m_layersMenu);
 
   p_makerAction = addAction(tr("Button Maker"));
@@ -39,7 +42,14 @@ EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
 void EmoteMenu::EmoteChange(DREmote emote)
 {
   if(m_buttonMaker == nullptr) return;
+  m_currentEmote = emote;
   m_buttonMaker->SetEmote(emote);
+
+  clearLayers();
+  for(const EmoteLayer &layer : emote.emoteOverlays)
+  {
+    AddLayer(layer.offsetName, actor::user::layerState(layer.offsetName));
+  }
 }
 
 bool EmoteMenu::isRealtime()
@@ -59,6 +69,7 @@ void EmoteMenu::ClearPresets()
   m_defaultVertical = 0;
   m_defaultScale = 1000;
   m_presetsClearedCheck = false;
+  m_presetsMenu->addSeparator();
 }
 
 void EmoteMenu::AddPreset(const QString &name)
@@ -68,7 +79,7 @@ void EmoteMenu::AddPreset(const QString &name)
 
   if(m_presetsClearedCheck) return;
 
-  for(ActorScalingPreset presetData : CharacterManager::get().p_SelectedCharacter->GetScalingPresets())
+  for(ActorScalingPreset presetData : actor::user::retrieve()->GetScalingPresets())
   {
     if(presetData.name == name)
     {
@@ -77,6 +88,12 @@ void EmoteMenu::AddPreset(const QString &name)
     }
   }
   m_presetsClearedCheck = true;
+}
+
+void EmoteMenu::clearLayers()
+{
+  m_layersMenu->clear();
+  m_layersMenu->hide();
 }
 
 void EmoteMenu::OnMenuRequested(QPoint p_point)
@@ -109,7 +126,8 @@ void EmoteMenu::OnRealtimeTriggered()
 void EmoteMenu::OnButtonMakerTriggered()
 {
   m_buttonMaker->show();
-  m_buttonMaker->SetCharacter(CharacterManager::get().p_SelectedCharacter->GetFolder());
+  m_buttonMaker->SetCharacter(actor::user::retrieve()->GetFolder());
+  m_buttonMaker->SetEmote(m_currentEmote);
 }
 
 void EmoteMenu::OnOffsetResetTriggered()
@@ -119,9 +137,20 @@ void EmoteMenu::OnOffsetResetTriggered()
   courtroom::sliders::setHorizontal(500);
 }
 
+void EmoteMenu::AddLayer(const QString &name, bool defaultValue)
+{
+  QAction* action = m_layersMenu->addAction(name);
+  action->setCheckable(true);
+  action->setChecked(defaultValue);
+
+  connect(action, &QAction::toggled, this, [=](bool checked){
+    dro::actor::user::toggleLayer(name, checked);
+  });
+}
+
 void EmoteMenu::ApplyPreset(const QString &presetName)
 {
-  for(ActorScalingPreset presetData : CharacterManager::get().p_SelectedCharacter->GetScalingPresets())
+  for(ActorScalingPreset presetData : actor::user::retrieve()->GetScalingPresets())
   {
     if(presetData.name == presetName)
     {

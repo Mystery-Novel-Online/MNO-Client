@@ -1,6 +1,6 @@
 #include "user_metadata.h"
 #include "modules/managers/character_manager.h"
-
+#include "dro/param/actor_repository.h"
 CharacterId s_UserCharId = SpectatorId;
 int s_clientId = 0;
 int s_incomingId = 0;
@@ -74,16 +74,16 @@ namespace dro::network::metadata::user
   {
     if(s_showname.trimmed().isEmpty())
     {
-      if(CharacterManager::get().p_SelectedCharacter != nullptr)
-        return CharacterManager::get().p_SelectedCharacter->GetShowname().toStdString();
+      if(actor::user::retrieve() != nullptr)
+        return actor::user::retrieve()->GetShowname().toStdString();
     }
     return s_showname.toStdString();
   }
 
   std::string getIniswap()
   {
-    if(CharacterManager::get().p_SelectedCharacter != nullptr)
-      return CharacterManager::get().p_SelectedCharacter->GetFolder().toStdString();
+    if(actor::user::retrieve() != nullptr)
+      return actor::user::retrieve()->GetFolder().toStdString();
     return "Spectator";
   }
 

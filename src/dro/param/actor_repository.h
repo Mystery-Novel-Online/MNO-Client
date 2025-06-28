@@ -13,6 +13,9 @@ namespace dro::actor::repository
 namespace dro::actor::user
 {
   ActorData *load(QString folder);
+  ActorData *retrieve();
+  void toggleLayer(const QString& name, bool state);
+  bool layerState(const QString& name);
 }
 
 

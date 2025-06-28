@@ -17,6 +17,7 @@ public:
 
   void emotionChange(DREmote emote);
   void actorChange(ActorData *actor);
+  void outfitChange();
 
   int calculateTrueIndex(int id);
 

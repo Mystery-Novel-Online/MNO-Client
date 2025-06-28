@@ -11,7 +11,7 @@
 #include <QTextStream>
 #include "dro/system/theme_scripting.h"
 #include "dro/interface/courtroom_layout.h"
-
+#include "dro/param/actor_repository.h"
 #include <modules/theme/thememanager.h>
 
 #include <QFileInfo>
@@ -85,25 +85,13 @@ ActorData *CharacterManager::SwitchCharacter(QString t_folder)
 
   courtroom::lists::setAnimations(animations);
   LuaBridge::LuaEventCall("OnCharacterLoad", t_folder.toStdString());
-  QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");
   QStringList l_OutfitNames = {"<All>"};
 
-  if(FS::Checks::FileExists(l_jsonPath))
-  {
-    p_SelectedCharacter = new ActorDataReader();
-    p_SelectedCharacter->LoadActor(t_folder);
-    QStringList l_charaOutfits = p_SelectedCharacter->GetOutfitNames();
-    l_OutfitNames.append(l_charaOutfits);
-    setOutfitList(l_OutfitNames);
-    return p_SelectedCharacter;
-  }
-
-  p_SelectedCharacter = new LegacyActorReader();
-  p_SelectedCharacter->LoadActor(t_folder);
+  QStringList l_charaOutfits = dro::actor::user::load(t_folder)->GetOutfitNames();
+  l_OutfitNames.append(l_charaOutfits);
   setOutfitList(l_OutfitNames);
 
-
-  return p_SelectedCharacter;
+  return dro::actor::user::retrieve();
 }
 
 void CharacterManager::setOutfitList(QStringList t_outfits)

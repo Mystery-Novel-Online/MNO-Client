@@ -40,6 +40,7 @@
 #include "dro/interface/courtroom_layout.h"
 #include "dro/system/replay_playback.h"
 #include "dro/system/runtime_loop.h"
+#include "dro/param/actor_repository.h"
 #include <mk2/spritecachingreader.h>
 
 #include <QCheckBox>
@@ -65,6 +66,7 @@ const int Courtroom::DEFAULT_WIDTH = 714;
 const int Courtroom::DEFAULT_HEIGHT = 668;
 
 using namespace dro::system;
+using namespace dro;
 
 Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
     : QWidget(parent)
@@ -368,7 +370,7 @@ void Courtroom::enter_courtroom(int p_cid)
     ao_config->set_showname_placeholder(l_final_showname);
 
     QStringList l_content{l_chr_name, l_final_showname};
-    if(ServerMetadata::FeatureSupported("outfits")) l_content.append(CharacterManager::get().p_SelectedCharacter->GetOutfit());
+    if(ServerMetadata::FeatureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
 
     ao_app->send_server_packet(DRPacket("chrini", l_content));
   }
@@ -803,7 +805,7 @@ QString Courtroom::get_current_position()
 {
   if (ui_pos_dropdown->currentIndex() == DefaultPositionIndex)
   {
-    return CharacterManager::get().p_SelectedCharacter->GetSide();
+    return actor::user::retrieve()->GetSide();
   }
   return ui_pos_dropdown->currentData(Qt::UserRole).toString();
 }
@@ -2500,7 +2502,7 @@ void Courtroom::set_hp_bar(int p_bar, int p_state)
 
 void Courtroom::set_character_position(QString p_pos)
 {
-  const bool l_is_default_pos = p_pos == CharacterManager::get().p_SelectedCharacter->GetSide();
+  const bool l_is_default_pos = p_pos == actor::user::retrieve()->GetSide();
 
   int l_pos_index = ui_pos_dropdown->currentIndex();
   if (!l_is_default_pos)
@@ -2970,23 +2972,24 @@ void Courtroom::onOutfitChanged(int outfitIndex)
   int trueOutfitIndex = outfitIndex -1;
   if(trueOutfitIndex == -1)
   {
-    CharacterManager::get().p_SelectedCharacter->SwitchOutfit("<All>");
+    actor::user::retrieve()->SwitchOutfit("<All>");
   }
-  else if(CharacterManager::get().p_SelectedCharacter->GetOutfitNames().length() > trueOutfitIndex && trueOutfitIndex != -1)
+  else if(actor::user::retrieve()->GetOutfitNames().length() > trueOutfitIndex && trueOutfitIndex != -1)
   {
-    CharacterManager::get().p_SelectedCharacter->SwitchOutfit(CharacterManager::get().p_SelectedCharacter->GetOutfitNames()[trueOutfitIndex]);
+    actor::user::retrieve()->SwitchOutfit(actor::user::retrieve()->GetOutfitNames()[trueOutfitIndex]);
   }
 
   ui_emotes->refreshSelection(false);
   ui_emotes->refreshEmotes(false);
+  ui_emotes->outfitChange();
 
   const QString l_chr_name = get_character_ini();
-  const QString l_showname = CharacterManager::get().p_SelectedCharacter->GetShowname();
+  const QString l_showname = actor::user::retrieve()->GetShowname();
   const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
 
   ao_config->set_showname_placeholder(l_final_showname);
   QStringList l_content{l_chr_name, l_final_showname};
-  if(ServerMetadata::FeatureSupported("outfits")) l_content.append(CharacterManager::get().p_SelectedCharacter->GetOutfit());
+  if(ServerMetadata::FeatureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
 
   ao_app->send_server_packet(DRPacket("chrini", l_content));
 }

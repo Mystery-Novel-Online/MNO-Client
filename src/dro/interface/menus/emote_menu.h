@@ -21,6 +21,9 @@ public:
   void ClearPresets();
   void AddPreset(const QString& name);
 
+  void clearLayers();
+  void AddLayer(const QString& name, bool defaultValue);
+
 
 public slots:
   void OnMenuRequested(QPoint p_point);
@@ -46,6 +49,7 @@ private:
   QMenu* m_layersMenu;
 
 
+  DREmote m_currentEmote;
   //
   bool m_presetsClearedCheck = false;
   int m_defaultVertical = 0;

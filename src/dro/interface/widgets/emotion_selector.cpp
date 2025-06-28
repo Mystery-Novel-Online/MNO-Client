@@ -3,12 +3,15 @@
 #include "modules/theme/thememanager.h"
 #include "modules/managers/character_manager.h"
 #include "dro/interface/widgets/emotion_button.h"
+#include "dro/param/actor_repository.h"
 #include <QCheckBox>
 #include <QListWidget>
 #include <QWheelEvent>
 #include "drtheme.h"
 #include "qmath.h"
 #include "dro/interface/courtroom_layout.h"
+
+using namespace dro::actor::user;
 
 EmotionSelector::EmotionSelector(QWidget *parent)
     : RPWidget{"emotes", parent}
@@ -27,12 +30,30 @@ void EmotionSelector::emotionChange(DREmote emote)
 void EmotionSelector::actorChange(ActorData *actor)
 {
   m_ActorEmotions.clear();
-  m_ActorEmotions = CharacterManager::get().p_SelectedCharacter->GetEmotes();
+  m_ActorEmotions = retrieve()->GetEmotes();
 
   m_ContextMenu->ClearPresets();
 
   for(ActorScalingPreset presetData : actor->GetScalingPresets())
     m_ContextMenu->AddPreset(presetData.name);
+
+  if(m_ActorEmotions.count() > 0)
+  {
+    m_ContextMenu->EmoteChange(m_ActorEmotions[0]);
+  }
+
+}
+
+void EmotionSelector::outfitChange()
+{
+  m_ActorEmotions.clear();
+  m_ActorEmotions = retrieve()->GetEmotes();
+
+  if(m_ActorEmotions.count() > 0)
+  {
+    m_ContextMenu->EmoteChange(m_ActorEmotions[0]);
+  }
+  else m_ContextMenu->clearLayers();
 }
 
 int EmotionSelector::calculateTrueIndex(int id)
@@ -131,7 +152,7 @@ void EmotionSelector::refreshEmotes(bool scrollToCurrent)
 void EmotionSelector::refreshSelection(bool changedActor)
 {
   const int l_prev_emote_count = m_ActorEmotions.count();
-  m_ActorEmotions = CharacterManager::get().p_SelectedCharacter->GetEmotes();
+  m_ActorEmotions = retrieve()->GetEmotes();
 
   QComboBox* l_emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
   QCheckBox* l_preCheckbox = dynamic_cast<QCheckBox*>(ThemeManager::get().getWidget("pre"));
