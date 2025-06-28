@@ -14,10 +14,6 @@ using namespace dro;
 EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
 {
   m_EmotionSelector = parent;
-  p_SizeAction = addAction(tr("Resize"));
-  p_RenderAction = addAction(tr("Use Sprite Images"));
-  addSeparator();
-
 
   m_presetsMenu = new QMenu(tr("Offsets"), this);
   p_ResetOffsetsAction = new QAction(tr("Reset (Center)"), this);
@@ -26,8 +22,12 @@ EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
 
   m_layersMenu = new QMenu(tr("Layers"), this);
   addMenu(m_layersMenu);
+  addSeparator();
 
-  p_makerAction = addAction(tr("Button Maker"));
+  QMenu *buttonsMenu = addMenu(tr("Buttons"));
+  p_SizeAction = buttonsMenu->addAction(tr("Resize"));
+  p_RenderAction = buttonsMenu->addAction(tr("Use Sprite Images"));
+  p_makerAction = buttonsMenu->addAction(tr("Button Maker"));
 
   connect(p_SizeAction, &QAction::triggered, this, &EmoteMenu::OnDoubleSizeTriggered);
   connect(p_RenderAction, &QAction::triggered, this, &EmoteMenu::OnRealtimeTriggered);

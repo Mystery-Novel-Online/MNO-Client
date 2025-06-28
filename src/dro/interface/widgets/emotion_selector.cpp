@@ -30,7 +30,7 @@ void EmotionSelector::emotionChange(DREmote emote)
 void EmotionSelector::actorChange(ActorData *actor)
 {
   m_ActorEmotions.clear();
-  m_ActorEmotions = retrieve()->GetEmotes();
+  if(retrieve() != nullptr) retrieve()->GetEmotes();
 
   m_ContextMenu->ClearPresets();
 

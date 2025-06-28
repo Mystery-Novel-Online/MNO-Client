@@ -21,6 +21,8 @@
 #include <QtMath>
 #include <QtConcurrent/QtConcurrent>
 #include "dro/interface/widgets/emotion_selector.h"
+#include "dro/param/actor_repository.h"
+#include "dro/system/text_encoding.h"
 #include <dro/interface/menus/emote_menu.h>
 
 int s_emotePreviewIndex = -1;
@@ -69,7 +71,17 @@ void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
   const int l_real_id = ui_emotes->calculateTrueIndex(p_id);
   const DREmote &l_emote =  ui_emotes->getEmote(l_real_id);
   ui_emote_preview_character->set_mirrored(ui_flip->isChecked());
-  ui_emote_preview_character->processOverlays(l_emote.emoteOverlays, l_emote.character, l_emote.dialog, l_emote.outfitName);
+
+
+  QStringList layers;
+  for(const EmoteLayer &layer : l_emote.emoteOverlays)
+  {
+    if(dro::actor::user::layerState(layer.toggleName))
+      layers.append(dro::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+  }
+
+  ui_emote_preview_character->processOverlays(dro::system::encoding::text::EncodeBase64(layers), l_emote.character, l_emote.dialog, l_emote.outfitName);
+
   ui_emote_preview_character->play_idle(l_emote.character, l_emote.dialog);
 
   QScreen *screen = QApplication::screenAt(p_global_pos);

@@ -2975,6 +2975,7 @@ void Courtroom::onOutfitChanged(int outfitIndex)
 {
   if(outfitIndex == -1) return;
   int trueOutfitIndex = outfitIndex -1;
+  if(actor::user::retrieve() == nullptr) return;
   if(trueOutfitIndex == -1)
   {
     actor::user::retrieve()->SwitchOutfit("<All>");

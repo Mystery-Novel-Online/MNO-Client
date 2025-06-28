@@ -11,6 +11,8 @@
 #include "aoapplication.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/interface/courtroom_layout.h"
+#include "dro/param/actor_repository.h"
+#include "dro/system/text_encoding.h"
 #include <QSlider>
 
 ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
@@ -87,12 +89,20 @@ void ButtonMaker::SetEmote(DREmote emote)
   {
     DREmote checkEmote = m_Emotes.at(i);
 
-    if(emote.dialog == checkEmote.dialog)
+    if(emote.comment == checkEmote.comment)
     {
       m_EmoteIndex = i;
       m_CharacterSprite->play_idle(checkEmote.character, checkEmote.dialog);
       m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
-      m_CharacterSprite->processOverlays(checkEmote.emoteOverlays, checkEmote.character, checkEmote.dialog, checkEmote.outfitName);
+
+      QStringList layers;
+      for(const EmoteLayer &layer : checkEmote.emoteOverlays)
+      {
+        if(dro::actor::user::layerState(layer.toggleName))
+          layers.append(dro::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+      }
+
+      m_CharacterSprite->processOverlays(dro::system::encoding::text::EncodeBase64(layers), checkEmote.character, checkEmote.dialog, checkEmote.outfitName);
       m_CharacterSprite->start(DRCharacterMovie::ScalingMode::WidthSmoothScaling, 1.0f);
       return;
     }

@@ -87,8 +87,12 @@ ActorData *CharacterManager::SwitchCharacter(QString t_folder)
   LuaBridge::LuaEventCall("OnCharacterLoad", t_folder.toStdString());
   QStringList l_OutfitNames = {"<All>"};
 
-  QStringList l_charaOutfits = dro::actor::user::load(t_folder)->GetOutfitNames();
-  l_OutfitNames.append(l_charaOutfits);
+  ActorData* actor = dro::actor::user::load(t_folder);
+  if(actor != nullptr)
+  {
+    QStringList l_charaOutfits = actor->GetOutfitNames();
+    l_OutfitNames.append(l_charaOutfits);
+  }
   setOutfitList(l_OutfitNames);
 
   return dro::actor::user::retrieve();

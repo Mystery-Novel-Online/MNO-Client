@@ -21,7 +21,7 @@ void dro::actor::user::toggleLayer(const QString &name, bool state)
 
 ActorData *dro::actor::user::load(QString folder)
 {
-  static QString currentFolder = "";
+  static QString currentFolder = "<NOCHAR>";
   s_layersEnabled.clear();
   if(folder == currentFolder)
   {
