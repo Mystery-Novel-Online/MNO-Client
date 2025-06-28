@@ -86,6 +86,7 @@ struct EmoteLayer
   bool detachLayer;
 
   QString blendMode;
+  QString toggleName;
 };
 
 

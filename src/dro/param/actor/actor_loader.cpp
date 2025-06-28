@@ -405,11 +405,14 @@ OutfitReader::OutfitReader(const QString& character, const QString& outfit) : m_
   for(QJsonValueRef overlayData : getArrayValue("layers"))
   {
     SetTargetObject(overlayData.toObject());
-    QString overlayName = getStringValue("name");
-    QRect overlayRect = getRectangleValue("offset");
-    QString overlayRender = getStringValue("order");
-    m_LayerOffsets[overlayName] = overlayRect;
-    m_LayerRenderOrder[overlayName] = overlayRender;
+    EmoteLayer layer;
+
+    layer.offsetName = getStringValue("name");
+    layer.spriteOrder = getStringValue("order");
+    layer.layerOffset = getRectangleValue("offset");
+    layer.toggleName = getStringValue("toggle");
+
+    m_Layers.append(layer);
   }
 
   ReadSettings();
@@ -468,12 +471,14 @@ void OutfitReader::ReadEmotes()
     emote.sound_delay     = qMax(0, emote.sound_delay);
     emote.video_file      = videoFile;
 
-    for(const QString& overlayName : m_LayerOffsets.keys())
+    for(const EmoteLayer& layer : m_Layers)
     {
-      const QString overlayImage = getStringValue(overlayName).trimmed();
+      const QString overlayImage = getStringValue(layer.offsetName).trimmed();
       if (!overlayImage.isEmpty())
       {
-        emote.emoteOverlays.append({overlayName, overlayImage, m_LayerRenderOrder[overlayName], m_LayerOffsets[overlayName]});
+        EmoteLayer newLayer = layer;
+        newLayer.spriteName = overlayImage;
+        emote.emoteOverlays.append(newLayer);
       }
     }
 

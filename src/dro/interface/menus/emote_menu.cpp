@@ -48,7 +48,8 @@ void EmoteMenu::EmoteChange(DREmote emote)
   clearLayers();
   for(const EmoteLayer &layer : emote.emoteOverlays)
   {
-    AddLayer(layer.offsetName, actor::user::layerState(layer.offsetName));
+    if(!layer.toggleName.trimmed().isEmpty())
+      AddLayer(layer.toggleName, actor::user::layerState(layer.toggleName));
   }
 }
 

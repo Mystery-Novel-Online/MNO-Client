@@ -23,8 +23,7 @@ public:
   void ReadEmotes();
 
   QVector<DREmote> m_Emotes = {};
-  QMap<QString, QRect> m_LayerOffsets = {};
-  QMap<QString, QString> m_LayerRenderOrder = {};
+  QVector<EmoteLayer> m_Layers = {};
 
 private:
   QString m_Showname = "";
