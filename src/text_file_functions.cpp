@@ -418,9 +418,10 @@ QStringList AOApplication::get_sfx_list()
   QStringList r_sfx_list;
 
   QStringList l_file_list;
-  l_file_list.append(FS::Paths::BasePath() + CONFIG_SOUNDS_INI);
   for (const QString &i_chr : get_char_include_tree(get_current_char()))
     l_file_list.append(get_character_path(i_chr, CHARACTER_SOUNDS_INI));
+
+  l_file_list.append(FS::Paths::FindFiles(CONFIG_SOUNDS_INI));
 
   for (const QString &i_file_path : qAsConst(l_file_list))
   {
