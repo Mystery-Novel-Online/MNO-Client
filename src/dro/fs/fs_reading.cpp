@@ -259,5 +259,52 @@ QString FindFile(const QStringList &filePaths, bool allowPackages, const QString
   return "";
 }
 
+QStringList FindFiles(const QString &filePath, const QStringList &extensions)
+{
+  QStringList returnValues = {};
+
+
+  QStringList appendedFileList = {filePath};
+
+  if(extensions.count() > 0)
+  {
+    for(const QString &extension : extensions)
+      appendedFileList.append(filePath + extension);
+  }
+  else
+  {
+    appendedFileList.append(filePath);
+  }
+
+  QVector<QString> packageNames = Packages::CachedNames();
+  QVector<QString> disabledList = Packages::DisabledList();
+
+  for(QString &packageName : packageNames)
+  {
+    if(!disabledList.contains(packageName))
+    {
+      for(const QString& path : appendedFileList)
+      {
+        QString package_path = Paths::Package(packageName) + path;
+        if(Checks::FileExists(package_path))
+        {
+          returnValues.append(package_path);
+        }
+      }
+    }
+  }
+
+  for(const QString& path : appendedFileList)
+  {
+    QString baseFilePath = BasePath() + path;
+    if(Checks::FileExists(baseFilePath))
+    {
+      returnValues.append(baseFilePath);
+    }
+  }
+
+  return returnValues;
+}
+
 
 }

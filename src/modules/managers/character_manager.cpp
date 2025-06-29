@@ -57,18 +57,6 @@ ActorData *CharacterManager::SwitchCharacter(QString t_folder)
 {
   QStringList animations = {"None"};
 
-  QFile file("base/configs/default_animations.ini");
-  if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-    QTextStream in(&file);
-    while (!in.atEnd())
-    {
-      QString line = in.readLine().trimmed();
-      if (!line.isEmpty()) animations.append(line);
-    }
-    file.close();
-  }
-
-
   QFile characterAnimations(FS::Paths::FindFile("characters/" + t_folder + "/animations.ini"));
   if (characterAnimations.open(QIODevice::ReadOnly | QIODevice::Text)) {
     QTextStream in(&characterAnimations);
@@ -81,6 +69,21 @@ ActorData *CharacterManager::SwitchCharacter(QString t_folder)
   }
 
   animations.append(FS::Paths::GetFileList("characters/" + t_folder + "/animations", true, "json"));
+
+
+  for(QString animationIniPath : FS::Paths::FindFiles("configs/animations.ini"))
+  {
+    QFile file(animationIniPath);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+      QTextStream in(&file);
+      while (!in.atEnd())
+      {
+        QString line = in.readLine().trimmed();
+        if (!line.isEmpty()) animations.append(line);
+      }
+      file.close();
+    }
+  }
 
 
   courtroom::lists::setAnimations(animations);
