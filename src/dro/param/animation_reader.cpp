@@ -49,6 +49,11 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
   sequence.SetLoop(animationLoop);
 
   QRect targetResolution = getRectangleValue("target_resolution");
+  if(targetResolution.width() == 0)
+  {
+    targetResolution.setWidth(960);
+    targetResolution.setHeight(544);
+  }
 
   for(QJsonValueRef overlayData : getArrayValue("layers"))
   {
@@ -109,6 +114,13 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
         QVector3D frameValue = getVector3DValue("value");
         KeyframeCurve frameCurveIn = KeyframeCurve::CurveEase;
         KeyframeCurve frameCurveOut = KeyframeCurve::CurveEase;
+
+        const float xValue = frameValue.x() / float(targetResolution.width()) * 1000.0f;
+        const float yValue = frameValue.y() / float(targetResolution.height()) * 1000.0f;
+
+        frameValue = {xValue, yValue, frameValue.z()};
+
+
 
         QString curveInValue = getStringValue("curve_in");
         QString curveOutValue = getStringValue("curve_out");

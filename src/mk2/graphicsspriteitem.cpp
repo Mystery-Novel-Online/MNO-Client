@@ -461,8 +461,12 @@ QPointF GraphicsSpriteItem::computeDrawPosition(const QVector3D &animationOffset
   const float verticalOffset = (mVerticalVPOffset / 1000.0f) * (sceneRect.height() + scaledRect.height()) / 2.0f;
   const float horizontalOffset = (m_HorizontalOffset / 1000.0f) * (sceneRect.width() + scaledRect.width()) / 2.0f;
 
-  return centerOffset + QPointF(horizontalOffset + animationOffset.x(),
-                                verticalOffset + animationOffset.y());
+
+  const float animVertical = (animationOffset.y() / 1000.0f) * (sceneRect.height() + scaledRect.height()) / 2.0f;
+  const float animHorizontal = (animationOffset.x() / 1000.0f) * (sceneRect.width() + scaledRect.width()) / 2.0f;
+
+  return centerOffset + QPointF(horizontalOffset + animHorizontal,
+                                verticalOffset + animVertical);
 }
 
 void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale, const std::unordered_map<std::string, QVariant>& evaluatedFrames, double alpha)
