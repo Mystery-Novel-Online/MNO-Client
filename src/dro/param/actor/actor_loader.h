@@ -3,6 +3,7 @@
 
 #include <datatypes.h>
 #include "dro/param/json_reader.h"
+#include "mk2/spriteplayer.h"
 
 struct ActorScalingPreset
 {
@@ -57,7 +58,17 @@ public:
   virtual QString GetOutfit() { return m_CurrentOutfit; };
 
   virtual void SetScalingMode(const QString& mode) {m_ScalingMode = mode;};
-  virtual QString GetScalingMode() {return m_ScalingMode;};
+  virtual mk2::SpritePlayer::ScalingMode GetScalingMode()
+  {
+    const static QMap<QString, mk2::SpritePlayer::ScalingMode> scalingModeMap =
+    {
+      {"width_smooth", mk2::SpritePlayer::WidthSmoothScaling},
+      {"width_pixels", mk2::SpritePlayer::WidthPixelScaling},
+    };
+
+    if(scalingModeMap.contains(m_ScalingMode.toLower())) return scalingModeMap[m_ScalingMode.toLower()];
+    return mk2::SpritePlayer::AutomaticScaling;
+  };
 
   virtual void SetScalingPresets(QVector<ActorScalingPreset> presets) {m_Presets = presets;};
   virtual QVector<ActorScalingPreset> GetScalingPresets() { return m_Presets; };

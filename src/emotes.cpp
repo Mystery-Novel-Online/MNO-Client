@@ -24,6 +24,7 @@
 #include "dro/param/actor_repository.h"
 #include "dro/system/text_encoding.h"
 #include <dro/interface/menus/emote_menu.h>
+#include "dro/interface/courtroom_layout.h"
 
 int s_emotePreviewIndex = -1;
 using namespace dro;
@@ -81,8 +82,9 @@ void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
   }
 
   ui_emote_preview_character->processOverlays(dro::system::encoding::text::EncodeBase64(layers), l_emote.character, l_emote.dialog, l_emote.outfitName);
-
   ui_emote_preview_character->play_idle(l_emote.character, l_emote.dialog);
+  ui_emote_preview_character->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
+  ui_emote_preview_character->start(dro::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
 
   QScreen *screen = QApplication::screenAt(p_global_pos);
   if (screen == nullptr)

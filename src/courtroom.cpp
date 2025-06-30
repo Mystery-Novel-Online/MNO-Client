@@ -899,10 +899,7 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
     mk2::SpritePlayer::ScalingMode targetScaling = mk2::SpritePlayer::AutomaticScaling;
     if(m_SpeakerActor != nullptr)
     {
-      QString scalingMode = m_SpeakerActor->GetScalingMode();
-
-      if(scalingMode == "width_smooth")
-        targetScaling = mk2::SpritePlayer::WidthSmoothScaling;
+      targetScaling = m_SpeakerActor->GetScalingMode();
     }
 
     if (ui_vp_player_char->is_running())
@@ -1156,8 +1153,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
 
     if(m_PairActor != nullptr)
     {
-      QString scalingMode = m_PairActor->GetScalingMode();
-      if(scalingMode == "width_smooth") m_PairScaling = mk2::SpritePlayer::WidthSmoothScaling;
+      m_PairScaling = m_PairActor->GetScalingMode();
       m_PairScale = metadata::message::pair::scaleOffset();
     }
 
@@ -1179,8 +1175,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
 
   if(m_SpeakerActor != nullptr)
   {
-    QString scalingMode = m_SpeakerActor->GetScalingMode();
-    if(scalingMode == "width_smooth") m_ActorScaling = mk2::SpritePlayer::WidthSmoothScaling;
+    m_ActorScaling = m_SpeakerActor->GetScalingMode();
   }
 
 

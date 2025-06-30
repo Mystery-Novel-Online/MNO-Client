@@ -269,6 +269,13 @@ void SpritePlayer::resolve_scaling_mode(ScalingMode scalingMode, double scale)
       scale_current_frame();
       return;
     }
+    if(scalingMode == WidthPixelScaling)
+    {
+      m_transform = Qt::FastTransformation;
+      m_resolved_scaling_mode = WidthPixelScaling;
+      scale_current_frame();
+      return;
+    }
   }
   m_resolved_scaling_mode = m_scaling_mode;
 
@@ -434,6 +441,21 @@ void SpritePlayer::scale_current_frame()
   case HeightScaling:
     composed = composed.scaledToHeight(m_size.height() * m_scale, m_transform);
     break;
+
+    case WidthPixelScaling:
+    {
+      const int originalWidth = composed.width();
+      if (originalWidth > 0)
+      {
+        int idealWidth = int(m_size.width() * m_scale);
+
+        int multiples = qMax(1, int((double)idealWidth / originalWidth + 0.5));
+        int finalWidth = originalWidth * multiples;
+        int finalHeight = composed.height() * multiples;
+
+        composed = composed.scaled(finalWidth, finalHeight, Qt::IgnoreAspectRatio, Qt::FastTransformation);
+      }
+    }
   }
 
   m_overallScale = static_cast<double>(composed.width()) / originalSize.width();

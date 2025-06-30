@@ -77,8 +77,7 @@ void ActorDataReader::LoadActor(const QString& folder)
   if(isValueExists("scaling_mode"))
   {
     const QString scalingMode = getStringValue("scaling_mode");
-    static const QStringList allowedScalings = {"automatic", "width_smooth"};
-    if(allowedScalings.contains(scalingMode)) SetScalingMode(scalingMode);
+    SetScalingMode(scalingMode);
   }
 
   m_OutfitsOrder = getStringArrayValue("outfit_order");

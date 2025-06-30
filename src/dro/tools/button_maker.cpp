@@ -103,7 +103,7 @@ void ButtonMaker::SetEmote(DREmote emote)
       }
 
       m_CharacterSprite->processOverlays(dro::system::encoding::text::EncodeBase64(layers), checkEmote.character, checkEmote.dialog, checkEmote.outfitName);
-      m_CharacterSprite->start(DRCharacterMovie::ScalingMode::WidthSmoothScaling, 1.0f);
+      m_CharacterSprite->start(dro::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
       return;
     }
   }
@@ -210,9 +210,7 @@ void ButtonMaker::onGenerateClicked()
   }
 
 
-  m_CharacterSprite->play_idle(m_Emotes.at(m_EmoteIndex).character, m_Emotes.at(m_EmoteIndex).dialog);
-  m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
-  m_CharacterSprite->start(DRCharacterMovie::ScalingMode::WidthSmoothScaling, 1.0f);
+  SetEmote(m_Emotes.at(m_EmoteIndex));
 }
 
 void ButtonMaker::onAddUnderlayClicked()
