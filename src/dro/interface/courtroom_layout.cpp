@@ -364,6 +364,7 @@ namespace courtroom
 
         RPComboBox* comboBox = new RPComboBox(s_CourtroomWidgets["courtroom"], AOApplication::getInstance());
         comboBox->setWidgetInfo(QString::fromStdString(name), "[" + QString::fromStdString(css) + "]", "courtroom");
+        comboBox->refreshCSS();
         s_CourtroomWidgets.insert(qName, comboBox);
         comboBox->raise();
         comboBox->show();
