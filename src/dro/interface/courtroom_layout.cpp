@@ -280,6 +280,7 @@ namespace courtroom
       {
         RPLineEdit* lineEdit = new RPLineEdit(QString::fromStdString(name), "[" + QString::fromStdString(css) + "]", s_CourtroomWidgets["courtroom"]);
         lineEdit->refreshCSS();
+        s_CourtroomLineEdits.append(lineEdit);
         s_CourtroomWidgets.insert(qName, lineEdit);
         lineEdit->raise();
         lineEdit->show();
@@ -329,6 +330,7 @@ namespace courtroom
       if (!s_CourtroomWidgets.contains(qName))
       {
         RPTextEdit* textEdit = new RPTextEdit(QString::fromStdString(name), s_CourtroomWidgets["courtroom"]);
+        s_CourtroomTextEdits.append(textEdit);
         s_CourtroomWidgets.insert(qName, textEdit);
 
         set_drtextedit_font(textEdit, QString::fromStdString(name), COURTROOM_FONTS_INI, AOApplication::getInstance());
@@ -365,6 +367,7 @@ namespace courtroom
         RPComboBox* comboBox = new RPComboBox(s_CourtroomWidgets["courtroom"], AOApplication::getInstance());
         comboBox->setWidgetInfo(QString::fromStdString(name), "[" + QString::fromStdString(css) + "]", "courtroom");
         comboBox->refreshCSS();
+        s_CourtroomComboBoxes.append(comboBox);
         s_CourtroomWidgets.insert(qName, comboBox);
         comboBox->raise();
         comboBox->show();
