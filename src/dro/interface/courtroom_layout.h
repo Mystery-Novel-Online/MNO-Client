@@ -60,16 +60,22 @@ namespace courtroom
   namespace lineedit
   {
     void create(const std::string& name, const std::string& css, int x, int y, int width, int height);
+    std::string getValue(const std::string& name);
+    void setValue(const std::string& name, const std::string& value);
   }
 
   namespace textedit
   {
     void create(const std::string& name, int x, int y, int width, int height);
+    void setText(const std::string& name, const std::string& text);
   }
 
   namespace combobox
   {
-    void create(const std::string& name, int x, int y, int width, int height);
+    void create(const std::string& name, const std::string& css, int x, int y, int width, int height);
+    void addItem(const std::string& name, const std::string& value);
+    void removeItem(const std::string& name, const std::string& value);
+    void clearItems(const std::string& name);
   }
 
   namespace sliders

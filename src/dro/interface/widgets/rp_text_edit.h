@@ -13,6 +13,7 @@ class RPTextEdit : public QTextEdit
 public:
   RPTextEdit(const QString &name, QWidget *p_parent = nullptr);
   void resetTransform();
+  void hideScrollbars();
 
   Qt::Alignment get_text_alignment() const;
 

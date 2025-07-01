@@ -20,6 +20,12 @@ void RPTextEdit::resetTransform()
   set_size_and_pos(this, m_friendlyName, COURTROOM_DESIGN_INI, m_app);
 }
 
+void RPTextEdit::hideScrollbars()
+{
+  setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
+
 void RPTextEdit::set_outline(bool p_enabled, int outlineWidth, QColor outlineColor)
 {
   if (has_outline == p_enabled)

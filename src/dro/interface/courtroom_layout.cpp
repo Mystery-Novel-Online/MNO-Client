@@ -1,5 +1,6 @@
 #include "courtroom_layout.h"
 
+#include "commondefs.h"
 #include "dro/interface/widgets/sticker_viewer.h"
 #include <aoapplication.h>
 #include "dro/interface/widgets/chat_log.h"
@@ -8,6 +9,7 @@
 #include <courtroom.h>
 #include "modules/theme/thememanager.h"
 #include "dro/system/theme_scripting.h"
+#include "dro/interface/widgets/rp_combo_box.h"
 #include "dro/interface/widgets/rp_line_edit.h"
 
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
@@ -291,6 +293,9 @@ namespace courtroom
                            QString eventName = QString::fromStdString(name) + "ReturnPressed";
                            LuaBridge::LuaEventCall(eventName.toUtf8());
                          });
+        QObject::connect(lineEdit, &QLineEdit::textEdited, [=](const QString &text) { QString eventName = QString::fromStdString(name) + "TextEdited"; LuaBridge::LuaEventCall(eventName.toUtf8(), text.toStdString()); });
+        QObject::connect(lineEdit, &QLineEdit::editingFinished, [=]() { QString eventName = QString::fromStdString(name) + "EditingFinished"; LuaBridge::LuaEventCall(eventName.toUtf8()); });
+        QObject::connect(lineEdit, &QLineEdit::selectionChanged, [=]() { QString eventName = QString::fromStdString(name) + "SelectionChanged"; LuaBridge::LuaEventCall(eventName.toUtf8()); });
 
       }
 
@@ -298,6 +303,20 @@ namespace courtroom
       s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
       s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
     }
+
+    std::string getValue(const std::string &name)
+    {
+      if (auto *box = qobject_cast<RPLineEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+        return box->text().toStdString();
+      return "";
+    }
+
+    void setValue(const std::string &name, const std::string &value)
+    {
+      if (auto *box = qobject_cast<RPLineEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+        box->setText(QString::fromStdString(value));
+    }
+
   }
 
   namespace textedit
@@ -309,8 +328,13 @@ namespace courtroom
 
       if (!s_CourtroomWidgets.contains(qName))
       {
-        QTextEdit* textEdit = new QTextEdit(s_CourtroomWidgets["courtroom"]);
+        RPTextEdit* textEdit = new RPTextEdit(QString::fromStdString(name), s_CourtroomWidgets["courtroom"]);
         s_CourtroomWidgets.insert(qName, textEdit);
+
+        set_drtextedit_font(textEdit, QString::fromStdString(name), COURTROOM_FONTS_INI, AOApplication::getInstance());
+        textEdit->setPlainText(textEdit->toPlainText());
+        textEdit->setReadOnly(true);
+
         textEdit->raise();
         textEdit->show();
       }
@@ -319,27 +343,65 @@ namespace courtroom
       s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
       s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
     }
+
+    void setText(const std::string &name, const std::string &text)
+    {
+      if (auto *box = qobject_cast<RPTextEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+        box->setText(QString::fromStdString(text));
+    }
+
   }
 
   namespace combobox
   {
-    void create(const std::string& name, int x, int y, int width, int height)
+  void create(const std::string& name, const std::string &css, int x, int y, int width, int height)
     {
       const QString qName = QString::fromStdString(name);
       if (!s_CourtroomWidgets.contains("courtroom")) return;
 
       if (!s_CourtroomWidgets.contains(qName))
       {
-        QComboBox* comboBox = new QComboBox(s_CourtroomWidgets["courtroom"]);
+
+        RPComboBox* comboBox = new RPComboBox(s_CourtroomWidgets["courtroom"], AOApplication::getInstance());
+        comboBox->setWidgetInfo(QString::fromStdString(name), "[" + QString::fromStdString(css) + "]", "courtroom");
         s_CourtroomWidgets.insert(qName, comboBox);
         comboBox->raise();
         comboBox->show();
+
+        QObject::connect(comboBox, &QComboBox::currentTextChanged, [=](const QString &text) {
+                           QString eventName = QString::fromStdString(name) + "SelectionChanged";
+                           LuaBridge::LuaEventCall(eventName.toUtf8(), text);
+                         });
+
+        QObject::connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
+                           QString eventName = QString::fromStdString(name) + "IndexChanged";
+                           LuaBridge::LuaEventCall(eventName.toUtf8(), index);
+                         });
       }
 
       float resizeFactor = ThemeManager::get().getResize();
       s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
       s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
     }
+
+    void addItem(const std::string &name, const std::string &value)
+    {
+      if (auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+        combobox->addItem(QString::fromStdString(value));
+    }
+
+    void removeItem(const std::string &name, const std::string &value)
+    {
+      //if (auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+      //  combobox->addItem(QString::fromStdString(value));
+    }
+
+    void clearItems(const std::string &name)
+    {
+      if (auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+        combobox->clear();
+    }
+
   }
 
   namespace stickers

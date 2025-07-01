@@ -71,8 +71,20 @@ namespace ThemeScripting
       sol::table buttonsTable = s_themeScript.create_named_table("Button");
       buttonsTable.set_function("Create", &courtroom::buttons::create);
 
+      sol::table displayTextTable = s_themeScript.create_named_table("TextDisplay");
+      displayTextTable.set_function("Create", &courtroom::textedit::create);
+      displayTextTable.set_function("SetText", &courtroom::textedit::setText);
+
+
       sol::table lineeditTable = s_themeScript.create_named_table("LineEdit");
       lineeditTable.set_function("Create", &courtroom::lineedit::create);
+      lineeditTable.set_function("GetValue", &courtroom::lineedit::getValue);
+      lineeditTable.set_function("SetValue", &courtroom::lineedit::setValue);
+
+      sol::table comboboxTable = s_themeScript.create_named_table("ComboBox");
+      comboboxTable.set_function("Create", &courtroom::combobox::create);
+      comboboxTable.set_function("AddItem", &courtroom::combobox::addItem);
+      comboboxTable.set_function("Clear", &courtroom::combobox::clearItems);
 
       sol::table slidersTable = s_themeScript.create_named_table("Slider");
       slidersTable.set_function("Create", &courtroom::sliders::create);
