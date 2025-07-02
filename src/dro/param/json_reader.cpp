@@ -10,6 +10,9 @@ void JSONReader::ReadFromFile(QString path)
   QFile json_file(path); json_file.open(QIODevice::ReadOnly | QIODevice::Text);
   QString fileContents = json_file.readAll(); json_file.close();
 
+  static QRegularExpression trailingCommas(R"(,\s*([\]}]))");
+  fileContents.replace(trailingCommas, R"(\1)");
+
   ReadFromString(fileContents);
 }
 
