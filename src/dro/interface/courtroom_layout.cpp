@@ -352,6 +352,12 @@ namespace courtroom
         box->setText(QString::fromStdString(text));
     }
 
+    void setFrame(const std::string &name, const bool state)
+    {
+      if (auto *box = qobject_cast<RPTextEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+        box->setFrameStyle(state ? QFrame::Box : QFrame::NoFrame);
+    }
+
   }
 
   namespace combobox

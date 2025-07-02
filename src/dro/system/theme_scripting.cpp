@@ -74,6 +74,7 @@ namespace ThemeScripting
       sol::table displayTextTable = s_themeScript.create_named_table("TextDisplay");
       displayTextTable.set_function("Create", &courtroom::textedit::create);
       displayTextTable.set_function("SetText", &courtroom::textedit::setText);
+      displayTextTable.set_function("SetFrame", &courtroom::textedit::setFrame);
 
 
       sol::table lineeditTable = s_themeScript.create_named_table("LineEdit");

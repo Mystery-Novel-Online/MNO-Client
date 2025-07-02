@@ -68,6 +68,7 @@ namespace courtroom
   {
     void create(const std::string& name, int x, int y, int width, int height);
     void setText(const std::string& name, const std::string& text);
+    void setFrame(const std::string& name, const bool state);
   }
 
   namespace combobox
