@@ -16,6 +16,11 @@ struct TimedSound {
   std::string sound;
 };
 
+struct TimedSignal {
+  float timestamp;
+  std::string signal;
+};
+
 class KeyframeChannelTemplate
 {
 public:

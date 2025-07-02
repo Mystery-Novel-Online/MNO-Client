@@ -99,6 +99,7 @@ namespace courtroom
   {
     void update();
     void screenshot();
+    QPixmap getScreenshot();
   }
 
 }

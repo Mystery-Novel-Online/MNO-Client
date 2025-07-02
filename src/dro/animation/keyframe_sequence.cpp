@@ -1,6 +1,7 @@
 #include "keyframe_sequence.h"
 #include "dro/system/animation.h"
 #include "dro/system/audio.h"
+#include "dro/interface/courtroom_layout.h"
 
 KeyframeSequence::KeyframeSequence()
 {
@@ -20,8 +21,14 @@ void KeyframeSequence::Cleanup()
   m_Timestamp = 0;
   m_LastTimestamp = 0;
   m_Channels.clear();
+
   m_TimedSounds.clear();
   m_TriggeredThisLoop.clear();
+  m_TimedSignals.clear();
+  m_TriggeredSignalsThisLoop.clear();
+
+  m_ViewportTimestamp = 0;
+  m_RenderProcessed = false;
 }
 
 void KeyframeSequence::SetSound(QString name)
@@ -79,6 +86,26 @@ void KeyframeSequence::RunSequence(float deltaTime)
     }
   }
 
+  for (const auto& signalEvent : m_TimedSignals) {
+    float triggerTime = signalEvent.timestamp;
+    bool wrapped = (newTimestamp < m_Timestamp);
+
+    if ((wrapped && (triggerTime >= m_Timestamp || triggerTime <= newTimestamp)) ||
+        (!wrapped && triggerTime >= m_Timestamp && triggerTime <= newTimestamp)) {
+      if (m_TriggeredSignalsThisLoop.find(signalEvent.signal) == m_TriggeredSignalsThisLoop.end())
+      {
+        if(signalEvent.signal == "hide_desk")
+          courtroom::layout::setVisibility("ui_vp_desk", false);
+        else if(signalEvent.signal == "hide_textbox")
+          courtroom::layout::setVisibility("ao2_chatbox", false);
+        else if(signalEvent.signal == "show_textbox")
+          courtroom::layout::setVisibility("ao2_chatbox", true);
+
+        m_TriggeredSignalsThisLoop.insert(signalEvent.signal);
+      }
+    }
+  }
+
   m_LastTimestamp = m_Timestamp;
   m_Timestamp = newTimestamp;
 }
@@ -93,7 +120,22 @@ void KeyframeSequence::Evaluate(std::unordered_map<std::string, QVariant> &outVa
   }
 }
 
+void KeyframeSequence::AddTimedSignal(float timestamp, const std::string &signal)
+{
+  m_TimedSignals.push_back({timestamp, signal});
+}
+
 bool KeyframeSequence::getLoopState()
 {
   return m_Loop;
+}
+
+bool KeyframeSequence::canRenderViewport()
+{
+  if(m_RenderProcessed) return false;
+  if(m_Timestamp >= m_ViewportTimestamp)
+  {
+    m_RenderProcessed = true;
+  }
+  return m_RenderProcessed;
 }

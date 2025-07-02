@@ -45,6 +45,9 @@ public:
   void setLayerPositioning(const QString& name);
   void setDetatch(bool state);
   void setCompositionMode(QPainter::CompositionMode mode);
+
+  QPixmap &getPixmap(bool renderAllowed = false);
+
   mk2::SpritePlayer* spritePlayerReference();
 
 
@@ -62,6 +65,8 @@ private:
   QString m_layerPosition = "";
   double m_currentScale = 0.0f;
   QPainter::CompositionMode m_compositionMode = QPainter::CompositionMode_SourceOver;
+
+  QPixmap m_screenshotPixmap = QPixmap(0, 0);
 };
 
 namespace mk2

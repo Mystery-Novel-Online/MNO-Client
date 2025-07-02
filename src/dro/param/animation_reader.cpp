@@ -47,6 +47,7 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
   QString animationSound = getStringValue("sound");
   sequence.SetSound(animationSound);
   sequence.SetLoop(animationLoop);
+  sequence.setViewportTimestamp(getIntValue("viewport_time"));
 
   QRect targetResolution = getRectangleValue("target_resolution");
   if(targetResolution.width() == 0)
@@ -98,6 +99,19 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
         QString frameValue = getStringValue("value");
 
         sequence.AddTimedSound(frameTime, frameValue.toStdString());
+      }
+    }
+    else if(channelName == "signals")
+    {
+      for(QJsonValueRef frameValueRef : getArrayValue("frames"))
+      {
+        const QJsonObject frameObject = frameValueRef.toObject();
+        SetTargetObject(frameObject);
+
+        int frameTime = getIntValue("time");
+        QString frameValue = getStringValue("value");
+
+        sequence.AddTimedSignal(frameTime, frameValue.toStdString());
       }
     }
     else if(channelType == "vec3")

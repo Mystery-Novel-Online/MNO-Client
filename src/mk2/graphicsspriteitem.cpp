@@ -473,7 +473,8 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
 {
   for (SpriteLayer *layer : layers)
   {
-    QPixmap pixmap = layer->spritePlayer.getCurrentPixmap();
+    QPixmap pixmap = layer->name() == "viewport" ? layer->getPixmap(m_KeyframeSequence.canRenderViewport()) : layer->spritePlayer.getCurrentPixmap();
+
     if (pixmap.isNull())
       continue;
 
@@ -716,6 +717,15 @@ void SpriteLayer::setDetatch(bool state)
 void SpriteLayer::setCompositionMode(QPainter::CompositionMode mode)
 {
   m_compositionMode = mode;
+}
+
+QPixmap &SpriteLayer::getPixmap(bool renderAllowed)
+{
+  if(renderAllowed)
+  {
+    if(m_name == "viewport") m_screenshotPixmap = courtroom::viewport::getScreenshot();
+  }
+  return m_screenshotPixmap;
 }
 
 SpritePlayer *SpriteLayer::spritePlayerReference()

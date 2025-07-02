@@ -626,6 +626,23 @@ namespace courtroom
       }
     }
 
+    QPixmap getScreenshot()
+    {
+      Courtroom *courtroom = dynamic_cast<Courtroom*>(s_CourtroomWidgets["courtroom"]);
+      DRGraphicsView *viewport = dynamic_cast<DRGraphicsView*>(s_CourtroomWidgets["viewport"]);
+
+      if(courtroom != nullptr && viewport != nullptr)
+      {
+        QPixmap courtroomRender = courtroom->grab();
+
+        QRect viewportArea(viewport->x(), viewport->y(), viewport->width(), viewport->height());
+        QPixmap viewportCrop = courtroomRender.copy(viewportArea);
+        return viewportCrop;
+      }
+
+      return QPixmap(0, 0);
+    }
+
   }
 
 
