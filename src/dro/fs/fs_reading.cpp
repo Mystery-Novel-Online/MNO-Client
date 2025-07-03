@@ -264,7 +264,7 @@ QStringList FindFiles(const QString &filePath, const QStringList &extensions)
   QStringList returnValues = {};
 
 
-  QStringList appendedFileList = {filePath};
+  QStringList appendedFileList = {};
 
   if(extensions.count() > 0)
   {
