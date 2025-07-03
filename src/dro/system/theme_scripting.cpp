@@ -76,6 +76,9 @@ namespace ThemeScripting
       displayTextTable.set_function("SetText", &courtroom::textedit::setText);
       displayTextTable.set_function("SetFrame", &courtroom::textedit::setFrame);
 
+      sol::table hoverWidgetTable = s_themeScript.create_named_table("HoverController");
+      hoverWidgetTable.set_function("Create", &courtroom::hovercontroller::create);
+      hoverWidgetTable.set_function("AddWidget", &courtroom::hovercontroller::addWidget);
 
       sol::table lineeditTable = s_themeScript.create_named_table("LineEdit");
       lineeditTable.set_function("Create", &courtroom::lineedit::create);

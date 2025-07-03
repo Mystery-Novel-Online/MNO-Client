@@ -64,6 +64,12 @@ namespace courtroom
     void setValue(const std::string& name, const std::string& value);
   }
 
+  namespace hovercontroller
+  {
+    void create(const std::string& name, int x, int y, int width, int height);
+    void addWidget(const std::string& name, const std::string& child);
+  }
+
   namespace textedit
   {
     void create(const std::string& name, int x, int y, int width, int height);

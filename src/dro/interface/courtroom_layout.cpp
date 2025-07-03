@@ -1,6 +1,7 @@
 #include "courtroom_layout.h"
 
 #include "commondefs.h"
+#include "dro/interface/widgets/rp_hover_widget.h"
 #include "dro/interface/widgets/sticker_viewer.h"
 #include <aoapplication.h>
 #include "dro/interface/widgets/chat_log.h"
@@ -22,10 +23,13 @@ static QVector<RPSlider *> s_CourtroomSliders = {};
 static QVector<QLineEdit *> s_CourtroomLineEdits = {};
 static QVector<QTextEdit *> s_CourtroomTextEdits = {};
 static QVector<QComboBox *> s_CourtroomComboBoxes = {};
+static QVector<RPHoverWidget *> s_CourtroomHoverWidgets = {};
 
 template <typename T>
 void cleanupWidgets(QVector<T*> &list)
 {
+  QWidget* courtroomWidget = s_CourtroomWidgets.value("courtroom", nullptr);
+
   for (T *item : list)
   {
     auto it = s_CourtroomWidgets.begin();
@@ -36,6 +40,16 @@ void cleanupWidgets(QVector<T*> &list)
       else
         ++it;
     }
+
+    if (courtroomWidget && item)
+    {
+      const auto& children = item->template findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);
+      for (QWidget* child : children)
+      {
+        child->setParent(courtroomWidget);
+      }
+    }
+
     delete item;
   }
   list.clear();
@@ -54,6 +68,7 @@ namespace courtroom
     cleanupWidgets(s_CourtroomLineEdits);
     cleanupWidgets(s_CourtroomTextEdits);
     cleanupWidgets(s_CourtroomComboBoxes);
+    cleanupWidgets(s_CourtroomHoverWidgets);
   }
 
   void reload()
@@ -649,6 +664,37 @@ namespace courtroom
       return QPixmap(0, 0);
     }
 
+  }
+
+  void hovercontroller::create(const std::string &name, int x, int y, int width, int height)
+  {
+    const QString qName = QString::fromStdString(name);
+    if (!s_CourtroomWidgets.contains("courtroom")) return;
+
+    if (!s_CourtroomWidgets.contains(qName))
+    {
+      RPHoverWidget* hoverWidget = new RPHoverWidget(s_CourtroomWidgets["courtroom"]);
+      s_CourtroomHoverWidgets.append(hoverWidget);
+      s_CourtroomWidgets.insert(qName, hoverWidget);
+
+      hoverWidget->raise();
+      hoverWidget->show();
+    }
+
+    float resizeFactor = ThemeManager::get().getResize();
+    s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
+    s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
+  }
+
+  void hovercontroller::addWidget(const std::string &name, const std::string &child)
+  {
+    if (auto *hoverWidget = qobject_cast<RPHoverWidget *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+    {
+      if (auto *childWidget = qobject_cast<QWidget *>(s_CourtroomWidgets.value(QString::fromStdString(child))))
+      {
+        hoverWidget->addWidget(childWidget);
+      }
+    }
   }
 
 
