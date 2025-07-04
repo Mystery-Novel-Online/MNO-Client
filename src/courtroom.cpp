@@ -2244,19 +2244,25 @@ void Courtroom::next_chat_letter()
     {
     case 's':
       play_screenshake_anim();
-      break;
+      advanceLetter();
+      next_chat_letter();
+      return;
+
     case 'f':
       playEffect("effect_flash", "");
-      break;
+      advanceLetter();
+      next_chat_letter();
+      return;
+
     case 'n':
       ui_vp_message->textCursor().insertText("\n", vp_message_format);
-      break;
+      advanceLetter();
+      next_chat_letter();
+      return;
+
     default:
       break;
     }
-    advanceLetter();
-    next_chat_letter();
-    return;
   }
 
   if (f_character == Qt::Key_Space)
