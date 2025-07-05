@@ -47,6 +47,7 @@ private:
   int m_SelectedIndex = 0;
 
 public slots:
+  void dropdownChanged(int id);
   void emoteClicked(int id);
 
 private slots:

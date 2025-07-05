@@ -259,10 +259,41 @@ void EmotionSelector::selectEmote(int emoteTarget)
 
 }
 
+void EmotionSelector::dropdownChanged(int id)
+{
+  m_PageIndex = 0;
+  selectEmote(id);
+
+  QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
+  QListWidget* sfxList = dynamic_cast<QListWidget*>(ThemeManager::get().getWidget("sfx_list"));
+  QListWidget* animList = dynamic_cast<QListWidget*>(ThemeManager::get().getWidget("chara_animations"));
+  if (sfxList != nullptr && sfxList->count() != 0)
+  {
+    sfxList->setCurrentRow(0);
+  }
+  if (animList != nullptr && animList->count() != 0)
+  {
+    animList->setCurrentRow(0);
+    const QString &sequenceName = getSelectedEmote().sequence;
+    for(QListWidgetItem *item : animList->findItems(sequenceName, Qt::MatchExactly))
+    {
+      animList->setCurrentItem(item);
+    };
+
+  }
+
+
+  emotionChange(getSelectedEmote());
+
+  if(emoteCombobox != nullptr) emoteCombobox->setCurrentIndex(getSelectedIndex());
+  courtroom::ic::focusMessageBox();
+  refreshEmotes(true);
+}
+
 void EmotionSelector::emoteClicked(int id)
 {
   selectEmote(id);
-  m_SelectedIndex = id;
+
   QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
   QListWidget* sfxList = dynamic_cast<QListWidget*>(ThemeManager::get().getWidget("sfx_list"));
   QListWidget* animList = dynamic_cast<QListWidget*>(ThemeManager::get().getWidget("chara_animations"));

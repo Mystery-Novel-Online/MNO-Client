@@ -141,5 +141,5 @@ void Courtroom::on_emote_right_clicked()
 
 void Courtroom::on_emote_dropdown_changed(int p_index)
 {
-  ui_emotes->emoteClicked(p_index);
+  ui_emotes->dropdownChanged(p_index);
 }
