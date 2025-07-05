@@ -25,9 +25,11 @@ public:
   int m_rectSize = 120;
   bool m_dragging = false;
   QPoint m_dragOffset;
-
+  bool m_renderGuides = false;
+  QImage m_OverlayImage;
 
 protected:
+  void keyPressEvent(QKeyEvent* event) override;
   void paintEvent(QPaintEvent *event) override;
   void mousePressEvent(QMouseEvent *event) override;
   void mouseMoveEvent(QMouseEvent *event) override;
@@ -63,7 +65,6 @@ private:
   ButtonMakerOverlay *m_Overlay = nullptr;
 
   QImage m_UnderlayImage;
-  QImage m_OverlayImage;
   QImage m_AlphaMaskImage;
 
 };

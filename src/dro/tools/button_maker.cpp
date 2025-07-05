@@ -84,12 +84,30 @@ void ButtonMaker::SetEmote(DREmote emote)
     hide();
     return;
   }
+  DREmote currentEmote = m_Emotes.at(m_EmoteIndex);
+  if(emote.comment == currentEmote.comment && emote.outfitName == currentEmote.outfitName)
+  {
+    m_EmoteIndex = m_EmoteIndex;
+    m_CharacterSprite->play_idle(currentEmote.character, currentEmote.dialog);
+    m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
+
+    QStringList layers;
+    for(const EmoteLayer &layer : currentEmote.emoteOverlays)
+    {
+      if(dro::actor::user::layerState(layer.toggleName))
+        layers.append(dro::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+    }
+
+    m_CharacterSprite->processOverlays(dro::system::encoding::text::EncodeBase64(layers), currentEmote.character, currentEmote.dialog, currentEmote.outfitName);
+    m_CharacterSprite->start(dro::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
+    return;
+  }
 
   for(int i = 0; i < m_Emotes.count(); i++)
   {
     DREmote checkEmote = m_Emotes.at(i);
 
-    if(emote.comment == checkEmote.comment)
+    if(emote.comment == checkEmote.comment && emote.outfitName == checkEmote.outfitName)
     {
       m_EmoteIndex = i;
       m_CharacterSprite->play_idle(checkEmote.character, checkEmote.dialog);
@@ -137,6 +155,8 @@ void ButtonMaker::SetCharacter(QString character)
 
 void ButtonMaker::onGenerateClicked()
 {
+
+  m_Overlay->setFocus();
   QRect cropRect(m_Overlay->m_rectPos, QSize(m_Overlay->m_rectSize, m_Overlay->m_rectSize));
   QSize outputSize = cropRect.size();
 
@@ -169,9 +189,9 @@ void ButtonMaker::onGenerateClicked()
 
   finalPainter.drawImage(0, 0, cropppedSprite);
 
-  if (!m_OverlayImage.isNull())
+  if (!m_Overlay->m_OverlayImage.isNull())
   {
-    QImage overlayScaled = m_OverlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QImage overlayScaled = m_Overlay->m_OverlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     finalPainter.drawImage(0, 0, overlayScaled);
   }
 
@@ -216,16 +236,19 @@ void ButtonMaker::onGenerateClicked()
 void ButtonMaker::onAddUnderlayClicked()
 {
   m_UnderlayImage = LoadImageDialog();
+  m_Overlay->setFocus();
 }
 
 void ButtonMaker::onAddOverlayClicked()
 {
-  m_OverlayImage = LoadImageDialog();
+  m_Overlay->m_OverlayImage = LoadImageDialog();
+  m_Overlay->setFocus();
 }
 
 void ButtonMaker::onAlphaClicked()
 {
   m_AlphaMaskImage = LoadImageDialog();
+  m_Overlay->setFocus();
 }
 
 QImage ButtonMaker::LoadImageDialog()
@@ -243,17 +266,59 @@ ButtonMakerOverlay::ButtonMakerOverlay(QWidget *parent) : QWidget(parent)
   setMouseTracking(true);
   resize(960, 544);
   m_rectPos = QPoint((width() / 2) - (m_rectSize / 2), 80);
+  setFocusPolicy(Qt::StrongFocus);
+  setFocus();
+}
+
+void ButtonMakerOverlay::keyPressEvent(QKeyEvent *event)
+{
+
+  switch(event->key())
+  {
+    case Qt::Key_Up:
+      m_rectPos.setY(m_rectPos.y() - 1);
+      break;
+    case Qt::Key_Down:
+      m_rectPos.setY(m_rectPos.y() + 1);
+      break;
+    case Qt::Key_Right:
+      m_rectPos.setX(m_rectPos.x() + 1);
+      break;
+    case Qt::Key_Left:
+      m_rectPos.setX(m_rectPos.x() - 1);
+      break;
+    case Qt::Key_G:
+      m_renderGuides = m_renderGuides == false;
+      break;
+
+  }
+
+    update();
 }
 
 void ButtonMakerOverlay::paintEvent(QPaintEvent *)
 {
   QPainter painter(this);
   painter.setPen(Qt::white);
-  painter.drawRect(QRect(m_rectPos, QSize(m_rectSize, m_rectSize)));
+  QRect rect(m_rectPos, QSize(m_rectSize, m_rectSize));
+  painter.drawRect(rect);
+
+  if(m_renderGuides)
+  {
+    QPoint center = rect.center();
+    painter.setPen(QPen(Qt::red, 1, Qt::DashLine));
+
+    painter.drawLine(QPoint(rect.left(), center.y()), QPoint(rect.right(), center.y()));
+    painter.drawLine(QPoint(center.x(), rect.top()), QPoint(center.x(), rect.bottom()));
+  }
+  if(m_OverlayImage.isNull()) return;
+  painter.drawImage(rect, m_OverlayImage);
+
 }
 
 void ButtonMakerOverlay::mousePressEvent(QMouseEvent *event)
 {
+  setFocus();
   QRect rect(m_rectPos, QSize(m_rectSize, m_rectSize));
   if (rect.contains(event->pos())) {
     m_dragging = true;
