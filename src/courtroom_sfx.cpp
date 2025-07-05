@@ -43,6 +43,13 @@ void Courtroom::load_sfx_list_theme()
 
   m_sfx_color_found = ao_app->current_theme->get_widget_settings_color("sfx_list", "courtroom", "found_sfx", "found_song_color");
   m_sfx_color_missing = ao_app->current_theme->get_widget_settings_color("sfx_list", "courtroom", "missing_sfx", "missing_song_color");
+
+
+  m_animListIdle = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "unselected_anim", "unselected_anim_color");
+  m_animListSelected = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "selected_anim", "selected_anim_color");
+  m_animListHeader = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "category_header", "category_header_color");
+
+
   update_all_sfx_item_color();
 }
 
@@ -95,12 +102,15 @@ void Courtroom::filter_sfx_list()
 void Courtroom::setAnimItemColor(QListWidgetItem *item)
 {
   if (item == nullptr) return;
-  QColor l_color = m_sfx_color_found;
+  QColor l_color = m_animListIdle;
 
-  if (item == animList->currentItem())
+  if(item->text().startsWith("[") && item->text().endsWith("]"))
   {
-    const double l_final_lightness = qMin(1.0, l_color.lightnessF() + 0.4);
-    l_color.setHslF(l_color.hueF(), l_color.saturationF(), l_final_lightness);
+    l_color = m_animListHeader;
+  }
+  else if (item == animList->currentItem())
+  {
+    l_color = m_animListSelected;
   }
 
   item->setBackground(l_color);
@@ -142,8 +152,10 @@ void Courtroom::set_sfx_item_color(QListWidgetItem *p_item)
 
 void Courtroom::onAnimListItemChanged(QListWidgetItem *current_item, QListWidgetItem *previous_item)
 {
-  setAnimItemColor(current_item);
-  setAnimItemColor(previous_item);
+  for (int i = 0; i < animList->count(); ++i)
+  {
+    setAnimItemColor(animList->item(i));
+  }
   ui_ic_chat_message_field->setFocus();
 }
 

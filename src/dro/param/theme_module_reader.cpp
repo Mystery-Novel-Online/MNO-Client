@@ -184,6 +184,13 @@ ThemeScene *ThemeModuleReader::ParseScene(QString t_scene)
       if(obj["settings"].toObject().contains("missing_song_color")) m_configSounds["missing_song_color"] = obj["settings"].toObject()["missing_song_color"].toString();
     }
 
+    if(key == "chara_animations")
+    {
+      if(obj["settings"].toObject().contains("unselected_anim_color")) m_configSounds["unselected_anim_color"] = obj["settings"].toObject()["unselected_anim_color"].toString();
+      if(obj["settings"].toObject().contains("selected_anim_color")) m_configSounds["selected_anim_color"] = obj["settings"].toObject()["selected_anim_color"].toString();
+      if(obj["settings"].toObject().contains("category_header_color")) m_configSounds["category_header_color"] = obj["settings"].toObject()["category_header_color"].toString();
+    }
+
 
 
 

@@ -540,6 +540,10 @@ private:
   QListWidget *ui_sfx_list = nullptr;
   QVector<DRSfx> m_sfx_list;
   const QString m_sfx_default_file = "__DEFAULT__";
+  QColor m_animListIdle;
+  QColor m_animListSelected;
+  QColor m_animListHeader;
+
   QColor m_sfx_color_found;
   QColor m_sfx_color_missing;
   QMenu *ui_sfx_menu = nullptr;

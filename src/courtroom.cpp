@@ -383,6 +383,7 @@ void Courtroom::enter_courtroom(int p_cid)
   ui_emotes->refreshSelection(l_changed_chr);
   ui_emotes->refreshEmotes(false);
 
+  onAnimListItemChanged(nullptr, nullptr);
   load_current_character_sfx_list();
   select_default_sfx();
 
@@ -3008,6 +3009,7 @@ void Courtroom::onOutfitChanged(int outfitIndex)
 
   ui_emotes->refreshSelection(false);
   ui_emotes->refreshEmotes(false);
+  onAnimListItemChanged(nullptr, nullptr);
   ui_emotes->outfitChange();
 
   const QString l_chr_name = get_character_ini();
