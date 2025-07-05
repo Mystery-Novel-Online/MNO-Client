@@ -51,6 +51,7 @@ namespace ThemeScripting
 
       sol::table widgetTable = s_themeScript.create_named_table("Widget");
       widgetTable.set_function("Move", &courtroom::layout::moveWidget);
+      widgetTable.set_function("Resize", &courtroom::layout::resizeWidget);
       widgetTable.set_function("Raise", &courtroom::layout::raiseWidget);
       widgetTable.set_function("SetVisible", &courtroom::layout::setVisibility);
       widgetTable.set_function("SetParent", &courtroom::layout::setParent);

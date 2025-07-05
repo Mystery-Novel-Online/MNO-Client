@@ -614,6 +614,16 @@ namespace courtroom
       s_CourtroomWidgets[qChild]->setParent(s_CourtroomWidgets[qParent]);
     }
 
+    void resizeWidget(const char *name, int width, int height)
+    {
+      if(!s_CourtroomWidgets.contains(name)) return;
+      QWidget *targetWidget = s_CourtroomWidgets[name];
+      float resizeFactor = ThemeManager::get().getResize();
+      int scaledX = static_cast<int>(width * resizeFactor);
+      int scaledY = static_cast<int>(height * resizeFactor);
+      targetWidget->resize(scaledX, scaledY);
+    }
+
   }
 
   namespace viewport
