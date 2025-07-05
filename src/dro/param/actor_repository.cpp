@@ -7,6 +7,7 @@
 
 QMap<QString, bool> s_layersEnabled = {};
 ActorData* s_currentActor = nullptr;
+static QString s_currentFolder = "<NOCHAR>";
 
 bool dro::actor::user::layerState(const QString &name)
 {
@@ -21,14 +22,14 @@ void dro::actor::user::toggleLayer(const QString &name, bool state)
 
 ActorData *dro::actor::user::load(QString folder)
 {
-  static QString currentFolder = "<NOCHAR>";
   s_layersEnabled.clear();
-  if(folder == currentFolder)
+  if(folder == s_currentFolder)
   {
     if(s_currentActor != nullptr) s_currentActor->reload();
     return s_currentActor;
   }
 
+  s_currentFolder = folder;
   QString l_jsonPath = AOApplication::getInstance()->get_character_path(folder, "char.json");
 
   if(FS::Checks::FileExists(l_jsonPath))
@@ -48,4 +49,9 @@ ActorData *dro::actor::user::load(QString folder)
 ActorData *dro::actor::user::retrieve()
 {
   return s_currentActor;
+}
+
+QString dro::actor::user::name()
+{
+  return s_currentFolder;
 }
