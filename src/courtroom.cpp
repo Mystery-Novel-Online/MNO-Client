@@ -888,36 +888,45 @@ void Courtroom::on_pair_offset_changed()
 void Courtroom::OnPlayerOffsetsChanged(int value)
 {
   if(!ServerMetadata::FeatureSupported("outfits")) return;
-  if(metadata::message::recentMessage().characterFolder != actor::user::name()) return;
   if(metadata::message::recentMessage().modifiers.Hidden) return;
   bool intParse = false;
   int speakerClientId = m_chatmessage[CMClientId].toInt(&intParse);
-  if(speakerClientId == metadata::user::getClientId())
+
+  DRCharacterMovie* targetCharacter = nullptr;
+  mk2::SpritePlayer::ScalingMode targetScaling = mk2::SpritePlayer::AutomaticScaling;
+
+  if(metadata::user::getClientId() == speakerClientId)
   {
-    ui_vp_player_char->setVerticalOffset(ui_slider_vertical_axis->value());
-
-    static double lastScale = 0.0f;
-    double playerScale = (double)ui_slider_scale->value() / 1000.0f;
-
-    mk2::SpritePlayer::ScalingMode targetScaling = mk2::SpritePlayer::AutomaticScaling;
+    if(metadata::message::recentMessage().characterFolder != actor::user::name()) return;
+    targetCharacter = ui_vp_player_char;
     if(m_SpeakerActor != nullptr)
-    {
       targetScaling = m_SpeakerActor->GetScalingMode();
-    }
-
-    if (ui_vp_player_char->is_running())
-    {
-      ui_vp_player_char->stop();
-    }
-
-    ui_vp_player_char->setHorizontalOffset(ui_slider_horizontal_axis->value());
-    if(lastScale != playerScale)
-    {
-      ui_vp_player_char->start(targetScaling, playerScale);
-      lastScale = playerScale;
-    }
-
   }
+  if(speakerClientId == metadata::user::partner::clientId())
+  {
+    if(metadata::message::pair::getCharacter() != actor::user::name()) return;
+    targetCharacter = ui_vp_player_pair;
+    if(m_PairActor != nullptr)
+      targetScaling = m_PairActor->GetScalingMode();
+  }
+
+  double playerScale = (double)ui_slider_scale->value() / 1000.0f;
+  if(targetCharacter == nullptr) return;
+
+  targetCharacter->setVerticalOffset(ui_slider_vertical_axis->value());
+
+  static double lastScale = 0.0f;
+
+  targetCharacter->setHorizontalOffset(ui_slider_horizontal_axis->value());
+
+  if(lastScale != playerScale)
+  {
+    if (targetCharacter->is_running())
+      targetCharacter->stop();
+    targetCharacter->start(targetScaling, playerScale);
+    lastScale = playerScale;
+  }
+
 }
 
 void Courtroom::on_showname_placeholder_changed(QString p_showname_placeholder)

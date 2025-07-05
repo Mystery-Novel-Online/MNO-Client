@@ -24,6 +24,11 @@ namespace dro::network::metadata::user
       return s_partnerClientId == -1;
     }
 
+    int clientId()
+    {
+      return s_partnerClientId;
+    }
+
   }
 
   bool IsSpectator()

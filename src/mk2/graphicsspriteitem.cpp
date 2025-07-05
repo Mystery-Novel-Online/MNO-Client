@@ -553,6 +553,7 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
   float alpha = 1.0f;
   float animScale = 1.0f;
+  float isolatedScale = 1.0f;
   float rotation = 0.0f;
   QVector3D animationOffset;
 
@@ -570,6 +571,8 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
     animationOffset = it->second.value<QVector3D>();
   if (auto it = evaluatedValues.find("scale"); it != evaluatedValues.end())
     animScale = it->second.toFloat();
+  if (auto it = evaluatedValues.find("character_scale"); it != evaluatedValues.end())
+    isolatedScale = it->second.toFloat();
   if (auto it = evaluatedValues.find("rotation"); it != evaluatedValues.end())
     rotation = it->second.toFloat();
 
@@ -597,9 +600,14 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
     drawSpriteLayers(&combiner, m_spriteLayersBelow, drawPos, scale, evaluatedValues, 1.0);
 
+    combiner.save();
+    combiner.translate(pivot);
+    combiner.scale(isolatedScale, isolatedScale);
+    combiner.translate(-pivot);
 
     combiner.drawPixmap(drawPos, pixmap);
 
+    combiner.restore();
     drawSpriteLayers(&combiner, m_spriteLayers, drawPos, scale, evaluatedValues, 1.0); // alpha=1.0 here
 
     combiner.end();

@@ -14,6 +14,7 @@ namespace dro::network::metadata::user
   namespace partner
   {
     void setPartner(int clientId);
+    int clientId();
     bool isUnpaired();
   }
 
