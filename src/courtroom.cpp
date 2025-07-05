@@ -1091,10 +1091,14 @@ void Courtroom::on_ic_message_return_pressed()
     packet_contents.append(l_emote.outfitName);
     packet_contents.append(QString::fromStdString(courtroom::lists::getAnimation()));
     QStringList layers;
+    int layerCount = 0;
     for(const EmoteLayer &layer : l_emote.emoteOverlays)
     {
-      if(actor::user::layerState(layer.toggleName))
+      if(actor::user::layerState(layer.toggleName) && layerCount < 4)
+      {
         layers.append(dro::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+        layerCount += 1;
+      }
     }
     packet_contents.append(dro::system::encoding::text::EncodeBase64(layers));
   }
