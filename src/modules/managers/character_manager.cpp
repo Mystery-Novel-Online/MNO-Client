@@ -67,9 +67,10 @@ ActorData *CharacterManager::SwitchCharacter(QString t_folder)
     }
     characterAnimations.close();
   }
-
-  animations.append(FS::Paths::GetFileList("characters/" + t_folder + "/animations", true, "json"));
-
+  else
+  {
+    animations.append(FS::Paths::GetFileList("characters/" + t_folder + "/animations", true, "json"));
+  }
 
   for(QString animationIniPath : FS::Paths::FindFiles("configs/animations.ini"))
   {

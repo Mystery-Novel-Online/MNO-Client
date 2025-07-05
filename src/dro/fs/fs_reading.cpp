@@ -276,6 +276,15 @@ QStringList FindFiles(const QString &filePath, const QStringList &extensions)
     appendedFileList.append(filePath);
   }
 
+  for(const QString& path : appendedFileList)
+  {
+    QString baseFilePath = BasePath() + path;
+    if(Checks::FileExists(baseFilePath))
+    {
+      returnValues.append(baseFilePath);
+    }
+  }
+
   QVector<QString> packageNames = Packages::CachedNames();
   QVector<QString> disabledList = Packages::DisabledList();
 
@@ -294,14 +303,7 @@ QStringList FindFiles(const QString &filePath, const QStringList &extensions)
     }
   }
 
-  for(const QString& path : appendedFileList)
-  {
-    QString baseFilePath = BasePath() + path;
-    if(Checks::FileExists(baseFilePath))
-    {
-      returnValues.append(baseFilePath);
-    }
-  }
+
 
   return returnValues;
 }
