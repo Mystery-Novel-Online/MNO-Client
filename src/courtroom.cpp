@@ -182,6 +182,9 @@ void Courtroom::setup_courtroom()
   TimeDebugger::get().EndTimer("Courtroom Setup");
   PairManager::get().ThemeReload();
   LuaBridge::LuaEventCall("OnCourtroomSetup");
+
+
+  w_ViewportOverlay->raise();
 }
 
 void Courtroom::map_viewers()
@@ -1832,6 +1835,28 @@ void Courtroom::handle_chatmessage_3()
 
   ui_vp_player_pair->setCharacterAnimation(metadata::message::pair::getAnimation(), metadata::message::pair::getCharacter(), true);
 
+}
+
+void Courtroom::handelInvestigation(QString p_contents)
+{
+  if(w_ViewportOverlay == nullptr) return;
+  w_ViewportOverlay->clearInteractions();
+  QString l_PacketData = dro::system::encoding::text::DecodeBase64String(p_contents);
+  JSONReader l_InvestigationJson = JSONReader();
+  l_InvestigationJson.ReadFromString(l_PacketData);
+
+
+  for (const QJsonValue &value : l_InvestigationJson.mDocument.array())
+  {
+    if (value.isObject())
+    {
+      l_InvestigationJson.SetTargetObject(value.toObject());
+      QString l_ObjName = l_InvestigationJson.getStringValue("name");
+      QString l_ObjDesc = l_InvestigationJson.getStringValue("desc");
+      QRect l_ObjRect = l_InvestigationJson.getRectangleValue("rect");
+      w_ViewportOverlay->addInteraction(l_ObjRect, l_ObjName, l_ObjDesc);
+    }
+  }
 }
 
 void Courtroom::on_chat_config_changed()

@@ -253,6 +253,8 @@ public:
   void handle_chatmessage_2();
   void handle_chatmessage_3();
 
+  void handelInvestigation(QString p_contents);
+
   struct IcLogTextFormat
   {
     QTextCharFormat base;

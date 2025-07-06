@@ -30,4 +30,10 @@ namespace dro::system::encoding::text
     return parameters.split("#");
   }
 
+  QString DecodeBase64String(const QString& base64)
+  {
+    QByteArray byteArray = QByteArray::fromBase64(base64.toUtf8());
+    return QString::fromUtf8(byteArray);
+  }
+
 }

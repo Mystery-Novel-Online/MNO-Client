@@ -12,6 +12,7 @@ namespace dro::system::encoding::text
 
   QString EncodeBase64(const QStringList& list);
   QStringList DecodeBase64(const QString& base64);
+  QString DecodeBase64String(const QString& base64);
 }
 
 #endif // TEXT_ENCODING_H

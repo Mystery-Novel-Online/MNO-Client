@@ -531,13 +531,13 @@ namespace courtroom
 
   namespace ooc
   {
-    void appendMessage(const char *name, const char *message)
+    void appendMessage(const std::string& name, const std::string& message)
     {
       DRChatLog *oocChatlog = nullptr;
       QWidget *chatlogWidget = s_CourtroomWidgets["server_chatlog"];
       oocChatlog = dynamic_cast<DRChatLog*>(chatlogWidget);
       if(oocChatlog == nullptr) return;
-      oocChatlog->append_chatmessage(name, message);
+      oocChatlog->append_chatmessage(QString::fromStdString(name), QString::fromStdString(message));
     }
 
     std::string getInputFieldContents()

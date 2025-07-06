@@ -433,6 +433,11 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (is_courtroom_constructed && joined_server())
       m_courtroom->next_chatmessage(l_content);
   }
+  else if (l_header == "INVES")
+  {
+    if (is_courtroom_constructed && joined_server())
+      m_courtroom->handelInvestigation(l_content.at(0));
+  }
   else if (l_header == "ackMS")
   {
     if (is_courtroom_constructed && joined_server())
