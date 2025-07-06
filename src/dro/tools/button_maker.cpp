@@ -75,6 +75,23 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 
 }
 
+void ButtonMaker::forceEmote(DREmote emote)
+{
+  m_CharacterSprite->play_idle(emote.character, emote.dialog);
+  m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
+
+  QStringList layers;
+  for(const EmoteLayer &layer : emote.emoteOverlays)
+  {
+    if(dro::actor::user::layerState(layer.toggleName))
+      layers.append(dro::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+  }
+
+  m_CharacterSprite->processOverlays(dro::system::encoding::text::EncodeBase64(layers), emote.character, emote.dialog, emote.outfitName);
+  m_CharacterSprite->start(dro::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
+  return;
+}
+
 void ButtonMaker::SetEmote(DREmote emote)
 {
   if(m_Emotes.count() == 0) return;
@@ -230,7 +247,7 @@ void ButtonMaker::onGenerateClicked()
   }
 
 
-  SetEmote(m_Emotes.at(m_EmoteIndex));
+  forceEmote(m_Emotes.at(m_EmoteIndex));
 }
 
 void ButtonMaker::onAddUnderlayClicked()

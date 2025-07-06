@@ -42,6 +42,7 @@ class ButtonMaker : public QWidget
   Q_OBJECT
 public:
   ButtonMaker(QWidget *parent = nullptr);
+  void forceEmote(DREmote emote);
   void SetEmote(DREmote emote);
   void SetCharacter(QString character);
 
