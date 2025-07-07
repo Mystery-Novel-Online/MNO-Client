@@ -104,9 +104,9 @@ public:
 
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
   void processOverlays(const QVector<EmoteLayer>& emoteLayers, const QString& character, const QString& emotePath, const QString& outfitName);
-  void createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings);
-  void createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched = false);
-  void createOverlay(const EmoteLayer& layer, const QString &imagePath);
+  SpriteLayer *createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings);
+  SpriteLayer *createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched = false);
+  SpriteLayer *createOverlay(const EmoteLayer& layer, const QString &imagePath);
   void clearImageLayers();
 
 

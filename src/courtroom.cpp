@@ -40,6 +40,7 @@
 #include "dro/interface/courtroom_layout.h"
 #include "dro/system/replay_playback.h"
 #include "dro/system/runtime_loop.h"
+#include "dro/system/runtime_values.h"
 #include "dro/param/actor_repository.h"
 #include <mk2/spritecachingreader.h>
 
@@ -1857,6 +1858,25 @@ void Courtroom::handelInvestigation(QString p_contents)
       w_ViewportOverlay->addInteraction(l_ObjRect, l_ObjName, l_ObjDesc);
     }
   }
+}
+
+void Courtroom::handleScene(QStringList p_contents)
+{
+  while(p_contents.length() < 10)
+  {
+    p_contents.append("");
+  }
+
+  runtime::values::storeValue("area_name", p_contents.at(0));
+  runtime::values::storeValue("map_visual", p_contents.at(2));
+
+  ui_vp_wtce->setKeyframeAnimation("transitions/", "default");
+
+  //DRAreaBackground l_area_bg;
+  //l_area_bg.background = t_Contents.at(1);
+  //l_CourtroomScene->set_background(l_area_bg);
+
+  reset_viewport();
 }
 
 void Courtroom::on_chat_config_changed()

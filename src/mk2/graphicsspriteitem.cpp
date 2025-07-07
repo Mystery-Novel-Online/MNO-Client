@@ -147,12 +147,22 @@ bool GraphicsSpriteItem::setKeyframeAnimation(const QString &directory, const QS
   clearImageLayers();
   for(const EmoteLayer &layer : AnimationReader(directory + "/" + animation, m_KeyframeSequence).m_Layers)
   {
-    QString filePath = FS::Paths::FindFile("animations/" + directory + "/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
+    QStringList searchPaths =
+    {
+      "animations/" + directory + "/assets/" + layer.assetPath,
+      "animations/assets/" + layer.assetPath,
+      "animations/" + directory + "/assets/" + layer.offsetName,
+      "animations/assets/" + layer.offsetName,
+      layer.assetPath + "/" + layer.offsetName
+    };
 
-    if(!FS::Checks::FileExists(filePath))
-      filePath = FS::Paths::FindFile("animations/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
+    QString filePath = FS::Paths::FindFile(searchPaths, true, FS::Formats::SupportedImages());
 
-    createOverlay(layer, filePath);
+    SpriteLayer *layerData = createOverlay(layer, filePath);
+    if(layer.offsetName == "viewport")
+    {
+      layerData->getPixmap(m_KeyframeSequence.canRenderViewport());
+    }
   }
 
   return m_KeyframeSequence.getLoopState();
@@ -265,7 +275,7 @@ void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers,
 
 }
 
-void GraphicsSpriteItem::createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings)
+SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings)
 {
   m_LayersExist = true;
 
@@ -318,9 +328,10 @@ void GraphicsSpriteItem::createOverlay(const QString &characterName, const QStri
 
   update();
   m_player->scale_current_frame();
+  return layer;
 }
 
-void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched)
+SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched)
 {
   m_LayersExist = true;
 
@@ -347,9 +358,10 @@ void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &
     m_spriteLayers.append(layer);
   }
   update();
+  return layer;
 }
 
-void GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QString &imagePath)
+SpriteLayer *GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QString &imagePath)
 {
   m_LayersExist = true;
 
@@ -422,6 +434,7 @@ void GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QString &i
     m_spriteLayers.append(layerData);
   }
   update();
+  return layerData;
 }
 
 void GraphicsSpriteItem::clearImageLayers()
@@ -546,8 +559,13 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   Q_UNUSED(option);
   Q_UNUSED(widget);
 
+  bool renderPixmap = true;
   QPixmap pixmap = m_player->getCurrentPixmap();
-  if (pixmap.isNull()) return;
+  if (pixmap.isNull())
+  {
+    if(!m_LayersExist) return;
+    renderPixmap = false;
+  }
 
   const double scale = m_player->getScaledAmount();
 
@@ -608,16 +626,20 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
     drawSpriteLayers(&combiner, m_spriteLayersBelow, drawPos, scale, evaluatedValues, 1.0);
 
-    combiner.save();
-    combiner.translate(pivot);
-    combiner.scale(isolatedScale, isolatedScale);
-    combiner.rotate(isolatedRotation);
-    combiner.translate(-pivot);
-    combiner.setOpacity(isolatedAlpha);
+    if(renderPixmap)
+    {
+      combiner.save();
+      combiner.translate(pivot);
+      combiner.scale(isolatedScale, isolatedScale);
+      combiner.rotate(isolatedRotation);
+      combiner.translate(-pivot);
+      combiner.setOpacity(isolatedAlpha);
 
-    combiner.drawPixmap(drawPos, pixmap);
+      combiner.drawPixmap(drawPos, pixmap);
 
-    combiner.restore();
+      combiner.restore();
+    }
+
     drawSpriteLayers(&combiner, m_spriteLayers, drawPos, scale, evaluatedValues, 1.0); // alpha=1.0 here
 
     combiner.end();

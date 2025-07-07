@@ -254,6 +254,7 @@ public:
   void handle_chatmessage_3();
 
   void handelInvestigation(QString p_contents);
+  void handleScene(QStringList p_contents);
 
   struct IcLogTextFormat
   {

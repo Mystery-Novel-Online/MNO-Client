@@ -2,6 +2,7 @@
 #include "dro/animation/keyframe_sequence.h"
 #include "dro/animation/keyframe_channel.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/system/runtime_values.h"
 #include "aoapplication.h"
 
 AnimationReader::AnimationReader(const QString &animPath, KeyframeSequence &sequence)
@@ -62,6 +63,7 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
     QString overlayName = getStringValue("name");
     QRect overlayRect = getRectangleValue("offset");
     QString overlayRender = getStringValue("order");
+    QString assetPath = dro::runtime::values::resolveVariables(getStringValue("asset"));
     QString blendMode = getStringValue("blend_mode");
     bool detach = getBoolValue("detach");
 
@@ -75,7 +77,7 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
       overlayRect = QRect(int(xNorm), int(yNorm), int(wNorm), int(hNorm));
     }
 
-    m_Layers.append({overlayName, "", overlayRender, overlayRect, detach, blendMode});
+    m_Layers.append({overlayName, "", overlayRender, overlayRect, detach, blendMode, "", assetPath});
   }
 
   ResetTargetObject();

@@ -87,6 +87,7 @@ struct EmoteLayer
 
   QString blendMode;
   QString toggleName;
+  QString assetPath;
 };
 
 
