@@ -471,8 +471,10 @@ QPointF GraphicsSpriteItem::computeDrawPosition(const QVector3D &animationOffset
   const QRectF scaledRect = m_player->get_scaled_bounding_rect();
   const QPointF centerOffset = sceneRect.center() - scaledRect.center();
 
+  const int hTarget = m_isMirrored ? -m_HorizontalOffset : m_HorizontalOffset;
+
   const float verticalOffset = (mVerticalVPOffset / 1000.0f) * (sceneRect.height() + scaledRect.height()) / 2.0f;
-  const float horizontalOffset = (m_HorizontalOffset / 1000.0f) * (sceneRect.width() + scaledRect.width()) / 2.0f;
+  const float horizontalOffset = ((hTarget  / 1000.0f) * sceneRect.width());
 
 
   const float animVertical = (animationOffset.y() / 1000.0f) * (sceneRect.height() + scaledRect.height()) / 2.0f;
@@ -603,13 +605,12 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
     rotation = it->second.toFloat();
 
   const QRectF sceneRect = scene()->sceneRect();
-  const QPointF drawPos = computeDrawPosition(animationOffset);
+  QPointF drawPos = computeDrawPosition(animationOffset);
   const QPointF pivot(sceneRect.center().x() + drawPos.x(), sceneRect.bottom());
 
 
   painter->translate(pivot);
-  if(m_isMirrored) painter->scale(-animScale, animScale);
-  else painter->scale(animScale, animScale);
+  painter->scale(animScale, animScale);
   painter->rotate(rotation);
   painter->translate(-pivot);
   painter->setOpacity(alpha);
@@ -644,6 +645,12 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
     combiner.end();
 
+    if(m_isMirrored)
+    {
+      painter->translate(sceneRect.center());
+      painter->scale(-1.0f, 1.0f);
+      painter->translate(-sceneRect.center());
+    }
     painter->drawPixmap(QPoint(0, 0), pixmapCombined);
   }
   else
