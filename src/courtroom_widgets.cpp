@@ -149,7 +149,7 @@ void Courtroom::create_widgets()
   ui_vp_music_name->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_vp_music_name->setReadOnly(true);
   music_anim = new QPropertyAnimation(ui_vp_music_name, "geometry", this);
-  set_music_text("DANGANRONPA ONLINE");
+  set_music_text("FUSHIMA ONLINE");
 
   ui_vp_clock = new DRStickerViewer(ao_app, this);
 
