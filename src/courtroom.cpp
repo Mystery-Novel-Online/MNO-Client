@@ -106,8 +106,6 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   ui_slider_horizontal_axis->setValue(500);
   resetAFKTimer();
 
-  replays::recording::start();
-
   if (!ServerMetadata::FeatureSupported("sequence")) return;
   connect(&m_checkTimer, &QTimer::timeout, this, &Courtroom::checkAFKStatus);
   m_checkTimer.start(1000);
@@ -1542,27 +1540,14 @@ void Courtroom::handle_chatmessage_2() // handles IC
   }
 
 
-  if(m_chatmessage[CMOffsetH].isEmpty())
-  {
-    ui_vp_player_char->setHorizontalOffset(selfOffset);
-  }
-  else
+  if(!m_chatmessage[CMOffsetH].isEmpty())
   {
     int hOffset = m_chatmessage[CMOffsetH].toInt();
 
     if(hOffset != 0)
-    {
-      int courtroomWidth = ui_viewport->width();
-      int halfWidth = courtroomWidth / 2;
-      ui_vp_player_char->setHorizontalOffset(hOffset);
-    }
-    else
-    {
-      ui_vp_player_char->setHorizontalOffset(selfOffset);
-    };
-
+      selfOffset = hOffset;
   }
-
+  ui_vp_player_char->setHorizontalOffset(selfOffset);
   ui_vp_player_pair->setHorizontalOffset(otherOffset);
   int verticalValue = m_chatmessage[CMOffsetV].trimmed().toInt();
 
@@ -1729,6 +1714,7 @@ void Courtroom::handle_chatmessage_3()
 
   ui_vp_player_char->hide();
   ui_vp_player_char->clearImageLayers();
+  ui_vp_player_pair->clearImageLayers();
   if (ui_vp_player_char->is_running())
   {
     ui_vp_player_char->stop();

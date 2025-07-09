@@ -21,6 +21,7 @@
 #include "dro/network/json_packet.h"
 #include "dro/system/theme_scripting.h"
 #include "dro/system/audio.h"
+#include "dro/system/replay_playback.h"
 
 using namespace dro::system;
 
@@ -177,11 +178,14 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       return;
 
     m_lobby->set_player_count(l_content.at(0).toInt(), l_content.at(1).toInt());
+
   }
   else if (l_header == "SI")
   {
     if (l_content.size() != 3)
       return;
+
+    replays::recording::start();
 
     m_character_count = l_content.at(0).toInt();
     m_evidence_count = l_content.at(1).toInt();
