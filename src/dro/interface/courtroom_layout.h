@@ -107,6 +107,8 @@ namespace courtroom
   {
     void update();
     void screenshot();
+    void clearInteractions();
+    void addInteraction(const std::string& name, const std::string& description, int x, int y, int width, int height);
     QPixmap getScreenshot();
   }
 

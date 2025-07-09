@@ -674,6 +674,18 @@ namespace courtroom
       return QPixmap(0, 0);
     }
 
+    void clearInteractions()
+    {
+      if (auto *overlay = qobject_cast<ViewportOverlay *>(s_CourtroomWidgets.value("viewport_overlay")))
+        overlay->clearInteractions();
+    }
+
+    void addInteraction(const std::string &name, const std::string &description, int x, int y, int width, int height)
+    {
+      if (auto *overlay = qobject_cast<ViewportOverlay *>(s_CourtroomWidgets.value("viewport_overlay")))
+        overlay->addInteraction({x, y, width, height}, QString::fromStdString(name), QString::fromStdString(description));
+    }
+
   }
 
   void hovercontroller::create(const std::string &name, int x, int y, int width, int height)

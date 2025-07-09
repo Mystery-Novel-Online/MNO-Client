@@ -1853,6 +1853,8 @@ void Courtroom::handleScene(QStringList p_contents)
     p_contents.append("");
   }
 
+  LuaBridge::LuaEventCall("OnSceneChange", p_contents.at(0).toStdString(), p_contents.at(2).toStdString());
+
   runtime::values::storeValue("area_name", p_contents.at(0).toStdString());
   runtime::values::storeValue("map_visual", p_contents.at(2).toStdString());
 

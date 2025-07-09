@@ -121,6 +121,13 @@ namespace ThemeScripting
       }
 
       {
+        sol::table table = s_themeScript.create_named_table("Viewport");
+        table.set_function("Screenshot", &courtroom::viewport::screenshot);
+        table.set_function("AddInteraction", &courtroom::viewport::addInteraction);
+        table.set_function("ClearInteractions", &courtroom::viewport::clearInteractions);
+      }
+
+      {
         sol::table table = s_themeScript.create_named_table("RuntimeValue");
         table.set_function("Resolve", &dro::runtime::values::resolveVariables);
         table.set_function("Assign", &dro::runtime::values::storeValue);

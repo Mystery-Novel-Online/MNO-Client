@@ -10,6 +10,7 @@
 #include "dro/system/audio.h"
 #include "dro/interface/courtroom_layout.h"
 #include "courtroom.h"
+#include "dro/system/theme_scripting.h"
 
 ViewportOverlay::ViewportOverlay(QWidget *parent)
     : QWidget{parent}
@@ -235,6 +236,7 @@ void InteractionObject::enterEvent(QEvent *event)
   if(m_cursor == nullptr) return;
   m_cursor->set_image(AOApplication::getInstance()->find_theme_asset_path("cursor_hover.png"));
 
+  LuaBridge::LuaEventCall("OnInteractionHover", m_name.toStdString());
   audio::system::Play("cursor_hover");
 }
 
@@ -249,6 +251,7 @@ void InteractionObject::mouseReleaseEvent(QMouseEvent *event)
 {
   if (event->button() == Qt::LeftButton)
   {
+    LuaBridge::LuaEventCall("OnInteractionClick", m_name.toStdString(), m_description.toStdString());
     audio::system::Play("cursor_click");
 
     if(SceneManager::get().mPlayerDataList.count() == 0)
