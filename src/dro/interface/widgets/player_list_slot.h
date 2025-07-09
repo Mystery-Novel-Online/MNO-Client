@@ -6,11 +6,15 @@ class AOApplication;
 #include "dro/interface/widgets/rp_label.h"
 
 #include <QWidget>
+#include "dro/interface/widgets/rp_widget.h"
 
-class DrPlayerListEntry : public QWidget
+class DrPlayerListEntry : public RPWidget
 {
 public:
   DrPlayerListEntry(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y);
+
+  void refreshManual(int width);
+  void refreshAutomatic(int width);
 
   void toggleTyping(bool status);
 

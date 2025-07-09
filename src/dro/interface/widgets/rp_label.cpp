@@ -1,6 +1,8 @@
 #include "dro/interface/widgets/rp_label.h"
 
 #include "aoapplication.h"
+#include "commondefs.h"
+#include "theme.h"
 
 RPLabel::RPLabel(QWidget *parent, AOApplication *p_ao_app)
     : QLabel(parent)
@@ -8,8 +10,20 @@ RPLabel::RPLabel(QWidget *parent, AOApplication *p_ao_app)
   ao_app = p_ao_app;
 }
 
+RPLabel::RPLabel(const QString &name, QWidget *parent)
+    : QLabel(parent)
+{
+  m_Friendly = name;
+  ao_app = AOApplication::getInstance();
+}
+
 void RPLabel::set_image(QString p_image)
 {
   const QString l_image_path = ao_app->find_theme_asset_path(p_image);
   setStyleSheet("border-image:url(\"" + l_image_path + "\")");
+}
+
+void RPLabel::themeRefresh()
+{
+  set_size_and_pos(this, m_Friendly, COURTROOM_DESIGN_INI, ao_app);
 }

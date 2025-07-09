@@ -3633,9 +3633,11 @@ void Courtroom::construct_playerlist_layout()
   QPoint f_spacing = ao_app->current_theme->get_widget_settings_spacing("player_list", "courtroom", "player_list_spacing");
 
   set_size_and_pos(ui_player_list, "player_list", COURTROOM_DESIGN_INI, ao_app);
-
   float resize = ThemeManager::get().getResize();
-  int player_height = (int)((float)50 * resize);
+
+  int player_height = ao_app->get_element_dimensions("player_list_slot", COURTROOM_DESIGN_INI).height;
+  if(player_height == 0) player_height = (int)((float)50 * resize);
+
   int y_spacing = f_spacing.y();
   int max_pages = ceil((SceneManager::get().mPlayerDataList.count() - 1) / m_page_max_player_count);
 
@@ -3701,10 +3703,12 @@ void Courtroom::construct_playerlist_layout()
 
   int starting_index = (m_page_player_list * m_page_max_player_count);
 
+  int last_entry_height = 0;
   for (int n = starting_index; n < SceneManager::get().mPlayerDataList.count(); ++n)
   {
-    int y_pos = ((int)((float)50 * resize) + y_spacing) * (n - starting_index);
+    int y_pos = (last_entry_height + y_spacing) * (n - starting_index);
     DrPlayerListEntry* ui_playername = new DrPlayerListEntry(ui_player_list, ao_app, 1, y_pos);
+    last_entry_height = ui_playername->height();
 
     DrPlayer playerData = SceneManager::get().mPlayerDataList.at(n);
     ui_playername->set_character(playerData.m_character, playerData.m_Afk);
