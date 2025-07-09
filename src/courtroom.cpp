@@ -1853,8 +1853,8 @@ void Courtroom::handleScene(QStringList p_contents)
     p_contents.append("");
   }
 
-  runtime::values::storeValue("area_name", p_contents.at(0));
-  runtime::values::storeValue("map_visual", p_contents.at(2));
+  runtime::values::storeValue("area_name", p_contents.at(0).toStdString());
+  runtime::values::storeValue("map_visual", p_contents.at(2).toStdString());
 
   ui_vp_wtce->setKeyframeAnimation("transitions/", "default");
 

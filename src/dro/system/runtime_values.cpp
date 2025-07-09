@@ -5,20 +5,24 @@
 
 QMap<QString, QString> s_runtimeValues = {};
 
-void dro::runtime::values::storeValue(const QString &name, const QString &value)
+void dro::runtime::values::storeValue(const std::string& name, const std::string& value)
 {
-  if(s_runtimeValues.contains(name) && !name.startsWith("prior_"))
+  QString qName = QString::fromStdString(name);
+  QString qValue = QString::fromStdString(value);
+  if(s_runtimeValues.contains(qName) && !qName.startsWith("prior_"))
   {
-    s_runtimeValues["prior_" + name] = s_runtimeValues[name];
+    s_runtimeValues["prior_" + qName] = s_runtimeValues[qName];
   }
-  s_runtimeValues[name] = value;
+  s_runtimeValues[qName] = qValue;
 }
 
-QString dro::runtime::values::resolveVariables(const QString &input)
+std::string dro::runtime::values::resolveVariables(const std::string& input)
 {
-  QString result = input;
+  QString qInput = QString::fromStdString(input);
+
+  QString result = qInput;
   QRegularExpression re(R"(\{([^}]+)\})");
-  QRegularExpressionMatchIterator i = re.globalMatch(input);
+  QRegularExpressionMatchIterator i = re.globalMatch(qInput);
 
   while (i.hasNext())
   {
@@ -27,5 +31,5 @@ QString dro::runtime::values::resolveVariables(const QString &input)
     result.replace(match.captured(0), s_runtimeValues[varName]);
   }
 
-  return result;
+  return result.toStdString();
 }

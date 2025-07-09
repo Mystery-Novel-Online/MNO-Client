@@ -5,6 +5,7 @@
 #include <modules/theme/thememanager.h>
 #include "modules/managers/notify_manager.h"
 #include "dro/network/metadata/area_metadata.h"
+#include "dro/system/runtime_values.h"
 #include "courtroom.h"
 #include <lobby.h>
 
@@ -117,6 +118,12 @@ namespace ThemeScripting
         inputField.set_function("GetText", &courtroom::ic::getMessageBoxContents);
         inputField.set_function("SetText", &courtroom::ic::setMessageBox);
         inputField.set_function("Append", &courtroom::ic::appendMessageBox);
+      }
+
+      {
+        sol::table table = s_themeScript.create_named_table("RuntimeValue");
+        table.set_function("Resolve", &dro::runtime::values::resolveVariables);
+        table.set_function("Assign", &dro::runtime::values::storeValue);
       }
 
       {

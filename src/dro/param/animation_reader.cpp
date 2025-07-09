@@ -63,7 +63,7 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
     QString overlayName = getStringValue("name");
     QRect overlayRect = getRectangleValue("offset");
     QString overlayRender = getStringValue("order");
-    QString assetPath = dro::runtime::values::resolveVariables(getStringValue("asset"));
+    QString assetPath = QString::fromStdString(dro::runtime::values::resolveVariables(getStringValue("asset").toStdString()));
     QString blendMode = getStringValue("blend_mode");
     bool detach = getBoolValue("detach");
 
