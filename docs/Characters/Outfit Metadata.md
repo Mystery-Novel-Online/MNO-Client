@@ -90,6 +90,9 @@ Each emote has the following fields:
 - `image` (optional, string):  
   The base image used (e.g., `"body"`).
 
+- `video` (optional, string):  
+  The video file that is played before the emote is displayed.
+
 - `pre` (optional, string):  
   Specifies a pre-animation to play before the emote appears.
 
@@ -106,30 +109,30 @@ Each emote has the following fields:
   If wanting to use an `image` from another outfit folder you can define what folder to grab it from here. (e.g., `"Default"`).
     - If the parameter is present but left blank, it will use the root directory  
 
+- `desk` (optional, boolean):  
+  Overwrites the default rule for displaying the desk.
+
+- `ignore_offsets` (optional, boolean):  
+  Overwrites the default rule for ignoring offsets.
 
 
-video
-desk
-ignore_offsets
-
-### Example
+### Using Layers
+If planning to use a character layer, you will need to define that image the layer uses within the emote. For example, you would do the following if using a "face" layer.
 
 ```json
 {
-  "name": "dissapointed",
-  "image": "body",
+  "name": "Front Dissapointed",
+  "image": "front",
   "face": "dissapointed",
-  "sfx": "explosion"
 }
 ```
 
----
+### Default Behaviour
 
-## Summary
+By default, you only really need the "name" parameter. If an image parameter is not provided, it will be automatically filled by the client with whatever the value of "name" is. 
 
-The `outfit.json` file is a compact and structured way to define:
-- Display rules (`default_rules`)
-- Layered visual components (`layers`)
-- Character expressions or animations (`emotes`)
-
-This structure allows for modular and customizable character rendering in an interactive or animated environment.
+```json
+{
+  "name": "joyful"
+}
+```
