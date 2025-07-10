@@ -136,7 +136,7 @@ set(HEADERS
   src/mk2/spriteviewer.h
   src/modules/managers/character_manager.h
   src/modules/managers/notify_manager.h
-  src/modules/managers/pair_manager.h
+
   src/modules/managers/scene_manager.h
   src/modules/theme/thememanager.h
   src/theme.h
@@ -271,7 +271,7 @@ set(SOURCES
   src/mk2/spriteseekingreader.cpp
   src/modules/managers/character_manager.cpp
   src/modules/managers/notify_manager.cpp
-  src/modules/managers/pair_manager.cpp
+
   src/modules/managers/scene_manager.cpp
   src/modules/theme/thememanager.cpp
   src/path_functions.cpp
