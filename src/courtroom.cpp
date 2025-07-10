@@ -162,7 +162,8 @@ void Courtroom::setup_courtroom()
 
   set_widget_names();
   set_widgets();
-  setupWidgetTabs();
+  ThemeManager::get().deleteTabPanels();
+  ThemeManager::get().createTabParent();
   set_widget_layers();
 
   reset_widget_toggles();

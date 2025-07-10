@@ -228,8 +228,6 @@ public:
   void list_note_files();
   void set_note_files();
 
-  void move_widget(QWidget *p_widget, QString p_identifier);
-
   void set_shouts();
 
   void set_effects();
@@ -726,7 +724,6 @@ private:
   void insert_widget_names(QVector<QString> &p_widget_names, QVector<QWidget *> &p_widgets);
   template <typename T>
   void insert_widget_names(QVector<QString> &p_widget_names, QVector<T *> &p_widgets);
-  void setupWidgetTabs();
   void set_widget_layers();
   void set_widget_layers_legacy();
 

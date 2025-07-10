@@ -11,6 +11,13 @@ RPWidget::RPWidget(const QString &name, QWidget *parent) : QWidget{parent}, m_fr
   m_app = AOApplication::getInstance();
 }
 
+RPWidget::~RPWidget()
+{
+  if(m_backgroundImage != nullptr)
+    delete m_backgroundImage;
+}
+
+
 void RPWidget::setDragable(bool isDragable)
 {
   m_dragEnabled = isDragable;

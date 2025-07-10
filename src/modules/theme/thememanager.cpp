@@ -21,6 +21,38 @@ void ThemeManager::ResetWidgetLists()
   m_DetatchedTabList.clear();
 }
 
+void ThemeManager::deleteTabPanels()
+{
+  for(const QString& tabName : m_TabWidgets.keys())
+  {
+    QWidget *courtroom = getWidget("courtroom");
+    RPWidget *currentTab = m_TabWidgets[tabName];
+
+    if (courtroom && currentTab)
+    {
+      const auto& children = currentTab->template findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);
+      for (QWidget* child : children)
+      {
+        child->setParent(courtroom);
+        child->show();
+      }
+    }
+
+    delete currentTab;
+  }
+}
+
+void ThemeManager::createTabPanels()
+{
+
+}
+
+void ThemeManager::parentTabWidgets()
+{
+
+}
+
+
 void ThemeManager::createTabParent()
 {
   m_TabDeletionQueue = m_TabWidgets;
@@ -105,23 +137,6 @@ void ThemeManager::execLayerTabs()
       m_TabWidgets[r_tabInfo.m_Name]->hide();
     }
   };
-
-  QMap<QString, QWidget *>::iterator it;
-
-  for (it = m_TabDeletionQueue.begin(); it != m_TabDeletionQueue.end(); ++it)
-  {
-    Courtroom* target = AOApplication::getInstance()->get_courtroom();
-    QWidget *value = it.value();
-    if(target != nullptr)
-    {
-      const auto children = value->findChildren<QWidget *>(QString(), Qt::FindDirectChildrenOnly);
-      for (QWidget *child : children)
-      {
-        child->setParent(target);
-      }
-    }
-    delete value;
-  }
 }
 
 void ThemeManager::resetSelectedTabs()
@@ -170,15 +185,7 @@ void ThemeManager::toggleTab(const QString& name, const QString& group)
     }
 
     if (isCurrent)
-    {
       getWidget(panelName)->show();
-
-      const QString bgImage = AOApplication::getInstance()->find_theme_asset_path("courtroombackground_" + name + ".png");
-      if (!bgImage.isEmpty())
-        wCourtroomBackground->set_theme_image("courtroombackground_" + name + ".png");
-      else
-        wCourtroomBackground->set_theme_image("courtroombackground.png");
-    }
     else if (!isToggle)
     {
       if(!tabInfo.m_ToggleEnabled)
@@ -321,15 +328,6 @@ void ThemeManager::addComboBox(QString name, RPComboBox *comboBox)
   mComboBoxWidgets[name] = comboBox;
 }
 
-void ThemeManager::refreshComboBox()
-{
-  for(RPComboBox* comboBox : mComboBoxWidgets)
-  {
-    comboBox->refreshPosition();
-    comboBox->refreshCSS();
-    comboBox->show();
-  }
-}
 
 void ThemeManager::setCourtroomBackground(AOImageDisplay *t_background)
 {

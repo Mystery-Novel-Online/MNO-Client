@@ -23,7 +23,7 @@ QMap<QString, pos_size_type> s_PositionalDimensions = {};
 
 namespace dro::system::theme
 {
-  void applyDimensions(QWidget *widget, const QString &identifier, ThemeSceneType scene)
+  void applyDimensions(QWidget *widget, const QString &identifier, ThemeSceneType scene, bool allowResize)
   {
     pos_size_type dimensions = getDimensions(identifier, scene);
 
@@ -34,7 +34,8 @@ namespace dro::system::theme
     }
 
     widget->move(dimensions.x, dimensions.y);
-    widget->resize(dimensions.width, dimensions.height);
+    if(allowResize)
+      widget->resize(dimensions.width, dimensions.height);
   }
 
   pos_size_type getDimensions(const QString &identifier, ThemeSceneType scene)

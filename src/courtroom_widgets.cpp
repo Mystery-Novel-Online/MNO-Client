@@ -743,11 +743,6 @@ void Courtroom::insert_widget_names(QVector<QString> &p_name_list, QVector<QWidg
     insert_widget_name(p_name_list[i], p_widget_list[i]);
 }
 
-void Courtroom::setupWidgetTabs()
-{
-  ThemeManager::get().createTabParent();
-}
-
 void Courtroom::set_widget_names()
 {
   // Assign names to the default widgets
@@ -785,6 +780,7 @@ void Courtroom::set_widget_layers()
     set_widget_layers_legacy();
     return;
   }
+
   QStringList l_widget_records;
 
 
@@ -1152,7 +1148,7 @@ void Courtroom::set_widgets()
   if (ao_app->current_theme->read_config_bool("enable_single_shout") && ui_shouts.size() > 0)
   {
     for (auto &shout : ui_shouts)
-      move_widget(shout, "bullet");
+      theme::applyDimensions(shout, "bullet", SceneType_Courtroom, false);
 
     set_shouts();
 
@@ -1172,7 +1168,7 @@ void Courtroom::set_widgets()
   if (ao_app->current_theme->read_config_bool("enable_single_effect")  && ui_effects.size() > 0 ) // check to prevent crashing
   {
     for (auto &effect : ui_effects)
-      move_widget(effect, "effect");
+      theme::applyDimensions(effect, "effect", SceneType_Courtroom, false);
 
     set_effects();
 
@@ -1190,7 +1186,7 @@ void Courtroom::set_widgets()
   if (ao_app->current_theme->read_config_bool("enable_single_wtce")) // courtroom_config.ini necessary
   {
     for (auto &wtce : ui_wtce)
-      move_widget(wtce, "wtce");
+      theme::applyDimensions(wtce, "wtce", SceneType_Courtroom, false);
     qDebug() << "AA: single wtce";
   }
   set_judge_wtce();
@@ -1352,25 +1348,6 @@ void Courtroom::setupWidgetElement(RPTextEdit *widget, QString name, QString def
   if(mDefaultWidgetCSS.contains(name)) widget->setStyleSheet(mDefaultWidgetCSS[name]);
 
   if(!visible) widget->hide();
-}
-
-void Courtroom::move_widget(QWidget *p_widget, QString p_identifier)
-{
-  QString filename = COURTROOM_DESIGN_INI;
-
-  pos_size_type design_ini_result = dro::system::theme::getDimensions(p_identifier, SceneType_Courtroom);
-
-  if (design_ini_result.width < 0 || design_ini_result.height < 0)
-  {
-    qDebug() << "W: could not find \"" << p_identifier << "\" in " << filename;
-    // Don't hide, as some widgets don't have a built-in way of reappearing again.
-    p_widget->move(0, 0);
-    p_widget->resize(0, 0);
-  }
-  else
-  {
-    p_widget->move(design_ini_result.x, design_ini_result.y);
-  }
 }
 
 template <typename T>
@@ -1787,9 +1764,7 @@ void Courtroom::setup_screenshake_anim(double message_offset)
 
 void Courtroom::play_screenshake_anim()
 {
-
   chatbox_anim->start();
   background_anim->start();
   player_sprite_anim->start();
-
 }

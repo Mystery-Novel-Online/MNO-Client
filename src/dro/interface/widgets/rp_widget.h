@@ -12,6 +12,7 @@ class RPWidget : public QWidget
   Q_OBJECT
 public:
   explicit RPWidget(const QString &name, QWidget *parent = nullptr);
+  ~RPWidget();
   void setDragable(bool dragable);
   void setBackgroundImage(QString imageName);
   virtual void resetTransform();
