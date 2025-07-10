@@ -27,14 +27,17 @@ void ThemeManager::deleteTabPanels()
   {
     QWidget *courtroom = getWidget("courtroom");
     RPWidget *currentTab = m_TabWidgets[tabName];
+    currentTab->show();
 
     if (courtroom && currentTab)
     {
       const auto& children = currentTab->template findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);
       for (QWidget* child : children)
       {
+        bool wasVisible = child->isVisible();
         child->setParent(courtroom);
-        child->show();
+        if (wasVisible)
+          child->show();
       }
     }
 

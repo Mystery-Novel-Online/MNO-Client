@@ -81,14 +81,6 @@ void EmotionSelector::constructEmotes()
 
   m_EmoteColumns = ((width() - button_width) / (x_spacing + button_width)) + 1;
   m_EmoteRows = ((height() - button_height) / (y_spacing + button_height)) + 1;
-  qDebug() << "Emote Construction";
-  qDebug() << "  Visible:" << isVisible();
-  qDebug() << "  Hidden:" << isHidden();
-  qDebug() << "  Size:" << size();
-  qDebug() << "  Geometry:" << geometry();
-  qDebug() << "  Parent:" << parentWidget();
-  qDebug() << "  In Layout:" << (parentWidget() && parentWidget()->layout() ?
-                                     parentWidget()->layout()->indexOf(this) : -2);
 
   m_PageLimit = qMax(1, m_EmoteColumns * m_EmoteRows);
   for (int n = 0; n < m_PageLimit; ++n)
