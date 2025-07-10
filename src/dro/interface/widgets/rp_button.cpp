@@ -39,6 +39,7 @@ bool RPButton::has_image()
 
 void RPButton::set_image(QString p_image)
 {
+  m_relativeButtonPath = p_image;
   QString path = m_app->find_theme_asset_path(p_image);
   if(m_image == path) return;
   m_image_stem = p_image;
@@ -90,5 +91,16 @@ void RPButton::refresh_image()
 
 void RPButton::refresh_position()
 {
-  dro::system::theme::applyDimensions(this, m_friendlyName, SceneType_Courtroom);
+  dro::system::theme::applyDimensions(this, m_friendlyName, m_Scene);
+  set_image(m_relativeButtonPath);
+}
+
+void RPButton::setName(const QString &name)
+{
+  m_friendlyName = name;
+}
+
+void RPButton::setScene(ThemeSceneType scene)
+{
+  m_Scene = scene;
 }

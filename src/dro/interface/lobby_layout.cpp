@@ -20,6 +20,8 @@ namespace Layout::ServerSelect
   RPButton *CreateButton(QString name, QString image, std::function<void()> releasedFunction)
   {
     RPButton* newButton = new RPButton(s_ConstructedLobby);
+    newButton->setName(name);
+    newButton->setScene(SceneType_ServerSelect);
     dro::system::theme::applyDimensions(newButton, name, SceneType_ServerSelect);
     newButton->set_image(image + ".png");
 

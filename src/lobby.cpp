@@ -221,6 +221,12 @@ void Lobby::update_widgets()
     dro::system::theme::applyDimensions(widget, identifier, SceneType_ServerSelect);
   }
 
+  ui_toggle_favorite->refresh_position();
+  ui_refresh->refresh_position();
+  ui_connect->refresh_position();
+  ui_gallery_toggle->refresh_position();
+  ui_gallery_play->refresh_position();
+
   ui_background->set_theme_image("lobbybackground.png");
 
   ui_gallery_background->set_theme_image("replaybackground.png");
