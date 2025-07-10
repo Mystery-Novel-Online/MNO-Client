@@ -203,19 +203,6 @@ QVector<QStringList>DRTheme::get_highlight_characters()
   return ThemeManager::get().mCurrentThemeReader.GetColorsHighlights();
 }
 
-pos_size_type DRTheme::get_element_dimensions(QString p_identifier, QString p_scene)
-{
-  if(p_scene == "courtroom")
-  {
-    return ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(SceneType_Courtroom, p_identifier);
-  }
-  else
-  {
-    return ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(SceneType_ServerSelect, p_identifier);
-  }
-
-}
-
 QString DRTheme::get_widget_image(QString p_identifier, QString p_fallback, QString p_scene)
 {
   if(!m_jsonLoaded)

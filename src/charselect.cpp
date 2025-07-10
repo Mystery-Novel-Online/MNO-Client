@@ -131,7 +131,7 @@ void Courtroom::reset_char_select()
 
 void Courtroom::set_char_select()
 {
-  pos_size_type f_charselect = ao_app->get_element_dimensions("char_select", COURTROOM_DESIGN_INI);
+  pos_size_type f_charselect = dro::system::theme::getDimensions("char_select", SceneType_Courtroom);
   if (f_charselect.width < 0 || f_charselect.height < 0)
     qWarning() << "warning: char_select not found or invalid within courtroom_design.ini";
 

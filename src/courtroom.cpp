@@ -9,7 +9,6 @@
 #include "modules/managers/character_manager.h"
 #include "dro/interface/widgets/note_area.h"
 #include "dro/interface/widgets/note_picker.h"
-#include "modules/managers/pair_manager.h"
 #include "dro/interface/widgets/aotimer.h"
 #include "commondefs.h"
 #include "debug_functions.h"
@@ -669,8 +668,8 @@ void Courtroom::set_music_text(QString p_text)
 
 void Courtroom::update_music_text_anim()
 {
-  pos_size_type res_a = ao_app->get_element_dimensions("music_name", COURTROOM_DESIGN_INI);
-  pos_size_type res_b = ao_app->get_element_dimensions("music_area", COURTROOM_DESIGN_INI);
+  pos_size_type res_a = dro::system::theme::getDimensions("music_name", SceneType_Courtroom);
+  pos_size_type res_b = dro::system::theme::getDimensions("music_area", SceneType_Courtroom);
 
   float speed = static_cast<float>(ao_app->current_theme->get_music_name_speed());
 
@@ -3637,7 +3636,7 @@ void Courtroom::construct_playerlist_layout()
   theme::applyDimensions(ui_player_list, "player_list", SceneType_Courtroom);
   float resize = ThemeManager::get().getResize();
 
-  int player_height = ao_app->get_element_dimensions("player_list_slot", COURTROOM_DESIGN_INI).height;
+  int player_height = dro::system::theme::getDimensions("player_list_slot", SceneType_Courtroom).height;
   if(player_height == 0) player_height = (int)((float)50 * resize);
 
   int y_spacing = f_spacing.y();

@@ -5,7 +5,6 @@
 #include "aoconfig.h"
 #include "dro/interface/widgets/image_display.h"
 #include "dro/interface/widgets/rp_label.h"
-#include "modules/managers/pair_manager.h"
 #include "dro/interface/widgets/note_area.h"
 #include "dro/interface/widgets/note_picker.h"
 #include "dro/interface/widgets/aotimer.h"
@@ -951,7 +950,7 @@ void Courtroom::set_widget_layers_legacy()
 
 void Courtroom::set_widgets()
 {
-  pos_size_type courtroomDimensions = ao_app->get_element_dimensions("courtroom", COURTROOM_DESIGN_INI);
+  pos_size_type courtroomDimensions = dro::system::theme::getDimensions("courtroom", SceneType_Courtroom);
   if (courtroomDimensions.width < 0 || courtroomDimensions.height < 0)
   {
     qWarning() << "W: did not find courtroom width or height in " << COURTROOM_DESIGN_INI;
@@ -1111,7 +1110,7 @@ void Courtroom::set_widgets()
   if(ThemeManager::get().getReloadPending())
   {
     { // emote preview
-      pos_size_type l_emote_preview_size = ao_app->get_element_dimensions("emote_preview", COURTROOM_DESIGN_INI);
+      pos_size_type l_emote_preview_size = dro::system::theme::getDimensions("emote_preview", SceneType_Courtroom);
       if (l_emote_preview_size.width <= 0 || l_emote_preview_size.height <= 0)
       {
         l_emote_preview_size.width = 320;
@@ -1359,7 +1358,7 @@ void Courtroom::move_widget(QWidget *p_widget, QString p_identifier)
 {
   QString filename = COURTROOM_DESIGN_INI;
 
-  pos_size_type design_ini_result = ao_app->get_element_dimensions(p_identifier, filename);
+  pos_size_type design_ini_result = dro::system::theme::getDimensions(p_identifier, SceneType_Courtroom);
 
   if (design_ini_result.width < 0 || design_ini_result.height < 0)
   {
@@ -1761,7 +1760,7 @@ void Courtroom::set_fonts()
 
 void Courtroom::setup_screenshake_anim(double message_offset)
 {
-  pos_size_type chatbox_res = ao_app->get_element_dimensions("ao2_chatbox", COURTROOM_DESIGN_INI);
+  pos_size_type chatbox_res = dro::system::theme::getDimensions("ao2_chatbox", SceneType_Courtroom);
 
   background_anim->setLoopCount(5);
   background_anim->setDuration(50);

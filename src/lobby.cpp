@@ -184,7 +184,7 @@ DRServerInfoList Lobby::get_combined_server_list()
 void Lobby::update_widgets()
 {
   ao_app->current_theme->InitTheme();
-  pos_size_type f_lobby = ao_app->get_element_dimensions("lobby", LOBBY_DESIGN_INI);
+  pos_size_type f_lobby = dro::system::theme::getDimensions("lobby", SceneType_ServerSelect);
   if (f_lobby.width < 0 || f_lobby.height < 0)
   {
     qWarning() << "W: did not find lobby width or height in " << LOBBY_DESIGN_INI;

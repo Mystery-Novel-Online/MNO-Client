@@ -6,7 +6,6 @@
 #include "dro/network/metadata/message_metadata.h"
 #include "dro/interface/courtroom_layout.h"
 #include "modules/managers/notify_manager.h"
-#include "modules/managers/pair_manager.h"
 #include <qjsondocument.h>
 
 using namespace dro::network;

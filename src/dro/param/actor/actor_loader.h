@@ -40,6 +40,7 @@ class ActorData
 {
 public:
   ActorData(){};
+  virtual ~ActorData() = default;
 
   virtual QString GetEmoteSprite(const DREmote& t_emote);
   virtual QString GetEmoteButton(const DREmote& t_emote, bool t_enabled);

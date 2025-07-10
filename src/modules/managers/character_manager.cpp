@@ -72,7 +72,7 @@ ActorData *CharacterManager::SwitchCharacter(QString t_folder)
     animations.append(FS::Paths::GetFileList("characters/" + t_folder + "/animations", true, "json"));
   }
 
-  for(QString animationIniPath : FS::Paths::FindFiles("configs/animations.ini"))
+  for(const QString &animationIniPath : FS::Paths::FindFiles("configs/animations.ini"))
   {
     QFile file(animationIniPath);
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
