@@ -10,6 +10,7 @@ class AnimationReader : public JSONReader
 public:
   AnimationReader(const QString &weatherPath, KeyframeSequence &sequence);
   AnimationReader(const QString &name, KeyframeSequence &sequence, const QString &character);
+  AnimationReader(const QString &name, const QString &theme, KeyframeSequence &sequence);
 
   void loadData(KeyframeSequence &sequence);
   QVector<EmoteLayer> m_Layers = {};

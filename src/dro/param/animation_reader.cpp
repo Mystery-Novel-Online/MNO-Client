@@ -34,6 +34,15 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
 
 }
 
+AnimationReader::AnimationReader(const QString &name, const QString &theme, KeyframeSequence &sequence)
+{
+  sequence.Cleanup();
+  QString animationPath = FS::Paths::FindFile("themes/" + theme + "/animations/"+ name + ".json");
+  if(!FS::Checks::FileExists(animationPath)) return;
+  ReadFromFile(animationPath);
+  loadData(sequence);
+}
+
 void AnimationReader::loadData(KeyframeSequence &sequence)
 {
   static const QMap<QString, KeyframeCurve> curveMap =

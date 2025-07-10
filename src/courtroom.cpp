@@ -1858,7 +1858,7 @@ void Courtroom::handleScene(QStringList p_contents)
   runtime::values::storeValue("area_name", p_contents.at(0).toStdString());
   runtime::values::storeValue("map_visual", p_contents.at(2).toStdString());
 
-  ui_vp_wtce->setKeyframeAnimation("transitions/", "default");
+  ui_vp_wtce->setThemeAnimation("scene_transition");
 
   //DRAreaBackground l_area_bg;
   //l_area_bg.background = t_Contents.at(1);

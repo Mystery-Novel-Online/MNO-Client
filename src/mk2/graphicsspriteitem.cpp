@@ -153,8 +153,35 @@ bool GraphicsSpriteItem::setKeyframeAnimation(const QString &directory, const QS
       "animations/assets/" + layer.assetPath,
       "animations/" + directory + "/assets/" + layer.offsetName,
       "animations/assets/" + layer.offsetName,
-      layer.assetPath + "/" + layer.offsetName
+      layer.assetPath
     };
+
+    QString filePath = FS::Paths::FindFile(searchPaths, true, FS::Formats::SupportedImages());
+
+    SpriteLayer *layerData = createOverlay(layer, filePath);
+    if(layer.offsetName == "viewport")
+    {
+      layerData->getPixmap(m_KeyframeSequence.canRenderViewport());
+    }
+  }
+
+  return m_KeyframeSequence.getLoopState();
+}
+
+bool GraphicsSpriteItem::setThemeAnimation(const QString &animation)
+{
+  clearImageLayers();
+  const QString theme = AOApplication::getInstance()->getCurrentTheme();
+  for(const EmoteLayer &layer : AnimationReader(animation, theme, m_KeyframeSequence).m_Layers)
+  {
+    QStringList searchPaths =
+        {
+            "themes/" + theme + "/animations/assets/" + layer.assetPath,
+            "themes/" + theme + "/animations/assets/" + layer.offsetName,
+            "animations/assets/" + layer.assetPath,
+            "animations/assets/" + layer.offsetName,
+            layer.assetPath
+        };
 
     QString filePath = FS::Paths::FindFile(searchPaths, true, FS::Formats::SupportedImages());
 
