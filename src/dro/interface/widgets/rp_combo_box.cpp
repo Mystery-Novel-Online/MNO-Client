@@ -1,5 +1,6 @@
 #include "rp_combo_box.h"
 #include "commondefs.h"
+#include "dro/system/theme.h"
 #include "theme.h"
 
 RPComboBox::RPComboBox(QWidget *parent, AOApplication *p_ao_app)
@@ -17,7 +18,7 @@ void RPComboBox::setWidgetInfo(QString widgetName, QString legacyCSS, QString sc
 
 void RPComboBox::refreshPosition()
 {
-  set_size_and_pos(this, mWidgetName, COURTROOM_DESIGN_INI, ao_app);
+  dro::system::theme::applyDimensions(this, mWidgetName, SceneType_Courtroom);
 }
 
 void RPComboBox::refreshCSS()

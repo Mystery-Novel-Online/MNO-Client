@@ -310,7 +310,7 @@ AOPixmap ThemeReader::GetCachedPixmap(QString path)
   return AOPixmap();
 }
 
-widgetFontStruct ThemeReader::GetFontData(RPSceneType sceneType, QString element)
+widgetFontStruct ThemeReader::GetFontData(ThemeSceneType sceneType, QString element)
 {
   widgetFontStruct return_value;
   double resize = 1.0;
@@ -334,7 +334,7 @@ widgetFontStruct ThemeReader::GetFontData(RPSceneType sceneType, QString element
   return return_value;
 }
 
-pos_size_type ThemeReader::GetWidgetTransform(RPSceneType sceneType, QString element)
+pos_size_type ThemeReader::GetWidgetTransform(ThemeSceneType sceneType, QString element)
 {
   pos_size_type return_value;
 
@@ -377,15 +377,15 @@ widgetFontStruct ThemeReader::GetFontDataPairing(QString element, QString positi
 
   if(m_GameModeCurrent != nullptr)
   {
-    if(m_GameModeCurrent->containsWidgetFont(COURTROOM, name_alignment))
+    if(m_GameModeCurrent->containsWidgetFont(SceneType_Courtroom, name_alignment))
     {
-      return_value = m_GameModeCurrent->getWidgetFont(COURTROOM, name_alignment);
+      return_value = m_GameModeCurrent->getWidgetFont(SceneType_Courtroom, name_alignment);
       return_value.size = (int)((double)return_value.size * resize);
       return return_value;
     }
-    else if(m_GameModeCurrent->containsWidgetFont(COURTROOM, element))
+    else if(m_GameModeCurrent->containsWidgetFont(SceneType_Courtroom, element))
     {
-      return_value = m_GameModeCurrent->getWidgetFont(COURTROOM, element);
+      return_value = m_GameModeCurrent->getWidgetFont(SceneType_Courtroom, element);
       return_value.size = (int)((double)return_value.size * resize);
       return return_value;
     }
@@ -394,10 +394,10 @@ widgetFontStruct ThemeReader::GetFontDataPairing(QString element, QString positi
 
   if(m_GameModeCollection.contains("default"))
   {
-    if(m_GameModeCollection["default"]->containsWidgetFont(COURTROOM, name_alignment)) return_value = m_GameModeCollection["default"]->getWidgetFont(COURTROOM, name_alignment);
-    else if(m_GameModeCollection["default"]->containsWidgetFont(COURTROOM, element))
+    if(m_GameModeCollection["default"]->containsWidgetFont(SceneType_Courtroom, name_alignment)) return_value = m_GameModeCollection["default"]->getWidgetFont(SceneType_Courtroom, name_alignment);
+    else if(m_GameModeCollection["default"]->containsWidgetFont(SceneType_Courtroom, element))
     {
-      return_value = m_GameModeCollection["default"]->getWidgetFont(COURTROOM, element);
+      return_value = m_GameModeCollection["default"]->getWidgetFont(SceneType_Courtroom, element);
     }
   }
 

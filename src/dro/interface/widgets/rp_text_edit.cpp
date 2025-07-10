@@ -3,6 +3,7 @@
 #include "commondefs.h"
 #include "aoapplication.h"
 #include "theme.h"
+#include "dro/system/theme.h"
 
 #include <QDebug>
 #include <QTextBlock>
@@ -17,7 +18,7 @@ RPTextEdit::RPTextEdit(const QString &name, QWidget *parent)
 
 void RPTextEdit::resetTransform()
 {
-  set_size_and_pos(this, m_friendlyName, COURTROOM_DESIGN_INI, m_app);
+  dro::system::theme::applyDimensions(this, m_friendlyName, SceneType_Courtroom);
 }
 
 void RPTextEdit::hideScrollbars()

@@ -7,9 +7,10 @@
 #include "dro/interface/widgets/rp_button.h"
 #include "dro/interface/widgets/viewports/legacy_viewport.h"
 #include "dro/system/replay_playback.h"
+#include "dro/system/theme.h"
 #include "theme.h"
 
-using namespace dro::system::replays;
+using namespace dro::system;
 
 ReplayWindow::ReplayWindow()
 {
@@ -17,8 +18,8 @@ ReplayWindow::ReplayWindow()
   setFocusPolicy(Qt::StrongFocus);
   constructLayout();
 
-  assignWindow(this);
-  assignViewport(m_viewport);
+  replays::assignWindow(this);
+  replays::assignViewport(m_viewport);
 }
 
 void ReplayWindow::setScrubberData(int length)
@@ -65,25 +66,25 @@ void ReplayWindow::setState(ReplayState state)
 void ReplayWindow::constructLayout()
 {
   m_viewport = new LegacyViewport(this);
-  set_size_and_pos(this, "replay_window", REPLAY_DESIGN_INI, AOApplication::getInstance());
+  theme::applyDimensions(this, "replay_window", SceneType_Replay);
   m_viewport->constructViewport();
 
 
   m_playbackHover = new RPHoverWidget(this);
-  set_size_and_pos(m_playbackHover, "playback_hover_field", REPLAY_DESIGN_INI, AOApplication::getInstance());
+  theme::applyDimensions(m_playbackHover, "playback_hover_field", SceneType_Replay);
   m_playbackHover->show();
 
   m_scrubberHover = new RPHoverWidget(this);
-  set_size_and_pos(m_scrubberHover, "controller", REPLAY_DESIGN_INI, AOApplication::getInstance());
+  theme::applyDimensions(m_scrubberHover, "controller", SceneType_Replay);
   m_scrubberHover->show();
 
 
   m_playbackScrubber = new QSlider(Qt::Horizontal, this);
-  set_size_and_pos(m_playbackScrubber, "scrubber", REPLAY_DESIGN_INI, AOApplication::getInstance());
+  theme::applyDimensions(m_playbackScrubber, "scrubber", SceneType_Replay);
   m_scrubberHover->addWidget(m_playbackScrubber);
 
   m_autoToggle = new RPButton("auto", "", "Manual", this);
-  set_size_and_pos(m_autoToggle, "playback_mode", REPLAY_DESIGN_INI, AOApplication::getInstance());
+  theme::applyDimensions(m_autoToggle, "playback_mode", SceneType_Replay);
   m_playbackHover->addWidget(m_autoToggle);
   setState(ReplayState_Manual);
 
@@ -118,7 +119,7 @@ void ReplayWindow::onAutoToggle()
 void ReplayWindow::onTextComplete()
 {
   if(m_currentState != ReplayState_Automatic) return;
-  dro::system::replays::playback::setNextUpdate(2000);
+  replays::playback::setNextUpdate(2000);
 
 }
 
@@ -130,19 +131,19 @@ void ReplayWindow::onScrubberPressed()
 void ReplayWindow::onScrubberReleased()
 {
   m_DraggingSlider = false;
-  playback::setTimestamp(m_playbackScrubber->value());
+  replays::playback::setTimestamp(m_playbackScrubber->value());
 }
 
 void ReplayWindow::onScrubberValue()
 {
-  if(!m_DraggingSlider) playback::setTimestamp(m_playbackScrubber->value());
+  if(!m_DraggingSlider) replays::playback::setTimestamp(m_playbackScrubber->value());
 }
 
 void ReplayWindow::keyPressEvent(QKeyEvent *event)
 {
   if (event->key() == Qt::Key_Space)
   {
-    playback::progress();
+    replays::playback::progress();
   }
   else
     QWidget::keyPressEvent(event);

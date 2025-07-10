@@ -243,17 +243,17 @@ void ThemeModuleReader::SwitchModuleTarget(QString t_target)
   SetTargetObject(t_target);
 }
 
-ThemeScene *ThemeModuleReader::getThemeScene(RPSceneType t_scene)
+ThemeScene *ThemeModuleReader::getThemeScene(ThemeSceneType t_scene)
 {
   switch (t_scene)
   {
-    case LOBBY:
+    case SceneType_ServerSelect:
       return m_LobbyScene;
 
     case SceneType_Replay:
       return m_ReplaysScene;
 
-    case COURTROOM:
+    case SceneType_Courtroom:
       return m_CourtroomScene;
 
     case SceneType_Viewport:
@@ -264,7 +264,7 @@ ThemeScene *ThemeModuleReader::getThemeScene(RPSceneType t_scene)
     }
 }
 
-bool ThemeModuleReader::getContainsSceneWidget(RPSceneType t_scene, QString t_name)
+bool ThemeModuleReader::getContainsSceneWidget(ThemeSceneType t_scene, QString t_name)
 {
     ThemeScene *l_scene = getThemeScene(t_scene);
 

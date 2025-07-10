@@ -32,16 +32,16 @@ public:
 
   QVector<ThemeTabInfo> getTabs();
 
-  pos_size_type GetWidgetTransform(RPSceneType sceneType, QString element);
+  pos_size_type GetWidgetTransform(ThemeSceneType sceneType, QString element);
   QVector2D GetWidgetSpacing(QString widget_name);
 
-  widgetFontStruct GetFontData(RPSceneType sceneType, QString element);
+  widgetFontStruct GetFontData(ThemeSceneType sceneType, QString element);
   widgetFontStruct GetFontDataPairing(QString element, QString position);
 
   QVector<QStringList> GetColorsHighlights();
   QMap<QString, DR::ColorInfo> GetColorsDefault();
 
-  QStringList GetSceneWidgetNames(RPSceneType t_sceneType)
+  QStringList GetSceneWidgetNames(ThemeSceneType t_sceneType)
   {
     QStringList l_widgetNames = {};
     QVector<ThemeScene *> l_scenes = RetrieveSceneOrder(t_sceneType, true);
@@ -55,7 +55,7 @@ public:
     return l_widgetNames;
   }
 
-  WidgetThemeData * GetWidgetData(RPSceneType t_sceneType, QString t_name)
+  WidgetThemeData * GetWidgetData(ThemeSceneType t_sceneType, QString t_name)
   {
     QVector<ThemeScene *> l_scenes = RetrieveSceneOrder(t_sceneType, false);
     for(ThemeScene * r_scene : l_scenes)
@@ -108,7 +108,7 @@ private:
 
   }
 
-  QVector<ThemeScene *> RetrieveSceneOrder(RPSceneType t_type, bool t_onlyFirst = false)
+  QVector<ThemeScene *> RetrieveSceneOrder(ThemeSceneType t_type, bool t_onlyFirst = false)
   {
     QVector<ThemeScene *> l_returnData = {};
 

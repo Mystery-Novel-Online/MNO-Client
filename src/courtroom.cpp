@@ -2165,7 +2165,7 @@ void Courtroom::setup_chat()
   // Cache these so chat_tick performs better
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct messageFont = ThemeManager::get().mCurrentThemeReader.GetFontData(COURTROOM, "message");
+    widgetFontStruct messageFont = ThemeManager::get().mCurrentThemeReader.GetFontData(SceneType_Courtroom, "message");
     m_chatbox_message_outline = messageFont.outline;
     m_messageOutlineColor = messageFont.outlineColor;
     m_messageOutlineSize = messageFont.outlineSize;
@@ -3634,7 +3634,7 @@ void Courtroom::construct_playerlist_layout()
   //Setup Player list
   QPoint f_spacing = ao_app->current_theme->get_widget_settings_spacing("player_list", "courtroom", "player_list_spacing");
 
-  set_size_and_pos(ui_player_list, "player_list", COURTROOM_DESIGN_INI, ao_app);
+  theme::applyDimensions(ui_player_list, "player_list", SceneType_Courtroom);
   float resize = ThemeManager::get().getResize();
 
   int player_height = ao_app->get_element_dimensions("player_list_slot", COURTROOM_DESIGN_INI).height;
@@ -3776,7 +3776,7 @@ void Courtroom::write_area_desc()
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontstruct = ThemeManager::get().mCurrentThemeReader.GetFontData(COURTROOM, "area_desc");
+    widgetFontStruct fontstruct = ThemeManager::get().mCurrentThemeReader.GetFontData(SceneType_Courtroom, "area_desc");
     l_color = fontstruct.color;
     is_bold = fontstruct.bold;
   }

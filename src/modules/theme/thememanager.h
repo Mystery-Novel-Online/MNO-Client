@@ -38,7 +38,7 @@ public:
   void setWidgetDimensions(QWidget *t_widget, int t_width, int t_height);
 
 
-  void AssignDimensions(QWidget *t_widget, QString t_name, RPSceneType t_scene);
+  void AssignDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene);
 
   //Widgets
   void SetWidgetNames(QHash<QString, QWidget *> t_WidgetNames);

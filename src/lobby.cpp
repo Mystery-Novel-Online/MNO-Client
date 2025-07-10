@@ -7,6 +7,7 @@
 #include "commondefs.h"
 #include "datatypes.h"
 #include "dro/system/localization.h"
+#include "dro/system/theme.h"
 #include "debug_functions.h"
 #include "dro/interface/widgets/chat_log.h"
 #include "drmasterclient.h"
@@ -194,27 +195,46 @@ void Lobby::update_widgets()
   resize(f_lobby.width, f_lobby.height);
   center_widget_to_screen(this);
 
-  set_size_and_pos(ui_background, "lobby", LOBBY_DESIGN_INI, ao_app);
+  QMap<QWidget*, QString> reloadList =
+  {
+    {ui_background, "lobby"},
+    {ui_gallery_background, "lobby"},
+    {ui_gallery_preview, "replay_preview"},
+    {ui_public_server_filter, "public_servers"},
+    {ui_favorite_server_filter, "favorites"},
+    {ui_version, "version"},
+    {ui_config_panel, "config_panel"},
+    {ui_gallery_categories, "replay_category"},
+    {ui_gallery_packages, "replay_packages"},
+    {ui_server_list, "server_list"},
+    {ui_replay_list, "replay_list"},
+    {ui_player_count, "player_count"},
+    {ui_description, "description"},
+    {ui_chatbox, "chatbox"},
+    {ui_loading_text, "loading_label"},
+    {ui_progress_bar, "progress_bar"},
+    {ui_cancel, "cancel"},
+  };
+
+  for (auto [widget, identifier] : reloadList.toStdMap())
+  {
+    dro::system::theme::applyDimensions(widget, identifier, SceneType_ServerSelect);
+  }
+
   ui_background->set_theme_image("lobbybackground.png");
 
-  set_size_and_pos(ui_gallery_background, "lobby", LOBBY_DESIGN_INI, ao_app);
   ui_gallery_background->set_theme_image("replaybackground.png");
   ui_gallery_background->raise();
   ui_gallery_background->hide();
 
-  set_size_and_pos(ui_gallery_preview, "replay_preview", LOBBY_DESIGN_INI, ao_app);
   ui_gallery_preview->set_theme_image("replay_preview.png");
 
-  set_size_and_pos(ui_public_server_filter, "public_servers", LOBBY_DESIGN_INI, ao_app);
   ui_public_server_filter->set_image(m_server_filter == PublicOnly ? "publicservers_selected.png" : "publicservers.png");
 
-  set_size_and_pos(ui_favorite_server_filter, "favorites", LOBBY_DESIGN_INI, ao_app);
   ui_favorite_server_filter->set_image(m_server_filter == FavoriteOnly ? "favorites_selected.png" : "favorites.png");
 
-  set_size_and_pos(ui_version, "version", LOBBY_DESIGN_INI, ao_app);
   ui_version->setText("Version: " + get_version_string());
 
-  set_size_and_pos(ui_config_panel, "config_panel", LOBBY_DESIGN_INI, ao_app);
   ui_config_panel->set_image_and_text("lobby_config_panel.png", "Config");
   if (ui_config_panel->isHidden() || ui_config_panel->size().isEmpty())
   {
@@ -223,35 +243,26 @@ void Lobby::update_widgets()
     ui_config_panel->show();
   }
 
-  set_size_and_pos(ui_gallery_categories, "replay_category", LOBBY_DESIGN_INI, ao_app);
-
-  set_size_and_pos(ui_gallery_packages, "replay_packages", LOBBY_DESIGN_INI, ao_app);
-
-  set_size_and_pos(ui_server_list, "server_list", LOBBY_DESIGN_INI, ao_app);
   ui_server_list->setStyleSheet("background-color: rgba(0, 0, 0, 0);"
                                 "font: bold;");
 
-  set_size_and_pos(ui_replay_list, "replay_list", LOBBY_DESIGN_INI, ao_app);
   ui_server_list->setStyleSheet("background-color: rgba(0, 0, 0, 0);"
                                 "font: bold;");
 
-  set_size_and_pos(ui_player_count, "player_count", LOBBY_DESIGN_INI, ao_app);
   ui_player_count->setStyleSheet("font: bold;"
                                  "color: white;"
                                  "qproperty-alignment: AlignCenter;");
 
-  set_size_and_pos(ui_description, "description", LOBBY_DESIGN_INI, ao_app);
   ui_description->setStyleSheet("background-color: rgba(0, 0, 0, 0);"
                                 "color: white;");
 
-  set_size_and_pos(ui_chatbox, "chatbox", LOBBY_DESIGN_INI, ao_app);
+
   ui_chatbox->setReadOnly(true);
   ui_chatbox->setStyleSheet("QTextBrowser{background-color: rgba(0, 0, 0, 0);}");
 
   ui_loading_background->resize(this->width(), this->height());
   ui_loading_background->set_theme_image("loadingbackground.png");
 
-  set_size_and_pos(ui_loading_text, "loading_label", LOBBY_DESIGN_INI, ao_app);
   ui_loading_text->setFont(QFont("Arial", 20, QFont::Bold));
   ui_loading_text->setReadOnly(true);
   ui_loading_text->setAlignment(Qt::AlignCenter);
@@ -260,8 +271,6 @@ void Lobby::update_widgets()
                                  "color: rgba(255, 128, 0, 255);");
   ui_loading_text->append("Loading");
 
-  set_size_and_pos(ui_progress_bar, "progress_bar", LOBBY_DESIGN_INI, ao_app);
-  set_size_and_pos(ui_cancel, "cancel", LOBBY_DESIGN_INI, ao_app);
   ui_cancel->setText("Cancel");
 
   ui_loading_background->hide();

@@ -50,11 +50,11 @@ public:
 };
 
 
-enum RPSceneType
+enum ThemeSceneType
 {
-  LOBBY,
-  COURTROOM,
-  TESTINGLABS,
+  SceneType_ServerSelect,
+  SceneType_Courtroom,
+  SceneType_TestingLabs,
   SceneType_Replay,
   SceneType_Viewport
 };

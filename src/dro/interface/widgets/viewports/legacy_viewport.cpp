@@ -15,6 +15,7 @@
 #include <modules/theme/thememanager.h>
 #include "modules/managers/character_manager.h"
 #include "dro/system/runtime_loop.h"
+#include "dro/system/theme.h"
 
 #include <QGraphicsOpacityEffect>
 #include <QGraphicsProxyWidget>
@@ -25,7 +26,7 @@ using namespace dro::network::metadata;
 LegacyViewport::LegacyViewport(QWidget *parent) : RPViewport(parent)
 {
   m_graphicsView = new DRGraphicsView(parent);
-  set_size_and_pos(m_graphicsView, "viewport", REPLAY_DESIGN_INI, AOApplication::getInstance());
+  dro::system::theme::applyDimensions(m_graphicsView, "viewport", SceneType_Replay);
   RuntimeLoop::assignViewport(this);
 }
 
@@ -291,7 +292,7 @@ void LegacyViewport::constructInterface()
   }
 
   m_message = new RPTypewriter(m_graphicsView);
-  set_size_and_pos(m_message, "message", VIEWPORT_DESIGN_INI, AOApplication::getInstance());
+  dro::system::theme::applyDimensions(m_message, "message", SceneType_Viewport);
 
   m_message->setFrameStyle(QFrame::NoFrame);
   m_message->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -303,7 +304,7 @@ void LegacyViewport::constructInterface()
   connect(m_message, &RPTypewriter::typingDone, this, &LegacyViewport::onTypingDone);
 
   m_showname = new RPTextEdit("showname");
-  set_size_and_pos(m_showname, "showname", VIEWPORT_DESIGN_INI, AOApplication::getInstance());
+  dro::system::theme::applyDimensions(m_showname, "showname", SceneType_Viewport);
   m_showname->setFrameStyle(QFrame::NoFrame);
   m_showname->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   m_showname->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

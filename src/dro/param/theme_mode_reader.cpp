@@ -147,7 +147,7 @@ void ThemeModeReader::SetTimeOfDay(QString time)
 QColor ThemeModeReader::getChatlogColour(QString t_type)
 {
 
-  QVector<ThemeScene*> loadOrder = getSceneLoadOrder(COURTROOM);
+  QVector<ThemeScene*> loadOrder = getSceneLoadOrder(SceneType_Courtroom);
   for(ThemeScene * scene : loadOrder)
   {
     if(scene->containsChatlogColor(t_type))
@@ -161,7 +161,7 @@ QColor ThemeModeReader::getChatlogColour(QString t_type)
 
 bool ThemeModeReader::getChatlogBool(QString t_type)
 {
-  QVector<ThemeScene*> loadOrder = getSceneLoadOrder(COURTROOM);
+  QVector<ThemeScene*> loadOrder = getSceneLoadOrder(SceneType_Courtroom);
   for(ThemeScene * scene : loadOrder)
   {
     if(scene->containsChatlogBold(t_type)) return scene->getChatlogBold(t_type);
@@ -171,7 +171,7 @@ bool ThemeModeReader::getChatlogBool(QString t_type)
 
 bool ThemeModeReader::getContainsChatlogColour(QString t_type)
 {
-  QVector<ThemeScene*> loadOrder = getSceneLoadOrder(COURTROOM);
+  QVector<ThemeScene*> loadOrder = getSceneLoadOrder(SceneType_Courtroom);
   for(ThemeScene * scene : loadOrder)
   {
     if(scene->containsChatlogColor(t_type)) return true;
@@ -181,7 +181,7 @@ bool ThemeModeReader::getContainsChatlogColour(QString t_type)
 
 bool ThemeModeReader::getContainsChatlogBool(QString t_type)
 {
-  QVector<ThemeScene*> loadOrder = getSceneLoadOrder(COURTROOM);
+  QVector<ThemeScene*> loadOrder = getSceneLoadOrder(SceneType_Courtroom);
   for(ThemeScene * scene : loadOrder)
   {
     if(scene->containsChatlogBold(t_type)) return true;
@@ -251,7 +251,7 @@ QMap<QString, DR::ColorInfo> ThemeModeReader::GetFontColorsDefault()
 
 QVector2D ThemeModeReader::getWidgetSpacing(QString t_name)
 {
-  QVector<ThemeScene*> readOrder = getSceneLoadOrder(COURTROOM);
+  QVector<ThemeScene*> readOrder = getSceneLoadOrder(SceneType_Courtroom);
 
   for (ThemeScene *scene : readOrder)
   {
@@ -291,7 +291,7 @@ int ThemeModeReader::getTimerNumber()
   return -1;
 }
 
-bool ThemeModeReader::containsWidgetPosition(RPSceneType sceneType, QString name)
+bool ThemeModeReader::containsWidgetPosition(ThemeSceneType sceneType, QString name)
 {
   if(m_TimeOfDayCurrent != nullptr)
   {
@@ -316,12 +316,12 @@ bool ThemeModeReader::containsWidgetPosition(RPSceneType sceneType, QString name
   return false;
 }
 
-pos_size_type ThemeModeReader::getWidgetPosition(RPSceneType sceneType, QString name)
+pos_size_type ThemeModeReader::getWidgetPosition(ThemeSceneType sceneType, QString name)
 {
   return getWidgetDimensions(getSceneLoadOrder(sceneType), name);
 }
 
-bool ThemeModeReader::containsWidgetFont(RPSceneType t_sceneType, QString widget_name)
+bool ThemeModeReader::containsWidgetFont(ThemeSceneType t_sceneType, QString widget_name)
 {
   QVector<ThemeScene*> readOrder = getSceneLoadOrder(t_sceneType);
 
@@ -337,7 +337,7 @@ bool ThemeModeReader::containsWidgetFont(RPSceneType t_sceneType, QString widget
 }
 
 
-widgetFontStruct ThemeModeReader::getWidgetFont(RPSceneType t_sceneType, QString t_name)
+widgetFontStruct ThemeModeReader::getWidgetFont(ThemeSceneType t_sceneType, QString t_name)
 {
   QVector<ThemeScene*> readOrder = getSceneLoadOrder(t_sceneType);
 
@@ -368,7 +368,7 @@ pos_size_type ThemeModeReader::getWidgetDimensions(QVector<ThemeScene *> t_readO
 }
 
 
-QVector<ThemeScene*> ThemeModeReader::getSceneLoadOrder(RPSceneType t_type)
+QVector<ThemeScene*> ThemeModeReader::getSceneLoadOrder(ThemeSceneType t_type)
 {
   QVector<ThemeScene*> returnValue = {};
 

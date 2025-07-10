@@ -3,6 +3,7 @@
 #include "aoapplication.h"
 #include "commondefs.h"
 #include "theme.h"
+#include "dro/system/theme.h"
 
 RPLabel::RPLabel(QWidget *parent, AOApplication *p_ao_app)
     : QLabel(parent)
@@ -25,5 +26,5 @@ void RPLabel::set_image(QString p_image)
 
 void RPLabel::themeRefresh()
 {
-  set_size_and_pos(this, m_Friendly, COURTROOM_DESIGN_INI, ao_app);
+  dro::system::theme::applyDimensions(this, m_Friendly, SceneType_Courtroom);
 }

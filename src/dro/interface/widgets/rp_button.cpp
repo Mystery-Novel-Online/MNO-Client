@@ -4,6 +4,7 @@
 #include "commondefs.h"
 #include "debug_functions.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/system/theme.h"
 #include "drtheme.h"
 #include "theme.h"
 
@@ -89,5 +90,5 @@ void RPButton::refresh_image()
 
 void RPButton::refresh_position()
 {
-  set_size_and_pos(this, m_friendlyName, COURTROOM_DESIGN_INI, m_app);
+  dro::system::theme::applyDimensions(this, m_friendlyName, SceneType_Courtroom);
 }

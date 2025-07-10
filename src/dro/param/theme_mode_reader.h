@@ -42,16 +42,16 @@ public:
   int getMusicScrollSpeed();
   int getTimerNumber();
 
-  bool containsWidgetPosition(RPSceneType sceneType, QString name);
+  bool containsWidgetPosition(ThemeSceneType sceneType, QString name);
 
-  pos_size_type getWidgetPosition(RPSceneType sceneType, QString name);
+  pos_size_type getWidgetPosition(ThemeSceneType sceneType, QString name);
 
-  bool containsWidgetFont(RPSceneType sceneType, QString widget_name);
-  widgetFontStruct getWidgetFont(RPSceneType t_sceneType, QString t_name);
+  bool containsWidgetFont(ThemeSceneType sceneType, QString widget_name);
+  widgetFontStruct getWidgetFont(ThemeSceneType t_sceneType, QString t_name);
 
   pos_size_type getWidgetDimensions(QVector<ThemeScene *> t_readOrder, QString t_name);
 
-  QVector<ThemeScene *> getSceneLoadOrder(RPSceneType t_type);
+  QVector<ThemeScene *> getSceneLoadOrder(ThemeSceneType t_type);
   QVector<ThemeModuleReader *>getModuleLoadOrder();
 
 public:

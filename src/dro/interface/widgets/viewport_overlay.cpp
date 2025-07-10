@@ -87,8 +87,8 @@ void ViewportOverlay::resizeWidgetAndChildren(QString t_widget, int t_width, int
   QWidget* l_widget = ThemeManager::get().getWidget(t_widget);
   if(l_widget == nullptr) return;
 
-  int l_viewportNativeHeight = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(COURTROOM, "viewport").height;
-  pos_size_type l_widgetSize = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(COURTROOM, t_widget);
+  int l_viewportNativeHeight = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(SceneType_Courtroom, "viewport").height;
+  pos_size_type l_widgetSize = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(SceneType_Courtroom, t_widget);
 
   double l_scalingFactor = static_cast<double>(t_height) / l_viewportNativeHeight;
 

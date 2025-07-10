@@ -1,5 +1,6 @@
 #include "rp_line_edit.h"
 #include "commondefs.h"
+#include "dro/system/theme.h"
 
 QHash<QString, QString> s_defaultLineEditCSS
 {
@@ -35,7 +36,7 @@ void RPLineEdit::setDefaultCSS(QString css)
 
 void RPLineEdit::refreshPosition()
 {
-  set_size_and_pos(this, m_friendlyName, COURTROOM_DESIGN_INI, m_app);
+  dro::system::theme::applyDimensions(this, m_friendlyName, SceneType_Courtroom);
   set_text_alignment(this, m_friendlyName, COURTROOM_FONTS_INI, m_app);
 }
 

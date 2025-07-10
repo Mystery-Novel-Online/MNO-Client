@@ -12,6 +12,7 @@
 #include "dro/interface/widgets/rp_slider.h"
 #include "dro/network/metadata/user_metadata.h"
 #include "dro/system/audio/music_player.h"
+#include "dro/system/theme.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"

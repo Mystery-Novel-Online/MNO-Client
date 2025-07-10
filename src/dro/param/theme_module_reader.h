@@ -21,9 +21,9 @@ public:
 
   void SwitchModuleTarget(QString t_target);
 
-  ThemeScene *getThemeScene(RPSceneType t_scene);
+  ThemeScene *getThemeScene(ThemeSceneType t_scene);
 
-  bool getContainsSceneWidget(RPSceneType t_scene, QString t_name);
+  bool getContainsSceneWidget(ThemeSceneType t_scene, QString t_name);
 
   //layers
   bool getContainsLayers();

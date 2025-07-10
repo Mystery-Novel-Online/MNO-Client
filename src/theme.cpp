@@ -18,24 +18,6 @@
 
 #include <modules/theme/thememanager.h>
 
-void set_size_and_pos(QWidget *p_widget, QString p_identifier, QString p_ini_file, AOApplication *ao_app)
-{
-  pos_size_type design_ini_result = ao_app->get_element_dimensions(p_identifier, p_ini_file);
-
-  if (design_ini_result.width < 0 || design_ini_result.height < 0)
-  {
-    qDebug() << "W: could not find" << p_identifier << "in " << p_ini_file;
-    // Don't hide, as some widgets don't have a built-in way of reappearing again.
-    p_widget->move(0, 0);
-    p_widget->resize(0, 0);
-  }
-  else
-  {
-    p_widget->move(design_ini_result.x, design_ini_result.y);
-    p_widget->resize(design_ini_result.width, design_ini_result.height);
-  }
-}
-
 void set_text_alignment_or_default(QWidget *p_widget, QString p_identifier, QString p_ini_file, AOApplication *ao_app,
                                    std::string p_property, Qt::Alignment p_default_horizontal,
                                    Qt::Alignment p_default_vertical)
@@ -81,8 +63,8 @@ void set_text_alignment(QWidget *p_widget, QString p_identifier, QString p_ini_f
 void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOApplication *ao_app)
 {
 
-  RPSceneType l_scene = LOBBY;
-  if(ini_file == COURTROOM_FONTS_INI) l_scene = COURTROOM;
+  ThemeSceneType l_scene = SceneType_ServerSelect;
+  if(ini_file == COURTROOM_FONTS_INI) l_scene = SceneType_Courtroom;
   else if(ini_file == VIEWPORT_FONTS_INI) l_scene = SceneType_Viewport;
 
 
@@ -157,7 +139,7 @@ void set_drtextedit_font(RPTextEdit *p_widget, QString p_identifier, QString p_i
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontData(COURTROOM, p_identifier);
+    widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontData(SceneType_Courtroom, p_identifier);
     outline = fontData.outline;
     outlineWidth = fontData.outlineSize;
     outlineColor = fontData.outlineColor;

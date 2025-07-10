@@ -89,12 +89,12 @@ void DrPlayerListEntry::refreshManual(int width)
   ui_typing->themeRefresh();
   set_stylesheet(ui_typing, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
 
-  set_size_and_pos(ui_user_image, "player_list_icon", COURTROOM_DESIGN_INI, ao_app);
-  set_size_and_pos(pCharacterBorderDisplay, "player_list_border", COURTROOM_DESIGN_INI, ao_app);
-  set_size_and_pos(pStatusDisplay, "player_list_status", COURTROOM_DESIGN_INI, ao_app);
+  theme::applyDimensions(ui_user_image, "player_list_icon", SceneType_Courtroom);
+  theme::applyDimensions(pCharacterBorderDisplay, "player_list_border", SceneType_Courtroom);
+  theme::applyDimensions(pStatusDisplay, "player_list_status", SceneType_Courtroom);
 
   //Prompt (For Blackouts / Look)
-  set_size_and_pos(m_prompt, "player_list_prompt", COURTROOM_DESIGN_INI, ao_app);
+  theme::applyDimensions(m_prompt, "player_list_prompt", SceneType_Courtroom);
   m_prompt->setWordWrap(true);
 }
 
