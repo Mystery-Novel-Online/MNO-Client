@@ -682,6 +682,12 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   }
   else
   {
+    if(m_isMirrored)
+    {
+      painter->translate(sceneRect.center());
+      painter->scale(-1.0f, 1.0f);
+      painter->translate(-sceneRect.center());
+    }
     painter->drawPixmap(drawPos, pixmap);
   }
   painter->restore();
