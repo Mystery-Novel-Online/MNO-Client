@@ -161,8 +161,16 @@ void LegacyViewport::toggleChatbox(bool state)
 {
   if(m_userInterfaceObjects.contains("chatbox"))
   {
-    if(state) m_userInterfaceObjects["chatbox"]->show();
-    else m_userInterfaceObjects["chatbox"]->hide();
+    if(state)
+    {
+      m_userInterfaceObjects["chatbox"]->show();
+      m_showname->show();
+    }
+    else
+    {
+      m_userInterfaceObjects["chatbox"]->hide();
+      m_showname->hide();
+    }
   }
 }
 
