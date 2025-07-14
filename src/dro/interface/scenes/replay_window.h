@@ -3,6 +3,7 @@
 #include <QSlider>
 #include <QWidget>
 #include "dro/interface/widgets/rp_hover_widget.h"
+#include "dro/interface/widgets/scene_widget.h"
 
 class RPViewport;
 class RPButton;
@@ -14,7 +15,7 @@ enum ReplayState
   ReplayState_Realtime
 };
 
-class ReplayWindow : public QWidget
+class ReplayWindow : public SceneWidget
 {
   Q_OBJECT
 public:

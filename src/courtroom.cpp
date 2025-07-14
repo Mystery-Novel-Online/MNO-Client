@@ -69,7 +69,7 @@ using namespace dro::system;
 using namespace dro;
 
 Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
-    : QWidget(parent)
+    : SceneWidget(SceneType_Courtroom, parent)
 {
   ao_app = p_ao_app;
   ao_config = new AOConfig(this);

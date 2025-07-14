@@ -296,6 +296,7 @@ add_executable(dro-client
   src/dro/param/actor_repository.h src/dro/param/actor_repository.cpp
   src/dro/system/runtime_values.h src/dro/system/runtime_values.cpp
   src/dro/system/theme.h src/dro/system/theme.cpp
+  src/dro/interface/widgets/scene_widget.h src/dro/interface/widgets/scene_widget.cpp
 )
 
 target_include_directories(dro-client PUBLIC

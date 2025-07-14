@@ -7,6 +7,7 @@
 #include <QComboBox>
 #include <QMainWindow>
 #include <QModelIndex>
+#include "dro/interface/widgets/scene_widget.h"
 
 #include <optional>
 
@@ -22,7 +23,8 @@ class QListWidget;
 class QLineEdit;
 class QProgressBar;
 class QTextBrowser;
-class Lobby : public QMainWindow
+
+class Lobby : public SceneWidget
 {
   Q_OBJECT
 

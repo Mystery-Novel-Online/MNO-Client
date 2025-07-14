@@ -73,10 +73,11 @@ class QLabel;
 #include "dro/interface/widgets/emotion_selector.h"
 #include "dro/interface/widgets/choice_dialog.h"
 #include "dro/interface/widgets/viewport_overlay.h"
+#include "dro/interface/widgets/scene_widget.h"
 
 using namespace dro::network;
 
-class Courtroom : public QWidget
+class Courtroom : public SceneWidget
 {
   Q_OBJECT
 

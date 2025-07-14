@@ -19,21 +19,21 @@ namespace Layout::ServerSelect
 
   RPButton *CreateButton(QString name, QString image, std::function<void()> releasedFunction)
   {
-    RPButton* newButton = new RPButton(s_ConstructedLobby);
-    newButton->setName(name);
-    newButton->setScene(SceneType_ServerSelect);
-    dro::system::theme::applyDimensions(newButton, name, SceneType_ServerSelect);
-    newButton->set_image(image + ".png");
+    RPButton* rpButton = new RPButton(s_ConstructedLobby);
+    rpButton->setName(name);
+    rpButton->setScene(SceneType_ServerSelect);
+    dro::system::theme::applyDimensions(rpButton, name, SceneType_ServerSelect);
+    rpButton->set_image(image + ".png");
 
-    QObject::connect(newButton, &QPushButton::pressed, [newButton, image]() { newButton->set_image(image + "_pressed.png"); });
+    QObject::connect(rpButton, &QPushButton::pressed, [rpButton, image]() { rpButton->set_image(image + "_pressed.png"); });
 
-    QObject::connect(newButton, &QPushButton::released, [newButton, image, releasedFunction]()
+    QObject::connect(rpButton, &QPushButton::released, [rpButton, image, releasedFunction]()
     {
-      newButton->set_image(image + ".png");
+      rpButton->set_image(image + ".png");
       if (releasedFunction) {  releasedFunction(); }
     });
 
-    return newButton;
+    return rpButton;
   }
 
 }

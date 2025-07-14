@@ -12,7 +12,7 @@
 
 using namespace dro::system;
 
-ReplayWindow::ReplayWindow()
+ReplayWindow::ReplayWindow() : SceneWidget(SceneType_Replay)
 {
   setWindowTitle("Replay");
   setFocusPolicy(Qt::StrongFocus);
@@ -48,7 +48,7 @@ void ReplayWindow::setState(ReplayState state)
 
   case ReplayState_Automatic:
     m_currentState = ReplayState_Automatic;
-    dro::system::replays::playback::setNextUpdate(2000);
+    dro::system::replays::playback::setNextUpdate(2500);
     m_autoToggle->set_image("playback_auto.png");
     break;
 
@@ -65,26 +65,15 @@ void ReplayWindow::setState(ReplayState state)
 
 void ReplayWindow::constructLayout()
 {
-  m_viewport = new LegacyViewport(this);
-  theme::applyDimensions(this, "replay_window", SceneType_Replay);
+  m_viewport = createWidget<LegacyViewport>("replay_window");
   m_viewport->constructViewport();
-
-
-  m_playbackHover = new RPHoverWidget(this);
-  theme::applyDimensions(m_playbackHover, "playback_hover_field", SceneType_Replay);
-  m_playbackHover->show();
-
-  m_scrubberHover = new RPHoverWidget(this);
-  theme::applyDimensions(m_scrubberHover, "controller", SceneType_Replay);
-  m_scrubberHover->show();
-
-
-  m_playbackScrubber = new QSlider(Qt::Horizontal, this);
-  theme::applyDimensions(m_playbackScrubber, "scrubber", SceneType_Replay);
+  m_playbackHover = createWidget<RPHoverWidget>("playback_hover_field");
+  m_scrubberHover = createWidget<RPHoverWidget>("controller");
+  m_playbackScrubber = createWidget<QSlider>("scrubber", Qt::Horizontal);
   m_scrubberHover->addWidget(m_playbackScrubber);
 
-  m_autoToggle = new RPButton("auto", "", "Manual", this);
-  theme::applyDimensions(m_autoToggle, "playback_mode", SceneType_Replay);
+  m_autoToggle = createWidget<RPButton>("playback_mode", "auto", "", "Manual");
+
   m_playbackHover->addWidget(m_autoToggle);
   setState(ReplayState_Manual);
 
@@ -119,7 +108,7 @@ void ReplayWindow::onAutoToggle()
 void ReplayWindow::onTextComplete()
 {
   if(m_currentState != ReplayState_Automatic) return;
-  replays::playback::setNextUpdate(2000);
+  replays::playback::setNextUpdate(2500);
 
 }
 

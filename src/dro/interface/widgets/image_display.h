@@ -9,6 +9,7 @@ class AOImageDisplay : public QLabel
 {
 public:
   AOImageDisplay(QWidget *parent, AOApplication *p_ao_app);
+  AOImageDisplay(QWidget *parent);
 
   QString get_image();
   void set_image(QString p_image);

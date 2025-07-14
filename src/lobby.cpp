@@ -45,9 +45,12 @@
 
 using namespace dro::system;
 
-Lobby::Lobby(AOApplication *p_ao_app)
-    : QMainWindow()
+Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(SceneType_ServerSelect)
 {
+
+  m_replayWindow = new ReplayWindow();
+  m_replayWindow->hide();
+
   ao_app = p_ao_app;
   ao_config = new AOConfig(this);
   m_master_client = new DRMasterClient(this);
@@ -55,32 +58,31 @@ Lobby::Lobby(AOApplication *p_ao_app)
   setWindowTitle("Danganronpa Online (" + get_version_string() + ")");
   Layout::ServerSelect::AssignLobby(this, ao_app);
 
-  ui_background = new AOImageDisplay(this, ao_app);
-
-
-  ui_gallery_background = new AOImageDisplay(this, ao_app);
-  ui_gallery_preview = new AOImageDisplay(ui_gallery_background, ao_app);
+  ui_background = createWidget<AOImageDisplay>("lobby");
+  ui_gallery_background = createWidget<AOImageDisplay>("lobby");
+  ui_gallery_preview = createWidget<AOImageDisplay>("replay_preview");
+  ui_gallery_preview->setParent(ui_gallery_background);
 
   \
-  ui_public_server_filter = new RPButton(this);
+  ui_public_server_filter = createWidget<RPButton>("public_servers");
+  ui_favorite_server_filter = createWidget<RPButton>("favorites");
 
-  ui_favorite_server_filter = new RPButton(this);
+  ui_toggle_favorite = createButton("add_to_fav", "addtofav", [this]() {this->on_add_to_fav_released();});
+  ui_refresh = createButton("refresh", "refresh", [this]() {this->on_refresh_released();});
+  ui_connect = createButton("connect", "connect", [this]() {this->on_connect_released();});
+  ui_gallery_toggle = createButton("toggle_gallery", "toggle_gallery", [this]() {this->onGalleryToggle();});
+  ui_gallery_play = createButton("play_replay", "play_replay", [this]() {this->onGalleryPlay();});
 
-  ui_toggle_favorite = Layout::ServerSelect::CreateButton("add_to_fav", "addtofav", [this]() {this->on_add_to_fav_released();});
-  ui_refresh = Layout::ServerSelect::CreateButton("refresh", "refresh", [this]() {this->on_refresh_released();});
-  ui_connect = Layout::ServerSelect::CreateButton("connect", "connect", [this]() {this->on_connect_released();});
-  ui_gallery_toggle = Layout::ServerSelect::CreateButton("toggle_gallery", "toggle_gallery", [this]() {this->onGalleryToggle();});
-  ui_gallery_play = Layout::ServerSelect::CreateButton("play_replay", "play_replay", [this]() {this->onGalleryPlay();});
   ui_gallery_play->setParent(ui_gallery_background);
 
-  ui_config_panel = new RPButton(this);
+  ui_config_panel = createWidget<RPButton>("config_panel");
 
-  ui_version = new RPTextEdit("version", this);
+  ui_version = createWidget<RPTextEdit>("version", "version");
   ui_version->setFrameStyle(QFrame::NoFrame);
   ui_version->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_version->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_version->setReadOnly(true);
-  ui_server_list = new QListWidget(this);
+  ui_server_list = createWidget<QListWidget>("server_list");
   ui_server_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
   ui_server_menu = new QMenu(this);
@@ -91,38 +93,43 @@ Lobby::Lobby(AOApplication *p_ao_app)
   ui_move_down_server = ui_server_menu->addAction(localization::getText("SERVER_FAVORITES_DOWN"));
   ui_delete_server = ui_server_menu->addAction(localization::getText("SERVER_FAVORITES_REMOVE"));
 
-  ui_player_count = new RPTextEdit("player_count", this);
+  ui_player_count = createWidget<RPTextEdit>("player_count", "player_count");
   ui_player_count->setFrameStyle(QFrame::NoFrame);
   ui_player_count->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_player_count->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_player_count->setWordWrapMode(QTextOption::NoWrap);
   ui_player_count->setReadOnly(true);
 
-  ui_description = new QTextBrowser(this);
+  ui_description = createWidget<QTextBrowser>("description");
   ui_description->setOpenExternalLinks(true);
   ui_description->setReadOnly(true);
 
-  ui_chatbox = new DRChatLog(this);
+  ui_chatbox = createWidget<DRChatLog>("chatbox");
+  ui_chatbox->hide();
   ui_chatbox->setOpenExternalLinks(true);
   ui_chatbox->setReadOnly(true);
 
-  ui_loading_background = new AOImageDisplay(this, ao_app);
-  ui_loading_text = new RPTextEdit("loading_label", ui_loading_background);
-  ui_progress_bar = new QProgressBar(ui_loading_background);
+  ui_loading_background = new AOImageDisplay(this);
+  ui_loading_text = createWidget<RPTextEdit>("loading_label", "loading_label");
+  ui_loading_text->setParent(ui_loading_background);
 
+  ui_progress_bar = createWidget<QProgressBar>("progress_bar");
+  ui_progress_bar->setParent(ui_loading_background);
   ui_progress_bar->setMinimum(0);
   ui_progress_bar->setMaximum(100);
   ui_progress_bar->setStyleSheet("QProgressBar{ color: white; }");
 
-  ui_cancel = new RPButton(ui_loading_background);
+  ui_cancel = createWidget<RPButton>("cancel");
+  ui_cancel->setParent(ui_loading_background);
 
-
-  ui_replay_list = new QListWidget(ui_gallery_background);
+  ui_replay_list = createWidget<QListWidget>("replay_list");
+  ui_replay_list->setParent(ui_gallery_background);
   ui_replay_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
-  ui_gallery_packages = new QComboBox(ui_gallery_background);
-  ui_gallery_categories = new QComboBox(ui_gallery_background);
-
+  ui_gallery_packages = createWidget<QComboBox>("replay_packages");
+  ui_gallery_categories = createWidget<QComboBox>("replay_category");
+  ui_gallery_packages->setParent(ui_gallery_background);
+  ui_gallery_categories->setParent(ui_gallery_background);
 
   connect(ui_gallery_categories, SIGNAL(currentIndexChanged(int)), this, SLOT(onGalleryCategoryChanged(int)));
   connect(ui_gallery_packages, SIGNAL(currentIndexChanged(int)), this, SLOT(onGalleryPackageChanged(int)));
@@ -164,8 +171,6 @@ Lobby::Lobby(AOApplication *p_ao_app)
   set_choose_a_server();
 
   ThemeManager::get().ResetWidgetLists();
-  m_replayWindow = new ReplayWindow();
-  m_replayWindow->hide();
   ui_gallery_packages->clear();
   ui_gallery_packages->addItems(dro::system::replays::io::packageNames());
 }
@@ -195,37 +200,7 @@ void Lobby::update_widgets()
   resize(f_lobby.width, f_lobby.height);
   center_widget_to_screen(this);
 
-  QMap<QWidget*, QString> reloadList =
-  {
-    {ui_background, "lobby"},
-    {ui_gallery_background, "lobby"},
-    {ui_gallery_preview, "replay_preview"},
-    {ui_public_server_filter, "public_servers"},
-    {ui_favorite_server_filter, "favorites"},
-    {ui_version, "version"},
-    {ui_config_panel, "config_panel"},
-    {ui_gallery_categories, "replay_category"},
-    {ui_gallery_packages, "replay_packages"},
-    {ui_server_list, "server_list"},
-    {ui_replay_list, "replay_list"},
-    {ui_player_count, "player_count"},
-    {ui_description, "description"},
-    {ui_chatbox, "chatbox"},
-    {ui_loading_text, "loading_label"},
-    {ui_progress_bar, "progress_bar"},
-    {ui_cancel, "cancel"},
-  };
-
-  for (auto [widget, identifier] : reloadList.toStdMap())
-  {
-    dro::system::theme::applyDimensions(widget, identifier, SceneType_ServerSelect);
-  }
-
-  ui_toggle_favorite->refresh_position();
-  ui_refresh->refresh_position();
-  ui_connect->refresh_position();
-  ui_gallery_toggle->refresh_position();
-  ui_gallery_play->refresh_position();
+  reload();
 
   ui_background->set_theme_image("lobbybackground.png");
 
@@ -287,6 +262,8 @@ void Lobby::update_widgets()
   update_server_listing();
 
   update_server_filter_buttons();
+
+  m_replayWindow->reload();
 }
 
 void Lobby::set_fonts()

@@ -17,6 +17,11 @@ AOImageDisplay::AOImageDisplay(QWidget *parent, AOApplication *p_ao_app)
   ao_app = p_ao_app;
 }
 
+AOImageDisplay::AOImageDisplay(QWidget *parent) : QLabel(parent)
+{
+  ao_app = AOApplication::getInstance();
+}
+
 QString AOImageDisplay::get_image()
 {
   return m_image;
