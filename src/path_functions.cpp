@@ -3,7 +3,7 @@
 #include "aoconfig.h"
 #include "commondefs.h"
 #include "courtroom.h"
-#include "modules/managers/character_manager.h"
+
 
 #include <QDebug>
 #include <QDir>
@@ -15,6 +15,7 @@
 #include "dro/fs/fs_reading.h"
 #include "dro/fs/fs_mounting.h"
 #include "dro/system/replay_playback.h"
+#include "dro/network/metadata/server_metadata.h"
 
 // Copied over from Vanilla.
 // As said in the comments there, this is a *super broad* definition.
@@ -28,7 +29,7 @@
 
 void AOApplication::reload_packages()
 {
-  CharacterManager::get().ResetPackages();
+  dro::network::metadata::character::lists::reset();
   dro::system::replays::io::resetCache();
   QVector<QString> packageNames = FS::Packages::Scan();
   QString packagesPath = FS::Paths::ApplicationPath() + "/packages/";
@@ -44,7 +45,7 @@ void AOApplication::reload_packages()
       packageChar.name = character_folder;
       baseCharacters.append(std::move(packageChar));
     }
-    CharacterManager::get().SetCharList("base", baseCharacters);
+    dro::network::metadata::character::lists::setFilteredList("base", baseCharacters);
   }
 
   for(QString packageName : packageNames)
@@ -60,7 +61,7 @@ void AOApplication::reload_packages()
         packageChar.name = character_folder;
         packageCharacters.append(std::move(packageChar));
       }
-      CharacterManager::get().SetCharList(packageName, packageCharacters);
+      dro::network::metadata::character::lists::setFilteredList(packageName, packageCharacters);
     }
 
     QDir replaysDirectory(packagesPath + packageName + "/replays");

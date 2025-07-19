@@ -8,7 +8,6 @@
 #include <QLabel>
 #include <QPaintEvent>
 #include <QPainter>
-#include <modules/managers/character_manager.h>
 #include "dro/interface/menus/emote_menu.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/param/actor_repository.h"

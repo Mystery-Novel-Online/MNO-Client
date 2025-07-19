@@ -8,7 +8,7 @@
 #include "drdiscord.h"
 #include "dro/network/metadata/tracklist_metadata.h"
 #include "drpacket.h"
-#include "modules/managers/character_manager.h"
+
 #include "dro/system/localization.h"
 #include "drserversocket.h"
 #include "dro/fs/fs_reading.h"
@@ -222,7 +222,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (!is_courtroom_constructed)
       return;
 
-    QVector<char_type> l_chr_list = CharacterManager::get().GetServerCharList();
+    QVector<char_type> l_chr_list = dro::network::metadata::character::lists::serverList();
     if (l_content.length() != l_chr_list.length())
     {
       qWarning() << "Server sent a character list of length " << l_content.length() << "which is different from the expected length " << l_chr_list.length() << "so ignoring it.";
@@ -232,11 +232,10 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     for (int i = 0; i < l_chr_list.length(); ++i)
     {
       l_chr_list[i].taken = l_content.at(i) == "-1";
-      CharacterManager::get().SetCharaTaken(i, l_content.at(i) == "-1");
+      dro::network::metadata::character::lists::setCharacterAvailability(i, l_content.at(i) == "-1");
     }
 
-
-    CharacterManager::get().SetCharList(l_chr_list);
+    dro::network::metadata::character::lists::setServerList(l_chr_list);
   }
   else if (l_header == "SC")
   {
@@ -250,7 +249,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       l_chr.name = i_chr_name;
       l_chr_list.append(std::move(l_chr));
     }
-    CharacterManager::get().SetCharList(l_chr_list);
+    dro::network::metadata::character::lists::setServerList(l_chr_list);
     m_loaded_characters = m_character_count;
 
     if (is_lobby_constructed)

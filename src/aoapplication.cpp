@@ -20,11 +20,11 @@
 #include <QFontDatabase>
 #include <QRegularExpression>
 
-#include <modules/managers/character_manager.h>
 #include "dro/system/localization.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/system/runtime_loop.h"
 #include "dro/system/effects.h"
+#include "dro/network/metadata/server_metadata.h"
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -78,7 +78,7 @@ AOApplication::AOApplication(int &argc, char **argv)
   connect(m_server_socket, &DRServerSocket::connection_state_changed, this, &AOApplication::_p_handle_server_state_update);
   connect(m_server_socket, SIGNAL(packet_received(DRPacket)), this, SLOT(_p_handle_server_packet(DRPacket)));
 
-  CharacterManager::get().LoadFavoritesList();
+  dro::network::metadata::character::lists::loadFavorites();
   reload_packages();
   resolve_current_theme();
 

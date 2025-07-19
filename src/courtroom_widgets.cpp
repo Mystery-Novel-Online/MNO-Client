@@ -201,7 +201,7 @@ void Courtroom::create_widgets()
   ui_ooc_chatlog->setReadOnly(true);
   ui_ooc_chatlog->setOpenExternalLinks(true);
 
-  ui_area_list = new QListWidget(this);
+  ui_area_list = new RPListWidget(this);
   ui_area_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
   p_AreaContextMenu = new AreaMenu(this);
@@ -212,15 +212,15 @@ void Courtroom::create_widgets()
   ui_area_search->setFrame(false);
   ui_area_search->setPlaceholderText(localization::getText("TEXTBOX_AREA"));
 
-  ui_music_list = new QListWidget(this);
+  ui_music_list = new RPListWidget(this);
   ui_music_list->setContextMenuPolicy(Qt::CustomContextMenu);
   ui_music_search = new RPLineEdit("music_search", localization::getText("TEXTBOX_MUSIC"), "[MUSIC SEARCH]", this);
   ui_music_search->setFrame(false);
   p_MenuBGM = new BGMMenu(this);
 
-  animList = new QListWidget(this);
+  animList = new RPListWidget(this);
 
-  ui_sfx_list = new QListWidget(this);
+  ui_sfx_list = new RPListWidget(this);
   ui_sfx_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
   ui_sfx_search = new RPLineEdit("sfx_search", "[SFX SEARCH]", this);

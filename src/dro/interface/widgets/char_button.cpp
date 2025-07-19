@@ -3,9 +3,10 @@
 #include "aoapplication.h"
 #include "dro/interface/widgets/image_display.h"
 #include <QDesktopServices>
-#include "modules/managers/character_manager.h"
+
 #include "dro/system/localization.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/network/metadata/server_metadata.h"
 #include "aoconfig.h"
 #include "courtroom.h"
 
@@ -91,12 +92,12 @@ void AOCharButton::set_taken(const bool p_enabled)
 
 void AOCharButton::addToFavorites()
 {
-  CharacterManager::get().AddToFavorites(m_character);
+  dro::network::metadata::character::lists::addFavorite(m_character);
 }
 
 void AOCharButton::removeFavorites()
 {
-  CharacterManager::get().RemoveFromFavorites(m_character);
+  dro::network::metadata::character::lists::removeFavorite(m_character);
 }
 
 void AOCharButton::openCharacterFolder()

@@ -8,7 +8,7 @@
 #include <QCheckBox>
 #include <QColor>
 #include "dro/system/localization.h"
-#include "modules/managers/character_manager.h"
+
 #include <QLineEdit>
 #include <QListWidget>
 #include <QMenu>
@@ -45,9 +45,10 @@ void Courtroom::load_sfx_list_theme()
   m_sfx_color_missing = ao_app->current_theme->get_widget_settings_color("sfx_list", "courtroom", "missing_sfx", "missing_song_color");
 
 
-  m_animListIdle = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "unselected_anim", "unselected_anim_color");
-  m_animListSelected = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "selected_anim", "selected_anim_color");
-  m_animListHeader = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "category_header", "category_header_color");
+  QColor unselected = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "unselected_anim", "unselected_anim_color");
+  QColor selected  = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "selected_anim", "selected_anim_color");
+  QColor header  = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "category_header", "category_header_color");
+  animList->assignColors(unselected, selected, header);
 
 
   update_all_sfx_item_color();
@@ -91,41 +92,12 @@ void Courtroom::load_current_character_sfx_list()
 
 void Courtroom::filter_sfx_list(QString p_filter)
 {
-  filter_list_widget(ui_sfx_list, p_filter);
+  ui_sfx_list->filterList(p_filter);
 }
 
 void Courtroom::filter_sfx_list()
 {
   filter_sfx_list(ui_sfx_search->text());
-}
-
-void Courtroom::setAnimItemColor(QListWidgetItem *item)
-{
-  if (item == nullptr) return;
-  QColor l_color = m_animListIdle;
-
-  if(item->text().startsWith("[") && item->text().endsWith("]"))
-  {
-    l_color = m_animListHeader;
-  }
-  else if (item == animList->currentItem())
-  {
-    l_color = m_animListSelected;
-  }
-
-  item->setBackground(l_color);
-}
-
-void Courtroom::select_default_sfx()
-{
-  if (ui_sfx_list->count() == 0)
-    return;
-  ui_sfx_list->setCurrentRow(0);
-}
-
-void Courtroom::clear_sfx_selection()
-{
-  ui_sfx_list->setCurrentRow(-1);
 }
 
 void Courtroom::set_sfx_item_color(QListWidgetItem *p_item)
@@ -154,7 +126,7 @@ void Courtroom::onAnimListItemChanged(QListWidgetItem *current_item, QListWidget
 {
   for (int i = 0; i < animList->count(); ++i)
   {
-    setAnimItemColor(animList->item(i));
+    animList->setItemColor(animList->item(i));
   }
   ui_ic_chat_message_field->setFocus();
 }

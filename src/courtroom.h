@@ -7,6 +7,7 @@
 #include "dro/interface/menus/bgm_menu.h"
 #include "dro/interface/menus/char_menu.h"
 #include "dro/interface/widgets/bgm_filter.h"
+#include "dro/interface/widgets/rp_list_widget.h"
 #include "dro/interface/widgets/screenshot_button.h"
 #include "dro/interface/widgets/health_bar.h"
 #include "dro/interface/widgets/rp_slider.h"
@@ -221,7 +222,6 @@ public:
 
   // helper function that populates ui_music_list with the contents of
   // music_list
-  void filter_list_widget(QListWidget *widget, QString filter);
   bool is_area_music_list_separated();
   void list_music();
   void list_areas();
@@ -531,21 +531,18 @@ private:
 
   DRChatLog *ui_ooc_chatlog = nullptr;
 
-  QListWidget *ui_area_list = nullptr;
+  RPListWidget *ui_area_list = nullptr;
   QLineEdit *ui_area_search = nullptr;
-  QListWidget *ui_music_list = nullptr;
+  RPListWidget *ui_music_list = nullptr;
   QLineEdit *ui_music_search = nullptr;
   BGMMenu *p_MenuBGM = nullptr;
 
   AreaMenu *p_AreaContextMenu = nullptr;
 
-  QListWidget *animList = nullptr;
-  QListWidget *ui_sfx_list = nullptr;
+  RPListWidget *animList = nullptr;
+  RPListWidget *ui_sfx_list = nullptr;
   QVector<DRSfx> m_sfx_list;
   const QString m_sfx_default_file = "__DEFAULT__";
-  QColor m_animListIdle;
-  QColor m_animListSelected;
-  QColor m_animListHeader;
 
   QColor m_sfx_color_found;
   QColor m_sfx_color_missing;
@@ -925,8 +922,6 @@ public:
   QString current_sfx_file();
   void load_current_character_sfx_list();
   void load_sfx_list_theme();
-  void select_default_sfx();
-  void clear_sfx_selection();
   void update_all_sfx_item_color();
 
 public slots:
@@ -934,7 +929,6 @@ public slots:
   void filter_sfx_list();
 
 private:
-  void setAnimItemColor(QListWidgetItem *item);
   void set_sfx_item_color(QListWidgetItem *item);
 
 private slots:

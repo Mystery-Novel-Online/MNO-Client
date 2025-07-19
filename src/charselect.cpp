@@ -11,7 +11,7 @@
 #include "drpacket.h"
 #include "dro/fs/fs_reading.h"
 #include "hardware_functions.h"
-#include "modules/managers/character_manager.h"
+
 #include "qcombobox.h"
 #include "theme.h"
 #include "drtheme.h"
@@ -24,6 +24,7 @@
 #include "dro/interface/widgets/character_select.h"
 #include <dro/interface/widgets/rp_line_edit.h>
 #include "dro/interface/widgets/rp_widget.h"
+#include "dro/network/metadata/server_metadata.h"
 
 void Courtroom::construct_char_select()
 {
@@ -46,7 +47,7 @@ void Courtroom::construct_char_select()
   pBtnCharSelectRefresh = new RPButton("char_select_refresh", "char_refresh.png", dro::system::localization::getText("REFRESH"), ui_char_select_background);
 
   pCharaSelectSearch = new RPLineEdit("character_search", dro::system::localization::getText("CSS_SEARCH"), "[CHARA SEARCH]", ui_char_select_background);
-  pCharaSelectSeries = setupComboBoxWidget(CharacterManager::get().GetCharacterPackages() , "character_packages", "[PACKAGE FILTER]");
+  pCharaSelectSeries = setupComboBoxWidget(dro::network::metadata::character::lists::characterFilters(), "character_packages", "[PACKAGE FILTER]");
 
   connect(char_button_mapper, SIGNAL(mapped(int)), this, SLOT(char_clicked(int)));
   connect(ui_back_to_lobby, SIGNAL(clicked()), this, SLOT(on_back_to_lobby_clicked()));
@@ -146,22 +147,22 @@ void Courtroom::set_char_select_page()
   ui_chr_select_left->hide();
   ui_chr_select_right->hide();
 
-
-
-  CharacterManager::get().mFilteredChrList = {};
-
+  dro::network::metadata::character::lists::clearFlitered();
 
   for (AOCharButton *button : qAsConst(ui_char_button_list))
     button->hide();
 
+  int l_item_count = 0;
 
-
-  for (char_type charaType : CharacterManager::get().GetCharList(pCharaSelectSeries->currentText()))
+  for (char_type charaType : dro::network::metadata::character::lists::filteredList(pCharaSelectSeries->currentText()))
   {
-    if(charaType.name.toLower().contains(pCharaSelectSearch->text().toLower())) CharacterManager::get().mFilteredChrList.append(charaType);
+    if(charaType.name.toLower().contains(pCharaSelectSearch->text().toLower()))
+    {
+      l_item_count += 1;
+      dro::network::metadata::character::lists::addFlitered(charaType);
+    }
   }
 
-  const int l_item_count = CharacterManager::get().mFilteredChrList.length();
   const int l_page_count = qFloor(l_item_count / m_page_max_chr_count) + bool(l_item_count % m_page_max_chr_count);
   m_current_chr_page = qBound(0, m_current_chr_page, l_page_count - 1);
   const int l_current_page_emote_count =
@@ -184,9 +185,9 @@ void Courtroom::set_char_select_page()
 
     int l_real_i = i + m_current_chr_page * m_page_max_chr_count;
     AOCharButton *l_button = ui_char_button_list.at(i);
-    const QString l_base_chr = CharacterManager::get().mFilteredChrList.at(l_real_i).name;
-    l_button->set_character(l_base_chr, ao_config->character_ini(l_base_chr));
-    l_button->set_taken((CharacterManager::get().mFilteredChrList.at(l_real_i).taken));
+    QString characterName = dro::network::metadata::character::lists::characterNameFiltered(l_real_i);
+    l_button->set_character(characterName, ao_config->character_ini(characterName));
+    l_button->set_taken(dro::network::metadata::character::lists::characterTaken(characterName));
     l_button->show();
     l_button->move(xOffset, yOffset);
     xOffset += 68;
@@ -243,15 +244,15 @@ void Courtroom::SwitchCharacterByName(const char *characterName)
     return;
   }
 
-  if(!CharacterManager::get().GetCharacterInServer(characterName))
+  if(!dro::network::metadata::character::lists::characterCheck(characterName))
   {
-    serverCharacterId = CharacterManager::get().GetAvaliablePersona();
+    serverCharacterId = dro::network::metadata::character::lists::findAvailablePersona();
     if(serverCharacterId == -1) return;
-    ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(serverCharacterId), characterName);
+    ao_config->set_character_ini(dro::network::metadata::character::lists::characterNameServer(serverCharacterId), characterName);
   }
   else
   {
-    serverCharacterId = CharacterManager::get().GetFilteredId(characterName);
+    serverCharacterId = dro::network::metadata::character::lists::characterServerId(characterName);
   }
 
   ao_app->send_server_packet(
@@ -261,6 +262,7 @@ void Courtroom::SwitchCharacterByName(const char *characterName)
 
 void Courtroom::char_clicked(int n_char)
 {
+  using namespace dro::network::metadata;
   if (metadata::user::GetCharacterName() == UIFilteredCharButton.at(n_char)->character())
   {
     enter_courtroom(metadata::user::GetCharacterId());
@@ -269,8 +271,8 @@ void Courtroom::char_clicked(int n_char)
 
   int n_real_char = n_char + m_current_chr_page * m_page_max_chr_count;
 
-  QString l_pathCharIni = ao_app->get_character_path(CharacterManager::get().mFilteredChrList.at(n_real_char).name, CHARACTER_CHAR_INI);
-  QString l_pathCharJson = ao_app->get_character_path(CharacterManager::get().mFilteredChrList.at(n_real_char).name, CHARACTER_CHAR_JSON);
+  QString l_pathCharIni = ao_app->get_character_path(character::lists::characterNameFiltered(n_real_char), CHARACTER_CHAR_INI);
+  QString l_pathCharJson = ao_app->get_character_path(character::lists::characterNameFiltered(n_real_char), CHARACTER_CHAR_JSON);
 
   qDebug() << "char_ini_path" << l_pathCharIni;
 
@@ -281,16 +283,16 @@ void Courtroom::char_clicked(int n_char)
     return;
   }
 
-  if(!CharacterManager::get().GetCharacterInServer(n_real_char))
+  if(!character::lists::characterCheck(n_real_char))
   {
     int filtered_char = n_real_char;
-    n_real_char = CharacterManager::get().GetAvaliablePersona();
+    n_real_char = character::lists::findAvailablePersona();
     if(n_real_char == -1) return;
-    ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(n_real_char), CharacterManager::get().GetFilteredCharaName(filtered_char));
+    ao_config->set_character_ini(character::lists::characterNameServer(n_real_char), character::lists::characterNameFiltered(filtered_char));
   }
   else
   {
-    n_real_char = CharacterManager::get().GetFilteredId(n_real_char);
+    n_real_char = character::lists::characterServerId(n_real_char);
   }
 
   ao_app->send_server_packet(

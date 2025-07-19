@@ -10,10 +10,12 @@
 
 #include "dro/param/background/legacy_background_reader.h"
 #include "dro/param/background/background_reader.h"
+#include "dro/param/actor/actor_loader.h"
 #include "dro/system/audio.h"
 
 #include <modules/theme/thememanager.h>
-#include "modules/managers/character_manager.h"
+
+#include "dro/param/actor_repository.h"
 #include "dro/system/runtime_loop.h"
 #include "dro/system/theme.h"
 
@@ -87,8 +89,8 @@ void LegacyViewport::constructViewport()
 void LegacyViewport::loadCurrentMessage()
 {
   MessageMetadata &message = message::recentMessage();
-  m_currentActor = CharacterManager::get().ReadCharacter(message.characterFolder);
-  m_pairActor = CharacterManager::get().ReadCharacter(message.pairData.characterFolder);
+  m_currentActor = dro::actor::repository::retrieve(message.characterFolder);
+  m_pairActor = dro::actor::repository::retrieve(message.pairData.characterFolder);
   if(message.characterPre.trimmed().isEmpty()) message.characterPre = "-";
   m_message->setInput("");
   toggleChatbox(false);

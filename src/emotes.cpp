@@ -15,7 +15,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QFuture>
-#include "modules/managers/character_manager.h"
+
 #include <QLineEdit>
 #include <QScreen>
 #include <QtMath>

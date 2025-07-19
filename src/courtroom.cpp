@@ -6,7 +6,7 @@
 #include "dro/interface/widgets/rp_button.h"
 #include "aoconfig.h"
 #include "dro/interface/widgets/image_display.h"
-#include "modules/managers/character_manager.h"
+
 #include "dro/interface/widgets/note_area.h"
 #include "dro/interface/widgets/note_picker.h"
 #include "dro/interface/widgets/aotimer.h"
@@ -343,7 +343,7 @@ void Courtroom::enter_courtroom(int p_cid)
 
   const QString l_chr_name = get_character_ini();
 
-  ActorData *actor = CharacterManager::get().SwitchCharacter(l_chr_name);
+  ActorData *actor = dro::actor::user::switchCharacter(l_chr_name);
   ui_emotes->actorChange(actor);
   if(!actor->GetScalingPresets().empty())
   {
@@ -387,7 +387,7 @@ void Courtroom::enter_courtroom(int p_cid)
 
   onAnimListItemChanged(nullptr, nullptr);
   load_current_character_sfx_list();
-  select_default_sfx();
+  ui_sfx_list->selectDefault();
 
   ui_emotes->setHidden(spectating);
   ui_emote_dropdown->setDisabled(spectating);
@@ -719,16 +719,6 @@ void Courtroom::handle_clock(QString time)
   ui_vp_clock->show();
 }
 
-void Courtroom::filter_list_widget(QListWidget *p_list_widget, QString p_filter)
-{
-  const QString l_final_filter = p_filter.simplified();
-  for (int i = 0; i < p_list_widget->count(); i++)
-  {
-    QListWidgetItem *i_item = p_list_widget->item(i);
-    i_item->setHidden(!l_final_filter.isEmpty() && !i_item->text().contains(l_final_filter, Qt::CaseInsensitive));
-  }
-}
-
 bool Courtroom::is_area_music_list_separated()
 {
   return ao_app->current_theme->read_config_bool("enable_music_and_area_list_separation");
@@ -750,7 +740,8 @@ void Courtroom::list_music()
     const QString l_song_path = ao_app->find_asset_path({ao_app->get_music_path(i_song)}, FS::Formats::SupportedAudio());
     l_item->setBackground(l_song_path.isEmpty() ? l_missing_song_brush : l_song_brush);
   }
-  filter_list_widget(ui_music_list, ui_music_search->text());
+
+  ui_music_list->filterList(ui_music_search->text());
 }
 
 void Courtroom::list_areas()
@@ -763,7 +754,7 @@ void Courtroom::list_areas()
     QListWidgetItem *l_item = new QListWidgetItem(i_item_name, ui_area_list);
     l_item->setBackground(l_area_brush);
   }
-  filter_list_widget(ui_area_list, ui_area_search->text());
+  ui_area_list->filterList(ui_area_search->text());
 }
 
 void Courtroom::list_note_files()
@@ -1142,7 +1133,7 @@ void Courtroom::handle_acknowledged_ms()
 
   reset_shout_buttons();
   reset_effect_buttons();
-  clear_sfx_selection();
+  ui_sfx_list->clearSelection();
 }
 
 void Courtroom::next_chatmessage(QStringList p_chatmessage)
@@ -1162,7 +1153,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   const int l_message_chr_id = p_chatmessage[CMChrId].toInt();
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
 
-  m_SpeakerActor = CharacterManager::get().ReadCharacter(p_chatmessage[CMChrName]);
+  m_SpeakerActor = dro::actor::repository::retrieve(p_chatmessage[CMChrName]);
   if(!p_chatmessage[CMOutfitName].isEmpty())
   {
     m_SpeakerActor->SwitchOutfit(p_chatmessage[CMOutfitName]);
@@ -1170,7 +1161,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
 
   if(metadata::message::pair::isActive())
   {
-    m_PairActor = CharacterManager::get().ReadCharacter(metadata::message::pair::getCharacter());
+    m_PairActor = dro::actor::repository::retrieve(metadata::message::pair::getCharacter());
 
     m_PairScaling = mk2::SpritePlayer::AutomaticScaling;
 
@@ -1218,7 +1209,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   {
     append_system_text(l_showname, l_message);
   }
-  else if (l_message_chr_id >= 0 && l_message_chr_id < CharacterManager::get().mServerCharacters.length())
+  else if (l_message_chr_id >= 0 && l_message_chr_id < metadata::character::lists::lengthServerList())
   {
     const int l_client_id = p_chatmessage[CMClientId].toInt();
     append_ic_text(l_showname, l_message, false, false, l_client_id, metadata::user::GetCharacterId() == l_message_chr_id);
@@ -1228,6 +1219,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
       save_textlog(l_showname + ": " + l_message);
     }
   }
+
 
   { // clear interface if required
     bool l_ok;
@@ -1392,7 +1384,7 @@ void Courtroom::handle_chatmessage()
   m_speaker_chr_id = m_chatmessage[CMChrId].toInt();
   is_system_speaking = (m_speaker_chr_id == SpectatorId);
 
-  if (m_speaker_chr_id != SpectatorId && (m_speaker_chr_id < 0 || m_speaker_chr_id >= CharacterManager::get().mServerCharacters.length()))
+  if (m_speaker_chr_id != SpectatorId && (m_speaker_chr_id < 0 || m_speaker_chr_id >= metadata::character::lists::lengthServerList()))
   {
     post_chatmessage();
     return;
@@ -1816,9 +1808,7 @@ void Courtroom::handle_chatmessage_3()
 
   bool animLoop = ui_vp_player_char->setCharacterAnimation(m_chatmessage[CMAnimSequence], m_chatmessage[CMChrName]);
   if(!animLoop && isLocalClient)
-  {
-    animList->setCurrentRow(0);
-  }
+    animList->selectDefault();
 
   ui_vp_player_pair->setCharacterAnimation(metadata::message::pair::getAnimation(), metadata::message::pair::getCharacter(), true);
 
@@ -2515,11 +2505,11 @@ void Courtroom::handle_song(QStringList p_contents)
     }
 
 
-    if (l_chr_id >= 0 && l_chr_id < CharacterManager::get().mServerCharacters.length())
+    if (l_chr_id >= 0 && l_chr_id < metadata::character::lists::lengthServerList())
     {
       if (l_showname.isEmpty())
       {
-        l_showname = ao_app->get_showname(CharacterManager::get().mServerCharacters.at(l_chr_id).name);
+        l_showname = ao_app->get_showname(metadata::character::lists::characterNameServer(l_chr_id));
       }
 
       append_ic_text(l_showname, "has played a song: " + l_song_meta.title(), false, true, NoClientId, l_chr_id == metadata::user::GetCharacterId());
@@ -2770,7 +2760,7 @@ void Courtroom::on_area_list_double_clicked(QModelIndex p_model)
 
 void Courtroom::on_area_search_edited(QString p_filter)
 {
-  filter_list_widget(ui_area_list, p_filter);
+  ui_area_list->filterList(p_filter);
 }
 
 void Courtroom::on_area_search_edited()
@@ -2814,7 +2804,7 @@ void Courtroom::on_music_menu_insert_ooc_triggered()
 
 void Courtroom::on_music_search_edited(QString p_filter)
 {
-  filter_list_widget(ui_music_list, p_filter);
+  ui_music_list->filterList(p_filter);
 }
 
 void Courtroom::on_music_search_edited()
@@ -3184,7 +3174,7 @@ void Courtroom::OnCharRefreshClicked()
 {
   ao_app->reload_packages();
   pCharaSelectSeries->clear();
-  pCharaSelectSeries->addItems(CharacterManager::get().GetCharacterPackages());
+  pCharaSelectSeries->addItems(metadata::character::lists::characterFilters());
   m_current_chr_page = 0;
   set_char_select_page();
 }
@@ -3194,7 +3184,7 @@ void Courtroom::OnCharRandomClicked()
   int n_real_char = 0;
   std::srand(std::time(nullptr));
 
-  QVector<char_type> randomList = CharacterManager::get().GetLastCharList();
+  QVector<char_type> randomList = metadata::character::lists::currentList();
 
   int randomCount = randomList.length();
 
@@ -3222,15 +3212,15 @@ void Courtroom::OnCharRandomClicked()
     }
   }
 
-  if(!CharacterManager::get().GetCharacterInServer(selectedChar.name))
+  if(!metadata::character::lists::characterCheck(selectedChar.name))
   {
-    n_real_char = CharacterManager::get().GetAvaliablePersona();
+    n_real_char = metadata::character::lists::findAvailablePersona();
     if(n_real_char == -1) return;
-    ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(n_real_char), selectedChar.name);
+    ao_config->set_character_ini(metadata::character::lists::characterNameServer(n_real_char), selectedChar.name);
   }
   else
   {
-    n_real_char = CharacterManager::get().GetFilteredId(selectedChar.name);
+    n_real_char = metadata::character::lists::characterServerId(selectedChar.name);
   }
 
   ao_app->send_server_packet(
@@ -3242,7 +3232,7 @@ void Courtroom::SwitchRandomCharacter(QString list)
   int n_real_char = 0;
   std::srand(std::time(nullptr));
 
-  QVector<char_type> randomList = CharacterManager::get().GetCharList(list);
+  QVector<char_type> randomList = metadata::character::lists::filteredList(list);
   if(randomList.isEmpty()) return;
 
   int randomCount = randomList.length();
@@ -3270,15 +3260,15 @@ void Courtroom::SwitchRandomCharacter(QString list)
     }
   }
 
-  if(!CharacterManager::get().GetCharacterInServer(selectedChar.name))
+  if(!metadata::character::lists::characterCheck(selectedChar.name))
   {
-    n_real_char = CharacterManager::get().GetAvaliablePersona();
+    n_real_char = metadata::character::lists::findAvailablePersona();
     if(n_real_char == -1) return;
-    ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(n_real_char), selectedChar.name);
+    ao_config->set_character_ini(metadata::character::lists::characterNameServer(n_real_char), selectedChar.name);
   }
   else
   {
-    n_real_char = CharacterManager::get().GetFilteredId(selectedChar.name);
+    n_real_char = metadata::character::lists::characterServerId(selectedChar.name);
   }
 
   ao_app->send_server_packet(

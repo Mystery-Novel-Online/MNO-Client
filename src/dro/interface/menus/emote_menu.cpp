@@ -5,7 +5,7 @@ static bool s_renderSprites = false;
 
 #include "aoapplication.h"
 #include "courtroom.h"
-#include "modules/managers/character_manager.h"
+
 #include "dro/interface/courtroom_layout.h"
 #include "dro/param/actor_repository.h"
 

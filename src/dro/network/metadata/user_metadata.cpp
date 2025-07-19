@@ -1,6 +1,8 @@
 #include "user_metadata.h"
-#include "modules/managers/character_manager.h"
+
 #include "dro/param/actor_repository.h"
+#include "dro/network/metadata/server_metadata.h"
+#include "dro/param/actor/actor_loader.h"
 CharacterId s_UserCharId = SpectatorId;
 int s_clientId = 0;
 int s_incomingId = 0;
@@ -50,7 +52,7 @@ namespace dro::network::metadata::user
 
   QString GetCharacterName()
   {
-    return IsSpectator() ? nullptr : CharacterManager::get().mServerCharacters.at(s_UserCharId).name;
+    return IsSpectator() ? nullptr : dro::network::metadata::character::lists::characterNameServer(s_UserCharId);
   }
 
   bool ChangeCharacterId(int id)

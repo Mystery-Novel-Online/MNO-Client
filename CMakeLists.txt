@@ -134,7 +134,7 @@ set(HEADERS
   src/mk2/spritereadersynchronizer.h
   src/mk2/spriteseekingreader.h
   src/mk2/spriteviewer.h
-  src/modules/managers/character_manager.h
+
   src/modules/managers/notify_manager.h
 
   src/modules/managers/scene_manager.h
@@ -269,7 +269,7 @@ set(SOURCES
   src/mk2/spritedynamicreader.cpp
   src/mk2/spriteplayer.cpp
   src/mk2/spriteseekingreader.cpp
-  src/modules/managers/character_manager.cpp
+
   src/modules/managers/notify_manager.cpp
 
   src/modules/managers/scene_manager.cpp
@@ -297,6 +297,7 @@ add_executable(dro-client
   src/dro/system/runtime_values.h src/dro/system/runtime_values.cpp
   src/dro/system/theme.h src/dro/system/theme.cpp
   src/dro/interface/widgets/scene_widget.h src/dro/interface/widgets/scene_widget.cpp
+  src/dro/interface/widgets/rp_list_widget.h src/dro/interface/widgets/rp_list_widget.cpp
 )
 
 target_include_directories(dro-client PUBLIC

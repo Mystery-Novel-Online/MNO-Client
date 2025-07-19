@@ -6,7 +6,7 @@
 #include <QInputDialog>
 #include <QListWidget>
 #include "dro/fs/fs_reading.h"
-#include "modules/managers/character_manager.h"
+
 #include "dro/param/actor_repository.h"
 
 using namespace dro::actor::user;
