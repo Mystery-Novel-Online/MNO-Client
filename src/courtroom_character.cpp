@@ -23,14 +23,14 @@
 
 void Courtroom::set_character_id(const int p_chr_id)
 {
-  if (!metadata::user::SetCharacterId(p_chr_id)) return;
+  if (!user::SetCharacterId(p_chr_id)) return;
   load_character();
   Q_EMIT character_id_changed(p_chr_id);
 }
 
 QString Courtroom::get_character_ini()
 {
-  return ao_config->character_ini(metadata::user::GetCharacterName());
+  return ao_config->character_ini(user::GetCharacterName());
 }
 
 QString Courtroom::get_character_content_url()
@@ -186,13 +186,13 @@ void Courtroom::SetChatboxFocus()
 
 void Courtroom::update_default_iniswap_item()
 {
-  drSetItemIcon(ui_iniswap_dropdown, 0, metadata::user::GetCharacterName(), ao_app);
+  drSetItemIcon(ui_iniswap_dropdown, 0, user::GetCharacterName(), ao_app);
 }
 
 void Courtroom::select_base_character_iniswap()
 {
   const QString l_current_chr = get_character_ini();
-  if (metadata::user::GetCharacterName() == l_current_chr)
+  if (user::GetCharacterName() == l_current_chr)
   {
     ui_iniswap_dropdown->setCurrentIndex(0);
     return;
@@ -226,8 +226,8 @@ void Courtroom::update_character_content_url(QString url)
 
 void Courtroom::on_iniswap_dropdown_changed(int p_index)
 {
-  ao_config->set_character_ini(metadata::user::GetCharacterName(),
-                               p_index == 0 ? metadata::user::GetCharacterName() : ui_iniswap_dropdown->itemText(p_index));
+  ao_config->set_character_ini(user::GetCharacterName(),
+                               p_index == 0 ? user::GetCharacterName() : ui_iniswap_dropdown->itemText(p_index));
 }
 
 void Courtroom::onCharacterSelectPackageChanged(int p_index)

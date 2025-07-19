@@ -76,7 +76,8 @@ class QLabel;
 #include "dro/interface/widgets/viewport_overlay.h"
 #include "dro/interface/widgets/scene_widget.h"
 
-using namespace dro::network;
+using namespace dro;
+using namespace dro::network::metadata;
 
 class Courtroom : public SceneWidget
 {

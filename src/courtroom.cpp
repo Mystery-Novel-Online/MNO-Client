@@ -101,11 +101,11 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   set_char_select();
   load_audiotracks();
   reset_viewport();
-  metadata::user::partner::setPartner(-1);
+  user::partner::setPartner(-1);
   ui_slider_horizontal_axis->setValue(500);
   resetAFKTimer();
 
-  if (!ServerMetadata::FeatureSupported("sequence")) return;
+  if (!network::metadata::ServerInformation::featureSupported("sequence")) return;
   connect(&m_checkTimer, &QTimer::timeout, this, &Courtroom::checkAFKStatus);
   m_checkTimer.start(1000);
 }
@@ -335,7 +335,7 @@ void Courtroom::enter_courtroom(int p_cid)
   const QString l_prev_chr_name = get_character_ini();
 
   // character =================================================================
-  if (metadata::user::ChangeCharacterId(p_cid)) update_default_iniswap_item();
+  if (user::ChangeCharacterId(p_cid)) update_default_iniswap_item();
 
   QLineEdit *l_current_field = ui_ic_chat_message_field;
   if (ui_ooc_chat_message->hasFocus()) l_current_field = ui_ooc_chat_message;
@@ -357,7 +357,7 @@ void Courtroom::enter_courtroom(int p_cid)
     ui_slider_vertical_axis->setValue(0);
   }
 
-  bool spectating = metadata::user::IsSpectator();
+  bool spectating = user::IsSpectator();
 
   if (spectating)
   {
@@ -372,7 +372,7 @@ void Courtroom::enter_courtroom(int p_cid)
     ao_config->set_showname_placeholder(l_final_showname);
 
     QStringList l_content{l_chr_name, l_final_showname};
-    if(ServerMetadata::FeatureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
+    if(network::metadata::ServerInformation::featureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
 
     ao_app->send_server_packet(DRPacket("chrini", l_content));
   }
@@ -409,7 +409,7 @@ void Courtroom::enter_courtroom(int p_cid)
 
 void Courtroom::done_received()
 {
-  metadata::user::ChangeCharacterId(SpectatorId);
+  user::ChangeCharacterId(SpectatorId);
 
   audio::Suppress(true);
 
@@ -881,24 +881,24 @@ void Courtroom::on_pair_offset_changed()
 
 void Courtroom::OnPlayerOffsetsChanged(int value)
 {
-  if(!ServerMetadata::FeatureSupported("outfits")) return;
-  if(metadata::message::recentMessage().modifiers.Hidden) return;
+  if(!network::metadata::ServerInformation::featureSupported("outfits")) return;
+  if(message::recentMessage().modifiers.Hidden) return;
   bool intParse = false;
   int speakerClientId = m_chatmessage[CMClientId].toInt(&intParse);
 
   DRCharacterMovie* targetCharacter = nullptr;
   mk2::SpritePlayer::ScalingMode targetScaling = mk2::SpritePlayer::AutomaticScaling;
 
-  if(metadata::user::getClientId() == speakerClientId)
+  if(user::getClientId() == speakerClientId)
   {
-    if(metadata::message::recentMessage().characterFolder != actor::user::name()) return;
+    if(message::recentMessage().characterFolder != actor::user::name()) return;
     targetCharacter = ui_vp_player_char;
     if(m_SpeakerActor != nullptr)
       targetScaling = m_SpeakerActor->GetScalingMode();
   }
-  if(speakerClientId == metadata::user::partner::clientId())
+  if(speakerClientId == user::partner::clientId())
   {
-    if(metadata::message::pair::getCharacter() != actor::user::name()) return;
+    if(message::pair::getCharacter() != actor::user::name()) return;
     targetCharacter = ui_vp_player_pair;
     if(m_PairActor != nullptr)
       targetScaling = m_PairActor->GetScalingMode();
@@ -932,7 +932,7 @@ void Courtroom::on_showname_placeholder_changed(QString p_showname_placeholder)
 
 void Courtroom::on_character_ini_changed()
 {
-  enter_courtroom(metadata::user::GetCharacterId());
+  enter_courtroom(user::GetCharacterId());
 }
 
 void Courtroom::on_ic_message_return_pressed()
@@ -1028,7 +1028,7 @@ void Courtroom::on_ic_message_return_pressed()
   }
 
   packet_contents.append(QString::number(l_emote_mod));
-  packet_contents.append(QString::number(metadata::user::GetCharacterId()));
+  packet_contents.append(QString::number(user::GetCharacterId()));
 
   if (l_emote.sound_file == current_sfx_file())
     packet_contents.append(QString::number(l_emote.sound_delay));
@@ -1063,7 +1063,7 @@ void Courtroom::on_ic_message_return_pressed()
   // hide character
   packet_contents.append(QString::number(ui_hide_character->isChecked()));
 
-  if(ServerMetadata::FeatureSupported("outfits"))
+  if(network::metadata::ServerInformation::featureSupported("outfits"))
   {
     if(l_emote.ignore_offsets)
     {
@@ -1080,7 +1080,7 @@ void Courtroom::on_ic_message_return_pressed()
   }
 
 
-  if(ServerMetadata::FeatureSupported("sequence"))
+  if(network::metadata::ServerInformation::featureSupported("sequence"))
   {
     packet_contents.append(l_emote.outfitName);
     packet_contents.append(QString::fromStdString(courtroom::lists::getAnimation()));
@@ -1113,7 +1113,7 @@ void Courtroom::handle_ic_message_length()
   }
 
   if(l_length == 0) return;
-  if(!ServerMetadata::FeatureSupported("sequence")) return;
+  if(!network::metadata::ServerInformation::featureSupported("sequence")) return;
 
   const int currentUptime = RuntimeLoop::uptime();
   if(m_lastTypingPacket == 0 || (currentUptime - m_lastTypingPacket) > (1000 * 10))
@@ -1148,7 +1148,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
     p_chatmessage.append(QString{});
   }
 
-  metadata::message::incomingMessage(p_chatmessage);
+  message::incomingMessage(p_chatmessage);
 
   const int l_message_chr_id = p_chatmessage[CMChrId].toInt();
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
@@ -1159,16 +1159,16 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
     m_SpeakerActor->SwitchOutfit(p_chatmessage[CMOutfitName]);
   }
 
-  if(metadata::message::pair::isActive())
+  if(message::pair::isActive())
   {
-    m_PairActor = dro::actor::repository::retrieve(metadata::message::pair::getCharacter());
+    m_PairActor = dro::actor::repository::retrieve(message::pair::getCharacter());
 
     m_PairScaling = mk2::SpritePlayer::AutomaticScaling;
 
     if(m_PairActor != nullptr)
     {
       m_PairScaling = m_PairActor->GetScalingMode();
-      m_PairScale = metadata::message::pair::scaleOffset();
+      m_PairScale = message::pair::scaleOffset();
     }
 
   }
@@ -1209,10 +1209,10 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   {
     append_system_text(l_showname, l_message);
   }
-  else if (l_message_chr_id >= 0 && l_message_chr_id < metadata::character::lists::lengthServerList())
+  else if (l_message_chr_id >= 0 && l_message_chr_id < CharacterRepository::serverListLength())
   {
     const int l_client_id = p_chatmessage[CMClientId].toInt();
-    append_ic_text(l_showname, l_message, false, false, l_client_id, metadata::user::GetCharacterId() == l_message_chr_id);
+    append_ic_text(l_showname, l_message, false, false, l_client_id, user::GetCharacterId() == l_message_chr_id);
 
     if (ao_config->log_is_recording_enabled() && !l_message.isEmpty())
     {
@@ -1224,7 +1224,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   { // clear interface if required
     bool l_ok;
     const int l_client_id = p_chatmessage[CMClientId].toInt(&l_ok);
-    if (l_ok && l_client_id == metadata::user::getClientId())
+    if (l_ok && l_client_id == user::getClientId())
     {
       handle_acknowledged_ms();
     }
@@ -1276,7 +1276,7 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
   l_file_list.insert(ViewportCharacterIdle, ao_app->get_character_sprite_idle_path(l_character, l_emote));
   l_file_list.insert(ViewportCharacterTalk, ao_app->get_character_sprite_talk_path(l_character, l_emote));
 
-  l_file_list.insert(ViewportPairCharacterIdle, ao_app->get_character_sprite_idle_path(metadata::message::pair::getCharacter(), metadata::message::pair::getEmote()));
+  l_file_list.insert(ViewportPairCharacterIdle, ao_app->get_character_sprite_idle_path(message::pair::getCharacter(), message::pair::getEmote()));
 
   // shouts
   l_file_list.insert(ViewportShout, ao_app->get_shout_sprite_path(l_character, get_shout_name(l_shout_id), l_outfit));
@@ -1384,7 +1384,7 @@ void Courtroom::handle_chatmessage()
   m_speaker_chr_id = m_chatmessage[CMChrId].toInt();
   is_system_speaking = (m_speaker_chr_id == SpectatorId);
 
-  if (m_speaker_chr_id != SpectatorId && (m_speaker_chr_id < 0 || m_speaker_chr_id >= metadata::character::lists::lengthServerList()))
+  if (m_speaker_chr_id != SpectatorId && (m_speaker_chr_id < 0 || m_speaker_chr_id >= CharacterRepository::serverListLength()))
   {
     post_chatmessage();
     return;
@@ -1395,7 +1395,7 @@ void Courtroom::handle_chatmessage()
   m_msg_is_first_person = false;
 
   // reset our ui state if client just spoke
-  if (metadata::user::IsSpectator() && is_system_speaking == false)
+  if (user::IsSpectator() && is_system_speaking == false)
   {
     // update first person mode status
     m_msg_is_first_person = ao_app->get_first_person_enabled();
@@ -1513,14 +1513,14 @@ void Courtroom::objection_done()
 void Courtroom::handle_chatmessage_2() // handles IC
 {
 
-  int selfOffset = metadata::message::horizontalOffset();
-  int otherOffset = metadata::message::pair::horizontalOffset();
+  int selfOffset = message::horizontalOffset();
+  int otherOffset = message::pair::horizontalOffset();
 
   QString offsetTextbox = "left";
 
   if(selfOffset > otherOffset) offsetTextbox = "right";
 
-  if(metadata::message::pair::isLeader())
+  if(message::pair::isLeader())
   {
     ui_vp_player_char->setZValue(ViewportLayers_PlayerBack);
     ui_vp_player_pair->setZValue(ViewportLayers_PlayerFront);
@@ -1548,7 +1548,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
   else
     ui_vp_player_char->setVerticalOffset(verticalValue);
 
-  ui_vp_player_pair->setVerticalOffset(metadata::message::pair::verticalOffset());
+  ui_vp_player_pair->setVerticalOffset(message::pair::verticalOffset());
   setup_screenshake_anim(0);
   qDebug() << "handle_chatmessage_2";
   ui_vp_player_char->stop();
@@ -1556,7 +1556,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    if(!metadata::message::pair::isActive())
+    if(!message::pair::isActive())
     {
       ui_vp_player_pair->hide();
       pos_size_type showname = ThemeManager::get().resizePosition(theme::getPositionalDimensions("showname", "center"), ThemeManager::get().getViewporResize());
@@ -1591,7 +1591,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
   m_shout_reload_theme = false;
 
   const QString l_chatbox_name = ao_app->get_chat(m_chatmessage[CMChrName]);
-  const bool l_is_self = (ao_config->log_display_self_highlight_enabled() && m_speaker_chr_id == metadata::user::GetCharacterId());
+  const bool l_is_self = (ao_config->log_display_self_highlight_enabled() && m_speaker_chr_id == user::GetCharacterId());
 
   if(!LuaBridge::LuaEventCall("ChatboxImageEvent", l_is_self, chatmessage_is_empty, offsetTextbox.toStdString()))
   {
@@ -1604,7 +1604,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
   }
 
 
-  ui_vp_player_pair->setMirrored(metadata::message::pair::isFlipped());
+  ui_vp_player_pair->setMirrored(message::pair::isFlipped());
 
   if (m_chatmessage[CMFlipState].toInt() == 1)
     ui_vp_player_char->setMirrored(true);
@@ -1629,7 +1629,7 @@ void Courtroom::handle_chatmessage_3()
 
   ui_vp_player_char->set_play_once(false);
 
-  if(metadata::message::pair::isActive())
+  if(message::pair::isActive())
   {
     ui_vp_player_pair->set_play_once(false);
   }
@@ -1683,7 +1683,7 @@ void Courtroom::handle_chatmessage_3()
   }
 
   //Setup Partner
-  if(metadata::message::pair::isVisible())
+  if(message::pair::isVisible())
   {
     ui_vp_player_pair->hide();
     if(ui_vp_player_pair->is_running())
@@ -1737,7 +1737,7 @@ void Courtroom::handle_chatmessage_3()
   }
 
   ui_vp_player_char->processOverlays(m_pre_chatmessage[CMSpriteLayers], m_pre_chatmessage[CMChrName], m_pre_chatmessage[CMEmote], m_pre_chatmessage[CMOutfitName]);
-  ui_vp_player_pair->processOverlays(metadata::message::pair::getLayers(), metadata::message::pair::getCharacter(), metadata::message::pair::getEmote(), metadata::message::pair::getOutfit());
+  ui_vp_player_pair->processOverlays(message::pair::getLayers(), message::pair::getCharacter(), message::pair::getEmote(), message::pair::getOutfit());
 
   {
     bool l_effect_index_result;
@@ -1749,7 +1749,7 @@ void Courtroom::handle_chatmessage_3()
       {
         QStringList offset = ao_app->get_effect_offset(f_char, l_effect_index);
         ui_vp_effect->setPos(0, offset.at(1).toInt());
-        int selfOffset = metadata::message::horizontalOffset();
+        int selfOffset = message::horizontalOffset();
         if(ao_app->current_theme->getEffectPairOffset(l_effect_index)) ui_vp_effect->setHorizontalOffset(selfOffset);
 
         QString s_eff = effect_names.at(l_effect_index - 1);
@@ -1796,10 +1796,10 @@ void Courtroom::handle_chatmessage_3()
 
   LuaBridge::LuaEventCall("OnMessageStart");
   start_chat_timer();
-  metadata::message::pair::disable();
+  message::pair::disable();
 
   const int clientId = m_chatmessage[CMClientId].toInt();
-  const bool isLocalClient = clientId == metadata::user::getClientId();
+  const bool isLocalClient = clientId == user::getClientId();
   if(isLocalClient) m_lastTypingPacket = 0;
   else
   {
@@ -1810,7 +1810,7 @@ void Courtroom::handle_chatmessage_3()
   if(!animLoop && isLocalClient)
     animList->selectDefault();
 
-  ui_vp_player_pair->setCharacterAnimation(metadata::message::pair::getAnimation(), metadata::message::pair::getCharacter(), true);
+  ui_vp_player_pair->setCharacterAnimation(message::pair::getAnimation(), message::pair::getCharacter(), true);
 
 }
 
@@ -2457,7 +2457,7 @@ void Courtroom::set_text_color()
 
 void Courtroom::set_ban(int p_cid)
 {
-  if (p_cid != metadata::user::GetCharacterId() && p_cid != SpectatorId)
+  if (p_cid != user::GetCharacterId() && p_cid != SpectatorId)
     return;
 
   call_notice(localization::getText("NOTICE_BANNED"));
@@ -2505,14 +2505,14 @@ void Courtroom::handle_song(QStringList p_contents)
     }
 
 
-    if (l_chr_id >= 0 && l_chr_id < metadata::character::lists::lengthServerList())
+    if (l_chr_id >= 0 && l_chr_id < CharacterRepository::serverListLength())
     {
       if (l_showname.isEmpty())
       {
-        l_showname = ao_app->get_showname(metadata::character::lists::characterNameServer(l_chr_id));
+        l_showname = ao_app->get_showname(CharacterRepository::characterNameServer(l_chr_id));
       }
 
-      append_ic_text(l_showname, "has played a song: " + l_song_meta.title(), false, true, NoClientId, l_chr_id == metadata::user::GetCharacterId());
+      append_ic_text(l_showname, "has played a song: " + l_song_meta.title(), false, true, NoClientId, l_chr_id == user::GetCharacterId());
 
       if (ao_config->log_is_recording_enabled())
       {
@@ -2754,7 +2754,7 @@ void Courtroom::on_area_list_clicked()
 void Courtroom::on_area_list_double_clicked(QModelIndex p_model)
 {
   const QString l_area_name = ui_area_list->item(p_model.row())->text();
-  ao_app->send_server_packet(DRPacket("MC", {l_area_name, QString::number(metadata::user::GetCharacterId())}));
+  ao_app->send_server_packet(DRPacket("MC", {l_area_name, QString::number(user::GetCharacterId())}));
   ui_ic_chat_message_field->setFocus();
 }
 
@@ -2817,8 +2817,8 @@ void Courtroom::send_mc_packet(QString p_song, BGMPlayback playbackType)
   if (is_client_muted)
     return;
 
-  QStringList contents = {p_song, QString::number(metadata::user::GetCharacterId())};
-  if(ServerMetadata::FeatureSupported("outfits"))
+  QStringList contents = {p_song, QString::number(user::GetCharacterId())};
+  if(network::metadata::ServerInformation::featureSupported("outfits"))
   {
     contents.append(QString::number(playbackType));
   }
@@ -3041,7 +3041,7 @@ void Courtroom::onOutfitChanged(int outfitIndex)
 
   ao_config->set_showname_placeholder(l_final_showname);
   QStringList l_content{l_chr_name, l_final_showname};
-  if(ServerMetadata::FeatureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
+  if(network::metadata::ServerInformation::featureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
 
   ao_app->send_server_packet(DRPacket("chrini", l_content));
 }
@@ -3143,7 +3143,7 @@ void Courtroom::reload_theme()
 void Courtroom::load_character()
 {
   update_iniswap_list();
-  enter_courtroom(metadata::user::GetCharacterId());
+  enter_courtroom(user::GetCharacterId());
 }
 
 void Courtroom::load_audiotracks()
@@ -3167,14 +3167,14 @@ void Courtroom::on_back_to_lobby_clicked()
 
 void Courtroom::on_spectator_clicked()
 {
-  ao_app->send_server_packet(DRPacket("CC", {QString::number(metadata::user::getOutgoingClientId()), "-1", "HDID"}));
+  ao_app->send_server_packet(DRPacket("CC", {QString::number(user::getOutgoingClientId()), "-1", "HDID"}));
 }
 
 void Courtroom::OnCharRefreshClicked()
 {
   ao_app->reload_packages();
   pCharaSelectSeries->clear();
-  pCharaSelectSeries->addItems(metadata::character::lists::characterFilters());
+  pCharaSelectSeries->addItems(CharacterRepository::filterList());
   m_current_chr_page = 0;
   set_char_select_page();
 }
@@ -3184,7 +3184,7 @@ void Courtroom::OnCharRandomClicked()
   int n_real_char = 0;
   std::srand(std::time(nullptr));
 
-  QVector<char_type> randomList = metadata::character::lists::currentList();
+  QVector<char_type> randomList = CharacterRepository::currentList();
 
   int randomCount = randomList.length();
 
@@ -3193,9 +3193,9 @@ void Courtroom::OnCharRandomClicked()
   char_type selectedChar = randomList[randomIndex];
 
 
-  if (metadata::user::GetCharacterName() == selectedChar.name)
+  if (user::GetCharacterName() == selectedChar.name)
   {
-    enter_courtroom(metadata::user::GetCharacterId());
+    enter_courtroom(user::GetCharacterId());
     return;
   }
 
@@ -3212,19 +3212,19 @@ void Courtroom::OnCharRandomClicked()
     }
   }
 
-  if(!metadata::character::lists::characterCheck(selectedChar.name))
+  if(!CharacterRepository::characterExists(selectedChar.name))
   {
-    n_real_char = metadata::character::lists::findAvailablePersona();
+    n_real_char = CharacterRepository::findAvailablePersona();
     if(n_real_char == -1) return;
-    ao_config->set_character_ini(metadata::character::lists::characterNameServer(n_real_char), selectedChar.name);
+    ao_config->set_character_ini(CharacterRepository::characterNameServer(n_real_char), selectedChar.name);
   }
   else
   {
-    n_real_char = metadata::character::lists::characterServerId(selectedChar.name);
+    n_real_char = CharacterRepository::networkedIdFromName(selectedChar.name);
   }
 
   ao_app->send_server_packet(
-      DRPacket("CC", {QString::number(metadata::user::getOutgoingClientId()), QString::number(n_real_char), "HDID"}));
+      DRPacket("CC", {QString::number(user::getOutgoingClientId()), QString::number(n_real_char), "HDID"}));
 }
 
 void Courtroom::SwitchRandomCharacter(QString list)
@@ -3232,7 +3232,7 @@ void Courtroom::SwitchRandomCharacter(QString list)
   int n_real_char = 0;
   std::srand(std::time(nullptr));
 
-  QVector<char_type> randomList = metadata::character::lists::filteredList(list);
+  QVector<char_type> randomList = CharacterRepository::filteredList(list);
   if(randomList.isEmpty()) return;
 
   int randomCount = randomList.length();
@@ -3241,9 +3241,9 @@ void Courtroom::SwitchRandomCharacter(QString list)
 
   char_type selectedChar = randomList[randomIndex];
 
-  if (metadata::user::GetCharacterName() == selectedChar.name)
+  if (user::GetCharacterName() == selectedChar.name)
   {
-    enter_courtroom(metadata::user::GetCharacterId());
+    enter_courtroom(user::GetCharacterId());
     return;
   }
 
@@ -3260,19 +3260,19 @@ void Courtroom::SwitchRandomCharacter(QString list)
     }
   }
 
-  if(!metadata::character::lists::characterCheck(selectedChar.name))
+  if(!CharacterRepository::characterExists(selectedChar.name))
   {
-    n_real_char = metadata::character::lists::findAvailablePersona();
+    n_real_char = CharacterRepository::findAvailablePersona();
     if(n_real_char == -1) return;
-    ao_config->set_character_ini(metadata::character::lists::characterNameServer(n_real_char), selectedChar.name);
+    ao_config->set_character_ini(CharacterRepository::characterNameServer(n_real_char), selectedChar.name);
   }
   else
   {
-    n_real_char = metadata::character::lists::characterServerId(selectedChar.name);
+    n_real_char = CharacterRepository::networkedIdFromName(selectedChar.name);
   }
 
   ao_app->send_server_packet(
-      DRPacket("CC", {QString::number(metadata::user::getOutgoingClientId()), QString::number(n_real_char), "HDID"}));
+      DRPacket("CC", {QString::number(user::getOutgoingClientId()), QString::number(n_real_char), "HDID"}));
 }
 
 void Courtroom::on_call_mod_clicked()
@@ -3404,7 +3404,7 @@ void Courtroom::on_note_text_changed()
 
 void Courtroom::ping_server()
 {
-  ao_app->send_server_packet(DRPacket("CH", {QString::number(metadata::user::GetCharacterId())}));
+  ao_app->send_server_packet(DRPacket("CH", {QString::number(user::GetCharacterId())}));
 }
 
 void Courtroom::changeEvent(QEvent *event)
@@ -3452,7 +3452,7 @@ bool Courtroom::event(QEvent *event)
 
 void Courtroom::resetAFKTimer()
 {
-  if (!ServerMetadata::FeatureSupported("sequence")) return;
+  if (!network::metadata::ServerInformation::featureSupported("sequence")) return;
   if (m_isAfk && (RuntimeLoop::uptime() - m_lastActivityTimestamp) < m_afkThresholdMs)
   {
     m_isAfk = false;
@@ -3463,7 +3463,7 @@ void Courtroom::resetAFKTimer()
 
 void Courtroom::checkAFKStatus()
 {
-  if (!ServerMetadata::FeatureSupported("sequence")) return;
+  if (!network::metadata::ServerInformation::featureSupported("sequence")) return;
   if (!m_isAfk && (RuntimeLoop::uptime() - m_lastActivityTimestamp) >= m_afkThresholdMs) {
     m_isAfk = true;
 
@@ -3635,7 +3635,7 @@ void Courtroom::construct_playerlist_layout()
 
   player_columns = (( (int)((float)ui_player_list->height() * resize) - player_height) / (y_spacing + player_height)) + 1;
 
-  if(m_current_reportcard_reason != ReportCardReason::None && metadata::user::GetCharacterId() != SpectatorId)
+  if(m_current_reportcard_reason != ReportCardReason::None && user::GetCharacterId() != SpectatorId)
   {
     m_page_player_list = 0;
     ui_player_list_right->hide();

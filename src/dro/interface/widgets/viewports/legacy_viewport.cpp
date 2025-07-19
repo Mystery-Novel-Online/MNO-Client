@@ -209,7 +209,7 @@ void LegacyViewport::onVideoDone()
   emit videoDone();
   if (m_videoScreen->isVisible()) m_videoScreen->hide();
 
-  MessageMetadata &message = dro::network::metadata::message::recentMessage();
+  MessageMetadata &message = message::recentMessage();
   m_characterSprite->setHorizontalOffset(message.offsetHorizontal);
   m_characterSprite->setVerticalOffset(message.offsetVertical);
   m_characterSprite->processOverlays(message.characterLayers, message.characterFolder, message.characterEmote, message.characterOutfit);
@@ -227,7 +227,7 @@ void LegacyViewport::onVideoDone()
 
 void LegacyViewport::onObjectionDone()
 {
-  MessageMetadata &message = dro::network::metadata::message::recentMessage();
+  MessageMetadata &message = message::recentMessage();
   if(!message.characterPre.isEmpty())
   {
     m_characterSprite->set_play_once(true);
@@ -257,7 +257,7 @@ void LegacyViewport::onObjectionDone()
 void LegacyViewport::onPreanimDone()
 {
   emit preanimDone();
-  MessageMetadata &message = dro::network::metadata::message::recentMessage();
+  MessageMetadata &message = message::recentMessage();
   if(!message.textContent.trimmed().isEmpty()) toggleChatbox(true);
   else onTypingDone();
   m_message->setInput(message.textContent);

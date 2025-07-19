@@ -7,305 +7,206 @@
 #include "commondefs.h"
 #include <QDebug>
 
-QStringList s_featureList = {};
+using namespace dro::network::metadata;
 
-QString s_lastUsedFilter = "Server Characters";
-QVector<char_type> s_characterListFiltered;
-QVector<char_type> s_characterListServer;
-QVector<char_type> s_characterListFavorites;
-
-QHash<QString, QVector<char_type>> s_characterListRepository;
-
-QHash<QString, bool> s_characterClaimList = {};
-QStringList s_characterFilterList = {"Server Characters", "Favorites", "All"};
-
-
-void ServerMetadata::SetFeatureList(QStringList features)
+void ServerInformation::setFeatureList(QStringList features)
 {
-  s_featureList.clear();
-  s_featureList = features;
+  featureList.clear();
+  featureList = features;
 }
 
-bool ServerMetadata::FeatureSupported(QString featureName)
+bool ServerInformation::featureSupported(const QString &name)
 {
-  return s_featureList.contains(featureName);
+  return featureList.contains(name);
 }
 
-void dro::network::metadata::character::lists::reset()
+void CharacterRepository::reset()
 {
-  s_lastUsedFilter = "Server Characters";
-  s_characterListRepository = {};
-  s_characterFilterList.clear();
-  s_characterFilterList.append({"Server Characters", "Favorites", "All"});
+  lastUsedFilter = defaultFilters[0];
+  repository.clear();
 }
 
-void dro::network::metadata::character::lists::addFavorite(const QString &folder)
+void CharacterRepository::addFavorite(const QString &folder)
 {
-  for (int j = 0; j < s_characterListFavorites.size(); j++)
-  {
-    if (folder == s_characterListFavorites.at(j).name)
-    {
-      return;
-    }
-  }
-  char_type ct;
-  ct.name = folder;
-  s_characterListFavorites.append(ct);
+  if (std::any_of(favoriteCharacters.begin(), favoriteCharacters.end(), [&](const char_type& c){ return c.name == folder; }))
+    return;
+  favoriteCharacters.append({folder});
   saveFavorites();
 }
 
-void dro::network::metadata::character::lists::removeFavorite(const QString &folder)
+void CharacterRepository::removeFavorite(const QString &folder)
 {
-  for (int j = 0; j < s_characterListFavorites.size(); j++)
-  {
-    if (folder == s_characterListFavorites.at(j).name)
-    {
-      s_characterListFavorites.removeAt(j);
-      return;
-    }
+  auto it = std::remove_if(favoriteCharacters.begin(), favoriteCharacters.end(), [&](const char_type& c){ return c.name == folder; });
+  if (it != favoriteCharacters.end()) {
+    favoriteCharacters.erase(it, favoriteCharacters.end());
+    saveFavorites();
   }
-  saveFavorites();
 }
 
-void dro::network::metadata::character::lists::loadFavorites()
+void CharacterRepository::loadFavorites()
 {
-  s_characterListFavorites.clear();
+  favoriteCharacters.clear();
+
   QFile file(FS::Paths::FindFile(SAVE_FAVORITES, false));
-  if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-  {
-    qDebug() << "Failed to open file for reading";
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    qDebug() << "Failed to open favorites file.";
     return;
   }
 
   QTextStream in(&file);
-  while (!in.atEnd())
-  {
-    QString characterName = in.readLine().trimmed();
-
-    if (!characterName.isEmpty())
-    {
-      char_type character;
-      character.name = characterName;
-      s_characterListFavorites.append(character);
-    }
+  while (!in.atEnd()) {
+    QString line = in.readLine().trimmed();
+    if (!line.isEmpty())
+      favoriteCharacters.append({line});
   }
-
-  file.close();
 }
 
-void dro::network::metadata::character::lists::saveFavorites()
+void CharacterRepository::saveFavorites()
 {
-  QStringList favoritesList = {};
-  for (int j = 0; j < s_characterListFavorites.size(); j++)
-  {
-    favoritesList.append(s_characterListFavorites[j].name);
-  }
-
   QFile file(FS::Paths::FindFile(SAVE_FAVORITES, false));
-  if (file.open(QIODevice::WriteOnly | QIODevice::Text))
-  {
-    QTextStream out(&file);
-    for (const QString &character : favoritesList)
+  if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+    qDebug() << "Failed to save favorites.";
+    return;
+  }
+
+  QTextStream out(&file);
+  for (const auto& character : favoriteCharacters)
+    out << character.name << '\n';
+}
+
+void CharacterRepository::setCharacterAvailability(int index, bool available)
+{
+  if (index >= 0 && index < serverCharacters.size())
+    claimedCharacters[serverCharacters.at(index).name] = available;
+}
+
+bool CharacterRepository::isCharacterAvailable(const QString &name)
+{
+    return claimedCharacters.value(name, false);
+}
+
+void CharacterRepository::setServerList(const QVector<char_type> &list)
+{
+  serverCharacters = list;
+}
+
+void CharacterRepository::setFilteredList(const QString &name, const QVector<char_type> &list)
+{
+  if (!defaultFilters.contains(name))
+    repository[name] = list;
+}
+
+bool CharacterRepository::characterExists(const QString &name)
+{
+  return std::any_of(serverCharacters.begin(), serverCharacters.end(), [&](const char_type& c) { return c.name == name; });
+}
+
+bool CharacterRepository::filteredCharacterExists(int filterIndex)
+{
+  if (filterIndex < 0 || filterIndex >= filteredCharacters.size())
+    return false;
+
+  return characterExists(filteredCharacters.at(filterIndex).name);
+}
+
+void CharacterRepository::clearFiltered()
+{
+  filteredCharacters.clear();
+}
+
+void CharacterRepository::addFiltered(const char_type &character)
+{
+  filteredCharacters.append(character);
+}
+
+char_type CharacterRepository::filteredCharacter(int index)
+{
+  if(index > filteredCharacters.count()) return {};
+  filteredCharacters.at(index);
+}
+
+QString CharacterRepository::characterNameFiltered(int index)
+{
+  return (index >= 0 && index < filteredCharacters.size()) ? filteredCharacters.at(index).name : "";
+}
+
+QString CharacterRepository::characterNameServer(int index)
+{
+  return (index >= 0 && index < serverCharacters.size()) ? serverCharacters.at(index).name : "";
+}
+
+int CharacterRepository::findAvailablePersona()
+{
+  for (int i = 0; i <= 25; ++i) {
+    QString personaName = QString("Persona%1").arg(i);
+    if (!claimedCharacters.value(personaName, false))
     {
-      out << character << "\n";
-    }
-    file.close();
-  }
-  else
-  {
-    qDebug() << "Save Favorites Failed";
-  }
-}
-
-void dro::network::metadata::character::lists::setServerList(QVector<char_type> list)
-{
-  s_characterListServer = list;
-}
-
-void dro::network::metadata::character::lists::setFilteredList(const QString &package, QVector<char_type> list)
-{
-  if(!s_characterFilterList.contains(package)) s_characterFilterList.append(package);
-  s_characterListRepository[package] = list;
-}
-
-void dro::network::metadata::character::lists::setCharacterAvailability(int id, bool status)
-{
-  s_characterClaimList[s_characterListServer.at(id).name] = status;
-}
-
-int dro::network::metadata::character::lists::findAvailablePersona()
-{
-  for(int i = 0; i <= 25; i++)
-  {
-    QString personaName = QString("Persona" + QString::number(i));
-    if(s_characterClaimList.contains(personaName))
-    {
-      if(!s_characterClaimList[personaName])
-      {
-        for (int j = 0; j < s_characterListServer.size(); j++)
-        {
-          if (s_characterListServer[j].name == personaName)
-          {
-            return j;
-          }
-        }
-
-      }
+      auto it = std::find_if(serverCharacters.begin(), serverCharacters.end(), [&](const char_type& c) { return c.name == personaName; });
+      if (it != serverCharacters.end()) return std::distance(serverCharacters.begin(), it);
     }
   }
-
   return -1;
 }
 
-bool dro::network::metadata::character::lists::characterCheck(const QString &name)
+const QVector<char_type> &CharacterRepository::serverList()
 {
-  for (int j = 0; j < s_characterListServer.size(); j++)
-  {
-    if (s_characterListServer[j].name == name)
-    {
-      return true;
-    }
+  return serverCharacters;
+}
+
+QVector<char_type> CharacterRepository::filteredList(const QString &packageName)
+{
+  lastUsedFilter = packageName;
+
+  if (packageName == "Server Characters") return serverCharacters;
+  if (packageName == "Favorites") return favoriteCharacters;
+
+  if (packageName == "All") {
+    QVector<char_type> allCharacters;
+    for (const auto& list : repository)
+      allCharacters.append(list);
+    return allCharacters;
   }
 
-  return false;
+  return repository.value(packageName);
 }
 
-bool dro::network::metadata::character::lists::characterCheck(int filterID)
+QVector<char_type> CharacterRepository::currentList()
 {
-  for (int j = 0; j < s_characterListServer.size(); j++)
-  {
-    if (s_characterListServer[j].name == s_characterListFiltered.at(filterID).name)
-    {
-      return true;
-    }
+  return filteredList(lastUsedFilter);
+}
+
+QVector<char_type> CharacterRepository::resetClaims()
+{
+  claimedCharacters.clear();
+  return serverCharacters;
+}
+
+int CharacterRepository::networkedIdFromName(const QString &name)
+{
+  for (int i = 0; i < serverCharacters.size(); ++i) {
+    if (serverCharacters[i].name == name)
+      return i;
   }
-
-  return false;
-}
-
-QStringList dro::network::metadata::character::lists::characterFilters()
-{
-  return s_characterFilterList;
-}
-
-QVector<char_type> dro::network::metadata::character::lists::serverList()
-{
-  return s_characterListServer;
-}
-
-QVector<char_type> dro::network::metadata::character::lists::filteredList(QString package)
-{
-  s_lastUsedFilter = package;
-  if(package == "Server Characters") return s_characterListServer;
-  if(package == "Favorites") return s_characterListFavorites;
-
-  if(package == "All")
-  {
-    QVector<char_type> ALlCharacters = {};
-    QHash<QString, QVector<char_type>>::const_iterator i;
-    for (i = s_characterListRepository.constBegin(); i != s_characterListRepository.constEnd(); ++i)
-    {
-      ALlCharacters.append(i.value());
-    }
-    return ALlCharacters;
-  }
-
-  if(s_characterListRepository.contains(package))
-  {
-    return s_characterListRepository[package];
-  }
-  return QVector<char_type>();
-}
-
-QVector<char_type> dro::network::metadata::character::lists::currentList()
-{
-  if(s_lastUsedFilter == "Server Characters") return s_characterListServer;
-  if(s_lastUsedFilter == "Favorites") return s_characterListFavorites;
-
-  if(s_lastUsedFilter == "All")
-  {
-    QVector<char_type> ALlCharacters = {};
-    QHash<QString, QVector<char_type>>::const_iterator i;
-    for (i = s_characterListRepository.constBegin(); i != s_characterListRepository.constEnd(); ++i)
-    {
-      ALlCharacters.append(i.value());
-    }
-    return ALlCharacters;
-  }
-
-  if(s_characterListRepository.contains(s_lastUsedFilter))
-  {
-    return s_characterListRepository[s_lastUsedFilter];
-  }
-
-  return s_characterListServer;
-}
-
-QVector<char_type> dro::network::metadata::character::lists::resetClaimed()
-{
-  s_characterClaimList = {};
-  return s_characterListServer;
-}
-
-QString dro::network::metadata::character::lists::characterNameFiltered(int id)
-{
-  return s_characterListFiltered.at(id).name;
-}
-
-QString dro::network::metadata::character::lists::characterNameServer(int id)
-{
-  return s_characterListServer.at(id).name;
-}
-
-int dro::network::metadata::character::lists::characterServerId(int Id)
-{
-  for (int j = 0; j < s_characterListServer.size(); j++)
-  {
-    if (s_characterListServer[j].name == s_characterListFiltered.at(Id).name)
-    {
-      return j;
-    }
-  }
-
   return -1;
 }
 
-int dro::network::metadata::character::lists::characterServerId(QString name)
+int CharacterRepository::networkedIdFromFiltered(int filteredId)
 {
-  for (int j = 0; j < s_characterListServer.size(); j++)
-  {
-    if (s_characterListServer[j].name == name)
-    {
-      return j;
-    }
-  }
-
-  return -1;
+  if (filteredId < 0 || filteredId >= filteredCharacters.size()) return -1;
+  const QString& name = filteredCharacters.at(filteredId).name;
+  return networkedIdFromName(name);
 }
 
-void dro::network::metadata::character::lists::clearFlitered()
+QStringList CharacterRepository::filterList()
 {
-  s_characterListFiltered.clear();
+  QStringList filters = defaultFilters;
+  QStringList customKeys = repository.keys();
+  std::sort(customKeys.begin(), customKeys.end(), [](const QString& a, const QString& b) { return QString::localeAwareCompare(a, b) < 0; });
+  filters.append(customKeys);
+  return filters;
 }
 
-void dro::network::metadata::character::lists::addFlitered(const char_type &character)
+int CharacterRepository::serverListLength()
 {
-  s_characterListFiltered.append(character);
-}
-
-char_type dro::network::metadata::character::lists::filteredCharacter(int id)
-{
-  if(id > s_characterListFiltered.count()) return {};
-  s_characterListFiltered.at(id);
-}
-
-int dro::network::metadata::character::lists::lengthServerList()
-{
-  return s_characterListServer.length();
-}
-
-bool dro::network::metadata::character::lists::characterTaken(const QString &name)
-{
-  if(!s_characterClaimList.contains(name)) return false;
-  return s_characterClaimList[name];
+  return serverCharacters.size();
 }

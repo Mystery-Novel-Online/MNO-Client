@@ -52,7 +52,7 @@ namespace dro::network::metadata::user
 
   QString GetCharacterName()
   {
-    return IsSpectator() ? nullptr : dro::network::metadata::character::lists::characterNameServer(s_UserCharId);
+    return IsSpectator() ? nullptr : CharacterRepository::characterNameServer(s_UserCharId);
   }
 
   bool ChangeCharacterId(int id)

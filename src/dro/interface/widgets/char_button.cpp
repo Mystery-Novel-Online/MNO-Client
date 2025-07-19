@@ -92,12 +92,12 @@ void AOCharButton::set_taken(const bool p_enabled)
 
 void AOCharButton::addToFavorites()
 {
-  dro::network::metadata::character::lists::addFavorite(m_character);
+  CharacterRepository::addFavorite(m_character);
 }
 
 void AOCharButton::removeFavorites()
 {
-  dro::network::metadata::character::lists::removeFavorite(m_character);
+  CharacterRepository::removeFavorite(m_character);
 }
 
 void AOCharButton::openCharacterFolder()

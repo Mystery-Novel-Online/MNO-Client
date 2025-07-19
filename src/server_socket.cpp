@@ -130,7 +130,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (l_content.size() < 2)
       return;
 
-    metadata::user::setClientId(l_content.at(0).toInt());
+    user::setClientId(l_content.at(0).toInt());
     m_server_software = l_content.at(1);
 
 
@@ -140,7 +140,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   }
   else if (l_header == "FL")
   {
-    ServerMetadata::SetFeatureList(l_content);
+    network::metadata::ServerInformation::setFeatureList(l_content);
   }
   else if (l_header == "CT")
   {
@@ -170,7 +170,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       m_server_client_version_status = VersionStatus::ServerOutdated;
     }
 
-    metadata::user::setIncomingId(s_lastMessageId);
+    user::setIncomingId(s_lastMessageId);
   }
   else if (l_header == "PN")
   {
@@ -222,7 +222,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (!is_courtroom_constructed)
       return;
 
-    QVector<char_type> l_chr_list = dro::network::metadata::character::lists::serverList();
+    QVector<char_type> l_chr_list = CharacterRepository::serverList();
     if (l_content.length() != l_chr_list.length())
     {
       qWarning() << "Server sent a character list of length " << l_content.length() << "which is different from the expected length " << l_chr_list.length() << "so ignoring it.";
@@ -232,10 +232,10 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     for (int i = 0; i < l_chr_list.length(); ++i)
     {
       l_chr_list[i].taken = l_content.at(i) == "-1";
-      dro::network::metadata::character::lists::setCharacterAvailability(i, l_content.at(i) == "-1");
+      CharacterRepository::setCharacterAvailability(i, l_content.at(i) == "-1");
     }
 
-    dro::network::metadata::character::lists::setServerList(l_chr_list);
+    CharacterRepository::setServerList(l_chr_list);
   }
   else if (l_header == "SC")
   {
@@ -249,7 +249,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       l_chr.name = i_chr_name;
       l_chr_list.append(std::move(l_chr));
     }
-    dro::network::metadata::character::lists::setServerList(l_chr_list);
+    CharacterRepository::setServerList(l_chr_list);
     m_loaded_characters = m_character_count;
 
     if (is_lobby_constructed)
@@ -472,7 +472,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   {
     if (is_courtroom_constructed && l_content.size() > 0)
     {
-      int f_cid = metadata::user::GetCharacterId();
+      int f_cid = user::GetCharacterId();
       int remote_cid = l_content.at(0).toInt();
 
       if (f_cid != remote_cid && remote_cid != -1)

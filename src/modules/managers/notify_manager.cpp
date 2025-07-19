@@ -53,11 +53,6 @@ void NotifyManager::SetSenderName(QString sender)
   mSenderName = sender;
 }
 
-void NotifyManager::SetSenderCharacter(QString sender)
-{
-  mSenderCharacter = sender;
-}
-
 void NotifyManager::SetRequestKey(QString sender)
 {
   mRequestKey = sender;

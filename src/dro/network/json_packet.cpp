@@ -68,7 +68,7 @@ void JsonPacket::ProcessNotifyRequestPacket(JSONReader& jsonReader)
 {
   jsonReader.SetTargetObject("data");
   NotifyManager::get().SetSenderId(jsonReader.getIntValue("requester_id"));
-  NotifyManager::get().SetSenderCharacter(jsonReader.getStringValue("requester_character"));
+  //NotifyManager::get().SetSenderCharacter(jsonReader.getStringValue("requester_character"));
   NotifyManager::get().SetSenderName(jsonReader.getStringValue("requester_name"));
   NotifyManager::get().SetRequestKey(jsonReader.getStringValue("requester_key"));
   QString requesterType = jsonReader.getStringValue("request_type");
@@ -100,7 +100,7 @@ void JsonPacket::ProcessPairDataPacket(JSONReader& jsonReader)
     true
   };
   int offsetSelf = jsonReader.getIntValue("self_offset");
-  metadata::message::setPairMetadata(metadata, offsetSelf);
+  message::setPairMetadata(metadata, offsetSelf);
 }
 
 void JsonPacket::ProcessPairPacket(JSONReader& jsonReader)

@@ -29,7 +29,7 @@
 
 void AOApplication::reload_packages()
 {
-  dro::network::metadata::character::lists::reset();
+  CharacterRepository::reset();
   dro::system::replays::io::resetCache();
   QVector<QString> packageNames = FS::Packages::Scan();
   QString packagesPath = FS::Paths::ApplicationPath() + "/packages/";
@@ -45,7 +45,7 @@ void AOApplication::reload_packages()
       packageChar.name = character_folder;
       baseCharacters.append(std::move(packageChar));
     }
-    dro::network::metadata::character::lists::setFilteredList("base", baseCharacters);
+    CharacterRepository::setFilteredList("base", baseCharacters);
   }
 
   for(QString packageName : packageNames)
@@ -61,7 +61,7 @@ void AOApplication::reload_packages()
         packageChar.name = character_folder;
         packageCharacters.append(std::move(packageChar));
       }
-      dro::network::metadata::character::lists::setFilteredList(packageName, packageCharacters);
+      CharacterRepository::setFilteredList(packageName, packageCharacters);
     }
 
     QDir replaysDirectory(packagesPath + packageName + "/replays");

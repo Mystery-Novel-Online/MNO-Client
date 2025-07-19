@@ -3,51 +3,69 @@
 
 #include "datatypes.h"
 
-namespace ServerMetadata
+namespace dro::network::metadata
 {
-  void SetFeatureList(QStringList features);
-  bool FeatureSupported(QString featureName);
-}
+  class ServerInformation
+  {
+  public:
+    static void setFeatureList(QStringList features);
+    static bool featureSupported(const QString& name);
 
-namespace dro::network::metadata::character::lists
-{
-  void reset();
-  void addFavorite(const QString& folder);
-  void removeFavorite(const QString& folder);
+  private:
+    static inline QStringList featureList = {};
+  };
 
-  void loadFavorites();
-  void saveFavorites();
+  class CharacterRepository
+  {
+  public:
+    static void reset();
 
-  void setServerList(QVector<char_type> list);
-  void setFilteredList(const QString& package, QVector<char_type> list);
+    static void addFavorite(const QString& folder);
+    static void removeFavorite(const QString& folder);
 
-  void setCharacterAvailability(int id, bool status);
+    static void loadFavorites();
+    static void saveFavorites();
 
-  int findAvailablePersona();
+    static void setCharacterAvailability(int index, bool available);
+    static bool isCharacterAvailable(const QString& name);
 
-  bool characterCheck(const QString& name);
-  bool characterCheck(int filterID);
-  bool characterTaken(const QString& name);
+    static void setServerList(const QVector<char_type>& list);
+    static void setFilteredList(const QString& name, const QVector<char_type>& list);
 
-  QStringList characterFilters();
+    static bool characterExists(const QString& name);
+    static bool filteredCharacterExists(int filterIndex);
 
-  QVector<char_type> serverList();
-  QVector<char_type> filteredList(QString package);
-  QVector<char_type> currentList();
-  QVector<char_type> resetClaimed();
+    static void clearFiltered();
+    static void addFiltered(const char_type& character);
+    static char_type filteredCharacter(int index);
 
-  char_type filteredCharacter(int id);
+    static QString characterNameFiltered(int index);
+    static QString characterNameServer(int index);
 
-  int lengthServerList();
+    static int findAvailablePersona();
 
-  void clearFlitered();
-  void addFlitered(const char_type& character);
+    static const QVector<char_type>& serverList();
+    static QVector<char_type> filteredList(const QString& packageName);
+    static QVector<char_type> currentList();
+    static QVector<char_type> resetClaims();
 
-  QString characterNameFiltered(int id);
-  QString characterNameServer(int id);
+    static int networkedIdFromName(const QString& name);
+    static int networkedIdFromFiltered(int filteredId);
 
-  int characterServerId(int Id);
-  int characterServerId(QString name);
+    static QStringList filterList();
+    static int serverListLength();
+
+  private:
+    static inline QString lastUsedFilter = "Server Characters";
+
+    static inline const QStringList defaultFilters = { "Server Characters", "Favorites", "All" };
+    static inline QVector<char_type> serverCharacters;
+    static inline QVector<char_type> filteredCharacters;
+    static inline QVector<char_type> favoriteCharacters;
+
+    static inline QHash<QString, QVector<char_type>> repository;
+    static inline QHash<QString, bool> claimedCharacters;
+  };
 }
 
 #endif // SERVER_METADATA_H

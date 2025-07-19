@@ -62,8 +62,8 @@ namespace ThemeScripting
       dialogTable.set_function("SetText", &LuaFunctions::SetNotificationText);
 
       sol::table characterTable = s_themeScript.create_named_table("Character");
-      characterTable.set_function("GetShowname", &metadata::user::getShowname);
-      characterTable.set_function("GetIniswap", &metadata::user::getIniswap);
+      characterTable.set_function("GetShowname", &user::getShowname);
+      characterTable.set_function("GetIniswap", &user::getIniswap);
       characterTable.set_function("Exists", &FS::Checks::CharacterExists);
       characterTable.set_function("Switch", &LuaFunctions::SwitchCharacter);
       characterTable.set_function("SetScale", &courtroom::sliders::setScale);
@@ -106,9 +106,9 @@ namespace ThemeScripting
       tabTable.set_function("Change", &LuaFunctions::ChangeTab);
 
       sol::table serverTable = s_themeScript.create_named_table("Server");
-      tabTable.set_function("GetClientId", &metadata::user::getClientId);
-      tabTable.set_function("GetCharacterId", &metadata::user::GetCharacterId);
-      tabTable.set_function("GetCurrentCharacter", &metadata::user::GetCharacterName);
+      tabTable.set_function("GetClientId", &user::getClientId);
+      tabTable.set_function("GetCharacterId", &user::GetCharacterId);
+      tabTable.set_function("GetCurrentCharacter", &user::GetCharacterName);
 
       {
         sol::table ic = s_themeScript.create_named_table("IC");
