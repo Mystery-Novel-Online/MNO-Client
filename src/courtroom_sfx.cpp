@@ -18,6 +18,8 @@
 #include "dro/fs/fs_reading.h"
 #include "dro/system/audio.h"
 
+#include "dro/encoding/binary_encoding.h"
+
 #include <optional>
 
 std::optional<DRSfx> Courtroom::current_sfx()
@@ -173,6 +175,8 @@ void Courtroom::on_sfx_menu_insert_caption_triggered()
     {
       l_caption = l_match.captured(1);
     }
-    ui_ic_chat_message_field->insert(l_caption);
+
+    ui_ic_chat_message_field->addTag(TagType_SoundEffect, {current_sfx_file()});
+    //ui_ic_chat_message_field->insertPlainText(l_caption);
   }
 }

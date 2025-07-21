@@ -141,6 +141,7 @@ public slots:
 
   void setFlipped(bool state);
   void setMirrored(bool state);
+  bool mirroredState();
 
 signals:
   void size_changed(QSizeF);

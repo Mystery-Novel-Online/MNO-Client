@@ -8,6 +8,7 @@
 #include "dro/interface/menus/char_menu.h"
 #include "dro/interface/widgets/bgm_filter.h"
 #include "dro/interface/widgets/rp_list_widget.h"
+#include "dro/interface/widgets/rp_message_input.h"
 #include "dro/interface/widgets/screenshot_button.h"
 #include "dro/interface/widgets/health_bar.h"
 #include "dro/interface/widgets/rp_slider.h"
@@ -20,6 +21,7 @@
 #include "mk2/graphicsvideoscreen.h"
 #include "mk2/spriteplayer.h"
 #include "mk2/spritereadersynchronizer.h"
+
 
 class AOApplication;
 class AOBlipPlayer;
@@ -78,6 +80,13 @@ class QLabel;
 
 using namespace dro;
 using namespace dro::network::metadata;
+
+struct IncomingTagData
+{
+  int timestamp;
+  MessageTagType action;
+  QVariantList variables;
+};
 
 class Courtroom : public SceneWidget
 {
@@ -372,7 +381,7 @@ private:
   QString icchatlogsfilename = QDateTime::currentDateTime().toString("'logs/'yyyy-MM-dd (hh.mm.ss.z)'.txt'");
 
   static const int MINIMUM_MESSAGE_SIZE = 15;
-  static const int OPTIMAL_MESSAGE_SIZE = 25;
+  static const int OPTIMAL_MESSAGE_SIZE = 26;
   QStringList m_pre_chatmessage;
   GameState m_game_state = GameState::Finished;
 
@@ -394,6 +403,8 @@ private:
   bool chatmessage_is_empty = false;
 
   QString previous_ic_message;
+
+  QVector<IncomingTagData> m_ProcessedTags = {};
 
   QColor m_message_color;
   QString m_message_color_name;
@@ -554,7 +565,7 @@ private:
 
   QLineEdit *ui_ic_chat_showname = nullptr;
   QWidget *ui_ic_chat_message = nullptr;
-  QLineEdit *ui_ic_chat_message_field = nullptr;
+  RPMessageInput *ui_ic_chat_message_field = nullptr;
   QLabel *ui_ic_chat_message_counter = nullptr;
   int m_lastTypingPacket = 0;
 
@@ -792,6 +803,10 @@ private slots:
   void handle_ic_message_length();
   void on_chat_config_changed();
   void OnBgmFilterChanged();
+
+
+  void onFlipTagActivated();
+  void onAnimationTag();
 
   void CharacterSearchUpdated();
 

@@ -219,6 +219,8 @@ void Courtroom::create_widgets()
   p_MenuBGM = new BGMMenu(this);
 
   animList = new RPListWidget(this);
+  animList->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(animList, &QCheckBox::customContextMenuRequested, this, &Courtroom::onAnimationTag);
 
   ui_sfx_list = new RPListWidget(this);
   ui_sfx_list->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -233,8 +235,8 @@ void Courtroom::create_widgets()
 
   ui_ic_chat_message = new QWidget(this);
 
-  ui_ic_chat_message_field = new QLineEdit(ui_ic_chat_message);
-  ui_ic_chat_message_field->setFrame(false);
+  ui_ic_chat_message_field = new RPMessageInput(ui_ic_chat_message);
+  ui_ic_chat_message_field->setFrameStyle(QFrame::NoFrame);
   ui_ic_chat_message_field->setPlaceholderText(localization::getText("CHATBOX_IC"));
   ui_ic_chat_message_field->setMaxLength(255);
 
@@ -318,6 +320,8 @@ void Courtroom::create_widgets()
   ui_change_character->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(ui_change_character, &QWidget::customContextMenuRequested, p_CharacterContextMenu, &CharMenu::OnMenuRequested);
 
+
+
   ui_call_mod = new RPButton("call_mod", "callmod.png", localization::getText("PING_MODS"), this);
   ui_switch_area_music = new RPButton("switch_area_music", "switch_area_music.png", "A/M", this);
 
@@ -336,9 +340,12 @@ void Courtroom::create_widgets()
   ui_pre->setToolTip(localization::getText("TOOLTIP_PRE"));
 
   ui_flip = new QCheckBox(this);
+  ui_flip->setContextMenuPolicy(Qt::CustomContextMenu);
   ui_flip->setText(localization::getText("TITLE_FLIP"));
   ui_flip->setToolTip(localization::getText("TOOLTIP_FLIP"));
   ui_flip->hide();
+
+  connect(ui_flip, &QCheckBox::customContextMenuRequested, this, &Courtroom::onFlipTagActivated);
 
   ui_hide_character = new QCheckBox(this);
   ui_hide_character->setText(localization::getText("TITLE_HIDE"));
@@ -441,9 +448,9 @@ void Courtroom::connect_widgets()
   connect(ao_config, SIGNAL(showname_placeholder_changed(QString)), this, SLOT(on_showname_placeholder_changed(QString)));
   connect(ao_config, SIGNAL(character_ini_changed(QString)), this, SLOT(on_character_ini_changed()));
   connect(ui_ic_chat_showname, SIGNAL(editingFinished()), this, SLOT(on_ic_showname_editing_finished()));
-  connect(ui_ic_chat_message_field, SIGNAL(returnPressed()), this, SLOT(on_ic_message_return_pressed()));
   connect(ao_config, SIGNAL(message_length_threshold_changed(int)), this, SLOT(handle_ic_message_length()));
-  connect(ui_ic_chat_message_field, SIGNAL(textChanged(QString)), this, SLOT(handle_ic_message_length()));
+  connect(ui_ic_chat_message_field, &QTextEdit::textChanged, this, &Courtroom::handle_ic_message_length);
+  connect(ui_ic_chat_message_field, &RPMessageInput::returnPressed, this, &Courtroom::on_ic_message_return_pressed);
   connect(ui_ic_chatlog->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(on_ic_chatlog_scroll_changed()));
   connect(ui_ic_chatlog_scroll_topdown, SIGNAL(clicked()), this, SLOT(on_ic_chatlog_scroll_topdown_clicked()));
   connect(ui_ic_chatlog_scroll_bottomup, SIGNAL(clicked()), this, SLOT(on_ic_chatlog_scroll_bottomup_clicked()));

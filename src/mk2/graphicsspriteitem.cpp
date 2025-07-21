@@ -228,6 +228,11 @@ void GraphicsSpriteItem::setMirrored(bool state)
   m_isMirrored = state;
 }
 
+bool GraphicsSpriteItem::mirroredState()
+{
+  return m_isMirrored;
+}
+
 bool GraphicsSpriteItem::is_valid() const
 {
   return m_player->is_valid();

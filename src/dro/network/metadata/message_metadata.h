@@ -45,6 +45,9 @@ struct MessageMetadata
   QString characterVideo = "";
   QString characterShout = "";
 
+
+  QString messageTags = "";
+
   QString userShowname = "";
   QString textContent = "";
 

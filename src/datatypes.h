@@ -8,6 +8,35 @@
 #include <QRect>
 #include <QColor>
 
+enum MessageTagType
+{
+  TagType_SoundEffect,
+  TagType_MusicChange,
+  TagType_EmoteChange,
+  TagType_PlaySequence,
+  TagType_Wait,
+  TagType_Effect,
+  TagType_Flip,
+  TagType_Hide,
+  TagType_NewLine,
+};
+
+struct ThemeMessageHighlight
+{
+  QChar openingCharacter;
+  QChar closingCharacter;
+  QString colourValue;
+  bool hideCharacter;
+};
+
+struct MessageTag
+{
+  int id;
+  int index;
+  QString image;
+  QString value;
+};
+
 class MessageEffect
 {
 public:
@@ -372,7 +401,8 @@ enum ChatMessage : int32_t
   CMOffsetS,
   CMOutfitName,
   CMAnimSequence,
-  CMSpriteLayers
+  CMSpriteLayers,
+  CMMessageTags
 };
 
 enum EmoteMod

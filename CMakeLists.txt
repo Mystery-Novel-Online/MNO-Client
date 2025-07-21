@@ -298,6 +298,8 @@ add_executable(dro-client
   src/dro/system/theme.h src/dro/system/theme.cpp
   src/dro/interface/widgets/scene_widget.h src/dro/interface/widgets/scene_widget.cpp
   src/dro/interface/widgets/rp_list_widget.h src/dro/interface/widgets/rp_list_widget.cpp
+  src/dro/interface/widgets/rp_message_input.h src/dro/interface/widgets/rp_message_input.cpp
+  src/dro/encoding/binary_encoding.h src/dro/encoding/binary_encoding.cpp
 )
 
 target_include_directories(dro-client PUBLIC

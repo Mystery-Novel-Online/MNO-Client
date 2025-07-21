@@ -6,6 +6,7 @@
 #include "dro/interface/widgets/rp_button.h"
 #include "aoconfig.h"
 #include "dro/interface/widgets/image_display.h"
+#include "dro/encoding/binary_encoding.h"
 
 #include "dro/interface/widgets/note_area.h"
 #include "dro/interface/widgets/note_picker.h"
@@ -337,9 +338,8 @@ void Courtroom::enter_courtroom(int p_cid)
   // character =================================================================
   if (user::ChangeCharacterId(p_cid)) update_default_iniswap_item();
 
-  QLineEdit *l_current_field = ui_ic_chat_message_field;
-  if (ui_ooc_chat_message->hasFocus()) l_current_field = ui_ooc_chat_message;
-  const int l_current_cursor_pos = l_current_field->cursorPosition();
+  QLineEdit *l_current_field = ui_ooc_chat_message->hasFocus() ? ui_ooc_chat_message : nullptr;
+  const int l_current_cursor_pos = ui_ooc_chat_message->cursorPosition();
 
   const QString l_chr_name = get_character_ini();
 
@@ -395,9 +395,15 @@ void Courtroom::enter_courtroom(int p_cid)
   ui_ic_chat_message_field->setDisabled(spectating);
   set_character_position(actor->GetSide());
 
-  // restore line field focus
-  l_current_field->setFocus();
-  l_current_field->setCursorPosition(l_current_cursor_pos);
+  if(l_current_field != nullptr)
+  {
+    l_current_field->setFocus();
+    l_current_field->setCursorPosition(l_current_cursor_pos);
+  }
+  else
+  {
+    ui_ic_chat_message->setFocus();
+  }
 
   const QString l_showname = ao_config->showname();
   if (!l_showname.isEmpty() && !is_first_showname_sent)
@@ -1097,6 +1103,20 @@ void Courtroom::on_ic_message_return_pressed()
     packet_contents.append(dro::system::encoding::text::EncodeBase64(layers));
   }
 
+
+  if(network::metadata::ServerInformation::featureSupported("tags"))
+  {
+    QStringList tags;
+    for(MessageTag tag : ui_ic_chat_message_field->getTags())
+    {
+      tags.append(dro::system::encoding::text::EncodePacketContents({QString::number(tag.index), tag.value}));
+    }
+    packet_contents.append(dro::system::encoding::text::EncodeBase64(tags));
+  }
+
+
+
+
   ao_app->send_server_packet(DRPacket("MS", packet_contents));
 }
 
@@ -1625,6 +1645,22 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
 void Courtroom::handle_chatmessage_3()
 {
+  QStringList tagInformation = dro::system::encoding::text::DecodeBase64(m_pre_chatmessage[CMMessageTags]);
+
+  m_ProcessedTags.clear();
+
+  for(QString tagInfo : tagInformation)
+  {
+    QStringList tagArray = system::encoding::text::DecodePacketContents(tagInfo);
+    if(tagArray.count() == 2)
+    {
+      int tagPosition = tagArray[0].toInt();
+      QVariantList tagArguments = dro::encoding::BinaryEncoder::decodeBase64(tagArray[1]);
+      IncomingTagData data = {tagPosition, (MessageTagType)tagArguments.at(0).toInt(), tagArguments};
+      m_ProcessedTags.append(data);
+    }
+  }
+
   qDebug() << "handle_chatmessage_3";
 
   ui_vp_player_char->set_play_once(false);
@@ -1866,6 +1902,18 @@ void Courtroom::OnBgmFilterChanged()
 {
   m_music_list = ui_bgm_filter->GetMusicList();
   list_music();
+}
+
+void Courtroom::onFlipTagActivated()
+{
+  ui_ic_chat_message_field->addTag(TagType_Flip, {});
+  ui_ic_chat_message_field->setFocus();
+}
+
+void Courtroom::onAnimationTag()
+{
+  ui_ic_chat_message_field->addTag(TagType_PlaySequence, {animList->currentItem()->text()});
+  ui_ic_chat_message_field->setFocus();
 }
 
 void Courtroom::CharacterSearchUpdated()
@@ -2225,6 +2273,37 @@ void Courtroom::next_chat_letter()
 
   int message_length = f_message.length();
 
+  QVector<IncomingTagData> unprocessedTags = {};
+  for(IncomingTagData tag : m_ProcessedTags)
+  {
+    if(tag.timestamp == m_tick_step)
+    {
+      switch(tag.action)
+      {
+      case TagType_SoundEffect:
+        audio::effect::StopAll();
+        audio::effect::Play(tag.variables.at(1).toString().toStdString());
+        break;
+
+      case TagType_Flip:
+        ui_vp_player_char->setMirrored(ui_vp_player_char->mirroredState() == false);
+        break;
+
+      case TagType_PlaySequence:
+        ui_vp_player_char->setCharacterAnimation(tag.variables.at(1).toString(), m_chatmessage[CMChrName]);
+        break;
+
+      default:
+        break;
+      }
+    }
+    else
+    {
+      unprocessedTags.append(tag);
+    }
+  }
+
+  m_ProcessedTags = unprocessedTags;
   if (m_tick_step >= message_length || ui_vp_chatbox->isHidden())
   {
     post_chatmessage();
