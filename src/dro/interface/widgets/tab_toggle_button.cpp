@@ -3,8 +3,6 @@
 #include <modules/theme/thememanager.h>
 #include "dro/system/theme_scripting.h"
 
-#include <QMenu>
-
 TabToggleButton::TabToggleButton(QWidget *parent, AOApplication *p_ao_app) : RPButton(parent)
 {
   this->setContextMenuPolicy(Qt::CustomContextMenu);

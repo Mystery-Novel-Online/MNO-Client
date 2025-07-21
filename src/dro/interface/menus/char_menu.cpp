@@ -1,13 +1,8 @@
 #include "char_menu.h"
 #include "modules/theme/thememanager.h"
-#include "courtroom.h"
-
-#include <QDesktopServices>
-#include <QInputDialog>
-#include <QListWidget>
 #include "dro/fs/fs_reading.h"
-
 #include "dro/param/actor_repository.h"
+#include "dro/param/actor/actor_loader.h"
 
 using namespace dro::actor::user;
 

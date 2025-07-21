@@ -1,16 +1,10 @@
 #include "viewport_overlay.h"
-#include "drtheme.h"
-#include <AOApplication.h>
-#include <QMenu>
-#include <QPainter>
-#include <dro/interface/widgets/image_display.h>
-#include <modules/managers/scene_manager.h>
+
 #include <modules/theme/thememanager.h>
-#include "commondefs.h"
-#include "dro/system/audio.h"
+#include <modules/managers/scene_manager.h>
 #include "dro/interface/courtroom_layout.h"
-#include "courtroom.h"
 #include "dro/system/theme_scripting.h"
+#include "dro/system/audio.h"
 
 ViewportOverlay::ViewportOverlay(QWidget *parent)
     : QWidget{parent}

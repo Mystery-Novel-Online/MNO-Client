@@ -1,13 +1,6 @@
 #include "replay_window.h"
 
-#include <QDebug>
-#include <QKeyEvent>
-
-#include "commondefs.h"
-#include "dro/interface/widgets/rp_button.h"
-#include "dro/interface/widgets/viewports/legacy_viewport.h"
 #include "dro/system/replay_playback.h"
-#include "dro/system/theme.h"
 #include "theme.h"
 
 using namespace dro::system;

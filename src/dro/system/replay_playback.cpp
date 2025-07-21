@@ -3,7 +3,6 @@
 
 #include "dro/interface/scenes/replay_window.h"
 #include "dro/interface/widgets/viewports/rp_viewport.h"
-
 #include "dro/network/metadata/message_metadata.h"
 #include "dro/param/replay_reader.h"
 #include "dro/fs/fs_reading.h"

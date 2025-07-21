@@ -1,10 +1,6 @@
 #ifndef SCREENSHOT_BUTTON_H
 #define SCREENSHOT_BUTTON_H
 
-#include <QObject>
-#include <QWidget>
-#include "dro/interface/widgets/rp_button.h"
-
 class ScreenshotButton : public RPButton
 {
   Q_OBJECT

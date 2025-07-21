@@ -1,13 +1,6 @@
 #include "actor_loader.h"
-#include "aoapplication.h"
-
-#include "commondefs.h"
-#include <QSettings>
 #include <utils.h>
-
 #include "dro/fs/fs_reading.h"
-
-#include <QDir>
 
 static QMap<QString, ActorData*> s_CachedCharacters;
 

@@ -1,8 +1,5 @@
 #include "binary_encoding.h"
 
-#include <QDataStream>
-#include <QDebug>
-
 using namespace dro::encoding;
 
 QString BinaryEncoder::encodeBase64(const QVariantList &values)

@@ -1,13 +1,5 @@
-#include "dro/interface/widgets/emotion_button.h"
-
-#include "aoapplication.h"
-#include "courtroom.h"
+#include "dro/param/actor/actor_loader.h"
 #include "modules/theme/thememanager.h"
-#include <QHelpEvent>
-#include <QImage>
-#include <QLabel>
-#include <QPaintEvent>
-#include <QPainter>
 #include "dro/interface/menus/emote_menu.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/param/actor_repository.h"

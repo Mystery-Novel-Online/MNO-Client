@@ -1,8 +1,5 @@
 #include "drserversocket.h"
-#include "qabstractsocket.h"
-
-#include <QTcpSocket>
-#include <QTimer>
+#include "pch.h"
 
 const int DRServerSocket::CONNECTING_DELAY = 5000;
 

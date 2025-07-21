@@ -1,11 +1,6 @@
 #include "lobby.h"
-#include "pch.h"
-#include "pch_widgets.h"
-
-#include "aoapplication.h"
 #include "aoconfig.h"
-#include "commondefs.h"
-#include "datatypes.h"
+
 #include "dro/system/localization.h"
 #include "dro/system/theme.h"
 #include "debug_functions.h"
@@ -17,7 +12,6 @@
 #include "theme.h"
 #include "version.h"
 
-#include <utility>
 #include "dro/fs/fs_reading.h"
 #include "dro/interface/lobby_layout.h"
 

@@ -1,15 +1,9 @@
 #include "drtheme.h"
-#include "commondefs.h"
+#include "pch.h"
+
 #include "dro/fs/fs_reading.h"
-#include "qjsonobject.h"
-#include "aoconfig.h"
-#include <QJsonArray>
-
-#include "modules/theme/thememanager.h"
 #include "dro/system/theme_scripting.h"
-
-#include <qcolor.h>
-#include <qfile.h>
+#include "modules/theme/thememanager.h"
 
 DRTheme::DRTheme(AOApplication *p_ao_app)
 {

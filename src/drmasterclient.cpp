@@ -1,12 +1,5 @@
 #include "drmasterclient.h"
-
-// qt
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
+#include "pch.h"
 
 DRMasterClient::DRMasterClient(QObject *parent)
     : QObject(parent)

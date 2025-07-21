@@ -1,13 +1,10 @@
 #ifndef EMOTION_SELECTOR_H
 #define EMOTION_SELECTOR_H
 
-#include <AOApplication.h>
-#include <QObject>
-#include <QWidget>
-#include "dro/interface/widgets/rp_widget.h"
 #include "dro/interface/menus/emote_menu.h"
 
 class AOEmoteButton;
+class ActorData;
 
 class EmotionSelector : public RPWidget
 {

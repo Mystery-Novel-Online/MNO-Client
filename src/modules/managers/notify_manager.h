@@ -1,12 +1,6 @@
 #ifndef NOTIFYMANAGER_H
 #define NOTIFYMANAGER_H
 
-#include <QString>
-
-#include "dro/interface/widgets/choice_dialog.h"
-
-
-
 class NotifyManager
 {
 public:

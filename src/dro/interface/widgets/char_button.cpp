@@ -1,19 +1,10 @@
 #include "char_button.h"
-
-#include "aoapplication.h"
-#include "dro/interface/widgets/image_display.h"
-#include <QDesktopServices>
+#include "pch.h"
 
 #include "dro/system/localization.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/network/metadata/server_metadata.h"
 #include "aoconfig.h"
-#include "courtroom.h"
-
-#include <QFile>
-#include <QLabel>
-#include <QMenu>
-#include <QUrl>
 
 AOCharButton::AOCharButton(QWidget *parent, AOApplication *p_ao_app, int x_pos, int y_pos)
     : QPushButton(parent)

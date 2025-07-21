@@ -1,8 +1,5 @@
 #include "rp_message_input.h"
 #include "dro/encoding/binary_encoding.h"
-#include "aoapplication.h"
-
-#include <QTextBlock>
 
 RPMessageInput::RPMessageInput(QWidget *parent)
     : QTextEdit(parent)

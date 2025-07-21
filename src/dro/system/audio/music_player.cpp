@@ -1,11 +1,7 @@
 #include "music_player.h"
 
-#include "aoapplication.h"
-
 #include "draudiostream.h"
 #include "draudiotrackmetadata.h"
-#include <QDebug>
-#include <QRegularExpression>
 
 AOMusicPlayer::AOMusicPlayer(QObject *p_parent)
     : AOObject(p_parent)

@@ -1,7 +1,5 @@
 #include "drmediatester.h"
-
-#include <QUrl>
-
+#include "pch.h"
 #include "debug_functions.h"
 
 DRMediaTester::DRMediaTester(QObject *parent)

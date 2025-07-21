@@ -1,12 +1,10 @@
 #include "sfx_player.h"
 
-#include "aoapplication.h"
 #include "draudioengine.h"
 #include "draudiostream.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/fs/fs_reading.h"
 
-#include <QDebug>
 #include <cstddef>
 
 AOSfxPlayer::AOSfxPlayer(QObject *p_parent)

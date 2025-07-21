@@ -1,7 +1,5 @@
 #include "text_encoding.h"
-
-#include <QString>
-#include <QStringList>
+#include "pch.h"
 
 namespace dro::system::encoding::text
 {

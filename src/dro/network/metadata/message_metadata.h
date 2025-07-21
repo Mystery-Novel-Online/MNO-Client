@@ -2,7 +2,7 @@
 #define MESSAGE_METADATA_H
 
 #include <QString>
-#include "datatypes.h"
+
 
 struct MessageModifiers
 {

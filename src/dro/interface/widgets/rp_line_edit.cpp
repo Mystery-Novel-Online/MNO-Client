@@ -1,5 +1,4 @@
 #include "rp_line_edit.h"
-#include "commondefs.h"
 #include "dro/system/theme.h"
 
 QHash<QString, QString> s_defaultLineEditCSS

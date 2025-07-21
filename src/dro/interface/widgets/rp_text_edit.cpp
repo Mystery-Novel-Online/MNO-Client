@@ -1,12 +1,8 @@
 #include "rp_text_edit.h"
 #include "debug_functions.h"
-#include "commondefs.h"
-#include "aoapplication.h"
+
 #include "theme.h"
 #include "dro/system/theme.h"
-
-#include <QDebug>
-#include <QTextBlock>
 
 RPTextEdit::RPTextEdit(const QString &name, QWidget *parent)
     : QTextEdit(parent), m_friendlyName(name)

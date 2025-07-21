@@ -1,7 +1,5 @@
 #include "rp_widget.h"
-#include <QMouseEvent>
-#include "aoapplication.h"
-#include "commondefs.h"
+
 #include <modules/theme/thememanager.h>
 #include "dro/fs/fs_reading.h"
 #include "dro/system/theme.h"

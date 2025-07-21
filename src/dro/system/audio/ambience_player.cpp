@@ -1,8 +1,4 @@
-#include "aoapplication.h"
-
 #include "draudiostream.h"
-#include <QDebug>
-
 #include "ambience_player.h"
 
 RPAmbiencePlayer::RPAmbiencePlayer(QObject *p_parent)

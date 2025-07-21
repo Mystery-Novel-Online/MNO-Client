@@ -1,9 +1,5 @@
 #include "drdiscord.h"
-
-#include <QDateTime>
-#include <QDebug>
-#include <QGlobalStatic>
-#include <QTimer>
+#include "pch.h"
 
 #include <cstring>
 

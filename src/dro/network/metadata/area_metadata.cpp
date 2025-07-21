@@ -1,7 +1,4 @@
 #include "area_metadata.h"
-#include "aoapplication.h"
-#include "courtroom.h"
-#include <QString>
 
 static QString s_AreaDescription = "";
 

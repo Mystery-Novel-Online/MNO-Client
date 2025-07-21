@@ -1,7 +1,7 @@
 #ifndef AOAPPLICATION_H
 #define AOAPPLICATION_H
 
-#include "datatypes.h"
+
 #include "drpacket.h"
 #include "drserversocket.h"
 

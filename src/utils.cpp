@@ -1,6 +1,5 @@
 #include "utils.h"
-
-#include <QSettings>
+#include "pch.h"
 
 using namespace utils;
 

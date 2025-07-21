@@ -1,7 +1,3 @@
-#include "dro/interface/widgets/rp_label.h"
-
-#include "aoapplication.h"
-#include "commondefs.h"
 #include "theme.h"
 #include "dro/system/theme.h"
 

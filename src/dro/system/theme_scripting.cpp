@@ -6,7 +6,7 @@
 #include "modules/managers/notify_manager.h"
 #include "dro/network/metadata/area_metadata.h"
 #include "dro/system/runtime_values.h"
-#include "courtroom.h"
+
 #include <lobby.h>
 
 #pragma comment(lib, "lua54.lib")

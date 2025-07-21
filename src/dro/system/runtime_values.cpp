@@ -1,7 +1,5 @@
 #include "runtime_values.h"
-
-#include <QMap>
-#include <QRegularExpressionMatch>
+#include "pch.h"
 
 QMap<QString, QString> s_runtimeValues = {};
 

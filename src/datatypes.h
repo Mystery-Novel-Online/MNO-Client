@@ -1,13 +1,6 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H
 
-#include "qvector2d.h"
-#include <QDateTime>
-#include <QMap>
-#include <QVector>
-#include <QRect>
-#include <QColor>
-
 enum MessageTagType
 {
   TagType_SoundEffect,

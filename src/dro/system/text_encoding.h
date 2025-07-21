@@ -1,9 +1,9 @@
 #ifndef TEXT_ENCODING_H
 #define TEXT_ENCODING_H
 
-
 class QString;
 class QStringList;
+
 namespace dro::system::encoding::text
 {
   QString EncodePacketContents(const QStringList& list);

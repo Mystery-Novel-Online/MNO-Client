@@ -18,21 +18,13 @@
 **
 **************************************************************************/
 #include "graphicsspriteitem.h"
-
-#include <QFileInfo>
-#include <QGraphicsScene>
-#include <QOpenGLContext>
-#include <QPainter>
-#include <QVector3D>
-
-#include <functional>
+#include "pch.h"
 
 #include <modules/managers/scene_manager.h>
 #include "dro/param/animation_reader.h"
 #include "dro/interface/courtroom_layout.h"
-#include "spritedynamicreader.h"
 #include "spriteseekingreader.h"
-#include "aoapplication.h"
+
 #include "dro/system/text_encoding.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/system/runtime_loop.h"

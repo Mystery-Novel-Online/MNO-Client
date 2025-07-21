@@ -1,6 +1,5 @@
 #include "hardware_functions.h"
-
-#include <QDebug>
+#include "pch.h"
 
 #ifdef Q_OS_WINDOWS
 #include <windows.h>

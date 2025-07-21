@@ -1,7 +1,5 @@
 #include "localization.h"
-#include <QDir>
-#include <QFileInfo>
-#include <QMap>
+#include "pch.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/param/localization_reader.h"
 

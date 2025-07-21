@@ -1,6 +1,4 @@
 #include "legacy_background_reader.h"
-#include "aoapplication.h"
-#include <QSettings>
 
 LegacyBackgroundReader::LegacyBackgroundReader()
 {

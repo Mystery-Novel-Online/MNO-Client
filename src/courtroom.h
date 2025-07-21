@@ -1,7 +1,7 @@
 #ifndef COURTROOM_H
 #define COURTROOM_H
 
-#include "datatypes.h"
+
 #include "drgraphicscene.h"
 #include "dro/interface/menus/area_menu.h"
 #include "dro/interface/menus/bgm_menu.h"

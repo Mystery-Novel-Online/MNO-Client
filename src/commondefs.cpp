@@ -1,6 +1,4 @@
-#include "commondefs.h"
-
-#include <QString>
+#include "pch.h"
 
 const QString BASE_CONFIG_INI = "/base/config.ini";
 const QString BASE_PACKAGES_INI = "packages.ini";

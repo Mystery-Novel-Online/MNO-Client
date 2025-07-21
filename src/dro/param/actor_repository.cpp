@@ -1,8 +1,5 @@
 #include "actor_repository.h"
-#include <QFileInfo>
-#include <QMap>
-#include <QString>
-#include "aoapplication.h"
+
 #include "modules/theme/thememanager.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/param/actor/actor_loader.h"

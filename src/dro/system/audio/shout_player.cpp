@@ -1,6 +1,5 @@
 #include "shout_player.h"
 
-#include "aoapplication.h"
 #include "draudioengine.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/fs/fs_reading.h"

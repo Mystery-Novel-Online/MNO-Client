@@ -1,9 +1,6 @@
 #include "rp_button.h"
 
-#include "aoapplication.h"
-#include "commondefs.h"
 #include "debug_functions.h"
-#include "dro/fs/fs_reading.h"
 #include "dro/system/theme.h"
 #include "drtheme.h"
 #include "theme.h"

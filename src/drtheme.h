@@ -2,7 +2,7 @@
 #define DRTHEME_H
 
 #include "qjsonobject.h"
-#include <AOApplication.h>
+
 #include <qjsondocument.h>
 #include <qstring.h>
 

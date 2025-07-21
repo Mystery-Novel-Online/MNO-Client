@@ -1,8 +1,5 @@
 #include "debug_functions.h"
-
-#include <QCheckBox>
-#include <QDebug>
-#include <QMessageBox>
+#include "pch.h"
 
 #include "aoconfig.h"
 

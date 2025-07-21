@@ -1,27 +1,23 @@
+#include "pch.h"
 #include "legacy_viewport.h"
 #include "drcharactermovie.h"
-#include "dro/interface/widgets/rp_typewriter.h"
-#include "commondefs.h"
 #include "dro/network/metadata/message_metadata.h"
 #include "drscenemovie.h"
 #include "theme.h"
-#include "aoapplication.h"
+
 #include "dro/fs/fs_reading.h"
 
 #include "dro/param/background/legacy_background_reader.h"
 #include "dro/param/background/background_reader.h"
 #include "dro/param/actor/actor_loader.h"
-#include "dro/system/audio.h"
 
-#include <modules/theme/thememanager.h>
+#include "modules/theme/thememanager.h"
 
 #include "dro/param/actor_repository.h"
 #include "dro/system/runtime_loop.h"
+#include "dro/system/audio.h"
 #include "dro/system/theme.h"
 
-#include <QGraphicsOpacityEffect>
-#include <QGraphicsProxyWidget>
-#include <QPropertyAnimation>
 
 using namespace dro::network::metadata;
 

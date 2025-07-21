@@ -1,11 +1,5 @@
 #include "server_metadata.h"
-#include <QStringList>
-#include <QString>
-#include <QFile>
-#include <QTextStream>
 #include "dro/fs/fs_reading.h"
-#include "commondefs.h"
-#include <QDebug>
 
 using namespace dro::network::metadata;
 

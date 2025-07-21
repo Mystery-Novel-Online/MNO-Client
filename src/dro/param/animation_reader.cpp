@@ -3,7 +3,7 @@
 #include "dro/animation/keyframe_channel.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/system/runtime_values.h"
-#include "aoapplication.h"
+
 
 AnimationReader::AnimationReader(const QString &animPath, KeyframeSequence &sequence)
 {

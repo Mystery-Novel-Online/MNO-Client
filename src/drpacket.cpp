@@ -1,6 +1,5 @@
 #include "drpacket.h"
-
-#include <QDebug>
+#include "pch.h"
 
 QString DRPacket::encode(QString p_data)
 {

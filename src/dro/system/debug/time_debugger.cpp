@@ -1,5 +1,4 @@
 #include "time_debugger.h"
-#include "qdebug.h"
 
 TimeDebugger TimeDebugger::s_Instance;
 

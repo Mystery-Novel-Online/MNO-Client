@@ -1,8 +1,3 @@
-#include "dro/interface/widgets/image_display.h"
-
-#include <QDebug>
-
-#include "aoapplication.h"
 #include "aopixmap.h"
 #include "dro/fs/fs_reading.h"
 #include "modules/theme/thememanager.h"

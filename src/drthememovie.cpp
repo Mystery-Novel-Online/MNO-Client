@@ -1,7 +1,5 @@
 #include "drthememovie.h"
 
-#include "aoapplication.h"
-
 DRThemeMovie::DRThemeMovie(AOApplication *app, QGraphicsItem *parent)
     : DRMovie(parent)
     , ao_app(app)

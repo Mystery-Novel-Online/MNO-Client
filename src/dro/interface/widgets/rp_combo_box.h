@@ -1,7 +1,7 @@
 #ifndef DROCOMBOBOX_H
 #define DROCOMBOBOX_H
 
-#include <AOApplication.h>
+
 #include <QComboBox>
 #include <QObject>
 #include <QWidget>

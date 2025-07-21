@@ -1,8 +1,6 @@
 #ifndef TABTOGGLEBUTTON_H
 #define TABTOGGLEBUTTON_H
 
-#include "dro/interface/widgets/rp_button.h"
-
 class TabToggleButton : public RPButton
 {
   Q_OBJECT

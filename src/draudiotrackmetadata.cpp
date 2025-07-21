@@ -1,15 +1,6 @@
 #include "draudiotrackmetadata.h"
+#include "pch.h"
 
-#include <QDebug>
-#include <QDir>
-#include <QFileInfo>
-#include <QMap>
-#include <QRegularExpression>
-#include <QSettings>
-#include <QStringList>
-#include <QUrl>
-
-#include "aoapplication.h"
 #include "utils.h"
 
 static QMap<QString, DRAudiotrackMetadata> s_audiotrack_cache;

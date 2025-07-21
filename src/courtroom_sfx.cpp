@@ -1,26 +1,8 @@
-#include "courtroom.h"
-
-#include "aoapplication.h"
-#include "commondefs.h"
 #include "dro/fs/fs_reading.h"
 #include "drtheme.h"
-
-#include <QCheckBox>
-#include <QColor>
 #include "dro/system/localization.h"
-
-#include <QLineEdit>
-#include <QListWidget>
-#include <QMenu>
-#include <QRegularExpression>
-#include <QRegularExpressionMatch>
-
 #include "dro/fs/fs_reading.h"
 #include "dro/system/audio.h"
-
-#include "dro/encoding/binary_encoding.h"
-
-#include <optional>
 
 std::optional<DRSfx> Courtroom::current_sfx()
 {

@@ -1,10 +1,8 @@
 #include "emote_menu.h"
+#include "dro/param/actor/actor_loader.h"
 
 static bool s_sizeDoubled = false;
 static bool s_renderSprites = false;
-
-#include "aoapplication.h"
-#include "courtroom.h"
 
 #include "dro/interface/courtroom_layout.h"
 #include "dro/param/actor_repository.h"

@@ -1,8 +1,5 @@
 #include "area_menu.h"
 #include "modules/theme/thememanager.h"
-#include "courtroom.h"
-
-#include <QListWidget>
 
 AreaMenu::AreaMenu(QWidget *parent) : QMenu(parent)
 {

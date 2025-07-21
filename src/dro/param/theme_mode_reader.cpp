@@ -1,8 +1,6 @@
 #include "theme_mode_reader.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/system/localization.h"
-#include <aoapplication.h>
-#include <QDir>
 
 ThemeModeReader::ThemeModeReader(QString filePath)
 {

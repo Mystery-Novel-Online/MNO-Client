@@ -1,23 +1,9 @@
-#include "courtroom.h"
+#include "pch.h"
 
-#include "aoapplication.h"
 #include "aoconfig.h"
-#include "commondefs.h"
 #include "drpacket.h"
 #include "theme.h"
 
-#include <QAbstractItemView>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QCompleter>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QFutureWatcher>
-#include <QListView>
-#include <QPixmap>
-#include <QUrl>
-#include <QtConcurrent/QtConcurrent>
 #include "dro/fs/fs_reading.h"
 #include "dro/fs/fs_mounting.h"
 

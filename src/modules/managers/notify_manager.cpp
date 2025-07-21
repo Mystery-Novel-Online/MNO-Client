@@ -1,9 +1,9 @@
 #include "notify_manager.h"
+#include "pch.h"
+
 #include "dro/system/theme_scripting.h"
 
 NotifyManager NotifyManager::s_Instance;
-
-
 
 void NotifyManager::ThemeSetupPopup(ChoiceDialog *notify)
 {

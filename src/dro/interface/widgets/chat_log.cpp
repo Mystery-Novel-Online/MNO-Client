@@ -2,12 +2,6 @@
 
 #include "aoconfig.h"
 
-#include <QRegularExpression>
-#include <QRegularExpressionMatch>
-#include <QRegularExpressionMatchIterator>
-#include <QScrollBar>
-#include <QUrl>
-
 DRChatLog::DRChatLog(QWidget *parent)
     : QTextBrowser(parent)
     , dr_config(new AOConfig(this))

@@ -1,15 +1,6 @@
-#include "aoapplication.h"
+#include "pch.h"
 
 #include "aoconfig.h"
-#include "commondefs.h"
-#include "courtroom.h"
-
-
-#include <QDebug>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QRegExp>
 
 #include <modules/theme/thememanager.h>
 #include "dro/fs/fs_reading.h"

@@ -5,7 +5,7 @@
 #include "dro/param/theme_module_reader.h"
 
 #include <aopixmap.h>
-#include <datatypes.h>
+
 
 
 class ThemeModeReader : public JSONReader

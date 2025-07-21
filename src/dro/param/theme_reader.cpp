@@ -1,6 +1,5 @@
 #include "theme_reader.h"
-#include "aoapplication.h"
-#include <QDir>
+
 #include <modules/theme/thememanager.h>
 #include "dro/fs/fs_reading.h"
 

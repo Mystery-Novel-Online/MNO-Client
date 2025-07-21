@@ -1,10 +1,8 @@
 #include "theme.h"
-#include "aoapplication.h"
-#include "drtheme.h"
-#include "commondefs.h"
-#include "modules/theme/thememanager.h"
 
-#include <QWidget>
+#include "drtheme.h"
+#include "modules/theme/thememanager.h"
+#include "pch.h"
 
 const pos_size_type FALLBACK_DIMENSIONS = {0, 0, -1, -1};
 

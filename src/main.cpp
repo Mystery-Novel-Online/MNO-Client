@@ -1,11 +1,10 @@
-#include "aoapplication.h"
+#include "pch.h"
+
 #include "aoconfig.h"
 #include "drmediatester.h"
 #include "lobby.h"
-#include "logger.h"
 #include "version.h"
 
-#include <QDebug>
 
 int main(int argc, char *argv[])
 {

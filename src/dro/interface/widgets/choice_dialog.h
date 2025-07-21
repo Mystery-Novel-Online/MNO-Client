@@ -1,12 +1,6 @@
 #ifndef CHOICE_DIALOG_H
 #define CHOICE_DIALOG_H
 
-#include <QWidget>
-#include "dro/interface/widgets/sticker_viewer.h"
-#include "dro/interface/widgets/rp_text_edit.h"
-#include "dro/interface/widgets/rp_widget.h"
-#include "dro/interface/widgets/rp_button.h"
-
 enum ChoiceEvent
 {
   ChoiceEvent_Invalid = 0,

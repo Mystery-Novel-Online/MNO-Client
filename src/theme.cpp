@@ -1,18 +1,6 @@
 #include "theme.h"
 #include "pch.h"
 
-// std
-#include <string>
-
-// qt
-#include <QDebug>
-#include <QFontDatabase>
-#include <QScreen>
-
-// src
-#include "commondefs.h"
-#include "dro/interface/widgets/sticker_viewer.h"
-#include "dro/interface/widgets/rp_text_edit.h"
 #include "drtheme.h"
 
 #include <modules/theme/thememanager.h>

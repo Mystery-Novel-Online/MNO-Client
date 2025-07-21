@@ -18,13 +18,7 @@
 **
 **************************************************************************/
 #include "drgraphicscene.h"
-
-#include <QGraphicsItem>
-#include <QObject>
-#include <QResizeEvent>
-#include <QSurfaceFormat>
-
-#include <QDebug>
+#include "pch.h"
 
 DRGraphicsView::DRGraphicsView(QWidget *parent)
     : QGraphicsView(parent)

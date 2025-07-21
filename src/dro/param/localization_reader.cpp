@@ -1,8 +1,5 @@
 #include "localization_reader.h"
 #include "dro/fs/fs_reading.h"
-#include "aoapplication.h"
-
-
 
 LocalizationReader::LocalizationReader(QString t_languageCode)
 {

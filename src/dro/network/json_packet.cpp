@@ -1,12 +1,9 @@
 #include "json_packet.h"
-#include "qjsonobject.h"
-#include "aoapplication.h"
-#include "courtroom.h"
+
 #include "dro/param/json_reader.h"
 #include "dro/network/metadata/message_metadata.h"
 #include "dro/interface/courtroom_layout.h"
 #include "modules/managers/notify_manager.h"
-#include <qjsondocument.h>
 
 using namespace dro::network;
 

@@ -1,8 +1,6 @@
 #ifndef THEME_H
 #define THEME_H
 
-#include "datatypes.h"
-
 namespace dro::system::theme
 {
   void reloadMetadata();

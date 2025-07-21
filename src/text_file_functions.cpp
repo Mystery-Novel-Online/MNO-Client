@@ -1,16 +1,8 @@
-#include "aoapplication.h"
-
-#include <QColor>
-#include <QDebug>
-#include <QFile>
-#include <QSettings>
-#include <QTextStream>
+#include "pch.h"
 
 #include "aoconfig.h"
 #include "drtheme.h"
-#include "commondefs.h"
 #include "dro/fs/fs_reading.h"
-#include "modules/theme/thememanager.h"
 #include "utils.h"
 
 QStringList AOApplication::get_callwords()

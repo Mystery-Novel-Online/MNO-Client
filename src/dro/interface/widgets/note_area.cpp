@@ -1,18 +1,8 @@
 #include "note_area.h"
+#include "pch.h"
 
-#include "aoapplication.h"
-#include "dro/interface/widgets/rp_button.h"
 #include "note_picker.h"
-#include "commondefs.h"
-#include "courtroom.h"
 #include "theme.h"
-
-#include <QDebug>
-#include <QFile>
-#include <QHBoxLayout>
-#include <QLineEdit>
-#include <QTextStream>
-#include <QVBoxLayout>
 #include "dro/fs/fs_reading.h"
 
 AONoteArea::AONoteArea(QWidget *p_parent, AOApplication *p_ao_app)

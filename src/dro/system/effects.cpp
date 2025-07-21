@@ -1,10 +1,8 @@
 #include "effects.h"
+#include "pch.h"
 
-#include <QString>
 #include "dro/param/json_reader.h"
 #include "dro/fs/fs_reading.h"
-#include <QVector>
-#include "datatypes.h"
 
 static QVector<MessageEffect> s_viewportEffects = {};
 MessageEffect s_fallbackEffect = MessageEffect("<NONE>");

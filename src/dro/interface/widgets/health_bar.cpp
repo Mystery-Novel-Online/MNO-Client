@@ -1,5 +1,5 @@
 #include "health_bar.h"
-#include "aoapplication.h"
+
 
 HealthBar::HealthBar(QString name, AOApplication *app, QWidget *parent) : AOImageDisplay{parent, app}, m_App(app) , m_Name(name)
 {

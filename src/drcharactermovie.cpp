@@ -1,9 +1,6 @@
 #include "drcharactermovie.h"
-
-#include "aoapplication.h"
+#include "pch.h"
 #include "dro/fs/fs_reading.h"
-
-#include <QDebug>
 
 DRCharacterMovie::DRCharacterMovie(AOApplication *ao_app, QGraphicsItem *parent)
     : DRMovie(parent)

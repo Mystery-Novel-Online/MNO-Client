@@ -1,6 +1,5 @@
-#include "datatypes.h"
 
-#include <QMap>
+#include "pch.h"
 
 QMap<DR::Color, DR::ColorInfo> DR::get_default_color_map()
 {

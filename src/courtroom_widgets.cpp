@@ -1,8 +1,5 @@
-#include "courtroom.h"
 #include "pch.h"
-#include "pch_widgets.h"
 
-#include "aoapplication.h"
 #include "aoconfig.h"
 
 #include "drcharactermovie.h"

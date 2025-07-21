@@ -5,6 +5,21 @@
 #include <bass/bassopus.h>
 #include <bass/bass_fx.h>
 
+#include <QGraphicsScene>
+#include <QOpenGLContext>
+#include <QVector3D>
+#include <QGroupBox>
+#include <QCompleter>
+#include <QRadioButton>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QAbstractSocket>
+#include <QTcpSocket>
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QObject>
 #include <QApplication>
 #include <QString>
 #include <QMainWindow>
@@ -24,6 +39,7 @@
 #include <QPropertyAnimation>
 #include <QScrollArea>
 #include <QScrollBar>
+#include <QTime>
 #include <QTimer>
 #include <QToolTip>
 #include <QVBoxLayout>
@@ -48,7 +64,6 @@
 #include <QFuture>
 #include <QScreen>
 #include <QtConcurrent/QtConcurrent>
-#include <functional>
 #include <QUrl>
 #include <QDesktopServices>
 #include <QClipboard>
@@ -60,10 +75,59 @@
 #include <QSizePolicy>
 #include <QFileDialog>
 #include <QMetaType>
-#include <optional>
+#include <QImage>
+#include <QLabel>
+#include <QPainter>
+#include <QHelpEvent>
+#include <QPaintEvent>
+#include <QWheelEvent>
+#include <QGraphicsOpacityEffect>
+#include <QGraphicsProxyWidget>
+#include <QTextBlock>
 
-#include "aoapplication.h"
-#include "datatypes.h"
+#include <functional>
+#include <optional>
+#include <utility>
+
 #include "commondefs.h"
+#include "datatypes.h"
+#include "aoapplication.h"
+
+#include "dro/interface/widgets/sticker_viewer.h"
+#include "dro/interface/widgets/rp_widget.h"
+#include "dro/interface/widgets/rp_label.h"
+#include "dro/interface/widgets/chat_log.h"
+#include "dro/interface/widgets/image_display.h"
+#include "dro/interface/widgets/note_area.h"
+#include "dro/interface/widgets/note_picker.h"
+#include "dro/interface/widgets/rp_button.h"
+#include "dro/interface/widgets/player_list_slot.h"
+#include "dro/interface/widgets/rp_combo_box.h"
+#include "dro/interface/widgets/rp_line_edit.h"
+#include "dro/interface/widgets/rp_hover_widget.h"
+#include "dro/interface/widgets/bgm_filter.h"
+#include "dro/interface/widgets/rp_list_widget.h"
+#include "dro/interface/widgets/rp_message_input.h"
+#include "dro/interface/widgets/screenshot_button.h"
+#include "dro/interface/widgets/health_bar.h"
+#include "dro/interface/widgets/rp_slider.h"
+
+//Text Edit Widgets
+#include "dro/interface/widgets/rp_text_edit.h"
+#include "dro/interface/widgets/rp_typewriter.h"
+#include "dro/interface/widgets/aotimer.h"
+
+#include "dro/interface/widgets/emotion_selector.h"
+#include "dro/interface/widgets/choice_dialog.h"
+#include "dro/interface/widgets/viewport_overlay.h"
+#include "dro/interface/widgets/char_button.h"
+#include "dro/interface/widgets/character_select.h"
+#include "dro/interface/widgets/emotion_button.h"
+#include "dro/interface/widgets/tab_toggle_button.h"
+#include "dro/interface/widgets/viewports/legacy_viewport.h"
+
+#include "courtroom.h"
+#include "drgraphicscene.h"
+#include "drcharactermovie.h"
 
 #endif // PCH_H

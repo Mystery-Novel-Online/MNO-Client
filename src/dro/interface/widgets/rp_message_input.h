@@ -12,7 +12,7 @@ class QTextCharFormat;
 class QTextImageFormat;
 class QKeyEvent;
 
-#include "datatypes.h"
+
 
 class RPMessageInput : public QTextEdit
 {

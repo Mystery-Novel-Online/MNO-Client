@@ -19,10 +19,7 @@
 **************************************************************************/
 
 #include "mk2/spriteviewer.h"
-#include "mk2/spritedynamicreader.h"
-
-#include <QFile>
-#include <QResizeEvent>
+#include "pch.h"
 
 using namespace mk2;
 

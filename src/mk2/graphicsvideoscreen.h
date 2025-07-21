@@ -19,7 +19,7 @@
 **************************************************************************/
 #pragma once
 
-#include "aoapplication.h"
+
 #include "aoconfig.h"
 #include "draudioengine.h"
 #include "draudiostreamfamily.h"

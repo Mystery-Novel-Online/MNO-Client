@@ -1,7 +1,7 @@
 #ifndef RP_BUTTON_H
 #define RP_BUTTON_H
 
-#include "datatypes.h"
+
 class AOApplication;
 
 #include <QPushButton>

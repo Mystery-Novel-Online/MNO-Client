@@ -1,14 +1,10 @@
 #include "emotion_selector.h"
-#include "courtroom.h"
+#include "dro/param/actor/actor_loader.h"
+#include "dro/param/actor_repository.h"
+
 #include "modules/theme/thememanager.h"
 
-#include "dro/interface/widgets/emotion_button.h"
-#include "dro/param/actor_repository.h"
-#include <QCheckBox>
-#include <QListWidget>
-#include <QWheelEvent>
 #include "drtheme.h"
-#include "qmath.h"
 #include "dro/interface/courtroom_layout.h"
 
 using namespace dro::actor::user;

@@ -1,29 +1,21 @@
-#include "aoapplication.h"
+#include "pch.h"
 
 #include "aoconfig.h"
 #include "aoconfigpanel.h"
-#include "courtroom.h"
 #include "debug_functions.h"
 #include "drdiscord.h"
-#include "dro/fs/fs_writing.h"
-#include "dro/system/audio.h"
-#include "drpacket.h"
 #include "drserversocket.h"
-#include "dro/fs/fs_reading.h"
 #include "lobby.h"
 #include "theme.h"
 #include "drtheme.h"
 #include "version.h"
 
-#include <QDir>
-#include <QFileInfo>
-#include <QFontDatabase>
-#include <QRegularExpression>
-
 #include "dro/system/localization.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_writing.h"
 #include "dro/system/runtime_loop.h"
 #include "dro/system/effects.h"
+#include "dro/system/audio.h"
 #include "dro/network/metadata/server_metadata.h"
 
 AOApplication *AOApplication::m_Instance = nullptr;

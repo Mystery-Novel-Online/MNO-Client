@@ -1,10 +1,5 @@
 #include "courtroom_layout.h"
-#include "pch.h"
-#include "pch_widgets.h"
 
-#include "commondefs.h"
-#include <aoapplication.h>
-#include <courtroom.h>
 #include "modules/theme/thememanager.h"
 #include "dro/system/theme_scripting.h"
 

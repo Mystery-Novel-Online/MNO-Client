@@ -1,7 +1,6 @@
 #include "aotimer.h"
+#include "pch.h"
 
-#include <QDebug>
-#include <QTimer>
 
 AOTimer::AOTimer(QString name, QWidget *p_parent)
     : RPTextEdit(name, p_parent)

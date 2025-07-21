@@ -1,11 +1,8 @@
 #ifndef LOBBY_H
 #define LOBBY_H
 
-#include "datatypes.h"
 #include "dro/interface/scenes/replay_window.h"
 #include "dro/interface/widgets/scene_widget.h"
-
-#include <optional>
 
 class AOApplication;
 class RPButton;

@@ -11,7 +11,7 @@
 class QNetworkAccessManager;
 
 // src
-#include "datatypes.h"
+
 
 class DRMasterClient : public QObject
 {

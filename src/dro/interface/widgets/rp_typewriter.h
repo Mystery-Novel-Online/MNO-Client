@@ -1,9 +1,6 @@
 #ifndef RP_TYPEWRITER_H
 #define RP_TYPEWRITER_H
 
-#include <QObject>
-#include "dro/interface/widgets/rp_text_edit.h"
-
 enum TypeWriterAction
 {
   TypeWriterAction_Text,

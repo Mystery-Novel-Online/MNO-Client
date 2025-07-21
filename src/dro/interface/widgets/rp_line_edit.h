@@ -1,7 +1,7 @@
 #ifndef DROLINEEDIT_H
 #define DROLINEEDIT_H
 
-#include <AOApplication.h>
+
 #include <QLineEdit>
 #include <QWidget>
 #include "theme.h"

@@ -1,8 +1,8 @@
 #include "draudioengine.h"
 
 #include "draudioengine_p.h"
+#include "pch.h"
 
-#include <QTimer>
 
 static const int UPDATE_TIMER_INTERVAL = 100;
 

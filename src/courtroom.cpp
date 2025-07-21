@@ -1,14 +1,10 @@
-#include "courtroom.h"
 #include "pch.h"
-#include "pch_widgets.h"
 
 #include "modules/theme/thememanager.h"
-#include "aoapplication.h"
 #include "dro/system/debug/time_debugger.h"
 #include "aoconfig.h"
 #include "dro/encoding/binary_encoding.h"
 
-#include "commondefs.h"
 #include "debug_functions.h"
 #include "dro/system/localization.h"
 #include "draudiotrackmetadata.h"
@@ -24,7 +20,6 @@
 #include "mk2/graphicsvideoscreen.h"
 #include "mk2/spritedynamicreader.h"
 #include "mk2/spriteseekingreader.h"
-#include "src/datatypes.h"
 #include "theme.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/network/metadata/server_metadata.h"
@@ -37,8 +32,8 @@
 #include "dro/system/runtime_loop.h"
 #include "dro/system/runtime_values.h"
 #include "dro/param/actor_repository.h"
+#include "dro/param/actor/actor_loader.h"
 #include <mk2/spritecachingreader.h>
-
 
 const int Courtroom::DEFAULT_WIDTH = 714;
 const int Courtroom::DEFAULT_HEIGHT = 668;
