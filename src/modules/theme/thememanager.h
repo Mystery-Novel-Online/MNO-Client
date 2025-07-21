@@ -2,11 +2,6 @@
 #define THEMEMANAGER_H
 
 #include <QHash>
-#include "dro/interface/widgets/image_display.h"
-#include "dro/interface/widgets/rp_combo_box.h"
-#include "dro/interface/widgets/rp_line_edit.h"
-#include "dro/interface/widgets/rp_button.h"
-#include "dro/interface/widgets/rp_widget.h"
 #include "dro/param/theme_reader.h"
 
 class ThemeManager

@@ -1,4 +1,5 @@
 #include "theme.h"
+#include "pch.h"
 
 // std
 #include <string>
@@ -9,9 +10,7 @@
 #include <QScreen>
 
 // src
-#include "aoapplication.h"
 #include "commondefs.h"
-#include "datatypes.h"
 #include "dro/interface/widgets/sticker_viewer.h"
 #include "dro/interface/widgets/rp_text_edit.h"
 #include "drtheme.h"

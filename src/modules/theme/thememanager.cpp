@@ -1,9 +1,11 @@
 #include "thememanager.h"
+#include "pch.h"
+#include "pch_widgets.h"
+
 #include "courtroom.h"
 #include "drtheme.h"
 #include "aoapplication.h"
-#include "dro/interface/widgets/tab_toggle_button.h"
-#include "dro/interface/widgets/rp_widget.h"
+
 #include "dro/system/theme_scripting.h"
 #include "dro/interface/courtroom_layout.h"
 

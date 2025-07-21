@@ -1,51 +1,23 @@
 #include "courtroom.h"
+#include "pch.h"
+#include "pch_widgets.h"
 
 #include "aoapplication.h"
-#include "dro/interface/widgets/rp_button.h"
 #include "aoconfig.h"
-#include "dro/interface/widgets/image_display.h"
-#include "dro/interface/widgets/rp_label.h"
-#include "dro/interface/widgets/note_area.h"
-#include "dro/interface/widgets/note_picker.h"
-#include "dro/interface/widgets/aotimer.h"
-#include "commondefs.h"
+
 #include "drcharactermovie.h"
-#include "dro/interface/widgets/chat_log.h"
 #include "drtheme.h"
 #include "dreffectmovie.h"
 #include "drscenemovie.h"
 #include "drshoutmovie.h"
 #include "drsplashmovie.h"
-#include "dro/interface/widgets/sticker_viewer.h"
-#include "dro/interface/widgets/rp_text_edit.h"
+
 #include "dro/fs/fs_reading.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "modules/managers/notify_manager.h"
 #include "theme.h"
 
-#include <QAction>
-#include <QCheckBox>
-#include <QComboBox>
-#include <QDebug>
-#include <QFile>
-#include <QGraphicsBlurEffect>
-#include <QHBoxLayout>
-#include <QInputDialog>
-#include <QListWidget>
-#include <QMenu>
-#include <QOpenGLContext>
-#include <QOpenGLWidget>
-#include <QPropertyAnimation>
-#include <QScrollArea>
-#include <QScrollBar>
-#include <QSignalMapper>
-#include <QTimer>
-#include <QVBoxLayout>
-
-#include <modules/theme/thememanager.h>
-
-#include "dro/interface/widgets/rp_combo_box.h"
-#include "dro/interface/widgets/rp_line_edit.h"
+#include "modules/theme/thememanager.h"
 #include "dro/system/debug/time_debugger.h"
 #include "dro/system/localization.h"
 

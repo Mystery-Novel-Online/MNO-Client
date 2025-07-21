@@ -1,30 +1,19 @@
 #include "courtroom.h"
+#include "pch.h"
+#include "pch_widgets.h"
 
-#include "aoapplication.h"
-#include "dro/interface/widgets/rp_button.h"
-#include "dro/interface/widgets/char_button.h"
-#include "aoconfig.h"
-#include "dro/interface/widgets/image_display.h"
-#include "commondefs.h"
-#include "debug_functions.h"
+#include "dro/network/metadata/server_metadata.h"
 #include "dro/system/localization.h"
-#include "drpacket.h"
 #include "dro/fs/fs_reading.h"
+
+#include "aoconfig.h"
+#include "debug_functions.h"
+#include "drpacket.h"
 #include "hardware_functions.h"
 
-#include "qcombobox.h"
 #include "theme.h"
 #include "drtheme.h"
 
-#include <QDebug>
-#include <QSignalMapper>
-#include <QtMath>
-#include <QLineEdit>
-
-#include "dro/interface/widgets/character_select.h"
-#include <dro/interface/widgets/rp_line_edit.h>
-#include "dro/interface/widgets/rp_widget.h"
-#include "dro/network/metadata/server_metadata.h"
 
 void Courtroom::construct_char_select()
 {

@@ -1,22 +1,18 @@
 #include "courtroom.h"
-#include "dro/interface/widgets/player_list_slot.h"
+#include "pch.h"
+#include "pch_widgets.h"
+
 #include "modules/theme/thememanager.h"
 #include "aoapplication.h"
 #include "dro/system/debug/time_debugger.h"
-#include "dro/interface/widgets/rp_button.h"
 #include "aoconfig.h"
-#include "dro/interface/widgets/image_display.h"
 #include "dro/encoding/binary_encoding.h"
 
-#include "dro/interface/widgets/note_area.h"
-#include "dro/interface/widgets/note_picker.h"
-#include "dro/interface/widgets/aotimer.h"
 #include "commondefs.h"
 #include "debug_functions.h"
 #include "dro/system/localization.h"
 #include "draudiotrackmetadata.h"
 #include "drcharactermovie.h"
-#include "dro/interface/widgets/chat_log.h"
 #include "drdiscord.h"
 #include "drtheme.h"
 #include "dreffectmovie.h"
@@ -24,7 +20,6 @@
 #include "drscenemovie.h"
 #include "drshoutmovie.h"
 #include "drsplashmovie.h"
-#include "dro/interface/widgets/sticker_viewer.h"
 #include "dro/fs/fs_reading.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "mk2/spritedynamicreader.h"
@@ -44,24 +39,6 @@
 #include "dro/param/actor_repository.h"
 #include <mk2/spritecachingreader.h>
 
-#include <QCheckBox>
-#include <QComboBox>
-#include <QCursor>
-#include <QDebug>
-#include <QDir>
-#include <QFileInfo>
-#include <QGraphicsBlurEffect>
-#include <QInputDialog>
-#include <QLineEdit>
-#include <QListWidget>
-#include <QMenu>
-#include <QMessageBox>
-#include <QPropertyAnimation>
-#include <QScrollArea>
-#include <QScrollBar>
-#include <QTimer>
-#include <QToolTip>
-#include <QVBoxLayout>
 
 const int Courtroom::DEFAULT_WIDTH = 714;
 const int Courtroom::DEFAULT_HEIGHT = 668;

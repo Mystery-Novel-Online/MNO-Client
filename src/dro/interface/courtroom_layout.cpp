@@ -1,17 +1,12 @@
 #include "courtroom_layout.h"
+#include "pch.h"
+#include "pch_widgets.h"
 
 #include "commondefs.h"
-#include "dro/interface/widgets/rp_hover_widget.h"
-#include "dro/interface/widgets/sticker_viewer.h"
 #include <aoapplication.h>
-#include "dro/interface/widgets/chat_log.h"
-#include <QListWidget>
-#include <QString>
 #include <courtroom.h>
 #include "modules/theme/thememanager.h"
 #include "dro/system/theme_scripting.h"
-#include "dro/interface/widgets/rp_combo_box.h"
-#include "dro/interface/widgets/rp_line_edit.h"
 
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
 static QHash<QString, QWidget *> s_TabWidgets = {};

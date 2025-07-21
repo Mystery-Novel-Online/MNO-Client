@@ -122,7 +122,7 @@ void CharacterRepository::addFiltered(const char_type &character)
 char_type CharacterRepository::filteredCharacter(int index)
 {
   if(index > filteredCharacters.count()) return {};
-  filteredCharacters.at(index);
+  return filteredCharacters.at(index);
 }
 
 QString CharacterRepository::characterNameFiltered(int index)

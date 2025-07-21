@@ -1,39 +1,21 @@
 #include "lobby.h"
+#include "pch.h"
+#include "pch_widgets.h"
 
 #include "aoapplication.h"
-#include "dro/interface/widgets/rp_button.h"
 #include "aoconfig.h"
-#include "dro/interface/widgets/image_display.h"
 #include "commondefs.h"
 #include "datatypes.h"
 #include "dro/system/localization.h"
 #include "dro/system/theme.h"
 #include "debug_functions.h"
-#include "dro/interface/widgets/chat_log.h"
 #include "drmasterclient.h"
 #include "drpacket.h"
 #include "drserverinfoeditor.h"
-#include "dro/interface/widgets/rp_text_edit.h"
 #include "drtheme.h"
 #include "modules/managers/scene_manager.h"
 #include "theme.h"
 #include "version.h"
-
-#include <QAction>
-#include <QCollator>
-#include <QDebug>
-#include <QFile>
-#include <QFontDatabase>
-#include <QIcon>
-#include <QInputDialog>
-#include <QLineEdit>
-#include <QListWidget>
-#include <QMenu>
-#include <QMessageBox>
-#include <QPixmap>
-#include <QProgressBar>
-#include <QScopedPointer>
-#include <QSettings>
 
 #include <utility>
 #include "dro/fs/fs_reading.h"

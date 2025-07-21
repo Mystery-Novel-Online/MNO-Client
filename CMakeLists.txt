@@ -300,7 +300,11 @@ add_executable(dro-client
   src/dro/interface/widgets/rp_list_widget.h src/dro/interface/widgets/rp_list_widget.cpp
   src/dro/interface/widgets/rp_message_input.h src/dro/interface/widgets/rp_message_input.cpp
   src/dro/encoding/binary_encoding.h src/dro/encoding/binary_encoding.cpp
+  src/pch.h
+  src/pch_widgets.h
 )
+target_precompile_headers(dro-client PRIVATE src/pch.h)
+target_precompile_headers(dro-client PRIVATE src/pch_widgets.h)
 
 target_include_directories(dro-client PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}

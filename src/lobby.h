@@ -3,10 +3,6 @@
 
 #include "datatypes.h"
 #include "dro/interface/scenes/replay_window.h"
-
-#include <QComboBox>
-#include <QMainWindow>
-#include <QModelIndex>
 #include "dro/interface/widgets/scene_widget.h"
 
 #include <optional>

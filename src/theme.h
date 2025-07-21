@@ -1,8 +1,6 @@
 #pragma once
 
 // src
-#include "datatypes.h"
-class AOApplication;
 class DRStickerViewer;
 class RPTextEdit;
 

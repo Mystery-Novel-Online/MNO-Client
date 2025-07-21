@@ -1,0 +1,32 @@
+#ifndef PCH_WIDGETS_H
+#define PCH_WIDGETS_H
+
+#include "dro/interface/widgets/sticker_viewer.h"
+#include "dro/interface/widgets/chat_log.h"
+#include "dro/interface/widgets/note_area.h"
+#include "dro/interface/widgets/note_picker.h"
+#include "dro/interface/widgets/aotimer.h"
+#include "dro/interface/widgets/image_display.h"
+#include "dro/interface/widgets/rp_button.h"
+#include "dro/interface/widgets/player_list_slot.h"
+#include "dro/interface/widgets/rp_combo_box.h"
+#include "dro/interface/widgets/rp_line_edit.h"
+#include "dro/interface/widgets/rp_hover_widget.h"
+#include "dro/interface/widgets/bgm_filter.h"
+#include "dro/interface/widgets/rp_list_widget.h"
+#include "dro/interface/widgets/rp_message_input.h"
+#include "dro/interface/widgets/screenshot_button.h"
+#include "dro/interface/widgets/health_bar.h"
+#include "dro/interface/widgets/rp_slider.h"
+#include "dro/interface/widgets/rp_text_edit.h"
+#include "dro/interface/widgets/emotion_selector.h"
+#include "dro/interface/widgets/choice_dialog.h"
+#include "dro/interface/widgets/viewport_overlay.h"
+#include "dro/interface/widgets/char_button.h"
+#include "dro/interface/widgets/character_select.h"
+#include "dro/interface/widgets/rp_widget.h"
+#include "dro/interface/widgets/rp_label.h"
+#include "dro/interface/widgets/emotion_button.h"
+#include "dro/interface/widgets/tab_toggle_button.h"
+
+#endif // PCH_WIDGETS_H

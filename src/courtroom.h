@@ -6,12 +6,6 @@
 #include "dro/interface/menus/area_menu.h"
 #include "dro/interface/menus/bgm_menu.h"
 #include "dro/interface/menus/char_menu.h"
-#include "dro/interface/widgets/bgm_filter.h"
-#include "dro/interface/widgets/rp_list_widget.h"
-#include "dro/interface/widgets/rp_message_input.h"
-#include "dro/interface/widgets/screenshot_button.h"
-#include "dro/interface/widgets/health_bar.h"
-#include "dro/interface/widgets/rp_slider.h"
 #include "dro/network/metadata/user_metadata.h"
 #include "dro/system/audio/music_player.h"
 #include "dro/system/theme.h"
@@ -48,14 +42,6 @@ class DRShoutMovie;
 class DRSplashMovie;
 class DRStickerViewer;
 class RPTextEdit;
-#include <QMainWindow>
-#include <QMap>
-#include <QModelIndex>
-#include <QQueue>
-#include <QSharedPointer>
-#include <QSlider>
-#include <QStack>
-#include <QTextCharFormat>
 
 class QAction;
 class QCheckBox;
@@ -70,12 +56,8 @@ class QSignalMapper;
 class QLabel;
 
 #include <optional>
-#include "dro/interface/widgets/player_list_slot.h"
 
 #include <mk2/drplayer.h>
-#include "dro/interface/widgets/emotion_selector.h"
-#include "dro/interface/widgets/choice_dialog.h"
-#include "dro/interface/widgets/viewport_overlay.h"
 #include "dro/interface/widgets/scene_widget.h"
 
 using namespace dro;

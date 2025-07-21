@@ -1,0 +1,50 @@
+#ifndef PCH_H
+#define PCH_H
+
+#include "aoapplication.h"
+#include "datatypes.h"
+#include "commondefs.h"
+
+#include <QMainWindow>
+#include <QCheckBox>
+#include <QComboBox>
+#include <QCursor>
+#include <QDebug>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QGraphicsBlurEffect>
+#include <QInputDialog>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QMenu>
+#include <QMessageBox>
+#include <QPropertyAnimation>
+#include <QScrollArea>
+#include <QScrollBar>
+#include <QTimer>
+#include <QToolTip>
+#include <QVBoxLayout>
+#include <QMap>
+#include <QModelIndex>
+#include <QQueue>
+#include <QSharedPointer>
+#include <QSlider>
+#include <QStack>
+#include <QTextCharFormat>
+#include <QAction>
+#include <QCollator>
+#include <QFontDatabase>
+#include <QIcon>
+#include <QPixmap>
+#include <QProgressBar>
+#include <QScopedPointer>
+#include <QSettings>
+#include <QSignalMapper>
+#include <QtMath>
+#include <QHBoxLayout>
+#include <QFuture>
+#include <QScreen>
+#include <QtConcurrent/QtConcurrent>
+
+#endif // PCH_H
