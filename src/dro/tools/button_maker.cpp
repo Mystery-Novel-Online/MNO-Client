@@ -1,19 +1,11 @@
 #include "button_maker.h"
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QSpacerItem>
-#include <QSizePolicy>
-#include <QFileInfo>
-#include <QDir>
-#include <QMessageBox>
-#include <QFileDialog>
-#include "aoapplication.h"
+#include "pch.h"
+#include "pch_widgets.h"
+
 #include "dro/fs/fs_reading.h"
 #include "dro/interface/courtroom_layout.h"
 #include "dro/param/actor_repository.h"
 #include "dro/system/text_encoding.h"
-#include <QSlider>
 
 ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 {

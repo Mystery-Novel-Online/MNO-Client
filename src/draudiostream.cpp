@@ -1,14 +1,5 @@
 #include "draudiostream.h"
-
-#include <QDebug>
-#include <QFileInfo>
-#include <QUrl>
-#include <QtMath>
-
-#include <bass/bass.h>
-
-#include <bass/bassopus.h>
-#include <bass/bass_fx.h>
+#include "pch.h"
 
 #include "draudioengine.h"
 

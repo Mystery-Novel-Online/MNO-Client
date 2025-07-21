@@ -1,17 +1,14 @@
 #include "player_list_slot.h"
-#include "aoapplication.h"
+#include "pch.h"
+#include "pch_widgets.h"
+
 #include "courtroom.h"
-#include "commondefs.h"
 #include "theme.h"
+
 #include "dro/fs/fs_reading.h"
 #include "dro/system/localization.h"
 #include "dro/network/metadata/user_metadata.h"
 #include "modules/theme/thememanager.h"
-
-#include <QMenu>
-#include <QUrl>
-#include <QDesktopServices>
-#include <QClipboard>
 
 using namespace dro::network::metadata;
 using namespace dro::system;

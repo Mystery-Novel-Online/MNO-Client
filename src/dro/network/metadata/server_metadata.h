@@ -5,7 +5,7 @@
 
 namespace dro::network::metadata
 {
-  class ServerInformation
+  class VNServerInformation
   {
   public:
     static void setFeatureList(QStringList features);

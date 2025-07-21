@@ -1,10 +1,12 @@
 #ifndef PCH_H
 #define PCH_H
 
-#include "aoapplication.h"
-#include "datatypes.h"
-#include "commondefs.h"
+#include <bass/bass.h>
+#include <bass/bassopus.h>
+#include <bass/bass_fx.h>
 
+#include <QApplication>
+#include <QString>
 #include <QMainWindow>
 #include <QCheckBox>
 #include <QComboBox>
@@ -46,5 +48,22 @@
 #include <QFuture>
 #include <QScreen>
 #include <QtConcurrent/QtConcurrent>
+#include <functional>
+#include <QUrl>
+#include <QDesktopServices>
+#include <QClipboard>
+#include <QVector>
+#include <QImageReader>
+#include <QProcess>
+#include <QPushButton>
+#include <QSpacerItem>
+#include <QSizePolicy>
+#include <QFileDialog>
+#include <QMetaType>
+#include <optional>
+
+#include "aoapplication.h"
+#include "datatypes.h"
+#include "commondefs.h"
 
 #endif // PCH_H

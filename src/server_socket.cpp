@@ -140,7 +140,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   }
   else if (l_header == "FL")
   {
-    network::metadata::ServerInformation::setFeatureList(l_content);
+    network::metadata::VNServerInformation::setFeatureList(l_content);
   }
   else if (l_header == "CT")
   {

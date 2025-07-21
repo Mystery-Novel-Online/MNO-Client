@@ -1,10 +1,11 @@
 #include "lobby_layout.h"
-#include "dro/interface/widgets/rp_button.h"
-#include "lobby.h"
-#include "aoapplication.h"
-#include "theme.h"
-#include "commondefs.h"
+#include "pch.h"
+#include "pch_widgets.h"
+
 #include "dro/system/theme.h"
+
+#include "lobby.h"
+#include "theme.h"
 
 static Lobby* s_ConstructedLobby = nullptr;
 static AOApplication* s_AOApplication = nullptr;

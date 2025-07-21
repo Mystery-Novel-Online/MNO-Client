@@ -83,7 +83,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   ui_slider_horizontal_axis->setValue(500);
   resetAFKTimer();
 
-  if (!network::metadata::ServerInformation::featureSupported("sequence")) return;
+  if (!network::metadata::VNServerInformation::featureSupported("sequence")) return;
   connect(&m_checkTimer, &QTimer::timeout, this, &Courtroom::checkAFKStatus);
   m_checkTimer.start(1000);
 }
@@ -349,7 +349,7 @@ void Courtroom::enter_courtroom(int p_cid)
     ao_config->set_showname_placeholder(l_final_showname);
 
     QStringList l_content{l_chr_name, l_final_showname};
-    if(network::metadata::ServerInformation::featureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
+    if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
 
     ao_app->send_server_packet(DRPacket("chrini", l_content));
   }
@@ -864,7 +864,7 @@ void Courtroom::on_pair_offset_changed()
 
 void Courtroom::OnPlayerOffsetsChanged(int value)
 {
-  if(!network::metadata::ServerInformation::featureSupported("outfits")) return;
+  if(!network::metadata::VNServerInformation::featureSupported("outfits")) return;
   if(message::recentMessage().modifiers.Hidden) return;
   bool intParse = false;
   int speakerClientId = m_chatmessage[CMClientId].toInt(&intParse);
@@ -1046,7 +1046,7 @@ void Courtroom::on_ic_message_return_pressed()
   // hide character
   packet_contents.append(QString::number(ui_hide_character->isChecked()));
 
-  if(network::metadata::ServerInformation::featureSupported("outfits"))
+  if(network::metadata::VNServerInformation::featureSupported("outfits"))
   {
     if(l_emote.ignore_offsets)
     {
@@ -1063,7 +1063,7 @@ void Courtroom::on_ic_message_return_pressed()
   }
 
 
-  if(network::metadata::ServerInformation::featureSupported("sequence"))
+  if(network::metadata::VNServerInformation::featureSupported("sequence"))
   {
     packet_contents.append(l_emote.outfitName);
     packet_contents.append(QString::fromStdString(courtroom::lists::getAnimation()));
@@ -1081,7 +1081,7 @@ void Courtroom::on_ic_message_return_pressed()
   }
 
 
-  if(network::metadata::ServerInformation::featureSupported("tags"))
+  if(network::metadata::VNServerInformation::featureSupported("tags"))
   {
     QStringList tags;
     for(MessageTag tag : ui_ic_chat_message_field->getTags())
@@ -1110,7 +1110,7 @@ void Courtroom::handle_ic_message_length()
   }
 
   if(l_length == 0) return;
-  if(!network::metadata::ServerInformation::featureSupported("sequence")) return;
+  if(!network::metadata::VNServerInformation::featureSupported("sequence")) return;
 
   const int currentUptime = RuntimeLoop::uptime();
   if(m_lastTypingPacket == 0 || (currentUptime - m_lastTypingPacket) > (1000 * 10))
@@ -2874,7 +2874,7 @@ void Courtroom::send_mc_packet(QString p_song, BGMPlayback playbackType)
     return;
 
   QStringList contents = {p_song, QString::number(user::GetCharacterId())};
-  if(network::metadata::ServerInformation::featureSupported("outfits"))
+  if(network::metadata::VNServerInformation::featureSupported("outfits"))
   {
     contents.append(QString::number(playbackType));
   }
@@ -3097,7 +3097,7 @@ void Courtroom::onOutfitChanged(int outfitIndex)
 
   ao_config->set_showname_placeholder(l_final_showname);
   QStringList l_content{l_chr_name, l_final_showname};
-  if(network::metadata::ServerInformation::featureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
+  if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
 
   ao_app->send_server_packet(DRPacket("chrini", l_content));
 }
@@ -3508,7 +3508,7 @@ bool Courtroom::event(QEvent *event)
 
 void Courtroom::resetAFKTimer()
 {
-  if (!network::metadata::ServerInformation::featureSupported("sequence")) return;
+  if (!network::metadata::VNServerInformation::featureSupported("sequence")) return;
   if (m_isAfk && (RuntimeLoop::uptime() - m_lastActivityTimestamp) < m_afkThresholdMs)
   {
     m_isAfk = false;
@@ -3519,7 +3519,7 @@ void Courtroom::resetAFKTimer()
 
 void Courtroom::checkAFKStatus()
 {
-  if (!network::metadata::ServerInformation::featureSupported("sequence")) return;
+  if (!network::metadata::VNServerInformation::featureSupported("sequence")) return;
   if (!m_isAfk && (RuntimeLoop::uptime() - m_lastActivityTimestamp) >= m_afkThresholdMs) {
     m_isAfk = true;
 

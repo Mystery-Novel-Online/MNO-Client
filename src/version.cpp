@@ -1,11 +1,5 @@
 #include "version.h"
-
-#include <QFile>
-#include <QImageReader>
-#include <QString>
-#include <qprocess.h>
-#include <bass/bass.h>
-#include "datatypes.h"
+#include "pch.h"
 
 int get_release_version()
 {

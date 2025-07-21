@@ -1,6 +1,8 @@
 #ifndef PCH_WIDGETS_H
 #define PCH_WIDGETS_H
 
+#include "dro/interface/widgets/rp_widget.h"
+#include "dro/interface/widgets/rp_label.h"
 #include "dro/interface/widgets/sticker_viewer.h"
 #include "dro/interface/widgets/chat_log.h"
 #include "dro/interface/widgets/note_area.h"
@@ -24,8 +26,6 @@
 #include "dro/interface/widgets/viewport_overlay.h"
 #include "dro/interface/widgets/char_button.h"
 #include "dro/interface/widgets/character_select.h"
-#include "dro/interface/widgets/rp_widget.h"
-#include "dro/interface/widgets/rp_label.h"
 #include "dro/interface/widgets/emotion_button.h"
 #include "dro/interface/widgets/tab_toggle_button.h"
 

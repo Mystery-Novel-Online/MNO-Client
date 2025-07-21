@@ -2,11 +2,7 @@
 #define PLAYER_LIST_SLOT_H
 class AOApplication;
 
-#include "dro/interface/widgets/image_display.h"
-#include "dro/interface/widgets/rp_label.h"
-
 #include <QWidget>
-#include "dro/interface/widgets/rp_widget.h"
 
 class DrPlayerListEntry : public RPWidget
 {

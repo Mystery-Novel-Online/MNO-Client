@@ -9,13 +9,13 @@
 
 using namespace dro::network::metadata;
 
-void ServerInformation::setFeatureList(QStringList features)
+void VNServerInformation::setFeatureList(QStringList features)
 {
   featureList.clear();
   featureList = features;
 }
 
-bool ServerInformation::featureSupported(const QString &name)
+bool VNServerInformation::featureSupported(const QString &name)
 {
   return featureList.contains(name);
 }

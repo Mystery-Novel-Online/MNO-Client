@@ -1,8 +1,5 @@
 #include "draudiodevice.h"
-
-#include <QMap>
-
-#include <bass/bass.h>
+#include "pch.h"
 
 QVector<DRAudioDevice> DRAudioDevice::get_device_list()
 {

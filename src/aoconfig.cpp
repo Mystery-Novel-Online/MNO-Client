@@ -1,26 +1,16 @@
 #include "aoconfig.h"
+#include "pch.h"
 
-#include "commondefs.h"
-#include "datatypes.h"
 #include "draudioengine.h"
-#include "dro/fs/fs_reading.h"
 #include "mk2/spritedynamicreader.h"
+
 #include "modules/managers/scene_manager.h"
-#include "dro/system/localization.h"
-
-// qt
-#include <QApplication>
-#include <QDebug>
-#include <QDir>
-#include <QFileInfo>
-#include <QMap>
-#include <QSettings>
-#include <QSharedPointer>
-#include <QVector>
-
 #include <modules/theme/thememanager.h>
+
+#include "dro/fs/fs_reading.h"
 #include "dro/network/metadata/user_metadata.h"
 #include "dro/system/replay_playback.h"
+#include "dro/system/localization.h"
 
 /*!
     We have to suffer through a lot of boilerplate code
