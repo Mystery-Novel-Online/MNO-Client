@@ -40,7 +40,7 @@ void RPMessageInput::reloadHighlights()
 
 void RPMessageInput::setMaxLength(int length)
 {
-  if(length > 0)
+  if(length < 0)
     length = 0;
   m_maxLength = length;
 }

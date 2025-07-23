@@ -245,13 +245,15 @@ void Lobby::update_widgets()
 void Lobby::set_fonts()
 {
   set_drtextedit_font(ui_player_count, "player_count", LOBBY_FONTS_INI, ao_app);
+
   set_font(ui_description, "description", LOBBY_FONTS_INI, ao_app);
   set_font(ui_chatbox, "chatbox", LOBBY_FONTS_INI, ao_app);
-  set_drtextedit_font(ui_loading_text, "loading_text", LOBBY_FONTS_INI, ao_app);
   set_font(ui_server_list, "server_list", LOBBY_FONTS_INI, ao_app);
   set_font(ui_replay_list, "replay_list", LOBBY_FONTS_INI, ao_app);
   set_font(ui_gallery_packages, "replay_packages", LOBBY_FONTS_INI, ao_app);
   set_font(ui_gallery_categories, "replay_category", LOBBY_FONTS_INI, ao_app);
+
+  set_drtextedit_font(ui_loading_text, "loading_text", LOBBY_FONTS_INI, ao_app);
 }
 
 void Lobby::set_stylesheet(QWidget *widget, QString target_tag)

@@ -10,6 +10,8 @@ SceneWidget::SceneWidget(ThemeSceneType scene, QWidget *parent) : QMainWindow(pa
 
 void SceneWidget::reload()
 {
+  const QString& sceneFontFile = m_currentScene == SceneType_Courtroom ? COURTROOM_FONTS_INI : LOBBY_FONTS_INI;
+
   for (auto [widget, identifier] : m_widgetThemeMap.toStdMap())
   {
     dro::system::theme::applyDimensions(widget, identifier, m_currentScene);
@@ -17,6 +19,7 @@ void SceneWidget::reload()
     RPLineEdit  *rpLineEdit   =  dynamic_cast<RPLineEdit*>(widget);
     RPButton    *rpButton     =  dynamic_cast<RPButton*>  (widget);
     RPComboBox  *rpComboBox   =  dynamic_cast<RPComboBox*>(widget);
+    RPListWidget *rpListWidget = dynamic_cast<RPListWidget*>(widget);
 
     if(rpLineEdit != nullptr)
     {
@@ -29,6 +32,11 @@ void SceneWidget::reload()
 
     if(rpComboBox != nullptr)
       rpComboBox->refreshCSS();
+
+    if(rpListWidget != nullptr)
+    {
+      set_font(rpListWidget, identifier, sceneFontFile);
+    }
 
   }
 }

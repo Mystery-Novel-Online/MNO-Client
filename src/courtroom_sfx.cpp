@@ -32,7 +32,7 @@ void Courtroom::load_sfx_list_theme()
   QColor unselected = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "unselected_anim", "unselected_anim_color");
   QColor selected  = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "selected_anim", "selected_anim_color");
   QColor header  = ao_app->current_theme->get_widget_settings_color("chara_animations", "courtroom", "category_header", "category_header_color");
-  animList->assignColors(unselected, selected, header);
+  ui_anim_list->assignColors(unselected, selected, header);
 
 
   update_all_sfx_item_color();
@@ -108,9 +108,9 @@ void Courtroom::set_sfx_item_color(QListWidgetItem *p_item)
 
 void Courtroom::onAnimListItemChanged(QListWidgetItem *current_item, QListWidgetItem *previous_item)
 {
-  for (int i = 0; i < animList->count(); ++i)
+  for (int i = 0; i < ui_anim_list->count(); ++i)
   {
-    animList->setItemColor(animList->item(i));
+    ui_anim_list->setItemColor(ui_anim_list->item(i));
   }
   ui_ic_chat_message_field->setFocus();
 }

@@ -50,6 +50,7 @@ void set_text_alignment(QWidget *p_widget, QString p_identifier, QString p_ini_f
 void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOApplication *ao_app)
 {
 
+  if(ao_app == nullptr) ao_app = AOApplication::getInstance();
   ThemeSceneType l_scene = SceneType_ServerSelect;
   if(ini_file == COURTROOM_FONTS_INI) l_scene = SceneType_Courtroom;
   else if(ini_file == VIEWPORT_FONTS_INI) l_scene = SceneType_Viewport;

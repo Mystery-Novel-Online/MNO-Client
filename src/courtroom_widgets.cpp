@@ -170,7 +170,7 @@ void Courtroom::create_widgets()
   ui_ooc_chatlog->setReadOnly(true);
   ui_ooc_chatlog->setOpenExternalLinks(true);
 
-  ui_area_list = new RPListWidget(this);
+  ui_area_list = createWidget<RPListWidget>("area_list");
   ui_area_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
   p_AreaContextMenu = new AreaMenu(this);
@@ -181,17 +181,17 @@ void Courtroom::create_widgets()
   ui_area_search->setFrame(false);
   ui_area_search->setPlaceholderText(localization::getText("TEXTBOX_AREA"));
 
-  ui_music_list = new RPListWidget(this);
+  ui_music_list = createWidget<RPListWidget>("music_list");
   ui_music_list->setContextMenuPolicy(Qt::CustomContextMenu);
   ui_music_search = new RPLineEdit("music_search", localization::getText("TEXTBOX_MUSIC"), "[MUSIC SEARCH]", this);
   ui_music_search->setFrame(false);
   p_MenuBGM = new BGMMenu(this);
 
-  animList = new RPListWidget(this);
-  animList->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(animList, &QCheckBox::customContextMenuRequested, this, &Courtroom::onAnimationTag);
+  ui_anim_list = createWidget<RPListWidget>("chara_animations");
+  ui_anim_list->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(ui_anim_list, &QCheckBox::customContextMenuRequested, this, &Courtroom::onAnimationTag);
 
-  ui_sfx_list = new RPListWidget(this);
+  ui_sfx_list = createWidget<RPListWidget>("sfx_list");
   ui_sfx_list->setContextMenuPolicy(Qt::CustomContextMenu);
 
   ui_sfx_search = new RPLineEdit("sfx_search", "[SFX SEARCH]", this);
@@ -491,7 +491,7 @@ void Courtroom::connect_widgets()
 
   connect(ui_sfx_list, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(on_sfx_list_current_item_changed(QListWidgetItem *, QListWidgetItem *)));
   connect(ui_sfx_list, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_sfx_list_context_menu_requested(QPoint)));
-  connect(animList, &QListWidget::currentItemChanged, this, &Courtroom::onAnimListItemChanged);
+  connect(ui_anim_list, &QListWidget::currentItemChanged, this, &Courtroom::onAnimListItemChanged);
 
   connect(ui_sfx_menu_preview, SIGNAL(triggered()), this, SLOT(on_sfx_menu_preview_triggered()));
   connect(ui_sfx_menu_insert_file_name, SIGNAL(triggered()), this, SLOT(on_sfx_menu_insert_file_name_triggered()));
@@ -692,7 +692,7 @@ void Courtroom::reset_widget_names()
       {"viewport_overlay", w_ViewportOverlay},
       {"outfit_selector", wOutfitDropdown},
       {"screenshot", p_ScreenshotBtn},
-      {"chara_animations", animList}
+      {"chara_animations", ui_anim_list}
   };
   for(RPButton* shoutButton : ui_shouts)
   {
@@ -963,6 +963,7 @@ void Courtroom::set_widgets()
   TimeDebugger::get().CheckpointTimer("Courtroom Setup", "Setup Viewport Widgets");
 
 
+  reload();
   QMap<QWidget*, QString> reloadList =
   {
     {ui_vp_chat_arrow, "chat_arrow"},
@@ -970,8 +971,6 @@ void Courtroom::set_widgets()
     {ui_ic_chatlog, "ic_chatlog"},
     {ui_area_desc, "area_desc"},
     {ui_ooc_chatlog, "server_chatlog"},
-    {ui_sfx_list, "sfx_list"},
-    {animList, "chara_animations"},
     {ui_ic_chat_message, "ao2_ic_chat_message"},
     {ui_vp_chatbox, "ao2_chatbox"},
     {ui_vp_music_area, "music_area"},
@@ -1696,9 +1695,7 @@ void Courtroom::set_fonts()
   ui_ooc_chatlog->reset_message_format();
 
   set_font(ui_music_list, "music_list", COURTROOM_FONTS_INI, ao_app);
-  set_font(animList, "chara_animations", COURTROOM_FONTS_INI, ao_app);
-  set_font(ui_area_list, "area_list", COURTROOM_FONTS_INI, ao_app);
-  set_font(ui_sfx_list, "sfx_list", COURTROOM_FONTS_INI, ao_app);
+
   set_drtextedit_font(ui_vp_music_name, "music_name", COURTROOM_FONTS_INI, ao_app);
   ui_vp_music_name->setPlainText(ui_vp_music_name->toPlainText());
   set_drtextedit_font(ui_vp_notepad, "notepad", COURTROOM_FONTS_INI, ao_app);

@@ -1816,7 +1816,7 @@ void Courtroom::handle_chatmessage_3()
 
   bool animLoop = ui_vp_player_char->setCharacterAnimation(m_chatmessage[CMAnimSequence], m_chatmessage[CMChrName]);
   if(!animLoop && isLocalClient)
-    animList->selectDefault();
+    ui_anim_list->selectDefault();
 
   ui_vp_player_pair->setCharacterAnimation(message::pair::getAnimation(), message::pair::getCharacter(), true);
 
@@ -1884,7 +1884,7 @@ void Courtroom::onFlipTagActivated()
 
 void Courtroom::onAnimationTag()
 {
-  ui_ic_chat_message_field->addTag(TagType_PlaySequence, {animList->currentItem()->text()});
+  ui_ic_chat_message_field->addTag(TagType_PlaySequence, {ui_anim_list->currentItem()->text()});
   ui_ic_chat_message_field->setFocus();
 }
 
