@@ -18,7 +18,6 @@
 **
 **************************************************************************/
 #include "graphicsspriteitem.h"
-#include "pch.h"
 
 #include <modules/managers/scene_manager.h>
 #include "dro/param/animation_reader.h"
@@ -27,6 +26,7 @@
 
 #include "dro/system/text_encoding.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 #include "dro/system/runtime_loop.h"
 
 using namespace mk2;
@@ -195,7 +195,7 @@ bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, 
     if(!FS::Checks::FileExists(filePath))
       filePath = FS::Paths::FindFile("animations/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
     if(!FS::Checks::FileExists(filePath))
-      filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.offsetName);
+      filePath = fs::characters::getSpritePathIdle(character, layer.offsetName);
 
     createOverlay(layer, filePath);
   }
@@ -283,15 +283,15 @@ void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers,
 
   for(const EmoteLayer &layer : emoteLayers)
   {
-    QString filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, path + layer.spriteName);
+    QString filePath = fs::characters::getSpritePathIdle(character, path + layer.spriteName);
     if(!outfitName.isEmpty())
     {
-      const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, "outfits/" + outfitName +  "/" + layer.spriteName);
+      const QString currentOutfitName = fs::characters::getSpritePathIdle(character, "outfits/" + outfitName +  "/" + layer.spriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
     else
     {
-      const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.spriteName);
+      const QString currentOutfitName = fs::characters::getSpritePathIdle(character, layer.spriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
     createOverlay(layer, filePath);
@@ -333,7 +333,7 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &characterName, con
 
   QStringList filePaths = buildPaths(layerName);
   QString filePath = FS::Paths::FindFile(filePaths, true, FS::Formats::SupportedImages());
-  if(filePath.isEmpty()) filePath = AOApplication::getInstance()->get_character_sprite_idle_path(characterName, layerName);
+  if(filePath.isEmpty()) filePath = fs::characters::getSpritePathIdle(characterName, layerName);
 
   stateSprites[ViewportCharacterIdle]->set_file_name(filePath);
 

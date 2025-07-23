@@ -1,6 +1,7 @@
 #include "actor_loader.h"
 #include <utils.h>
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 
 static QMap<QString, ActorData*> s_CachedCharacters;
 
@@ -8,7 +9,7 @@ ActorData *ActorLoader::GetCharacter(const QString& folder)
 {
   if(!s_CachedCharacters.contains(folder))
   {
-    QString charaConfigPath = AOApplication::getInstance()->get_character_path(folder, "char.json");
+    QString charaConfigPath = fs::characters::getFilePath(folder, "char.json");
     ActorData *characterData;
     if(FS::Checks::FileExists(charaConfigPath))
     {
@@ -35,12 +36,12 @@ QString ActorData::GetEmoteSprite(const DREmote& emote)
 QString ActorData::GetEmoteButton(const DREmote& emote, bool enabled)
 {
   const QString filename = enabled ? QString("emotions/button%1_on.png").arg(emote.key) : QString("emotions/button%1_off.png").arg(emote.key);
-  return AOApplication::getInstance()->get_character_path(emote.character, filename);
+  return fs::characters::getFilePath(emote.character, filename);
 }
 
 QString ActorData::GetSelectedImage(const DREmote& emote)
 {
-  return AOApplication::getInstance()->get_character_path(emote.character, "emotions/selected.png");
+  return fs::characters::getFilePath(emote.character, "emotions/selected.png");
 }
 
 QStringList ActorData::GetOutfitNames()
@@ -61,7 +62,7 @@ void ActorData::SwitchOutfit(const QString& t_outfit)
 void ActorDataReader::LoadActor(const QString& folder)
 {
   SetFolder(folder);
-  ReadFromFile(AOApplication::getInstance()->get_character_path(folder, "char.json"));
+  ReadFromFile(fs::characters::getFilePath(folder, "char.json"));
 
   SetShowname(getStringValue("showname"));
   SetGender(getStringValue("gender"));
@@ -104,14 +105,14 @@ QString ActorDataReader::GetEmoteButton(const DREmote& emote, bool enabled)
 {
   const QString path = QString("outfits/%1/emotions/%2%3.png")
   .arg(emote.outfitName, emote.comment, enabled ? "_on" : "");
-  return AOApplication::getInstance()->get_character_path(emote.character, path);
+  return fs::characters::getFilePath(emote.character, path);
 }
 
 QString ActorDataReader::GetSelectedImage(const DREmote& emote)
 {
   QString currentOutfit = GetOutfit();
   QString path  = QString("outfits/%1/emotions/selected.png").arg(currentOutfit);
-  return AOApplication::getInstance()->get_character_path(emote.character, path);
+  return fs::characters::getFilePath(emote.character, path);
 }
 
 QStringList ActorDataReader::GetOutfitNames()
@@ -137,7 +138,7 @@ void ActorDataReader::LoadOutfits()
 {
   m_OutfitNames.clear();
 
-  const QString outfitPath = AOApplication::getInstance()->get_character_folder_path(GetFolder()) + "/outfits";
+  const QString outfitPath = fs::characters::getDirectoryPath(GetFolder()) + "/outfits";
   QDir outfitDir(outfitPath);
 
   QStringList subdirs = outfitDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
@@ -266,7 +267,7 @@ QVector<DREmote> LegacyActorReader::GetEmotes()
 
   for (const QString &i_chr : l_chr_list)
   {
-    if (!FS::Checks::DirectoryExists(AOApplication::getInstance()->get_character_folder_path(i_chr)))
+    if (!FS::Checks::DirectoryExists(fs::characters::getDirectoryPath(i_chr)))
     {
       qWarning().noquote()
       << QString("Parent character <%1> not found, character <%2> cannot use it.").arg(i_chr, GetFolder());
@@ -276,7 +277,7 @@ QVector<DREmote> LegacyActorReader::GetEmotes()
     qDebug().noquote() << QString("Adding <%1>").arg(i_chr);
 #endif
 
-    QSettings l_chrini(AOApplication::getInstance()->get_character_path(i_chr, CHARACTER_CHAR_INI), QSettings::IniFormat);
+    QSettings l_chrini(fs::characters::getFilePath(i_chr, CHARACTER_CHAR_INI), QSettings::IniFormat);
     l_chrini.setIniCodec("UTF-8");
     utils::QSettingsKeyFetcher l_fetcher(l_chrini);
 
@@ -372,20 +373,23 @@ QVector<DREmote> LegacyActorReader::GetEmotes()
 
 QString LegacyActorReader::GetEmoteButton(const DREmote& t_emote, bool t_enabled)
 {
-  QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("emotions/button%1_off.png").arg(t_emote.key));
+  QString l_texture = fs::characters::getFilePath(t_emote.character, QString("emotions/button%1_off.png").arg(t_emote.key));
 
-  if(t_enabled) l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, QString("emotions/button%1_on.png").arg(t_emote.key));
+  if(t_enabled) l_texture = fs::characters::getFilePath(t_emote.character, QString("emotions/button%1_on.png").arg(t_emote.key));
   return l_texture;
 }
 
 QString LegacyActorReader::GetSelectedImage(const DREmote& t_emote)
 {
-  QString l_texture = AOApplication::getInstance()->get_character_path(t_emote.character, "emotions/selected.png");
+  QString l_texture = fs::characters::getFilePath(t_emote.character, "emotions/selected.png");
   return l_texture;
 }
 
 
-OutfitReader::OutfitReader(const QString& character, const QString& outfit) : m_CharacterName(character), m_OutfitName(outfit), m_OutfitPath(AOApplication::getInstance()->get_character_folder_path(character) + "/outfits/" + outfit)
+OutfitReader::OutfitReader(const QString& character, const QString& outfit) :
+      m_CharacterName(character),
+      m_OutfitName(outfit),
+      m_OutfitPath(fs::characters::getDirectoryPath(character) + "/outfits/" + outfit)
 {
   const QString outfitJsonPath = m_OutfitPath + "/outfit.json";
   if(!FS::Checks::FileExists(outfitJsonPath)) return;

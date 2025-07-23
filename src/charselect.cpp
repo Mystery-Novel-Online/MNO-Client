@@ -3,6 +3,7 @@
 #include "dro/network/metadata/server_metadata.h"
 #include "dro/system/localization.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 
 #include "aoconfig.h"
 #include "debug_functions.h"
@@ -215,8 +216,8 @@ void Courtroom::update_character_icon(QString p_character)
 void Courtroom::SwitchCharacterByName(const char *characterName)
 {
   int serverCharacterId = 0;
-  QString characterPathIni = ao_app->get_character_path(characterName, CHARACTER_CHAR_INI);
-  QString characterPathJson = ao_app->get_character_path(characterName, CHARACTER_CHAR_JSON);
+  QString characterPathIni = fs::characters::getFilePath(characterName, CHARACTER_CHAR_INI);
+  QString characterPathJson = fs::characters::getFilePath(characterName, CHARACTER_CHAR_JSON);
 
   if (user::GetCharacterName() == characterName)
   {
@@ -258,8 +259,8 @@ void Courtroom::char_clicked(int n_char)
 
   int n_real_char = n_char + m_current_chr_page * m_page_max_chr_count;
 
-  QString l_pathCharIni = ao_app->get_character_path(CharacterRepository::characterNameFiltered(n_real_char), CHARACTER_CHAR_INI);
-  QString l_pathCharJson = ao_app->get_character_path(CharacterRepository::characterNameFiltered(n_real_char), CHARACTER_CHAR_JSON);
+  QString l_pathCharIni = fs::characters::getFilePath(CharacterRepository::characterNameFiltered(n_real_char), CHARACTER_CHAR_INI);
+  QString l_pathCharJson = fs::characters::getFilePath(CharacterRepository::characterNameFiltered(n_real_char), CHARACTER_CHAR_JSON);
 
   qDebug() << "char_ini_path" << l_pathCharIni;
 

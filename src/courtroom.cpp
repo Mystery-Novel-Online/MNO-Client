@@ -22,6 +22,7 @@
 #include "mk2/spriteseekingreader.h"
 #include "theme.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 #include "dro/network/metadata/server_metadata.h"
 #include "dro/network/metadata/message_metadata.h"
 #include "dro/system/theme_scripting.h"
@@ -1264,11 +1265,11 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
   }
 
   // characters
-  l_file_list.insert(ViewportCharacterPre, ao_app->get_character_sprite_pre_path(l_character, l_emote_anim));
-  l_file_list.insert(ViewportCharacterIdle, ao_app->get_character_sprite_idle_path(l_character, l_emote));
-  l_file_list.insert(ViewportCharacterTalk, ao_app->get_character_sprite_talk_path(l_character, l_emote));
+  l_file_list.insert(ViewportCharacterPre, fs::characters::getSpritePathPre(l_character, l_emote_anim));
+  l_file_list.insert(ViewportCharacterIdle, fs::characters::getSpritePathIdle(l_character, l_emote));
+  l_file_list.insert(ViewportCharacterTalk, fs::characters::getSpritePathTalk(l_character, l_emote));
 
-  l_file_list.insert(ViewportPairCharacterIdle, ao_app->get_character_sprite_idle_path(message::pair::getCharacter(), message::pair::getEmote()));
+  l_file_list.insert(ViewportPairCharacterIdle, fs::characters::getSpritePathIdle(message::pair::getCharacter(), message::pair::getEmote()));
 
   // shouts
   l_file_list.insert(ViewportShout, ao_app->get_shout_sprite_path(l_character, get_shout_name(l_shout_id), l_outfit));
@@ -1675,7 +1676,7 @@ void Courtroom::handle_chatmessage_3()
         l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname", FS::Formats::StaticImages());
 
       if (l_showname_image.isEmpty())
-        l_showname_image = ao_app->find_asset_path({ao_app->get_character_path(f_char, "showname")}, FS::Formats::StaticImages());
+        l_showname_image = ao_app->find_asset_path({fs::characters::getFilePath(f_char, "showname")}, FS::Formats::StaticImages());
     }
 
     if (!l_showname_image.isEmpty())
@@ -2191,7 +2192,7 @@ void Courtroom::setup_chat()
   m_chatbox_message_highlight_colors = ao_app->get_highlight_colors();
 
   QString f_gender = "male";
-  QString l_jsonPath = AOApplication::getInstance()->get_character_path(m_chatmessage[CMChrName], "char.json");
+  QString l_jsonPath = fs::characters::getFilePath(m_chatmessage[CMChrName], "char.json");
   if(FS::Checks::FileExists(l_jsonPath))
   {
     ActorData *speakerActor = new ActorDataReader();
@@ -3250,8 +3251,8 @@ void Courtroom::OnCharRandomClicked()
     return;
   }
 
-  QString char_json_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_JSON);
-  QString char_ini_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_INI);
+  QString char_json_path = fs::characters::getFilePath(selectedChar.name, CHARACTER_CHAR_JSON);
+  QString char_ini_path = fs::characters::getFilePath(selectedChar.name, CHARACTER_CHAR_INI);
 
   if (!FS::Checks::FileExists(char_json_path))
   {
@@ -3298,8 +3299,8 @@ void Courtroom::SwitchRandomCharacter(QString list)
     return;
   }
 
-  QString char_json_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_JSON);
-  QString char_ini_path = ao_app->get_character_path(selectedChar.name, CHARACTER_CHAR_INI);
+  QString char_json_path = fs::characters::getFilePath(selectedChar.name, CHARACTER_CHAR_JSON);
+  QString char_ini_path = fs::characters::getFilePath(selectedChar.name, CHARACTER_CHAR_INI);
 
   if (!FS::Checks::FileExists(char_json_path))
   {

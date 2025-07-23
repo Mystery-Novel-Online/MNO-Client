@@ -5,6 +5,7 @@
 #include "theme.h"
 
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 #include "dro/fs/fs_mounting.h"
 
 void Courtroom::set_character_id(const int p_chr_id)
@@ -21,7 +22,7 @@ QString Courtroom::get_character_ini()
 
 QString Courtroom::get_character_content_url()
 {
-  QFile l_contentFile(ao_app->get_character_path(get_character_ini(), "CONTENT.txt"));
+  QFile l_contentFile(fs::characters::getFilePath(get_character_ini(), "CONTENT.txt"));
   if (!l_contentFile.open(QIODevice::ReadOnly))
     return nullptr;
 
@@ -42,7 +43,7 @@ void drSetItemIcon(QComboBox *p_widget, const int p_index, const QString &p_chr_
     return QIcon(l_blank_texture);
   }();
 
-  const QString l_icon_file = ao_app->get_character_path(p_chr_name, "char_icon.png");
+  const QString l_icon_file = fs::characters::getFilePath(p_chr_name, "char_icon.png");
   p_widget->setItemIcon(p_index, FS::Checks::FileExists(l_icon_file) ? QIcon(l_icon_file) : s_blank_icon);
 }
 } // namespace
@@ -90,7 +91,7 @@ void Courtroom::SearchForCharacterListAsync()
     for (const QFileInfo &i_info : l_info_list)
     {
       const QString l_name = i_info.fileName();
-      if (!FS::Checks::FileExists(ao_app->get_character_path(l_name, CHARACTER_CHAR_INI)) && !FS::Checks::FileExists(ao_app->get_character_path(l_name, CHARACTER_CHAR_JSON)))
+      if (!FS::Checks::FileExists(fs::characters::getFilePath(l_name, CHARACTER_CHAR_INI)) && !FS::Checks::FileExists(fs::characters::getFilePath(l_name, CHARACTER_CHAR_JSON)))
         continue;
       if(!currentIniswapList.contains(l_name))
       {
@@ -197,7 +198,7 @@ void Courtroom::refresh_character_content_url()
 
 void Courtroom::update_character_content_url(QString url)
 {
-  QString contentFilePath = ao_app->get_character_path(get_character_ini(), "CONTENT.txt");
+  QString contentFilePath = fs::characters::getFilePath(get_character_ini(), "CONTENT.txt");
 
   QFile contentFile(contentFilePath);
   if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))

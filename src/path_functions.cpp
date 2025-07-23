@@ -90,18 +90,6 @@ QVector<QString> AOApplication::get_all_package_and_base_paths(QString p_path)
   return found_paths;
 }
 
-
-
-QString AOApplication::get_character_folder_path(QString p_chr)
-{
-  return FS::Paths::FindDirectory("characters/" + p_chr);
-}
-
-QString AOApplication::get_character_path(QString p_chr, QString p_file)
-{
-  return get_character_folder_path(p_chr) + "/" + p_file;
-}
-
 QString AOApplication::get_music_path(QString p_song)
 {
   return get_case_sensitive_path(FS::Paths::FindFile("sounds/music/" + p_song));

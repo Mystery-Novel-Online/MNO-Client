@@ -19,6 +19,7 @@
 #include "dro/system/localization.h"
 
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 #include "dro/interface/courtroom_layout.h"
 
 using namespace dro::system;
@@ -1384,7 +1385,7 @@ void Courtroom::check_effects()
 
   for (int i = 0; i < ui_effects.size(); ++i)
   {
-    QString path = ao_app->find_asset_path({ao_app->get_character_path(get_character_ini(), effect_names.at(i))}, FS::Formats::AnimatedImages());
+    QString path = ao_app->find_asset_path({fs::characters::getFilePath(get_character_ini(), effect_names.at(i))}, FS::Formats::AnimatedImages());
     if (path.isEmpty())
       path = ao_app->find_theme_asset_path(effect_names.at(i), FS::Formats::AnimatedImages());
 
@@ -1408,7 +1409,7 @@ void Courtroom::check_shouts()
 
   for (int i = 0; i < ui_shouts.size(); ++i)
   {
-    QString path = ao_app->find_asset_path({ao_app->get_character_path(get_character_ini(), shout_names.at(i))}, FS::Formats::AnimatedImages());
+    QString path = ao_app->find_asset_path({fs::characters::getFilePath(get_character_ini(), shout_names.at(i))}, FS::Formats::AnimatedImages());
 
     if (path.isEmpty())
       path = ao_app->find_theme_asset_path(shout_names.at(i), FS::Formats::AnimatedImages());
@@ -1431,7 +1432,7 @@ void Courtroom::check_wtce()
 
   for (int i = 0; i < ui_wtce.size(); ++i)
   {
-    QString path = ao_app->find_asset_path({ao_app->get_character_path(get_character_ini(), wtce_names.at(i))}, FS::Formats::AnimatedImages());
+    QString path = ao_app->find_asset_path({fs::characters::getFilePath(get_character_ini(), wtce_names.at(i))}, FS::Formats::AnimatedImages());
     if (path.isEmpty())
       path = ao_app->find_theme_asset_path(wtce_names.at(i), FS::Formats::AnimatedImages());
     wtce_enabled[i] = (!path.isEmpty());

@@ -6,6 +6,7 @@
 #include "theme.h"
 
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 
 #include "dro/param/background/legacy_background_reader.h"
 #include "dro/param/background/background_reader.h"
@@ -114,7 +115,7 @@ void LegacyViewport::loadCurrentMessage()
     if(!message.pairData.characterFolder.trimmed().isEmpty())
     {
       m_pairSprite->set_play_once(false);
-      m_pairSprite->set_file_name(AOApplication::getInstance()->get_character_sprite_idle_path(message.pairData.characterFolder, message.pairData.characterEmote));
+      m_pairSprite->set_file_name(fs::characters::getSpritePathIdle(message.pairData.characterFolder, message.pairData.characterEmote));
 
       m_pairSprite->setHorizontalOffset(message::pair::horizontalOffset());
       m_pairSprite->setVerticalOffset(message::pair::verticalOffset());
@@ -227,7 +228,7 @@ void LegacyViewport::onObjectionDone()
   if(!message.characterPre.isEmpty())
   {
     m_characterSprite->set_play_once(true);
-    m_characterSprite->set_file_name(AOApplication::getInstance()->get_character_sprite_pre_path(message.characterFolder, message.characterPre));
+    m_characterSprite->set_file_name(fs::characters::getSpritePathPre(message.characterFolder, message.characterPre));
     mk2::SpritePlayer::ScalingMode targetScaling = m_currentActor->GetScalingMode();
     m_characterSprite->start(targetScaling, (double)message.offsetScale / 1000.0f);
   }
@@ -266,7 +267,7 @@ void LegacyViewport::onPreanimDone()
   {
     m_characterSprite->show();
     m_characterSprite->set_play_once(false);
-    m_characterSprite->set_file_name(AOApplication::getInstance()->get_character_sprite_idle_path(message.characterFolder, message.characterEmote));
+    m_characterSprite->set_file_name(fs::characters::getSpritePathIdle(message.characterFolder, message.characterEmote));
     mk2::SpritePlayer::ScalingMode targetScaling = m_currentActor->GetScalingMode();
     m_characterSprite->start(targetScaling, (double)message.offsetScale / 1000.0f);
   }

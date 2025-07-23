@@ -6,6 +6,7 @@
 #include "dro/system/localization.h"
 #include "dro/network/metadata/user_metadata.h"
 #include "modules/theme/thememanager.h"
+#include "dro/fs/fs_characters.h"
 
 using namespace dro::network::metadata;
 using namespace dro::system;
@@ -166,7 +167,7 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
 
   if(!m_CharacterOutfit.isEmpty())
   {
-    characterIconPath = ao_app->get_character_path(m_character, "outfits/" + m_CharacterOutfit + "/char_icon.png");
+    characterIconPath = fs::characters::getFilePath(m_character, "outfits/" + m_CharacterOutfit + "/char_icon.png");
     if(!FS::Checks::FileExists(characterIconPath))
     {
       characterIconPath = "";
@@ -175,7 +176,7 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
 
   if(characterIconPath.isEmpty())
   {
-    characterIconPath = ao_app->get_character_path(m_character, "char_icon.png");
+    characterIconPath = fs::characters::getFilePath(m_character, "char_icon.png");
   }
 
   if(FS::Checks::FileExists(characterIconPath))
@@ -187,7 +188,7 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
       }
       else
       {
-        const QString l_selected_texture = ao_app->get_character_path(p_character, "char_border.png");
+        const QString l_selected_texture = fs::characters::getFilePath(p_character, "char_border.png");
         if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
       }
 

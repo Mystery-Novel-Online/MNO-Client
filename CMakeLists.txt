@@ -301,6 +301,7 @@ add_executable(dro-client
   src/dro/interface/widgets/rp_message_input.h src/dro/interface/widgets/rp_message_input.cpp
   src/dro/encoding/binary_encoding.h src/dro/encoding/binary_encoding.cpp
   src/pch.h
+  src/dro/fs/fs_characters.h src/dro/fs/fs_characters.cpp
 
 )
 target_precompile_headers(dro-client PRIVATE src/pch.h)

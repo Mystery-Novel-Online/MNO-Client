@@ -3,6 +3,7 @@
 #include "aoconfig.h"
 #include "drtheme.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 #include "utils.h"
 
 QStringList AOApplication::get_callwords()
@@ -370,7 +371,7 @@ QStringList AOApplication::get_sfx_list()
 
   QStringList l_file_list;
   for (const QString &i_chr : get_char_include_tree(get_current_char()))
-    l_file_list.append(get_character_path(i_chr, CHARACTER_SOUNDS_INI));
+    l_file_list.append(fs::characters::getFilePath(i_chr, CHARACTER_SOUNDS_INI));
 
   l_file_list.append(FS::Paths::FindFiles(CONFIG_SOUNDS_INI));
 
@@ -402,7 +403,7 @@ QStringList AOApplication::get_sfx_list()
 // be found
 QVariant AOApplication::read_char_ini(QString p_chr, QString p_group, QString p_key, QVariant p_def)
 {
-  QSettings s(get_character_path(p_chr, CHARACTER_CHAR_INI), QSettings::IniFormat);
+  QSettings s(fs::characters::getFilePath(p_chr, CHARACTER_CHAR_INI), QSettings::IniFormat);
   s.setIniCodec("UTF-8");
   utils::QSettingsKeyFetcher l_fetcher(s);
   s.beginGroup(l_fetcher.lookup_group(p_group));

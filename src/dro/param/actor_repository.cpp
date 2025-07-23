@@ -5,6 +5,7 @@
 #include "dro/param/actor/actor_loader.h"
 #include "dro/interface/courtroom_layout.h"
 #include "dro/system/theme_scripting.h"
+#include "dro/fs/fs_characters.h"
 
 QMap<QString, bool> s_layersEnabled = {};
 ActorData* s_currentActor = nullptr;
@@ -31,7 +32,7 @@ ActorData *dro::actor::user::load(QString folder)
   }
 
   s_currentFolder = folder;
-  QString l_jsonPath = AOApplication::getInstance()->get_character_path(folder, "char.json");
+  QString l_jsonPath = fs::characters::getFilePath(folder, "char.json");
 
   if(FS::Checks::FileExists(l_jsonPath))
   {
@@ -61,7 +62,7 @@ ActorData *dro::actor::repository::retrieve(QString t_folder)
 {
   static QMap<QString, QPair<QDateTime, ActorData*>> s_cache;
 
-  QString l_jsonPath = AOApplication::getInstance()->get_character_path(t_folder, "char.json");
+  QString l_jsonPath = fs::characters::getFilePath(t_folder, "char.json");
 
   if(FS::Checks::FileExists(l_jsonPath))
   {
