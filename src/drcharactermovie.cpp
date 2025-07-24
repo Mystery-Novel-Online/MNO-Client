@@ -1,9 +1,7 @@
 #include "drcharactermovie.h"
-
-#include "aoapplication.h"
+#include "pch.h"
 #include "dro/fs/fs_reading.h"
-
-#include <QDebug>
+#include "dro/fs/fs_characters.h"
 
 DRCharacterMovie::DRCharacterMovie(AOApplication *ao_app, QGraphicsItem *parent)
     : DRMovie(parent)
@@ -18,7 +16,7 @@ DRCharacterMovie::~DRCharacterMovie()
 
 void DRCharacterMovie::play(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder, bool p_play_once)
 {
-  set_file_name(ao_app->get_character_sprite_path(p_character, p_emote, p_prefix, p_use_placeholder));
+  set_file_name(fs::characters::getSpritePath(p_character, p_emote, p_prefix, p_use_placeholder));
   set_play_once(p_play_once);
   start();
 }

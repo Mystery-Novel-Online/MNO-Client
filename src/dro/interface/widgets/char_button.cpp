@@ -1,18 +1,11 @@
 #include "char_button.h"
+#include "pch.h"
 
-#include "aoapplication.h"
-#include "dro/interface/widgets/image_display.h"
-#include <QDesktopServices>
-#include "modules/managers/character_manager.h"
 #include "dro/system/localization.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
+#include "dro/network/metadata/server_metadata.h"
 #include "aoconfig.h"
-#include "courtroom.h"
-
-#include <QFile>
-#include <QLabel>
-#include <QMenu>
-#include <QUrl>
 
 AOCharButton::AOCharButton(QWidget *parent, AOApplication *p_ao_app, int x_pos, int y_pos)
     : QPushButton(parent)
@@ -69,7 +62,7 @@ QString AOCharButton::character()
 void AOCharButton::set_character(QString p_character, QString p_character_ini)
 {
   m_character = p_character;
-  const QString l_icon_path = ao_app->get_character_path(m_character, "char_icon.png");
+  const QString l_icon_path = fs::characters::getFilePath(m_character, "char_icon.png");
   const bool l_file_exist = FS::Checks::FileExists(l_icon_path);
   setStyleSheet(l_file_exist ? QString("AOCharButton { border-image: url(\"%1\");  }").arg(l_icon_path) : nullptr);
   const QString l_final_character = QString(m_character).replace("&", "&&");
@@ -78,7 +71,7 @@ void AOCharButton::set_character(QString p_character, QString p_character_ini)
   const bool l_is_different_chr = m_character != p_character_ini;
   if (l_is_different_chr)
     ui_character->setStyleSheet(
-        QString("border-image: url(\"%1\");").arg(ao_app->get_character_path(p_character_ini, "char_icon.png")));
+        QString("border-image: url(\"%1\");").arg(fs::characters::getFilePath(p_character_ini, "char_icon.png")));
   ui_character->setVisible(l_is_different_chr);
   setToolTip(l_is_different_chr ? QString("%1 as %2").arg(m_character, QString(p_character_ini).replace("&", "&&"))
                                 : l_final_character);
@@ -91,12 +84,12 @@ void AOCharButton::set_taken(const bool p_enabled)
 
 void AOCharButton::addToFavorites()
 {
-  CharacterManager::get().AddToFavorites(m_character);
+  CharacterRepository::addFavorite(m_character);
 }
 
 void AOCharButton::removeFavorites()
 {
-  CharacterManager::get().RemoveFromFavorites(m_character);
+  CharacterRepository::removeFavorite(m_character);
 }
 
 void AOCharButton::openCharacterFolder()

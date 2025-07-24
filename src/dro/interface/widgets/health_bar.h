@@ -1,10 +1,6 @@
 #ifndef HEALTH_BAR_H
 #define HEALTH_BAR_H
 
-#include <QObject>
-#include <QWidget>
-#include "dro/interface/widgets/image_display.h"
-
 class HealthBar : public AOImageDisplay
 {
   Q_OBJECT

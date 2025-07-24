@@ -1,7 +1,7 @@
 #ifndef AOAPPLICATION_H
 #define AOAPPLICATION_H
 
-#include "datatypes.h"
+
 #include "drpacket.h"
 #include "drserversocket.h"
 
@@ -69,8 +69,6 @@ public:
   // implementation in path_functions.cpp
   void reload_packages();
   QVector<QString> get_all_package_and_base_paths(QString p_path);
-  QString get_character_folder_path(QString character);
-  QString get_character_path(QString p_character, QString p_file);
   // QString get_demothings_path();
   QString get_music_path(QString p_song);
 
@@ -125,9 +123,6 @@ public:
 
   // Returns the coordinates of widget with p_identifier from p_file
   QPoint get_button_spacing(QString p_identifier, QString p_file);
-
-  // Returns the dimensions of widget with specified identifier from p_file
-  pos_size_type get_element_dimensions(QString p_identifier, QString p_file);
 
   // Returns the value of font property p_identifier from p_file
   int get_font_property(QString p_identifier, QString p_file);
@@ -246,10 +241,6 @@ public:
   QString get_sfx_path(QString sfx);
   QString get_sfx_noext_path(QString p_file);
   QString get_ambient_sfx_path(QString p_file);
-  QString get_character_sprite_path(QString character, QString emote, QString prefix, bool use_placeholder);
-  QString get_character_sprite_pre_path(QString character, QString emote);
-  QString get_character_sprite_idle_path(QString character, QString emote);
-  QString get_character_sprite_talk_path(QString character, QString emote);
   QString get_background_sprite_path(QString background, QString image);
   QString get_background_sprite_noext_path(QString background, QString image);
   QString getWeatherSprite(QString weather);

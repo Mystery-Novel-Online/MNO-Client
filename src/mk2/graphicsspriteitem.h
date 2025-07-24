@@ -25,7 +25,7 @@
 #include <QGraphicsObject>
 #include <QObject>
 #include <QPainter>
-#include <datatypes.h>
+
 #include "dro/animation/keyframe_sequence.h"
 
 class SpriteLayer
@@ -104,9 +104,9 @@ public:
 
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
   void processOverlays(const QVector<EmoteLayer>& emoteLayers, const QString& character, const QString& emotePath, const QString& outfitName);
-  void createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings);
-  void createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched = false);
-  void createOverlay(const EmoteLayer& layer, const QString &imagePath);
+  SpriteLayer *createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings);
+  SpriteLayer *createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched = false);
+  SpriteLayer *createOverlay(const EmoteLayer& layer, const QString &imagePath);
   void clearImageLayers();
 
 
@@ -135,11 +135,13 @@ public slots:
   void setVerticalOffset(int t_offset);
   void setHorizontalOffset(int t_offset);
   bool setKeyframeAnimation(const QString &directory, const QString &animation);
+  bool setThemeAnimation(const QString &animation);
   bool setCharacterAnimation(QString name, QString character, bool startFromEnd = false);
   void stop();
 
   void setFlipped(bool state);
   void setMirrored(bool state);
+  bool mirroredState();
 
 signals:
   void size_changed(QSizeF);

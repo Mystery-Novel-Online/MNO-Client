@@ -1,12 +1,6 @@
 #ifndef NOTIFYMANAGER_H
 #define NOTIFYMANAGER_H
 
-#include <QString>
-
-#include "dro/interface/widgets/choice_dialog.h"
-
-
-
 class NotifyManager
 {
 public:
@@ -26,7 +20,6 @@ public:
 
   void SetSenderId(int id);
   void SetSenderName(QString sender);
-  void SetSenderCharacter(QString sender);
   void SetRequestKey(QString sender);
 
   void SetText(QString text, bool show);
@@ -35,7 +28,6 @@ public:
 private:
   int mSenderId = -1;
   QString mRequestKey = "";
-  QString mSenderCharacter = "SYSTEM";
   QString mSenderName = "SYSTEM";
   QString mCurrentNotificationMessage = "";
   ChoiceEvent mCurrentNotification = ChoiceEvent_Invalid;

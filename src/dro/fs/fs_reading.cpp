@@ -1,10 +1,6 @@
 #include "fs_reading.h"
 #include "fs_mounting.h"
 
-#include <QDir>
-#include <QFileInfo>
-
-
 namespace FS::Checks
 {
 

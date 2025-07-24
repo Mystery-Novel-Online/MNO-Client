@@ -1,7 +1,7 @@
 #ifndef BACKGROUNDDATA_H
 #define BACKGROUNDDATA_H
 
-#include "datatypes.h"
+
 
 class BackgroundData
 {

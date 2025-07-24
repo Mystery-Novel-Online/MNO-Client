@@ -1,11 +1,11 @@
 #include "draudiostream.h"
+#include "pch.h"
 #define NOMINMAX
 
 #include "draudiostreamfamily.h"
 
 #include "draudioengine.h"
 
-#include <QDebug>
 
 DRAudioStreamFamily::DRAudioStreamFamily(DRAudio::Family p_family)
     : m_family(p_family)

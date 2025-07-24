@@ -1,16 +1,8 @@
-#include "dro/interface/widgets/emotion_button.h"
-
-#include "aoapplication.h"
-#include "courtroom.h"
+#include "dro/param/actor/actor_loader.h"
 #include "modules/theme/thememanager.h"
-#include <QHelpEvent>
-#include <QImage>
-#include <QLabel>
-#include <QPaintEvent>
-#include <QPainter>
-#include <modules/managers/character_manager.h>
 #include "dro/interface/menus/emote_menu.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 #include "dro/param/actor_repository.h"
 
 using namespace dro::actor::user;
@@ -82,7 +74,7 @@ void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
 
   if(EmoteMenu::isRealtime())
   {
-    m_texture.load(ao_app->get_character_sprite_path(p_emote.character, p_emote.dialog, "", false));
+    m_texture.load(fs::characters::getSpritePath(p_emote.character, p_emote.dialog, "", false));
     m_texture = m_texture.scaledToHeight(250, Qt::SmoothTransformation);
 
     int highestPixel = findHighestPixel();

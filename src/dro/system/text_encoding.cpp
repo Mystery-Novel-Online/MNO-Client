@@ -1,7 +1,5 @@
 #include "text_encoding.h"
-
-#include <QString>
-#include <QStringList>
+#include "pch.h"
 
 namespace dro::system::encoding::text
 {
@@ -28,6 +26,12 @@ namespace dro::system::encoding::text
   QStringList DecodePacketContents(const QString &parameters)
   {
     return parameters.split("#");
+  }
+
+  QString DecodeBase64String(const QString& base64)
+  {
+    QByteArray byteArray = QByteArray::fromBase64(base64.toUtf8());
+    return QString::fromUtf8(byteArray);
   }
 
 }

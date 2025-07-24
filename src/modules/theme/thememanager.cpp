@@ -1,12 +1,10 @@
 #include "thememanager.h"
-#include "courtroom.h"
+#include "pch.h"
+
 #include "drtheme.h"
-#include "aoapplication.h"
-#include "dro/interface/widgets/tab_toggle_button.h"
-#include "dro/interface/widgets/rp_widget.h"
+
 #include "dro/system/theme_scripting.h"
 #include "dro/interface/courtroom_layout.h"
-
 
 ThemeManager ThemeManager::s_Instance;
 
@@ -20,6 +18,41 @@ void ThemeManager::ResetWidgetLists()
   mComboBoxWidgets.clear();
   m_DetatchedTabList.clear();
 }
+
+void ThemeManager::deleteTabPanels()
+{
+  for(const QString& tabName : m_TabWidgets.keys())
+  {
+    QWidget *courtroom = getWidget("courtroom");
+    RPWidget *currentTab = m_TabWidgets[tabName];
+    currentTab->show();
+
+    if (courtroom && currentTab)
+    {
+      const auto& children = currentTab->template findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);
+      for (QWidget* child : children)
+      {
+        bool wasVisible = child->isVisible();
+        child->setParent(courtroom);
+        if (wasVisible)
+          child->show();
+      }
+    }
+
+    delete currentTab;
+  }
+}
+
+void ThemeManager::createTabPanels()
+{
+
+}
+
+void ThemeManager::parentTabWidgets()
+{
+
+}
+
 
 void ThemeManager::createTabParent()
 {
@@ -46,8 +79,8 @@ void ThemeManager::createTabParent()
 
     QString l_buttonName = r_tabInfo.m_Name + "_toggle";
 
-    pos_size_type l_panelPosition = mCurrentThemeReader.GetWidgetTransform(COURTROOM, l_panelName);
-    pos_size_type l_buttonDimensions = mCurrentThemeReader.GetWidgetTransform(COURTROOM, l_buttonName);
+    pos_size_type l_panelPosition = mCurrentThemeReader.GetWidgetTransform(SceneType_Courtroom, l_panelName);
+    pos_size_type l_buttonDimensions = mCurrentThemeReader.GetWidgetTransform(SceneType_Courtroom, l_buttonName);
 
 
 
@@ -105,23 +138,6 @@ void ThemeManager::execLayerTabs()
       m_TabWidgets[r_tabInfo.m_Name]->hide();
     }
   };
-
-  QMap<QString, QWidget *>::iterator it;
-
-  for (it = m_TabDeletionQueue.begin(); it != m_TabDeletionQueue.end(); ++it)
-  {
-    Courtroom* target = AOApplication::getInstance()->get_courtroom();
-    QWidget *value = it.value();
-    if(target != nullptr)
-    {
-      const auto children = value->findChildren<QWidget *>(QString(), Qt::FindDirectChildrenOnly);
-      for (QWidget *child : children)
-      {
-        child->setParent(target);
-      }
-    }
-    delete value;
-  }
 }
 
 void ThemeManager::resetSelectedTabs()
@@ -170,15 +186,7 @@ void ThemeManager::toggleTab(const QString& name, const QString& group)
     }
 
     if (isCurrent)
-    {
       getWidget(panelName)->show();
-
-      const QString bgImage = AOApplication::getInstance()->find_theme_asset_path("courtroombackground_" + name + ".png");
-      if (!bgImage.isEmpty())
-        wCourtroomBackground->set_theme_image("courtroombackground_" + name + ".png");
-      else
-        wCourtroomBackground->set_theme_image("courtroombackground.png");
-    }
     else if (!isToggle)
     {
       if(!tabInfo.m_ToggleEnabled)
@@ -243,7 +251,7 @@ void ThemeManager::setWidgetDimensions(QWidget *t_widget, int t_width, int t_hei
   t_widget->resize(l_PositionWidth, l_PositionHeight);
 }
 
-void ThemeManager::AssignDimensions(QWidget *t_widget, QString t_name, RPSceneType t_scene)
+void ThemeManager::AssignDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene)
 {
   pos_size_type lPositionData = mCurrentThemeReader.GetWidgetTransform(t_scene, t_name);
   lPositionData.width = static_cast<int>(lPositionData.width);
@@ -321,15 +329,6 @@ void ThemeManager::addComboBox(QString name, RPComboBox *comboBox)
   mComboBoxWidgets[name] = comboBox;
 }
 
-void ThemeManager::refreshComboBox()
-{
-  for(RPComboBox* comboBox : mComboBoxWidgets)
-  {
-    comboBox->refreshPosition();
-    comboBox->refreshCSS();
-    comboBox->show();
-  }
-}
 
 void ThemeManager::setCourtroomBackground(AOImageDisplay *t_background)
 {

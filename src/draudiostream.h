@@ -4,13 +4,6 @@
 #include "draudiodevice.h"
 #include "draudioerror.h"
 
-#include <bass/bass.h>
-
-#include <QObject>
-#include <QStack>
-
-#include <optional>
-
 class DRAudioEngine;
 class DRAudioEnginePrivate;
 class DRAudioStreamFamily;

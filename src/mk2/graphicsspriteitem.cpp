@@ -19,22 +19,14 @@
 **************************************************************************/
 #include "graphicsspriteitem.h"
 
-#include <QFileInfo>
-#include <QGraphicsScene>
-#include <QOpenGLContext>
-#include <QPainter>
-#include <QVector3D>
-
-#include <functional>
-
 #include <modules/managers/scene_manager.h>
 #include "dro/param/animation_reader.h"
 #include "dro/interface/courtroom_layout.h"
-#include "spritedynamicreader.h"
 #include "spriteseekingreader.h"
-#include "aoapplication.h"
+
 #include "dro/system/text_encoding.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 #include "dro/system/runtime_loop.h"
 
 using namespace mk2;
@@ -147,12 +139,49 @@ bool GraphicsSpriteItem::setKeyframeAnimation(const QString &directory, const QS
   clearImageLayers();
   for(const EmoteLayer &layer : AnimationReader(directory + "/" + animation, m_KeyframeSequence).m_Layers)
   {
-    QString filePath = FS::Paths::FindFile("animations/" + directory + "/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
+    QStringList searchPaths =
+    {
+      "animations/" + directory + "/assets/" + layer.assetPath,
+      "animations/assets/" + layer.assetPath,
+      "animations/" + directory + "/assets/" + layer.offsetName,
+      "animations/assets/" + layer.offsetName,
+      layer.assetPath
+    };
 
-    if(!FS::Checks::FileExists(filePath))
-      filePath = FS::Paths::FindFile("animations/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
+    QString filePath = FS::Paths::FindFile(searchPaths, true, FS::Formats::SupportedImages());
 
-    createOverlay(layer, filePath);
+    SpriteLayer *layerData = createOverlay(layer, filePath);
+    if(layer.offsetName == "viewport")
+    {
+      layerData->getPixmap(m_KeyframeSequence.canRenderViewport());
+    }
+  }
+
+  return m_KeyframeSequence.getLoopState();
+}
+
+bool GraphicsSpriteItem::setThemeAnimation(const QString &animation)
+{
+  clearImageLayers();
+  const QString theme = AOApplication::getInstance()->getCurrentTheme();
+  for(const EmoteLayer &layer : AnimationReader(animation, theme, m_KeyframeSequence).m_Layers)
+  {
+    QStringList searchPaths =
+        {
+            "themes/" + theme + "/animations/assets/" + layer.assetPath,
+            "themes/" + theme + "/animations/assets/" + layer.offsetName,
+            "animations/assets/" + layer.assetPath,
+            "animations/assets/" + layer.offsetName,
+            layer.assetPath
+        };
+
+    QString filePath = FS::Paths::FindFile(searchPaths, true, FS::Formats::SupportedImages());
+
+    SpriteLayer *layerData = createOverlay(layer, filePath);
+    if(layer.offsetName == "viewport")
+    {
+      layerData->getPixmap(m_KeyframeSequence.canRenderViewport());
+    }
   }
 
   return m_KeyframeSequence.getLoopState();
@@ -166,7 +195,7 @@ bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, 
     if(!FS::Checks::FileExists(filePath))
       filePath = FS::Paths::FindFile("animations/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
     if(!FS::Checks::FileExists(filePath))
-      filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.offsetName);
+      filePath = fs::characters::getSpritePathIdle(character, layer.offsetName);
 
     createOverlay(layer, filePath);
   }
@@ -189,6 +218,11 @@ void GraphicsSpriteItem::setFlipped(bool state)
 void GraphicsSpriteItem::setMirrored(bool state)
 {
   m_isMirrored = state;
+}
+
+bool GraphicsSpriteItem::mirroredState()
+{
+  return m_isMirrored;
 }
 
 bool GraphicsSpriteItem::is_valid() const
@@ -249,15 +283,15 @@ void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers,
 
   for(const EmoteLayer &layer : emoteLayers)
   {
-    QString filePath = AOApplication::getInstance()->get_character_sprite_idle_path(character, path + layer.spriteName);
+    QString filePath = fs::characters::getSpritePathIdle(character, path + layer.spriteName);
     if(!outfitName.isEmpty())
     {
-      const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, "outfits/" + outfitName +  "/" + layer.spriteName);
+      const QString currentOutfitName = fs::characters::getSpritePathIdle(character, "outfits/" + outfitName +  "/" + layer.spriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
     else
     {
-      const QString currentOutfitName = AOApplication::getInstance()->get_character_sprite_idle_path(character, layer.spriteName);
+      const QString currentOutfitName = fs::characters::getSpritePathIdle(character, layer.spriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
     createOverlay(layer, filePath);
@@ -265,7 +299,7 @@ void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers,
 
 }
 
-void GraphicsSpriteItem::createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings)
+SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings)
 {
   m_LayersExist = true;
 
@@ -299,7 +333,7 @@ void GraphicsSpriteItem::createOverlay(const QString &characterName, const QStri
 
   QStringList filePaths = buildPaths(layerName);
   QString filePath = FS::Paths::FindFile(filePaths, true, FS::Formats::SupportedImages());
-  if(filePath.isEmpty()) filePath = AOApplication::getInstance()->get_character_sprite_idle_path(characterName, layerName);
+  if(filePath.isEmpty()) filePath = fs::characters::getSpritePathIdle(characterName, layerName);
 
   stateSprites[ViewportCharacterIdle]->set_file_name(filePath);
 
@@ -318,9 +352,10 @@ void GraphicsSpriteItem::createOverlay(const QString &characterName, const QStri
 
   update();
   m_player->scale_current_frame();
+  return layer;
 }
 
-void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched)
+SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched)
 {
   m_LayersExist = true;
 
@@ -347,9 +382,10 @@ void GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &
     m_spriteLayers.append(layer);
   }
   update();
+  return layer;
 }
 
-void GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QString &imagePath)
+SpriteLayer *GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QString &imagePath)
 {
   m_LayersExist = true;
 
@@ -422,6 +458,7 @@ void GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QString &i
     m_spriteLayers.append(layerData);
   }
   update();
+  return layerData;
 }
 
 void GraphicsSpriteItem::clearImageLayers()
@@ -458,8 +495,10 @@ QPointF GraphicsSpriteItem::computeDrawPosition(const QVector3D &animationOffset
   const QRectF scaledRect = m_player->get_scaled_bounding_rect();
   const QPointF centerOffset = sceneRect.center() - scaledRect.center();
 
+  const int hTarget = m_isMirrored ? -m_HorizontalOffset : m_HorizontalOffset;
+
   const float verticalOffset = (mVerticalVPOffset / 1000.0f) * (sceneRect.height() + scaledRect.height()) / 2.0f;
-  const float horizontalOffset = (m_HorizontalOffset / 1000.0f) * (sceneRect.width() + scaledRect.width()) / 2.0f;
+  const float horizontalOffset = ((hTarget  / 1000.0f) * sceneRect.width());
 
 
   const float animVertical = (animationOffset.y() / 1000.0f) * (sceneRect.height() + scaledRect.height()) / 2.0f;
@@ -546,8 +585,13 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   Q_UNUSED(option);
   Q_UNUSED(widget);
 
+  bool renderPixmap = true;
   QPixmap pixmap = m_player->getCurrentPixmap();
-  if (pixmap.isNull()) return;
+  if (pixmap.isNull())
+  {
+    if(!m_LayersExist) return;
+    renderPixmap = false;
+  }
 
   const double scale = m_player->getScaledAmount();
 
@@ -585,13 +629,12 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
     rotation = it->second.toFloat();
 
   const QRectF sceneRect = scene()->sceneRect();
-  const QPointF drawPos = computeDrawPosition(animationOffset);
+  QPointF drawPos = computeDrawPosition(animationOffset);
   const QPointF pivot(sceneRect.center().x() + drawPos.x(), sceneRect.bottom());
 
 
   painter->translate(pivot);
-  if(m_isMirrored) painter->scale(-animScale, animScale);
-  else painter->scale(animScale, animScale);
+  painter->scale(animScale, animScale);
   painter->rotate(rotation);
   painter->translate(-pivot);
   painter->setOpacity(alpha);
@@ -608,24 +651,40 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
     drawSpriteLayers(&combiner, m_spriteLayersBelow, drawPos, scale, evaluatedValues, 1.0);
 
-    combiner.save();
-    combiner.translate(pivot);
-    combiner.scale(isolatedScale, isolatedScale);
-    combiner.rotate(isolatedRotation);
-    combiner.translate(-pivot);
-    combiner.setOpacity(isolatedAlpha);
+    if(renderPixmap)
+    {
+      combiner.save();
+      combiner.translate(pivot);
+      combiner.scale(isolatedScale, isolatedScale);
+      combiner.rotate(isolatedRotation);
+      combiner.translate(-pivot);
+      combiner.setOpacity(isolatedAlpha);
 
-    combiner.drawPixmap(drawPos, pixmap);
+      combiner.drawPixmap(drawPos, pixmap);
 
-    combiner.restore();
+      combiner.restore();
+    }
+
     drawSpriteLayers(&combiner, m_spriteLayers, drawPos, scale, evaluatedValues, 1.0); // alpha=1.0 here
 
     combiner.end();
 
+    if(m_isMirrored)
+    {
+      painter->translate(sceneRect.center());
+      painter->scale(-1.0f, 1.0f);
+      painter->translate(-sceneRect.center());
+    }
     painter->drawPixmap(QPoint(0, 0), pixmapCombined);
   }
   else
   {
+    if(m_isMirrored)
+    {
+      painter->translate(sceneRect.center());
+      painter->scale(-1.0f, 1.0f);
+      painter->translate(-sceneRect.center());
+    }
     painter->drawPixmap(drawPos, pixmap);
   }
   painter->restore();

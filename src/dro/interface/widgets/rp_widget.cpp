@@ -1,14 +1,20 @@
 #include "rp_widget.h"
-#include <QMouseEvent>
-#include "aoapplication.h"
-#include "commondefs.h"
+
 #include <modules/theme/thememanager.h>
 #include "dro/fs/fs_reading.h"
+#include "dro/system/theme.h"
 
 RPWidget::RPWidget(const QString &name, QWidget *parent) : QWidget{parent}, m_friendlyName(name)
 {
   m_app = AOApplication::getInstance();
 }
+
+RPWidget::~RPWidget()
+{
+  if(m_backgroundImage != nullptr)
+    delete m_backgroundImage;
+}
+
 
 void RPWidget::setDragable(bool isDragable)
 {
@@ -36,7 +42,7 @@ void RPWidget::setBackgroundImage(QString imageName)
 
 void RPWidget::resetTransform()
 {
-  set_size_and_pos(this, m_friendlyName, COURTROOM_DESIGN_INI, m_app);
+  dro::system::theme::applyDimensions(this, m_friendlyName, SceneType_Courtroom);
 }
 
 void RPWidget::mousePressEvent(QMouseEvent *event)

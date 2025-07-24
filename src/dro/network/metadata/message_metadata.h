@@ -2,7 +2,7 @@
 #define MESSAGE_METADATA_H
 
 #include <QString>
-#include "datatypes.h"
+
 
 struct MessageModifiers
 {
@@ -44,6 +44,9 @@ struct MessageMetadata
   QString characterLayers = "";
   QString characterVideo = "";
   QString characterShout = "";
+
+
+  QString messageTags = "";
 
   QString userShowname = "";
   QString textContent = "";

@@ -1,8 +1,5 @@
 #ifndef THEMESCENE_H
 #define THEMESCENE_H
-#include <QHash>
-#include "datatypes.h"
-
 
 class ThemeScene
 {

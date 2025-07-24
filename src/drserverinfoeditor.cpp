@@ -1,8 +1,6 @@
 #include "drserverinfoeditor.h"
-
+#include "pch.h"
 #include "aoguiloader.h"
-
-#include <QPushButton>
 
 DRServerInfoEditor::DRServerInfoEditor(QWidget *parent)
     : QDialog(parent)

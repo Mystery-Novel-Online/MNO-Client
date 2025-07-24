@@ -1,13 +1,8 @@
 #include "choice_dialog.h"
-#include "AOApplication.h"
-#include "commondefs.h"
-#include "drtheme.h"
-#include "dro/fs/fs_reading.h"
-#include "courtroom.h"
-#include "modules/theme/thememanager.h"
+
 #include "theme.h"
-#include "dro/fs/fs_reading.h"
 #include "dro/system/theme_scripting.h"
+#include "modules/theme/thememanager.h"
 
 ChoiceDialog::ChoiceDialog(QWidget *parent)
     : RPWidget{"notify_popup", parent}

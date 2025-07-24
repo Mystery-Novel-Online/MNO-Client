@@ -1,9 +1,5 @@
 #include "bgm_menu.h"
-
-#include <QListWidget>
-
 #include <modules/theme/thememanager.h>
-#include "courtroom.h"
 #include "dro/network/metadata/tracklist_metadata.h"
 #include "dro/interface/courtroom_layout.h"
 

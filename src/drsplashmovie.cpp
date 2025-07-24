@@ -1,7 +1,5 @@
 #include "drsplashmovie.h"
 
-#include "aoapplication.h"
-
 DRSplashMovie::DRSplashMovie(AOApplication *ao_app, QGraphicsItem *parent)
     : DRMovie(parent)
     , ao_app(ao_app)

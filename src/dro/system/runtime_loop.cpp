@@ -1,11 +1,9 @@
 #include "runtime_loop.h"
-#include <QElapsedTimer>
-#include <qdebug.h>
+#include "pch.h"
+
 #include "theme_scripting.h"
-#include <QVector3D>
 #include "dro/system/animation.h"
 #include "dro/interface/courtroom_layout.h"
-#include "dro/interface/widgets/rp_typewriter.h"
 #include "dro/interface/widgets/viewports/legacy_viewport.h"
 #include "dro/system/replay_playback.h"
 

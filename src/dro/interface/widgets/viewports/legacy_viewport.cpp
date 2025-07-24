@@ -1,31 +1,31 @@
+#include "pch.h"
 #include "legacy_viewport.h"
 #include "drcharactermovie.h"
-#include "dro/interface/widgets/rp_typewriter.h"
-#include "commondefs.h"
 #include "dro/network/metadata/message_metadata.h"
 #include "drscenemovie.h"
 #include "theme.h"
-#include "aoapplication.h"
+
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 
 #include "dro/param/background/legacy_background_reader.h"
 #include "dro/param/background/background_reader.h"
-#include "dro/system/audio.h"
+#include "dro/param/actor/actor_loader.h"
 
-#include <modules/theme/thememanager.h>
-#include "modules/managers/character_manager.h"
+#include "modules/theme/thememanager.h"
+
+#include "dro/param/actor_repository.h"
 #include "dro/system/runtime_loop.h"
+#include "dro/system/audio.h"
+#include "dro/system/theme.h"
 
-#include <QGraphicsOpacityEffect>
-#include <QGraphicsProxyWidget>
-#include <QPropertyAnimation>
 
 using namespace dro::network::metadata;
 
 LegacyViewport::LegacyViewport(QWidget *parent) : RPViewport(parent)
 {
   m_graphicsView = new DRGraphicsView(parent);
-  set_size_and_pos(m_graphicsView, "viewport", REPLAY_DESIGN_INI, AOApplication::getInstance());
+  dro::system::theme::applyDimensions(m_graphicsView, "viewport", SceneType_Replay);
   RuntimeLoop::assignViewport(this);
 }
 
@@ -86,8 +86,8 @@ void LegacyViewport::constructViewport()
 void LegacyViewport::loadCurrentMessage()
 {
   MessageMetadata &message = message::recentMessage();
-  m_currentActor = CharacterManager::get().ReadCharacter(message.characterFolder);
-  m_pairActor = CharacterManager::get().ReadCharacter(message.pairData.characterFolder);
+  m_currentActor = dro::actor::repository::retrieve(message.characterFolder);
+  m_pairActor = dro::actor::repository::retrieve(message.pairData.characterFolder);
   if(message.characterPre.trimmed().isEmpty()) message.characterPre = "-";
   m_message->setInput("");
   toggleChatbox(false);
@@ -115,7 +115,7 @@ void LegacyViewport::loadCurrentMessage()
     if(!message.pairData.characterFolder.trimmed().isEmpty())
     {
       m_pairSprite->set_play_once(false);
-      m_pairSprite->set_file_name(AOApplication::getInstance()->get_character_sprite_idle_path(message.pairData.characterFolder, message.pairData.characterEmote));
+      m_pairSprite->set_file_name(fs::characters::getSpritePathIdle(message.pairData.characterFolder, message.pairData.characterEmote));
 
       m_pairSprite->setHorizontalOffset(message::pair::horizontalOffset());
       m_pairSprite->setVerticalOffset(message::pair::verticalOffset());
@@ -160,8 +160,16 @@ void LegacyViewport::toggleChatbox(bool state)
 {
   if(m_userInterfaceObjects.contains("chatbox"))
   {
-    if(state) m_userInterfaceObjects["chatbox"]->show();
-    else m_userInterfaceObjects["chatbox"]->hide();
+    if(state)
+    {
+      m_userInterfaceObjects["chatbox"]->show();
+      m_showname->show();
+    }
+    else
+    {
+      m_userInterfaceObjects["chatbox"]->hide();
+      m_showname->hide();
+    }
   }
 }
 
@@ -198,7 +206,7 @@ void LegacyViewport::onVideoDone()
   emit videoDone();
   if (m_videoScreen->isVisible()) m_videoScreen->hide();
 
-  MessageMetadata &message = dro::network::metadata::message::recentMessage();
+  MessageMetadata &message = message::recentMessage();
   m_characterSprite->setHorizontalOffset(message.offsetHorizontal);
   m_characterSprite->setVerticalOffset(message.offsetVertical);
   m_characterSprite->processOverlays(message.characterLayers, message.characterFolder, message.characterEmote, message.characterOutfit);
@@ -216,11 +224,11 @@ void LegacyViewport::onVideoDone()
 
 void LegacyViewport::onObjectionDone()
 {
-  MessageMetadata &message = dro::network::metadata::message::recentMessage();
+  MessageMetadata &message = message::recentMessage();
   if(!message.characterPre.isEmpty())
   {
     m_characterSprite->set_play_once(true);
-    m_characterSprite->set_file_name(AOApplication::getInstance()->get_character_sprite_pre_path(message.characterFolder, message.characterPre));
+    m_characterSprite->set_file_name(fs::characters::getSpritePathPre(message.characterFolder, message.characterPre));
     mk2::SpritePlayer::ScalingMode targetScaling = m_currentActor->GetScalingMode();
     m_characterSprite->start(targetScaling, (double)message.offsetScale / 1000.0f);
   }
@@ -246,7 +254,7 @@ void LegacyViewport::onObjectionDone()
 void LegacyViewport::onPreanimDone()
 {
   emit preanimDone();
-  MessageMetadata &message = dro::network::metadata::message::recentMessage();
+  MessageMetadata &message = message::recentMessage();
   if(!message.textContent.trimmed().isEmpty()) toggleChatbox(true);
   else onTypingDone();
   m_message->setInput(message.textContent);
@@ -259,7 +267,7 @@ void LegacyViewport::onPreanimDone()
   {
     m_characterSprite->show();
     m_characterSprite->set_play_once(false);
-    m_characterSprite->set_file_name(AOApplication::getInstance()->get_character_sprite_idle_path(message.characterFolder, message.characterEmote));
+    m_characterSprite->set_file_name(fs::characters::getSpritePathIdle(message.characterFolder, message.characterEmote));
     mk2::SpritePlayer::ScalingMode targetScaling = m_currentActor->GetScalingMode();
     m_characterSprite->start(targetScaling, (double)message.offsetScale / 1000.0f);
   }
@@ -291,7 +299,7 @@ void LegacyViewport::constructInterface()
   }
 
   m_message = new RPTypewriter(m_graphicsView);
-  set_size_and_pos(m_message, "message", VIEWPORT_DESIGN_INI, AOApplication::getInstance());
+  dro::system::theme::applyDimensions(m_message, "message", SceneType_Viewport);
 
   m_message->setFrameStyle(QFrame::NoFrame);
   m_message->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -303,7 +311,7 @@ void LegacyViewport::constructInterface()
   connect(m_message, &RPTypewriter::typingDone, this, &LegacyViewport::onTypingDone);
 
   m_showname = new RPTextEdit("showname");
-  set_size_and_pos(m_showname, "showname", VIEWPORT_DESIGN_INI, AOApplication::getInstance());
+  dro::system::theme::applyDimensions(m_showname, "showname", SceneType_Viewport);
   m_showname->setFrameStyle(QFrame::NoFrame);
   m_showname->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   m_showname->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

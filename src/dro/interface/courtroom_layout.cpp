@@ -1,17 +1,7 @@
 #include "courtroom_layout.h"
 
-#include "commondefs.h"
-#include "dro/interface/widgets/rp_hover_widget.h"
-#include "dro/interface/widgets/sticker_viewer.h"
-#include <aoapplication.h>
-#include "dro/interface/widgets/chat_log.h"
-#include <QListWidget>
-#include <QString>
-#include <courtroom.h>
 #include "modules/theme/thememanager.h"
 #include "dro/system/theme_scripting.h"
-#include "dro/interface/widgets/rp_combo_box.h"
-#include "dro/interface/widgets/rp_line_edit.h"
 
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
 static QHash<QString, QWidget *> s_TabWidgets = {};
@@ -531,13 +521,13 @@ namespace courtroom
 
   namespace ooc
   {
-    void appendMessage(const char *name, const char *message)
+    void appendMessage(const std::string& name, const std::string& message)
     {
       DRChatLog *oocChatlog = nullptr;
       QWidget *chatlogWidget = s_CourtroomWidgets["server_chatlog"];
       oocChatlog = dynamic_cast<DRChatLog*>(chatlogWidget);
       if(oocChatlog == nullptr) return;
-      oocChatlog->append_chatmessage(name, message);
+      oocChatlog->append_chatmessage(QString::fromStdString(name), QString::fromStdString(message));
     }
 
     std::string getInputFieldContents()
@@ -672,6 +662,18 @@ namespace courtroom
       }
 
       return QPixmap(0, 0);
+    }
+
+    void clearInteractions()
+    {
+      if (auto *overlay = qobject_cast<ViewportOverlay *>(s_CourtroomWidgets.value("viewport_overlay")))
+        overlay->clearInteractions();
+    }
+
+    void addInteraction(const std::string &name, const std::string &description, int x, int y, int width, int height)
+    {
+      if (auto *overlay = qobject_cast<ViewportOverlay *>(s_CourtroomWidgets.value("viewport_overlay")))
+        overlay->addInteraction({x, y, width, height}, QString::fromStdString(name), QString::fromStdString(description));
     }
 
   }

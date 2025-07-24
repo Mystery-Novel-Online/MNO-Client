@@ -2,8 +2,6 @@
 #include "dro/system/runtime_loop.h"
 #include "dro/system/audio.h"
 
-#include <aoapplication.h>
-
 RPTypewriter::RPTypewriter(QWidget *parent) : RPTextEdit("message", parent)
 {
   audio::blip::SetGender("male");

@@ -1,6 +1,5 @@
 #include "sticker_viewer.h"
 
-#include "aoapplication.h"
 #include "drtheme.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/fs/fs_reading.h"

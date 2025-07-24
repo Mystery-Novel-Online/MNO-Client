@@ -5,6 +5,10 @@
 static MessageMetadata s_CurrentMessage;
 static bool s_MsgPairActive = false;
 
+using namespace dro::network::metadata::message;
+
+
+
 namespace dro::network::metadata::message
 {
 
@@ -126,6 +130,7 @@ namespace dro::network::metadata::message
     s_CurrentMessage.characterId = message[CMChrId].toInt();
     s_CurrentMessage.speakerClient = message[CMClientId].toInt();
     s_CurrentMessage.modifiers.DelaySFX = message[CMSoundDelay].toInt();
+    s_CurrentMessage.messageTags = message[CMMessageTags];
     system::replays::recording::messageCharacter();
   }
 

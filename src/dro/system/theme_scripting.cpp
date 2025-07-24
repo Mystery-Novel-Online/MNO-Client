@@ -5,7 +5,8 @@
 #include <modules/theme/thememanager.h>
 #include "modules/managers/notify_manager.h"
 #include "dro/network/metadata/area_metadata.h"
-#include "courtroom.h"
+#include "dro/system/runtime_values.h"
+
 #include <lobby.h>
 
 #pragma comment(lib, "lua54.lib")
@@ -61,8 +62,8 @@ namespace ThemeScripting
       dialogTable.set_function("SetText", &LuaFunctions::SetNotificationText);
 
       sol::table characterTable = s_themeScript.create_named_table("Character");
-      characterTable.set_function("GetShowname", &metadata::user::getShowname);
-      characterTable.set_function("GetIniswap", &metadata::user::getIniswap);
+      characterTable.set_function("GetShowname", &user::getShowname);
+      characterTable.set_function("GetIniswap", &user::getIniswap);
       characterTable.set_function("Exists", &FS::Checks::CharacterExists);
       characterTable.set_function("Switch", &LuaFunctions::SwitchCharacter);
       characterTable.set_function("SetScale", &courtroom::sliders::setScale);
@@ -105,9 +106,9 @@ namespace ThemeScripting
       tabTable.set_function("Change", &LuaFunctions::ChangeTab);
 
       sol::table serverTable = s_themeScript.create_named_table("Server");
-      tabTable.set_function("GetClientId", &metadata::user::getClientId);
-      tabTable.set_function("GetCharacterId", &metadata::user::GetCharacterId);
-      tabTable.set_function("GetCurrentCharacter", &metadata::user::GetCharacterName);
+      tabTable.set_function("GetClientId", &user::getClientId);
+      tabTable.set_function("GetCharacterId", &user::GetCharacterId);
+      tabTable.set_function("GetCurrentCharacter", &user::GetCharacterName);
 
       {
         sol::table ic = s_themeScript.create_named_table("IC");
@@ -117,6 +118,19 @@ namespace ThemeScripting
         inputField.set_function("GetText", &courtroom::ic::getMessageBoxContents);
         inputField.set_function("SetText", &courtroom::ic::setMessageBox);
         inputField.set_function("Append", &courtroom::ic::appendMessageBox);
+      }
+
+      {
+        sol::table table = s_themeScript.create_named_table("Viewport");
+        table.set_function("Screenshot", &courtroom::viewport::screenshot);
+        table.set_function("AddInteraction", &courtroom::viewport::addInteraction);
+        table.set_function("ClearInteractions", &courtroom::viewport::clearInteractions);
+      }
+
+      {
+        sol::table table = s_themeScript.create_named_table("RuntimeValue");
+        table.set_function("Resolve", &dro::runtime::values::resolveVariables);
+        table.set_function("Assign", &dro::runtime::values::storeValue);
       }
 
       {

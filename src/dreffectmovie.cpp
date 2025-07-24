@@ -1,7 +1,5 @@
 #include "dreffectmovie.h"
 
-#include "aoapplication.h"
-
 DREffectMovie::DREffectMovie(AOApplication *ao_app, QGraphicsItem *parent)
     : DRMovie(parent)
     , ao_app(ao_app)

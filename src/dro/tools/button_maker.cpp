@@ -1,19 +1,10 @@
 #include "button_maker.h"
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QSpacerItem>
-#include <QSizePolicy>
-#include <QFileInfo>
-#include <QDir>
-#include <QMessageBox>
-#include <QFileDialog>
-#include "aoapplication.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/interface/courtroom_layout.h"
 #include "dro/param/actor_repository.h"
 #include "dro/system/text_encoding.h"
-#include <QSlider>
+#include "dro/param/actor/actor_loader.h"
+#include "dro/fs/fs_characters.h"
 
 ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 {
@@ -150,7 +141,7 @@ void ButtonMaker::SetCharacter(QString character)
   m_EmoteIndex = 0;
   m_Emotes.clear();
 
-  m_Path = AOApplication::getInstance()->get_character_path(character, "char.json");
+  m_Path = fs::characters::getFilePath(character, "char.json");
   if(FS::Checks::FileExists(m_Path))
   {
     m_IsJson = true;
@@ -220,7 +211,7 @@ void ButtonMaker::onGenerateClicked()
     buttonDirectory = "/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".png";
   }
 
-  QString filePath = AOApplication::getInstance()->get_character_path(m_Emotes.at(m_EmoteIndex).character, buttonDirectory);
+  QString filePath = fs::characters::getFilePath(m_Emotes.at(m_EmoteIndex).character, buttonDirectory);
   if(FS::Checks::FileExists(filePath))
   {
     QMessageBox::StandardButton replaceResult;

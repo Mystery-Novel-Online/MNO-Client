@@ -2,7 +2,7 @@
 #define EMOTION_BUTTON_H
 
 // src
-#include "datatypes.h"
+
 #include "qdebug.h"
 
 class AOApplication;

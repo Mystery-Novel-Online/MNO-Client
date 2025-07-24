@@ -1,7 +1,5 @@
 #include "blip_player.h"
 
-#include "aoapplication.h"
-
 const int AOBlipPlayer::BLIP_COUNT = 5;
 
 AOBlipPlayer::AOBlipPlayer(QObject *p_parent)

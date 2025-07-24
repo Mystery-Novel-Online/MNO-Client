@@ -1,5 +1,5 @@
 #include "rp_viewport.h"
 
-RPViewport::RPViewport(QObject *parent) : QObject{parent}
+RPViewport::RPViewport(QWidget *parent) : QWidget{parent}
 {
 }

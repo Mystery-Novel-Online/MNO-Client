@@ -2,10 +2,6 @@
 #define THEMEMANAGER_H
 
 #include <QHash>
-#include "dro/interface/widgets/image_display.h"
-#include "dro/interface/widgets/rp_combo_box.h"
-#include "dro/interface/widgets/rp_line_edit.h"
-#include "dro/interface/widgets/rp_button.h"
 #include "dro/param/theme_reader.h"
 
 class ThemeManager
@@ -21,6 +17,11 @@ public:
   void ResetWidgetLists();
 
   //Tabs
+
+  void deleteTabPanels();
+  void createTabPanels();
+  void parentTabWidgets();
+
   void createTabParent();
   void execLayerTabs();
   void resetSelectedTabs();
@@ -38,7 +39,7 @@ public:
   void setWidgetDimensions(QWidget *t_widget, int t_width, int t_height);
 
 
-  void AssignDimensions(QWidget *t_widget, QString t_name, RPSceneType t_scene);
+  void AssignDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene);
 
   //Widgets
   void SetWidgetNames(QHash<QString, QWidget *> t_WidgetNames);
@@ -61,8 +62,6 @@ public:
   double getViewporResize();
 
   void addComboBox(QString name, RPComboBox* lineEdit);
-  void refreshComboBox();
-
   void setCourtroomBackground(AOImageDisplay *t_background);
 
 
@@ -93,8 +92,8 @@ private:
   double mViewportResize = 1;
 
 
-  QMap<QString, QWidget *> m_TabWidgets = {};
-  QMap<QString, QWidget *> m_TabDeletionQueue = {};
+  QMap<QString, RPWidget *> m_TabWidgets = {};
+  QMap<QString, RPWidget *> m_TabDeletionQueue = {};
 
   QHash<QString, QWidget *> m_WidgetNames = {};
   QHash<QString, RPButton*> mButtonWidgets { };

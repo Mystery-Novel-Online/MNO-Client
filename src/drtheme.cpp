@@ -1,15 +1,9 @@
 #include "drtheme.h"
-#include "commondefs.h"
+#include "pch.h"
+
 #include "dro/fs/fs_reading.h"
-#include "qjsonobject.h"
-#include "aoconfig.h"
-#include <QJsonArray>
-
-#include "modules/theme/thememanager.h"
 #include "dro/system/theme_scripting.h"
-
-#include <qcolor.h>
-#include <qfile.h>
+#include "modules/theme/thememanager.h"
 
 DRTheme::DRTheme(AOApplication *p_ao_app)
 {
@@ -203,19 +197,6 @@ QVector<QStringList>DRTheme::get_highlight_characters()
   return ThemeManager::get().mCurrentThemeReader.GetColorsHighlights();
 }
 
-pos_size_type DRTheme::get_element_dimensions(QString p_identifier, QString p_scene)
-{
-  if(p_scene == "courtroom")
-  {
-    return ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(COURTROOM, p_identifier);
-  }
-  else
-  {
-    return ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(LOBBY, p_identifier);
-  }
-
-}
-
 QString DRTheme::get_widget_image(QString p_identifier, QString p_fallback, QString p_scene)
 {
   if(!m_jsonLoaded)
@@ -244,8 +225,8 @@ QString DRTheme::get_widget_font_string_setting(QString p_identifier, QString p_
     return ao_app->read_theme_ini(fallback, p_scene);
   }
 
-  RPSceneType sceneType = COURTROOM;
-  if(p_scene == LOBBY_FONTS_INI) sceneType = LOBBY;
+  ThemeSceneType sceneType = SceneType_Courtroom;
+  if(p_scene == LOBBY_FONTS_INI) sceneType = SceneType_ServerSelect;
   return ThemeManager::get().mCurrentThemeReader.GetFontData(sceneType, p_identifier).align;
 }
 

@@ -1,8 +1,5 @@
 #include "drshoutmovie.h"
-
-#include "aoapplication.h"
-
-#include <QDebug>
+#include "pch.h"
 
 DRShoutMovie::DRShoutMovie(AOApplication *ao_app, QGraphicsItem *parent)
     : DRMovie(parent)

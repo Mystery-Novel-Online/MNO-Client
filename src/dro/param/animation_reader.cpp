@@ -2,7 +2,8 @@
 #include "dro/animation/keyframe_sequence.h"
 #include "dro/animation/keyframe_channel.h"
 #include "dro/fs/fs_reading.h"
-#include "aoapplication.h"
+#include "dro/system/runtime_values.h"
+
 
 AnimationReader::AnimationReader(const QString &animPath, KeyframeSequence &sequence)
 {
@@ -31,6 +32,15 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
   ReadFromFile(animationPath);
   loadData(sequence);
 
+}
+
+AnimationReader::AnimationReader(const QString &name, const QString &theme, KeyframeSequence &sequence)
+{
+  sequence.Cleanup();
+  QString animationPath = FS::Paths::FindFile("themes/" + theme + "/animations/"+ name + ".json");
+  if(!FS::Checks::FileExists(animationPath)) return;
+  ReadFromFile(animationPath);
+  loadData(sequence);
 }
 
 void AnimationReader::loadData(KeyframeSequence &sequence)
@@ -62,6 +72,7 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
     QString overlayName = getStringValue("name");
     QRect overlayRect = getRectangleValue("offset");
     QString overlayRender = getStringValue("order");
+    QString assetPath = QString::fromStdString(dro::runtime::values::resolveVariables(getStringValue("asset").toStdString()));
     QString blendMode = getStringValue("blend_mode");
     bool detach = getBoolValue("detach");
 
@@ -75,7 +86,7 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
       overlayRect = QRect(int(xNorm), int(yNorm), int(wNorm), int(hNorm));
     }
 
-    m_Layers.append({overlayName, "", overlayRender, overlayRect, detach, blendMode});
+    m_Layers.append({overlayName, "", overlayRender, overlayRect, detach, blendMode, "", assetPath});
   }
 
   ResetTargetObject();

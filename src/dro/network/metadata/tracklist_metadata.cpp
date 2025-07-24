@@ -1,5 +1,4 @@
 #include "tracklist_metadata.h"
-#include <QMap>
 
 QMap<QString, QStringList> s_musicList = {};
 QStringList s_musicCategories = {};

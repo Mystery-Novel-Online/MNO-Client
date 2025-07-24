@@ -1,26 +1,22 @@
-#include "aoapplication.h"
-
-#include <QDebug>
-
+#include "pch.h"
 #include "aoconfig.h"
-#include "courtroom.h"
+
 #include "debug_functions.h"
 #include "drdiscord.h"
-#include "dro/network/metadata/tracklist_metadata.h"
 #include "drpacket.h"
-#include "modules/managers/character_manager.h"
-#include "dro/system/localization.h"
 #include "drserversocket.h"
-#include "dro/fs/fs_reading.h"
 #include "hardware_functions.h"
 #include "lobby.h"
 #include "version.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/network/metadata/server_metadata.h"
 #include "dro/network/metadata/area_metadata.h"
+#include "dro/network/metadata/tracklist_metadata.h"
 #include "dro/network/json_packet.h"
 #include "dro/system/theme_scripting.h"
 #include "dro/system/audio.h"
+#include "dro/system/replay_playback.h"
+#include "dro/system/localization.h"
 
 using namespace dro::system;
 
@@ -129,7 +125,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (l_content.size() < 2)
       return;
 
-    metadata::user::setClientId(l_content.at(0).toInt());
+    user::setClientId(l_content.at(0).toInt());
     m_server_software = l_content.at(1);
 
 
@@ -139,7 +135,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   }
   else if (l_header == "FL")
   {
-    ServerMetadata::SetFeatureList(l_content);
+    network::metadata::VNServerInformation::setFeatureList(l_content);
   }
   else if (l_header == "CT")
   {
@@ -169,7 +165,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       m_server_client_version_status = VersionStatus::ServerOutdated;
     }
 
-    metadata::user::setIncomingId(s_lastMessageId);
+    user::setIncomingId(s_lastMessageId);
   }
   else if (l_header == "PN")
   {
@@ -177,11 +173,14 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       return;
 
     m_lobby->set_player_count(l_content.at(0).toInt(), l_content.at(1).toInt());
+
   }
   else if (l_header == "SI")
   {
     if (l_content.size() != 3)
       return;
+
+    replays::recording::start();
 
     m_character_count = l_content.at(0).toInt();
     m_evidence_count = l_content.at(1).toInt();
@@ -218,7 +217,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (!is_courtroom_constructed)
       return;
 
-    QVector<char_type> l_chr_list = CharacterManager::get().GetServerCharList();
+    QVector<char_type> l_chr_list = CharacterRepository::serverList();
     if (l_content.length() != l_chr_list.length())
     {
       qWarning() << "Server sent a character list of length " << l_content.length() << "which is different from the expected length " << l_chr_list.length() << "so ignoring it.";
@@ -228,11 +227,10 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     for (int i = 0; i < l_chr_list.length(); ++i)
     {
       l_chr_list[i].taken = l_content.at(i) == "-1";
-      CharacterManager::get().SetCharaTaken(i, l_content.at(i) == "-1");
+      CharacterRepository::setCharacterAvailability(i, l_content.at(i) == "-1");
     }
 
-
-    CharacterManager::get().SetCharList(l_chr_list);
+    CharacterRepository::setServerList(l_chr_list);
   }
   else if (l_header == "SC")
   {
@@ -246,7 +244,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       l_chr.name = i_chr_name;
       l_chr_list.append(std::move(l_chr));
     }
-    CharacterManager::get().SetCharList(l_chr_list);
+    CharacterRepository::setServerList(l_chr_list);
     m_loaded_characters = m_character_count;
 
     if (is_lobby_constructed)
@@ -433,6 +431,16 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (is_courtroom_constructed && joined_server())
       m_courtroom->next_chatmessage(l_content);
   }
+  else if (l_header == "INVES")
+  {
+    if (is_courtroom_constructed && joined_server())
+      m_courtroom->handelInvestigation(l_content.at(0));
+  }
+  else if (l_header == "SCENE")
+  {
+    if (is_courtroom_constructed && joined_server())
+      m_courtroom->handleScene(l_content);
+  }
   else if (l_header == "ackMS")
   {
     if (is_courtroom_constructed && joined_server())
@@ -459,7 +467,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   {
     if (is_courtroom_constructed && l_content.size() > 0)
     {
-      int f_cid = metadata::user::GetCharacterId();
+      int f_cid = user::GetCharacterId();
       int remote_cid = l_content.at(0).toInt();
 
       if (f_cid != remote_cid && remote_cid != -1)

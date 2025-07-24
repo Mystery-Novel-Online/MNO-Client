@@ -1,11 +1,12 @@
 #include "replay_playback.h"
+#include "pch.h"
+
 #include "dro/interface/scenes/replay_window.h"
 #include "dro/interface/widgets/viewports/rp_viewport.h"
 #include "dro/network/metadata/message_metadata.h"
 #include "dro/param/replay_reader.h"
 #include "dro/fs/fs_reading.h"
 #include "dro/system/audio.h"
-#include "datatypes.h"
 #include "dro/system/runtime_loop.h"
 
 static ReplayWindow *s_replayWindow = nullptr;
@@ -30,6 +31,8 @@ static int s_limitMessageCount = 0;
 //Auto Variables
 static bool s_autoModeSingle = false;
 static int s_nextAutoUpdate = 0;
+
+
 
 namespace dro::system::replays
 {
@@ -104,7 +107,8 @@ namespace dro::system::replays
 
     void messageCharacter()
     {
-      const MessageMetadata message = dro::network::metadata::message::recentMessage();
+      using namespace dro::network::metadata;
+      const MessageMetadata message = message::recentMessage();
       const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
 
       if(s_limitEarliestMessage == 0) s_limitEarliestMessage = timestampElapsed;
@@ -129,19 +133,19 @@ namespace dro::system::replays
       lNewOperation.variables["effect"] = message.effect.name;
       lNewOperation.variables["shout"] = message.characterShout;
 
-      if(dro::network::metadata::message::pair::isActive())
+      if(message::pair::isActive())
       {
-        lNewOperation.variables["pair_char"] = dro::network::metadata::message::pair::getCharacter();
-        lNewOperation.variables["pair_emote"] = dro::network::metadata::message::pair::getEmote();
-        lNewOperation.variables["pair_outfit"] = dro::network::metadata::message::pair::getOutfit();
-        lNewOperation.variables["pair_sequence"] = dro::network::metadata::message::pair::getAnimation();
-        lNewOperation.variables["pair_layers"] = dro::network::metadata::message::pair::getLayers();
-        lNewOperation.variables["pair_horizontal"] =  QString::number(dro::network::metadata::message::pair::horizontalOffset());
-        lNewOperation.variables["pair_vertical"] =  QString::number(dro::network::metadata::message::pair::verticalOffset());
-        lNewOperation.variables["pair_scale"] =  QString::number(dro::network::metadata::message::pair::scaleValue());
-        lNewOperation.variables["pair_leader"] =  QString::number(dro::network::metadata::message::pair::isLeader());
-        lNewOperation.variables["pair_flipped"] =  QString::number(dro::network::metadata::message::pair::isFlipped());
-        lNewOperation.variables["pair_visible"] =  QString::number(dro::network::metadata::message::pair::isVisible());
+        lNewOperation.variables["pair_char"] = message::pair::getCharacter();
+        lNewOperation.variables["pair_emote"] = message::pair::getEmote();
+        lNewOperation.variables["pair_outfit"] = message::pair::getOutfit();
+        lNewOperation.variables["pair_sequence"] = message::pair::getAnimation();
+        lNewOperation.variables["pair_layers"] = message::pair::getLayers();
+        lNewOperation.variables["pair_horizontal"] =  QString::number(message::pair::horizontalOffset());
+        lNewOperation.variables["pair_vertical"] =  QString::number(message::pair::verticalOffset());
+        lNewOperation.variables["pair_scale"] =  QString::number(message::pair::scaleValue());
+        lNewOperation.variables["pair_leader"] =  QString::number(message::pair::isLeader());
+        lNewOperation.variables["pair_flipped"] =  QString::number(message::pair::isFlipped());
+        lNewOperation.variables["pair_visible"] =  QString::number(message::pair::isVisible());
       }
 
       if(!message.characterSequence.isEmpty())
@@ -244,7 +248,7 @@ namespace dro::system::replays
 
   namespace playback
   {
-
+    using namespace dro::network::metadata;
     void loadFile(QString name)
     {
       s_playbackTimestamp = 0;
@@ -364,7 +368,7 @@ namespace dro::system::replays
 
       if(nextOperation.operation == "msg")
       {
-        dro::network::metadata::message::incomingMessage(s_playbackOperations[s_playbackTimestamp]);
+        message::incomingMessage(s_playbackOperations[s_playbackTimestamp]);
         s_replayViewport->loadCurrentMessage();
       }
 

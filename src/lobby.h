@@ -1,14 +1,8 @@
 #ifndef LOBBY_H
 #define LOBBY_H
 
-#include "datatypes.h"
 #include "dro/interface/scenes/replay_window.h"
-
-#include <QComboBox>
-#include <QMainWindow>
-#include <QModelIndex>
-
-#include <optional>
+#include "dro/interface/widgets/scene_widget.h"
 
 class AOApplication;
 class RPButton;
@@ -22,7 +16,8 @@ class QListWidget;
 class QLineEdit;
 class QProgressBar;
 class QTextBrowser;
-class Lobby : public QMainWindow
+
+class Lobby : public SceneWidget
 {
   Q_OBJECT
 

@@ -1,7 +1,5 @@
 #include "drposition.h"
-
-#include <QDebug>
-#include <QSettings>
+#include "pch.h"
 
 const QMap<QString, DRPosition> DRPositionMap::LEGACY_POSITION_MAP{
     {

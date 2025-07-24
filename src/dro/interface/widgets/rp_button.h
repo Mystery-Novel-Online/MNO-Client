@@ -1,6 +1,7 @@
 #ifndef RP_BUTTON_H
 #define RP_BUTTON_H
 
+
 class AOApplication;
 
 #include <QPushButton>
@@ -24,6 +25,9 @@ public:
   void refresh_image();
   void refresh_position();
 
+  void setName(const QString&);
+  void setScene(ThemeSceneType);
+
 private:
   AOApplication *m_app = nullptr;
   QString m_image;
@@ -34,6 +38,9 @@ private:
   QString m_fallbackImage = "";
   QString m_fallbackText = "";
   QString m_targetScene = "courtroom";
+
+  QString m_relativeButtonPath;
+  ThemeSceneType m_Scene = SceneType_Courtroom;
 };
 
 #endif // RP_BUTTON_H

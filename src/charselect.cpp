@@ -1,29 +1,18 @@
-#include "courtroom.h"
+#include "pch.h"
 
-#include "aoapplication.h"
-#include "dro/interface/widgets/rp_button.h"
-#include "dro/interface/widgets/char_button.h"
-#include "aoconfig.h"
-#include "dro/interface/widgets/image_display.h"
-#include "commondefs.h"
-#include "debug_functions.h"
+#include "dro/network/metadata/server_metadata.h"
 #include "dro/system/localization.h"
-#include "drpacket.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
+
+#include "aoconfig.h"
+#include "debug_functions.h"
+#include "drpacket.h"
 #include "hardware_functions.h"
-#include "modules/managers/character_manager.h"
-#include "qcombobox.h"
+
 #include "theme.h"
 #include "drtheme.h"
 
-#include <QDebug>
-#include <QSignalMapper>
-#include <QtMath>
-#include <QLineEdit>
-
-#include "dro/interface/widgets/character_select.h"
-#include <dro/interface/widgets/rp_line_edit.h>
-#include "dro/interface/widgets/rp_widget.h"
 
 void Courtroom::construct_char_select()
 {
@@ -46,7 +35,7 @@ void Courtroom::construct_char_select()
   pBtnCharSelectRefresh = new RPButton("char_select_refresh", "char_refresh.png", dro::system::localization::getText("REFRESH"), ui_char_select_background);
 
   pCharaSelectSearch = new RPLineEdit("character_search", dro::system::localization::getText("CSS_SEARCH"), "[CHARA SEARCH]", ui_char_select_background);
-  pCharaSelectSeries = setupComboBoxWidget(CharacterManager::get().GetCharacterPackages() , "character_packages", "[PACKAGE FILTER]");
+  pCharaSelectSeries = setupComboBoxWidget(CharacterRepository::filterList(), "character_packages", "[PACKAGE FILTER]");
 
   connect(char_button_mapper, SIGNAL(mapped(int)), this, SLOT(char_clicked(int)));
   connect(ui_back_to_lobby, SIGNAL(clicked()), this, SLOT(on_back_to_lobby_clicked()));
@@ -131,7 +120,7 @@ void Courtroom::reset_char_select()
 
 void Courtroom::set_char_select()
 {
-  pos_size_type f_charselect = ao_app->get_element_dimensions("char_select", COURTROOM_DESIGN_INI);
+  pos_size_type f_charselect = dro::system::theme::getDimensions("char_select", SceneType_Courtroom);
   if (f_charselect.width < 0 || f_charselect.height < 0)
     qWarning() << "warning: char_select not found or invalid within courtroom_design.ini";
 
@@ -146,22 +135,22 @@ void Courtroom::set_char_select_page()
   ui_chr_select_left->hide();
   ui_chr_select_right->hide();
 
-
-
-  CharacterManager::get().mFilteredChrList = {};
-
+  CharacterRepository::clearFiltered();
 
   for (AOCharButton *button : qAsConst(ui_char_button_list))
     button->hide();
 
+  int l_item_count = 0;
 
-
-  for (char_type charaType : CharacterManager::get().GetCharList(pCharaSelectSeries->currentText()))
+  for (char_type charaType : CharacterRepository::filteredList(pCharaSelectSeries->currentText()))
   {
-    if(charaType.name.toLower().contains(pCharaSelectSearch->text().toLower())) CharacterManager::get().mFilteredChrList.append(charaType);
+    if(charaType.name.toLower().contains(pCharaSelectSearch->text().toLower()))
+    {
+      l_item_count += 1;
+      CharacterRepository::addFiltered(charaType);
+    }
   }
 
-  const int l_item_count = CharacterManager::get().mFilteredChrList.length();
   const int l_page_count = qFloor(l_item_count / m_page_max_chr_count) + bool(l_item_count % m_page_max_chr_count);
   m_current_chr_page = qBound(0, m_current_chr_page, l_page_count - 1);
   const int l_current_page_emote_count =
@@ -184,9 +173,9 @@ void Courtroom::set_char_select_page()
 
     int l_real_i = i + m_current_chr_page * m_page_max_chr_count;
     AOCharButton *l_button = ui_char_button_list.at(i);
-    const QString l_base_chr = CharacterManager::get().mFilteredChrList.at(l_real_i).name;
-    l_button->set_character(l_base_chr, ao_config->character_ini(l_base_chr));
-    l_button->set_taken((CharacterManager::get().mFilteredChrList.at(l_real_i).taken));
+    QString characterName = CharacterRepository::characterNameFiltered(l_real_i);
+    l_button->set_character(characterName, ao_config->character_ini(characterName));
+    l_button->set_taken(CharacterRepository::isCharacterAvailable(characterName));
     l_button->show();
     l_button->move(xOffset, yOffset);
     xOffset += 68;
@@ -227,12 +216,12 @@ void Courtroom::update_character_icon(QString p_character)
 void Courtroom::SwitchCharacterByName(const char *characterName)
 {
   int serverCharacterId = 0;
-  QString characterPathIni = ao_app->get_character_path(characterName, CHARACTER_CHAR_INI);
-  QString characterPathJson = ao_app->get_character_path(characterName, CHARACTER_CHAR_JSON);
+  QString characterPathIni = fs::characters::getFilePath(characterName, CHARACTER_CHAR_INI);
+  QString characterPathJson = fs::characters::getFilePath(characterName, CHARACTER_CHAR_JSON);
 
-  if (metadata::user::GetCharacterName() == characterName)
+  if (user::GetCharacterName() == characterName)
   {
-    enter_courtroom(metadata::user::GetCharacterId());
+    enter_courtroom(user::GetCharacterId());
     return;
   }
 
@@ -243,34 +232,35 @@ void Courtroom::SwitchCharacterByName(const char *characterName)
     return;
   }
 
-  if(!CharacterManager::get().GetCharacterInServer(characterName))
+  if(!CharacterRepository::characterExists(characterName))
   {
-    serverCharacterId = CharacterManager::get().GetAvaliablePersona();
+    serverCharacterId = CharacterRepository::findAvailablePersona();
     if(serverCharacterId == -1) return;
-    ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(serverCharacterId), characterName);
+    ao_config->set_character_ini(CharacterRepository::characterNameServer(serverCharacterId), characterName);
   }
   else
   {
-    serverCharacterId = CharacterManager::get().GetFilteredId(characterName);
+    serverCharacterId = CharacterRepository::networkedIdFromName(characterName);
   }
 
   ao_app->send_server_packet(
-      DRPacket("CC", {QString::number(metadata::user::getOutgoingClientId()), QString::number(serverCharacterId), "HDID"}));
+      DRPacket("CC", {QString::number(user::getOutgoingClientId()), QString::number(serverCharacterId), "HDID"}));
 
 }
 
 void Courtroom::char_clicked(int n_char)
 {
-  if (metadata::user::GetCharacterName() == UIFilteredCharButton.at(n_char)->character())
+  using namespace dro::network::metadata;
+  if (user::GetCharacterName() == UIFilteredCharButton.at(n_char)->character())
   {
-    enter_courtroom(metadata::user::GetCharacterId());
+    enter_courtroom(user::GetCharacterId());
     return;
   }
 
   int n_real_char = n_char + m_current_chr_page * m_page_max_chr_count;
 
-  QString l_pathCharIni = ao_app->get_character_path(CharacterManager::get().mFilteredChrList.at(n_real_char).name, CHARACTER_CHAR_INI);
-  QString l_pathCharJson = ao_app->get_character_path(CharacterManager::get().mFilteredChrList.at(n_real_char).name, CHARACTER_CHAR_JSON);
+  QString l_pathCharIni = fs::characters::getFilePath(CharacterRepository::characterNameFiltered(n_real_char), CHARACTER_CHAR_INI);
+  QString l_pathCharJson = fs::characters::getFilePath(CharacterRepository::characterNameFiltered(n_real_char), CHARACTER_CHAR_JSON);
 
   qDebug() << "char_ini_path" << l_pathCharIni;
 
@@ -281,20 +271,20 @@ void Courtroom::char_clicked(int n_char)
     return;
   }
 
-  if(!CharacterManager::get().GetCharacterInServer(n_real_char))
+  if(!CharacterRepository::filteredCharacterExists(n_real_char))
   {
     int filtered_char = n_real_char;
-    n_real_char = CharacterManager::get().GetAvaliablePersona();
+    n_real_char = CharacterRepository::findAvailablePersona();
     if(n_real_char == -1) return;
-    ao_config->set_character_ini(CharacterManager::get().GetServerCharaName(n_real_char), CharacterManager::get().GetFilteredCharaName(filtered_char));
+    ao_config->set_character_ini(CharacterRepository::characterNameServer(n_real_char), CharacterRepository::characterNameFiltered(filtered_char));
   }
   else
   {
-    n_real_char = CharacterManager::get().GetFilteredId(n_real_char);
+    n_real_char = CharacterRepository::networkedIdFromFiltered(n_real_char);
   }
 
   ao_app->send_server_packet(
-      DRPacket("CC", {QString::number(metadata::user::getOutgoingClientId()), QString::number(n_real_char), "HDID"}));
+      DRPacket("CC", {QString::number(user::getOutgoingClientId()), QString::number(n_real_char), "HDID"}));
 }
 
 void Courtroom::char_mouse_entered(AOCharButton *p_caller)

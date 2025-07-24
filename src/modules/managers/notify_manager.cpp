@@ -1,9 +1,9 @@
 #include "notify_manager.h"
+#include "pch.h"
+
 #include "dro/system/theme_scripting.h"
 
 NotifyManager NotifyManager::s_Instance;
-
-
 
 void NotifyManager::ThemeSetupPopup(ChoiceDialog *notify)
 {
@@ -51,11 +51,6 @@ void NotifyManager::SetSenderId(int id)
 void NotifyManager::SetSenderName(QString sender)
 {
   mSenderName = sender;
-}
-
-void NotifyManager::SetSenderCharacter(QString sender)
-{
-  mSenderCharacter = sender;
 }
 
 void NotifyManager::SetRequestKey(QString sender)

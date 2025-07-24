@@ -1,16 +1,10 @@
 #ifndef LEGACY_VIEWPORT_H
 #define LEGACY_VIEWPORT_H
 #include "dreffectmovie.h"
-#include "dro/interface/widgets/rp_label.h"
-#include "dro/interface/widgets/rp_text_edit.h"
 #include "dro/interface/widgets/viewports/rp_viewport.h"
-#include "drgraphicscene.h"
 #include "dro/param/background/background_data.h"
 #include "drshoutmovie.h"
 #include "mk2/graphicsvideoscreen.h"
-
-#include <QObject>
-#include <QWidget>
 
 class RPTypewriter;
 class DRSceneMovie;

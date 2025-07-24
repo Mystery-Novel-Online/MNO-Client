@@ -1,5 +1,5 @@
 #include "audio.h"
-#include <aoapplication.h>
+
 #include "dro/system/audio/blip_player.h"
 #include "dro/system/audio/music_player.h"
 #include "dro/system/audio/sfx_player.h"
@@ -7,7 +7,6 @@
 #include "dro/system/audio/shout_player.h"
 #include "dro/system/audio/ambience_player.h"
 
-#include <QString>
 
 static AOBlipPlayer *s_blipPlayer;
 static int s_blipRateOverride = -1;

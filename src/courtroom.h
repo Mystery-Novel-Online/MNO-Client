@@ -1,23 +1,21 @@
 #ifndef COURTROOM_H
 #define COURTROOM_H
 
-#include "datatypes.h"
+
 #include "drgraphicscene.h"
 #include "dro/interface/menus/area_menu.h"
 #include "dro/interface/menus/bgm_menu.h"
 #include "dro/interface/menus/char_menu.h"
-#include "dro/interface/widgets/bgm_filter.h"
-#include "dro/interface/widgets/screenshot_button.h"
-#include "dro/interface/widgets/health_bar.h"
-#include "dro/interface/widgets/rp_slider.h"
 #include "dro/network/metadata/user_metadata.h"
 #include "dro/system/audio/music_player.h"
+#include "dro/system/theme.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "mk2/spriteplayer.h"
 #include "mk2/spritereadersynchronizer.h"
+
 
 class AOApplication;
 class AOBlipPlayer;
@@ -44,14 +42,6 @@ class DRShoutMovie;
 class DRSplashMovie;
 class DRStickerViewer;
 class RPTextEdit;
-#include <QMainWindow>
-#include <QMap>
-#include <QModelIndex>
-#include <QQueue>
-#include <QSharedPointer>
-#include <QSlider>
-#include <QStack>
-#include <QTextCharFormat>
 
 class QAction;
 class QCheckBox;
@@ -66,16 +56,21 @@ class QSignalMapper;
 class QLabel;
 
 #include <optional>
-#include "dro/interface/widgets/player_list_slot.h"
 
 #include <mk2/drplayer.h>
-#include "dro/interface/widgets/emotion_selector.h"
-#include "dro/interface/widgets/choice_dialog.h"
-#include "dro/interface/widgets/viewport_overlay.h"
+#include "dro/interface/widgets/scene_widget.h"
 
-using namespace dro::network;
+using namespace dro;
+using namespace dro::network::metadata;
 
-class Courtroom : public QWidget
+struct IncomingTagData
+{
+  int timestamp;
+  MessageTagType action;
+  QVariantList variables;
+};
+
+class Courtroom : public SceneWidget
 {
   Q_OBJECT
 
@@ -219,15 +214,12 @@ public:
 
   // helper function that populates ui_music_list with the contents of
   // music_list
-  void filter_list_widget(QListWidget *widget, QString filter);
   bool is_area_music_list_separated();
   void list_music();
   void list_areas();
 
   void list_note_files();
   void set_note_files();
-
-  void move_widget(QWidget *p_widget, QString p_identifier);
 
   void set_shouts();
 
@@ -252,6 +244,9 @@ public:
   void handle_chatmessage();
   void handle_chatmessage_2();
   void handle_chatmessage_3();
+
+  void handelInvestigation(QString p_contents);
+  void handleScene(QStringList p_contents);
 
   struct IcLogTextFormat
   {
@@ -368,7 +363,7 @@ private:
   QString icchatlogsfilename = QDateTime::currentDateTime().toString("'logs/'yyyy-MM-dd (hh.mm.ss.z)'.txt'");
 
   static const int MINIMUM_MESSAGE_SIZE = 15;
-  static const int OPTIMAL_MESSAGE_SIZE = 25;
+  static const int OPTIMAL_MESSAGE_SIZE = 26;
   QStringList m_pre_chatmessage;
   GameState m_game_state = GameState::Finished;
 
@@ -390,6 +385,8 @@ private:
   bool chatmessage_is_empty = false;
 
   QString previous_ic_message;
+
+  QVector<IncomingTagData> m_ProcessedTags = {};
 
   QColor m_message_color;
   QString m_message_color_name;
@@ -528,21 +525,18 @@ private:
 
   DRChatLog *ui_ooc_chatlog = nullptr;
 
-  QListWidget *ui_area_list = nullptr;
+  RPListWidget *ui_area_list = nullptr;
   QLineEdit *ui_area_search = nullptr;
-  QListWidget *ui_music_list = nullptr;
+  RPListWidget *ui_music_list = nullptr;
   QLineEdit *ui_music_search = nullptr;
   BGMMenu *p_MenuBGM = nullptr;
 
   AreaMenu *p_AreaContextMenu = nullptr;
 
-  QListWidget *animList = nullptr;
-  QListWidget *ui_sfx_list = nullptr;
+  RPListWidget *ui_anim_list = nullptr;
+  RPListWidget *ui_sfx_list = nullptr;
   QVector<DRSfx> m_sfx_list;
   const QString m_sfx_default_file = "__DEFAULT__";
-  QColor m_animListIdle;
-  QColor m_animListSelected;
-  QColor m_animListHeader;
 
   QColor m_sfx_color_found;
   QColor m_sfx_color_missing;
@@ -553,7 +547,7 @@ private:
 
   QLineEdit *ui_ic_chat_showname = nullptr;
   QWidget *ui_ic_chat_message = nullptr;
-  QLineEdit *ui_ic_chat_message_field = nullptr;
+  RPMessageInput *ui_ic_chat_message_field = nullptr;
   QLabel *ui_ic_chat_message_counter = nullptr;
   int m_lastTypingPacket = 0;
 
@@ -722,7 +716,6 @@ private:
   void insert_widget_names(QVector<QString> &p_widget_names, QVector<QWidget *> &p_widgets);
   template <typename T>
   void insert_widget_names(QVector<QString> &p_widget_names, QVector<T *> &p_widgets);
-  void setupWidgetTabs();
   void set_widget_layers();
   void set_widget_layers_legacy();
 
@@ -792,6 +785,10 @@ private slots:
   void handle_ic_message_length();
   void on_chat_config_changed();
   void OnBgmFilterChanged();
+
+
+  void onFlipTagActivated();
+  void onAnimationTag();
 
   void CharacterSearchUpdated();
 
@@ -923,8 +920,6 @@ public:
   QString current_sfx_file();
   void load_current_character_sfx_list();
   void load_sfx_list_theme();
-  void select_default_sfx();
-  void clear_sfx_selection();
   void update_all_sfx_item_color();
 
 public slots:
@@ -932,7 +927,6 @@ public slots:
   void filter_sfx_list();
 
 private:
-  void setAnimItemColor(QListWidgetItem *item);
   void set_sfx_item_color(QListWidgetItem *item);
 
 private slots:

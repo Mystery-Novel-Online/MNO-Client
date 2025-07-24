@@ -1,20 +1,12 @@
-#include "aoapplication.h"
+#include "pch.h"
 
 #include "aoconfig.h"
-#include "commondefs.h"
-#include "courtroom.h"
-#include "modules/managers/character_manager.h"
-
-#include <QDebug>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QRegExp>
 
 #include <modules/theme/thememanager.h>
 #include "dro/fs/fs_reading.h"
 #include "dro/fs/fs_mounting.h"
 #include "dro/system/replay_playback.h"
+#include "dro/network/metadata/server_metadata.h"
 
 // Copied over from Vanilla.
 // As said in the comments there, this is a *super broad* definition.
@@ -28,8 +20,10 @@
 
 void AOApplication::reload_packages()
 {
-  CharacterManager::get().ResetPackages();
+  // Reset cached data
+  CharacterRepository::reset();
   dro::system::replays::io::resetCache();
+
   QVector<QString> packageNames = FS::Packages::Scan();
   QString packagesPath = FS::Paths::ApplicationPath() + "/packages/";
 
@@ -44,7 +38,7 @@ void AOApplication::reload_packages()
       packageChar.name = character_folder;
       baseCharacters.append(std::move(packageChar));
     }
-    CharacterManager::get().SetCharList("base", baseCharacters);
+    CharacterRepository::setFilteredList("base", baseCharacters);
   }
 
   for(QString packageName : packageNames)
@@ -60,15 +54,14 @@ void AOApplication::reload_packages()
         packageChar.name = character_folder;
         packageCharacters.append(std::move(packageChar));
       }
-      CharacterManager::get().SetCharList(packageName, packageCharacters);
+      CharacterRepository::setFilteredList(packageName, packageCharacters);
     }
 
-    QDir replaysDirectory(packagesPath + packageName + "/replays");
-    if (replaysDirectory.exists())
+    const QDir replaysDir(packagesPath + packageName + "/replays");
+    if (replaysDir.exists())
     {
-      QVector<QString> l_replayGroups;
-      QStringList l_folderGroups = replaysDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-      dro::system::replays::io::cachePackage(packageName, l_folderGroups);
+      const QStringList replayFolders = replaysDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+      dro::system::replays::io::cachePackage(packageName, replayFolders);
     }
   }
 
@@ -96,18 +89,6 @@ QVector<QString> AOApplication::get_all_package_and_base_paths(QString p_path)
 
 
   return found_paths;
-}
-
-
-
-QString AOApplication::get_character_folder_path(QString p_chr)
-{
-  return FS::Paths::FindDirectory("characters/" + p_chr);
-}
-
-QString AOApplication::get_character_path(QString p_chr, QString p_file)
-{
-  return get_character_folder_path(p_chr) + "/" + p_file;
 }
 
 QString AOApplication::get_music_path(QString p_song)

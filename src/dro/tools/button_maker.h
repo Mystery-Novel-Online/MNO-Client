@@ -1,18 +1,8 @@
 #ifndef BUTTON_MAKER_H
 #define BUTTON_MAKER_H
 
-#include <QWidget>
-#include <QObject>
-#include <QPushButton>
-#include <QHBoxLayout>
-#include <QVBoxLayout>
-#include <QPainter>
-#include <QMouseEvent>
-#include <QWheelEvent>
-#include <QDebug>
-#include <drgraphicscene.h>
-#include <dro/param/actor/actor_loader.h>
-#include "drcharactermovie.h"
+class DRGraphicsView;
+class DRCharacterMovie;
 
 class ButtonMakerOverlay : public QWidget
 {

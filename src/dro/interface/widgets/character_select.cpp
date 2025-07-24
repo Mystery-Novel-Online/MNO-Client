@@ -1,7 +1,6 @@
 #include "character_select.h"
+#include "pch.h"
 
-#include <QPaintEvent>
-#include "courtroom.h"
 
 CharacterSelectWidget::CharacterSelectWidget(QWidget *parent, AOApplication *p_ao_app) : QWidget(parent)
 {

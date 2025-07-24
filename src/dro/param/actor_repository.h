@@ -2,6 +2,7 @@
 #define ACTOR_REPOSITORY_H
 
 class QString;
+class QStringList;
 class ActorData;
 
 namespace dro::actor::repository
@@ -12,11 +13,13 @@ namespace dro::actor::repository
 
 namespace dro::actor::user
 {
+  ActorData *switchCharacter(QString folder);
   ActorData *load(QString folder);
   ActorData *retrieve();
   QString name();
   void toggleLayer(const QString& name, bool state);
   bool layerState(const QString& name);
+  void setOutfitList(QStringList outfits);
 }
 
 

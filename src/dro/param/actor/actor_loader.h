@@ -1,7 +1,6 @@
 #ifndef ACTOR_LOADER_H
 #define ACTOR_LOADER_H
 
-#include <datatypes.h>
 #include "dro/param/json_reader.h"
 #include "mk2/spriteplayer.h"
 
@@ -40,6 +39,7 @@ class ActorData
 {
 public:
   ActorData(){};
+  virtual ~ActorData() = default;
 
   virtual QString GetEmoteSprite(const DREmote& t_emote);
   virtual QString GetEmoteButton(const DREmote& t_emote, bool t_enabled);

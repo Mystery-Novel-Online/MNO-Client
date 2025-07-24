@@ -1,13 +1,5 @@
 #pragma once
 
-#include <QMetaType>
-#include <QString>
-#include <QVector>
-
-#include <optional>
-
-#include <bass/bass.h>
-
 class DRAudioDevice
 {
 public:

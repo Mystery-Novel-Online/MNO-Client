@@ -1,12 +1,34 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H
 
-#include "qvector2d.h"
-#include <QDateTime>
-#include <QMap>
-#include <QVector>
-#include <QRect>
-#include <QColor>
+enum MessageTagType
+{
+  TagType_SoundEffect,
+  TagType_MusicChange,
+  TagType_EmoteChange,
+  TagType_PlaySequence,
+  TagType_Wait,
+  TagType_Effect,
+  TagType_Flip,
+  TagType_Hide,
+  TagType_NewLine,
+};
+
+struct ThemeMessageHighlight
+{
+  QChar openingCharacter;
+  QChar closingCharacter;
+  QString colourValue;
+  bool hideCharacter;
+};
+
+struct MessageTag
+{
+  int id;
+  int index;
+  QString image;
+  QString value;
+};
 
 class MessageEffect
 {
@@ -50,11 +72,11 @@ public:
 };
 
 
-enum RPSceneType
+enum ThemeSceneType
 {
-  LOBBY,
-  COURTROOM,
-  TESTINGLABS,
+  SceneType_ServerSelect,
+  SceneType_Courtroom,
+  SceneType_TestingLabs,
   SceneType_Replay,
   SceneType_Viewport
 };
@@ -87,6 +109,7 @@ struct EmoteLayer
 
   QString blendMode;
   QString toggleName;
+  QString assetPath;
 };
 
 
@@ -371,7 +394,8 @@ enum ChatMessage : int32_t
   CMOffsetS,
   CMOutfitName,
   CMAnimSequence,
-  CMSpriteLayers
+  CMSpriteLayers,
+  CMMessageTags
 };
 
 enum EmoteMod

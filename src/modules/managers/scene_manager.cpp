@@ -1,8 +1,6 @@
 #include "scene_manager.h"
-#include <QPropertyAnimation>
-#include <QGraphicsOpacityEffect>
-#include <courtroom.h>
-#include "aoapplication.h"
+#include "pch.h"
+
 #include "dro/fs/fs_reading.h"
 #include "dro/param/background/background_reader.h"
 #include "dro/param/background/legacy_background_reader.h"

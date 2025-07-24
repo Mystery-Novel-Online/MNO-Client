@@ -1,5 +1,4 @@
 #include "keyframe_channel.h"
-#include <QVector3D>
 
 template<typename T>
 void KeyframeChannel<T>::AddKeyframe(float time, const T &value, KeyframeCurve curveIn, KeyframeCurve curveOut)

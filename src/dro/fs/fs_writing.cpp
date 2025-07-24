@@ -1,8 +1,5 @@
 #include "fs_writing.h"
 
-#include <QCoreApplication>
-#include <QDir>
-
 void DirUtils::CreateInitialFolders()
 {
   QDir().mkdir("base/screenshots");

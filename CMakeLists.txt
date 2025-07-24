@@ -134,9 +134,9 @@ set(HEADERS
   src/mk2/spritereadersynchronizer.h
   src/mk2/spriteseekingreader.h
   src/mk2/spriteviewer.h
-  src/modules/managers/character_manager.h
+
   src/modules/managers/notify_manager.h
-  src/modules/managers/pair_manager.h
+
   src/modules/managers/scene_manager.h
   src/modules/theme/thememanager.h
   src/theme.h
@@ -269,9 +269,9 @@ set(SOURCES
   src/mk2/spritedynamicreader.cpp
   src/mk2/spriteplayer.cpp
   src/mk2/spriteseekingreader.cpp
-  src/modules/managers/character_manager.cpp
+
   src/modules/managers/notify_manager.cpp
-  src/modules/managers/pair_manager.cpp
+
   src/modules/managers/scene_manager.cpp
   src/modules/theme/thememanager.cpp
   src/path_functions.cpp
@@ -294,7 +294,17 @@ add_executable(dro-client
   ${SOURCES}
   ${RESOURCES}
   src/dro/param/actor_repository.h src/dro/param/actor_repository.cpp
+  src/dro/system/runtime_values.h src/dro/system/runtime_values.cpp
+  src/dro/system/theme.h src/dro/system/theme.cpp
+  src/dro/interface/widgets/scene_widget.h src/dro/interface/widgets/scene_widget.cpp
+  src/dro/interface/widgets/rp_list_widget.h src/dro/interface/widgets/rp_list_widget.cpp
+  src/dro/interface/widgets/rp_message_input.h src/dro/interface/widgets/rp_message_input.cpp
+  src/dro/encoding/binary_encoding.h src/dro/encoding/binary_encoding.cpp
+  src/pch.h
+  src/dro/fs/fs_characters.h src/dro/fs/fs_characters.cpp
+
 )
+target_precompile_headers(dro-client PRIVATE src/pch.h)
 
 target_include_directories(dro-client PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}

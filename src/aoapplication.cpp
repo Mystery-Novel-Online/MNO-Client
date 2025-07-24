@@ -1,30 +1,23 @@
-#include "aoapplication.h"
+#include "pch.h"
 
 #include "aoconfig.h"
 #include "aoconfigpanel.h"
-#include "courtroom.h"
 #include "debug_functions.h"
 #include "drdiscord.h"
-#include "dro/fs/fs_writing.h"
-#include "dro/system/audio.h"
-#include "drpacket.h"
 #include "drserversocket.h"
-#include "dro/fs/fs_reading.h"
 #include "lobby.h"
 #include "theme.h"
 #include "drtheme.h"
 #include "version.h"
 
-#include <QDir>
-#include <QFileInfo>
-#include <QFontDatabase>
-#include <QRegularExpression>
-
-#include <modules/managers/character_manager.h>
 #include "dro/system/localization.h"
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_writing.h"
+#include "dro/fs/fs_characters.h"
 #include "dro/system/runtime_loop.h"
 #include "dro/system/effects.h"
+#include "dro/system/audio.h"
+#include "dro/network/metadata/server_metadata.h"
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -78,7 +71,7 @@ AOApplication::AOApplication(int &argc, char **argv)
   connect(m_server_socket, &DRServerSocket::connection_state_changed, this, &AOApplication::_p_handle_server_state_update);
   connect(m_server_socket, SIGNAL(packet_received(DRPacket)), this, SLOT(_p_handle_server_packet(DRPacket)));
 
-  CharacterManager::get().LoadFavoritesList();
+  CharacterRepository::loadFavorites();
   reload_packages();
   resolve_current_theme();
 
@@ -238,94 +231,6 @@ QString AOApplication::get_ambient_sfx_path(QString p_file)
   return find_asset_path(FS::Paths::FindFile("sounds/ambient/" + p_file));
 }
 
-QString AOApplication::get_character_sprite_path(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder)
-{
-  bool l_valid = true;
-  const QStringList l_blacklist{
-      "char_icon.png",
-      "showname.png",
-      "emotions",
-  };
-  for (const QString &i_black : l_blacklist)
-  {
-    if (p_emote.startsWith(i_black, Qt::CaseInsensitive))
-    {
-      l_valid = false;
-      break;
-    }
-  }
-
-  QStringList l_file_name_list;
-  for (const QString &i_extension : FS::Formats::SupportedImages())
-  {
-    if (!p_prefix.isEmpty())
-    {
-      if (p_emote.contains("outfits/"))
-      {
-        int lastSlashIndex = p_emote.lastIndexOf('/');
-        l_file_name_list.append(p_emote.left(lastSlashIndex + 1) + p_prefix + p_emote.mid(lastSlashIndex + 1) + i_extension);
-      }
-      else
-      {
-        l_file_name_list.append(p_prefix + p_emote + i_extension);
-      }
-
-    }
-    l_file_name_list.append(p_emote + i_extension);
-  }
-
-  QString l_file_path;
-  if (l_valid)
-  {
-    QStringList l_file_path_list;
-    for (const QString &i_chr_name : get_char_include_tree(p_character))
-    {
-      for (const QString &i_file_name : qAsConst(l_file_name_list))
-      {
-        l_file_path_list.append(get_character_path(i_chr_name, i_file_name));
-      }
-    }
-
-    for (const QString &i_file_path : qAsConst(l_file_path_list))
-    {
-      const QString l_resolved_file_path = find_asset_path(i_file_path);
-      if (!l_resolved_file_path.isEmpty())
-      {
-        l_file_path = l_resolved_file_path;
-        break;
-      }
-    }
-  }
-
-  if (l_file_path.isEmpty() && p_use_placeholder)
-  {
-    l_file_path = find_theme_asset_path("placeholder", FS::Formats::AnimatedImages());
-  }
-
-  if (l_file_path.isEmpty())
-  {
-    qWarning() << "error: character animation not found"
-               << "character:" << p_character << "emote:" << p_emote << "prefix:" << p_prefix;
-  }
-
-  return l_file_path;
-}
-
-QString AOApplication::get_character_sprite_pre_path(QString character, QString emote)
-{
-  return get_character_sprite_path(character, emote, QString{}, false);
-}
-
-QString AOApplication::get_character_sprite_idle_path(QString character, QString emote)
-{
-  return get_character_sprite_path(character, emote, "(a)", true);
-}
-
-QString AOApplication::get_character_sprite_talk_path(QString character, QString emote)
-{
-  return get_character_sprite_path(character, emote, "(b)", true);
-}
-
 QString AOApplication::get_background_sprite_path(QString p_background_name, QString p_image)
 {
   const QString l_target_filename = find_asset_path(get_background_path(p_background_name) + "/" + p_image);
@@ -345,10 +250,10 @@ QString AOApplication::getWeatherSprite(QString weather)
 QString AOApplication::get_shout_sprite_path(QString p_character, QString p_shout, const QString &outfit)
 {
   QStringList l_filepath_list{
-      get_character_path(p_character, "outfits/" + outfit + "/" + p_shout),
-      get_character_path(p_character, "outfits/" + outfit + "/" + p_shout + "_bubble"),
-      get_character_path(p_character, p_shout),
-      get_character_path(p_character, p_shout + "_bubble"),
+      fs::characters::getFilePath(p_character, "outfits/" + outfit + "/" + p_shout),
+      fs::characters::getFilePath(p_character, "outfits/" + outfit + "/" + p_shout + "_bubble"),
+      fs::characters::getFilePath(p_character, p_shout),
+      fs::characters::getFilePath(p_character, p_shout + "_bubble"),
   };
 
   QString l_filename = find_asset_path(l_filepath_list, FS::Formats::AnimatedImages());
@@ -383,8 +288,8 @@ QString AOApplication::get_theme_sprite_path(QString p_file_name, QString p_char
     }
 
     QStringList l_path_list{
-        get_character_path(p_character, l_character_file_name),
-        get_character_path(p_character, "overlay/" + l_character_file_name),
+        fs::characters::getFilePath(p_character, l_character_file_name),
+        fs::characters::getFilePath(p_character, "overlay/" + l_character_file_name),
     };
     l_file_path = find_asset_path(l_path_list, FS::Formats::SupportedImages());
   }

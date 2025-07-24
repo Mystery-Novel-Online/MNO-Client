@@ -1,10 +1,6 @@
 #ifndef RP_WIDGET_H
 #define RP_WIDGET_H
 
-#include <QObject>
-#include <QWidget>
-#include "dro/interface/widgets/sticker_viewer.h"
-
 class AOApplication;
 
 class RPWidget : public QWidget
@@ -12,6 +8,7 @@ class RPWidget : public QWidget
   Q_OBJECT
 public:
   explicit RPWidget(const QString &name, QWidget *parent = nullptr);
+  ~RPWidget();
   void setDragable(bool dragable);
   void setBackgroundImage(QString imageName);
   virtual void resetTransform();

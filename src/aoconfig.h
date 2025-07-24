@@ -1,7 +1,7 @@
 #ifndef AOCONFIG_H
 #define AOCONFIG_H
 
-#include "datatypes.h"
+
 
 #include <QObject>
 

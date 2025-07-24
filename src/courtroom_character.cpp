@@ -1,41 +1,28 @@
-#include "courtroom.h"
+#include "pch.h"
 
-#include "aoapplication.h"
 #include "aoconfig.h"
-#include "commondefs.h"
 #include "drpacket.h"
 #include "theme.h"
 
-#include <QAbstractItemView>
-#include <QComboBox>
-#include <QLineEdit>
-#include <QCompleter>
-#include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QFutureWatcher>
-#include <QListView>
-#include <QPixmap>
-#include <QUrl>
-#include <QtConcurrent/QtConcurrent>
 #include "dro/fs/fs_reading.h"
+#include "dro/fs/fs_characters.h"
 #include "dro/fs/fs_mounting.h"
 
 void Courtroom::set_character_id(const int p_chr_id)
 {
-  if (!metadata::user::SetCharacterId(p_chr_id)) return;
+  if (!user::SetCharacterId(p_chr_id)) return;
   load_character();
   Q_EMIT character_id_changed(p_chr_id);
 }
 
 QString Courtroom::get_character_ini()
 {
-  return ao_config->character_ini(metadata::user::GetCharacterName());
+  return ao_config->character_ini(user::GetCharacterName());
 }
 
 QString Courtroom::get_character_content_url()
 {
-  QFile l_contentFile(ao_app->get_character_path(get_character_ini(), "CONTENT.txt"));
+  QFile l_contentFile(fs::characters::getFilePath(get_character_ini(), "CONTENT.txt"));
   if (!l_contentFile.open(QIODevice::ReadOnly))
     return nullptr;
 
@@ -56,7 +43,7 @@ void drSetItemIcon(QComboBox *p_widget, const int p_index, const QString &p_chr_
     return QIcon(l_blank_texture);
   }();
 
-  const QString l_icon_file = ao_app->get_character_path(p_chr_name, "char_icon.png");
+  const QString l_icon_file = fs::characters::getFilePath(p_chr_name, "char_icon.png");
   p_widget->setItemIcon(p_index, FS::Checks::FileExists(l_icon_file) ? QIcon(l_icon_file) : s_blank_icon);
 }
 } // namespace
@@ -104,7 +91,7 @@ void Courtroom::SearchForCharacterListAsync()
     for (const QFileInfo &i_info : l_info_list)
     {
       const QString l_name = i_info.fileName();
-      if (!FS::Checks::FileExists(ao_app->get_character_path(l_name, CHARACTER_CHAR_INI)) && !FS::Checks::FileExists(ao_app->get_character_path(l_name, CHARACTER_CHAR_JSON)))
+      if (!FS::Checks::FileExists(fs::characters::getFilePath(l_name, CHARACTER_CHAR_INI)) && !FS::Checks::FileExists(fs::characters::getFilePath(l_name, CHARACTER_CHAR_JSON)))
         continue;
       if(!currentIniswapList.contains(l_name))
       {
@@ -186,13 +173,13 @@ void Courtroom::SetChatboxFocus()
 
 void Courtroom::update_default_iniswap_item()
 {
-  drSetItemIcon(ui_iniswap_dropdown, 0, metadata::user::GetCharacterName(), ao_app);
+  drSetItemIcon(ui_iniswap_dropdown, 0, user::GetCharacterName(), ao_app);
 }
 
 void Courtroom::select_base_character_iniswap()
 {
   const QString l_current_chr = get_character_ini();
-  if (metadata::user::GetCharacterName() == l_current_chr)
+  if (user::GetCharacterName() == l_current_chr)
   {
     ui_iniswap_dropdown->setCurrentIndex(0);
     return;
@@ -211,7 +198,7 @@ void Courtroom::refresh_character_content_url()
 
 void Courtroom::update_character_content_url(QString url)
 {
-  QString contentFilePath = ao_app->get_character_path(get_character_ini(), "CONTENT.txt");
+  QString contentFilePath = fs::characters::getFilePath(get_character_ini(), "CONTENT.txt");
 
   QFile contentFile(contentFilePath);
   if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -226,8 +213,8 @@ void Courtroom::update_character_content_url(QString url)
 
 void Courtroom::on_iniswap_dropdown_changed(int p_index)
 {
-  ao_config->set_character_ini(metadata::user::GetCharacterName(),
-                               p_index == 0 ? metadata::user::GetCharacterName() : ui_iniswap_dropdown->itemText(p_index));
+  ao_config->set_character_ini(user::GetCharacterName(),
+                               p_index == 0 ? user::GetCharacterName() : ui_iniswap_dropdown->itemText(p_index));
 }
 
 void Courtroom::onCharacterSelectPackageChanged(int p_index)

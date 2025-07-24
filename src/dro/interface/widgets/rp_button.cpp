@@ -1,9 +1,7 @@
 #include "rp_button.h"
 
-#include "aoapplication.h"
-#include "commondefs.h"
 #include "debug_functions.h"
-#include "dro/fs/fs_reading.h"
+#include "dro/system/theme.h"
 #include "drtheme.h"
 #include "theme.h"
 
@@ -38,6 +36,7 @@ bool RPButton::has_image()
 
 void RPButton::set_image(QString p_image)
 {
+  m_relativeButtonPath = p_image;
   QString path = m_app->find_theme_asset_path(p_image);
   if(m_image == path) return;
   m_image_stem = p_image;
@@ -89,5 +88,16 @@ void RPButton::refresh_image()
 
 void RPButton::refresh_position()
 {
-  set_size_and_pos(this, m_friendlyName, COURTROOM_DESIGN_INI, m_app);
+  dro::system::theme::applyDimensions(this, m_friendlyName, m_Scene);
+  set_image(m_relativeButtonPath);
+}
+
+void RPButton::setName(const QString &name)
+{
+  m_friendlyName = name;
+}
+
+void RPButton::setScene(ThemeSceneType scene)
+{
+  m_Scene = scene;
 }

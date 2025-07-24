@@ -1,9 +1,6 @@
 #include "fs_mounting.h"
 #include "fs_reading.h"
 
-#include <QDir>
-#include <QTextStream>
-
 static QVector<QString> s_foundPackages = {};
 static QVector<QString> s_disabledPackages = {};
 

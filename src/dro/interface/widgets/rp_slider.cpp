@@ -1,5 +1,4 @@
 #include "rp_slider.h"
-#include <QInputDialog>
 
 RPSlider::RPSlider(Qt::Orientation orientation, QWidget *parent) : QSlider(orientation, parent)
 {

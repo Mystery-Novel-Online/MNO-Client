@@ -24,6 +24,7 @@
 #include <QMediaService>
 #include <QStyleOptionGraphicsItem>
 #include <QUrl>
+#include "dro/fs/fs_characters.h"
 
 DRVideoScreen::DRVideoScreen(AOApplication *ao_app, QGraphicsItem *parent)
     : QGraphicsVideoItem(parent)
@@ -86,7 +87,7 @@ void DRVideoScreen::play_character_video(QString p_character, QString p_video)
   const QString l_video_path = QString("videos/%1").arg(p_video);
   for (const QString &i_character_name : ao_app->get_char_include_tree(p_character))
   {
-    l_filepath_list.append(ao_app->get_character_path(i_character_name, l_video_path));
+    l_filepath_list.append(fs::characters::getFilePath(i_character_name, l_video_path));
   }
 
   const QString l_filepath = ao_app->find_asset_path(l_filepath_list);

@@ -1,14 +1,4 @@
-#include "note_picker.h"
-
-#include "dro/interface/widgets/rp_button.h"
-#include "note_area.h"
-#include "courtroom.h"
 #include "debug_functions.h"
-
-#include <QFileDialog>
-#include <QLineEdit>
-#include <QVBoxLayout>
-
 #include "dro/fs/fs_reading.h"
 
 AONotePicker::AONotePicker(QWidget *p_parent, AOApplication *p_ao_app)

@@ -1,29 +1,17 @@
-#include "courtroom.h"
+#include "pch.h"
 
-#include "aoapplication.h"
-#include "dro/interface/widgets/rp_button.h"
 #include "aoconfig.h"
-#include "dro/interface/widgets/emotion_button.h"
 #include "dro/system/localization.h"
-#include "dro/interface/widgets/image_display.h"
-#include "commondefs.h"
 #include "drcharactermovie.h"
 #include "drgraphicscene.h"
 #include "theme.h"
 #include "drtheme.h"
 #include "modules/theme/thememanager.h"
-#include <QCheckBox>
-#include <QComboBox>
-#include <QFuture>
-#include "modules/managers/character_manager.h"
-#include <QLineEdit>
-#include <QScreen>
-#include <QtMath>
-#include <QtConcurrent/QtConcurrent>
-#include "dro/interface/widgets/emotion_selector.h"
+
 #include "dro/param/actor_repository.h"
+#include "dro/param/actor/actor_loader.h"
 #include "dro/system/text_encoding.h"
-#include <dro/interface/menus/emote_menu.h>
+#include "dro/interface/menus/emote_menu.h"
 #include "dro/interface/courtroom_layout.h"
 
 int s_emotePreviewIndex = -1;

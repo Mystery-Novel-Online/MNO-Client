@@ -1,8 +1,5 @@
 #include "draudio.h"
-
-#include <bass/bass.h>
-
-#include <QString>
+#include "pch.h"
 
 QString DRAudio::get_bass_error(const int32_t p_error_code)
 {

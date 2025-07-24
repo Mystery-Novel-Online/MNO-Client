@@ -40,7 +40,7 @@ namespace courtroom
     void setInputFieldContents(const std::string& text);
     std::string getDisplayName();
     void setDisplayName(const std::string& text);
-    void appendMessage(const char* sender, const char* message);
+    void appendMessage(const std::string& sender, const std::string& message);
   }
 
   namespace choice
@@ -107,6 +107,8 @@ namespace courtroom
   {
     void update();
     void screenshot();
+    void clearInteractions();
+    void addInteraction(const std::string& name, const std::string& description, int x, int y, int width, int height);
     QPixmap getScreenshot();
   }
 

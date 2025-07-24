@@ -1,17 +1,12 @@
 #include "player_list_slot.h"
-#include "aoapplication.h"
-#include "courtroom.h"
-#include "commondefs.h"
+
 #include "theme.h"
+
 #include "dro/fs/fs_reading.h"
 #include "dro/system/localization.h"
 #include "dro/network/metadata/user_metadata.h"
 #include "modules/theme/thememanager.h"
-
-#include <QMenu>
-#include <QUrl>
-#include <QDesktopServices>
-#include <QClipboard>
+#include "dro/fs/fs_characters.h"
 
 using namespace dro::network::metadata;
 using namespace dro::system;
@@ -26,58 +21,42 @@ constexpr int TYPING_Y_OFFSET = 27;
 }
 
 DrPlayerListEntry::DrPlayerListEntry(QWidget *parent, AOApplication *p_ao_app, int p_x, int p_y)
-    : QWidget(parent)
+    : RPWidget("player_list_slot", parent)
 {
-
-  const double themeResize = ThemeManager::get().getResize();
-  const int widgetHeight = static_cast<int>(DEFAULT_HEIGHT * themeResize);
-  const int widgetWidth = parent->size().width();
-  const int statusIconSize = static_cast<int>(STATUS_ICON_SIZE * themeResize);
+  resetTransform();
 
   ao_app = p_ao_app;
-  this->resize(widgetWidth, widgetHeight);
-  this->move(p_x, p_y);
 
-  ui_showname = new RPLabel(this, ao_app);
-  ui_showname->move(widgetHeight, 7);
-  ui_showname->resize(widgetWidth-widgetHeight, 18);
-  set_stylesheet(ui_showname, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
-
-  ui_typing = new RPLabel(this, ao_app);
-  ui_typing->move(widgetHeight + (widgetWidth-widgetHeight) / 2, 27);
-  ui_typing->resize((widgetWidth-widgetHeight) / 2, 18);
-  set_stylesheet(ui_typing, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
-
+  ui_showname = new RPLabel("player_list_showname", this);
+  ui_typing = new RPLabel("player_list_typing", this);
   ui_user_image = new AOImageDisplay(this, ao_app);
-  ui_user_image->move((int)((float)5 * themeResize), (int)((float)5 * themeResize));
-  ui_user_image->resize((int)((float)40 * ThemeManager::get().getResize()), (int)((float)40 * ThemeManager::get().getResize()));
-
-
   pCharacterBorderDisplay = new AOImageDisplay(this, ao_app);
-  pCharacterBorderDisplay->move(0, 0);
-  pCharacterBorderDisplay->resize(widgetHeight, widgetHeight);
-
   pStatusDisplay = new AOImageDisplay(this, ao_app);
-  pStatusDisplay->move((int)((float)30 * themeResize),(int)((float)23 * themeResize));
-  pStatusDisplay->resize(statusIconSize, statusIconSize);
+  m_prompt = new RPLabel(this, ao_app);
+
+  bool automaticScaling = height() == 0;
+
+  this->move(p_x, p_y);
+  if(automaticScaling)
+  {
+    refreshAutomatic(parent->size().width());
+  }
+  else
+  {
+    refreshManual(parent->size().width());
+  }
 
   const QString lStatusImagePath = ao_app->find_theme_asset_path("player_list_status.png");
-
   if (FS::Checks::FileExists(lStatusImagePath)) pStatusDisplay->set_image(lStatusImagePath);
 
 
   const QString l_selected_texture = ao_app->find_theme_asset_path("char_border.png");
-
   if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
 
-  //Prompt (For Blackouts / Look)
-  m_prompt = new RPLabel(this, ao_app);
-  m_prompt->move(5, 5);
-  m_prompt->resize(widgetWidth, widgetHeight);
-  m_prompt->setWordWrap(true);
   set_stylesheet(m_prompt, "[PLAYER LIST PROMPT]", COURTROOM_STYLESHEETS_CSS, ao_app);
 
   ui_typing->setText("Typing...");
+
   ui_typing->hide();
   ui_showname->hide();
   ui_user_image->hide();
@@ -94,6 +73,62 @@ DrPlayerListEntry::DrPlayerListEntry(QWidget *parent, AOApplication *p_ao_app, i
   m_typingTimer->setInterval(11000);
 
   connect(m_typingTimer, &QTimer::timeout, this, &DrPlayerListEntry::handleTypingTimeout);
+
+}
+
+void DrPlayerListEntry::refreshManual(int width)
+{
+  ui_showname->themeRefresh();
+  set_stylesheet(ui_showname, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
+
+  ui_typing->themeRefresh();
+  set_stylesheet(ui_typing, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
+
+  theme::applyDimensions(ui_user_image, "player_list_icon", SceneType_Courtroom);
+  theme::applyDimensions(pCharacterBorderDisplay, "player_list_border", SceneType_Courtroom);
+  theme::applyDimensions(pStatusDisplay, "player_list_status", SceneType_Courtroom);
+
+  //Prompt (For Blackouts / Look)
+  theme::applyDimensions(m_prompt, "player_list_prompt", SceneType_Courtroom);
+  m_prompt->setWordWrap(true);
+}
+
+
+void DrPlayerListEntry::refreshAutomatic(int width)
+{
+
+  const double themeResize = ThemeManager::get().getResize();
+
+  const int widgetHeight = static_cast<int>(DEFAULT_HEIGHT * themeResize);
+  const int widgetWidth = width;
+  const int statusIconSize = static_cast<int>(STATUS_ICON_SIZE * themeResize);
+
+  this->resize(widgetWidth, widgetHeight);
+
+  ui_showname->move(widgetHeight, 7);
+  ui_showname->resize(widgetWidth-widgetHeight, 18);
+
+  set_stylesheet(ui_showname, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
+
+  ui_typing->move(widgetHeight + (widgetWidth-widgetHeight) / 2, 27);
+  ui_typing->resize((widgetWidth-widgetHeight) / 2, 18);
+
+  set_stylesheet(ui_typing, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
+
+  int iconDimensionsoffset = (int)((float)5 * themeResize);
+  int iconScale = (int)((float)40 * themeResize);
+  ui_user_image->move(iconDimensionsoffset, iconDimensionsoffset);
+  ui_user_image->resize(iconScale, iconScale);
+
+  pCharacterBorderDisplay->move(0, 0);
+  pCharacterBorderDisplay->resize(widgetHeight, widgetHeight);
+
+  pStatusDisplay->move((int)((float)30 * themeResize),(int)((float)23 * themeResize));
+  pStatusDisplay->resize(statusIconSize, statusIconSize);
+
+  m_prompt->move(5, 5);
+  m_prompt->resize(widgetWidth, widgetHeight);
+  m_prompt->setWordWrap(true);
 
 }
 
@@ -132,7 +167,7 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
 
   if(!m_CharacterOutfit.isEmpty())
   {
-    characterIconPath = ao_app->get_character_path(m_character, "outfits/" + m_CharacterOutfit + "/char_icon.png");
+    characterIconPath = fs::characters::getFilePath(m_character, "outfits/" + m_CharacterOutfit + "/char_icon.png");
     if(!FS::Checks::FileExists(characterIconPath))
     {
       characterIconPath = "";
@@ -141,7 +176,7 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
 
   if(characterIconPath.isEmpty())
   {
-    characterIconPath = ao_app->get_character_path(m_character, "char_icon.png");
+    characterIconPath = fs::characters::getFilePath(m_character, "char_icon.png");
   }
 
   if(FS::Checks::FileExists(characterIconPath))
@@ -153,7 +188,7 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
       }
       else
       {
-        const QString l_selected_texture = ao_app->get_character_path(p_character, "char_border.png");
+        const QString l_selected_texture = fs::characters::getFilePath(p_character, "char_border.png");
         if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
       }
 

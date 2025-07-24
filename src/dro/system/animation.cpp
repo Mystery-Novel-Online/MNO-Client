@@ -1,6 +1,5 @@
 #include "animation.h"
 #include "dro/animation/keyframe_sequence.h"
-#include <QVector>
 
 QVector<KeyframeSequence*> s_currentSequences = {};
 

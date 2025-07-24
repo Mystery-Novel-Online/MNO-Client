@@ -1,11 +1,5 @@
 #include "version.h"
-
-#include <QFile>
-#include <QImageReader>
-#include <QString>
-#include <qprocess.h>
-#include <bass/bass.h>
-#include "datatypes.h"
+#include "pch.h"
 
 int get_release_version()
 {
@@ -14,7 +8,7 @@ int get_release_version()
 
 int get_major_version()
 {
-  return 8;
+  return 9;
 }
 
 int get_minor_version()
@@ -41,7 +35,7 @@ VersionNumber get_version_number(int baseVersion)
 
 QString get_post_version()
 {
-  return "";
+  return "b01";
 }
 
 QString get_version_string(int baseVersion)

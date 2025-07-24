@@ -1,7 +1,6 @@
 #ifndef CHARACTER_SELECT_H
 #define CHARACTER_SELECT_H
 
-#include <AOApplication.h>
 #include <QObject>
 #include <QWidget>
 

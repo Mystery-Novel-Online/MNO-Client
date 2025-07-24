@@ -1,8 +1,6 @@
 #ifndef NOTE_AREA_H
 #define NOTE_AREA_H
 
-#include "dro/interface/widgets/image_display.h"
-
 class AOApplication;
 class RPButton;
 
