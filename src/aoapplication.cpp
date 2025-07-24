@@ -84,7 +84,7 @@ AOApplication::AOApplication(int &argc, char **argv)
 
 AOApplication::~AOApplication()
 {
-  qInfo() << "Closing Danganronpa Online...";
+  qInfo() << "Closing Mystery Novel Online...";
   destruct_lobby();
   destruct_courtroom();
 }
@@ -436,7 +436,7 @@ void AOApplication::resolve_current_theme()
                  "1. Check you downloaded and extracted the resources correctly from "
                  "the DRO Discord including the large 'base' folder.\n"
                  "2. If you did, check that the base folder is in the same folder "
-                 "where you launched Danganronpa Online from: " +
+                 "where you launched Mystery Novel Online from: " +
                  FS::Paths::ApplicationPath() +
                  "\n"
                  "3. If it is there, check that your current theme folder exists in "

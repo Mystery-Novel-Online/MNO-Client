@@ -31,7 +31,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(SceneType_ServerSelect)
   ao_config = new AOConfig(this);
   m_master_client = new DRMasterClient(this);
 
-  setWindowTitle("Danganronpa Online (" + get_version_string() + ")");
+  setWindowTitle("Mystery Novel Online (" + get_version_string() + ")");
   Layout::ServerSelect::AssignLobby(this, ao_app);
 
   ui_background = createWidget<AOImageDisplay>("lobby");

@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 #endif
 
   //qInstallMessageHandler(logger::log);
-  qInfo() << "Starting Danganronpa Online...";
+  qInfo() << "Starting Mystery Novel Online...";
 
   bool l_dpi_scaling = false;
   for (int i = 0; i < argc; ++i)
