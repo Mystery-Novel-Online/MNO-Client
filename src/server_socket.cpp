@@ -8,17 +8,17 @@
 #include "hardware_functions.h"
 #include "lobby.h"
 #include "version.h"
-#include "dro/fs/fs_reading.h"
-#include "dro/network/metadata/server_metadata.h"
-#include "dro/network/metadata/area_metadata.h"
-#include "dro/network/metadata/tracklist_metadata.h"
-#include "dro/network/json_packet.h"
-#include "dro/system/theme_scripting.h"
-#include "dro/system/audio.h"
-#include "dro/system/replay_playback.h"
-#include "dro/system/localization.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/network/metadata/server_metadata.h"
+#include "engine/network/metadata/area_metadata.h"
+#include "engine/network/metadata/tracklist_metadata.h"
+#include "engine/network/json_packet.h"
+#include "engine/system/theme_scripting.h"
+#include "engine/system/audio.h"
+#include "engine/system/replay_playback.h"
+#include "engine/system/localization.h"
 
-using namespace dro::system;
+using namespace engine::system;
 
 static int s_lastMessageId = -1;
 

@@ -3,12 +3,12 @@
 
 
 #include "drgraphicscene.h"
-#include "dro/interface/menus/area_menu.h"
-#include "dro/interface/menus/bgm_menu.h"
-#include "dro/interface/menus/char_menu.h"
-#include "dro/network/metadata/user_metadata.h"
-#include "dro/system/audio/music_player.h"
-#include "dro/system/theme.h"
+#include "engine/interface/menus/area_menu.h"
+#include "engine/interface/menus/bgm_menu.h"
+#include "engine/interface/menus/char_menu.h"
+#include "engine/network/metadata/user_metadata.h"
+#include "engine/system/audio/music_player.h"
+#include "engine/system/theme.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"
@@ -58,10 +58,10 @@ class QLabel;
 #include <optional>
 
 #include <mk2/drplayer.h>
-#include "dro/interface/widgets/scene_widget.h"
+#include "engine/interface/widgets/scene_widget.h"
 
-using namespace dro;
-using namespace dro::network::metadata;
+using namespace engine;
+using namespace engine::network::metadata;
 
 struct IncomingTagData
 {

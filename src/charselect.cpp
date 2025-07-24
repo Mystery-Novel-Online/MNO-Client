@@ -1,9 +1,9 @@
 #include "pch.h"
 
-#include "dro/network/metadata/server_metadata.h"
-#include "dro/system/localization.h"
-#include "dro/fs/fs_reading.h"
-#include "dro/fs/fs_characters.h"
+#include "engine/network/metadata/server_metadata.h"
+#include "engine/system/localization.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/fs/fs_characters.h"
 
 #include "aoconfig.h"
 #include "debug_functions.h"
@@ -24,17 +24,17 @@ void Courtroom::construct_char_select()
   ui_char_button_selector->setAttribute(Qt::WA_TransparentForMouseEvents);
   ui_char_button_selector->resize(62, 62);
 
-  ui_back_to_lobby = new RPButton("back_to_lobby", "lobby_return.png", dro::system::localization::getText("CSS_DISCONNECT"), ui_char_select_background);
+  ui_back_to_lobby = new RPButton("back_to_lobby", "lobby_return.png", engine::system::localization::getText("CSS_DISCONNECT"), ui_char_select_background);
 
   ui_chr_select_left = new RPButton("char_select_left", "arrow_left.png", "", ui_char_select_background);
   ui_chr_select_right = new RPButton("char_select_right", "arrow_right.png", "", ui_char_select_background);
 
-  ui_spectator = new RPButton("spectator", "spectator.png", dro::system::localization::getText("CSS_SPECTATE"), ui_char_select_background);
+  ui_spectator = new RPButton("spectator", "spectator.png", engine::system::localization::getText("CSS_SPECTATE"), ui_char_select_background);
 
-  pBtnCharSelectRandom = new RPButton("char_select_random", "char_random.png", dro::system::localization::getText("CSS_RANDOM"), ui_char_select_background);
-  pBtnCharSelectRefresh = new RPButton("char_select_refresh", "char_refresh.png", dro::system::localization::getText("REFRESH"), ui_char_select_background);
+  pBtnCharSelectRandom = new RPButton("char_select_random", "char_random.png", engine::system::localization::getText("CSS_RANDOM"), ui_char_select_background);
+  pBtnCharSelectRefresh = new RPButton("char_select_refresh", "char_refresh.png", engine::system::localization::getText("REFRESH"), ui_char_select_background);
 
-  pCharaSelectSearch = new RPLineEdit("character_search", dro::system::localization::getText("CSS_SEARCH"), "[CHARA SEARCH]", ui_char_select_background);
+  pCharaSelectSearch = new RPLineEdit("character_search", engine::system::localization::getText("CSS_SEARCH"), "[CHARA SEARCH]", ui_char_select_background);
   pCharaSelectSeries = setupComboBoxWidget(CharacterRepository::filterList(), "character_packages", "[PACKAGE FILTER]");
 
   connect(char_button_mapper, SIGNAL(mapped(int)), this, SLOT(char_clicked(int)));
@@ -120,7 +120,7 @@ void Courtroom::reset_char_select()
 
 void Courtroom::set_char_select()
 {
-  pos_size_type f_charselect = dro::system::theme::getDimensions("char_select", SceneType_Courtroom);
+  pos_size_type f_charselect = engine::system::theme::getDimensions("char_select", SceneType_Courtroom);
   if (f_charselect.width < 0 || f_charselect.height < 0)
     qWarning() << "warning: char_select not found or invalid within courtroom_design.ini";
 
@@ -250,7 +250,7 @@ void Courtroom::SwitchCharacterByName(const char *characterName)
 
 void Courtroom::char_clicked(int n_char)
 {
-  using namespace dro::network::metadata;
+  using namespace engine::network::metadata;
   if (user::GetCharacterName() == UIFilteredCharButton.at(n_char)->character())
   {
     enter_courtroom(user::GetCharacterId());

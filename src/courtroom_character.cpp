@@ -4,9 +4,9 @@
 #include "drpacket.h"
 #include "theme.h"
 
-#include "dro/fs/fs_reading.h"
-#include "dro/fs/fs_characters.h"
-#include "dro/fs/fs_mounting.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/fs/fs_characters.h"
+#include "engine/fs/fs_mounting.h"
 
 void Courtroom::set_character_id(const int p_chr_id)
 {

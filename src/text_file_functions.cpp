@@ -2,8 +2,8 @@
 
 #include "aoconfig.h"
 #include "drtheme.h"
-#include "dro/fs/fs_reading.h"
-#include "dro/fs/fs_characters.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/fs/fs_characters.h"
 #include "utils.h"
 
 QStringList AOApplication::get_callwords()

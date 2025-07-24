@@ -2,7 +2,7 @@
 #define THEMEMANAGER_H
 
 #include <QHash>
-#include "dro/param/theme_reader.h"
+#include "engine/param/theme_reader.h"
 
 class ThemeManager
 {

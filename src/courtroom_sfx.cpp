@@ -1,8 +1,8 @@
-#include "dro/fs/fs_reading.h"
+#include "engine/fs/fs_reading.h"
 #include "drtheme.h"
-#include "dro/system/localization.h"
-#include "dro/fs/fs_reading.h"
-#include "dro/system/audio.h"
+#include "engine/system/localization.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/system/audio.h"
 
 std::optional<DRSfx> Courtroom::current_sfx()
 {
@@ -45,8 +45,8 @@ void Courtroom::load_current_character_sfx_list()
 
   // items
   m_sfx_list.clear();
-  m_sfx_list.append(DRSfx(dro::system::localization::getText("DEFAULT"), m_sfx_default_file));
-  m_sfx_list.append(DRSfx(dro::system::localization::getText("SFX_SILENCE"), nullptr));
+  m_sfx_list.append(DRSfx(engine::system::localization::getText("DEFAULT"), m_sfx_default_file));
+  m_sfx_list.append(DRSfx(engine::system::localization::getText("SFX_SILENCE"), nullptr));
 
   const QStringList l_sfx_list = ao_app->get_sfx_list();
   for (const QString &i_sfx_line : l_sfx_list)

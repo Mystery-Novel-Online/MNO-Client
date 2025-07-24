@@ -7,10 +7,10 @@
 #include "modules/managers/scene_manager.h"
 #include <modules/theme/thememanager.h>
 
-#include "dro/fs/fs_reading.h"
-#include "dro/network/metadata/user_metadata.h"
-#include "dro/system/replay_playback.h"
-#include "dro/system/localization.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/network/metadata/user_metadata.h"
+#include "engine/system/replay_playback.h"
+#include "engine/system/localization.h"
 
 /*!
     We have to suffer through a lot of boilerplate code
@@ -170,7 +170,7 @@ void AOConfigPrivate::load_file()
   if (language.trimmed().isEmpty())
     language = "English";
 
-  dro::system::localization::switchLanguage(language);
+  engine::system::localization::switchLanguage(language);
 
   theme = cfg.value("theme").toString();
   if (theme.trimmed().isEmpty())
@@ -803,7 +803,7 @@ void AOConfig::set_showname(QString p_value)
   if (d->showname == l_simplified_value && !l_simplified_value.isEmpty())
     return;
   d->showname = l_simplified_value;
-  dro::network::metadata::user::setShowname(p_value);
+  engine::network::metadata::user::setShowname(p_value);
   d->invoke_signal("showname_changed", Q_ARG(QString, d->showname));
 }
 
@@ -965,7 +965,7 @@ void AOConfig::set_timeofday(QString p_string)
     return;
   d->timeofday = p_string;
   d->invoke_signal("timeofday_changed", Q_ARG(QString, p_string));
-  dro::system::replays::recording::todChange(p_string);
+  engine::system::replays::recording::todChange(p_string);
 }
 
 void AOConfig::set_manual_timeofday(QString p_string)
@@ -974,7 +974,7 @@ void AOConfig::set_manual_timeofday(QString p_string)
     return;
   d->manual_timeofday = p_string;
   d->invoke_signal("manual_timeofday_changed", Q_ARG(QString, p_string));
-  dro::system::replays::recording::todChange(p_string);
+  engine::system::replays::recording::todChange(p_string);
 }
 
 void AOConfig::set_manual_timeofday_selection_enabled(bool p_enabled)

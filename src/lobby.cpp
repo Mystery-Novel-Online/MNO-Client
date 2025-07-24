@@ -1,8 +1,8 @@
 #include "lobby.h"
 #include "aoconfig.h"
 
-#include "dro/system/localization.h"
-#include "dro/system/theme.h"
+#include "engine/system/localization.h"
+#include "engine/system/theme.h"
 #include "debug_functions.h"
 #include "drmasterclient.h"
 #include "drpacket.h"
@@ -12,14 +12,14 @@
 #include "theme.h"
 #include "version.h"
 
-#include "dro/fs/fs_reading.h"
-#include "dro/interface/lobby_layout.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/interface/lobby_layout.h"
 
 #include <modules/theme/thememanager.h>
-#include "dro/interface/scenes/replay_window.h"
-#include "dro/system/replay_playback.h"
+#include "engine/interface/scenes/replay_window.h"
+#include "engine/system/replay_playback.h"
 
-using namespace dro::system;
+using namespace engine::system;
 
 Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(SceneType_ServerSelect)
 {
@@ -148,7 +148,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(SceneType_ServerSelect)
 
   ThemeManager::get().ResetWidgetLists();
   ui_gallery_packages->clear();
-  ui_gallery_packages->addItems(dro::system::replays::io::packageNames());
+  ui_gallery_packages->addItems(engine::system::replays::io::packageNames());
 }
 
 Lobby::~Lobby()
@@ -165,7 +165,7 @@ DRServerInfoList Lobby::get_combined_server_list()
 void Lobby::update_widgets()
 {
   ao_app->current_theme->InitTheme();
-  pos_size_type f_lobby = dro::system::theme::getDimensions("lobby", SceneType_ServerSelect);
+  pos_size_type f_lobby = engine::system::theme::getDimensions("lobby", SceneType_ServerSelect);
   if (f_lobby.width < 0 || f_lobby.height < 0)
   {
     qWarning() << "W: did not find lobby width or height in " << LOBBY_DESIGN_INI;
@@ -516,7 +516,7 @@ void Lobby::onGalleryPackageChanged(int index)
     ui_gallery_categories->clear();
     ui_gallery_categories->addItem("Default");
 
-    ui_gallery_categories->addItems(dro::system::replays::io::packageCategories(m_currentPackage));
+    ui_gallery_categories->addItems(engine::system::replays::io::packageCategories(m_currentPackage));
   }
 }
 
@@ -532,7 +532,7 @@ void Lobby::onGalleryCategoryChanged(int index)
     m_currentCategory = ui_gallery_categories->currentText();
   }
 
-  QStringList lReplays = dro::system::replays::io::packageContents(m_currentPackage, m_currentCategory);
+  QStringList lReplays = engine::system::replays::io::packageContents(m_currentPackage, m_currentCategory);
   ui_replay_list->addItems(lReplays);
 }
 
@@ -543,7 +543,7 @@ void Lobby::onGalleryToggle()
 
 void Lobby::onGalleryPlay()
 {
-  dro::system::replays::playback::load(ui_replay_list->currentItem()->text(), m_currentPackage, m_currentCategory);
+  engine::system::replays::playback::load(ui_replay_list->currentItem()->text(), m_currentPackage, m_currentCategory);
   m_replayWindow->show();
 }
 
@@ -614,7 +614,7 @@ void Lobby::on_connect_released()
       break;
     }
 
-    call_warning("You are connecting to an <b>incompatible</b> DRO server.<br /><br />Reason: " + l_reason +
+    call_warning("You are connecting to an <b>incompatible</b> MNO server.<br /><br />Reason: " + l_reason +
                  "<br /><br />"
                  "The client may not work properly, if at all.");
   }

@@ -3,8 +3,8 @@
 
 #include "drtheme.h"
 
-#include "dro/system/theme_scripting.h"
-#include "dro/interface/courtroom_layout.h"
+#include "engine/system/theme_scripting.h"
+#include "engine/interface/courtroom_layout.h"
 
 ThemeManager ThemeManager::s_Instance;
 

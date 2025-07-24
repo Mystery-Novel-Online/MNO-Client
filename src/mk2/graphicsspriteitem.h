@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QPainter>
 
-#include "dro/animation/keyframe_sequence.h"
+#include "engine/animation/keyframe_sequence.h"
 
 class SpriteLayer
 {

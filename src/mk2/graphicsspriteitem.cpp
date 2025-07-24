@@ -20,14 +20,14 @@
 #include "graphicsspriteitem.h"
 
 #include <modules/managers/scene_manager.h>
-#include "dro/param/animation_reader.h"
-#include "dro/interface/courtroom_layout.h"
+#include "engine/param/animation_reader.h"
+#include "engine/interface/courtroom_layout.h"
 #include "spriteseekingreader.h"
 
-#include "dro/system/text_encoding.h"
-#include "dro/fs/fs_reading.h"
-#include "dro/fs/fs_characters.h"
-#include "dro/system/runtime_loop.h"
+#include "engine/system/text_encoding.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/fs/fs_characters.h"
+#include "engine/system/runtime_loop.h"
 
 using namespace mk2;
 
@@ -264,9 +264,9 @@ void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QSt
 {
   clearImageLayers();
 
-  for(const QString& layerOffset : dro::system::encoding::text::DecodeBase64(overlayString))
+  for(const QString& layerOffset : engine::system::encoding::text::DecodeBase64(overlayString))
   {
-    QStringList offsetData = dro::system::encoding::text::DecodePacketContents(layerOffset);
+    QStringList offsetData = engine::system::encoding::text::DecodePacketContents(layerOffset);
     if(offsetData.length() == 7)
     {
       createOverlay(character, emotePath, outfitName, offsetData);

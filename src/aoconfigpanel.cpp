@@ -8,10 +8,10 @@
 
 #include <modules/theme/thememanager.h>
 
-#include "dro/system/localization.h"
-#include "dro/fs/fs_mounting.h"
+#include "engine/system/localization.h"
+#include "engine/fs/fs_mounting.h"
 
-using namespace dro::system;
+using namespace engine::system;
 
 AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
     : QWidget(p_parent)

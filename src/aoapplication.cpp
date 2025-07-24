@@ -10,14 +10,14 @@
 #include "drtheme.h"
 #include "version.h"
 
-#include "dro/system/localization.h"
-#include "dro/fs/fs_reading.h"
-#include "dro/fs/fs_writing.h"
-#include "dro/fs/fs_characters.h"
-#include "dro/system/runtime_loop.h"
-#include "dro/system/effects.h"
-#include "dro/system/audio.h"
-#include "dro/network/metadata/server_metadata.h"
+#include "engine/system/localization.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/fs/fs_writing.h"
+#include "engine/fs/fs_characters.h"
+#include "engine/system/runtime_loop.h"
+#include "engine/system/effects.h"
+#include "engine/system/audio.h"
+#include "engine/network/metadata/server_metadata.h"
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -39,7 +39,7 @@ AOApplication::AOApplication(int &argc, char **argv)
   DirUtils::CreateInitialFolders();
 
   SceneManager::get().pConfigAO = ao_config;
-  dro::system::localization::initialize();
+  engine::system::localization::initialize();
 
   ao_config_panel = new AOConfigPanel(this);
 
@@ -75,7 +75,7 @@ AOApplication::AOApplication(int &argc, char **argv)
   reload_packages();
   resolve_current_theme();
 
-  dro::system::effects::reload();
+  engine::system::effects::reload();
 
   QTimer* timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, [=]() { RuntimeLoop::Update(); });
@@ -434,7 +434,7 @@ void AOApplication::resolve_current_theme()
     call_warning("It doesn't look like your client is set up correctly. This can be "
                  "due to the following reasons: \n"
                  "1. Check you downloaded and extracted the resources correctly from "
-                 "the DRO Discord including the large 'base' folder.\n"
+                 "the MNO Discord including the large 'base' folder.\n"
                  "2. If you did, check that the base folder is in the same folder "
                  "where you launched Mystery Novel Online from: " +
                  FS::Paths::ApplicationPath() +

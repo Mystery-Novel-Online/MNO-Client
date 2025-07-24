@@ -9,20 +9,20 @@
 #include "drshoutmovie.h"
 #include "drsplashmovie.h"
 
-#include "dro/fs/fs_reading.h"
+#include "engine/fs/fs_reading.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "modules/managers/notify_manager.h"
 #include "theme.h"
 
 #include "modules/theme/thememanager.h"
-#include "dro/system/debug/time_debugger.h"
-#include "dro/system/localization.h"
+#include "engine/system/debug/time_debugger.h"
+#include "engine/system/localization.h"
 
-#include "dro/fs/fs_reading.h"
-#include "dro/fs/fs_characters.h"
-#include "dro/interface/courtroom_layout.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/fs/fs_characters.h"
+#include "engine/interface/courtroom_layout.h"
 
-using namespace dro::system;
+using namespace engine::system;
 
 void Courtroom::create_widgets()
 {
@@ -923,7 +923,7 @@ void Courtroom::set_widget_layers_legacy()
 
 void Courtroom::set_widgets()
 {
-  pos_size_type courtroomDimensions = dro::system::theme::getDimensions("courtroom", SceneType_Courtroom);
+  pos_size_type courtroomDimensions = engine::system::theme::getDimensions("courtroom", SceneType_Courtroom);
   if (courtroomDimensions.width < 0 || courtroomDimensions.height < 0)
   {
     qWarning() << "W: did not find courtroom width or height in " << COURTROOM_DESIGN_INI;
@@ -1082,7 +1082,7 @@ void Courtroom::set_widgets()
   if(ThemeManager::get().getReloadPending())
   {
     { // emote preview
-      pos_size_type l_emote_preview_size = dro::system::theme::getDimensions("emote_preview", SceneType_Courtroom);
+      pos_size_type l_emote_preview_size = engine::system::theme::getDimensions("emote_preview", SceneType_Courtroom);
       if (l_emote_preview_size.width <= 0 || l_emote_preview_size.height <= 0)
       {
         l_emote_preview_size.width = 320;
@@ -1113,7 +1113,7 @@ void Courtroom::set_widgets()
 
   for (int i = 0; i < shout_names.size(); ++i)
   {
-    dro::system::theme::applyDimensions(ui_shouts[i], shout_names[i], SceneType_Courtroom);
+    engine::system::theme::applyDimensions(ui_shouts[i], shout_names[i], SceneType_Courtroom);
   }
   reset_shout_buttons();
 
@@ -1134,7 +1134,7 @@ void Courtroom::set_widgets()
 
   for (int i = 0; i < effect_names.size(); ++i)
   {
-    dro::system::theme::applyDimensions(ui_effects[i], effect_names[i], SceneType_Courtroom);
+    engine::system::theme::applyDimensions(ui_effects[i], effect_names[i], SceneType_Courtroom);
     ThemeManager::get().addWidgetName(effect_names[i], ui_effects[i]);
   }
   reset_effect_buttons();
@@ -1155,7 +1155,7 @@ void Courtroom::set_widgets()
 
   for (int i = 0; i < wtce_names.size(); ++i)
   {
-    dro::system::theme::applyDimensions(ui_wtce[i],  wtce_names[i], SceneType_Courtroom);
+    engine::system::theme::applyDimensions(ui_wtce[i],  wtce_names[i], SceneType_Courtroom);
     ThemeManager::get().addWidgetName(wtce_names[i], ui_wtce[i]);
   }
 
@@ -1204,7 +1204,7 @@ void Courtroom::set_widgets()
 
   for (auto [widget, identifier] : reloadList.toStdMap())
   {
-    dro::system::theme::applyDimensions(widget, identifier, SceneType_Courtroom);
+    engine::system::theme::applyDimensions(widget, identifier, SceneType_Courtroom);
   }
 
   if (ao_app->current_theme->read_config_bool("enable_label_images"))
@@ -1385,7 +1385,7 @@ void Courtroom::check_effects()
 
   for (int i = 0; i < ui_effects.size(); ++i)
   {
-    QString path = ao_app->find_asset_path({fs::characters::getFilePath(get_character_ini(), effect_names.at(i))}, FS::Formats::AnimatedImages());
+    QString path = ao_app->find_asset_path({engine::fs::characters::getFilePath(get_character_ini(), effect_names.at(i))}, FS::Formats::AnimatedImages());
     if (path.isEmpty())
       path = ao_app->find_theme_asset_path(effect_names.at(i), FS::Formats::AnimatedImages());
 
@@ -1409,7 +1409,7 @@ void Courtroom::check_shouts()
 
   for (int i = 0; i < ui_shouts.size(); ++i)
   {
-    QString path = ao_app->find_asset_path({fs::characters::getFilePath(get_character_ini(), shout_names.at(i))}, FS::Formats::AnimatedImages());
+    QString path = ao_app->find_asset_path({engine::fs::characters::getFilePath(get_character_ini(), shout_names.at(i))}, FS::Formats::AnimatedImages());
 
     if (path.isEmpty())
       path = ao_app->find_theme_asset_path(shout_names.at(i), FS::Formats::AnimatedImages());
@@ -1432,7 +1432,7 @@ void Courtroom::check_wtce()
 
   for (int i = 0; i < ui_wtce.size(); ++i)
   {
-    QString path = ao_app->find_asset_path({fs::characters::getFilePath(get_character_ini(), wtce_names.at(i))}, FS::Formats::AnimatedImages());
+    QString path = ao_app->find_asset_path({engine::fs::characters::getFilePath(get_character_ini(), wtce_names.at(i))}, FS::Formats::AnimatedImages());
     if (path.isEmpty())
       path = ao_app->find_theme_asset_path(wtce_names.at(i), FS::Formats::AnimatedImages());
     wtce_enabled[i] = (!path.isEmpty());
@@ -1711,7 +1711,7 @@ void Courtroom::set_fonts()
 
 void Courtroom::setup_screenshake_anim(double message_offset)
 {
-  pos_size_type chatbox_res = dro::system::theme::getDimensions("ao2_chatbox", SceneType_Courtroom);
+  pos_size_type chatbox_res = engine::system::theme::getDimensions("ao2_chatbox", SceneType_Courtroom);
 
   background_anim->setLoopCount(5);
   background_anim->setDuration(50);

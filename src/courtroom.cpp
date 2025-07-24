@@ -1,12 +1,12 @@
 #include "pch.h"
 
 #include "modules/theme/thememanager.h"
-#include "dro/system/debug/time_debugger.h"
+#include "engine/system/debug/time_debugger.h"
 #include "aoconfig.h"
-#include "dro/encoding/binary_encoding.h"
+#include "engine/encoding/binary_encoding.h"
 
 #include "debug_functions.h"
-#include "dro/system/localization.h"
+#include "engine/system/localization.h"
 #include "draudiotrackmetadata.h"
 #include "drcharactermovie.h"
 #include "drdiscord.h"
@@ -16,31 +16,31 @@
 #include "drscenemovie.h"
 #include "drshoutmovie.h"
 #include "drsplashmovie.h"
-#include "dro/fs/fs_reading.h"
+#include "engine/fs/fs_reading.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "mk2/spritedynamicreader.h"
 #include "mk2/spriteseekingreader.h"
 #include "theme.h"
-#include "dro/fs/fs_reading.h"
-#include "dro/fs/fs_characters.h"
-#include "dro/network/metadata/server_metadata.h"
-#include "dro/network/metadata/message_metadata.h"
-#include "dro/system/theme_scripting.h"
-#include "dro/system/text_encoding.h"
-#include "dro/system/audio.h"
-#include "dro/interface/courtroom_layout.h"
-#include "dro/system/replay_playback.h"
-#include "dro/system/runtime_loop.h"
-#include "dro/system/runtime_values.h"
-#include "dro/param/actor_repository.h"
-#include "dro/param/actor/actor_loader.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/fs/fs_characters.h"
+#include "engine/network/metadata/server_metadata.h"
+#include "engine/network/metadata/message_metadata.h"
+#include "engine/system/theme_scripting.h"
+#include "engine/system/text_encoding.h"
+#include "engine/system/audio.h"
+#include "engine/interface/courtroom_layout.h"
+#include "engine/system/replay_playback.h"
+#include "engine/system/runtime_loop.h"
+#include "engine/system/runtime_values.h"
+#include "engine/param/actor_repository.h"
+#include "engine/param/actor/actor_loader.h"
 #include <mk2/spritecachingreader.h>
 
 const int Courtroom::DEFAULT_WIDTH = 714;
 const int Courtroom::DEFAULT_HEIGHT = 668;
 
-using namespace dro::system;
-using namespace dro;
+using namespace engine::system;
+using namespace engine;
 
 Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
     : SceneWidget(SceneType_Courtroom, parent)
@@ -316,7 +316,7 @@ void Courtroom::enter_courtroom(int p_cid)
 
   const QString l_chr_name = get_character_ini();
 
-  ActorData *actor = dro::actor::user::switchCharacter(l_chr_name);
+  ActorData *actor = engine::actor::user::switchCharacter(l_chr_name);
   ui_emotes->actorChange(actor);
   if(!actor->GetScalingPresets().empty())
   {
@@ -648,8 +648,8 @@ void Courtroom::set_music_text(QString p_text)
 
 void Courtroom::update_music_text_anim()
 {
-  pos_size_type res_a = dro::system::theme::getDimensions("music_name", SceneType_Courtroom);
-  pos_size_type res_b = dro::system::theme::getDimensions("music_area", SceneType_Courtroom);
+  pos_size_type res_a = engine::system::theme::getDimensions("music_name", SceneType_Courtroom);
+  pos_size_type res_b = engine::system::theme::getDimensions("music_area", SceneType_Courtroom);
 
   float speed = static_cast<float>(ao_app->current_theme->get_music_name_speed());
 
@@ -1069,11 +1069,11 @@ void Courtroom::on_ic_message_return_pressed()
     {
       if(actor::user::layerState(layer.toggleName) && layerCount < 4)
       {
-        layers.append(dro::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+        layers.append(engine::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
         layerCount += 1;
       }
     }
-    packet_contents.append(dro::system::encoding::text::EncodeBase64(layers));
+    packet_contents.append(engine::system::encoding::text::EncodeBase64(layers));
   }
 
 
@@ -1082,9 +1082,9 @@ void Courtroom::on_ic_message_return_pressed()
     QStringList tags;
     for(MessageTag tag : ui_ic_chat_message_field->getTags())
     {
-      tags.append(dro::system::encoding::text::EncodePacketContents({QString::number(tag.index), tag.value}));
+      tags.append(engine::system::encoding::text::EncodePacketContents({QString::number(tag.index), tag.value}));
     }
-    packet_contents.append(dro::system::encoding::text::EncodeBase64(tags));
+    packet_contents.append(engine::system::encoding::text::EncodeBase64(tags));
   }
 
 
@@ -1146,7 +1146,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   const int l_message_chr_id = p_chatmessage[CMChrId].toInt();
   const bool l_system_speaking = l_message_chr_id == SpectatorId;
 
-  m_SpeakerActor = dro::actor::repository::retrieve(p_chatmessage[CMChrName]);
+  m_SpeakerActor = engine::actor::repository::retrieve(p_chatmessage[CMChrName]);
   if(!p_chatmessage[CMOutfitName].isEmpty())
   {
     m_SpeakerActor->SwitchOutfit(p_chatmessage[CMOutfitName]);
@@ -1154,7 +1154,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
 
   if(message::pair::isActive())
   {
-    m_PairActor = dro::actor::repository::retrieve(message::pair::getCharacter());
+    m_PairActor = engine::actor::repository::retrieve(message::pair::getCharacter());
 
     m_PairScaling = mk2::SpritePlayer::AutomaticScaling;
 
@@ -1618,7 +1618,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
 void Courtroom::handle_chatmessage_3()
 {
-  QStringList tagInformation = dro::system::encoding::text::DecodeBase64(m_pre_chatmessage[CMMessageTags]);
+  QStringList tagInformation = engine::system::encoding::text::DecodeBase64(m_pre_chatmessage[CMMessageTags]);
 
   m_ProcessedTags.clear();
 
@@ -1628,7 +1628,7 @@ void Courtroom::handle_chatmessage_3()
     if(tagArray.count() == 2)
     {
       int tagPosition = tagArray[0].toInt();
-      QVariantList tagArguments = dro::encoding::BinaryEncoder::decodeBase64(tagArray[1]);
+      QVariantList tagArguments = engine::encoding::BinaryEncoder::decodeBase64(tagArray[1]);
       IncomingTagData data = {tagPosition, (MessageTagType)tagArguments.at(0).toInt(), tagArguments};
       m_ProcessedTags.append(data);
     }
@@ -1827,7 +1827,7 @@ void Courtroom::handelInvestigation(QString p_contents)
 {
   if(w_ViewportOverlay == nullptr) return;
   w_ViewportOverlay->clearInteractions();
-  QString l_PacketData = dro::system::encoding::text::DecodeBase64String(p_contents);
+  QString l_PacketData = engine::system::encoding::text::DecodeBase64String(p_contents);
   JSONReader l_InvestigationJson = JSONReader();
   l_InvestigationJson.ReadFromString(l_PacketData);
 
@@ -3679,7 +3679,7 @@ void Courtroom::construct_playerlist_layout()
   theme::applyDimensions(ui_player_list, "player_list", SceneType_Courtroom);
   float resize = ThemeManager::get().getResize();
 
-  int player_height = dro::system::theme::getDimensions("player_list_slot", SceneType_Courtroom).height;
+  int player_height = engine::system::theme::getDimensions("player_list_slot", SceneType_Courtroom).height;
   if(player_height == 0) player_height = (int)((float)50 * resize);
 
   int y_spacing = f_spacing.y();

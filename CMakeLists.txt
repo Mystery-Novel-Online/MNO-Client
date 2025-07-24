@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(dro-client VERSION 1.7.1 LANGUAGES CXX)
+project(rp-engine VERSION 1.7.1 LANGUAGES CXX)
 
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
@@ -13,80 +13,80 @@ find_package(QT NAMES Qt5 REQUIRED COMPONENTS core gui widgets uitools network m
 find_package(Qt5 REQUIRED COMPONENTS core gui widgets uitools network multimedia multimediawidgets)
 
 set(HEADERS
-  src/dro/animation/keyframe_channel.h
-  src/dro/animation/keyframe_sequence.h
-  src/dro/fs/fs_mounting.h
-  src/dro/fs/fs_reading.h
-  src/dro/fs/fs_writing.h
-  src/dro/interface/courtroom_layout.h
-  src/dro/interface/lobby_layout.h
-  src/dro/interface/menus/area_menu.h
-  src/dro/interface/menus/bgm_menu.h
-  src/dro/interface/menus/char_menu.h
-  src/dro/interface/menus/emote_menu.h
-  src/dro/interface/scenes/replay_window.h
-  src/dro/interface/widgets/bgm_filter.h
-  src/dro/interface/widgets/char_button.h
-  src/dro/interface/widgets/character_select.h
-  src/dro/interface/widgets/chat_log.h
-  src/dro/interface/widgets/emotion_button.h
-  src/dro/interface/widgets/health_bar.h
-  src/dro/interface/widgets/image_display.h
-  src/dro/interface/widgets/note_area.h
-  src/dro/interface/widgets/note_picker.h
-  src/dro/interface/widgets/player_list_slot.h
-  src/dro/interface/widgets/rp_button.h
-  src/dro/interface/widgets/rp_combo_box.h
-  src/dro/interface/widgets/rp_hover_widget.h
-  src/dro/interface/widgets/rp_label.h
-  src/dro/interface/widgets/rp_line_edit.h
-  src/dro/interface/widgets/rp_slider.h
-  src/dro/interface/widgets/rp_text_edit.h
-  src/dro/interface/widgets/rp_typewriter.h
-  src/dro/interface/widgets/rp_widget.h
-  src/dro/interface/widgets/screenshot_button.h
-  src/dro/interface/widgets/emotion_selector.h
-  src/dro/interface/widgets/choice_dialog.h
-  src/dro/interface/widgets/sticker_viewer.h
-  src/dro/interface/widgets/viewport_overlay.h
-  src/dro/interface/widgets/tab_toggle_button.h
-  src/dro/interface/widgets/aotimer.h
-  src/dro/interface/widgets/viewports/legacy_viewport.h
-  src/dro/interface/widgets/viewports/rp_viewport.h
-  src/dro/network/json_packet.h
-  src/dro/network/metadata/area_metadata.h
-  src/dro/network/metadata/message_metadata.h
-  src/dro/network/metadata/user_metadata.h
-  src/dro/network/metadata/server_metadata.h
-  src/dro/network/metadata/tracklist_metadata.h
-  src/dro/param/animation_reader.h
-  src/dro/param/replay_reader.h
-  src/dro/system/animation.h
-  src/dro/system/audio.h
-  src/dro/system/audio/ambience_player.h
-  src/dro/system/audio/blip_player.h
-  src/dro/system/audio/music_player.h
-  src/dro/system/audio/sfx_player.h
-  src/dro/system/audio/shout_player.h
-  src/dro/system/audio/system_player.h
-  src/dro/system/effects.h
-  src/dro/system/localization.h
-  src/dro/system/replay_playback.h
-  src/dro/system/runtime_loop.h
-  src/dro/system/text_encoding.h
-  src/dro/system/theme_scripting.h
-  src/dro/system/debug/time_debugger.h
-  src/dro/themes/theme_scene.h
-  src/dro/tools/button_maker.h
-  src/dro/param/json_reader.h
-  src/dro/param/localization_reader.h
-  src/dro/param/theme_mode_reader.h
-  src/dro/param/theme_module_reader.h
-  src/dro/param/theme_reader.h
-  src/dro/param/actor/actor_loader.h
-  src/dro/param/background/background_data.h
-  src/dro/param/background/background_reader.h
-  src/dro/param/background/legacy_background_reader.h
+  src/engine/animation/keyframe_channel.h
+  src/engine/animation/keyframe_sequence.h
+  src/engine/fs/fs_mounting.h
+  src/engine/fs/fs_reading.h
+  src/engine/fs/fs_writing.h
+  src/engine/interface/courtroom_layout.h
+  src/engine/interface/lobby_layout.h
+  src/engine/interface/menus/area_menu.h
+  src/engine/interface/menus/bgm_menu.h
+  src/engine/interface/menus/char_menu.h
+  src/engine/interface/menus/emote_menu.h
+  src/engine/interface/scenes/replay_window.h
+  src/engine/interface/widgets/bgm_filter.h
+  src/engine/interface/widgets/char_button.h
+  src/engine/interface/widgets/character_select.h
+  src/engine/interface/widgets/chat_log.h
+  src/engine/interface/widgets/emotion_button.h
+  src/engine/interface/widgets/health_bar.h
+  src/engine/interface/widgets/image_display.h
+  src/engine/interface/widgets/note_area.h
+  src/engine/interface/widgets/note_picker.h
+  src/engine/interface/widgets/player_list_slot.h
+  src/engine/interface/widgets/rp_button.h
+  src/engine/interface/widgets/rp_combo_box.h
+  src/engine/interface/widgets/rp_hover_widget.h
+  src/engine/interface/widgets/rp_label.h
+  src/engine/interface/widgets/rp_line_edit.h
+  src/engine/interface/widgets/rp_slider.h
+  src/engine/interface/widgets/rp_text_edit.h
+  src/engine/interface/widgets/rp_typewriter.h
+  src/engine/interface/widgets/rp_widget.h
+  src/engine/interface/widgets/screenshot_button.h
+  src/engine/interface/widgets/emotion_selector.h
+  src/engine/interface/widgets/choice_dialog.h
+  src/engine/interface/widgets/sticker_viewer.h
+  src/engine/interface/widgets/viewport_overlay.h
+  src/engine/interface/widgets/tab_toggle_button.h
+  src/engine/interface/widgets/aotimer.h
+  src/engine/interface/widgets/viewports/legacy_viewport.h
+  src/engine/interface/widgets/viewports/rp_viewport.h
+  src/engine/network/json_packet.h
+  src/engine/network/metadata/area_metadata.h
+  src/engine/network/metadata/message_metadata.h
+  src/engine/network/metadata/user_metadata.h
+  src/engine/network/metadata/server_metadata.h
+  src/engine/network/metadata/tracklist_metadata.h
+  src/engine/param/animation_reader.h
+  src/engine/param/replay_reader.h
+  src/engine/system/animation.h
+  src/engine/system/audio.h
+  src/engine/system/audio/ambience_player.h
+  src/engine/system/audio/blip_player.h
+  src/engine/system/audio/music_player.h
+  src/engine/system/audio/sfx_player.h
+  src/engine/system/audio/shout_player.h
+  src/engine/system/audio/system_player.h
+  src/engine/system/effects.h
+  src/engine/system/localization.h
+  src/engine/system/replay_playback.h
+  src/engine/system/runtime_loop.h
+  src/engine/system/text_encoding.h
+  src/engine/system/theme_scripting.h
+  src/engine/system/debug/time_debugger.h
+  src/engine/themes/theme_scene.h
+  src/engine/tools/button_maker.h
+  src/engine/param/json_reader.h
+  src/engine/param/localization_reader.h
+  src/engine/param/theme_mode_reader.h
+  src/engine/param/theme_module_reader.h
+  src/engine/param/theme_reader.h
+  src/engine/param/actor/actor_loader.h
+  src/engine/param/background/background_data.h
+  src/engine/param/background/background_reader.h
+  src/engine/param/background/legacy_background_reader.h
   src/aoapplication.h
   src/aoconfig.h
   src/aoconfigpanel.h
@@ -145,80 +145,80 @@ set(HEADERS
 )
 
 set(SOURCES
-  src/dro/animation/keyframe_channel.cpp
-  src/dro/animation/keyframe_sequence.cpp
-  src/dro/fs/fs_mounting.cpp
-  src/dro/fs/fs_reading.cpp
-  src/dro/fs/fs_writing.cpp
-  src/dro/interface/courtroom_layout.cpp
-  src/dro/interface/lobby_layout.cpp
-  src/dro/interface/menus/area_menu.cpp
-  src/dro/interface/menus/bgm_menu.cpp
-  src/dro/interface/menus/char_menu.cpp
-  src/dro/interface/menus/emote_menu.cpp
-  src/dro/interface/scenes/replay_window.cpp
-  src/dro/interface/widgets/bgm_filter.cpp
-  src/dro/interface/widgets/char_button.cpp
-  src/dro/interface/widgets/character_select.cpp
-  src/dro/interface/widgets/chat_log.cpp
-  src/dro/interface/widgets/emotion_button.cpp
-  src/dro/interface/widgets/health_bar.cpp
-  src/dro/interface/widgets/image_display.cpp
-  src/dro/interface/widgets/note_area.cpp
-  src/dro/interface/widgets/note_picker.cpp
-  src/dro/interface/widgets/player_list_slot.cpp
-  src/dro/interface/widgets/rp_button.cpp
-  src/dro/interface/widgets/rp_combo_box.cpp
-  src/dro/interface/widgets/rp_hover_widget.cpp
-  src/dro/interface/widgets/rp_label.cpp
-  src/dro/interface/widgets/rp_line_edit.cpp
-  src/dro/interface/widgets/rp_slider.cpp
-  src/dro/interface/widgets/rp_text_edit.cpp
-  src/dro/interface/widgets/rp_typewriter.cpp
-  src/dro/interface/widgets/rp_widget.cpp
-  src/dro/interface/widgets/screenshot_button.cpp
-  src/dro/interface/widgets/emotion_selector.cpp
-  src/dro/interface/widgets/choice_dialog.cpp
-  src/dro/interface/widgets/sticker_viewer.cpp
-  src/dro/interface/widgets/viewport_overlay.cpp
-  src/dro/interface/widgets/tab_toggle_button.cpp
-  src/dro/interface/widgets/aotimer.cpp
-  src/dro/interface/widgets/viewports/legacy_viewport.cpp
-  src/dro/interface/widgets/viewports/rp_viewport.cpp
-  src/dro/network/json_packet.cpp
-  src/dro/network/metadata/area_metadata.cpp
-  src/dro/network/metadata/message_metadata.cpp
-  src/dro/network/metadata/user_metadata.cpp
-  src/dro/network/metadata/server_metadata.cpp
-  src/dro/network/metadata/tracklist_metadata.cpp
-  src/dro/param/animation_reader.cpp
-  src/dro/param/replay_reader.cpp
-  src/dro/system/animation.cpp
-  src/dro/system/audio.cpp
-  src/dro/system/audio/ambience_player.cpp
-  src/dro/system/audio/blip_player.cpp
-  src/dro/system/audio/music_player.cpp
-  src/dro/system/audio/sfx_player.cpp
-  src/dro/system/audio/shout_player.cpp
-  src/dro/system/audio/system_player.cpp
-  src/dro/system/effects.cpp
-  src/dro/system/localization.cpp
-  src/dro/system/replay_playback.cpp
-  src/dro/system/runtime_loop.cpp
-  src/dro/system/text_encoding.cpp
-  src/dro/system/theme_scripting.cpp
-  src/dro/system/debug/time_debugger.cpp
-  src/dro/themes/theme_scene.cpp
-  src/dro/tools/button_maker.cpp
-  src/dro/param/json_reader.cpp
-  src/dro/param/localization_reader.cpp
-  src/dro/param/theme_mode_reader.cpp
-  src/dro/param/theme_module_reader.cpp
-  src/dro/param/theme_reader.cpp
-  src/dro/param/actor/actor_loader.cpp
-  src/dro/param/background/background_data.cpp
-  src/dro/param/background/background_reader.cpp
-  src/dro/param/background/legacy_background_reader.cpp
+  src/engine/animation/keyframe_channel.cpp
+  src/engine/animation/keyframe_sequence.cpp
+  src/engine/fs/fs_mounting.cpp
+  src/engine/fs/fs_reading.cpp
+  src/engine/fs/fs_writing.cpp
+  src/engine/interface/courtroom_layout.cpp
+  src/engine/interface/lobby_layout.cpp
+  src/engine/interface/menus/area_menu.cpp
+  src/engine/interface/menus/bgm_menu.cpp
+  src/engine/interface/menus/char_menu.cpp
+  src/engine/interface/menus/emote_menu.cpp
+  src/engine/interface/scenes/replay_window.cpp
+  src/engine/interface/widgets/bgm_filter.cpp
+  src/engine/interface/widgets/char_button.cpp
+  src/engine/interface/widgets/character_select.cpp
+  src/engine/interface/widgets/chat_log.cpp
+  src/engine/interface/widgets/emotion_button.cpp
+  src/engine/interface/widgets/health_bar.cpp
+  src/engine/interface/widgets/image_display.cpp
+  src/engine/interface/widgets/note_area.cpp
+  src/engine/interface/widgets/note_picker.cpp
+  src/engine/interface/widgets/player_list_slot.cpp
+  src/engine/interface/widgets/rp_button.cpp
+  src/engine/interface/widgets/rp_combo_box.cpp
+  src/engine/interface/widgets/rp_hover_widget.cpp
+  src/engine/interface/widgets/rp_label.cpp
+  src/engine/interface/widgets/rp_line_edit.cpp
+  src/engine/interface/widgets/rp_slider.cpp
+  src/engine/interface/widgets/rp_text_edit.cpp
+  src/engine/interface/widgets/rp_typewriter.cpp
+  src/engine/interface/widgets/rp_widget.cpp
+  src/engine/interface/widgets/screenshot_button.cpp
+  src/engine/interface/widgets/emotion_selector.cpp
+  src/engine/interface/widgets/choice_dialog.cpp
+  src/engine/interface/widgets/sticker_viewer.cpp
+  src/engine/interface/widgets/viewport_overlay.cpp
+  src/engine/interface/widgets/tab_toggle_button.cpp
+  src/engine/interface/widgets/aotimer.cpp
+  src/engine/interface/widgets/viewports/legacy_viewport.cpp
+  src/engine/interface/widgets/viewports/rp_viewport.cpp
+  src/engine/network/json_packet.cpp
+  src/engine/network/metadata/area_metadata.cpp
+  src/engine/network/metadata/message_metadata.cpp
+  src/engine/network/metadata/user_metadata.cpp
+  src/engine/network/metadata/server_metadata.cpp
+  src/engine/network/metadata/tracklist_metadata.cpp
+  src/engine/param/animation_reader.cpp
+  src/engine/param/replay_reader.cpp
+  src/engine/system/animation.cpp
+  src/engine/system/audio.cpp
+  src/engine/system/audio/ambience_player.cpp
+  src/engine/system/audio/blip_player.cpp
+  src/engine/system/audio/music_player.cpp
+  src/engine/system/audio/sfx_player.cpp
+  src/engine/system/audio/shout_player.cpp
+  src/engine/system/audio/system_player.cpp
+  src/engine/system/effects.cpp
+  src/engine/system/localization.cpp
+  src/engine/system/replay_playback.cpp
+  src/engine/system/runtime_loop.cpp
+  src/engine/system/text_encoding.cpp
+  src/engine/system/theme_scripting.cpp
+  src/engine/system/debug/time_debugger.cpp
+  src/engine/themes/theme_scene.cpp
+  src/engine/tools/button_maker.cpp
+  src/engine/param/json_reader.cpp
+  src/engine/param/localization_reader.cpp
+  src/engine/param/theme_mode_reader.cpp
+  src/engine/param/theme_module_reader.cpp
+  src/engine/param/theme_reader.cpp
+  src/engine/param/actor/actor_loader.cpp
+  src/engine/param/background/background_data.cpp
+  src/engine/param/background/background_reader.cpp
+  src/engine/param/background/legacy_background_reader.cpp
   src/aoapplication.cpp
   src/aoconfig.cpp
   src/aoconfigpanel.cpp
@@ -289,24 +289,24 @@ set(RESOURCES
   res.qrc
 )
 
-add_executable(dro-client
+add_executable(rp-engine
   ${HEADERS}
   ${SOURCES}
   ${RESOURCES}
-  src/dro/param/actor_repository.h src/dro/param/actor_repository.cpp
-  src/dro/system/runtime_values.h src/dro/system/runtime_values.cpp
-  src/dro/system/theme.h src/dro/system/theme.cpp
-  src/dro/interface/widgets/scene_widget.h src/dro/interface/widgets/scene_widget.cpp
-  src/dro/interface/widgets/rp_list_widget.h src/dro/interface/widgets/rp_list_widget.cpp
-  src/dro/interface/widgets/rp_message_input.h src/dro/interface/widgets/rp_message_input.cpp
-  src/dro/encoding/binary_encoding.h src/dro/encoding/binary_encoding.cpp
+  src/engine/param/actor_repository.h src/engine/param/actor_repository.cpp
+  src/engine/system/runtime_values.h src/engine/system/runtime_values.cpp
+  src/engine/system/theme.h src/engine/system/theme.cpp
+  src/engine/interface/widgets/scene_widget.h src/engine/interface/widgets/scene_widget.cpp
+  src/engine/interface/widgets/rp_list_widget.h src/engine/interface/widgets/rp_list_widget.cpp
+  src/engine/interface/widgets/rp_message_input.h src/engine/interface/widgets/rp_message_input.cpp
+  src/engine/encoding/binary_encoding.h src/engine/encoding/binary_encoding.cpp
   src/pch.h
-  src/dro/fs/fs_characters.h src/dro/fs/fs_characters.cpp
+  src/engine/fs/fs_characters.h src/engine/fs/fs_characters.cpp
 
 )
-target_precompile_headers(dro-client PRIVATE src/pch.h)
+target_precompile_headers(rp-engine PRIVATE src/pch.h)
 
-target_include_directories(dro-client PUBLIC
+target_include_directories(rp-engine PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/src
   ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -314,17 +314,17 @@ target_include_directories(dro-client PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
 )
 
-set_target_properties(dro-client PROPERTIES
+set_target_properties(rp-engine PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_LIST_DIR}/bin>
         RUNTIME_OUTPUT_DIRECTORY $<1:${CMAKE_CURRENT_LIST_DIR}/bin>
 )
 
-target_link_directories(dro-client PRIVATE
+target_link_directories(rp-engine PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/bass
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/discord-rpc
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
 )
-target_link_libraries(dro-client
+target_link_libraries(rp-engine
   Qt5::Core
   Qt5::Gui
   Qt5::Widgets
@@ -340,7 +340,7 @@ target_link_libraries(dro-client
 )
 
 if(WIN32)
-    set_target_properties(dro-client PROPERTIES WIN32_EXECUTABLE TRUE)
+    set_target_properties(rp-engine PROPERTIES WIN32_EXECUTABLE TRUE)
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/icons/logo-client.rc")
-    target_sources(dro-client PRIVATE ${APP_ICON_RESOURCE_WINDOWS})
+    target_sources(rp-engine PRIVATE ${APP_ICON_RESOURCE_WINDOWS})
 endif()

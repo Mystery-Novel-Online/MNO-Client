@@ -3,10 +3,10 @@
 #include "aoconfig.h"
 
 #include <modules/theme/thememanager.h>
-#include "dro/fs/fs_reading.h"
-#include "dro/fs/fs_mounting.h"
-#include "dro/system/replay_playback.h"
-#include "dro/network/metadata/server_metadata.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/fs/fs_mounting.h"
+#include "engine/system/replay_playback.h"
+#include "engine/network/metadata/server_metadata.h"
 
 // Copied over from Vanilla.
 // As said in the comments there, this is a *super broad* definition.
@@ -22,7 +22,7 @@ void AOApplication::reload_packages()
 {
   // Reset cached data
   CharacterRepository::reset();
-  dro::system::replays::io::resetCache();
+  engine::system::replays::io::resetCache();
 
   QVector<QString> packageNames = FS::Packages::Scan();
   QString packagesPath = FS::Paths::ApplicationPath() + "/packages/";
@@ -61,7 +61,7 @@ void AOApplication::reload_packages()
     if (replaysDir.exists())
     {
       const QStringList replayFolders = replaysDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-      dro::system::replays::io::cachePackage(packageName, replayFolders);
+      engine::system::replays::io::cachePackage(packageName, replayFolders);
     }
   }
 

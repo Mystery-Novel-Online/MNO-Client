@@ -1,9 +1,9 @@
 #include "scene_manager.h"
 #include "pch.h"
 
-#include "dro/fs/fs_reading.h"
-#include "dro/param/background/background_reader.h"
-#include "dro/param/background/legacy_background_reader.h"
+#include "engine/fs/fs_reading.h"
+#include "engine/param/background/background_reader.h"
+#include "engine/param/background/legacy_background_reader.h"
 #include <modules/theme/thememanager.h>
 
 SceneManager SceneManager::s_Instance;
