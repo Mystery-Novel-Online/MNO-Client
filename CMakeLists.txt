@@ -85,7 +85,7 @@ set(HEADERS
   src/engine/param/theme_reader.h
   src/engine/param/actor/actor_loader.h
 
-  src/engine/param/background/background_reader.h
+
   src/engine/param/background/legacy_background_reader.h
   src/aoapplication.h
   src/aoconfig.h
@@ -216,7 +216,7 @@ set(SOURCES
   src/engine/param/theme_module_reader.cpp
   src/engine/param/theme_reader.cpp
   src/engine/param/actor/actor_loader.cpp
-  src/engine/param/background/background_reader.cpp
+
   src/engine/param/background/legacy_background_reader.cpp
   src/aoapplication.cpp
   src/aoconfig.cpp

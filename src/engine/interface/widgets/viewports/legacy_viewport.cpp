@@ -9,7 +9,6 @@
 #include "engine/fs/fs_characters.h"
 
 #include "engine/param/background/legacy_background_reader.h"
-#include "engine/param/background/background_reader.h"
 #include "engine/param/actor/actor_loader.h"
 
 #include "modules/theme/thememanager.h"
@@ -18,6 +17,8 @@
 #include "engine/system/runtime_loop.h"
 #include "engine/system/audio.h"
 #include "engine/system/theme.h"
+
+#include <rolechat/background/JsonBackgroundData.h>
 
 
 using namespace engine::network::metadata;
@@ -140,11 +141,16 @@ void LegacyViewport::loadBackground(QString background)
   const QString jsonPath = aoApp->find_asset_path(aoApp->get_background_path(m_backgroundName) + "/" + "background.json");
 
   if(FS::Checks::FileExists(jsonPath))
-    m_backgroundData = new BackgroundReader();
+  {
+    m_backgroundData = new JsonBackgroundData();
+    m_backgroundData->loadBackground(jsonPath.toStdString());
+  }
   else
+  {
     m_backgroundData = new LegacyBackgroundReader();
+    m_backgroundData->loadBackground(m_backgroundName.toStdString());
+  }
 
-  m_backgroundData->loadBackground(m_backgroundName.toStdString());
   refreshBackground("wit");
 }
 

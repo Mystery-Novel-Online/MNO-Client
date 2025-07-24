@@ -2,9 +2,9 @@
 #include "pch.h"
 
 #include "engine/fs/fs_reading.h"
-#include "engine/param/background/background_reader.h"
 #include "engine/param/background/legacy_background_reader.h"
 #include <modules/theme/thememanager.h>
+#include "rolechat/background/JsonBackgroundData.h"
 
 SceneManager SceneManager::s_Instance;
 
@@ -14,14 +14,15 @@ void SceneManager::execLoadPlayerBackground(QString t_backgroundName)
   const QString l_backgroundJSONPath = AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(t_backgroundName) + "/" + "background.json");
   if(FS::Checks::FileExists(l_backgroundJSONPath))
   {
-    pCurrentBackground = new BackgroundReader();
+    pCurrentBackground = new JsonBackgroundData();
+    pCurrentBackground->loadBackground(l_backgroundJSONPath.toStdString());
   }
   else
   {
     pCurrentBackground = new LegacyBackgroundReader();
+    pCurrentBackground->loadBackground(t_backgroundName.toStdString());
   }
 
-  pCurrentBackground->loadBackground(t_backgroundName.toStdString());
 }
 
 QString SceneManager::getBackgroundPath(QString t_position)
