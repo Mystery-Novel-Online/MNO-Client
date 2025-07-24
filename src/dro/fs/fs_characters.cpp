@@ -1,10 +1,11 @@
 #include "fs_characters.h"
 #include "fs_reading.h"
 
+namespace{
 const QStringList SPRITE_PATH_BLACKLIST = { "char_icon.png", "showname.png", "emotions" };
+}
 
-
-const QString fs::characters::getSpritePath(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder)
+QString fs::characters::getSpritePath(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder)
 {
   bool l_valid = true;
 
@@ -73,27 +74,27 @@ const QString fs::characters::getSpritePath(QString p_character, QString p_emote
   return l_file_path;
 }
 
-const QString fs::characters::getSpritePathPre(QString character, QString emote)
+QString fs::characters::getSpritePathPre(QString character, QString emote)
 {
   return getSpritePath(character, emote, QString{}, false);
 }
 
-const QString fs::characters::getSpritePathTalk(QString character, QString emote)
+QString fs::characters::getSpritePathTalk(QString character, QString emote)
 {
   return getSpritePath(character, emote, "(b)", true);
 }
 
-const QString fs::characters::getSpritePathIdle(QString character, QString emote)
+QString fs::characters::getSpritePathIdle(QString character, QString emote)
 {
   return getSpritePath(character, emote, "(a)", true);
 }
 
-const QString fs::characters::getDirectoryPath(const QString &character)
+QString fs::characters::getDirectoryPath(const QString &character)
 {
   return FS::Paths::FindDirectory("characters/" + character);
 }
 
-const QString fs::characters::getFilePath(const QString &character, const QString &file)
+QString fs::characters::getFilePath(const QString &character, const QString &file)
 {
   return getDirectoryPath(character) + "/" + file;
 }

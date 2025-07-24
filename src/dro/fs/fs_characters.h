@@ -3,13 +3,13 @@
 
 namespace dro::fs::characters
 {
-  const QString getSpritePath(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder);
-  const QString getSpritePathPre(QString character, QString emote);
-  const QString getSpritePathTalk(QString character, QString emote);
-  const QString getSpritePathIdle(QString character, QString emote);
+  QString getSpritePath(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder);
+  QString getSpritePathPre(QString character, QString emote);
+  QString getSpritePathTalk(QString character, QString emote);
+  QString getSpritePathIdle(QString character, QString emote);
 
-  const QString getDirectoryPath(const QString& character);
-  const QString getFilePath(const QString& character, const QString& file);
+  QString getDirectoryPath(const QString& character);
+  QString getFilePath(const QString& character, const QString& file);
 }
 
 

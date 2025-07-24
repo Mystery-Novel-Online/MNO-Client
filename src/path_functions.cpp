@@ -20,8 +20,10 @@
 
 void AOApplication::reload_packages()
 {
+  // Reset cached data
   CharacterRepository::reset();
   dro::system::replays::io::resetCache();
+
   QVector<QString> packageNames = FS::Packages::Scan();
   QString packagesPath = FS::Paths::ApplicationPath() + "/packages/";
 
@@ -55,12 +57,11 @@ void AOApplication::reload_packages()
       CharacterRepository::setFilteredList(packageName, packageCharacters);
     }
 
-    QDir replaysDirectory(packagesPath + packageName + "/replays");
-    if (replaysDirectory.exists())
+    const QDir replaysDir(packagesPath + packageName + "/replays");
+    if (replaysDir.exists())
     {
-      QVector<QString> l_replayGroups;
-      QStringList l_folderGroups = replaysDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-      dro::system::replays::io::cachePackage(packageName, l_folderGroups);
+      const QStringList replayFolders = replaysDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+      dro::system::replays::io::cachePackage(packageName, replayFolders);
     }
   }
 
