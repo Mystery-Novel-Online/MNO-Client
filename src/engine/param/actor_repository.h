@@ -17,8 +17,8 @@ namespace engine::actor::user
   ActorData *load(QString folder);
   ActorData *retrieve();
   QString name();
-  void toggleLayer(const QString& name, bool state);
-  bool layerState(const QString& name);
+  void toggleLayer(const std::string& name, bool state);
+  bool layerState(const std::string& name);
   void setOutfitList(QStringList outfits);
 }
 

@@ -23,7 +23,7 @@ public:
 
   int get_emote_number();
   void set_emote_number(int emote_number);
-  void set_image(DREmote emote, bool enabled);
+  void set_image(ActorEmote emote, bool enabled);
   int findHighestPixel();
 
 signals:

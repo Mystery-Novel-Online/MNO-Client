@@ -32,8 +32,8 @@ class ButtonMaker : public QWidget
   Q_OBJECT
 public:
   ButtonMaker(QWidget *parent = nullptr);
-  void forceEmote(DREmote emote);
-  void SetEmote(DREmote emote);
+  void forceEmote(ActorEmote emote);
+  void SetEmote(ActorEmote emote);
   void SetCharacter(QString character);
 
 private slots:
@@ -45,7 +45,7 @@ private:
   QImage LoadImageDialog();
 private:
 
-  QVector<DREmote> m_Emotes = {};
+  QVector<ActorEmote> m_Emotes = {};
   int m_EmoteIndex = 0;
 
   bool m_IsJson = false;

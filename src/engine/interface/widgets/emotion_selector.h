@@ -12,7 +12,7 @@ class EmotionSelector : public RPWidget
 public:
   explicit EmotionSelector(QWidget *parent);
 
-  void emotionChange(DREmote emote);
+  void emotionChange(ActorEmote emote);
   void actorChange(ActorData *actor);
   void outfitChange();
 
@@ -23,8 +23,8 @@ public:
   void refreshSelection(bool changedActor);
   void resetPage();
 
-  DREmote getEmote(int emoteId);
-  DREmote getSelectedEmote();
+  ActorEmote getEmote(int emoteId);
+  ActorEmote getSelectedEmote();
   int getSelectedIndex() { return m_SelectedIndex; }
 
 
@@ -35,7 +35,7 @@ public:
 private:
   EmoteMenu* m_ContextMenu = nullptr;
   QVector<AOEmoteButton *> m_EmotionButtons;
-  QVector<DREmote> m_ActorEmotions = {};
+  QVector<ActorEmote> m_ActorEmotions = {};
 
   int m_EmoteColumns = 5;
   int m_EmoteRows = 2;

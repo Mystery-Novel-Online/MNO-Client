@@ -98,41 +98,6 @@ public:
   QString mForeground = "";
 };
 
-struct EmoteLayer
-{
-  QString offsetName;
-  QString spriteName;
-  QString spriteOrder;
-  QRect layerOffset;
-
-  bool detachLayer;
-
-  QString blendMode;
-  QString toggleName;
-  QString assetPath;
-};
-
-
-class DREmote
-{
-public:
-  QString character;
-  QString key;
-  QString comment;
-  QString anim;
-  QString sequence;
-  QString dialog;
-  int modifier = 0;
-  int desk_modifier = -1;
-  bool ignore_offsets = false;
-  QString sound_file;
-  int sound_delay = 0;
-  QString video_file;
-  QString outfitName = "";
-  QString emoteName = "";
-  QVector<EmoteLayer> emoteOverlays = {};
-};
-
 class DRAreaBackground
 {
 public:

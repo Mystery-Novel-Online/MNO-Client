@@ -3,6 +3,7 @@
 
 #include "engine/param/json_reader.h"
 #include "mk2/spriteplayer.h"
+#include <rolechat/actor/ActorOutfit.h>
 
 struct ActorScalingPreset
 {
@@ -11,39 +12,15 @@ struct ActorScalingPreset
   int scale = 1000;
 };
 
-class OutfitReader : public JSONReader
-{
-public:
-  OutfitReader(const QString& character, const QString& outfit);
-
-  void SetShowname(const QString& showname) { m_Showname = showname;};
-  QString GetShowname() { return m_Showname;};
-
-  void ReadSettings();
-  void ReadEmotes();
-
-  QVector<DREmote> m_Emotes = {};
-  QVector<EmoteLayer> m_Layers = {};
-
-private:
-  QString m_Showname = "";
-  QString m_CharacterName = "";
-  QString m_OutfitName = "";
-  QString m_OutfitPath = "";
-  bool m_RuleDesk = true;
-  bool m_RuleOffsets = false;
-
-};
-
 class ActorData
 {
 public:
   ActorData(){};
   virtual ~ActorData() = default;
 
-  virtual QString GetEmoteSprite(const DREmote& t_emote);
-  virtual QString GetEmoteButton(const DREmote& t_emote, bool t_enabled);
-  virtual QString GetSelectedImage(const DREmote& t_emote);
+  virtual QString GetEmoteSprite(const ActorEmote& t_emote);
+  virtual QString GetEmoteButton(const ActorEmote& t_emote, bool t_enabled);
+  virtual QString GetSelectedImage(const ActorEmote& t_emote);
 
   virtual void SetShowname(const QString& showname) { m_Showname = showname;};
   virtual QString GetShowname() { return m_Showname.isEmpty() ? m_Folder : m_Showname;};
@@ -74,7 +51,7 @@ public:
   virtual QVector<ActorScalingPreset> GetScalingPresets() { return m_Presets; };
 
   virtual QStringList GetOutfitNames();
-  virtual QVector<DREmote> GetEmotes();
+  virtual QVector<ActorEmote> GetEmotes();
 
   virtual void SetFolder(const QString& folder) { m_Folder = folder; };
   virtual QString GetFolder() { return m_Folder; };
@@ -84,8 +61,8 @@ public:
 
   virtual void reload() {};
 
-  virtual QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) = 0;
-  virtual OutfitReader* GetEmoteOutfit(const QString& emoteName) = 0;
+  virtual QVector<ActorLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) = 0;
+  virtual rolechat::actor::ActorOutfit* GetEmoteOutfit(const QString& emoteName) = 0;
 
 private:
   QVector<ActorScalingPreset> m_Presets = {};
@@ -103,16 +80,16 @@ public:
   ActorDataReader() = default;
 
   void LoadActor(const QString& folder) override;
-  QString GetEmoteSprite(const DREmote& t_emote) override;
-  QString GetEmoteButton(const DREmote& t_emote, bool t_enabled) override;
-  QString GetSelectedImage(const DREmote& t_emote) override;
+  QString GetEmoteSprite(const ActorEmote& t_emote) override;
+  QString GetEmoteButton(const ActorEmote& t_emote, bool t_enabled) override;
+  QString GetSelectedImage(const ActorEmote& t_emote) override;
   QStringList GetOutfitNames() override;
   void SwitchOutfit(const QString& t_outfit) override;
   QString GetShowname() override;
 
-  QVector<DREmote> GetEmotes() override;
-  QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override;
-  OutfitReader* GetEmoteOutfit(const QString& emoteName) override;
+  QVector<ActorEmote> GetEmotes() override;
+  QVector<ActorLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override;
+  rolechat::actor::ActorOutfit* GetEmoteOutfit(const QString& emoteName) override;
 
   void reload() override;
 
@@ -120,7 +97,7 @@ private:
   void LoadOutfits();
 
   QString m_Showname = "";
-  QMap<QString, OutfitReader*> m_Outfits = {};
+  QMap<QString, rolechat::actor::ActorOutfit*> m_Outfits = {};
   QStringList m_OutfitNames = {};
   QStringList m_OutfitsOrder = {};
 
@@ -137,12 +114,12 @@ public:
 
   QString DRLookupKey(const QStringList &keyList, const QString &targetKey);
 
-  QVector<DREmote> GetEmotes() override;
-  QString GetEmoteSprite(const DREmote& emote) override { return ""; };
-  QString GetEmoteButton(const DREmote& t_emote, bool t_enabled) override;
-  QString GetSelectedImage(const DREmote& t_emote) override;
-  QVector<EmoteLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override { return {}; };
-  OutfitReader* GetEmoteOutfit(const QString& emoteName) override { return nullptr; };
+  QVector<ActorEmote> GetEmotes() override;
+  QString GetEmoteSprite(const ActorEmote& emote) override { return ""; };
+  QString GetEmoteButton(const ActorEmote& t_emote, bool t_enabled) override;
+  QString GetSelectedImage(const ActorEmote& t_emote) override;
+  QVector<ActorLayer> GetEmoteOverlays(const QString& outfit, const QString& emoteName) override { return {}; };
+  rolechat::actor::ActorOutfit* GetEmoteOutfit(const QString& emoteName) override { return nullptr; };
 
 };
 

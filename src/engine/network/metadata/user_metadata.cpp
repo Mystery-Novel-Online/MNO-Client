@@ -81,16 +81,16 @@ namespace engine::network::metadata::user
   {
     if(s_showname.trimmed().isEmpty())
     {
-      if(actor::user::retrieve() != nullptr)
-        return actor::user::retrieve()->GetShowname().toStdString();
+      if(engine::actor::user::retrieve() != nullptr)
+        return engine::actor::user::retrieve()->GetShowname().toStdString();
     }
     return s_showname.toStdString();
   }
 
   std::string getIniswap()
   {
-    if(actor::user::retrieve() != nullptr)
-      return actor::user::retrieve()->GetFolder().toStdString();
+    if(engine::actor::user::retrieve() != nullptr)
+      return engine::actor::user::retrieve()->GetFolder().toStdString();
     return "Spectator";
   }
 

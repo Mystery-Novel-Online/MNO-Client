@@ -37,17 +37,17 @@ EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
   m_buttonMaker->hide();
 }
 
-void EmoteMenu::EmoteChange(DREmote emote)
+void EmoteMenu::EmoteChange(ActorEmote emote)
 {
   if(m_buttonMaker == nullptr) return;
   m_currentEmote = emote;
   m_buttonMaker->SetEmote(emote);
 
   clearLayers();
-  for(const EmoteLayer &layer : emote.emoteOverlays)
+  for(const ActorLayer &layer : emote.emoteOverlays)
   {
-    if(!layer.toggleName.trimmed().isEmpty())
-      AddLayer(layer.toggleName, actor::user::layerState(layer.toggleName));
+    if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty())
+      AddLayer(QString::fromStdString(layer.toggleName), engine::actor::user::layerState(layer.toggleName));
   }
 }
 
@@ -78,7 +78,7 @@ void EmoteMenu::AddPreset(const QString &name)
 
   if(m_presetsClearedCheck) return;
 
-  for(ActorScalingPreset presetData : actor::user::retrieve()->GetScalingPresets())
+  for(ActorScalingPreset presetData : engine::actor::user::retrieve()->GetScalingPresets())
   {
     if(presetData.name == name)
     {
@@ -125,7 +125,7 @@ void EmoteMenu::OnRealtimeTriggered()
 void EmoteMenu::OnButtonMakerTriggered()
 {
   m_buttonMaker->show();
-  m_buttonMaker->SetCharacter(actor::user::retrieve()->GetFolder());
+  m_buttonMaker->SetCharacter(engine::actor::user::retrieve()->GetFolder());
   m_buttonMaker->SetEmote(m_currentEmote);
 }
 
@@ -143,13 +143,13 @@ void EmoteMenu::AddLayer(const QString &name, bool defaultValue)
   action->setChecked(defaultValue);
 
   connect(action, &QAction::toggled, this, [=](bool checked){
-    engine::actor::user::toggleLayer(name, checked);
+    engine::actor::user::toggleLayer(name.toStdString(), checked);
   });
 }
 
 void EmoteMenu::ApplyPreset(const QString &presetName)
 {
-  for(ActorScalingPreset presetData : actor::user::retrieve()->GetScalingPresets())
+  for(ActorScalingPreset presetData : engine::actor::user::retrieve()->GetScalingPresets())
   {
     if(presetData.name == presetName)
     {

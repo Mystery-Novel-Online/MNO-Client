@@ -66,24 +66,24 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 
 }
 
-void ButtonMaker::forceEmote(DREmote emote)
+void ButtonMaker::forceEmote(ActorEmote emote)
 {
-  m_CharacterSprite->play_idle(emote.character, emote.dialog);
+  m_CharacterSprite->play_idle(QString::fromStdString(emote.character), QString::fromStdString(emote.dialog));
   m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
 
   QStringList layers;
-  for(const EmoteLayer &layer : emote.emoteOverlays)
+  for(const ActorLayer &layer : emote.emoteOverlays)
   {
     if(engine::actor::user::layerState(layer.toggleName))
-      layers.append(engine::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+      layers.append(engine::system::encoding::text::EncodePacketContents({QString::fromStdString(layer.spriteName), QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
   }
 
-  m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), emote.character, emote.dialog, emote.outfitName);
+  m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(emote.character), QString::fromStdString(emote.dialog), QString::fromStdString(emote.outfitName));
   m_CharacterSprite->start(engine::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
   return;
 }
 
-void ButtonMaker::SetEmote(DREmote emote)
+void ButtonMaker::SetEmote(ActorEmote emote)
 {
   if(m_Emotes.count() == 0) return;
 
@@ -92,43 +92,43 @@ void ButtonMaker::SetEmote(DREmote emote)
     hide();
     return;
   }
-  DREmote currentEmote = m_Emotes.at(m_EmoteIndex);
+  ActorEmote currentEmote = m_Emotes.at(m_EmoteIndex);
   if(emote.comment == currentEmote.comment && emote.outfitName == currentEmote.outfitName)
   {
     m_EmoteIndex = m_EmoteIndex;
-    m_CharacterSprite->play_idle(currentEmote.character, currentEmote.dialog);
+    m_CharacterSprite->play_idle(QString::fromStdString(currentEmote.character), QString::fromStdString(currentEmote.dialog));
     m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
 
     QStringList layers;
-    for(const EmoteLayer &layer : currentEmote.emoteOverlays)
+    for(const ActorLayer &layer : currentEmote.emoteOverlays)
     {
       if(engine::actor::user::layerState(layer.toggleName))
-        layers.append(engine::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+        layers.append(engine::system::encoding::text::EncodePacketContents({QString::fromStdString(layer.spriteName), QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
     }
 
-    m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), currentEmote.character, currentEmote.dialog, currentEmote.outfitName);
+    m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(currentEmote.character), QString::fromStdString(currentEmote.dialog), QString::fromStdString(currentEmote.outfitName));
     m_CharacterSprite->start(engine::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
     return;
   }
 
   for(int i = 0; i < m_Emotes.count(); i++)
   {
-    DREmote checkEmote = m_Emotes.at(i);
+    ActorEmote checkEmote = m_Emotes.at(i);
 
     if(emote.comment == checkEmote.comment && emote.outfitName == checkEmote.outfitName)
     {
       m_EmoteIndex = i;
-      m_CharacterSprite->play_idle(checkEmote.character, checkEmote.dialog);
+      m_CharacterSprite->play_idle(QString::fromStdString(checkEmote.character), QString::fromStdString(checkEmote.dialog));
       m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
 
       QStringList layers;
-      for(const EmoteLayer &layer : checkEmote.emoteOverlays)
+      for(const ActorLayer &layer : checkEmote.emoteOverlays)
       {
         if(engine::actor::user::layerState(layer.toggleName))
-          layers.append(engine::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+          layers.append(engine::system::encoding::text::EncodePacketContents({QString::fromStdString(layer.spriteName), QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
       }
 
-      m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), checkEmote.character, checkEmote.dialog, checkEmote.outfitName);
+      m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(checkEmote.character), QString::fromStdString(checkEmote.dialog), QString::fromStdString(checkEmote.outfitName));
       m_CharacterSprite->start(engine::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
       return;
     }
@@ -208,10 +208,10 @@ void ButtonMaker::onGenerateClicked()
   QString buttonDirectory = "/emotions/button" + QString::number(m_EmoteIndex + 1) + "_off.png";
   if(m_IsJson)
   {
-    buttonDirectory = "/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".png";
+    buttonDirectory = QString::fromStdString("/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".png");
   }
 
-  QString filePath = fs::characters::getFilePath(m_Emotes.at(m_EmoteIndex).character, buttonDirectory);
+  QString filePath = fs::characters::getFilePath(QString::fromStdString(m_Emotes.at(m_EmoteIndex).character), buttonDirectory);
   if(FS::Checks::FileExists(filePath))
   {
     QMessageBox::StandardButton replaceResult;

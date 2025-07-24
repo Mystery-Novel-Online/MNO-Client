@@ -70,7 +70,8 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
   {
     SetTargetObject(overlayData.toObject());
     QString overlayName = getStringValue("name");
-    QRect overlayRect = getRectangleValue("offset");
+    QRect qRectangle = getRectangleValue("offset");
+    RPRect overlayRect;
     QString overlayRender = getStringValue("order");
     QString assetPath = QString::fromStdString(engine::runtime::values::resolveVariables(getStringValue("asset").toStdString()));
     QString blendMode = getStringValue("blend_mode");
@@ -78,15 +79,19 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
 
     if (detach)
     {
-      const float xNorm = overlayRect.x() / float(targetResolution.width()) * 1000.0f;
-      const float yNorm = overlayRect.y() / float(targetResolution.height()) * 1000.0f;
-      const float wNorm = overlayRect.width() / float(targetResolution.width()) * 1000.0f;
-      const float hNorm = overlayRect.height() / float(targetResolution.height()) * 1000.0f;
+      const float xNorm = overlayRect.x / float(targetResolution.width()) * 1000.0f;
+      const float yNorm = overlayRect.y / float(targetResolution.height()) * 1000.0f;
+      const float wNorm = overlayRect.width / float(targetResolution.width()) * 1000.0f;
+      const float hNorm = overlayRect.height / float(targetResolution.height()) * 1000.0f;
 
-      overlayRect = QRect(int(xNorm), int(yNorm), int(wNorm), int(hNorm));
+      overlayRect = {int(xNorm), int(yNorm), int(wNorm), int(hNorm)};
+    }
+    else
+    {
+      overlayRect = {qRectangle.x(), qRectangle.y(), qRectangle.width(), qRectangle.height()};
     }
 
-    m_Layers.append({overlayName, "", overlayRender, overlayRect, detach, blendMode, "", assetPath});
+    m_Layers.append({overlayName.toStdString(), "", overlayRender.toStdString(), overlayRect, detach, blendMode.toStdString(), "", assetPath.toStdString()});
   }
 
   ResetTargetObject();

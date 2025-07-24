@@ -58,19 +58,19 @@ void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
     return;
   s_emotePreviewIndex = p_id;
   const int l_real_id = ui_emotes->calculateTrueIndex(p_id);
-  const DREmote &l_emote =  ui_emotes->getEmote(l_real_id);
+  const ActorEmote &l_emote =  ui_emotes->getEmote(l_real_id);
   ui_emote_preview_character->set_mirrored(ui_flip->isChecked());
 
 
   QStringList layers;
-  for(const EmoteLayer &layer : l_emote.emoteOverlays)
+  for(const ActorLayer &layer : l_emote.emoteOverlays)
   {
     if(engine::actor::user::layerState(layer.toggleName))
-      layers.append(engine::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+      layers.append(engine::system::encoding::text::EncodePacketContents({QString::fromStdString(layer.spriteName), QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
   }
 
-  ui_emote_preview_character->processOverlays(engine::system::encoding::text::EncodeBase64(layers), l_emote.character, l_emote.dialog, l_emote.outfitName);
-  ui_emote_preview_character->play_idle(l_emote.character, l_emote.dialog);
+  ui_emote_preview_character->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(l_emote.character), QString::fromStdString(l_emote.dialog), QString::fromStdString(l_emote.outfitName));
+  ui_emote_preview_character->play_idle(QString::fromStdString(l_emote.character), QString::fromStdString(l_emote.dialog));
   ui_emote_preview_character->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
   ui_emote_preview_character->start(engine::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
 

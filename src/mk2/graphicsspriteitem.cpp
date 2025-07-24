@@ -137,15 +137,18 @@ void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
 bool GraphicsSpriteItem::setKeyframeAnimation(const QString &directory, const QString &animation)
 {
   clearImageLayers();
-  for(const EmoteLayer &layer : AnimationReader(directory + "/" + animation, m_KeyframeSequence).m_Layers)
+  for(const ActorLayer &layer : AnimationReader(directory + "/" + animation, m_KeyframeSequence).m_Layers)
   {
+    QString qAssetPath = QString::fromStdString(layer.assetPath);
+    QString qOffsetName = QString::fromStdString(layer.offsetName);
+
     QStringList searchPaths =
     {
-      "animations/" + directory + "/assets/" + layer.assetPath,
-      "animations/assets/" + layer.assetPath,
-      "animations/" + directory + "/assets/" + layer.offsetName,
-      "animations/assets/" + layer.offsetName,
-      layer.assetPath
+      "animations/" + directory + "/assets/" + qAssetPath,
+      "animations/assets/" + qAssetPath,
+      "animations/" + directory + "/assets/" + qOffsetName,
+      "animations/assets/" + qOffsetName,
+      qAssetPath
     };
 
     QString filePath = FS::Paths::FindFile(searchPaths, true, FS::Formats::SupportedImages());
@@ -164,15 +167,19 @@ bool GraphicsSpriteItem::setThemeAnimation(const QString &animation)
 {
   clearImageLayers();
   const QString theme = AOApplication::getInstance()->getCurrentTheme();
-  for(const EmoteLayer &layer : AnimationReader(animation, theme, m_KeyframeSequence).m_Layers)
+  for(const ActorLayer &layer : AnimationReader(animation, theme, m_KeyframeSequence).m_Layers)
   {
+
+    QString qAssetPath = QString::fromStdString(layer.assetPath);
+    QString qOffsetName = QString::fromStdString(layer.offsetName);
+
     QStringList searchPaths =
         {
-            "themes/" + theme + "/animations/assets/" + layer.assetPath,
-            "themes/" + theme + "/animations/assets/" + layer.offsetName,
-            "animations/assets/" + layer.assetPath,
-            "animations/assets/" + layer.offsetName,
-            layer.assetPath
+            "themes/" + theme + "/animations/assets/" + qAssetPath,
+            "themes/" + theme + "/animations/assets/" + qOffsetName,
+            "animations/assets/" + qAssetPath,
+            "animations/assets/" + qOffsetName,
+            qAssetPath
         };
 
     QString filePath = FS::Paths::FindFile(searchPaths, true, FS::Formats::SupportedImages());
@@ -189,13 +196,15 @@ bool GraphicsSpriteItem::setThemeAnimation(const QString &animation)
 
 bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, bool startFromEnd)
 {
-  for(const EmoteLayer &layer : AnimationReader(name, m_KeyframeSequence, character).m_Layers)
+  for(const ActorLayer &layer : AnimationReader(name, m_KeyframeSequence, character).m_Layers)
   {
-    QString filePath = FS::Paths::FindFile("characters/" + character + "/animations/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
+    QString qOffsetName = QString::fromStdString(layer.offsetName);
+
+    QString filePath = FS::Paths::FindFile("characters/" + character + "/animations/assets/" + qOffsetName, true, FS::Formats::SupportedImages());
     if(!FS::Checks::FileExists(filePath))
-      filePath = FS::Paths::FindFile("animations/assets/" + layer.offsetName, true, FS::Formats::SupportedImages());
+      filePath = FS::Paths::FindFile("animations/assets/" + qOffsetName, true, FS::Formats::SupportedImages());
     if(!FS::Checks::FileExists(filePath))
-      filePath = fs::characters::getSpritePathIdle(character, layer.offsetName);
+      filePath = fs::characters::getSpritePathIdle(character, qOffsetName);
 
     createOverlay(layer, filePath);
   }
@@ -274,24 +283,25 @@ void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QSt
   }
 }
 
-void GraphicsSpriteItem::processOverlays(const QVector<EmoteLayer> &emoteLayers, const QString& character, const QString& emotePath, const QString& outfitName)
+void GraphicsSpriteItem::processOverlays(const QVector<ActorLayer> &ActorLayers, const QString& character, const QString& emotePath, const QString& outfitName)
 {
   clearImageLayers();
 
   QString path = QFileInfo(emotePath).path();
   if (!path.isEmpty()) path += "/";
 
-  for(const EmoteLayer &layer : emoteLayers)
+  for(const ActorLayer &layer : ActorLayers)
   {
-    QString filePath = fs::characters::getSpritePathIdle(character, path + layer.spriteName);
+    QString qSpriteName = QString::fromStdString(layer.spriteName);
+    QString filePath = fs::characters::getSpritePathIdle(character, path + qSpriteName);
     if(!outfitName.isEmpty())
     {
-      const QString currentOutfitName = fs::characters::getSpritePathIdle(character, "outfits/" + outfitName +  "/" + layer.spriteName);
+      const QString currentOutfitName = fs::characters::getSpritePathIdle(character, "outfits/" + outfitName +  "/" + qSpriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
     else
     {
-      const QString currentOutfitName = fs::characters::getSpritePathIdle(character, layer.spriteName);
+      const QString currentOutfitName = fs::characters::getSpritePathIdle(character, qSpriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
     createOverlay(layer, filePath);
@@ -385,23 +395,23 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &imageName, const Q
   return layer;
 }
 
-SpriteLayer *GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QString &imagePath)
+SpriteLayer *GraphicsSpriteItem::createOverlay(const ActorLayer &layer, const QString &imagePath)
 {
   m_LayersExist = true;
 
-  QRect targetRect = layer.layerOffset;
+  QRect targetRect;
   if(layer.detachLayer)
   {
-    const QRectF &normRect = layer.layerOffset;
+    const RPRect &normRect = layer.layerOffset;
     const QRectF sceneRect = scene()->sceneRect();
     targetRect.setLeft((normRect.left()) * sceneRect.width() / 1000.0);
     targetRect.setTop((normRect.top()) * sceneRect.height() / 1000.0);
-    targetRect.setWidth(normRect.width() * sceneRect.width() / 1000.0);
-    targetRect.setHeight(normRect.height() * sceneRect.height() / 1000.0);
+    targetRect.setWidth(normRect.width * sceneRect.width() / 1000.0);
+    targetRect.setHeight(normRect.height * sceneRect.height() / 1000.0);
   }
 
   SpriteLayer *layerData = new SpriteLayer(imagePath, targetRect);
-  layerData->setName(layer.offsetName);
+  layerData->setName(QString::fromStdString(layer.offsetName));
   layerData->setDetatch(layer.detachLayer);
 
   static const QMap<QString, QPainter::CompositionMode> compositionTable
@@ -447,9 +457,9 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const EmoteLayer &layer, const QS
     {"set_destination", QPainter::RasterOp_SetDestination},
     {"not_destination", QPainter::RasterOp_NotDestination}
   };
-  if(compositionTable.contains(layer.blendMode.toLower())) layerData->setCompositionMode(compositionTable.value(layer.blendMode.toLower()));
+  if(compositionTable.contains(QString::fromStdString(layer.blendMode).toLower())) layerData->setCompositionMode(compositionTable.value(QString::fromStdString(layer.blendMode).toLower()));
 
-  if(layer.spriteOrder.toLower() == "below")
+  if(QString::fromStdString(layer.spriteOrder).toLower() == "below")
   {
     m_spriteLayersBelow.append(layerData);
   }

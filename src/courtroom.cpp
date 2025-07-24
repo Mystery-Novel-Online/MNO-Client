@@ -345,7 +345,7 @@ void Courtroom::enter_courtroom(int p_cid)
     ao_config->set_showname_placeholder(l_final_showname);
 
     QStringList l_content{l_chr_name, l_final_showname};
-    if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
+    if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(engine::actor::user::retrieve()->GetOutfit());
 
     ao_app->send_server_packet(DRPacket("chrini", l_content));
   }
@@ -780,7 +780,7 @@ QString Courtroom::get_current_position()
 {
   if (ui_pos_dropdown->currentIndex() == DefaultPositionIndex)
   {
-    return actor::user::retrieve()->GetSide();
+    return engine::actor::user::retrieve()->GetSide();
   }
   return ui_pos_dropdown->currentData(Qt::UserRole).toString();
 }
@@ -870,14 +870,14 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
 
   if(user::getClientId() == speakerClientId)
   {
-    if(message::recentMessage().characterFolder != actor::user::name()) return;
+    if(message::recentMessage().characterFolder != engine::actor::user::name()) return;
     targetCharacter = ui_vp_player_char;
     if(m_SpeakerActor != nullptr)
       targetScaling = m_SpeakerActor->GetScalingMode();
   }
   if(speakerClientId == user::partner::clientId())
   {
-    if(message::pair::getCharacter() != actor::user::name()) return;
+    if(message::pair::getCharacter() != engine::actor::user::name()) return;
     targetCharacter = ui_vp_player_pair;
     if(m_PairActor != nullptr)
       targetScaling = m_PairActor->GetScalingMode();
@@ -959,19 +959,19 @@ void Courtroom::on_ic_message_return_pressed()
 
   QStringList packet_contents;
 
-  const DREmote &l_emote = ui_emotes->getSelectedEmote();
+  const ActorEmote &l_emote = ui_emotes->getSelectedEmote();
 
   const QString l_desk_modifier = l_emote.desk_modifier == -1 ? QString("chat") : QString::number(l_emote.desk_modifier);
   packet_contents.append(l_desk_modifier);
 
-  packet_contents.append(l_emote.anim);
+  packet_contents.append(QString::fromStdString(l_emote.anim));
 
   packet_contents.append(get_character_ini());
 
   if (ui_hide_character->isChecked())
     packet_contents.append("../../misc/blank");
   else
-    packet_contents.append(l_emote.dialog);
+    packet_contents.append(QString::fromStdString(l_emote.dialog));
 
   packet_contents.append(ui_ic_chat_message_field->text());
 
@@ -1009,7 +1009,7 @@ void Courtroom::on_ic_message_return_pressed()
   packet_contents.append(QString::number(l_emote_mod));
   packet_contents.append(QString::number(user::GetCharacterId()));
 
-  if (l_emote.sound_file == current_sfx_file())
+  if (l_emote.sound_file == current_sfx_file().toStdString())
     packet_contents.append(QString::number(l_emote.sound_delay));
   else
     packet_contents.append("0");
@@ -1037,7 +1037,7 @@ void Courtroom::on_ic_message_return_pressed()
   packet_contents.append(ao_config->showname());
 
   // video name
-  packet_contents.append(!l_emote.video_file.isEmpty() ? l_emote.video_file : "0");
+  packet_contents.append(!QString::fromStdString(l_emote.video_file).isEmpty() ? QString::fromStdString(l_emote.video_file) : "0");
 
   // hide character
   packet_contents.append(QString::number(ui_hide_character->isChecked()));
@@ -1061,15 +1061,15 @@ void Courtroom::on_ic_message_return_pressed()
 
   if(network::metadata::VNServerInformation::featureSupported("sequence"))
   {
-    packet_contents.append(l_emote.outfitName);
+    packet_contents.append(QString::fromStdString(l_emote.outfitName));
     packet_contents.append(QString::fromStdString(courtroom::lists::getAnimation()));
     QStringList layers;
     int layerCount = 0;
-    for(const EmoteLayer &layer : l_emote.emoteOverlays)
+    for(const ActorLayer &layer : l_emote.emoteOverlays)
     {
-      if(actor::user::layerState(layer.toggleName) && layerCount < 4)
+      if(engine::actor::user::layerState(layer.toggleName) && layerCount < 4)
       {
-        layers.append(engine::system::encoding::text::EncodePacketContents({layer.spriteName, layer.spriteOrder, QString::number(layer.layerOffset.x()), QString::number(layer.layerOffset.y()), QString::number(layer.layerOffset.width()), QString::number(layer.layerOffset.height()), layer.offsetName}));
+        layers.append(engine::system::encoding::text::EncodePacketContents({QString::fromStdString(layer.spriteName), QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
         layerCount += 1;
       }
     }
@@ -2604,7 +2604,7 @@ void Courtroom::set_hp_bar(int p_bar, int p_state)
 
 void Courtroom::set_character_position(QString p_pos)
 {
-  const bool l_is_default_pos = p_pos == actor::user::retrieve()->GetSide();
+  const bool l_is_default_pos = p_pos == engine::actor::user::retrieve()->GetSide();
 
   int l_pos_index = ui_pos_dropdown->currentIndex();
   if (!l_is_default_pos)
@@ -3072,14 +3072,14 @@ void Courtroom::onOutfitChanged(int outfitIndex)
 {
   if(outfitIndex == -1) return;
   int trueOutfitIndex = outfitIndex -1;
-  if(actor::user::retrieve() == nullptr) return;
+  if(engine::actor::user::retrieve() == nullptr) return;
   if(trueOutfitIndex == -1)
   {
-    actor::user::retrieve()->SwitchOutfit("<All>");
+    engine::actor::user::retrieve()->SwitchOutfit("<All>");
   }
-  else if(actor::user::retrieve()->GetOutfitNames().length() > trueOutfitIndex && trueOutfitIndex != -1)
+  else if(engine::actor::user::retrieve()->GetOutfitNames().length() > trueOutfitIndex && trueOutfitIndex != -1)
   {
-    actor::user::retrieve()->SwitchOutfit(actor::user::retrieve()->GetOutfitNames()[trueOutfitIndex]);
+    engine::actor::user::retrieve()->SwitchOutfit(engine::actor::user::retrieve()->GetOutfitNames()[trueOutfitIndex]);
   }
 
   ui_emotes->refreshSelection(false);
@@ -3088,12 +3088,12 @@ void Courtroom::onOutfitChanged(int outfitIndex)
   ui_emotes->outfitChange();
 
   const QString l_chr_name = get_character_ini();
-  const QString l_showname = actor::user::retrieve()->GetShowname();
+  const QString l_showname = engine::actor::user::retrieve()->GetShowname();
   const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
 
   ao_config->set_showname_placeholder(l_final_showname);
   QStringList l_content{l_chr_name, l_final_showname};
-  if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(actor::user::retrieve()->GetOutfit());
+  if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(engine::actor::user::retrieve()->GetOutfit());
 
   ao_app->send_server_packet(DRPacket("chrini", l_content));
 }

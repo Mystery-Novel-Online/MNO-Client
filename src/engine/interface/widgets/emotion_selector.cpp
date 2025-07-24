@@ -17,7 +17,7 @@ EmotionSelector::EmotionSelector(QWidget *parent)
   connect(this, &QWidget::customContextMenuRequested, m_ContextMenu, &EmoteMenu::OnMenuRequested);
 }
 
-void EmotionSelector::emotionChange(DREmote emote)
+void EmotionSelector::emotionChange(ActorEmote emote)
 {
   if(m_ContextMenu == nullptr) return;
   m_ContextMenu->EmoteChange(emote);
@@ -161,8 +161,8 @@ void EmotionSelector::refreshSelection(bool changedActor)
     l_emoteCombobox->clear();
 
     QStringList l_emote_list;
-    for (const DREmote &i_emote : qAsConst(m_ActorEmotions))
-      l_emote_list.append(i_emote.comment);
+    for (const ActorEmote &i_emote : qAsConst(m_ActorEmotions))
+      l_emote_list.append(QString::fromStdString(i_emote.comment));
     l_emoteCombobox->addItems(l_emote_list);
   }
 
@@ -194,17 +194,17 @@ void EmotionSelector::resetPage()
   refreshEmotes(true);
 }
 
-DREmote EmotionSelector::getEmote(int emoteId)
+ActorEmote EmotionSelector::getEmote(int emoteId)
 {
   if (emoteId < 0 || emoteId >= m_ActorEmotions.length())
-    return DREmote();
+    return ActorEmote();
   return m_ActorEmotions.at(emoteId);
 }
 
-DREmote EmotionSelector::getSelectedEmote()
+ActorEmote EmotionSelector::getSelectedEmote()
 {
   if (m_SelectedIndex < 0 || m_SelectedIndex >= m_ActorEmotions.length())
-    return DREmote();
+    return ActorEmote();
   return m_ActorEmotions.at(m_SelectedIndex);
 }
 
@@ -225,7 +225,7 @@ void EmotionSelector::selectEmote(int emoteTarget)
   const int l_min = m_PageIndex * m_PageLimit;
   const int l_max = (m_PageLimit - 1) + m_PageIndex * m_PageLimit;
 
-  const DREmote &l_prev_emote = getSelectedEmote();
+  const ActorEmote &l_prev_emote = getSelectedEmote();
   if (m_SelectedIndex >= l_min && m_SelectedIndex <= l_max)
   {
     AOEmoteButton *l_prev_button = m_EmotionButtons.at(m_SelectedIndex % m_PageLimit);
@@ -235,7 +235,7 @@ void EmotionSelector::selectEmote(int emoteTarget)
 
   const int l_prev_emote_id = m_SelectedIndex;
   m_SelectedIndex = calculateTrueIndex(emoteTarget);
-  const DREmote &l_emote = getSelectedEmote();
+  const ActorEmote &l_emote = getSelectedEmote();
 
   if (m_SelectedIndex >= l_min && m_SelectedIndex <= l_max)
   {
@@ -268,7 +268,7 @@ void EmotionSelector::dropdownChanged(int id)
     sfxList->selectDefault();
 
   if (animList != nullptr)
-    animList->selectText(getSelectedEmote().sequence);
+    animList->selectText(QString::fromStdString(getSelectedEmote().sequence));
 
   emotionChange(getSelectedEmote());
 
@@ -289,7 +289,7 @@ void EmotionSelector::emoteClicked(int id)
     sfxList->selectDefault();
 
   if (animList != nullptr)
-    animList->selectText(getSelectedEmote().sequence);
+    animList->selectText(QString::fromStdString(getSelectedEmote().sequence));
 
 
   emotionChange(getSelectedEmote());

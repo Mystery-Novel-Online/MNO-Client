@@ -11,15 +11,17 @@ QMap<QString, bool> s_layersEnabled = {};
 ActorData* s_currentActor = nullptr;
 static QString s_currentFolder = "<NOCHAR>";
 
-bool engine::actor::user::layerState(const QString &name)
+bool engine::actor::user::layerState(const std::string &name)
 {
-  if(s_layersEnabled.contains(name)) return s_layersEnabled[name];
+  QString qName = QString::fromStdString(name);
+  if(s_layersEnabled.contains(qName)) return s_layersEnabled[qName];
   return true;
 }
 
-void engine::actor::user::toggleLayer(const QString &name, bool state)
+void engine::actor::user::toggleLayer(const std::string &name, bool state)
 {
-  s_layersEnabled[name] = state;
+  QString qName = QString::fromStdString(name);
+  s_layersEnabled[qName] = state;
 }
 
 ActorData *engine::actor::user::load(QString folder)

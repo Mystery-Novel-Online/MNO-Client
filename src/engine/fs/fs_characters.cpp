@@ -98,3 +98,8 @@ QString fs::characters::getFilePath(const QString &character, const QString &fil
 {
   return getDirectoryPath(character) + "/" + file;
 }
+
+QString fs::characters::getSpritePath(const std::string &p_character, const std::string &p_emote, const std::string &p_prefix, bool p_use_placeholder)
+{
+  return getSpritePath(QString::fromStdString(p_character), QString::fromStdString(p_emote), QString::fromStdString(p_prefix), p_use_placeholder);
+}

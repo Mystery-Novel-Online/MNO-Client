@@ -103,10 +103,10 @@ public:
   void setLayerState(ViewportSprite viewportState);
 
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
-  void processOverlays(const QVector<EmoteLayer>& emoteLayers, const QString& character, const QString& emotePath, const QString& outfitName);
+  void processOverlays(const QVector<ActorLayer>& ActorLayers, const QString& character, const QString& emotePath, const QString& outfitName);
   SpriteLayer *createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings);
   SpriteLayer *createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched = false);
-  SpriteLayer *createOverlay(const EmoteLayer& layer, const QString &imagePath);
+  SpriteLayer *createOverlay(const ActorLayer& layer, const QString &imagePath);
   void clearImageLayers();
 
 

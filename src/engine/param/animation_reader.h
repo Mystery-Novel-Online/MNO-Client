@@ -13,7 +13,7 @@ public:
   AnimationReader(const QString &name, const QString &theme, KeyframeSequence &sequence);
 
   void loadData(KeyframeSequence &sequence);
-  QVector<EmoteLayer> m_Layers = {};
+  QVector<ActorLayer> m_Layers = {};
 };
 
 #endif // ANIMATION_READER_H

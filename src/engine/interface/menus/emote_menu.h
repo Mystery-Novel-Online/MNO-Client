@@ -13,7 +13,7 @@ class EmoteMenu : public QMenu
   Q_OBJECT
 public:
   EmoteMenu(EmotionSelector *parent = nullptr);
-  void EmoteChange(DREmote emote);
+  void EmoteChange(ActorEmote emote);
 
   static bool isRealtime();
   static bool isDoubleSize();
@@ -49,7 +49,7 @@ private:
   QMenu* m_layersMenu;
 
 
-  DREmote m_currentEmote;
+  ActorEmote m_currentEmote;
   //
   bool m_presetsClearedCheck = false;
   int m_defaultVertical = 0;

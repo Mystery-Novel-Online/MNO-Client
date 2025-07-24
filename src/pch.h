@@ -5,6 +5,9 @@
 #include <bass/bassopus.h>
 #include <bass/bass_fx.h>
 
+#include "rolechat/actor/ActorEmote.h"
+#include "rolechat/actor/ActorLayer.h"
+
 #include <QGraphicsScene>
 #include <QOpenGLContext>
 #include <QVector3D>
@@ -129,5 +132,7 @@
 #include "courtroom.h"
 #include "drgraphicscene.h"
 #include "drcharactermovie.h"
+
+using namespace rolechat;
 
 #endif // PCH_H

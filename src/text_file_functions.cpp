@@ -473,7 +473,7 @@ QString drLookupKey(const QStringList &keyList, const QString &targetKey)
   return targetKey;
 }
 
-QVector<DREmote> AOApplication::get_emote_list(QString p_chr)
+QVector<ActorEmote> AOApplication::get_emote_list(QString p_chr)
 {
   return {};
 }

@@ -37,7 +37,7 @@ int AOEmoteButton::get_emote_number()
   return m_index;
 }
 
-void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
+void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
 {
   QString l_texture = retrieve()->GetEmoteButton(p_emote, false);
 
@@ -93,8 +93,8 @@ void AOEmoteButton::set_image(DREmote p_emote, bool p_enabled)
   {
     m_texture.load(l_texture);
   }
-  m_comment = p_emote.comment;
-  setText(m_texture.isNull() ? p_emote.comment : nullptr);
+  m_comment = QString::fromStdString(p_emote.comment);
+  setText(m_texture.isNull() ? QString::fromStdString(p_emote.comment) : nullptr);
 }
 
 int AOEmoteButton::findHighestPixel()
