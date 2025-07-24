@@ -5,10 +5,10 @@ LegacyBackgroundReader::LegacyBackgroundReader()
 
 }
 
-void LegacyBackgroundReader::execLoadBackground(QString t_backgroundName)
+void LegacyBackgroundReader::loadBackground(const std::string& backgroundPath)
 {
 
-  const QString l_positions_ini = AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(t_backgroundName) + "/" + "positions.ini");
+  const QString l_positions_ini = AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(QString::fromStdString(backgroundPath)) + "/" + "positions.ini");
 
   QSettings l_settings(l_positions_ini, QSettings::IniFormat);
   l_settings.setIniCodec("UTF-8");
@@ -20,17 +20,17 @@ void LegacyBackgroundReader::execLoadBackground(QString t_backgroundName)
   const QStringList l_group_list = l_settings.childGroups();
   for (const QString &i_group : l_group_list)
   {
-    DRBackgroundPosition l_positionData;
+    BackgroundPosition l_positionData;
 
     const QString l_lower_group = i_group.toLower();
     l_settings.beginGroup(i_group);
-    l_positionData.mBackground = l_settings.value("back").toString();
-    l_positionData.mForeground = l_settings.value("front").toString();
+    l_positionData.background = l_settings.value("back").toString().toStdString();
+    l_positionData.foreground = l_settings.value("front").toString().toStdString();
 
     //TO-DO: Implement
     const QString l_ambient_sfx = l_settings.value("ambient_sfx").toString();
 
-    setPosition(l_lower_group, l_positionData);
+    assignPosition(l_lower_group.toStdString(), l_positionData);
 
     l_settings.endGroup();
   }

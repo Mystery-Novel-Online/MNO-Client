@@ -2,9 +2,9 @@
 #define LEGACY_VIEWPORT_H
 #include "dreffectmovie.h"
 #include "engine/interface/widgets/viewports/rp_viewport.h"
-#include "engine/param/background/background_data.h"
 #include "drshoutmovie.h"
 #include "mk2/graphicsvideoscreen.h"
+#include "rolechat/background/IBackgroundData.h"
 
 class RPTypewriter;
 class DRSceneMovie;
@@ -59,7 +59,7 @@ private:
   DRShoutMovie *m_shoutMovie = nullptr;
 
   //Backgrounds
-  BackgroundData *m_backgroundData = nullptr;
+  rolechat::background::IBackgroundData *m_backgroundData = nullptr;
   QString m_backgroundName = "Blackout_HD";
 
   ActorData *m_currentActor = nullptr;

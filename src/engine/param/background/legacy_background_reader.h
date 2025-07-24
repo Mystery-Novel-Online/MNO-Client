@@ -1,14 +1,13 @@
 #ifndef LEGACYBACKGROUNDREADER_H
 #define LEGACYBACKGROUNDREADER_H
-#include "background_data.h"
+#include "rolechat/background/IBackgroundData.h"
 
-
-class LegacyBackgroundReader : public BackgroundData
+using namespace rolechat::background;
+class LegacyBackgroundReader : public IBackgroundData
 {
 public:
   LegacyBackgroundReader();
-
-  void execLoadBackground(QString t_backgroundName);
+  void loadBackground(const std::string& backgroundPath);
 };
 
 #endif // LEGACYBACKGROUNDREADER_H

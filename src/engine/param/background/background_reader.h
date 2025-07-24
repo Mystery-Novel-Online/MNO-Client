@@ -1,17 +1,16 @@
 #ifndef BACKGROUNDREADER_H
 #define BACKGROUNDREADER_H
 
-#include "background_data.h"
 #include "engine/param/json_reader.h"
+#include "rolechat/background/IBackgroundData.h"
 
+using namespace rolechat::background;
 
-
-class BackgroundReader : public BackgroundData, public JSONReader
+class BackgroundReader : public IBackgroundData, public JSONReader
 {
 public:
   BackgroundReader();
-
-  void execLoadBackground(QString t_backgroundName);
+  void loadBackground(const std::string& backgroundPath);
 };
 
 #endif // BACKGROUNDREADER_H

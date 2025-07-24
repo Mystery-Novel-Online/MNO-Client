@@ -3,7 +3,7 @@
 
 #include "src/drgraphicscene.h"
 #include "mk2/drplayer.h"
-#include "engine/param//background/background_data.h"
+#include "rolechat/background/IBackgroundData.h"
 
 #include <aoconfig.h>
 
@@ -45,7 +45,7 @@ private:
 
 
   QString mBackgroundName = "";
-  BackgroundData *pCurrentBackground = nullptr;
+  rolechat::background::IBackgroundData *pCurrentBackground = nullptr;
 
 };
 

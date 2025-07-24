@@ -6,9 +6,9 @@ BackgroundReader::BackgroundReader()
 
 }
 
-void BackgroundReader::execLoadBackground(QString t_backgroundName)
+void BackgroundReader::loadBackground(const std::string& backgroundPath)
 {
-  const QString l_backgroundJSONPath = AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(t_backgroundName) + "/" + "background.json");
+  const QString l_backgroundJSONPath = AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(QString::fromStdString(backgroundPath)) + "/" + "background.json");
 
   if(FS::Checks::FileExists(l_backgroundJSONPath))
   {
@@ -22,10 +22,10 @@ void BackgroundReader::execLoadBackground(QString t_backgroundName)
       if(isValueExists(l_pos))
       {
         SetTargetObject(l_pos);
-        DRBackgroundPosition l_positionData;
-        l_positionData.mBackground = getStringValue("background");
-        l_positionData.mForeground = getStringValue("foreground");
-        setPosition(l_pos, l_positionData);
+        BackgroundPosition l_positionData;
+        l_positionData.background = getStringValue("background").toStdString();
+        l_positionData.foreground = getStringValue("foreground").toStdString();
+        assignPosition(l_pos.toStdString(), l_positionData);
       }
 
       ResetTargetObject();
@@ -38,7 +38,6 @@ void BackgroundReader::execLoadBackground(QString t_backgroundName)
     l_settings.mScaleMax = getDoubleValue("height_scale_max");
     l_settings.mPositionMinimum = getDoubleValue("height_position_minimum");
     l_settings.mPositionMaximum = getDoubleValue("height_position_max");
-    setSettings(l_settings);
 
   }
 }

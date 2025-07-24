@@ -84,7 +84,7 @@ set(HEADERS
   src/engine/param/theme_module_reader.h
   src/engine/param/theme_reader.h
   src/engine/param/actor/actor_loader.h
-  src/engine/param/background/background_data.h
+
   src/engine/param/background/background_reader.h
   src/engine/param/background/legacy_background_reader.h
   src/aoapplication.h
@@ -216,7 +216,6 @@ set(SOURCES
   src/engine/param/theme_module_reader.cpp
   src/engine/param/theme_reader.cpp
   src/engine/param/actor/actor_loader.cpp
-  src/engine/param/background/background_data.cpp
   src/engine/param/background/background_reader.cpp
   src/engine/param/background/legacy_background_reader.cpp
   src/aoapplication.cpp
@@ -324,6 +323,9 @@ target_link_directories(rp-engine PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/discord-rpc
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
 )
+
+add_subdirectory(3rd/rolechat-lib)
+
 target_link_libraries(rp-engine
   Qt5::Core
   Qt5::Gui
@@ -337,6 +339,7 @@ target_link_libraries(rp-engine
   bass_fx
   discord-rpc
   lua54
+  rolechat-lib
 )
 
 if(WIN32)

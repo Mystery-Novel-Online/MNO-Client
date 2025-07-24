@@ -21,27 +21,26 @@ void SceneManager::execLoadPlayerBackground(QString t_backgroundName)
     pCurrentBackground = new LegacyBackgroundReader();
   }
 
-  pCurrentBackground->execLoadBackground(t_backgroundName);
+  pCurrentBackground->loadBackground(t_backgroundName.toStdString());
 }
 
 QString SceneManager::getBackgroundPath(QString t_position)
 {
   if(pCurrentBackground == nullptr) return "";
-  QString l_filename = pCurrentBackground->getBackgroundFilename(t_position);
+  QString l_filename = QString::fromStdString(pCurrentBackground->backgroundFilename(t_position.toStdString()));
   return AOApplication::getInstance()->get_background_sprite_path(mBackgroundName, l_filename);
 }
 
 QString SceneManager::getForegroundPath(QString t_position)
 {
   if(pCurrentBackground == nullptr) return "";
-  QString l_filename = pCurrentBackground->getForegroundFilename(t_position);
+  QString l_filename = QString::fromStdString(pCurrentBackground->foregroundFilename(t_position.toStdString()));
   return AOApplication::getInstance()->get_background_sprite_path(mBackgroundName, l_filename);
 }
 
 DRBackgroundSettings SceneManager::getBackgroundSettings()
 {
-  if(pCurrentBackground == nullptr) return DRBackgroundSettings();
-  return pCurrentBackground->getSettings();
+  return DRBackgroundSettings();
 }
 
 RPLabel *SceneManager::CreateTransition(QWidget *parents, AOApplication *ao_app, DRGraphicsView *viewport)

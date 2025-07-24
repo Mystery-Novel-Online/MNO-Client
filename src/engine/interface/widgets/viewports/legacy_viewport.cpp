@@ -144,15 +144,15 @@ void LegacyViewport::loadBackground(QString background)
   else
     m_backgroundData = new LegacyBackgroundReader();
 
-  m_backgroundData->execLoadBackground(m_backgroundName);
+  m_backgroundData->loadBackground(m_backgroundName.toStdString());
   refreshBackground("wit");
 }
 
 void LegacyViewport::refreshBackground(QString position)
 {
   if(m_backgroundData == nullptr) return;
-  QString l_filename = m_backgroundData->getBackgroundFilename(position);
-  m_backgroundSprite->set_file_name(AOApplication::getInstance()->get_background_sprite_path(m_backgroundName, l_filename));
+  std::string l_filename = m_backgroundData->backgroundFilename(position.toStdString());
+  m_backgroundSprite->set_file_name(AOApplication::getInstance()->get_background_sprite_path(m_backgroundName, QString::fromStdString(l_filename)));
   m_backgroundSprite->start();
 }
 
