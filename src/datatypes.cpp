@@ -48,9 +48,6 @@ bool DRServerInfo::operator!=(const DRServerInfo &other) const
   return !operator==(other);
 }
 
-VersionNumber::VersionNumber()
-{}
-
 VersionNumber::VersionNumber(int p_release, int p_major, int p_minor)
     : release(p_release)
     , major(p_major)

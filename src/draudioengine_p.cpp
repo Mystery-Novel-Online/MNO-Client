@@ -97,7 +97,7 @@ void DRAudioEnginePrivate::update_current_device()
 
 void DRAudioEnginePrivate::update_device_list()
 {
-  const QVector<DRAudioDevice> l_new_device_list = DRAudioDevice::get_device_list();
+  QVector<DRAudioDevice> l_new_device_list = DRAudioDevice::get_device_list();
   if (l_new_device_list != device_list)
   {
     device_list = std::move(l_new_device_list);

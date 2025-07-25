@@ -3,10 +3,6 @@
 #include <modules/theme/thememanager.h>
 #include "engine/fs/fs_reading.h"
 
-ThemeReader::ThemeReader()
-{
-
-}
 
 void ThemeReader::LoadTheme(QString themeName)
 {

@@ -52,7 +52,6 @@ void DRServerSocket::send_packet(DRPacket p_packet)
 {
   if (!is_connected())
   {
-    const QString l_server_info = m_server.to_info();
     qWarning().noquote() << QString("Failed to send packet; not connected to server%1").arg(drFormatServerInfo(m_server));
     return;
   }

@@ -1,10 +1,5 @@
 #include "json_reader.h"
 
-JSONReader::JSONReader()
-{
-
-}
-
 void JSONReader::ReadFromFile(QString path)
 {
   QFile json_file(path); json_file.open(QIODevice::ReadOnly | QIODevice::Text);
@@ -113,10 +108,11 @@ QRect JSONReader::getRectangleValue(QString string)
   QRect l_ReturnValue;
   if(mTargetObject.contains(string))
   {
-    l_ReturnValue.setX(mTargetObject.value(string).toObject().value("x").toInt());
-    l_ReturnValue.setY(mTargetObject.value(string).toObject().value("y").toInt());
-    l_ReturnValue.setWidth(mTargetObject.value(string).toObject().value("width").toInt());
-    l_ReturnValue.setHeight(mTargetObject.value(string).toObject().value("height").toInt());
+    const QJsonObject &rectangleObject = mTargetObject.value(string).toObject();
+    l_ReturnValue.setX(rectangleObject.value("x").toInt());
+    l_ReturnValue.setY(rectangleObject.value("y").toInt());
+    l_ReturnValue.setWidth(rectangleObject.value("width").toInt());
+    l_ReturnValue.setHeight(rectangleObject.value("height").toInt());
   }
   return l_ReturnValue;
 }

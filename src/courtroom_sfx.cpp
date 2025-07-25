@@ -18,7 +18,7 @@ QString Courtroom::current_sfx_file()
   const std::optional<DRSfx> l_optional_sfx = current_sfx();
   if (!l_optional_sfx.has_value())
     return l_current_emote_file;
-  const QString l_file = l_optional_sfx.value().file;
+  const QString l_file = l_optional_sfx->file;
   return l_file == m_sfx_default_file ? l_current_emote_file : l_file;
 }
 

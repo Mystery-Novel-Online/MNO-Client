@@ -2,11 +2,9 @@
 #include "engine/fs/fs_reading.h"
 #include "engine/system/localization.h"
 
-ThemeModeReader::ThemeModeReader(QString filePath)
+ThemeModeReader::ThemeModeReader(QString filePath) : m_FilePath(filePath)
 {
-
   m_TimeOfDayReaders = {};
-  m_FilePath = filePath;
   //Load Images
   QDir directory(filePath);
 

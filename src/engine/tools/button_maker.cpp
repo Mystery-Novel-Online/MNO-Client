@@ -68,7 +68,7 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 
 }
 
-void ButtonMaker::forceEmote(ActorEmote emote)
+void ButtonMaker::forceEmote(const ActorEmote& emote)
 {
   m_CharacterSprite->play_idle(QString::fromStdString(emote.character), QString::fromStdString(emote.dialog));
   m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
@@ -85,7 +85,7 @@ void ButtonMaker::forceEmote(ActorEmote emote)
   return;
 }
 
-void ButtonMaker::SetEmote(ActorEmote emote)
+void ButtonMaker::SetEmote(const ActorEmote& emote)
 {
   if(m_Emotes.count() == 0) return;
 
@@ -97,7 +97,6 @@ void ButtonMaker::SetEmote(ActorEmote emote)
   ActorEmote currentEmote = m_Emotes.at(m_EmoteIndex);
   if(emote.comment == currentEmote.comment && emote.outfitName == currentEmote.outfitName)
   {
-    m_EmoteIndex = m_EmoteIndex;
     m_CharacterSprite->play_idle(QString::fromStdString(currentEmote.character), QString::fromStdString(currentEmote.dialog));
     m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
 

@@ -1746,7 +1746,7 @@ void Courtroom::handle_chatmessage_3()
     break;
   }
 
-  ui_vp_player_char->processOverlays(m_pre_chatmessage[CMSpriteLayers], m_pre_chatmessage[CMChrName], m_pre_chatmessage[CMEmote], m_pre_chatmessage[CMOutfitName]);
+  ui_vp_player_char->processOverlays(m_pre_chatmessage[CMSpriteLayers], m_pre_chatmessage[CMChrName], f_emote, m_pre_chatmessage[CMOutfitName]);
   ui_vp_player_pair->processOverlays(message::pair::getLayers(), message::pair::getCharacter(), message::pair::getEmote(), message::pair::getOutfit());
 
   {
@@ -1908,7 +1908,7 @@ void Courtroom::load_ic_text_format()
     if(ao_app->current_theme->m_jsonLoaded)
     {
       if (const std::optional<QColor> l_color = ThemeManager::get().mCurrentThemeReader.getChatlogColor(f_identifier); l_color.has_value())
-        f_format.setForeground(l_color.value());
+        f_format.setForeground(*l_color);
 
       if (ThemeManager::get().mCurrentThemeReader.getChatlogBool(f_identifier))
         f_format.setFontWeight(QFont::Bold);
@@ -2196,9 +2196,9 @@ void Courtroom::setup_chat()
   QString l_jsonPath = fs::characters::getFilePath(m_chatmessage[CMChrName], "char.json");
   if(FS::Checks::FileExists(l_jsonPath))
   {
-    rolechat::actor::IActorData *speakerActor = new rolechat::actor::JsonActorData();
-    speakerActor->load(m_chatmessage[CMChrName].toStdString(), fs::characters::getDirectoryPath(m_chatmessage[CMChrName]).toStdString());
-    f_gender = QString::fromStdString(speakerActor->gender());
+    rolechat::actor::JsonActorData speakerActor;
+    speakerActor.load(m_chatmessage[CMChrName].toStdString(), fs::characters::getDirectoryPath(m_chatmessage[CMChrName]).toStdString());
+    f_gender = QString::fromStdString(speakerActor.gender());
   }
   else
   {

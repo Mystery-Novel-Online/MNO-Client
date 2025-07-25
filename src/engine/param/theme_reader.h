@@ -6,7 +6,7 @@
 class ThemeReader
 {
 public:
-  ThemeReader();
+  ThemeReader() = default;
 
   void LoadTheme(QString themeName);
   void SetGamemode(QString gamemode);

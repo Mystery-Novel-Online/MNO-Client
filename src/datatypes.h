@@ -16,10 +16,10 @@ enum MessageTagType
 
 struct ThemeMessageHighlight
 {
+  bool hideCharacter;
   QChar openingCharacter;
   QChar closingCharacter;
   QString colourValue;
-  bool hideCharacter;
 };
 
 struct MessageTag
@@ -34,10 +34,7 @@ class MessageEffect
 {
 public:
   MessageEffect() = default;
-  MessageEffect(QString t_name)
-  {
-    name = t_name;
-  };
+  MessageEffect(QString t_name) : name(t_name) {};
 
   QString name = "";
   bool loops = false;
@@ -213,7 +210,7 @@ public:
   int major = 0;
   int minor = 0;
 
-  VersionNumber();
+  VersionNumber() = default;
   VersionNumber(int release, int major, int minor);
 
   QString to_string() const;

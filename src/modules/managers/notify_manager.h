@@ -26,16 +26,15 @@ public:
 
 
 private:
-  int mSenderId = -1;
+  NotifyManager() = default;
+  static NotifyManager s_Instance;
   QString mRequestKey = "";
   QString mSenderName = "SYSTEM";
   QString mCurrentNotificationMessage = "";
+  int mSenderId = -1;
   ChoiceEvent mCurrentNotification = ChoiceEvent_Invalid;
-
-  NotifyManager() {}
-  static NotifyManager s_Instance;
-
   ChoiceDialog *pNotificationPopup;
+
 
 };
 

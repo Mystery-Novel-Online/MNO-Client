@@ -6,7 +6,7 @@ using namespace rolechat::background;
 class LegacyBackgroundReader : public IBackgroundData
 {
 public:
-  LegacyBackgroundReader();
+  LegacyBackgroundReader() = default;
   void loadBackground(const std::string& backgroundPath);
 };
 

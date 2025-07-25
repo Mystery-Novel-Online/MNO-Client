@@ -17,11 +17,11 @@ public:
     bool m_Afk = false;
     QString m_showname;
     QString m_character;
+    QString m_CharacterOutfit = "";
     QString mURL;
     QString mPlayerStatus;
     QString mHDID;
     QString mIPID;
-    QString m_CharacterOutfit = "";
 };
 
 #endif // DRPLAYER_H

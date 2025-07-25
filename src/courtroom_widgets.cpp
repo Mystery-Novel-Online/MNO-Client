@@ -536,8 +536,6 @@ void Courtroom::reset_widget_toggles()
 
     if(ao_app->current_theme->m_jsonLoaded)
     {
-      QString l_parent_name = "Chat";
-
       QStringList chat_tab = ao_app->current_theme->get_tab_widgets("Chat");
       QStringList area_tab = ao_app->current_theme->get_tab_widgets("Area");
       QStringList gm_tab = ao_app->current_theme->get_tab_widgets("GM");
@@ -775,7 +773,7 @@ void Courtroom::set_widget_layers()
       }
       else
       {
-        QString l_parent_name = objectName();
+        l_parent_name = objectName();
       }
 
       count += 1;

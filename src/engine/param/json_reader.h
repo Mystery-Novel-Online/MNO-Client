@@ -15,7 +15,7 @@
 class JSONReader
 {
 public:
-  JSONReader();
+  JSONReader() = default;
   void  ReadFromFile(QString path);
   void  ReadFromString(QString data);
 

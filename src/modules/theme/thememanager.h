@@ -84,7 +84,7 @@ public:
   ThemeReader mCurrentThemeReader = ThemeReader();
 
 private:
-  ThemeManager() {}
+  ThemeManager() = default;
   static ThemeManager s_Instance;
 
   double mClientResize = 1;

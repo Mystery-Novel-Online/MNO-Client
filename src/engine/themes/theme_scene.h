@@ -4,7 +4,7 @@
 class ThemeScene
 {
 public:
-  ThemeScene();
+  ThemeScene() = default;
 
   QStringList getWidgetNames()
   {

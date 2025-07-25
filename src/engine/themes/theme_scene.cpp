@@ -1,10 +1,5 @@
 #include "theme_scene.h"
 
-ThemeScene::ThemeScene()
-{
-
-}
-
 WidgetThemeData *ThemeScene::getWidgetData(QString t_name)
 {
   if(m_Widgets.contains(t_name)) return m_Widgets[t_name];
@@ -26,10 +21,7 @@ QVector2D ThemeScene::getWidgetSpacing(QString t_name)
 void ThemeScene::setDummyTransform(QString t_name)
 {
   m_Widgets[t_name] = new WidgetThemeData();
-  m_Widgets[t_name]->Transform.x = -1;
-  m_Widgets[t_name]->Transform.y = -1;
-  m_Widgets[t_name]->Transform.width = -1;
-  m_Widgets[t_name]->Transform.height = -1;
+  m_Widgets[t_name]->Transform = {-1, -1, -1, -1};
 }
 
 void ThemeScene::setWidgetTransform(QString t_name, pos_size_type t_transform)

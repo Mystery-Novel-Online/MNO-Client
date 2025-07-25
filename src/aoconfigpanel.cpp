@@ -489,7 +489,7 @@ void AOConfigPanel::refresh_theme_list()
 
   if (l_theme_index.has_value())
   {
-    ui_theme->setCurrentIndex(l_theme_index.value());
+    ui_theme->setCurrentIndex(*l_theme_index);
   }
 
   update_theme_controls();

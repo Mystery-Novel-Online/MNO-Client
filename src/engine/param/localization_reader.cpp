@@ -1,9 +1,8 @@
 #include "localization_reader.h"
 #include "engine/fs/fs_reading.h"
 
-LocalizationReader::LocalizationReader(QString t_languageCode)
+LocalizationReader::LocalizationReader(QString t_languageCode) : mLangCode(t_languageCode)
 {
-  mLangCode = t_languageCode;
   QString l_localizationPath = FS::Paths::BasePath() + "localization/" + t_languageCode + ".json";
   if(FS::Checks::FileExists(l_localizationPath))
   {

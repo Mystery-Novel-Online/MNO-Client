@@ -22,7 +22,7 @@ public:
   void EndTimer(QString name);
 
 private:
-  TimeDebugger() {}
+  TimeDebugger() = default;
   static TimeDebugger s_Instance;
 
   QHash<QString, QElapsedTimer> CurrentTimers = {};

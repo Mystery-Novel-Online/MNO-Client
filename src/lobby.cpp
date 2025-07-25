@@ -579,7 +579,7 @@ void Lobby::on_add_to_fav_released()
   {
     return;
   }
-  const auto l_selected_server = m_combined_server_list.at(l_index.row());
+  const DRServerInfo& l_selected_server = m_combined_server_list.at(l_index.row());
   DRServerInfoList l_server_list = m_favorite_server_list;
   if (m_favorite_server_list.contains(l_selected_server))
   {

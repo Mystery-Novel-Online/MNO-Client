@@ -32,8 +32,8 @@ class ButtonMaker : public QWidget
   Q_OBJECT
 public:
   ButtonMaker(QWidget *parent = nullptr);
-  void forceEmote(ActorEmote emote);
-  void SetEmote(ActorEmote emote);
+  void forceEmote(const ActorEmote& emote);
+  void SetEmote(const ActorEmote& emote);
   void SetCharacter(QString character);
 
 private slots:

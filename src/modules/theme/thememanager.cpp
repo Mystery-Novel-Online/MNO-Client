@@ -25,6 +25,10 @@ void ThemeManager::deleteTabPanels()
   {
     QWidget *courtroom = getWidget("courtroom");
     RPWidget *currentTab = m_TabWidgets[tabName];
+
+    if(currentTab == nullptr)
+      continue;
+
     currentTab->show();
 
     if (courtroom && currentTab)
@@ -254,11 +258,6 @@ void ThemeManager::setWidgetDimensions(QWidget *t_widget, int t_width, int t_hei
 void ThemeManager::AssignDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene)
 {
   pos_size_type lPositionData = mCurrentThemeReader.GetWidgetTransform(t_scene, t_name);
-  lPositionData.width = static_cast<int>(lPositionData.width);
-  lPositionData.height = static_cast<int>(lPositionData.height);
-  lPositionData.x = static_cast<int>(lPositionData.x);
-  lPositionData.y = static_cast<int>(lPositionData.y);
-
   t_widget->move(lPositionData.x, lPositionData.y);
   t_widget->resize(lPositionData.width, lPositionData.height);
 }

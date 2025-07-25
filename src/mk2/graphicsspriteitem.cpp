@@ -715,23 +715,18 @@ void GraphicsSpriteItem::notify_update()
   update();
 }
 
-SpriteLayer::SpriteLayer(QString name, const QRectF &rect)
+SpriteLayer::SpriteLayer(QString name, const QRectF &rect) : targetRect(rect)
 {
   mk2::SpriteReader::ptr l_new_reader;
   l_new_reader = mk2::SpriteReader::ptr(new mk2::SpriteSeekingReader);
   l_new_reader->set_file_name(name);
   spritePlayer.set_reader(l_new_reader);
-  targetRect = rect;
   spritePlayer.set_size(targetRect.size().toSize());
   start(1.0f);
 }
 
-SpriteLayer::SpriteLayer(QMap<ViewportSprite, mk2::SpriteReader::ptr> &readerMap, const QRectF &rect, ViewportSprite state)
+SpriteLayer::SpriteLayer(QMap<ViewportSprite, mk2::SpriteReader::ptr> &readerMap, const QRectF &rect, ViewportSprite state) : m_readerMapping(readerMap), targetRect(rect), m_ViewportState(state)
 {
-  m_readerMapping = readerMap;
-  m_ViewportState = state;
-  targetRect = rect;
-
   if(m_readerMapping.contains(state))
   {
     spritePlayer.set_reader(m_readerMapping[m_ViewportState]);

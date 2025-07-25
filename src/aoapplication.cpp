@@ -480,7 +480,7 @@ void AOApplication::resolve_current_theme()
     {
       call_warning(tr("Your previous theme [%1] is missing; the current theme has been reset.\n\nTo select a different theme, go to the config panel.").arg(l_current_theme));
     }
-    ao_config->set_theme(l_target_theme.value());
+    ao_config->set_theme(*l_target_theme);
   }
 
   current_theme = new DRTheme(this);

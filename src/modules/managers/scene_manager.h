@@ -36,7 +36,7 @@ public:
 
   AOConfig *pConfigAO = nullptr;
 private:
-  SceneManager() {}
+  SceneManager() = default;
   static SceneManager s_Instance;
 
   int mFadeDuration = 200;

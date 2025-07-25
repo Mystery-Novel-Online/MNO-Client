@@ -30,7 +30,7 @@ void RPMessageInput::reloadHighlights()
   {
     if (h.size() >= 3)
     {
-      m_highlights.append({ h[0][0], h[0][1], h[1], h[2] == "0" });
+      m_highlights.append({ h[2] == "0", h[0][0], h[0][1], h[1] });
       m_openingCharacters.append(h[0][0]);
     }
   }

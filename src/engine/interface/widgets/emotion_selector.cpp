@@ -153,18 +153,21 @@ void EmotionSelector::refreshSelection(bool changedActor)
   QComboBox* l_emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
   QCheckBox* l_preCheckbox = dynamic_cast<QCheckBox*>(ThemeManager::get().getWidget("pre"));
 
+  if(l_emoteCombobox == nullptr)
+    return;
+
+  if(l_preCheckbox == nullptr)
+    return;
+
   const QString l_prev_emote = l_emoteCombobox->currentText();
 
-  if (l_emoteCombobox != nullptr)
-  {
-    QSignalBlocker l_blocker(l_emoteCombobox);
-    l_emoteCombobox->clear();
+  QSignalBlocker l_blocker(l_emoteCombobox);
+  l_emoteCombobox->clear();
 
-    QStringList l_emote_list;
-    for (const ActorEmote &i_emote : qAsConst(m_ActorEmotions))
-      l_emote_list.append(QString::fromStdString(i_emote.comment));
-    l_emoteCombobox->addItems(l_emote_list);
-  }
+  QStringList l_emote_list;
+  for (const ActorEmote &i_emote : qAsConst(m_ActorEmotions))
+    l_emote_list.append(QString::fromStdString(i_emote.comment));
+  l_emoteCombobox->addItems(l_emote_list);
 
   if (changedActor || l_prev_emote_count != m_ActorEmotions.count())
   {

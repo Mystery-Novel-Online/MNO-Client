@@ -185,6 +185,7 @@ QStringList GetDirectoryList(const QString &directoryPath, bool includePackages)
 
   if(includePackages)
   {
+    //TO-DO
     QVector<QString> searchArchives = Packages::CachedNames();
   }
 

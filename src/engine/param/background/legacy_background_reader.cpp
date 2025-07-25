@@ -1,10 +1,5 @@
 #include "legacy_background_reader.h"
 
-LegacyBackgroundReader::LegacyBackgroundReader()
-{
-
-}
-
 void LegacyBackgroundReader::loadBackground(const std::string& backgroundPath)
 {
 
