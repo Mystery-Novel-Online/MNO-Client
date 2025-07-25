@@ -95,7 +95,7 @@ void LegacyViewport::loadCurrentMessage()
 
   if(message.userShowname.isEmpty())
   {
-    m_showname->setText(m_currentActor->GetShowname());
+    m_showname->setText(QString::fromStdString(m_currentActor->showname()));
   }
   else
   {
@@ -121,7 +121,7 @@ void LegacyViewport::loadCurrentMessage()
       m_pairSprite->setHorizontalOffset(message::pair::horizontalOffset());
       m_pairSprite->setVerticalOffset(message::pair::verticalOffset());
 
-      mk2::SpritePlayer::ScalingMode targetScaling = m_pairActor->GetScalingMode();
+      rolechat::actor::ActorScalingMode targetScaling = m_pairActor->scalingMode();
       m_pairSprite->start(targetScaling, (double)message.pairData.offsetScale / 1000.0f);
       m_pairSprite->processOverlays(message.pairData.characterLayers, message.pairData.characterFolder, message.pairData.characterEmote, message.pairData.characterOutfit);
       m_pairSprite->setCharacterAnimation(message.pairData.characterSequence, message.pairData.characterFolder, true);
@@ -235,7 +235,7 @@ void LegacyViewport::onObjectionDone()
   {
     m_characterSprite->set_play_once(true);
     m_characterSprite->set_file_name(fs::characters::getSpritePathPre(message.characterFolder, message.characterPre));
-    mk2::SpritePlayer::ScalingMode targetScaling = m_currentActor->GetScalingMode();
+    rolechat::actor::ActorScalingMode targetScaling = m_currentActor->scalingMode();
     m_characterSprite->start(targetScaling, (double)message.offsetScale / 1000.0f);
   }
 
@@ -274,7 +274,7 @@ void LegacyViewport::onPreanimDone()
     m_characterSprite->show();
     m_characterSprite->set_play_once(false);
     m_characterSprite->set_file_name(fs::characters::getSpritePathIdle(message.characterFolder, message.characterEmote));
-    mk2::SpritePlayer::ScalingMode targetScaling = m_currentActor->GetScalingMode();
+    rolechat::actor::ActorScalingMode targetScaling = m_currentActor->scalingMode();
     m_characterSprite->start(targetScaling, (double)message.offsetScale / 1000.0f);
   }
 }

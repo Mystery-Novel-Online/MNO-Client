@@ -7,6 +7,8 @@
 
 #include "rolechat/actor/ActorEmote.h"
 #include "rolechat/actor/ActorLayer.h"
+#include "rolechat/actor/ActorScalingMode.h"
+#include "rolechat/actor/ActorScalingPreset.h"
 
 #include <QGraphicsScene>
 #include <QOpenGLContext>

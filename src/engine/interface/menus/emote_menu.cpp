@@ -78,9 +78,9 @@ void EmoteMenu::AddPreset(const QString &name)
 
   if(m_presetsClearedCheck) return;
 
-  for(ActorScalingPreset presetData : engine::actor::user::retrieve()->GetScalingPresets())
+  for(rolechat::actor::ActorScalingPreset presetData : engine::actor::user::retrieve()->scalingPresets())
   {
-    if(presetData.name == name)
+    if(presetData.name == name.toStdString())
     {
       m_defaultVertical = presetData.verticalAlign;
       m_defaultScale = presetData.scale;
@@ -125,7 +125,7 @@ void EmoteMenu::OnRealtimeTriggered()
 void EmoteMenu::OnButtonMakerTriggered()
 {
   m_buttonMaker->show();
-  m_buttonMaker->SetCharacter(engine::actor::user::retrieve()->GetFolder());
+  m_buttonMaker->SetCharacter(QString::fromStdString(engine::actor::user::retrieve()->folder()));
   m_buttonMaker->SetEmote(m_currentEmote);
 }
 
@@ -149,9 +149,9 @@ void EmoteMenu::AddLayer(const QString &name, bool defaultValue)
 
 void EmoteMenu::ApplyPreset(const QString &presetName)
 {
-  for(ActorScalingPreset presetData : engine::actor::user::retrieve()->GetScalingPresets())
+  for(rolechat::actor::ActorScalingPreset presetData : engine::actor::user::retrieve()->scalingPresets())
   {
-    if(presetData.name == presetName)
+    if(presetData.name == presetName.toStdString())
     {
       courtroom::sliders::setScale(presetData.scale);
       courtroom::sliders::setVertical(presetData.verticalAlign);

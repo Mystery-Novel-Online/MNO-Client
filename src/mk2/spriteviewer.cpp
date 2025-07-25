@@ -39,12 +39,12 @@ SpriteViewer::SpriteViewer(QWidget *parent)
 SpriteViewer::~SpriteViewer()
 {}
 
-SpritePlayer::ScalingMode SpriteViewer::get_scaling_mode() const
+rolechat::actor::ActorScalingMode SpriteViewer::get_scaling_mode() const
 {
   return m_player->get_scaling_mode();
 }
 
-void SpriteViewer::set_scaling_mode(SpritePlayer::ScalingMode p_scaling_mode)
+void SpriteViewer::set_scaling_mode(rolechat::actor::ActorScalingMode p_scaling_mode)
 {
   m_player->set_scaling_mode(p_scaling_mode);
 }

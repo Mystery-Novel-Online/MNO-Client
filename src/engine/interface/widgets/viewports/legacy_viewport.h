@@ -62,8 +62,8 @@ private:
   rolechat::background::IBackgroundData *m_backgroundData = nullptr;
   QString m_backgroundName = "Blackout_HD";
 
-  ActorData *m_currentActor = nullptr;
-  ActorData *m_pairActor = nullptr;
+  rolechat::actor::IActorData *m_currentActor = nullptr;
+  rolechat::actor::IActorData *m_pairActor = nullptr;
 
 };
 

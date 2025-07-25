@@ -3,6 +3,8 @@
 
 #include "engine/interface/menus/emote_menu.h"
 
+#include <rolechat/actor/IActorData.h>
+
 class AOEmoteButton;
 class ActorData;
 
@@ -13,7 +15,7 @@ public:
   explicit EmotionSelector(QWidget *parent);
 
   void emotionChange(ActorEmote emote);
-  void actorChange(ActorData *actor);
+  void actorChange(rolechat::actor::IActorData *actor);
   void outfitChange();
 
   int calculateTrueIndex(int id);

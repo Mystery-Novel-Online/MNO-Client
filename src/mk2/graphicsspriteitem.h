@@ -78,12 +78,12 @@ class GraphicsSpriteItem : public QGraphicsObject
   Q_PROPERTY(QSizeF size READ get_size WRITE set_size NOTIFY size_changed)
 
 public:
-  using ScalingMode = SpritePlayer::ScalingMode;
+  using ScalingMode = rolechat::actor::ActorScalingMode;
 
   GraphicsSpriteItem(QGraphicsItem *parent = nullptr);
   ~GraphicsSpriteItem();
 
-  SpritePlayer::ScalingMode get_scaling_mode() const;
+  rolechat::actor::ActorScalingMode get_scaling_mode() const;
 
   QSizeF get_size() const;
 
@@ -116,7 +116,7 @@ public:
   void paintGL();
 
 public slots:
-  void set_scaling_mode(SpritePlayer::ScalingMode scaling_mode);
+  void set_scaling_mode(rolechat::actor::ActorScalingMode scaling_mode);
 
   void set_size(QSizeF size);
 

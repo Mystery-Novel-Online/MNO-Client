@@ -402,12 +402,12 @@ private:
   int text_state = 2;
 
   //Temporary speaker management, will be put into its own class at some point.
-  ActorData *m_SpeakerActor = nullptr;
-  ActorData *m_PairActor = nullptr;
+  rolechat::actor::IActorData *m_SpeakerActor = nullptr;
+  rolechat::actor::IActorData *m_PairActor = nullptr;
   double m_ActorScale = 1.0;
   double m_PairScale = 1.0;
-  mk2::SpritePlayer::ScalingMode m_ActorScaling = mk2::SpritePlayer::ScalingMode::AutomaticScaling;
-  mk2::SpritePlayer::ScalingMode m_PairScaling = mk2::SpritePlayer::ScalingMode::AutomaticScaling;
+  rolechat::actor::ActorScalingMode m_ActorScaling = rolechat::actor::ActorScalingMode::AutomaticScaling;
+  rolechat::actor::ActorScalingMode m_PairScaling = rolechat::actor::ActorScalingMode::AutomaticScaling;
 
   // if enabled, disable showing our own sprites when we talk in ic
   bool m_msg_is_first_person = false;

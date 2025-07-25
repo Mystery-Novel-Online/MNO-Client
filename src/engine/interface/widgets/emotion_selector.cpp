@@ -23,15 +23,15 @@ void EmotionSelector::emotionChange(ActorEmote emote)
   m_ContextMenu->EmoteChange(emote);
 }
 
-void EmotionSelector::actorChange(ActorData *actor)
+void EmotionSelector::actorChange(rolechat::actor::IActorData *actor)
 {
   m_ActorEmotions.clear();
-  if(retrieve() != nullptr) retrieve()->GetEmotes();
+  if(retrieve() != nullptr) retrieve()->emotes();
 
   m_ContextMenu->ClearPresets();
 
-  for(ActorScalingPreset presetData : actor->GetScalingPresets())
-    m_ContextMenu->AddPreset(presetData.name);
+  for(rolechat::actor::ActorScalingPreset presetData : actor->scalingPresets())
+    m_ContextMenu->AddPreset(QString::fromStdString(presetData.name));
 
   if(m_ActorEmotions.count() > 0)
   {
@@ -43,7 +43,7 @@ void EmotionSelector::actorChange(ActorData *actor)
 void EmotionSelector::outfitChange()
 {
   m_ActorEmotions.clear();
-  m_ActorEmotions = retrieve()->GetEmotes();
+  m_ActorEmotions = QVector<ActorEmote>::fromStdVector(retrieve()->emotes());
 
   if(m_ActorEmotions.count() > 0)
   {
@@ -148,7 +148,7 @@ void EmotionSelector::refreshEmotes(bool scrollToCurrent)
 void EmotionSelector::refreshSelection(bool changedActor)
 {
   const int l_prev_emote_count = m_ActorEmotions.count();
-  m_ActorEmotions = retrieve()->GetEmotes();
+  m_ActorEmotions = QVector<ActorEmote>::fromStdVector(retrieve()->emotes());
 
   QComboBox* l_emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
   QCheckBox* l_preCheckbox = dynamic_cast<QCheckBox*>(ThemeManager::get().getWidget("pre"));

@@ -46,12 +46,12 @@ GraphicsSpriteItem::GraphicsSpriteItem(QGraphicsItem *parent)
 GraphicsSpriteItem::~GraphicsSpriteItem()
 {}
 
-SpritePlayer::ScalingMode GraphicsSpriteItem::get_scaling_mode() const
+rolechat::actor::ActorScalingMode GraphicsSpriteItem::get_scaling_mode() const
 {
   return m_player->get_scaling_mode();
 }
 
-void GraphicsSpriteItem::set_scaling_mode(SpritePlayer::ScalingMode p_scaling_mode)
+void GraphicsSpriteItem::set_scaling_mode(rolechat::actor::ActorScalingMode p_scaling_mode)
 {
   m_player->set_scaling_mode(p_scaling_mode);
 }
@@ -749,7 +749,7 @@ SpriteLayer::~SpriteLayer()
 void SpriteLayer::start(double scale)
 {
   if(m_currentScale == scale) return;
-  spritePlayer.start(SpritePlayer::WidthSmoothScaling, scale);
+  spritePlayer.start(rolechat::actor::ActorScalingMode::WidthSmoothScaling, scale);
   m_currentScale = scale;
 }
 
@@ -792,7 +792,7 @@ void SpriteLayer::setState(ViewportSprite state)
     spritePlayer.stop();
     spritePlayer.set_reader(m_readerMapping[m_ViewportState]);
     spritePlayer.set_size(targetRect.size().toSize());
-    spritePlayer.start(SpritePlayer::WidthSmoothScaling, 1.0f);
+    spritePlayer.start(rolechat::actor::ActorScalingMode::WidthSmoothScaling, 1.0f);
   }
 }
 

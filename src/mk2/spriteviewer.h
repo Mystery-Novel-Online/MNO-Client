@@ -33,12 +33,12 @@ class SpriteViewer : public QLabel
   Q_OBJECT
 
 public:
-  using ScalingMode = SpritePlayer::ScalingMode;
+  using ScalingMode = rolechat::actor::ActorScalingMode;
 
   SpriteViewer(QWidget *parent = nullptr);
   ~SpriteViewer();
 
-  SpritePlayer::ScalingMode get_scaling_mode() const;
+  rolechat::actor::ActorScalingMode get_scaling_mode() const;
 
   QString get_file_name() const;
 
@@ -55,7 +55,7 @@ public:
   int get_frame();
 
 public slots:
-  void set_scaling_mode(SpritePlayer::ScalingMode scaling_mode);
+  void set_scaling_mode(rolechat::actor::ActorScalingMode scaling_mode);
 
   void set_play_once(bool enabled);
 

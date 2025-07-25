@@ -6,6 +6,8 @@
 #include "engine/param/actor/actor_loader.h"
 #include "engine/fs/fs_characters.h"
 
+#include <rolechat/actor/JsonActorData.h>
+
 ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 {
   resize(960, 544);
@@ -79,7 +81,7 @@ void ButtonMaker::forceEmote(ActorEmote emote)
   }
 
   m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(emote.character), QString::fromStdString(emote.dialog), QString::fromStdString(emote.outfitName));
-  m_CharacterSprite->start(engine::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
+  m_CharacterSprite->start(engine::actor::user::retrieve()->scalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
   return;
 }
 
@@ -107,7 +109,7 @@ void ButtonMaker::SetEmote(ActorEmote emote)
     }
 
     m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(currentEmote.character), QString::fromStdString(currentEmote.dialog), QString::fromStdString(currentEmote.outfitName));
-    m_CharacterSprite->start(engine::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
+    m_CharacterSprite->start(engine::actor::user::retrieve()->scalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
     return;
   }
 
@@ -129,7 +131,7 @@ void ButtonMaker::SetEmote(ActorEmote emote)
       }
 
       m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(checkEmote.character), QString::fromStdString(checkEmote.dialog), QString::fromStdString(checkEmote.outfitName));
-      m_CharacterSprite->start(engine::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
+      m_CharacterSprite->start(engine::actor::user::retrieve()->scalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
       return;
     }
   }
@@ -145,17 +147,21 @@ void ButtonMaker::SetCharacter(QString character)
   if(FS::Checks::FileExists(m_Path))
   {
     m_IsJson = true;
-    ActorDataReader jsonActor = ActorDataReader();
-    jsonActor.LoadActor(character);
-    jsonActor.SetOutfit("<All>");
-    m_Emotes = jsonActor.GetEmotes();
+    rolechat::actor::JsonActorData jsonActor = rolechat::actor::JsonActorData();
+    jsonActor.load(character.toStdString(), fs::characters::getDirectoryPath(character).toStdString());
+    jsonActor.switchOutfit("<All>");
+    const std::vector<ActorEmote>& outfits = jsonActor.emotes();
+    m_Emotes.clear();
+    for (const ActorEmote& emote : outfits) { m_Emotes << emote; }
   }
   else
   {
     m_IsJson = false;
     LegacyActorReader legacyActor = LegacyActorReader();
-    legacyActor.LoadActor(character);
-    m_Emotes = legacyActor.GetEmotes();
+    legacyActor.load(character.toStdString(), fs::characters::getDirectoryPath(character).toStdString());
+    const std::vector<ActorEmote>& outfits = legacyActor.emotes();
+    m_Emotes.clear();
+    for (const ActorEmote& emote : outfits) { m_Emotes << emote; }
   }
 
   SetEmote(m_Emotes.at(m_EmoteIndex));

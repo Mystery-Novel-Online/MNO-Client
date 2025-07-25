@@ -36,18 +36,8 @@ class SpritePlayer : public QObject
   Q_OBJECT
 
 public:
-  enum ScalingMode
-  {
-    NoScaling,
-    WidthScaling,
-    HeightScaling,
-    StretchScaling,
-    DynamicScaling,
-    WidthSmoothScaling,
-    WidthPixelScaling,
-    AutomaticScaling
-  };
-  Q_ENUM(ScalingMode)
+
+  //Q_ENUM(rolechat::actor::ActorScalingMode)
 
   SpritePlayer(QObject *parent = nullptr);
   ~SpritePlayer();
@@ -58,7 +48,7 @@ public:
 
   QRectF get_scaled_bounding_rect() const;
 
-  SpritePlayer::ScalingMode get_scaling_mode() const;
+  rolechat::actor::ActorScalingMode get_scaling_mode() const;
 
   QSize get_size() const;
   double getScaledAmount() const;
@@ -83,7 +73,7 @@ public slots:
 
   void set_mirror(bool enabled);
 
-  void set_scaling_mode(SpritePlayer::ScalingMode scaling_mode);
+  void set_scaling_mode(rolechat::actor::ActorScalingMode scaling_mode);
 
   void set_size(QSize size);
 
@@ -93,11 +83,11 @@ public slots:
 
   void set_reader(SpriteReader::ptr reader);
 
-  void start(ScalingMode scaling = ScalingMode::AutomaticScaling, double scale = 1.0f);
+  void start(rolechat::actor::ActorScalingMode scaling = rolechat::actor::ActorScalingMode::AutomaticScaling, double scale = 1.0f);
   void restart();
   void stop();
 
-  void start(int p_start_frame, ScalingMode scaling = ScalingMode::AutomaticScaling, double scale = 1.0f);
+  void start(int p_start_frame, rolechat::actor::ActorScalingMode scaling = rolechat::actor::ActorScalingMode::AutomaticScaling, double scale = 1.0f);
   void restart(int p_start_frame);
 signals:
   void current_frame_changed();
@@ -112,15 +102,15 @@ signals:
   void finished();
 
 private:
-  ScalingMode m_manualScalingMode = AutomaticScaling;
+  rolechat::actor::ActorScalingMode m_manualScalingMode = rolechat::actor::ActorScalingMode::AutomaticScaling;
   SpriteReader::ptr m_reader;
   SpriteFrame m_current_frame;
   QImage m_scaled_current_frame;
   QPixmap m_scaled_pixmap_frame;
   double m_overallScale = 1.0;
   double m_scale = 1.0;
-  SpritePlayer::ScalingMode m_scaling_mode;
-  SpritePlayer::ScalingMode m_resolved_scaling_mode;
+  rolechat::actor::ActorScalingMode m_scaling_mode;
+  rolechat::actor::ActorScalingMode m_resolved_scaling_mode;
   Qt::TransformationMode m_transform;
   QSize m_size;
   bool m_running;
@@ -133,7 +123,7 @@ private:
   QTimer m_repaint_timer;
   QVector<SpriteLayer*> m_layerPlayers;
 
-  void resolve_scaling_mode(ScalingMode scalingMode = AutomaticScaling, double scale = 1.0f);
+  void resolve_scaling_mode(rolechat::actor::ActorScalingMode scalingMode = rolechat::actor::ActorScalingMode::AutomaticScaling, double scale = 1.0f);
 public slots:
   void scale_current_frame();
 private slots:

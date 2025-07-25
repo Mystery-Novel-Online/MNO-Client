@@ -6,9 +6,10 @@
 #include "engine/interface/courtroom_layout.h"
 #include "engine/system/theme_scripting.h"
 #include "engine/fs/fs_characters.h"
+#include <rolechat/actor/JsonActorData.h>
 
 QMap<QString, bool> s_layersEnabled = {};
-ActorData* s_currentActor = nullptr;
+rolechat::actor::IActorData* s_currentActor = nullptr;
 static QString s_currentFolder = "<NOCHAR>";
 
 bool engine::actor::user::layerState(const std::string &name)
@@ -24,7 +25,7 @@ void engine::actor::user::toggleLayer(const std::string &name, bool state)
   s_layersEnabled[qName] = state;
 }
 
-ActorData *engine::actor::user::load(QString folder)
+rolechat::actor::IActorData *engine::actor::user::load(QString folder)
 {
   s_layersEnabled.clear();
   if(folder == s_currentFolder)
@@ -38,19 +39,19 @@ ActorData *engine::actor::user::load(QString folder)
 
   if(FS::Checks::FileExists(l_jsonPath))
   {
-    s_currentActor = new ActorDataReader();
-    s_currentActor->LoadActor(folder);
+    s_currentActor = new rolechat::actor::JsonActorData();
+    s_currentActor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
   }
   else
   {
     s_currentActor = new LegacyActorReader();
-    s_currentActor->LoadActor(folder);
+    s_currentActor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
   }
 
   return s_currentActor;
 }
 
-ActorData *engine::actor::user::retrieve()
+rolechat::actor::IActorData *engine::actor::user::retrieve()
 {
   return s_currentActor;
 }
@@ -60,9 +61,9 @@ QString engine::actor::user::name()
   return s_currentFolder;
 }
 
-ActorData *engine::actor::repository::retrieve(QString t_folder)
+rolechat::actor::IActorData *engine::actor::repository::retrieve(QString t_folder)
 {
-  static QMap<QString, QPair<QDateTime, ActorData*>> s_cache;
+  static QMap<QString, QPair<QDateTime, rolechat::actor::IActorData*>> s_cache;
 
   QString l_jsonPath = fs::characters::getFilePath(t_folder, "char.json");
 
@@ -83,18 +84,18 @@ ActorData *engine::actor::repository::retrieve(QString t_folder)
       }
     }
 
-    ActorData* l_returnData = new ActorDataReader();
-    l_returnData->LoadActor(t_folder);
+    rolechat::actor::IActorData* l_returnData = new rolechat::actor::JsonActorData();
+    l_returnData->load(t_folder.toStdString(), fs::characters::getDirectoryPath(t_folder).toStdString());
     s_cache[t_folder] = qMakePair(lastModified, l_returnData);
     return l_returnData;
   }
 
-  ActorData *l_returnData = new LegacyActorReader();
-  l_returnData->LoadActor(t_folder);
+  rolechat::actor::IActorData *l_returnData = new LegacyActorReader();
+  l_returnData->load(t_folder.toStdString(), fs::characters::getDirectoryPath(t_folder).toStdString());
   return l_returnData;
 }
 
-ActorData *engine::actor::user::switchCharacter(QString folder)
+rolechat::actor::IActorData *engine::actor::user::switchCharacter(QString folder)
 {
 
   QStringList animations = {"None"};
@@ -133,10 +134,15 @@ ActorData *engine::actor::user::switchCharacter(QString folder)
   LuaBridge::LuaEventCall("OnCharacterLoad", folder.toStdString());
   QStringList l_OutfitNames = {"<All>"};
 
-  ActorData* actor = load(folder);
+  rolechat::actor::IActorData* actor = load(folder);
   if(actor != nullptr)
   {
-    QStringList l_charaOutfits = actor->GetOutfitNames();
+    const std::vector<std::string>& outfits = actor->outfitNames();
+    QStringList l_charaOutfits;
+    for (const std::string& outfit : outfits)
+    {
+      l_charaOutfits << QString::fromStdString(outfit);
+    }
     l_OutfitNames.append(l_charaOutfits);
   }
   setOutfitList(l_OutfitNames);

@@ -72,7 +72,7 @@ void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
   ui_emote_preview_character->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(l_emote.character), QString::fromStdString(l_emote.dialog), QString::fromStdString(l_emote.outfitName));
   ui_emote_preview_character->play_idle(QString::fromStdString(l_emote.character), QString::fromStdString(l_emote.dialog));
   ui_emote_preview_character->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
-  ui_emote_preview_character->start(engine::actor::user::retrieve()->GetScalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
+  ui_emote_preview_character->start(engine::actor::user::retrieve()->scalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
 
   QScreen *screen = QApplication::screenAt(p_global_pos);
   if (screen == nullptr)

@@ -35,6 +35,7 @@
 #include "engine/param/actor_repository.h"
 #include "engine/param/actor/actor_loader.h"
 #include <mk2/spritecachingreader.h>
+#include <rolechat/actor/JsonActorData.h>
 
 const int Courtroom::DEFAULT_WIDTH = 714;
 const int Courtroom::DEFAULT_HEIGHT = 668;
@@ -316,11 +317,11 @@ void Courtroom::enter_courtroom(int p_cid)
 
   const QString l_chr_name = get_character_ini();
 
-  ActorData *actor = engine::actor::user::switchCharacter(l_chr_name);
+  rolechat::actor::IActorData *actor = engine::actor::user::switchCharacter(l_chr_name);
   ui_emotes->actorChange(actor);
-  if(!actor->GetScalingPresets().empty())
+  if(!actor->scalingPresets().empty())
   {
-    ActorScalingPreset preset = actor->GetScalingPresets().at(0);
+    rolechat::actor::ActorScalingPreset preset = actor->scalingPresets().at(0);
     ui_slider_scale->setValue(preset.scale);
     ui_slider_vertical_axis->setValue(preset.verticalAlign);
   }
@@ -339,19 +340,19 @@ void Courtroom::enter_courtroom(int p_cid)
   }
   else
   {
-    const QString l_showname = actor->GetShowname();
+    const QString l_showname = QString::fromStdString(actor->showname());
     const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
     ao_app->get_discord()->set_character_name(l_final_showname);
     ao_config->set_showname_placeholder(l_final_showname);
 
     QStringList l_content{l_chr_name, l_final_showname};
-    if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(engine::actor::user::retrieve()->GetOutfit());
+    if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(QString::fromStdString(engine::actor::user::retrieve()->outfit()));
 
     ao_app->send_server_packet(DRPacket("chrini", l_content));
   }
   const bool l_changed_chr = l_chr_name != l_prev_chr_name;
   if (l_changed_chr)
-    set_character_position(actor->GetSide());
+    set_character_position(QString::fromStdString(actor->side()));
   select_base_character_iniswap();
   refresh_character_content_url();
 
@@ -366,7 +367,7 @@ void Courtroom::enter_courtroom(int p_cid)
   ui_emote_dropdown->setDisabled(spectating);
   ui_iniswap_dropdown->setDisabled(spectating);
   ui_ic_chat_message_field->setDisabled(spectating);
-  set_character_position(actor->GetSide());
+  set_character_position(QString::fromStdString(actor->side()));
 
   if(l_current_field != nullptr)
   {
@@ -780,7 +781,7 @@ QString Courtroom::get_current_position()
 {
   if (ui_pos_dropdown->currentIndex() == DefaultPositionIndex)
   {
-    return engine::actor::user::retrieve()->GetSide();
+    return QString::fromStdString(engine::actor::user::retrieve()->side());
   }
   return ui_pos_dropdown->currentData(Qt::UserRole).toString();
 }
@@ -866,21 +867,21 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
   int speakerClientId = m_chatmessage[CMClientId].toInt(&intParse);
 
   DRCharacterMovie* targetCharacter = nullptr;
-  mk2::SpritePlayer::ScalingMode targetScaling = mk2::SpritePlayer::AutomaticScaling;
+  rolechat::actor::ActorScalingMode targetScaling = rolechat::actor::ActorScalingMode::AutomaticScaling;
 
   if(user::getClientId() == speakerClientId)
   {
     if(message::recentMessage().characterFolder != engine::actor::user::name()) return;
     targetCharacter = ui_vp_player_char;
     if(m_SpeakerActor != nullptr)
-      targetScaling = m_SpeakerActor->GetScalingMode();
+      targetScaling = m_SpeakerActor->scalingMode();
   }
   if(speakerClientId == user::partner::clientId())
   {
     if(message::pair::getCharacter() != engine::actor::user::name()) return;
     targetCharacter = ui_vp_player_pair;
     if(m_PairActor != nullptr)
-      targetScaling = m_PairActor->GetScalingMode();
+      targetScaling = m_PairActor->scalingMode();
   }
 
   double playerScale = (double)ui_slider_scale->value() / 1000.0f;
@@ -1149,18 +1150,18 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   m_SpeakerActor = engine::actor::repository::retrieve(p_chatmessage[CMChrName]);
   if(!p_chatmessage[CMOutfitName].isEmpty())
   {
-    m_SpeakerActor->SwitchOutfit(p_chatmessage[CMOutfitName]);
+    m_SpeakerActor->switchOutfit(p_chatmessage[CMOutfitName].toStdString());
   }
 
   if(message::pair::isActive())
   {
     m_PairActor = engine::actor::repository::retrieve(message::pair::getCharacter());
 
-    m_PairScaling = mk2::SpritePlayer::AutomaticScaling;
+    m_PairScaling = rolechat::actor::ActorScalingMode::AutomaticScaling;
 
     if(m_PairActor != nullptr)
     {
-      m_PairScaling = m_PairActor->GetScalingMode();
+      m_PairScaling = m_PairActor->scalingMode();
       m_PairScale = message::pair::scaleOffset();
     }
 
@@ -1178,11 +1179,11 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
 
 
 
-  m_ActorScaling = mk2::SpritePlayer::AutomaticScaling;
+  m_ActorScaling = rolechat::actor::ActorScalingMode::AutomaticScaling;
 
   if(m_SpeakerActor != nullptr)
   {
-    m_ActorScaling = m_SpeakerActor->GetScalingMode();
+    m_ActorScaling = m_SpeakerActor->scalingMode();
   }
 
 
@@ -1190,7 +1191,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   QString l_showname = p_chatmessage[CMShowName];
   if (l_showname.isEmpty() && !l_system_speaking)
   {
-    l_showname = m_SpeakerActor->GetShowname();
+    l_showname = QString::fromStdString(m_SpeakerActor->showname());
   }
 
   QString l_message = QString(p_chatmessage[CMMessage]).remove(QRegularExpression("(?<!\\\\)(\\{|\\})")).replace(QRegularExpression("\\\\(\\{|\\})"), "\\1");
@@ -1403,7 +1404,7 @@ void Courtroom::handle_chatmessage()
   QString f_showname = m_chatmessage[CMShowName];
   if (f_showname.isEmpty() && !is_system_speaking)
   {
-    f_showname = m_SpeakerActor->GetShowname();
+    f_showname = QString::fromStdString(m_SpeakerActor->showname());
   }
   m_speaker_showname = f_showname;
 
@@ -2195,9 +2196,9 @@ void Courtroom::setup_chat()
   QString l_jsonPath = fs::characters::getFilePath(m_chatmessage[CMChrName], "char.json");
   if(FS::Checks::FileExists(l_jsonPath))
   {
-    ActorData *speakerActor = new ActorDataReader();
-    speakerActor->LoadActor(m_chatmessage[CMChrName]);
-    f_gender = speakerActor->GetGender();
+    rolechat::actor::IActorData *speakerActor = new rolechat::actor::JsonActorData();
+    speakerActor->load(m_chatmessage[CMChrName].toStdString(), fs::characters::getDirectoryPath(m_chatmessage[CMChrName]).toStdString());
+    f_gender = QString::fromStdString(speakerActor->gender());
   }
   else
   {
@@ -2604,7 +2605,7 @@ void Courtroom::set_hp_bar(int p_bar, int p_state)
 
 void Courtroom::set_character_position(QString p_pos)
 {
-  const bool l_is_default_pos = p_pos == engine::actor::user::retrieve()->GetSide();
+  const bool l_is_default_pos = p_pos.toStdString() == engine::actor::user::retrieve()->side();
 
   int l_pos_index = ui_pos_dropdown->currentIndex();
   if (!l_is_default_pos)
@@ -3075,11 +3076,11 @@ void Courtroom::onOutfitChanged(int outfitIndex)
   if(engine::actor::user::retrieve() == nullptr) return;
   if(trueOutfitIndex == -1)
   {
-    engine::actor::user::retrieve()->SwitchOutfit("<All>");
+    engine::actor::user::retrieve()->switchOutfit("<All>");
   }
-  else if(engine::actor::user::retrieve()->GetOutfitNames().length() > trueOutfitIndex && trueOutfitIndex != -1)
+  else if(engine::actor::user::retrieve()->outfitNames().size() > trueOutfitIndex && trueOutfitIndex != -1)
   {
-    engine::actor::user::retrieve()->SwitchOutfit(engine::actor::user::retrieve()->GetOutfitNames()[trueOutfitIndex]);
+    engine::actor::user::retrieve()->switchOutfit(engine::actor::user::retrieve()->outfitNames()[trueOutfitIndex]);
   }
 
   ui_emotes->refreshSelection(false);
@@ -3088,12 +3089,12 @@ void Courtroom::onOutfitChanged(int outfitIndex)
   ui_emotes->outfitChange();
 
   const QString l_chr_name = get_character_ini();
-  const QString l_showname = engine::actor::user::retrieve()->GetShowname();
+  const QString l_showname = QString::fromStdString(engine::actor::user::retrieve()->showname());
   const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
 
   ao_config->set_showname_placeholder(l_final_showname);
   QStringList l_content{l_chr_name, l_final_showname};
-  if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(engine::actor::user::retrieve()->GetOutfit());
+  if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(QString::fromStdString(engine::actor::user::retrieve()->outfit()));
 
   ao_app->send_server_packet(DRPacket("chrini", l_content));
 }

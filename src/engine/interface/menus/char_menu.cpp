@@ -52,7 +52,7 @@ void CharMenu::OnUpdateCharacterFilesTriggered()
 
 void CharMenu::OnOpenCharacterTriggered()
 {
-  QUrl folderUrl = QUrl::fromLocalFile(FS::Paths::FindDirectory("characters/" +  retrieve()->GetFolder()));
+  QUrl folderUrl = QUrl::fromLocalFile(FS::Paths::FindDirectory("characters/" +  QString::fromStdString(retrieve()->folder())));
   QDesktopServices::openUrl(folderUrl);
 }
 

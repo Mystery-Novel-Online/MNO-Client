@@ -5,17 +5,19 @@ class QString;
 class QStringList;
 class ActorData;
 
+#include <rolechat/actor/IActorData.h>
+
 namespace engine::actor::repository
 {
-  ActorData *retrieve(QString t_folder);
+  rolechat::actor::IActorData *retrieve(QString t_folder);
 }
 
 
 namespace engine::actor::user
 {
-  ActorData *switchCharacter(QString folder);
-  ActorData *load(QString folder);
-  ActorData *retrieve();
+  rolechat::actor::IActorData *switchCharacter(QString folder);
+  rolechat::actor::IActorData *load(QString folder);
+  rolechat::actor::IActorData *retrieve();
   QString name();
   void toggleLayer(const std::string& name, bool state);
   bool layerState(const std::string& name);

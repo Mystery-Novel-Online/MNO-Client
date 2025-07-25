@@ -82,7 +82,7 @@ namespace engine::network::metadata::user
     if(s_showname.trimmed().isEmpty())
     {
       if(engine::actor::user::retrieve() != nullptr)
-        return engine::actor::user::retrieve()->GetShowname().toStdString();
+        return engine::actor::user::retrieve()->showname();
     }
     return s_showname.toStdString();
   }
@@ -90,7 +90,7 @@ namespace engine::network::metadata::user
   std::string getIniswap()
   {
     if(engine::actor::user::retrieve() != nullptr)
-      return engine::actor::user::retrieve()->GetFolder().toStdString();
+      return engine::actor::user::retrieve()->folder();
     return "Spectator";
   }
 
