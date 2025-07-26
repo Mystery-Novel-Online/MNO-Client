@@ -2,9 +2,9 @@
 #include "engine/fs/fs_reading.h"
 
 using namespace FS::Checks;
-ThemeModuleReader::ThemeModuleReader(QString t_moduleDirectory, QString directory) : m_moduleDirectory(directory)
+ThemeModuleReader::ThemeModuleReader(QString directory, QString t_moduleName) : m_moduleDirectory(directory)
 {
-  QString modulePath = m_moduleDirectory + "/" + directory;
+  QString modulePath = m_moduleDirectory + "/" + t_moduleName;
 
   if(FileExists(modulePath))
   {

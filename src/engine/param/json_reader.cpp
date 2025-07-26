@@ -1,5 +1,10 @@
 #include "json_reader.h"
 
+void JSONReader::ReadFromFile(std::string path)
+{
+  ReadFromFile(QString::fromStdString(path));
+}
+
 void JSONReader::ReadFromFile(QString path)
 {
   QFile json_file(path); json_file.open(QIODevice::ReadOnly | QIODevice::Text);

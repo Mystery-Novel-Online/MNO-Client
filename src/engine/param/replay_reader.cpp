@@ -1,10 +1,12 @@
 #include "replay_reader.h"
 #include "engine/fs/fs_reading.h"
+#include "rolechat/filesystem/RCFile.h"
 
 ReplayReader::ReplayReader(const QString &path, QVector<ReplayOperation> &operations)
 {
   operations.clear();
-  if(!FS::Checks::FileExists(path)) return;
+
+  if(!rolechat::fs::RCFile::exists(path.toStdString())) return;
   ReadFromFile(path);
 
   QJsonArray scriptOperations = getArrayValue("script");

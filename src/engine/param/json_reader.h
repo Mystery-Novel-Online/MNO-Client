@@ -16,6 +16,7 @@ class JSONReader
 {
 public:
   JSONReader() = default;
+  void  ReadFromFile(std::string path);
   void  ReadFromFile(QString path);
   void  ReadFromString(QString data);
 

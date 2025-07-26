@@ -4,7 +4,6 @@
 #include "engine/fs/fs_reading.h"
 #include "engine/system/runtime_values.h"
 
-
 AnimationReader::AnimationReader(const QString &animPath, KeyframeSequence &sequence)
 {
   sequence.Cleanup();

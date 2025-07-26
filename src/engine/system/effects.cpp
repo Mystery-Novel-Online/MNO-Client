@@ -1,8 +1,7 @@
 #include "effects.h"
 #include "pch.h"
-
 #include "engine/param/json_reader.h"
-#include "engine/fs/fs_reading.h"
+#include <rolechat/filesystem/RCFile.h>
 
 static QVector<MessageEffect> s_viewportEffects = {};
 MessageEffect s_fallbackEffect = MessageEffect("<NONE>");
@@ -13,7 +12,8 @@ namespace engine::system::effects
   void reload()
   {
     JSONReader effectsReader = JSONReader();
-    effectsReader.ReadFromFile(FS::Paths::FindFile("effects/default/effects.json", false));
+    fs::RCFile effectsFile("effects/default/effects.json", false);
+    effectsReader.ReadFromFile(effectsFile.findFirst());
     s_viewportEffects = {};
 
     QJsonArray lEffectsArray = effectsReader.mDocument.array();
