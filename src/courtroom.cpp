@@ -653,9 +653,7 @@ void Courtroom::update_music_text_anim()
   pos_size_type res_b = engine::system::theme::getDimensions("music_area", SceneType_Courtroom);
 
   float speed = static_cast<float>(ao_app->current_theme->get_music_name_speed());
-
-  QFont f_font = ui_vp_music_name->font();
-  QFontMetrics fm(f_font);
+  QFontMetrics fm(ui_vp_music_name->font());
   int dist;
   if (ao_app->current_theme->read_config_bool("enable_const_music_speed"))
     dist = res_b.width;
@@ -917,7 +915,7 @@ void Courtroom::on_character_ini_changed()
 
 void Courtroom::on_ic_message_return_pressed()
 {
-  if (ui_ic_chat_message_field->text() == "")
+  if (ui_ic_chat_message_field->text().isEmpty())
     return;
 
   if ((anim_state < 3 || text_state < 2) && m_shout_state == 0)
@@ -1416,7 +1414,7 @@ void Courtroom::handle_chatmessage()
   stop_chat_timer();
   ui_vp_objection->stop();
 
-  m_message_color_name = "";
+  m_message_color_name.clear();
   m_message_color_stack.clear();
 
   // reset effect

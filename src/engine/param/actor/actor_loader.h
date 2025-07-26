@@ -20,10 +20,4 @@ public:
   QString DRLookupKey(const QStringList &keyList, const QString &targetKey);
 };
 
-class ActorLoader
-{
-public:
-  static rolechat::actor::IActorData *GetCharacter(const QString& folder);
-};
-
 #endif // ACTOR_LOADER_H

@@ -5,30 +5,6 @@
 #include <rolechat/actor/ActorOutfit.h>
 #include <rolechat/actor/JsonActorData.h>
 
-static QMap<QString, actor::IActorData*> s_CachedCharacters;
-
-actor::IActorData *ActorLoader::GetCharacter(const QString& folder)
-{
-  if(!s_CachedCharacters.contains(folder))
-  {
-    QString charaConfigPath = fs::characters::getFilePath(folder, "char.json");
-    actor::IActorData *characterData;
-    if(FS::Checks::FileExists(charaConfigPath))
-    {
-      characterData = new actor::JsonActorData();
-    }
-    else
-    {
-      characterData = new LegacyActorReader();
-    }
-
-    characterData->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
-    s_CachedCharacters[folder] = characterData;
-  }
-
-  return s_CachedCharacters[folder];
-}
-
 void LegacyActorReader::load(const std::string& folder, const std::string& path)
 {
   QString qFolder = QString::fromStdString(folder);

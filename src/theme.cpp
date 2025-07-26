@@ -115,8 +115,7 @@ void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOAppli
 
 void set_drtextedit_font(RPTextEdit *p_widget, QString p_identifier, QString p_ini_file, AOApplication *ao_app)
 {
-  QString l_scene = "lobby";
-  if(p_ini_file == COURTROOM_FONTS_INI) l_scene = "courtroom";
+  QString l_scene = p_ini_file == COURTROOM_FONTS_INI ? "courtroom" : "lobby";
 
   set_font(p_widget, p_identifier, p_ini_file, ao_app);
 
@@ -199,7 +198,7 @@ void setShownameFont(RPTextEdit *widget, QString identifier, QString align)
   set_text_alignment_or_default(widget, fontData, "text_alignment", Qt::AlignLeft, Qt::AlignTop);
 }
 
-void setThemeFont(QWidget *widget, widgetFontStruct font_data)
+void setThemeFont(QWidget *widget, const widgetFontStruct& font_data)
 {
 
   QString class_name = widget->metaObject()->className();

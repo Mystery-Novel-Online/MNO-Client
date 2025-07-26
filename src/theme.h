@@ -14,7 +14,7 @@ void set_text_alignment(QWidget *widget, widgetFontStruct font_data, AOApplicati
 void set_font(QWidget *widget, QString identifier, QString ini_file, AOApplication *ao_app = nullptr);
 void set_drtextedit_font(RPTextEdit *widget, QString identifier, QString ini_file, AOApplication *ao_app);
 
-void setThemeFont(QWidget *widget, widgetFontStruct font_data);
+void setThemeFont(QWidget *widget, const widgetFontStruct& font_data);
 void setShownameFont(RPTextEdit *widget, QString identifier, QString align);
 
 bool set_stylesheet(QWidget *widget, QString identifier, QString ini_file, AOApplication *ao_app);

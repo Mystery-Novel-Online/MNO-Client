@@ -40,7 +40,7 @@ public:
   ~AOApplication();
 
   void leave_server();
-  void connect_to_server(DRServerInfo server);
+  void connect_to_server(const DRServerInfo& server);
   void send_server_packet(DRPacket packet);
   ServerStatus last_server_status();
   bool joined_server();

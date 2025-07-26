@@ -22,7 +22,7 @@ using namespace engine::system;
 
 static int s_lastMessageId = -1;
 
-void AOApplication::connect_to_server(DRServerInfo p_server)
+void AOApplication::connect_to_server(const DRServerInfo& p_server)
 {
   m_server_socket->connect_to_server(p_server);
 }
