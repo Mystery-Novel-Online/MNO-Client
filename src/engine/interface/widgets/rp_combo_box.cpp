@@ -17,7 +17,7 @@ void RPComboBox::setWidgetInfo(QString widgetName, QString legacyCSS, QString sc
 
 void RPComboBox::refreshPosition()
 {
-  engine::system::theme::applyDimensions(this, mWidgetName, SceneType_Courtroom);
+  engine::system::theme::applyDimensions(this, mWidgetName, ThemeSceneType::SceneType_Courtroom);
 }
 
 void RPComboBox::refreshCSS()

@@ -51,9 +51,9 @@ void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOAppli
 {
 
   if(ao_app == nullptr) ao_app = AOApplication::getInstance();
-  ThemeSceneType l_scene = SceneType_ServerSelect;
-  if(ini_file == COURTROOM_FONTS_INI) l_scene = SceneType_Courtroom;
-  else if(ini_file == VIEWPORT_FONTS_INI) l_scene = SceneType_Viewport;
+  ThemeSceneType l_scene = ThemeSceneType::SceneType_ServerSelect;
+  if(ini_file == COURTROOM_FONTS_INI) l_scene = ThemeSceneType::SceneType_Courtroom;
+  else if(ini_file == VIEWPORT_FONTS_INI) l_scene = ThemeSceneType::SceneType_Viewport;
 
 
   QString class_name = p_widget->metaObject()->className();
@@ -126,7 +126,7 @@ void set_drtextedit_font(RPTextEdit *p_widget, QString p_identifier, QString p_i
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontData(SceneType_Courtroom, p_identifier);
+    widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontData(ThemeSceneType::SceneType_Courtroom, p_identifier);
     outline = fontData.outline;
     outlineWidth = fontData.outlineSize;
     outlineColor = fontData.outlineColor;

@@ -35,7 +35,7 @@ void RPLineEdit::setDefaultCSS(QString css)
 
 void RPLineEdit::refreshPosition()
 {
-  engine::system::theme::applyDimensions(this, m_friendlyName, SceneType_Courtroom);
+  engine::system::theme::applyDimensions(this, m_friendlyName, ThemeSceneType::SceneType_Courtroom);
   set_text_alignment(this, m_friendlyName, COURTROOM_FONTS_INI, m_app);
 }
 

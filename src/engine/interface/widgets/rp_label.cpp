@@ -22,5 +22,5 @@ void RPLabel::set_image(QString p_image)
 
 void RPLabel::themeRefresh()
 {
-  engine::system::theme::applyDimensions(this, m_Friendly, SceneType_Courtroom);
+  engine::system::theme::applyDimensions(this, m_Friendly, ThemeSceneType::SceneType_Courtroom);
 }

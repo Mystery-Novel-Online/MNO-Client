@@ -32,7 +32,7 @@ public:
 
   QVector<ThemeTabInfo> getTabs();
 
-  pos_size_type GetWidgetTransform(ThemeSceneType sceneType, QString element);
+  RPRect GetWidgetTransform(ThemeSceneType sceneType, QString element);
   QVector2D GetWidgetSpacing(QString widget_name);
 
   widgetFontStruct GetFontData(ThemeSceneType sceneType, QString element);

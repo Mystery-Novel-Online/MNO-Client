@@ -1,12 +1,9 @@
 #ifndef MESSAGE_METADATA_H
 #define MESSAGE_METADATA_H
 
-#include <QString>
-
-
 struct MessageModifiers
 {
-  ChatTypes ChatType;
+  DialogueType ChatType;
   DR::Color TextColor;
   bool      VisibleDesk = true;
   bool      PreAnimation = false;

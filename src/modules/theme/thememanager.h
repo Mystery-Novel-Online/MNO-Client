@@ -54,7 +54,7 @@ public:
   void toggleReload();
 
   //Widget Management
-  pos_size_type resizePosition(pos_size_type t_position, double t_scale);
+  RPRect resizePosition(RPRect t_position, double t_scale);
 
   void setResize(double size);
   double getResize();

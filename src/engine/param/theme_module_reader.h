@@ -5,7 +5,6 @@
 #include "engine/themes/theme_scene.h"
 
 
-
 class ThemeModuleReader : public JSONReader
 {
 public:
@@ -48,7 +47,7 @@ private:
   QHash<QString, bool> m_configBooleans = {};
   QHash<QString, QString> m_configSounds = {};
   QMap<QString, DR::ColorInfo> m_configColors = {};
-  QHash<QString, dialogueHighlights> m_configHighlights = {};
+  QHash<QString, ThemeHighlight> m_configHighlights = {};
 
   //Scenes
   ThemeScene *m_CourtroomScene = nullptr;

@@ -120,7 +120,7 @@ void Courtroom::reset_char_select()
 
 void Courtroom::set_char_select()
 {
-  pos_size_type f_charselect = engine::system::theme::getDimensions("char_select", SceneType_Courtroom);
+  RPRect f_charselect = engine::system::theme::getDimensions("char_select", ThemeSceneType::SceneType_Courtroom);
   if (f_charselect.width < 0 || f_charselect.height < 0)
     qWarning() << "warning: char_select not found or invalid within courtroom_design.ini";
 
@@ -142,9 +142,9 @@ void Courtroom::set_char_select_page()
 
   int l_item_count = 0;
 
-  for (char_type charaType : CharacterRepository::filteredList(pCharaSelectSeries->currentText()))
+  for (ActorSelectEntry charaType : CharacterRepository::filteredList(pCharaSelectSeries->currentText()))
   {
-    if(charaType.name.toLower().contains(pCharaSelectSearch->text().toLower()))
+    if(QString::fromStdString(charaType.name).toLower().contains(pCharaSelectSearch->text().toLower()))
     {
       l_item_count += 1;
       CharacterRepository::addFiltered(charaType);

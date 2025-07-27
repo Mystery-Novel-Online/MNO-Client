@@ -235,10 +235,10 @@ QString ThemeReader::GetConfigSoundName(QString soundName)
 QVector<QStringList> ThemeReader::GetColorsHighlights()
 {
   QVector<QStringList> f_vec;
-  QHash<QString, dialogueHighlights> returnValue = m_GameModeCollection["default"]->GetFontColorsHighlights(); ;
+  QHash<QString, ThemeHighlight> returnValue = m_GameModeCollection["default"]->GetFontColorsHighlights(); ;
   if(m_GameModeCurrent != nullptr && m_GameModeCurrent != m_GameModeCollection["default"])
   {
-    QHashIterator<QString, dialogueHighlights> i(m_GameModeCurrent->GetFontColorsHighlights());
+    QHashIterator<QString, ThemeHighlight> i(m_GameModeCurrent->GetFontColorsHighlights());
     while (i.hasNext())
     {
       i.next();
@@ -247,11 +247,11 @@ QVector<QStringList> ThemeReader::GetColorsHighlights()
       returnValue[i.key()].keepCharacters = i.value().keepCharacters;
     }
   }
-  QHashIterator<QString, dialogueHighlights> themeHighlights(returnValue);
-  while(themeHighlights.hasNext())
+  QHashIterator<QString, ThemeHighlight> ThemeHighlight(returnValue);
+  while(ThemeHighlight.hasNext())
   {
-    themeHighlights.next();
-    f_vec.append({themeHighlights.value().chars, themeHighlights.value().color, themeHighlights.value().keepCharacters ? "1" : "0"});
+    ThemeHighlight.next();
+    f_vec.append({QString::fromStdString(ThemeHighlight.value().chars), QString::fromStdString(ThemeHighlight.value().color), ThemeHighlight.value().keepCharacters ? "1" : "0"});
   }
 
   return f_vec;
@@ -329,9 +329,9 @@ widgetFontStruct ThemeReader::GetFontData(ThemeSceneType sceneType, QString elem
   return return_value;
 }
 
-pos_size_type ThemeReader::GetWidgetTransform(ThemeSceneType sceneType, QString element)
+RPRect ThemeReader::GetWidgetTransform(ThemeSceneType sceneType, QString element)
 {
-  pos_size_type return_value;
+  RPRect return_value;
 
   double resize = ThemeManager::get().getResize();
 
@@ -372,15 +372,15 @@ widgetFontStruct ThemeReader::GetFontDataPairing(QString element, QString positi
 
   if(m_GameModeCurrent != nullptr)
   {
-    if(m_GameModeCurrent->containsWidgetFont(SceneType_Courtroom, name_alignment))
+    if(m_GameModeCurrent->containsWidgetFont(ThemeSceneType::SceneType_Courtroom, name_alignment))
     {
-      return_value = m_GameModeCurrent->getWidgetFont(SceneType_Courtroom, name_alignment);
+      return_value = m_GameModeCurrent->getWidgetFont(ThemeSceneType::SceneType_Courtroom, name_alignment);
       return_value.size = (int)((double)return_value.size * resize);
       return return_value;
     }
-    else if(m_GameModeCurrent->containsWidgetFont(SceneType_Courtroom, element))
+    else if(m_GameModeCurrent->containsWidgetFont(ThemeSceneType::SceneType_Courtroom, element))
     {
-      return_value = m_GameModeCurrent->getWidgetFont(SceneType_Courtroom, element);
+      return_value = m_GameModeCurrent->getWidgetFont(ThemeSceneType::SceneType_Courtroom, element);
       return_value.size = (int)((double)return_value.size * resize);
       return return_value;
     }
@@ -389,10 +389,10 @@ widgetFontStruct ThemeReader::GetFontDataPairing(QString element, QString positi
 
   if(m_GameModeCollection.contains("default"))
   {
-    if(m_GameModeCollection["default"]->containsWidgetFont(SceneType_Courtroom, name_alignment)) return_value = m_GameModeCollection["default"]->getWidgetFont(SceneType_Courtroom, name_alignment);
-    else if(m_GameModeCollection["default"]->containsWidgetFont(SceneType_Courtroom, element))
+    if(m_GameModeCollection["default"]->containsWidgetFont(ThemeSceneType::SceneType_Courtroom, name_alignment)) return_value = m_GameModeCollection["default"]->getWidgetFont(ThemeSceneType::SceneType_Courtroom, name_alignment);
+    else if(m_GameModeCollection["default"]->containsWidgetFont(ThemeSceneType::SceneType_Courtroom, element))
     {
-      return_value = m_GameModeCollection["default"]->getWidgetFont(SceneType_Courtroom, element);
+      return_value = m_GameModeCollection["default"]->getWidgetFont(ThemeSceneType::SceneType_Courtroom, element);
     }
   }
 

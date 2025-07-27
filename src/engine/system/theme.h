@@ -7,8 +7,8 @@ namespace engine::system::theme
 
   void applyDimensions(QWidget *widget, const QString &identifier, ThemeSceneType scene, bool allowResize = true);
 
-  pos_size_type getDimensions(const QString &identifier, ThemeSceneType scene);
-  pos_size_type getPositionalDimensions(const QString &identifier, const QString &positional);
+  RPRect getDimensions(const QString &identifier, ThemeSceneType scene);
+  RPRect getPositionalDimensions(const QString &identifier, const QString &positional);
 
 }
 

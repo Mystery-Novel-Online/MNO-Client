@@ -217,7 +217,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (!is_courtroom_constructed)
       return;
 
-    QVector<char_type> l_chr_list = CharacterRepository::serverList();
+    QVector<ActorSelectEntry> l_chr_list = CharacterRepository::serverList();
     if (l_content.length() != l_chr_list.length())
     {
       qWarning() << "Server sent a character list of length " << l_content.length() << "which is different from the expected length " << l_chr_list.length() << "so ignoring it.";
@@ -237,11 +237,11 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if (!is_courtroom_constructed)
       return;
 
-    QVector<char_type> l_chr_list;
+    QVector<ActorSelectEntry> l_chr_list;
     for (const QString &i_chr_name : qAsConst(l_content))
     {
-      char_type l_chr;
-      l_chr.name = i_chr_name;
+      ActorSelectEntry l_chr;
+      l_chr.name = i_chr_name.toStdString();
       l_chr_list.append(std::move(l_chr));
     }
     CharacterRepository::setServerList(l_chr_list);

@@ -29,25 +29,25 @@ namespace engine::network::metadata
     static void setCharacterAvailability(int index, bool available);
     static bool isCharacterAvailable(const QString& name);
 
-    static void setServerList(const QVector<char_type>& list);
-    static void setFilteredList(const QString& name, const QVector<char_type>& list);
+    static void setServerList(const QVector<ActorSelectEntry>& list);
+    static void setFilteredList(const QString& name, const QVector<ActorSelectEntry>& list);
 
     static bool characterExists(const QString& name);
     static bool filteredCharacterExists(int filterIndex);
 
     static void clearFiltered();
-    static void addFiltered(const char_type& character);
-    static char_type filteredCharacter(int index);
+    static void addFiltered(const ActorSelectEntry& character);
+    static ActorSelectEntry filteredCharacter(int index);
 
     static QString characterNameFiltered(int index);
     static QString characterNameServer(int index);
 
     static int findAvailablePersona();
 
-    static const QVector<char_type>& serverList();
-    static QVector<char_type> filteredList(const QString& packageName);
-    static QVector<char_type> currentList();
-    static QVector<char_type> resetClaims();
+    static const QVector<ActorSelectEntry>& serverList();
+    static QVector<ActorSelectEntry> filteredList(const QString& packageName);
+    static QVector<ActorSelectEntry> currentList();
+    static QVector<ActorSelectEntry> resetClaims();
 
     static int networkedIdFromName(const QString& name);
     static int networkedIdFromFiltered(int filteredId);
@@ -59,11 +59,11 @@ namespace engine::network::metadata
     static inline QString lastUsedFilter = "Server Characters";
 
     static inline const QStringList defaultFilters = { "Server Characters", "Favorites", "All" };
-    static inline QVector<char_type> serverCharacters;
-    static inline QVector<char_type> filteredCharacters;
-    static inline QVector<char_type> favoriteCharacters;
+    static inline QVector<ActorSelectEntry> serverCharacters;
+    static inline QVector<ActorSelectEntry> filteredCharacters;
+    static inline QVector<ActorSelectEntry> favoriteCharacters;
 
-    static inline QHash<QString, QVector<char_type>> repository;
+    static inline QHash<QString, QVector<ActorSelectEntry>> repository;
     static inline QHash<QString, bool> claimedCharacters;
   };
 }

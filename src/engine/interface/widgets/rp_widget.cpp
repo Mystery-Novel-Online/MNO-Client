@@ -42,7 +42,7 @@ void RPWidget::setBackgroundImage(QString imageName)
 
 void RPWidget::resetTransform()
 {
-  engine::system::theme::applyDimensions(this, m_friendlyName, SceneType_Courtroom);
+  engine::system::theme::applyDimensions(this, m_friendlyName, ThemeSceneType::SceneType_Courtroom);
 }
 
 void RPWidget::mousePressEvent(QMouseEvent *event)

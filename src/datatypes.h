@@ -49,35 +49,6 @@ struct ReplayOperation
   QMap<QString, QString> variables;
 };
 
-enum class ChatTypes
-{
-  Talk,
-  Shout,
-  Think,
-  CG,
-  Narrator
-};
-
-class VariableMappedString
-{
-public:
-  VariableMappedString() = default;
-  VariableMappedString(const QString& input) : mInputString(input) { };
-
-  QString mInputString = "";
-  QMap<QString, QString> mVariableMap = {};
-};
-
-
-enum ThemeSceneType
-{
-  SceneType_ServerSelect,
-  SceneType_Courtroom,
-  SceneType_TestingLabs,
-  SceneType_Replay,
-  SceneType_Viewport
-};
-
 class DRBackgroundSettings
 {
 public:
@@ -86,13 +57,6 @@ public:
   double mScaleMax = 0.9;
   double mPositionMinimum = 0;
   double mPositionMaximum = 1;
-};
-
-class DRBackgroundPosition
-{
-public:
-  QString mBackground = "";
-  QString mForeground = "";
 };
 
 class DRAreaBackground
@@ -228,54 +192,32 @@ enum class VersionStatus
   ServerOutdated,
 };
 
-struct char_type
-{
-  QString name;
-  bool taken = false;
-};
-
-struct pos_size_type
-{
-  int x = 0;
-  int y = 0;
-  int width = 0;
-  int height = 0;
-};
-
 struct ThemeTabInfo
 {
   QString m_Name = "chat";
   QString m_Group = "default";
   bool m_DragEnabled = false;
   bool m_ToggleEnabled = false;
-  pos_size_type m_transform;
+  RPRect m_transform;
   QStringList m_WidgetContents = {};
-};
-
-
-struct dialogueHighlights
-{
-  QString chars = "";
-  QString color = "#FFFFFF";
-  bool keepCharacters = false;
 };
 
 struct widgetFontStruct
 {
+  QColor outlineColor = QColor(Qt::black);
   QString font = "";
+  QString color = "#FFFFFF";
+  QString align = "left";
   int size = 20;
+  int outlineSize = 1;
   bool bold = false;
   bool sharp = false;
   bool outline = false;
-  QString color = "#FFFFFF";
-  QString align = "left";
-  QColor outlineColor = QColor(Qt::black);
-  int outlineSize = 1;
 };
 
 struct WidgetThemeData
 {
-  pos_size_type Transform;
+  RPRect Transform;
   double Rotation = 0;
   widgetFontStruct *Font = nullptr;
   QVector2D Spacing = QVector2D(-1, -1);

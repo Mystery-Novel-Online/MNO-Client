@@ -14,7 +14,7 @@ RPTextEdit::RPTextEdit(const QString &name, QWidget *parent)
 
 void RPTextEdit::resetTransform()
 {
-  engine::system::theme::applyDimensions(this, m_friendlyName, SceneType_Courtroom);
+  engine::system::theme::applyDimensions(this, m_friendlyName, ThemeSceneType::SceneType_Courtroom);
 }
 
 void RPTextEdit::hideScrollbars()

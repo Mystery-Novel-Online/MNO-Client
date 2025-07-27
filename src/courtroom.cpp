@@ -44,7 +44,7 @@ using namespace engine::system;
 using namespace engine;
 
 Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
-    : SceneWidget(SceneType_Courtroom, parent)
+    : SceneWidget(ThemeSceneType::SceneType_Courtroom, parent)
 {
   ao_app = p_ao_app;
   ao_config = new AOConfig(this);
@@ -154,7 +154,7 @@ void Courtroom::setup_courtroom()
 
   construct_playerlist_layout();
   TimeDebugger::get().EndTimer("Courtroom Setup");
-  theme::reloadMetadata();
+  engine::system::theme::reloadMetadata();
   LuaBridge::LuaEventCall("OnCourtroomSetup");
 
 
@@ -649,8 +649,8 @@ void Courtroom::set_music_text(QString p_text)
 
 void Courtroom::update_music_text_anim()
 {
-  pos_size_type res_a = engine::system::theme::getDimensions("music_name", SceneType_Courtroom);
-  pos_size_type res_b = engine::system::theme::getDimensions("music_area", SceneType_Courtroom);
+  RPRect res_a = engine::system::theme::getDimensions("music_name", ThemeSceneType::SceneType_Courtroom);
+  RPRect res_b = engine::system::theme::getDimensions("music_area", ThemeSceneType::SceneType_Courtroom);
 
   float speed = static_cast<float>(ao_app->current_theme->get_music_name_speed());
   QFontMetrics fm(ui_vp_music_name->font());
@@ -1551,8 +1551,8 @@ void Courtroom::handle_chatmessage_2() // handles IC
     if(!message::pair::isActive())
     {
       ui_vp_player_pair->hide();
-      pos_size_type showname = ThemeManager::get().resizePosition(theme::getPositionalDimensions("showname", "center"), ThemeManager::get().getViewporResize());
-      pos_size_type l_MessagePos = ThemeManager::get().resizePosition(theme::getPositionalDimensions("message", "center"), ThemeManager::get().getViewporResize());
+      RPRect showname = ThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("showname", "center"), ThemeManager::get().getViewporResize());
+      RPRect l_MessagePos = ThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("message", "center"), ThemeManager::get().getViewporResize());
 
       ui_vp_showname->move(showname.x, showname.y);
       ui_vp_showname->resize(showname.width, showname.height);
@@ -1562,8 +1562,8 @@ void Courtroom::handle_chatmessage_2() // handles IC
     }
     else
     {
-      pos_size_type showname = ThemeManager::get().resizePosition(theme::getPositionalDimensions("showname", offsetTextbox), ThemeManager::get().getViewporResize());
-      pos_size_type l_MessagePos = ThemeManager::get().resizePosition(theme::getPositionalDimensions("message", offsetTextbox), ThemeManager::get().getViewporResize());
+      RPRect showname = ThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("showname", offsetTextbox), ThemeManager::get().getViewporResize());
+      RPRect l_MessagePos = ThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("message", offsetTextbox), ThemeManager::get().getViewporResize());
 
       ui_vp_showname->move(showname.x, showname.y);
       ui_vp_showname->resize(showname.width, showname.height);
@@ -2175,7 +2175,7 @@ void Courtroom::setup_chat()
   // Cache these so chat_tick performs better
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct messageFont = ThemeManager::get().mCurrentThemeReader.GetFontData(SceneType_Courtroom, "message");
+    widgetFontStruct messageFont = ThemeManager::get().mCurrentThemeReader.GetFontData(ThemeSceneType::SceneType_Courtroom, "message");
     m_chatbox_message_outline = messageFont.outline;
     m_messageOutlineColor = messageFont.outlineColor;
     m_messageOutlineSize = messageFont.outlineSize;
@@ -3235,23 +3235,23 @@ void Courtroom::OnCharRandomClicked()
   int n_real_char = 0;
   std::srand(std::time(nullptr));
 
-  QVector<char_type> randomList = CharacterRepository::currentList();
+  QVector<ActorSelectEntry> randomList = CharacterRepository::currentList();
 
   int randomCount = randomList.length();
 
   int randomIndex = std::rand() % randomCount;
 
-  char_type selectedChar = randomList[randomIndex];
+  ActorSelectEntry selectedChar = randomList[randomIndex];
 
 
-  if (user::GetCharacterName() == selectedChar.name)
+  if (user::GetCharacterName().toStdString() == selectedChar.name)
   {
     enter_courtroom(user::GetCharacterId());
     return;
   }
 
-  QString char_json_path = fs::characters::getFilePath(selectedChar.name, CHARACTER_CHAR_JSON);
-  QString char_ini_path = fs::characters::getFilePath(selectedChar.name, CHARACTER_CHAR_INI);
+  QString char_json_path = fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_JSON);
+  QString char_ini_path = fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_INI);
 
   if (!FS::Checks::FileExists(char_json_path))
   {
@@ -3263,15 +3263,15 @@ void Courtroom::OnCharRandomClicked()
     }
   }
 
-  if(!CharacterRepository::characterExists(selectedChar.name))
+  if(!CharacterRepository::characterExists(QString::fromStdString(selectedChar.name)))
   {
     n_real_char = CharacterRepository::findAvailablePersona();
     if(n_real_char == -1) return;
-    ao_config->set_character_ini(CharacterRepository::characterNameServer(n_real_char), selectedChar.name);
+    ao_config->set_character_ini(CharacterRepository::characterNameServer(n_real_char), QString::fromStdString(selectedChar.name));
   }
   else
   {
-    n_real_char = CharacterRepository::networkedIdFromName(selectedChar.name);
+    n_real_char = CharacterRepository::networkedIdFromName(QString::fromStdString(selectedChar.name));
   }
 
   ao_app->send_server_packet(
@@ -3283,23 +3283,23 @@ void Courtroom::SwitchRandomCharacter(QString list)
   int n_real_char = 0;
   std::srand(std::time(nullptr));
 
-  QVector<char_type> randomList = CharacterRepository::filteredList(list);
+  QVector<ActorSelectEntry> randomList = CharacterRepository::filteredList(list);
   if(randomList.isEmpty()) return;
 
   int randomCount = randomList.length();
 
   int randomIndex = std::rand() % randomCount;
 
-  char_type selectedChar = randomList[randomIndex];
+  ActorSelectEntry selectedChar = randomList[randomIndex];
 
-  if (user::GetCharacterName() == selectedChar.name)
+  if (user::GetCharacterName().toStdString() == selectedChar.name)
   {
     enter_courtroom(user::GetCharacterId());
     return;
   }
 
-  QString char_json_path = fs::characters::getFilePath(selectedChar.name, CHARACTER_CHAR_JSON);
-  QString char_ini_path = fs::characters::getFilePath(selectedChar.name, CHARACTER_CHAR_INI);
+  QString char_json_path = fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_JSON);
+  QString char_ini_path = fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_INI);
 
   if (!FS::Checks::FileExists(char_json_path))
   {
@@ -3311,15 +3311,15 @@ void Courtroom::SwitchRandomCharacter(QString list)
     }
   }
 
-  if(!CharacterRepository::characterExists(selectedChar.name))
+  if(!CharacterRepository::characterExists(QString::fromStdString(selectedChar.name)))
   {
     n_real_char = CharacterRepository::findAvailablePersona();
     if(n_real_char == -1) return;
-    ao_config->set_character_ini(CharacterRepository::characterNameServer(n_real_char), selectedChar.name);
+    ao_config->set_character_ini(CharacterRepository::characterNameServer(n_real_char), QString::fromStdString(selectedChar.name));
   }
   else
   {
-    n_real_char = CharacterRepository::networkedIdFromName(selectedChar.name);
+    n_real_char = CharacterRepository::networkedIdFromName(QString::fromStdString(selectedChar.name));
   }
 
   ao_app->send_server_packet(
@@ -3675,10 +3675,10 @@ void Courtroom::construct_playerlist_layout()
   //Setup Player list
   QPoint f_spacing = ao_app->current_theme->get_widget_settings_spacing("player_list", "courtroom", "player_list_spacing");
 
-  theme::applyDimensions(ui_player_list, "player_list", SceneType_Courtroom);
+  engine::system::theme::applyDimensions(ui_player_list, "player_list", ThemeSceneType::SceneType_Courtroom);
   float resize = ThemeManager::get().getResize();
 
-  int player_height = engine::system::theme::getDimensions("player_list_slot", SceneType_Courtroom).height;
+  int player_height = engine::system::theme::getDimensions("player_list_slot", ThemeSceneType::SceneType_Courtroom).height;
   if(player_height == 0) player_height = (int)((float)50 * resize);
 
   int y_spacing = f_spacing.y();
@@ -3817,7 +3817,7 @@ void Courtroom::write_area_desc()
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontstruct = ThemeManager::get().mCurrentThemeReader.GetFontData(SceneType_Courtroom, "area_desc");
+    widgetFontStruct fontstruct = ThemeManager::get().mCurrentThemeReader.GetFontData(ThemeSceneType::SceneType_Courtroom, "area_desc");
     l_color = fontstruct.color;
     is_bold = fontstruct.bold;
   }

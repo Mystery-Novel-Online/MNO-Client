@@ -26,7 +26,7 @@ using namespace engine::network::metadata;
 LegacyViewport::LegacyViewport(QWidget *parent) : RPViewport(parent)
 {
   m_graphicsView = new DRGraphicsView(parent);
-  engine::system::theme::applyDimensions(m_graphicsView, "viewport", SceneType_Replay);
+  engine::system::theme::applyDimensions(m_graphicsView, "viewport", ThemeSceneType::SceneType_Replays);
   RuntimeLoop::assignViewport(this);
 }
 
@@ -288,7 +288,7 @@ void LegacyViewport::constructInterface()
   m_userInterface->setStyleSheet("background: transparent;");
   m_userInterface->setBackgroundBrush(Qt::transparent);
 
-  QStringList viewporWidgets = ThemeManager::get().mCurrentThemeReader.GetSceneWidgetNames(SceneType_Viewport);
+  QStringList viewporWidgets = ThemeManager::get().mCurrentThemeReader.GetSceneWidgetNames(ThemeSceneType::SceneType_Viewport);
   QStringList blacklistedWidgets = { "showname" };
   std::reverse(viewporWidgets.begin(), viewporWidgets.end());
 
@@ -305,7 +305,7 @@ void LegacyViewport::constructInterface()
   }
 
   m_message = new RPTypewriter(m_graphicsView);
-  engine::system::theme::applyDimensions(m_message, "message", SceneType_Viewport);
+  engine::system::theme::applyDimensions(m_message, "message", ThemeSceneType::SceneType_Viewport);
 
   m_message->setFrameStyle(QFrame::NoFrame);
   m_message->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -317,7 +317,7 @@ void LegacyViewport::constructInterface()
   connect(m_message, &RPTypewriter::typingDone, this, &LegacyViewport::onTypingDone);
 
   m_showname = new RPTextEdit("showname");
-  engine::system::theme::applyDimensions(m_showname, "showname", SceneType_Viewport);
+  engine::system::theme::applyDimensions(m_showname, "showname", ThemeSceneType::SceneType_Viewport);
   m_showname->setFrameStyle(QFrame::NoFrame);
   m_showname->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   m_showname->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -327,7 +327,7 @@ void LegacyViewport::constructInterface()
 
   QGraphicsProxyWidget* pProxy = m_userInterface->scene()->addWidget(m_showname);
 
-  WidgetThemeData * l_shownameData = ThemeManager::get().mCurrentThemeReader.GetWidgetData(SceneType_Viewport, "showname");
+  WidgetThemeData * l_shownameData = ThemeManager::get().mCurrentThemeReader.GetWidgetData(ThemeSceneType::SceneType_Viewport, "showname");
 
 
   if(l_shownameData != nullptr)

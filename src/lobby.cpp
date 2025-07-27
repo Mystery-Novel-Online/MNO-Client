@@ -21,7 +21,7 @@
 
 using namespace engine::system;
 
-Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(SceneType_ServerSelect)
+Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_ServerSelect)
 {
 
   m_replayWindow = new ReplayWindow();
@@ -165,7 +165,7 @@ DRServerInfoList Lobby::get_combined_server_list()
 void Lobby::update_widgets()
 {
   ao_app->current_theme->InitTheme();
-  pos_size_type f_lobby = engine::system::theme::getDimensions("lobby", SceneType_ServerSelect);
+  RPRect f_lobby = engine::system::theme::getDimensions("lobby", ThemeSceneType::SceneType_ServerSelect);
   if (f_lobby.width < 0 || f_lobby.height < 0)
   {
     qWarning() << "W: did not find lobby width or height in " << LOBBY_DESIGN_INI;

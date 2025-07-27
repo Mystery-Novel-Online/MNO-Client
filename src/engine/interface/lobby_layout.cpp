@@ -21,8 +21,8 @@ namespace Layout::ServerSelect
   {
     RPButton* rpButton = new RPButton(s_ConstructedLobby);
     rpButton->setName(name);
-    rpButton->setScene(SceneType_ServerSelect);
-    engine::system::theme::applyDimensions(rpButton, name, SceneType_ServerSelect);
+    rpButton->setScene(ThemeSceneType::SceneType_ServerSelect);
+    engine::system::theme::applyDimensions(rpButton, name, ThemeSceneType::SceneType_ServerSelect);
     rpButton->set_image(image + ".png");
 
     QObject::connect(rpButton, &QPushButton::pressed, [rpButton, image]() { rpButton->set_image(image + "_pressed.png"); });

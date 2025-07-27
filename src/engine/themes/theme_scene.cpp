@@ -24,7 +24,7 @@ void ThemeScene::setDummyTransform(QString t_name)
   m_Widgets[t_name]->Transform = {-1, -1, -1, -1};
 }
 
-void ThemeScene::setWidgetTransform(QString t_name, pos_size_type t_transform)
+void ThemeScene::setWidgetTransform(QString t_name, RPRect t_transform)
 {
   if(!m_Widgets.contains(t_name)) m_Widgets[t_name] = new WidgetThemeData();
   m_Widgets[t_name]->Transform = t_transform;

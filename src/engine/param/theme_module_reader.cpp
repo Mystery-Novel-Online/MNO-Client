@@ -58,8 +58,8 @@ void ThemeModuleReader::ParseModuleConfig()
   for(QJsonValueRef highlighValue : configHighlightsArray)
   {
     SetTargetObject(highlighValue.toObject());
-    m_configHighlights[getStringValue("chars")].chars = getStringValue("chars");
-    m_configHighlights[getStringValue("chars")].color = getStringValue("color");
+    m_configHighlights[getStringValue("chars")].chars = getStringValue("chars").toStdString();
+    m_configHighlights[getStringValue("chars")].color = getStringValue("color").toStdString();
     m_configHighlights[getStringValue("chars")].keepCharacters = getBoolValue("keep_characters");
   }
 }
@@ -147,7 +147,7 @@ ThemeScene *ThemeModuleReader::ParseScene(QString t_scene)
 
     if(obj.contains("position"))
     {
-      pos_size_type widgetTransform;
+      RPRect widgetTransform;
       widgetTransform.x = obj["position"].toObject()["x"].toInt(); widgetTransform.y = obj["position"].toObject()["y"].toInt();
       widgetTransform.width = obj["position"].toObject()["width"].toInt(); widgetTransform.height = obj["position"].toObject()["height"].toInt();
       newScene->setWidgetTransform(key, widgetTransform);
@@ -246,16 +246,16 @@ ThemeScene *ThemeModuleReader::getThemeScene(ThemeSceneType t_scene)
 {
   switch (t_scene)
   {
-    case SceneType_ServerSelect:
+    case ThemeSceneType::SceneType_ServerSelect:
       return m_LobbyScene;
 
-    case SceneType_Replay:
+    case ThemeSceneType::SceneType_Replays:
       return m_ReplaysScene;
 
-    case SceneType_Courtroom:
+    case ThemeSceneType::SceneType_Courtroom:
       return m_CourtroomScene;
 
-    case SceneType_Viewport:
+    case ThemeSceneType::SceneType_Viewport:
       return m_ViewportScene;
 
     default:
@@ -272,7 +272,7 @@ bool ThemeModuleReader::getContainsSceneWidget(ThemeSceneType t_scene, QString t
 
     if(l_widgetData == nullptr) return false;
 
-    pos_size_type position = l_widgetData->Transform;
+    RPRect position = l_widgetData->Transform;
     if(position.height != -1 && position.width != -1)
     {
       return true;

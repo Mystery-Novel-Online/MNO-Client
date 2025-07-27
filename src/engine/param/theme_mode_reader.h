@@ -34,7 +34,7 @@ public:
   QVector<ThemeTabInfo> getTabs();
   QVector<QStringList> getLayers();
 
-  QHash<QString, dialogueHighlights>GetFontColorsHighlights();
+  QHash<QString, ThemeHighlight>GetFontColorsHighlights();
   QMap<QString, DR::ColorInfo>GetFontColorsDefault();
 
   //Data Retrieval
@@ -44,12 +44,12 @@ public:
 
   bool containsWidgetPosition(ThemeSceneType sceneType, QString name);
 
-  pos_size_type getWidgetPosition(ThemeSceneType sceneType, QString name);
+  RPRect getWidgetPosition(ThemeSceneType sceneType, QString name);
 
   bool containsWidgetFont(ThemeSceneType sceneType, QString widget_name);
   widgetFontStruct getWidgetFont(ThemeSceneType t_sceneType, QString t_name);
 
-  pos_size_type getWidgetDimensions(QVector<ThemeScene *> t_readOrder, QString t_name);
+  RPRect getWidgetDimensions(QVector<ThemeScene *> t_readOrder, QString t_name);
 
   QVector<ThemeScene *> getSceneLoadOrder(ThemeSceneType t_type);
   QVector<ThemeModuleReader *>getModuleLoadOrder();
@@ -63,7 +63,7 @@ private:
   int m_TimerCount = -1;
 
   QMap<QString, DR::ColorInfo> m_CourtroomFontColorsDefault = {};
-  QHash<QString, dialogueHighlights> m_CourtroomFontColorsHighlights = {};
+  QHash<QString, ThemeHighlight> m_CourtroomFontColorsHighlights = {};
 
   QString m_TimeOfDayCurrentName = "";
   ThemeModeReader* m_TimeOfDayCurrent = nullptr;

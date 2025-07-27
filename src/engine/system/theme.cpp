@@ -4,30 +4,30 @@
 #include "modules/theme/thememanager.h"
 #include "pch.h"
 
-const pos_size_type FALLBACK_DIMENSIONS = {0, 0, -1, -1};
+const RPRect FALLBACK_DIMENSIONS = {0, 0, -1, -1};
 
 static const QStringList CHATBOX_ELEMENTS = {"showname", "ao2_chatbox", "message", "chat_arrow"};
 static const QStringList POSITIONAL_ALIGNMENTS = {"", "_left", "_right"};
 
 const QMap<ThemeSceneType, QString> LEGACY_DESIGN_INIS =
 {
-  {SceneType_Courtroom, COURTROOM_DESIGN_INI},
-  {SceneType_ServerSelect, LOBBY_DESIGN_INI},
-  {SceneType_Replay, REPLAY_DESIGN_INI},
-  {SceneType_Viewport, VIEWPORT_DESIGN_INI}
+  {ThemeSceneType::SceneType_Courtroom, COURTROOM_DESIGN_INI},
+  {ThemeSceneType::SceneType_ServerSelect, LOBBY_DESIGN_INI},
+  {ThemeSceneType::SceneType_Replays, REPLAY_DESIGN_INI},
+  {ThemeSceneType::SceneType_Viewport, VIEWPORT_DESIGN_INI}
 };
 
-QMap<QString, pos_size_type> s_PositionalDimensions = {};
+QMap<QString, RPRect> s_PositionalDimensions = {};
 
 namespace engine::system::theme
 {
   void applyDimensions(QWidget *widget, const QString &identifier, ThemeSceneType scene, bool allowResize)
   {
-    pos_size_type dimensions = getDimensions(identifier, scene);
+    RPRect dimensions = getDimensions(identifier, scene);
 
     if (dimensions.width < 0 || dimensions.height < 0)
     {
-      qDebug() << "W: could not find" << identifier << "in " << scene;
+      qDebug() << "W: could not find" << identifier << "in " << (int)scene;
       dimensions = {0, 0, 0, 0};
     }
 
@@ -36,13 +36,13 @@ namespace engine::system::theme
       widget->resize(dimensions.width, dimensions.height);
   }
 
-  pos_size_type getDimensions(const QString &identifier, ThemeSceneType scene)
+  RPRect getDimensions(const QString &identifier, ThemeSceneType scene)
   {
     LEGACY_DESIGN_INIS.contains(scene);
 
     if(AOApplication::getInstance()->current_theme->m_jsonLoaded)
     {
-      pos_size_type json_pos = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(scene, identifier);
+      RPRect json_pos = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(scene, identifier);
       if(json_pos.width != -1) return json_pos;
     }
 
@@ -56,7 +56,7 @@ namespace engine::system::theme
 
     if (sub_line_elements.size() < 4) return FALLBACK_DIMENSIONS;
 
-    pos_size_type return_value;
+    RPRect return_value;
     return_value.x = sub_line_elements.at(0).toInt();
     return_value.y = sub_line_elements.at(1).toInt();
     return_value.width = sub_line_elements.at(2).toInt();
@@ -74,7 +74,7 @@ namespace engine::system::theme
       for(QString alignment : POSITIONAL_ALIGNMENTS)
       {
         QString fullName = element + alignment;
-        pos_size_type sizing = getDimensions(fullName, SceneType_Courtroom);
+        RPRect sizing = getDimensions(fullName, ThemeSceneType::SceneType_Courtroom);
 
         if(sizing.height != 0 && sizing.width != 0)
           s_PositionalDimensions[fullName] = sizing;
@@ -83,7 +83,7 @@ namespace engine::system::theme
 
   }
 
-  pos_size_type getPositionalDimensions(const QString &identifier, const QString &alignment)
+  RPRect getPositionalDimensions(const QString &identifier, const QString &alignment)
   {
     QString positionalIdentifier = identifier + "_" + alignment;
 

@@ -10,7 +10,7 @@ SceneWidget::SceneWidget(ThemeSceneType scene, QWidget *parent) : QMainWindow(pa
 
 void SceneWidget::reload()
 {
-  const QString& sceneFontFile = m_currentScene == SceneType_Courtroom ? COURTROOM_FONTS_INI : LOBBY_FONTS_INI;
+  const QString& sceneFontFile = m_currentScene == ThemeSceneType::SceneType_Courtroom ? COURTROOM_FONTS_INI : LOBBY_FONTS_INI;
 
   for (auto [widget, identifier] : m_widgetThemeMap.toStdMap())
   {

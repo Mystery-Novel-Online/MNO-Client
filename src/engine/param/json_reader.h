@@ -1,17 +1,6 @@
 #ifndef JSONREADER_H
 #define JSONREADER_H
 
-#include <QString>
-#include <QJsonObject>
-#include <QJsonDocument>
-#include <QJsonArray>
-#include <QFile>
-#include <QVector2D>
-#include <QVector3D>
-
-#include <QRect>
-
-
 class JSONReader
 {
 public:
@@ -29,9 +18,8 @@ public:
   QVector3D   getVector3DValue(QString string);
   QVector3D   getVector3DColorValue(QString string);
   QJsonArray  getArrayValue(QString string);
-  pos_size_type  getPositionData(QString string);
+  RPRect  getPositionData(QString string);
   QRect  getRectangleValue(QString string);
-  VariableMappedString getVarMappedString(QString t_fallback);
 
   bool        getBoolValue(QString string);
   int         getIntValue(QString string);

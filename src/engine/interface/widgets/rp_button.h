@@ -40,7 +40,7 @@ private:
   QString m_targetScene = "courtroom";
 
   QString m_relativeButtonPath;
-  ThemeSceneType m_Scene = SceneType_Courtroom;
+  ThemeSceneType m_Scene = ThemeSceneType::SceneType_Courtroom;
 };
 
 #endif // RP_BUTTON_H

@@ -30,12 +30,12 @@ void AOApplication::reload_packages()
   QDir baseCharactersDir (FS::Paths::BasePath() + "/characters");
   if (baseCharactersDir.exists())
   {
-    QVector<char_type> baseCharacters;
+    QVector<ActorSelectEntry> baseCharacters;
     QStringList character_folders = baseCharactersDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
     for (const QString &character_folder : character_folders)
     {
-      char_type packageChar;
-      packageChar.name = character_folder;
+      ActorSelectEntry packageChar;
+      packageChar.name = character_folder.toStdString();
       baseCharacters.append(std::move(packageChar));
     }
     CharacterRepository::setFilteredList("base", baseCharacters);
@@ -46,12 +46,12 @@ void AOApplication::reload_packages()
     QDir charactersPath (packagesPath + packageName + "/characters");
     if (charactersPath.exists())
     {
-      QVector<char_type> packageCharacters;
+      QVector<ActorSelectEntry> packageCharacters;
       QStringList character_folders = charactersPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
       for (const QString &character_folder : character_folders)
       {
-        char_type packageChar;
-        packageChar.name = character_folder;
+        ActorSelectEntry packageChar;
+        packageChar.name = character_folder.toStdString();
         packageCharacters.append(std::move(packageChar));
       }
       CharacterRepository::setFilteredList(packageName, packageCharacters);

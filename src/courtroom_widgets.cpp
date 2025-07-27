@@ -921,7 +921,7 @@ void Courtroom::set_widget_layers_legacy()
 
 void Courtroom::set_widgets()
 {
-  pos_size_type courtroomDimensions = engine::system::theme::getDimensions("courtroom", SceneType_Courtroom);
+  RPRect courtroomDimensions = engine::system::theme::getDimensions("courtroom", ThemeSceneType::SceneType_Courtroom);
   if (courtroomDimensions.width < 0 || courtroomDimensions.height < 0)
   {
     qWarning() << "W: did not find courtroom width or height in " << COURTROOM_DESIGN_INI;
@@ -1080,7 +1080,7 @@ void Courtroom::set_widgets()
   if(ThemeManager::get().getReloadPending())
   {
     { // emote preview
-      pos_size_type l_emote_preview_size = engine::system::theme::getDimensions("emote_preview", SceneType_Courtroom);
+      RPRect l_emote_preview_size = engine::system::theme::getDimensions("emote_preview", ThemeSceneType::SceneType_Courtroom);
       if (l_emote_preview_size.width <= 0 || l_emote_preview_size.height <= 0)
       {
         l_emote_preview_size.width = 320;
@@ -1111,7 +1111,7 @@ void Courtroom::set_widgets()
 
   for (int i = 0; i < shout_names.size(); ++i)
   {
-    engine::system::theme::applyDimensions(ui_shouts[i], shout_names[i], SceneType_Courtroom);
+    engine::system::theme::applyDimensions(ui_shouts[i], shout_names[i], ThemeSceneType::SceneType_Courtroom);
   }
   reset_shout_buttons();
 
@@ -1122,7 +1122,7 @@ void Courtroom::set_widgets()
   if (ao_app->current_theme->read_config_bool("enable_single_shout") && ui_shouts.size() > 0)
   {
     for (auto &shout : ui_shouts)
-      theme::applyDimensions(shout, "bullet", SceneType_Courtroom, false);
+      engine::system::theme::applyDimensions(shout, "bullet", ThemeSceneType::SceneType_Courtroom, false);
 
     set_shouts();
 
@@ -1132,7 +1132,7 @@ void Courtroom::set_widgets()
 
   for (int i = 0; i < effect_names.size(); ++i)
   {
-    engine::system::theme::applyDimensions(ui_effects[i], effect_names[i], SceneType_Courtroom);
+    engine::system::theme::applyDimensions(ui_effects[i], effect_names[i], ThemeSceneType::SceneType_Courtroom);
     ThemeManager::get().addWidgetName(effect_names[i], ui_effects[i]);
   }
   reset_effect_buttons();
@@ -1142,7 +1142,7 @@ void Courtroom::set_widgets()
   if (ao_app->current_theme->read_config_bool("enable_single_effect")  && ui_effects.size() > 0 ) // check to prevent crashing
   {
     for (auto &effect : ui_effects)
-      theme::applyDimensions(effect, "effect", SceneType_Courtroom, false);
+      engine::system::theme::applyDimensions(effect, "effect", ThemeSceneType::SceneType_Courtroom, false);
 
     set_effects();
 
@@ -1153,14 +1153,14 @@ void Courtroom::set_widgets()
 
   for (int i = 0; i < wtce_names.size(); ++i)
   {
-    engine::system::theme::applyDimensions(ui_wtce[i],  wtce_names[i], SceneType_Courtroom);
+    engine::system::theme::applyDimensions(ui_wtce[i],  wtce_names[i], ThemeSceneType::SceneType_Courtroom);
     ThemeManager::get().addWidgetName(wtce_names[i], ui_wtce[i]);
   }
 
   if (ao_app->current_theme->read_config_bool("enable_single_wtce")) // courtroom_config.ini necessary
   {
     for (auto &wtce : ui_wtce)
-      theme::applyDimensions(wtce, "wtce", SceneType_Courtroom, false);
+      engine::system::theme::applyDimensions(wtce, "wtce", ThemeSceneType::SceneType_Courtroom, false);
     qDebug() << "AA: single wtce";
   }
   set_judge_wtce();
@@ -1202,7 +1202,7 @@ void Courtroom::set_widgets()
 
   for (auto [widget, identifier] : reloadList.toStdMap())
   {
-    engine::system::theme::applyDimensions(widget, identifier, SceneType_Courtroom);
+    engine::system::theme::applyDimensions(widget, identifier, ThemeSceneType::SceneType_Courtroom);
   }
 
   if (ao_app->current_theme->read_config_bool("enable_label_images"))
@@ -1300,14 +1300,14 @@ void Courtroom::set_widgets()
 
 void Courtroom::setupWidgetElement(QWidget *widget, QString name, bool visible)
 {
-  theme::applyDimensions(widget, name, SceneType_Courtroom);
+  engine::system::theme::applyDimensions(widget, name, ThemeSceneType::SceneType_Courtroom);
   if(!visible) widget->hide();
 }
 
 
 void Courtroom::setupWidgetElement(AOImageDisplay *widget, QString name, QString image, bool visible)
 {
-  theme::applyDimensions(widget, name, SceneType_Courtroom);
+  engine::system::theme::applyDimensions(widget, name, ThemeSceneType::SceneType_Courtroom);
 
   widget->set_theme_image(ao_app->current_theme->get_widget_image(name, image, "courtroom"));
 
@@ -1316,7 +1316,7 @@ void Courtroom::setupWidgetElement(AOImageDisplay *widget, QString name, QString
 
 void Courtroom::setupWidgetElement(RPTextEdit *widget, QString name, QString defaultText, Qt::TextInteractionFlag flag, bool visible)
 {
-  theme::applyDimensions(widget, name, SceneType_Courtroom);
+  engine::system::theme::applyDimensions(widget, name, ThemeSceneType::SceneType_Courtroom);
 
   widget->setTextInteractionFlags(flag);
   if(mDefaultWidgetCSS.contains(name)) widget->setStyleSheet(mDefaultWidgetCSS[name]);
@@ -1367,7 +1367,7 @@ int Courtroom::adapt_numbered_items(QVector<T *> &item_vector, QString config_it
   for (int i = 0; i < new_item_number; i++)
   {
     item_vector[i]->show();
-    theme::applyDimensions(item_vector[i], item_name + "_" + QString::number(i), SceneType_Courtroom);
+    engine::system::theme::applyDimensions(item_vector[i], item_name + "_" + QString::number(i), ThemeSceneType::SceneType_Courtroom);
   }
   return new_item_number;
 }
@@ -1709,7 +1709,7 @@ void Courtroom::set_fonts()
 
 void Courtroom::setup_screenshake_anim(double message_offset)
 {
-  pos_size_type chatbox_res = engine::system::theme::getDimensions("ao2_chatbox", SceneType_Courtroom);
+  RPRect chatbox_res = engine::system::theme::getDimensions("ao2_chatbox", ThemeSceneType::SceneType_Courtroom);
 
   background_anim->setLoopCount(5);
   background_anim->setDuration(50);

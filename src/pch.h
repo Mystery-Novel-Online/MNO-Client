@@ -5,10 +5,20 @@
 #include <bass/bassopus.h>
 #include <bass/bass_fx.h>
 
-#include "rolechat/actor/ActorEmote.h"
-#include "rolechat/actor/ActorLayer.h"
-#include "rolechat/actor/ActorScalingMode.h"
-#include "rolechat/actor/ActorScalingPreset.h"
+#include <rolechat/dialogue/DialogueTypes.h>
+#include <rolechat/actor/ActorEmote.h>
+#include <rolechat/actor/ActorLayer.h>
+#include <rolechat/actor/ActorScalingMode.h>
+#include <rolechat/actor/ActorScalingPreset.h>
+#include <rolechat/theme/ThemeHighlight.h>
+#include <rolechat/theme/ThemeScene.h>
+#include <rolechat/math/RPRect.h>
+#include <rolechat/actor/ActorSelectEntry.h>
+
+using ActorSelectEntry = rolechat::actor::ActorSelectEntry;
+using DialogueType = rolechat::dialogue::DialogueType;
+using ThemeSceneType = rolechat::theme::ThemeSceneType;
+using ThemeHighlight = rolechat::theme::ThemeHighlight;
 
 #include <QGraphicsScene>
 #include <QOpenGLContext>

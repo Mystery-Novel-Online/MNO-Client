@@ -83,8 +83,8 @@ void ThemeManager::createTabParent()
 
     QString l_buttonName = r_tabInfo.m_Name + "_toggle";
 
-    pos_size_type l_panelPosition = mCurrentThemeReader.GetWidgetTransform(SceneType_Courtroom, l_panelName);
-    pos_size_type l_buttonDimensions = mCurrentThemeReader.GetWidgetTransform(SceneType_Courtroom, l_buttonName);
+    RPRect l_panelPosition = mCurrentThemeReader.GetWidgetTransform(ThemeSceneType::SceneType_Courtroom, l_panelName);
+    RPRect l_buttonDimensions = mCurrentThemeReader.GetWidgetTransform(ThemeSceneType::SceneType_Courtroom, l_buttonName);
 
 
 
@@ -257,7 +257,7 @@ void ThemeManager::setWidgetDimensions(QWidget *t_widget, int t_width, int t_hei
 
 void ThemeManager::AssignDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene)
 {
-  pos_size_type lPositionData = mCurrentThemeReader.GetWidgetTransform(t_scene, t_name);
+  RPRect lPositionData = mCurrentThemeReader.GetWidgetTransform(t_scene, t_name);
   t_widget->move(lPositionData.x, lPositionData.y);
   t_widget->resize(lPositionData.width, lPositionData.height);
 }
@@ -293,7 +293,7 @@ void ThemeManager::toggleReload()
   mRequiresReload = true;
 }
 
-pos_size_type ThemeManager::resizePosition(pos_size_type t_position, double t_scale)
+RPRect ThemeManager::resizePosition(RPRect t_position, double t_scale)
 {
   t_position.x = static_cast<int>(t_position.x * t_scale);
   t_position.y = static_cast<int>(t_position.y * t_scale);

@@ -5,7 +5,7 @@
 
 using namespace engine::system;
 
-ReplayWindow::ReplayWindow() : SceneWidget(SceneType_Replay)
+ReplayWindow::ReplayWindow() : SceneWidget(ThemeSceneType::SceneType_Replays)
 {
   setWindowTitle("Replay");
   setFocusPolicy(Qt::StrongFocus);

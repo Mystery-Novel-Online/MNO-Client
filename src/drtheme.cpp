@@ -225,8 +225,8 @@ QString DRTheme::get_widget_font_string_setting(QString p_identifier, QString p_
     return ao_app->read_theme_ini(fallback, p_scene);
   }
 
-  ThemeSceneType sceneType = SceneType_Courtroom;
-  if(p_scene == LOBBY_FONTS_INI) sceneType = SceneType_ServerSelect;
+  ThemeSceneType sceneType = ThemeSceneType::SceneType_Courtroom;
+  if(p_scene == LOBBY_FONTS_INI) sceneType = ThemeSceneType::SceneType_ServerSelect;
   return ThemeManager::get().mCurrentThemeReader.GetFontData(sceneType, p_identifier).align;
 }
 

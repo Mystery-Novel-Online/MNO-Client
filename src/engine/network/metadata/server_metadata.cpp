@@ -22,15 +22,15 @@ void CharacterRepository::reset()
 
 void CharacterRepository::addFavorite(const QString &folder)
 {
-  if (std::any_of(favoriteCharacters.begin(), favoriteCharacters.end(), [&](const char_type& c){ return c.name == folder; }))
+  if (std::any_of(favoriteCharacters.begin(), favoriteCharacters.end(), [&](const ActorSelectEntry& c){ return c.name == folder.toStdString(); }))
     return;
-  favoriteCharacters.append({folder});
+  favoriteCharacters.append({folder.toStdString()});
   saveFavorites();
 }
 
 void CharacterRepository::removeFavorite(const QString &folder)
 {
-  auto it = std::remove_if(favoriteCharacters.begin(), favoriteCharacters.end(), [&](const char_type& c){ return c.name == folder; });
+  auto it = std::remove_if(favoriteCharacters.begin(), favoriteCharacters.end(), [&](const ActorSelectEntry& c){ return c.name == folder.toStdString(); });
   if (it != favoriteCharacters.end()) {
     favoriteCharacters.erase(it, favoriteCharacters.end());
     saveFavorites();
@@ -51,7 +51,7 @@ void CharacterRepository::loadFavorites()
   while (!in.atEnd()) {
     QString line = in.readLine().trimmed();
     if (!line.isEmpty())
-      favoriteCharacters.append({line});
+      favoriteCharacters.append({line.toStdString()});
   }
 }
 
@@ -65,13 +65,13 @@ void CharacterRepository::saveFavorites()
 
   QTextStream out(&file);
   for (const auto& character : favoriteCharacters)
-    out << character.name << '\n';
+    out << QString::fromStdString(character.name) << '\n';
 }
 
 void CharacterRepository::setCharacterAvailability(int index, bool available)
 {
   if (index >= 0 && index < serverCharacters.size())
-    claimedCharacters[serverCharacters.at(index).name] = available;
+    claimedCharacters[QString::fromStdString(serverCharacters.at(index).name)] = available;
 }
 
 bool CharacterRepository::isCharacterAvailable(const QString &name)
@@ -79,12 +79,12 @@ bool CharacterRepository::isCharacterAvailable(const QString &name)
     return claimedCharacters.value(name, false);
 }
 
-void CharacterRepository::setServerList(const QVector<char_type> &list)
+void CharacterRepository::setServerList(const QVector<ActorSelectEntry> &list)
 {
   serverCharacters = list;
 }
 
-void CharacterRepository::setFilteredList(const QString &name, const QVector<char_type> &list)
+void CharacterRepository::setFilteredList(const QString &name, const QVector<ActorSelectEntry> &list)
 {
   if (!defaultFilters.contains(name))
     repository[name] = list;
@@ -92,7 +92,7 @@ void CharacterRepository::setFilteredList(const QString &name, const QVector<cha
 
 bool CharacterRepository::characterExists(const QString &name)
 {
-  return std::any_of(serverCharacters.begin(), serverCharacters.end(), [&](const char_type& c) { return c.name == name; });
+  return std::any_of(serverCharacters.begin(), serverCharacters.end(), [&](const ActorSelectEntry& c) { return c.name == name.toStdString(); });
 }
 
 bool CharacterRepository::filteredCharacterExists(int filterIndex)
@@ -100,7 +100,7 @@ bool CharacterRepository::filteredCharacterExists(int filterIndex)
   if (filterIndex < 0 || filterIndex >= filteredCharacters.size())
     return false;
 
-  return characterExists(filteredCharacters.at(filterIndex).name);
+  return characterExists(QString::fromStdString(filteredCharacters.at(filterIndex).name));
 }
 
 void CharacterRepository::clearFiltered()
@@ -108,12 +108,12 @@ void CharacterRepository::clearFiltered()
   filteredCharacters.clear();
 }
 
-void CharacterRepository::addFiltered(const char_type &character)
+void CharacterRepository::addFiltered(const ActorSelectEntry &character)
 {
   filteredCharacters.append(character);
 }
 
-char_type CharacterRepository::filteredCharacter(int index)
+ActorSelectEntry CharacterRepository::filteredCharacter(int index)
 {
   if(index > filteredCharacters.count()) return {};
   return filteredCharacters.at(index);
@@ -121,12 +121,12 @@ char_type CharacterRepository::filteredCharacter(int index)
 
 QString CharacterRepository::characterNameFiltered(int index)
 {
-  return (index >= 0 && index < filteredCharacters.size()) ? filteredCharacters.at(index).name : "";
+  return (index >= 0 && index < filteredCharacters.size()) ? QString::fromStdString(filteredCharacters.at(index).name) : "";
 }
 
 QString CharacterRepository::characterNameServer(int index)
 {
-  return (index >= 0 && index < serverCharacters.size()) ? serverCharacters.at(index).name : "";
+  return (index >= 0 && index < serverCharacters.size()) ? QString::fromStdString(serverCharacters.at(index).name) : "";
 }
 
 int CharacterRepository::findAvailablePersona()
@@ -135,19 +135,19 @@ int CharacterRepository::findAvailablePersona()
     QString personaName = QString("Persona%1").arg(i);
     if (!claimedCharacters.value(personaName, false))
     {
-      auto it = std::find_if(serverCharacters.begin(), serverCharacters.end(), [&](const char_type& c) { return c.name == personaName; });
+      auto it = std::find_if(serverCharacters.begin(), serverCharacters.end(), [&](const ActorSelectEntry& c) { return c.name == personaName.toStdString(); });
       if (it != serverCharacters.end()) return std::distance(serverCharacters.begin(), it);
     }
   }
   return -1;
 }
 
-const QVector<char_type> &CharacterRepository::serverList()
+const QVector<ActorSelectEntry> &CharacterRepository::serverList()
 {
   return serverCharacters;
 }
 
-QVector<char_type> CharacterRepository::filteredList(const QString &packageName)
+QVector<ActorSelectEntry> CharacterRepository::filteredList(const QString &packageName)
 {
   lastUsedFilter = packageName;
 
@@ -155,7 +155,7 @@ QVector<char_type> CharacterRepository::filteredList(const QString &packageName)
   if (packageName == "Favorites") return favoriteCharacters;
 
   if (packageName == "All") {
-    QVector<char_type> allCharacters;
+    QVector<ActorSelectEntry> allCharacters;
     for (const auto& list : repository)
       allCharacters.append(list);
     return allCharacters;
@@ -164,12 +164,12 @@ QVector<char_type> CharacterRepository::filteredList(const QString &packageName)
   return repository.value(packageName);
 }
 
-QVector<char_type> CharacterRepository::currentList()
+QVector<ActorSelectEntry> CharacterRepository::currentList()
 {
   return filteredList(lastUsedFilter);
 }
 
-QVector<char_type> CharacterRepository::resetClaims()
+QVector<ActorSelectEntry> CharacterRepository::resetClaims()
 {
   claimedCharacters.clear();
   return serverCharacters;
@@ -178,7 +178,7 @@ QVector<char_type> CharacterRepository::resetClaims()
 int CharacterRepository::networkedIdFromName(const QString &name)
 {
   for (int i = 0; i < serverCharacters.size(); ++i) {
-    if (serverCharacters[i].name == name)
+    if (serverCharacters[i].name == name.toStdString())
       return i;
   }
   return -1;
@@ -187,7 +187,7 @@ int CharacterRepository::networkedIdFromName(const QString &name)
 int CharacterRepository::networkedIdFromFiltered(int filteredId)
 {
   if (filteredId < 0 || filteredId >= filteredCharacters.size()) return -1;
-  const QString& name = filteredCharacters.at(filteredId).name;
+  const QString& name = QString::fromStdString(filteredCharacters.at(filteredId).name);
   return networkedIdFromName(name);
 }
 
