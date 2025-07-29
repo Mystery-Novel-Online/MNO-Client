@@ -218,11 +218,11 @@ QMap<DR::Color, DR::ColorInfo> AOApplication::get_chatmessage_colors()
   if (path.isEmpty())
   {
     qInfo().noquote() << QString("[color] theme %1 is missing file: %2, using default colors instead")
-                             .arg(ao_config->theme())
+                             .arg(QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")))
                              .arg(COURTROOM_TEXT_COLOR_INI);
     return color_map;
   }
-  qInfo().noquote() << QString("[color] loading colors for theme %1").arg(ao_config->theme());
+  qInfo().noquote() << QString("[color] loading colors for theme %1").arg(QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")));
 
   QSettings color_settings(path, QSettings::IniFormat);
 

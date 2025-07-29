@@ -38,13 +38,6 @@ public:
   bool discord_hide_server() const;
   bool discord_hide_character() const;
   QString language() const;
-  QString theme() const;
-  QString gamemode() const;
-  QString manual_gamemode() const;
-  bool is_manual_gamemode_selection_enabled() const;
-  QString timeofday() const;
-  QString manual_timeofday() const;
-  bool is_manual_timeofday_selection_enabled() const;
   bool searchable_iniswap_enabled() const;
   bool always_pre_enabled() const;
   int chat_tick_interval() const;
@@ -84,7 +77,6 @@ public:
   int punctuation_delay() const;
   bool blank_blips_enabled() const;
 
-  double theme_resize() const;
   int fade_duration() const;
 
   // io
@@ -113,12 +105,6 @@ public slots:
   void set_discord_hide_character(const bool p_enabled);
   void setLanguage(QString t_language);
   void set_theme(QString p_string);
-  void set_gamemode(QString p_string);
-  void set_manual_gamemode(QString p_string);
-  void set_manual_gamemode_selection_enabled(bool p_enabled);
-  void set_timeofday(QString p_string);
-  void set_manual_timeofday(QString p_string);
-  void set_manual_timeofday_selection_enabled(bool p_enabled);
   void set_searchable_iniswap(bool);
   void set_always_pre(bool p_enabled);
   void set_chat_tick_interval(int p_number);

@@ -36,6 +36,8 @@
 #include "engine/param/actor/actor_loader.h"
 #include <mk2/spritecachingreader.h>
 #include <rolechat/actor/JsonActorData.h>
+#include "engine/system/config_manager.h"
+#include "config_tabs/config_tab_theme.h"
 
 const int Courtroom::DEFAULT_WIDTH = 714;
 const int Courtroom::DEFAULT_HEIGHT = 668;
@@ -53,6 +55,14 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   m_preloader_sync = new mk2::SpriteReaderSynchronizer(this);
   m_preloader_sync->set_threshold(ao_config->caching_threshold());
 
+  //New Config
+  ConfigTabTheme *tab = ConfigManager::retrieveTab<ConfigTabTheme>("Theme");
+  if(tab)
+  {
+    connect(tab, &ConfigTabTheme::reloadTheme, this, &Courtroom::reload_theme);
+  }
+
+  //Legacy Config
   connect(ao_app, SIGNAL(reload_theme()), this, SLOT(reload_theme()));
   connect(ao_app, SIGNAL(reload_character()), this, SLOT(load_character()));
   connect(ao_app, SIGNAL(reload_audiotracks()), this, SLOT(load_audiotracks()));
@@ -91,8 +101,8 @@ Courtroom::~Courtroom()
   courtroom::tabs::cleanupToggles();
   ThemeManager::get().ResetWidgetLists();
   cleanup_preload_readers();
-  ao_config->set_gamemode(nullptr);
-  ao_config->set_timeofday(nullptr);
+  system::ConfigManager::setDefaultGamemode("");
+  system::ConfigManager::setdefaultTimeOfDay("");
   audio::StopAll();
 }
 
@@ -427,12 +437,7 @@ void Courtroom::play_ambient()
 
 QString Courtroom::get_current_background() const
 {
-  QString l_tod = ao_config->timeofday();
-  if (ao_config->is_manual_timeofday_selection_enabled())
-  {
-    l_tod = ao_config->manual_timeofday();
-  }
-
+  QString l_tod = ConfigManager::timeOfDay();
   return m_background.background_tod_map.value(l_tod, m_background.background);
 }
 

@@ -301,6 +301,9 @@ add_executable(rp-engine
   src/engine/encoding/binary_encoding.h src/engine/encoding/binary_encoding.cpp
   src/pch.h
   src/engine/fs/fs_characters.h src/engine/fs/fs_characters.cpp
+  src/rolechat_config.h src/rolechat_config.cpp src/rolechat_config.ui
+  src/config_tabs/config_tab_theme.h src/config_tabs/config_tab_theme.cpp src/config_tabs/config_tab_theme.ui
+  src/engine/system/config_manager.h src/engine/system/config_manager.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)

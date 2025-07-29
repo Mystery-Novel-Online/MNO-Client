@@ -18,11 +18,14 @@
 #include <modules/theme/thememanager.h>
 #include "engine/interface/scenes/replay_window.h"
 #include "engine/system/replay_playback.h"
+#include <engine/system/config_manager.h>
+#include "config_tabs/config_tab_theme.h"
 
 using namespace engine::system;
 
 Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_ServerSelect)
 {
+  ConfigTabTheme* configTab = ConfigManager::retrieveTab<ConfigTabTheme>("Theme");
 
   m_replayWindow = new ReplayWindow();
   m_replayWindow->hide();
@@ -112,7 +115,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   connect(ui_replay_list, SIGNAL(currentRowChanged(int)), this, SLOT(onReplayRowChanged(int)));
 
-  connect(ao_app, SIGNAL(reload_theme()), this, SLOT(update_widgets()));
+  connect(configTab, &ConfigTabTheme::reloadTheme, this, &Lobby::update_widgets);
   connect(ao_app, &AOApplication::server_status_changed, this, &Lobby::_p_update_description);
 
   connect(ao_config, SIGNAL(theme_changed(QString)), this, SLOT(update_widgets()));

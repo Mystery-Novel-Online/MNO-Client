@@ -131,19 +131,8 @@ private:
   QSpinBox *ui_punctuation_delay = nullptr;
 
   // game
-  QComboBox *ui_theme = nullptr;
   QLabel *wLanguageCredits = nullptr;
   QComboBox *wSettingsLanguage = nullptr;
-
-  QPushButton *ui_switch_theme = nullptr;
-  QPushButton *ui_reload_theme = nullptr;
-  QTreeView *ui_themeModules = nullptr;
-  QLineEdit *ui_gamemode = nullptr;
-  QComboBox *ui_manual_gamemode = nullptr;
-  QCheckBox *ui_manual_gamemode_selection = nullptr;
-  QLineEdit *ui_timeofday = nullptr;
-  QComboBox *ui_manual_timeofday = nullptr;
-  QCheckBox *ui_manual_timeofday_selection = nullptr;
 
   // messages
   QSlider *ui_length_threshold = nullptr;
@@ -216,7 +205,6 @@ private:
   QPushButton *ui_check_updates = nullptr;
 
   //Theme
-  QDoubleSpinBox *ui_theme_resize = nullptr;
   QSpinBox *ui_fade_duration = nullptr;
 
 

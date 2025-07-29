@@ -14,6 +14,7 @@
 #include <rolechat/theme/ThemeScene.h>
 #include <rolechat/math/RPRect.h>
 #include <rolechat/actor/ActorSelectEntry.h>
+#include <rolechat/config/ConfigUserSettings.h>
 
 using ActorSelectEntry = rolechat::actor::ActorSelectEntry;
 using DialogueType = rolechat::dialogue::DialogueType;
@@ -100,12 +101,16 @@ using ThemeHighlight = rolechat::theme::ThemeHighlight;
 #include <QGraphicsProxyWidget>
 #include <QTextBlock>
 
+
 #include <functional>
 #include <optional>
 #include <utility>
 
 #include "commondefs.h"
 #include "datatypes.h"
+
+#include "engine/system/config_manager.h"
+
 #include "aoapplication.h"
 
 #include "engine/interface/widgets/sticker_viewer.h"

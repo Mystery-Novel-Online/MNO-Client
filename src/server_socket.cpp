@@ -502,14 +502,14 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   {
     if (l_content.length() < 1)
       return;
-    ao_config->set_gamemode(l_content.at(0));
+    system::ConfigManager::setDefaultGamemode(l_content.at(0));
     LuaBridge::LuaEventCall("OnGamemodeChange", l_content.at(0).toStdString());
   }
   else if (l_header == "TOD")
   {
     if (l_content.length() < 1)
       return;
-    ao_config->set_timeofday(l_content.at(0));
+    system::ConfigManager::setdefaultTimeOfDay(l_content.at(0));
     LuaBridge::LuaEventCall("OnTimeOfDayChange", l_content.at(0).toStdString());
   }
   else if (l_header == "TR")

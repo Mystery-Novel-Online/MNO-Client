@@ -4,7 +4,7 @@
 #include "drmediatester.h"
 #include "lobby.h"
 #include "version.h"
-
+#include <rolechat/util/FileSystem.h>
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +14,7 @@ int main(int argc, char *argv[])
   qputenv("QT_MAC_WANTS_LAYER", "1");
 #endif
 
+  rolechat::fs::PackageManager::scanPackages();
   //qInstallMessageHandler(logger::log);
   qInfo() << "Starting Mystery Novel Online...";
 

@@ -6,11 +6,13 @@
 
 #include "modules/managers/scene_manager.h"
 #include <modules/theme/thememanager.h>
+#include <rolechat/config/ConfigUserSettings.h>
 
 #include "engine/fs/fs_reading.h"
 #include "engine/network/metadata/user_metadata.h"
 #include "engine/system/replay_playback.h"
 #include "engine/system/localization.h"
+
 
 /*!
     We have to suffer through a lot of boilerplate code
@@ -56,13 +58,6 @@ private:
   bool discord_hide_server = false;
   bool discord_hide_character = false;
   QString language;
-  QString theme;
-  QString gamemode;
-  QString manual_gamemode;
-  bool manual_gamemode_selection;
-  QString timeofday;
-  QString manual_timeofday;
-  bool manual_timeofday_selection;
   QString showname;
   QString showname_placeholder;
   QMap<QString, QString> ini_map;
@@ -105,7 +100,6 @@ private:
   bool blip_ignore_suppression;
   int blip_rate;
   int punctuation_delay;
-  double theme_resize;
   int fade_duration;
   bool blank_blips;
 
@@ -172,14 +166,6 @@ void AOConfigPrivate::load_file()
 
   engine::system::localization::switchLanguage(language);
 
-  theme = cfg.value("theme").toString();
-  if (theme.trimmed().isEmpty())
-    theme = "default";
-
-  manual_gamemode = cfg.value("gamemode").toString();
-  manual_gamemode_selection = cfg.value("manual_gamemode", false).toBool();
-  manual_timeofday = cfg.value("timeofday").toString();
-  manual_timeofday_selection = cfg.value("manual_timeofday", false).toBool();
   searchable_iniswap = cfg.value("searchable_iniswap", true).toBool();
   always_pre = cfg.value("always_pre", true).toBool();
   chat_tick_interval = cfg.value("chat_tick_interval", 60).toInt();
@@ -230,8 +216,7 @@ void AOConfigPrivate::load_file()
   blip_ignore_suppression = cfg.value("blip_ignore_suppression", false).toBool();
   blip_rate = cfg.value("blip_rate", 1000000000).toInt();
   punctuation_delay = cfg.value("punctuation_delay", 110).toInt();
-  theme_resize = cfg.value("theme_resize", 1).toDouble();
-  ThemeManager::get().setResize(theme_resize);
+  ThemeManager::get().setResize(config::ConfigUserSettings::floatValue("resize", 1.0f));
   fade_duration = cfg.value("fade_duration", 200).toInt();
   SceneManager::get().setFadeDuration(fade_duration);
   blank_blips = cfg.value("blank_blips").toBool();
@@ -289,12 +274,12 @@ void AOConfigPrivate::save_file()
   cfg.setValue("discord_hide_server", discord_hide_server);
   cfg.setValue("discord_hide_character", discord_hide_character);
 
-  cfg.setValue("theme", theme);
+  cfg.setValue("theme", QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")));
   cfg.setValue("language", language);
-  cfg.setValue("gamemode", manual_gamemode);
-  cfg.setValue("manual_gamemode", manual_gamemode_selection);
-  cfg.setValue("timeofday", manual_timeofday);
-  cfg.setValue("manual_timeofday", manual_timeofday_selection);
+  cfg.setValue("gamemode", QString::fromStdString(config::ConfigUserSettings::stringValue("gamemode")));
+  cfg.setValue("manual_gamemode", config::ConfigUserSettings::booleanValue("manual_gamemode"));
+  cfg.setValue("timeofday", QString::fromStdString(config::ConfigUserSettings::stringValue("timeofday")));
+  cfg.setValue("manual_timeofday", config::ConfigUserSettings::booleanValue("manual_timeofday"));
   cfg.setValue("searchable_iniswap", searchable_iniswap);
   cfg.setValue("always_pre", always_pre);
   cfg.setValue("chat_tick_interval", chat_tick_interval);
@@ -346,7 +331,7 @@ void AOConfigPrivate::save_file()
   cfg.setValue("blip_ignore_suppression", blip_ignore_suppression);
   cfg.setValue("blip_rate", blip_rate);
   cfg.setValue("punctuation_delay", punctuation_delay);
-  cfg.setValue("theme_resize", theme_resize);
+  cfg.setValue("theme_resize", config::ConfigUserSettings::floatValue("resize", 1.0f));
   cfg.setValue("fade_duration", fade_duration);
   cfg.setValue("blank_blips", blank_blips);
 
@@ -361,6 +346,7 @@ void AOConfigPrivate::save_file()
   }
 
   cfg.sync();
+  config::ConfigUserSettings::save();
 }
 
 void AOConfigPrivate::invoke_signal(QString p_method_name, QGenericArgument p_arg1, QGenericArgument p_arg2)
@@ -508,77 +494,6 @@ bool AOConfig::discord_hide_character() const
 QString AOConfig::language() const
 {
   return d->language;
-}
-
-/**
- * @brief Return the current theme name.
- * @return Name of current theme.
- */
-QString AOConfig::theme() const
-{
-  return d->theme;
-}
-
-QString AOConfig::gamemode() const
-{
-  return d->gamemode;
-}
-
-/**
- * @brief Return the current gamemode. If no gamemode is set, return the
- * empty string.
- *
- * @return Current gamemode, or empty string if not set.
- */
-QString AOConfig::manual_gamemode() const
-{
-  return d->manual_gamemode;
-}
-
-/**
- * @brief Returns the current manual gamemode status.
- *
- * @details If true, a player can change gamemodes manually and their client
- * will ignore orders to change gamemode from the server. If false, neither is
- * possible and the client will follow orders from the server to change
- * gamemode.
- *
- * @return Current manual gamemode status.
- */
-bool AOConfig::is_manual_gamemode_selection_enabled() const
-{
-  return d->manual_gamemode_selection;
-}
-
-QString AOConfig::timeofday() const
-{
-  return d->timeofday;
-}
-
-/**
- * @brief Returns the current manual time of day. If no time of day is set, return
- * the empty string.
- *
- * @return Current manual time of day, or empty string if not set.
- */
-QString AOConfig::manual_timeofday() const
-{
-  return d->manual_timeofday;
-}
-
-/**
- * @brief Returns the current manual time of day status.
- *
- * @details If true, a player can change time of day manually and their client
- * will ignore orders to change time of day from the server. If false, neither
- * is possible and the client will follow orders from the server to change
- * time of day.
- *
- * @return Current manual time of day status.
- */
-bool AOConfig::is_manual_timeofday_selection_enabled() const
-{
-  return d->manual_timeofday_selection;
 }
 
 bool AOConfig::searchable_iniswap_enabled() const
@@ -750,11 +665,6 @@ bool AOConfig::blank_blips_enabled() const
   return d->blank_blips;
 }
 
-double AOConfig::theme_resize() const
-{
-  return d->theme_resize;
-}
-
 int AOConfig::fade_duration() const
 {
   return d->fade_duration;
@@ -924,65 +834,11 @@ void AOConfig::setLanguage(QString t_language)
 
 void AOConfig::set_theme(QString p_string)
 {
-  if (d->theme == p_string)
+  if (QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")) == p_string)
     return;
-  d->theme = p_string;
-  d->manual_gamemode.clear();
-  d->manual_timeofday.clear();
+
+  config::ConfigUserSettings::setString("theme", p_string.toStdString());
   d->invoke_signal("theme_changed", Q_ARG(QString, p_string));
-}
-
-void AOConfig::set_gamemode(QString p_string)
-{
-  if (d->gamemode == p_string)
-    return;
-  d->gamemode = p_string;
-  ThemeManager::get().LoadGamemode(p_string);
-  d->invoke_signal("gamemode_changed", Q_ARG(QString, p_string));
-}
-
-void AOConfig::set_manual_gamemode(QString p_string)
-{
-  if (d->manual_gamemode == p_string)
-    return;
-  d->manual_gamemode = p_string;
-  ThemeManager::get().LoadGamemode(p_string);
-  d->manual_timeofday.clear();
-  d->invoke_signal("manual_gamemode_changed", Q_ARG(QString, p_string));
-}
-
-void AOConfig::set_manual_gamemode_selection_enabled(bool p_enabled)
-{
-  if (d->manual_gamemode_selection == p_enabled)
-    return;
-  d->manual_gamemode_selection = p_enabled;
-  d->invoke_signal("manual_gamemode_selection_changed", Q_ARG(bool, p_enabled));
-}
-
-void AOConfig::set_timeofday(QString p_string)
-{
-  if (d->timeofday == p_string)
-    return;
-  d->timeofday = p_string;
-  d->invoke_signal("timeofday_changed", Q_ARG(QString, p_string));
-  engine::system::replays::recording::todChange(p_string);
-}
-
-void AOConfig::set_manual_timeofday(QString p_string)
-{
-  if (d->manual_timeofday == p_string)
-    return;
-  d->manual_timeofday = p_string;
-  d->invoke_signal("manual_timeofday_changed", Q_ARG(QString, p_string));
-  engine::system::replays::recording::todChange(p_string);
-}
-
-void AOConfig::set_manual_timeofday_selection_enabled(bool p_enabled)
-{
-  if (d->manual_timeofday_selection == p_enabled)
-    return;
-  d->manual_timeofday_selection = p_enabled;
-  d->invoke_signal("manual_timeofday_selection_changed", Q_ARG(bool, p_enabled));
 }
 
 void AOConfig::set_searchable_iniswap(bool p_enabled)
@@ -1275,10 +1131,6 @@ void AOConfig::set_blank_blips(bool p_enabled)
 
 void AOConfig::setThemeResize(double resize)
 {
-  if (d->theme_resize == resize)
-    return;
-  d->theme_resize = resize;
-  ThemeManager::get().setResize(resize);
   d->invoke_signal("theme_resize_changed", Q_ARG(double, resize));
 }
 

@@ -239,11 +239,9 @@ QString AOApplication::find_theme_asset_path(QString p_file, QStringList p_exten
   }
 
   // Only add gamemode and/or time of day if non empty.
-  const QString l_gamemode =
-      ao_config->is_manual_gamemode_selection_enabled() ? ao_config->manual_gamemode() : ao_config->gamemode();
-  const QString l_timeofday =
-      ao_config->is_manual_timeofday_selection_enabled() ? ao_config->manual_timeofday() : ao_config->timeofday();
-  const QString l_theme_root = FS::Paths::FindDirectory("themes/" + ao_config->theme());
+  const QString l_gamemode = system::ConfigManager::gamemode();
+  const QString l_timeofday = system::ConfigManager::timeOfDay();
+  const QString l_theme_root = FS::Paths::FindDirectory("themes/" + QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")));
 
   if (!l_gamemode.isEmpty())
   {
@@ -273,21 +271,11 @@ QString AOApplication::find_theme_asset_path(QString p_file)
 
 QString AOApplication::find_current_theme_path()
 {
-  return FS::Paths::FindDirectory("themes/" + ao_config->theme());
+  return FS::Paths::FindDirectory("themes/" + QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")));
 }
 
 QString AOApplication::getCurrentTheme()
 {
-  return ao_config->theme();
-}
-
-QString AOApplication::getCurrentGamemode()
-{
-  return ao_config->is_manual_gamemode_selection_enabled() ? ao_config->manual_gamemode() : ao_config->gamemode();
-}
-
-QString AOApplication::getCurrentTime()
-{
-  return ao_config->is_manual_timeofday_selection_enabled() ? ao_config->manual_timeofday() : ao_config->timeofday();
+  return QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default"));
 }
 

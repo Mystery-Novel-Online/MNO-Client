@@ -253,8 +253,6 @@ public:
 public:
   bool notify(QObject *receiver, QEvent *event) override;
   void setInstance(AOApplication *newInstance);
-  QString getCurrentGamemode();
-  QString getCurrentTime();
 };
 
 #endif // AOAPPLICATION_H

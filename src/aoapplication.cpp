@@ -17,7 +17,10 @@
 #include "engine/system/runtime_loop.h"
 #include "engine/system/effects.h"
 #include "engine/system/audio.h"
+#include "engine/system/config_manager.h"
 #include "engine/network/metadata/server_metadata.h"
+#include <rolechat/config/ConfigUserSettings.h>
+#include "rolechat_config.h"
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -34,6 +37,8 @@ AOApplication *AOApplication::getInstance()
 AOApplication::AOApplication(int &argc, char **argv)
     : QApplication(argc, argv)
 {
+  system::ConfigManager::initializeConfig();
+
   ao_config = new AOConfig(this);
 
   DirUtils::CreateInitialFolders();
@@ -157,8 +162,8 @@ void AOApplication::destruct_courtroom()
     delete m_courtroom;
     m_courtroom = nullptr;
     is_courtroom_constructed = false;
-    ao_config->set_gamemode(nullptr);
-    ao_config->set_timeofday(nullptr);
+    system::ConfigManager::setDefaultGamemode("");
+    system::ConfigManager::setdefaultTimeOfDay("");
   }
   else
   {
@@ -443,7 +448,7 @@ void AOApplication::resolve_current_theme()
                  "base/themes. ");
   }
 
-  const QString l_current_theme = ao_config->theme();
+  const QString l_current_theme = QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default"));
   std::optional<QString> l_target_theme;
 
 
