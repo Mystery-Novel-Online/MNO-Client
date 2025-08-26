@@ -4,14 +4,17 @@
 #include "engine/fs/fs_reading.h"
 #include "engine/system/runtime_values.h"
 
+#include <rolechat/filesystem/RCFile.h>
+
 AnimationReader::AnimationReader(const QString &animPath, KeyframeSequence &sequence)
 {
   sequence.Cleanup();
+  fs::RCFile animationFile("animations/" + animPath.toStdString() + ".json");
 
-  QString animationPath = FS::Paths::FindFile("animations/" + animPath + ".json");
-  if(!FS::Checks::FileExists(animationPath)) return;
+  if(!animationFile.exists())
+    return;
 
-  ReadFromFile(animationPath);
+  ReadFromFile(animationFile.findFirst());
 
   loadData(sequence);
 }
@@ -20,15 +23,16 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
 {
   sequence.Cleanup();
 
-  QString animationPath = FS::Paths::FindFile("characters/" + character + "/animations/" + name + ".json");
+  fs::RCFile animationFile("characters/" + character.toStdString() + "/animations/"+ name.toStdString() + ".json");
 
-  if(!FS::Checks::FileExists(animationPath))
+  if(!animationFile.exists())
   {
-    animationPath = FS::Paths::FindFile("animations/characters/" + name + ".json");
-    if(!FS::Checks::FileExists(animationPath)) return;
+    animationFile = fs::RCFile("animations/characters/" + name.toStdString() + ".json");
+    if(!animationFile.exists())
+      return;
   }
 
-  ReadFromFile(animationPath);
+  ReadFromFile(animationFile.findFirst());
   loadData(sequence);
 
 }
@@ -36,9 +40,9 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
 AnimationReader::AnimationReader(const QString &name, const QString &theme, KeyframeSequence &sequence)
 {
   sequence.Cleanup();
-  QString animationPath = FS::Paths::FindFile("themes/" + theme + "/animations/"+ name + ".json");
-  if(!FS::Checks::FileExists(animationPath)) return;
-  ReadFromFile(animationPath);
+  fs::RCFile animationFile("themes/" + theme.toStdString() + "/animations/"+ name.toStdString() + ".json");
+  if(!animationFile.exists()) return;
+  ReadFromFile(animationFile.findFirst());
   loadData(sequence);
 }
 

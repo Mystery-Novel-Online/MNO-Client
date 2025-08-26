@@ -88,6 +88,7 @@ public:
   QString getCurrentTheme();
 
   QString get_case_sensitive_path(QString p_file);
+  QString get_case_sensitive_path(const std::string& p_file);
 
   ////// Functions for accessing the config panel //////
   void toggle_config_panel();

@@ -7,6 +7,8 @@
 #include "engine/fs/fs_mounting.h"
 #include "engine/system/replay_playback.h"
 #include "engine/network/metadata/server_metadata.h"
+#include <rolechat/filesystem/RCDir.h>
+#include <rolechat/filesystem/RCFile.h>
 
 // Copied over from Vanilla.
 // As said in the comments there, this is a *super broad* definition.
@@ -93,12 +95,13 @@ QVector<QString> AOApplication::get_all_package_and_base_paths(QString p_path)
 
 QString AOApplication::get_music_path(QString p_song)
 {
-  return get_case_sensitive_path(FS::Paths::FindFile("sounds/music/" + p_song));
+  fs::RCFile musicFile("sounds/music/" + p_song.toStdString());
+  return get_case_sensitive_path(musicFile.findFirst());
 }
 
 QString AOApplication::get_background_path(QString p_identifier)
 {
-  return FS::Paths::FindDirectory("background/" + p_identifier);
+  return QString::fromStdString(fs::RCDir("background/" + p_identifier.toStdString()).findFirst());
 }
 
 QString AOApplication::get_background_dir_path(QString p_identifier)
@@ -123,6 +126,12 @@ QString AOApplication::get_background_dir_path(QString p_identifier)
  *
  * @return The parameter path with fixed casing.
  */
+
+QString AOApplication::get_case_sensitive_path(const std::string &p_file)
+{
+  return get_case_sensitive_path(QString::fromStdString(p_file));
+}
+
 QString AOApplication::get_case_sensitive_path(QString p_file)
 #ifndef CASE_SENSITIVE_FILESYSTEM
 {
