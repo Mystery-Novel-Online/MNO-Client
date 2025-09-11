@@ -73,6 +73,9 @@ private:
   RPButton *ui_gallery_play = nullptr;
   RPButton *ui_gallery_toggle = nullptr;
 
+  AOImageDisplay *ui_workshop_background = nullptr;
+  RPButton *ui_workshop_toggle = nullptr;
+
   QListWidget *ui_replay_list = nullptr;
   QComboBox *ui_gallery_packages = nullptr;
   QComboBox *ui_gallery_categories = nullptr;
@@ -135,6 +138,7 @@ private slots:
   void onGalleryPackageChanged(int index);
   void onGalleryCategoryChanged(int index);
   void onGalleryToggle();
+  void onWorkshopToggle();
   void onGalleryPlay();
   void on_refresh_released();
   void on_add_to_fav_released();

@@ -42,6 +42,8 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_gallery_preview = createWidget<AOImageDisplay>("replay_preview");
   ui_gallery_preview->setParent(ui_gallery_background);
 
+  ui_workshop_background = createWidget<AOImageDisplay>("lobby");
+
   \
   ui_public_server_filter = createWidget<RPButton>("public_servers");
   ui_favorite_server_filter = createWidget<RPButton>("favorites");
@@ -50,6 +52,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_refresh = createButton("refresh", "refresh", [this]() {this->on_refresh_released();});
   ui_connect = createButton("connect", "connect", [this]() {this->on_connect_released();});
   ui_gallery_toggle = createButton("toggle_gallery", "toggle_gallery", [this]() {this->onGalleryToggle();});
+  ui_workshop_toggle = createButton("toggle_workshop", "toggle_workshop", [this]() {this->onWorkshopToggle();});
   ui_gallery_play = createButton("play_replay", "play_replay", [this]() {this->onGalleryPlay();});
 
   ui_gallery_play->setParent(ui_gallery_background);
@@ -187,6 +190,10 @@ void Lobby::update_widgets()
   ui_gallery_background->raise();
   ui_gallery_background->hide();
 
+  ui_workshop_background->set_theme_image("workshop_background.png");
+  ui_workshop_background->raise();
+  ui_workshop_background->hide();
+
   ui_gallery_preview->set_theme_image("replay_preview.png");
 
   ui_public_server_filter->set_image(m_server_filter == PublicOnly ? "publicservers_selected.png" : "publicservers.png");
@@ -236,6 +243,7 @@ void Lobby::update_widgets()
   ui_loading_background->hide();
 
   ui_gallery_toggle->raise();
+  ui_workshop_toggle->raise();
   set_fonts();
   set_stylesheets();
   update_server_listing();
@@ -542,6 +550,13 @@ void Lobby::onGalleryCategoryChanged(int index)
 void Lobby::onGalleryToggle()
 {
   ui_gallery_background->setVisible(!ui_gallery_background->isVisible());
+  ui_workshop_background->hide();
+}
+
+void Lobby::onWorkshopToggle()
+{
+  ui_workshop_background->setVisible(!ui_workshop_background->isVisible());
+  ui_gallery_background->hide();
 }
 
 void Lobby::onGalleryPlay()
