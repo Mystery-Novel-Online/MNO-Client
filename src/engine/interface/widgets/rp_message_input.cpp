@@ -48,7 +48,7 @@ void RPMessageInput::setMaxLength(int length)
 void RPMessageInput::addTag(MessageTagType type, QVariantList arguments)
 {
   QTextCursor cursor = textCursor();
-  QTextImageFormat format = createTagFormat();
+  QTextImageFormat format = createTagFormat(type);
   int id = format.property(QTextFormat::UserProperty).toInt();
   cursor.insertImage(format);
 
@@ -128,10 +128,17 @@ int RPMessageInput::maxLength()
   return m_maxLength;
 }
 
-QTextImageFormat RPMessageInput::createTagFormat()
+QTextImageFormat RPMessageInput::createTagFormat(MessageTagType tagType)
 {
   QTextImageFormat format;
-  format.setName("change_music.png");
+  switch (tagType) {
+  case MessageTagType::TagType_MusicChange:
+    format.setName("base/tags/change_music.png");
+    break;
+  default:
+    format.setName("base/tags/default.png");
+    break;
+  }
   int h = fontMetrics().height() - 2;
 
   format.setWidth(h);

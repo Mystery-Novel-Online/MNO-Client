@@ -41,7 +41,7 @@ private slots:
 
 private:
   // Tag helpers
-  QTextImageFormat createTagFormat();
+  QTextImageFormat createTagFormat(MessageTagType tagType);
 
   // Highlighting logic
   void applyHighlighting(const QString& text);
