@@ -223,9 +223,17 @@ bool RPMessageInput::openHighlight(QChar c, QTextCursor &cursor, QList<QTextChar
 
 void RPMessageInput::handleTextChanged()
 {
+
+  static QString lastText = "";
   QSignalBlocker blocker(this);
 
   QString plain = toPlainText();
+  if(plain.length() > m_maxLength)
+  {
+    setText(lastText);
+    return;
+  }
+  lastText = plain;
   int savedPos = textCursor().position();
 
   QTextCursor cursor(document());
