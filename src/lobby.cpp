@@ -25,6 +25,7 @@ using namespace engine::system;
 
 Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_ServerSelect)
 {
+  workshopPreviewDownloader = new QNetworkAccessManager(this);
   ConfigTabTheme* configTab = ConfigManager::retrieveTab<ConfigTabTheme>("Theme");
 
   m_replayWindow = new ReplayWindow();
@@ -57,6 +58,10 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   ui_gallery_play->setParent(ui_gallery_background);
 
+
+  ui_workshop_download = createButton("workshop_download", "workshop_download", [this]() {this->onWorkshopBrowser();});
+  ui_workshop_download->setParent(ui_workshop_background);
+
   ui_config_panel = createWidget<RPButton>("config_panel");
 
   ui_version = createWidget<RPTextEdit>("version", "version");
@@ -86,6 +91,11 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_description->setOpenExternalLinks(true);
   ui_description->setReadOnly(true);
 
+  ui_workshop_description = createWidget<QTextBrowser>("workshop_description");
+  ui_workshop_description->setOpenExternalLinks(true);
+  ui_workshop_description->setReadOnly(true);
+  ui_workshop_description->setParent(ui_workshop_background);
+
   ui_chatbox = createWidget<DRChatLog>("chatbox");
   ui_chatbox->hide();
   ui_chatbox->setOpenExternalLinks(true);
@@ -107,6 +117,37 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_replay_list = createWidget<QListWidget>("replay_list");
   ui_replay_list->setParent(ui_gallery_background);
   ui_replay_list->setContextMenuPolicy(Qt::CustomContextMenu);
+
+  ui_workshop_preview = createWidget<AOImageDisplay>("workshop_preview");
+  ui_workshop_preview->setParent(ui_workshop_background);
+
+  workshop_list = createWidget<WorkshopListWidget>("workshop_list");
+  workshop_list->setParent(ui_workshop_background);
+  workshop_list->updateFromApi();
+  ui_workshop_preview->setAlignment(Qt::AlignCenter);
+  QObject::connect(workshop_list, &WorkshopListWidget::entryClicked, [this](int id)
+  {
+    qDebug() << "Clicked entry ID:" << id;
+    ui_workshop_description->setText(workshop_list->getEntry(id).description);
+
+    m_currentBrowserUrl = workshop_list->getEntry(id).downloadLink;
+    QNetworkReply *reply = workshopPreviewDownloader->get(QNetworkRequest(QUrl(QString("http://localhost:3000/api/workshop/" + QString::number(id) + "/preview"))));
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]()
+            {
+              if(reply->error() == QNetworkReply::NoError) {
+                QByteArray imageData = reply->readAll();
+                QPixmap pix;
+                if(pix.loadFromData(imageData)) ui_workshop_preview->setPixmap(pix.scaled(ui_workshop_preview->width(), ui_workshop_preview->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                else qWarning("Failed to load image from data");
+              }
+              else
+                qWarning() << "Failed to download image:" << reply->errorString();
+
+              reply->deleteLater();
+            });
+
+  });
 
   ui_gallery_packages = createWidget<QComboBox>("replay_packages");
   ui_gallery_categories = createWidget<QComboBox>("replay_category");
@@ -223,6 +264,9 @@ void Lobby::update_widgets()
   ui_description->setStyleSheet("background-color: rgba(0, 0, 0, 0);"
                                 "color: white;");
 
+  ui_workshop_description->setStyleSheet("background-color: rgba(0, 0, 0, 0);"
+                                         "color: white;");
+
 
   ui_chatbox->setReadOnly(true);
   ui_chatbox->setStyleSheet("QTextBrowser{background-color: rgba(0, 0, 0, 0);}");
@@ -258,6 +302,7 @@ void Lobby::set_fonts()
   set_drtextedit_font(ui_player_count, "player_count", LOBBY_FONTS_INI, ao_app);
 
   set_font(ui_description, "description", LOBBY_FONTS_INI, ao_app);
+  set_font(ui_workshop_description, "workshop_description", LOBBY_FONTS_INI, ao_app);
   set_font(ui_chatbox, "chatbox", LOBBY_FONTS_INI, ao_app);
   set_font(ui_server_list, "server_list", LOBBY_FONTS_INI, ao_app);
   set_font(ui_replay_list, "replay_list", LOBBY_FONTS_INI, ao_app);
@@ -279,6 +324,7 @@ void Lobby::set_stylesheets()
 {
   set_stylesheet(ui_player_count, "[PLAYER COUNT]");
   set_stylesheet(ui_description, "[DESCRIPTION]");
+  set_stylesheet(ui_workshop_description, "[DESCRIPTION]");
   set_stylesheet(ui_chatbox, "[CHAT BOX]");
   set_stylesheet(ui_loading_text, "[LOADING TEXT]");
   set_stylesheet(ui_server_list, "[SERVER LIST]");
@@ -563,6 +609,15 @@ void Lobby::onGalleryPlay()
 {
   engine::system::replays::playback::load(ui_replay_list->currentItem()->text(), m_currentPackage, m_currentCategory);
   m_replayWindow->show();
+}
+
+void Lobby::onWorkshopBrowser()
+{
+  if(!m_currentBrowserUrl.isEmpty())
+  {
+    QUrl url(m_currentBrowserUrl);
+    QDesktopServices::openUrl(url);
+  }
 }
 
 void Lobby::toggle_public_server_filter()
