@@ -30,8 +30,11 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
   m_layout->addWidget(entry);
 }
 
-void WorkshopListWidget::updateFromApi(const QUrl &url)
+void WorkshopListWidget::updateFromApi()
 {
+
+  const QString workshopUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop";
+  const QUrl url = QUrl(workshopUrl);
   QNetworkRequest request(url);
   m_netManager->get(request);
 }
@@ -97,8 +100,13 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
 
     QJsonObject obj = val.toObject();
     int id = obj.value("id").toInt();
+    QString url = obj.value("url_download").toString();
+    if(url.isEmpty() || url == "repo")
+    {
+      url = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/repo";
+    };
 
-    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), obj.value("url_download").toString(), obj.value("folder").toString()};
+    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString()};
     QString iconUrl = obj.value("url_icon").toString();
 
     addEntry(id, iconUrl, newEntry.name, newEntry.submitter, "♀");

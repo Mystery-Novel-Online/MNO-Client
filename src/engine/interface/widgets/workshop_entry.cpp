@@ -16,7 +16,10 @@ WorkshopEntry::WorkshopEntry(int id, const QString &iconPath, const QString &tit
   mainLayout->addWidget(iconLabel);
 
   QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-  QNetworkReply *reply = manager->get(QNetworkRequest(QUrl(QString("http://localhost:3000/api/workshop/" + QString::number(id) + "/icon"))));
+
+
+  const QString workshopUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/icon";
+  QNetworkReply *reply = manager->get(QNetworkRequest(QUrl(workshopUrl)));
 
   connect(reply, &QNetworkReply::finished, this, [reply, iconLabel]()
   {

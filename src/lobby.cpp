@@ -131,7 +131,10 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     ui_workshop_description->setText(workshop_list->getEntry(id).description);
 
     m_currentBrowserUrl = workshop_list->getEntry(id).downloadLink;
-    QNetworkReply *reply = workshopPreviewDownloader->get(QNetworkRequest(QUrl(QString("http://localhost:3000/api/workshop/" + QString::number(id) + "/preview"))));
+
+
+    const QString workshopUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/preview";
+    QNetworkReply *reply = workshopPreviewDownloader->get(QNetworkRequest(QUrl(workshopUrl)));
 
     connect(reply, &QNetworkReply::finished, this, [this, reply]()
             {

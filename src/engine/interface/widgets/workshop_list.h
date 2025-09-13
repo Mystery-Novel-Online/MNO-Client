@@ -24,7 +24,7 @@ public:
                 const QString &icon, const QString &title,
                 const QString &subtitle, const QString &gender);
 
-  void updateFromApi(const QUrl &url = QUrl("http://localhost:3000/api/workshop"));
+  void updateFromApi();
   const WorkshopContentEntry getEntry(int id);
 
   void updateSearch(QString search);
