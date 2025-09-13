@@ -4,6 +4,7 @@
 #include "engine/interface/scenes/replay_window.h"
 #include "engine/interface/widgets/scene_widget.h"
 #include "engine/interface/widgets/workshop_list.h"
+#include "engine/interface/scenes/downloader_prompt.h"
 
 class AOApplication;
 class RPButton;
@@ -103,6 +104,7 @@ private:
 
 
   QString m_currentBrowserUrl = "";
+  int m_currentWorkshopId = 0;
   QNetworkAccessManager *workshopPreviewDownloader;
 
   QMenu *ui_server_menu;

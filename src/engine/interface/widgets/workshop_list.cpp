@@ -71,7 +71,7 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
     QJsonObject obj = val.toObject();
     int id = obj.value("id").toInt();
 
-    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), obj.value("url_download").toString()};
+    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), obj.value("url_download").toString(), obj.value("folder").toString()};
     QString iconUrl = obj.value("url_icon").toString();
 
     addEntry(id, iconUrl, newEntry.name, newEntry.submitter, "♀");

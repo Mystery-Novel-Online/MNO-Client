@@ -12,6 +12,7 @@ struct WorkshopContentEntry
   QString artist;
   QString description;
   QString downloadLink;
+  QString folder;
 };
 
 class WorkshopListWidget : public QWidget

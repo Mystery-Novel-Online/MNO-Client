@@ -127,7 +127,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_workshop_preview->setAlignment(Qt::AlignCenter);
   QObject::connect(workshop_list, &WorkshopListWidget::entryClicked, [this](int id)
   {
-    qDebug() << "Clicked entry ID:" << id;
+    m_currentWorkshopId = id;
     ui_workshop_description->setText(workshop_list->getEntry(id).description);
 
     m_currentBrowserUrl = workshop_list->getEntry(id).downloadLink;
@@ -613,11 +613,7 @@ void Lobby::onGalleryPlay()
 
 void Lobby::onWorkshopBrowser()
 {
-  if(!m_currentBrowserUrl.isEmpty())
-  {
-    QUrl url(m_currentBrowserUrl);
-    QDesktopServices::openUrl(url);
-  }
+  DownloaderPrompt::StartDownload(m_currentBrowserUrl, "packages/Workshop Downloads/");
 }
 
 void Lobby::toggle_public_server_filter()
