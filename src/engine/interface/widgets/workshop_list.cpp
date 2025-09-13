@@ -42,6 +42,33 @@ const WorkshopContentEntry WorkshopListWidget::getEntry(int id)
   return {};
 }
 
+void WorkshopListWidget::updateSearch(QString search)
+{
+  QString searchProcessed = search.toLower();
+
+  for (int i = 0; i < m_layout->count(); ++i)
+  {
+    QLayoutItem *child = m_layout->itemAt(i);
+    if (!child) continue;
+
+    if (QWidget *w = child->widget())
+    {
+      if (WorkshopEntry *entry = dynamic_cast<WorkshopEntry *>(w))
+      {
+        WorkshopContentEntry entryData = getEntry(entry->id());
+        QString nameProcessed = entryData.name.toLower();
+
+        if (nameProcessed.contains(searchProcessed))
+          entry->show();
+        else
+          entry->hide();
+      }
+    }
+  }
+
+  m_layout->update();
+}
+
 void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
 {
   if (reply->error() != QNetworkReply::NoError)

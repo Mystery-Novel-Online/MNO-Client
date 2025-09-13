@@ -27,6 +27,8 @@ public:
   void updateFromApi(const QUrl &url = QUrl("http://localhost:3000/api/workshop"));
   const WorkshopContentEntry getEntry(int id);
 
+  void updateSearch(QString search);
+
 signals:
   void entryClicked(int id);
 
