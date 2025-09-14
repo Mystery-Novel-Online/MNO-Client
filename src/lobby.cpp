@@ -136,16 +136,26 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     const QString workshopUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/preview";
     QNetworkReply *reply = workshopPreviewDownloader->get(QNetworkRequest(QUrl(workshopUrl)));
 
+    ui_workshop_preview->hide();
+
     connect(reply, &QNetworkReply::finished, this, [this, reply]()
             {
               if(reply->error() == QNetworkReply::NoError) {
                 QByteArray imageData = reply->readAll();
                 QPixmap pix;
-                if(pix.loadFromData(imageData)) ui_workshop_preview->setPixmap(pix.scaled(ui_workshop_preview->width(), ui_workshop_preview->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-                else qWarning("Failed to load image from data");
+                if(pix.loadFromData(imageData))
+                {
+                  ui_workshop_preview->setPixmap(pix.scaled(ui_workshop_preview->width(), ui_workshop_preview->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                  ui_workshop_preview->show();
+                }
+                else
+                  qWarning("Failed to load image from data");
               }
               else
+              {
                 qWarning() << "Failed to download image:" << reply->errorString();
+              }
+
 
               reply->deleteLater();
             });
