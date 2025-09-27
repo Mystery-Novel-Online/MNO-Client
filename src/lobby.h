@@ -76,6 +76,7 @@ private:
   RPButton *ui_gallery_toggle = nullptr;
 
   RPButton *ui_workshop_download = nullptr;
+  RPButton *ui_workshop_upload = nullptr;
 
   AOImageDisplay *ui_workshop_background = nullptr;
   AOImageDisplay *ui_workshop_preview = nullptr;
@@ -153,6 +154,7 @@ private slots:
   void onWorkshopToggle();
   void onGalleryPlay();
   void onWorkshopBrowser();
+  void onWorkshopUpload();
   void on_refresh_released();
   void on_add_to_fav_released();
   void on_connect_released();

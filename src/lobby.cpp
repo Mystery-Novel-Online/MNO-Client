@@ -18,6 +18,7 @@
 #include <modules/theme/thememanager.h>
 #include "engine/interface/scenes/replay_window.h"
 #include "engine/system/replay_playback.h"
+#include "engine/interface/scenes/workshop_uploader.h"
 #include <engine/system/config_manager.h>
 #include "config_tabs/config_tab_theme.h"
 
@@ -60,6 +61,8 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
 
   ui_workshop_download = createButton("workshop_download", "workshop_download", [this]() {this->onWorkshopBrowser();});
+  ui_workshop_upload = createButton("workshop_upload", "workshop_upload", [this]() {this->onWorkshopUpload();});
+  ui_workshop_upload->setParent(ui_workshop_background);
   ui_workshop_download->setParent(ui_workshop_background);
 
   ui_config_panel = createWidget<RPButton>("config_panel");
@@ -627,6 +630,11 @@ void Lobby::onGalleryPlay()
 void Lobby::onWorkshopBrowser()
 {
   DownloaderPrompt::StartDownload(m_currentBrowserUrl, "packages/Workshop Downloads/");
+}
+
+void Lobby::onWorkshopUpload()
+{
+  WorkshopUploader::StartUpload();
 }
 
 void Lobby::toggle_public_server_filter()
