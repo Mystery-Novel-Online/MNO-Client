@@ -12,7 +12,6 @@ WorkshopUploader::WorkshopUploader(QWidget *parent) : QDialog{parent}, m_current
   m_filePath = new QLineEdit(this);
   m_filePath->setReadOnly(true);
 
-  m_submitter = new QLineEdit(this);
   m_artist = new QLineEdit(this);
   m_description = new QLineEdit(this);
   m_tags = new QLineEdit(this);
@@ -28,7 +27,6 @@ WorkshopUploader::WorkshopUploader(QWidget *parent) : QDialog{parent}, m_current
   QFormLayout *layout = new QFormLayout(this);
   layout->addRow("Zip File:", m_filePath);
   layout->addRow("", m_chooseButton);
-  layout->addRow("Submitter:", m_submitter);
   layout->addRow("Artist:", m_artist);
   layout->addRow("Description:", m_description);
   layout->addRow("Tags:", m_tags);
@@ -92,12 +90,12 @@ void WorkshopUploader::submitForm()
     multiPart->append(part);
   };
 
-  addField("submitter", m_submitter->text());
+  addField("key", QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE")));
   addField("artist", m_artist->text());
   addField("description", m_description->text());
   addField("tags", m_tags->text());
 
-  QUrl url("http://localhost:3623/api/workshop/upload");
+  QUrl url(QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/upload");
   QNetworkRequest request(url);
 
   m_currentReply = m_network->post(request, multiPart);

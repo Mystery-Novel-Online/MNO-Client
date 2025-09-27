@@ -16,7 +16,6 @@ private slots:
 
 private:
   QLineEdit *m_filePath;
-  QLineEdit *m_submitter;
   QLineEdit *m_artist;
   QLineEdit *m_description;
   QLineEdit *m_tags;
