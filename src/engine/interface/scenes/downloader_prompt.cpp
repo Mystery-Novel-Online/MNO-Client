@@ -24,7 +24,9 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory)
   if(repository.isEmpty()) return;
 
   QUrl url(repository);
-  if(!repository.endsWith("/repo", Qt::CaseInsensitive))
+  bool isRepo = repository.endsWith("/repo", Qt::CaseInsensitive);
+  bool isCollection = repository.endsWith("/collection", Qt::CaseInsensitive);
+  if(!isRepo && !isCollection)
   {
     QDesktopServices::openUrl(url);
     return;
@@ -46,7 +48,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory)
     if (url.port() != -1) baseUrl += QString(":%1").arg(url.port());
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(prompt);
-    QObject::connect(manager, &QNetworkAccessManager::finished,[prompt, directory, baseUrl](QNetworkReply *reply) {
+    QObject::connect(manager, &QNetworkAccessManager::finished,[prompt, directory, baseUrl, isCollection](QNetworkReply *reply) {
                        if (reply->error() != QNetworkReply::NoError)
                        {
                          QMessageBox::warning(prompt, "Error", reply->errorString());
@@ -56,19 +58,29 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory)
 
                        QByteArray response = reply->readAll();
                        QJsonDocument doc = QJsonDocument::fromJson(response);
-                       if (!doc.isArray())
+                       if (!doc.isArray() && !isCollection)
                        {
                          QMessageBox::warning(prompt, "Error", "Invalid repo format");
                          reply->deleteLater();
                          return;
                        }
-                       QJsonArray files = doc.array();
+                       QString collectionName = doc["collection_name"].toString();
+
+                       QJsonArray files;
+                       if(isCollection)
+                       {
+                         files = doc["contents"].toArray();
+                       }
+                        else
+                       {
+                         files = doc.array();
+                       }
                        QMap<QString, QString> hashMap = {};
                        for (const QJsonValue &val : files)
                        {
                          QJsonObject obj = val.toObject();
                          QString hash = baseUrl + "/api/workshop/file/" + obj["hash"].toString();
-                         QString filePath = directory + "/" + obj["file_path"].toString();
+                         QString filePath = isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : directory + "/" + obj["file_path"].toString();
                          hashMap[hash] = filePath;
                        }
                        prompt->ProcessLinks(hashMap);

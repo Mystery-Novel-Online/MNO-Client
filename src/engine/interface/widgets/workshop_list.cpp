@@ -105,6 +105,10 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
     {
       url = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/repo";
     };
+    if(url == "collection")
+    {
+      url = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/collection";
+    }
 
     WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString()};
     QString iconUrl = obj.value("url_icon").toString();
