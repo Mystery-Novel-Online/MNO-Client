@@ -949,6 +949,7 @@ void Courtroom::on_ic_message_return_pressed()
   {
       send_ooc_packet({"/think " + ui_ic_chat_message_field->text()});
       ui_ic_chat_message_field->clear();
+      ui_ic_chat_message_field->clearTags();
       return;
   }
 
@@ -956,6 +957,7 @@ void Courtroom::on_ic_message_return_pressed()
   {
       send_ooc_packet({"/shout " + ui_ic_chat_message_field->text()});
       ui_ic_chat_message_field->clear();
+      ui_ic_chat_message_field->clearTags();
       return;
   }
 
@@ -1091,9 +1093,6 @@ void Courtroom::on_ic_message_return_pressed()
     packet_contents.append(engine::system::encoding::text::EncodeBase64(tags));
   }
 
-
-
-
   ao_app->send_server_packet(DRPacket("MS", packet_contents));
 }
 
@@ -1124,6 +1123,7 @@ void Courtroom::handle_ic_message_length()
 void Courtroom::handle_acknowledged_ms()
 {
   ui_ic_chat_message_field->clear();
+  ui_ic_chat_message_field->clearTags();
 
   // reset states
   ui_pre->setChecked(ao_config->always_pre_enabled());

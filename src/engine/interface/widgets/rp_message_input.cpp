@@ -119,8 +119,12 @@ QVector<MessageTag> RPMessageInput::getTags()
     block = block.next();
   }
 
-  m_tags.clear();
   return tags;
+}
+
+void RPMessageInput::clearTags()
+{
+  m_tags.clear();
 }
 
 int RPMessageInput::maxLength()

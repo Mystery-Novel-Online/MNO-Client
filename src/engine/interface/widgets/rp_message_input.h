@@ -28,6 +28,7 @@ public:
 
   QString text() const;
   QVector<MessageTag> getTags();
+  void clearTags();
   int maxLength();
 
 signals:
