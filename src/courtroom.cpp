@@ -1889,8 +1889,11 @@ void Courtroom::onFlipTagActivated()
 
 void Courtroom::onAnimationTag()
 {
-  ui_ic_chat_message_field->addTag(TagType_PlaySequence, {ui_anim_list->currentItem()->text()});
-  ui_anim_list->clearSelection();
+  auto item = ui_anim_list->currentItem();
+  if (!item) return;
+
+  ui_ic_chat_message_field->addTag(TagType_PlaySequence, { item->text() });
+  ui_anim_list->setCurrentRow(-1);
   ui_ic_chat_message_field->setFocus();
 }
 
