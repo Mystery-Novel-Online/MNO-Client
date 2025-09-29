@@ -3,6 +3,8 @@
 
 #include "engine/interface/scenes/replay_window.h"
 #include "engine/interface/widgets/scene_widget.h"
+#include "engine/interface/widgets/workshop_list.h"
+#include "engine/interface/scenes/downloader_prompt.h"
 
 class AOApplication;
 class RPButton;
@@ -73,6 +75,13 @@ private:
   RPButton *ui_gallery_play = nullptr;
   RPButton *ui_gallery_toggle = nullptr;
 
+  RPButton *ui_workshop_download = nullptr;
+  RPButton *ui_workshop_upload = nullptr;
+
+  AOImageDisplay *ui_workshop_background = nullptr;
+  AOImageDisplay *ui_workshop_preview = nullptr;
+  RPButton *ui_workshop_toggle = nullptr;
+
   QListWidget *ui_replay_list = nullptr;
   QComboBox *ui_gallery_packages = nullptr;
   QComboBox *ui_gallery_categories = nullptr;
@@ -91,6 +100,13 @@ private:
   RPTextEdit *ui_loading_text = nullptr;
   QProgressBar *ui_progress_bar = nullptr;
   RPButton *ui_cancel = nullptr;
+  WorkshopListWidget *workshop_list = nullptr;
+  QTextBrowser *ui_workshop_description = nullptr;
+
+
+  QString m_currentBrowserUrl = "";
+  int m_currentWorkshopId = 0;
+  QNetworkAccessManager *workshopPreviewDownloader;
 
   QMenu *ui_server_menu;
   std::optional<int> m_server_index;
@@ -135,7 +151,10 @@ private slots:
   void onGalleryPackageChanged(int index);
   void onGalleryCategoryChanged(int index);
   void onGalleryToggle();
+  void onWorkshopToggle();
   void onGalleryPlay();
+  void onWorkshopBrowser();
+  void onWorkshopUpload();
   void on_refresh_released();
   void on_add_to_fav_released();
   void on_connect_released();

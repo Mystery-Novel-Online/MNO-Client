@@ -304,6 +304,10 @@ add_executable(rp-engine
   src/rolechat_config.h src/rolechat_config.cpp src/rolechat_config.ui
   src/config_tabs/config_tab_theme.h src/config_tabs/config_tab_theme.cpp src/config_tabs/config_tab_theme.ui
   src/engine/system/config_manager.h src/engine/system/config_manager.cpp
+  src/engine/interface/widgets/workshop_list.h src/engine/interface/widgets/workshop_list.cpp
+  src/engine/interface/widgets/workshop_entry.h src/engine/interface/widgets/workshop_entry.cpp
+  src/engine/interface/scenes/downloader_prompt.h src/engine/interface/scenes/downloader_prompt.cpp
+  src/engine/interface/scenes/workshop_uploader.h src/engine/interface/scenes/workshop_uploader.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)

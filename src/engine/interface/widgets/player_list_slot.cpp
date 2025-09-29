@@ -7,6 +7,7 @@
 #include "engine/network/metadata/user_metadata.h"
 #include "modules/theme/thememanager.h"
 #include "engine/fs/fs_characters.h"
+#include "engine/interface/scenes/downloader_prompt.h"
 
 using namespace engine::network::metadata;
 using namespace engine::system;
@@ -274,12 +275,7 @@ void DrPlayerListEntry::openCharacterFolder()
 
 void DrPlayerListEntry::openBrowserURL()
 {
-  if(!mURL.isEmpty())
-  {
-      QUrl url(mURL);
-      QDesktopServices::openUrl(url);
-
-  }
+  DownloaderPrompt::StartDownload(mURL, "packages/Workshop Downloads");
 }
 
 void DrPlayerListEntry::sendPairRequest()

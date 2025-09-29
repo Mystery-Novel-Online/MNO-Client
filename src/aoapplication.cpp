@@ -447,7 +447,6 @@ void AOApplication::resolve_current_theme()
                  "3. If it is there, check that your current theme folder exists in "
                  "base/themes. ");
   }
-
   const QString l_current_theme = QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default"));
   std::optional<QString> l_target_theme;
 

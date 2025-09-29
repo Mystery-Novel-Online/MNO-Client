@@ -18,6 +18,7 @@
 #include <modules/theme/thememanager.h>
 #include "engine/interface/scenes/replay_window.h"
 #include "engine/system/replay_playback.h"
+#include "engine/interface/scenes/workshop_uploader.h"
 #include <engine/system/config_manager.h>
 #include "config_tabs/config_tab_theme.h"
 
@@ -25,6 +26,7 @@ using namespace engine::system;
 
 Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_ServerSelect)
 {
+  workshopPreviewDownloader = new QNetworkAccessManager(this);
   ConfigTabTheme* configTab = ConfigManager::retrieveTab<ConfigTabTheme>("Theme");
 
   m_replayWindow = new ReplayWindow();
@@ -42,6 +44,8 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_gallery_preview = createWidget<AOImageDisplay>("replay_preview");
   ui_gallery_preview->setParent(ui_gallery_background);
 
+  ui_workshop_background = createWidget<AOImageDisplay>("lobby");
+
   \
   ui_public_server_filter = createWidget<RPButton>("public_servers");
   ui_favorite_server_filter = createWidget<RPButton>("favorites");
@@ -50,9 +54,16 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_refresh = createButton("refresh", "refresh", [this]() {this->on_refresh_released();});
   ui_connect = createButton("connect", "connect", [this]() {this->on_connect_released();});
   ui_gallery_toggle = createButton("toggle_gallery", "toggle_gallery", [this]() {this->onGalleryToggle();});
+  ui_workshop_toggle = createButton("toggle_workshop", "toggle_workshop", [this]() {this->onWorkshopToggle();});
   ui_gallery_play = createButton("play_replay", "play_replay", [this]() {this->onGalleryPlay();});
 
   ui_gallery_play->setParent(ui_gallery_background);
+
+
+  ui_workshop_download = createButton("workshop_download", "workshop_download", [this]() {this->onWorkshopBrowser();});
+  ui_workshop_upload = createButton("workshop_upload", "workshop_upload", [this]() {this->onWorkshopUpload();});
+  ui_workshop_upload->setParent(ui_workshop_background);
+  ui_workshop_download->setParent(ui_workshop_background);
 
   ui_config_panel = createWidget<RPButton>("config_panel");
 
@@ -83,6 +94,11 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_description->setOpenExternalLinks(true);
   ui_description->setReadOnly(true);
 
+  ui_workshop_description = createWidget<QTextBrowser>("workshop_description");
+  ui_workshop_description->setOpenExternalLinks(true);
+  ui_workshop_description->setReadOnly(true);
+  ui_workshop_description->setParent(ui_workshop_background);
+
   ui_chatbox = createWidget<DRChatLog>("chatbox");
   ui_chatbox->hide();
   ui_chatbox->setOpenExternalLinks(true);
@@ -104,6 +120,50 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_replay_list = createWidget<QListWidget>("replay_list");
   ui_replay_list->setParent(ui_gallery_background);
   ui_replay_list->setContextMenuPolicy(Qt::CustomContextMenu);
+
+  ui_workshop_preview = createWidget<AOImageDisplay>("workshop_preview");
+  ui_workshop_preview->setParent(ui_workshop_background);
+
+  workshop_list = createWidget<WorkshopListWidget>("workshop_list");
+  workshop_list->setParent(ui_workshop_background);
+  workshop_list->updateFromApi();
+  ui_workshop_preview->setAlignment(Qt::AlignCenter);
+  QObject::connect(workshop_list, &WorkshopListWidget::entryClicked, [this](int id)
+  {
+    m_currentWorkshopId = id;
+    ui_workshop_description->setText(workshop_list->getEntry(id).description);
+
+    m_currentBrowserUrl = workshop_list->getEntry(id).downloadLink;
+
+
+    const QString workshopUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/preview";
+    QNetworkReply *reply = workshopPreviewDownloader->get(QNetworkRequest(QUrl(workshopUrl)));
+
+    ui_workshop_preview->hide();
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]()
+            {
+              if(reply->error() == QNetworkReply::NoError) {
+                QByteArray imageData = reply->readAll();
+                QPixmap pix;
+                if(pix.loadFromData(imageData))
+                {
+                  ui_workshop_preview->setPixmap(pix.scaled(ui_workshop_preview->width(), ui_workshop_preview->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                  ui_workshop_preview->show();
+                }
+                else
+                  qWarning("Failed to load image from data");
+              }
+              else
+              {
+                qWarning() << "Failed to download image:" << reply->errorString();
+              }
+
+
+              reply->deleteLater();
+            });
+
+  });
 
   ui_gallery_packages = createWidget<QComboBox>("replay_packages");
   ui_gallery_categories = createWidget<QComboBox>("replay_category");
@@ -187,6 +247,10 @@ void Lobby::update_widgets()
   ui_gallery_background->raise();
   ui_gallery_background->hide();
 
+  ui_workshop_background->set_theme_image("workshop_background.png");
+  ui_workshop_background->raise();
+  ui_workshop_background->hide();
+
   ui_gallery_preview->set_theme_image("replay_preview.png");
 
   ui_public_server_filter->set_image(m_server_filter == PublicOnly ? "publicservers_selected.png" : "publicservers.png");
@@ -216,6 +280,9 @@ void Lobby::update_widgets()
   ui_description->setStyleSheet("background-color: rgba(0, 0, 0, 0);"
                                 "color: white;");
 
+  ui_workshop_description->setStyleSheet("background-color: rgba(0, 0, 0, 0);"
+                                         "color: white;");
+
 
   ui_chatbox->setReadOnly(true);
   ui_chatbox->setStyleSheet("QTextBrowser{background-color: rgba(0, 0, 0, 0);}");
@@ -236,6 +303,7 @@ void Lobby::update_widgets()
   ui_loading_background->hide();
 
   ui_gallery_toggle->raise();
+  ui_workshop_toggle->raise();
   set_fonts();
   set_stylesheets();
   update_server_listing();
@@ -250,6 +318,7 @@ void Lobby::set_fonts()
   set_drtextedit_font(ui_player_count, "player_count", LOBBY_FONTS_INI, ao_app);
 
   set_font(ui_description, "description", LOBBY_FONTS_INI, ao_app);
+  set_font(ui_workshop_description, "workshop_description", LOBBY_FONTS_INI, ao_app);
   set_font(ui_chatbox, "chatbox", LOBBY_FONTS_INI, ao_app);
   set_font(ui_server_list, "server_list", LOBBY_FONTS_INI, ao_app);
   set_font(ui_replay_list, "replay_list", LOBBY_FONTS_INI, ao_app);
@@ -271,6 +340,7 @@ void Lobby::set_stylesheets()
 {
   set_stylesheet(ui_player_count, "[PLAYER COUNT]");
   set_stylesheet(ui_description, "[DESCRIPTION]");
+  set_stylesheet(ui_workshop_description, "[DESCRIPTION]");
   set_stylesheet(ui_chatbox, "[CHAT BOX]");
   set_stylesheet(ui_loading_text, "[LOADING TEXT]");
   set_stylesheet(ui_server_list, "[SERVER LIST]");
@@ -542,12 +612,29 @@ void Lobby::onGalleryCategoryChanged(int index)
 void Lobby::onGalleryToggle()
 {
   ui_gallery_background->setVisible(!ui_gallery_background->isVisible());
+  ui_workshop_background->hide();
+}
+
+void Lobby::onWorkshopToggle()
+{
+  ui_workshop_background->setVisible(!ui_workshop_background->isVisible());
+  ui_gallery_background->hide();
 }
 
 void Lobby::onGalleryPlay()
 {
   engine::system::replays::playback::load(ui_replay_list->currentItem()->text(), m_currentPackage, m_currentCategory);
   m_replayWindow->show();
+}
+
+void Lobby::onWorkshopBrowser()
+{
+  DownloaderPrompt::StartDownload(m_currentBrowserUrl, "packages/Workshop Downloads/");
+}
+
+void Lobby::onWorkshopUpload()
+{
+  WorkshopUploader::StartUpload();
 }
 
 void Lobby::toggle_public_server_filter()
