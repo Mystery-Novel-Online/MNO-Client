@@ -17,8 +17,7 @@ private slots:
 private:
   QLineEdit *m_filePath;
   QLineEdit *m_artist;
-  QLineEdit *m_description;
-  QLineEdit *m_tags;
+  QTextEdit *m_description;
   QPushButton *m_chooseButton;
   QPushButton *m_submitButton;
   QProgressBar *m_progress;

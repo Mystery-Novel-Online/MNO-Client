@@ -13,8 +13,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent) : QDialog{parent}, m_current
   m_filePath->setReadOnly(true);
 
   m_artist = new QLineEdit(this);
-  m_description = new QLineEdit(this);
-  m_tags = new QLineEdit(this);
+  m_description = new QTextEdit(this);
 
   m_chooseButton = new QPushButton("Choose Zip", this);
   m_submitButton = new QPushButton("Submit", this);
@@ -29,7 +28,6 @@ WorkshopUploader::WorkshopUploader(QWidget *parent) : QDialog{parent}, m_current
   layout->addRow("", m_chooseButton);
   layout->addRow("Artist:", m_artist);
   layout->addRow("Description:", m_description);
-  layout->addRow("Tags:", m_tags);
   layout->addRow("", m_submitButton);
   layout->addRow("Progress:", m_progress);
 
@@ -65,7 +63,6 @@ void WorkshopUploader::submitForm()
 
   QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
-         // Zip file
   QFile *file = new QFile(m_filePath->text());
   if (!file->open(QIODevice::ReadOnly)) {
     QMessageBox::warning(this, "Error", "Unable to open file.");
@@ -82,7 +79,6 @@ void WorkshopUploader::submitForm()
   file->setParent(multiPart);
   multiPart->append(filePart);
 
-         // Other fields
   auto addField = [&](const QString &name, const QString &value) {
     QHttpPart part;
     part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"" + name + "\""));
@@ -92,8 +88,8 @@ void WorkshopUploader::submitForm()
 
   addField("key", QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE")));
   addField("artist", m_artist->text());
-  addField("description", m_description->text());
-  addField("tags", m_tags->text());
+  addField("description", m_description->toPlainText());
+  addField("tags", "untagged");
 
   QUrl url(QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/upload");
   QNetworkRequest request(url);
@@ -112,7 +108,7 @@ void WorkshopUploader::handleReply(QNetworkReply *reply)
   m_progress->setVisible(false);
 
   if (reply->error() == QNetworkReply::NoError) {
-    QMessageBox::information(this, "Success", "Upload completed!");
+    QMessageBox::information(this, "Success", "Upload completed! It should be approved soon.");
   } else {
     QMessageBox::critical(this, "Error", reply->errorString());
   }
