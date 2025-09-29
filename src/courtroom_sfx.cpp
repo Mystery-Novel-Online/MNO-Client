@@ -131,6 +131,12 @@ void Courtroom::on_sfx_list_current_item_changed(QListWidgetItem *p_current_item
 
 void Courtroom::on_sfx_list_context_menu_requested(QPoint p_point)
 {
+  if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
+    ui_ic_chat_message_field->addTag(TagType_SoundEffect, { current_sfx_file() });
+    ui_sfx_list->clearSelection();
+    return;
+  }
+
   const QPoint l_global_point = ui_sfx_list->viewport()->mapToGlobal(p_point);
   ui_sfx_menu->popup(l_global_point);
 }
@@ -157,8 +163,6 @@ void Courtroom::on_sfx_menu_insert_caption_triggered()
     {
       l_caption = l_match.captured(1);
     }
-
-    ui_ic_chat_message_field->addTag(TagType_SoundEffect, {current_sfx_file()});
-    //ui_ic_chat_message_field->insertPlainText(l_caption);
+    ui_ic_chat_message_field->insertPlainText(l_caption);
   }
 }
