@@ -1,6 +1,6 @@
 #include "downloader_prompt.h"
 #include "engine/fs/fs_characters.h"
-
+#include "engine/fs/fs_mounting.h"
 DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
   setWindowTitle("Downloading...");
@@ -157,6 +157,8 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
                     contentFile.close();
                   }
                 }
+
+                FS::Packages::Scan();
 
                 QMessageBox::information(this, "Download Complete", "All files downloaded successfully!");
                 this->deleteLater();
