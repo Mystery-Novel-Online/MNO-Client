@@ -42,6 +42,13 @@ WorkshopUploader::WorkshopUploader(QWidget *parent) : QDialog{parent}, m_current
 
 void WorkshopUploader::StartUpload()
 {
+  QString uploadKey = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
+  if(uploadKey.trimmed().isEmpty() || uploadKey.trimmed() == "PUT_KEY_HERE")
+  {
+    QMessageBox::information(nullptr, "Warning", "In order to upload directly to the workshop, you will need a key. Please request one from Winter to do so.");
+    config::ConfigUserSettings::save();
+    return;
+  }
   WorkshopUploader *prompt = new WorkshopUploader(nullptr);
   prompt->show();
 }
