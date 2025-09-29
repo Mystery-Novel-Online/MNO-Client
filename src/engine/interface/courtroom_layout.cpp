@@ -491,21 +491,21 @@ namespace courtroom
     void focusMessageBox()
     {
       if(!s_CourtroomWidgets.contains("ao2_ic_chat_message_field")) return;
-      QLineEdit* lineEditField = dynamic_cast<QLineEdit*>(s_CourtroomWidgets["ao2_ic_chat_message_field"]);
+      RPMessageInput* lineEditField = dynamic_cast<RPMessageInput*>(s_CourtroomWidgets["ao2_ic_chat_message_field"]);
       if(lineEditField != nullptr) lineEditField->setFocus();
     }
 
     void setMessageBox(const std::string& text)
     {
       if(!s_CourtroomWidgets.contains("ao2_ic_chat_message_field")) return;
-      QLineEdit* lineEditField = dynamic_cast<QLineEdit*>(s_CourtroomWidgets["ao2_ic_chat_message_field"]);
+      RPMessageInput* lineEditField = dynamic_cast<RPMessageInput*>(s_CourtroomWidgets["ao2_ic_chat_message_field"]);
       if(lineEditField != nullptr) lineEditField->setText(QString::fromStdString(text));
     }
 
     std::string getMessageBoxContents()
     {
       if(!s_CourtroomWidgets.contains("ao2_ic_chat_message_field")) return "";
-      QLineEdit* lineEditField = dynamic_cast<QLineEdit*>(s_CourtroomWidgets["ao2_ic_chat_message_field"]);
+      RPMessageInput* lineEditField = dynamic_cast<RPMessageInput*>(s_CourtroomWidgets["ao2_ic_chat_message_field"]);
       if(lineEditField == nullptr) return "";
       return lineEditField->text().toStdString();
     }
@@ -513,7 +513,7 @@ namespace courtroom
     void appendMessageBox(const std::string &text)
     {
       if(!s_CourtroomWidgets.contains("ao2_ic_chat_message_field")) return;
-      QLineEdit* lineEditField = dynamic_cast<QLineEdit*>(s_CourtroomWidgets["ao2_ic_chat_message_field"]);
+      RPMessageInput* lineEditField = dynamic_cast<RPMessageInput*>(s_CourtroomWidgets["ao2_ic_chat_message_field"]);
       if(lineEditField != nullptr) lineEditField->setText(lineEditField->text() + QString::fromStdString(text));
     }
 
