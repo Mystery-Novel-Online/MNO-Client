@@ -105,6 +105,7 @@ private:
 
 
   QString m_currentBrowserUrl = "";
+  QString m_currentWorkshopCharacter = "";
   int m_currentWorkshopId = 0;
   QNetworkAccessManager *workshopPreviewDownloader;
 

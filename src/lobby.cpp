@@ -134,6 +134,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     ui_workshop_description->setText(workshop_list->getEntry(id).description);
 
     m_currentBrowserUrl = workshop_list->getEntry(id).downloadLink;
+    m_currentWorkshopCharacter = workshop_list->getEntry(id).folder;
 
 
     const QString workshopUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/preview";
@@ -629,7 +630,7 @@ void Lobby::onGalleryPlay()
 
 void Lobby::onWorkshopBrowser()
 {
-  DownloaderPrompt::StartDownload(m_currentBrowserUrl, "packages/Workshop Downloads/");
+  DownloaderPrompt::StartDownload(m_currentBrowserUrl, "packages/Workshop Downloads/", m_currentWorkshopCharacter);
 }
 
 void Lobby::onWorkshopUpload()

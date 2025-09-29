@@ -9,14 +9,16 @@ class DownloaderPrompt : public QDialog
   Q_OBJECT
 public:
   explicit DownloaderPrompt(QWidget *parent = nullptr);
-  static void StartDownload(QString repository, QString directory);
+  static void StartDownload(QString repository, QString directory, const QString& contentName);
 
-  void ProcessLinks(const QMap<QString, QString>& links);
+  void ProcessLinks(const QMap<QString, QString>& links, const QString& contentName, const QString& repositoryUrl, bool createContext);
+
 
 private:
   QProgressBar *m_progressBar;
   QMap<QString, QString> m_cdnFiles = {};
 
+  QString m_contentName = "";
   int m_filesDownloaded;
   int m_totalFiles;
 

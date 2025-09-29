@@ -1,4 +1,5 @@
 #include "downloader_prompt.h"
+#include "engine/fs/fs_characters.h"
 
 DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
@@ -19,10 +20,9 @@ DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
   setLayout(layout);
 }
 
-void DownloaderPrompt::StartDownload(QString repository, QString directory)
+void DownloaderPrompt::StartDownload(QString repository, QString directory, const QString &contentName)
 {
   if(repository.isEmpty()) return;
-
   QUrl url(repository);
   bool isRepo = repository.endsWith("/repo", Qt::CaseInsensitive);
   bool isCollection = repository.endsWith("/collection", Qt::CaseInsensitive);
@@ -48,7 +48,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory)
     if (url.port() != -1) baseUrl += QString(":%1").arg(url.port());
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(prompt);
-    QObject::connect(manager, &QNetworkAccessManager::finished,[prompt, directory, baseUrl, isCollection](QNetworkReply *reply) {
+    QObject::connect(manager, &QNetworkAccessManager::finished,[prompt, directory, baseUrl, isCollection, contentName, repository, isRepo](QNetworkReply *reply) {
                        if (reply->error() != QNetworkReply::NoError)
                        {
                          QMessageBox::warning(prompt, "Error", reply->errorString());
@@ -83,7 +83,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory)
                          QString filePath = isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : directory + "/" + obj["file_path"].toString();
                          hashMap[hash] = filePath;
                        }
-                       prompt->ProcessLinks(hashMap);
+                       prompt->ProcessLinks(hashMap, contentName, repository, isRepo);
                        reply->deleteLater();
                      });
 
@@ -92,7 +92,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory)
 
 }
 
-void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links)
+void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const QString &contentName, const QString& repositoryUrl, bool createContext)
 {
   m_cdnFiles.clear();
   m_cdnFiles = links;
@@ -103,6 +103,7 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links)
 
   m_filesDownloaded = 0;
   m_totalFiles = m_cdnFiles.size();
+  m_contentName = contentName;
 
   QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
@@ -120,7 +121,7 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links)
               }
             });
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply, filePath]() {
+    connect(reply, &QNetworkReply::finished, this, [this, reply, filePath, repositoryUrl, createContext]() {
               reply->deleteLater();
 
               if (reply->error() != QNetworkReply::NoError) {
@@ -144,6 +145,19 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links)
               m_progressBar->setValue(progress);
 
               if (m_filesDownloaded == m_totalFiles) {
+
+                if(createContext)
+                {
+                  QString contentFilePath = fs::characters::getFilePath(m_contentName, "CONTENT.txt");
+                  QFile contentFile(contentFilePath);
+                  if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))
+                  {
+                    QTextStream out(&contentFile);
+                    out << repositoryUrl;
+                    contentFile.close();
+                  }
+                }
+
                 QMessageBox::information(this, "Download Complete", "All files downloaded successfully!");
                 this->deleteLater();
               }
