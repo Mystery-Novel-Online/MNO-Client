@@ -81,7 +81,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
                          QJsonObject obj = val.toObject();
                          QString hash = baseUrl + "/api/workshop/file/" + obj["hash"].toString();
                          QString filePath = isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : directory + "/" + obj["file_path"].toString();
-                         hashMap[hash] = filePath;
+                         hashMap[filePath] = hash;
                        }
                        prompt->ProcessLinks(hashMap, contentName, repository, isRepo);
                        reply->deleteLater();
@@ -109,8 +109,8 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
 
   for (auto it = m_cdnFiles.constBegin(); it != m_cdnFiles.constEnd(); ++it)
   {
-    QString hash = it.key();
-    QString filePath = it.value();
+    QString hash = it.value();
+    QString filePath = it.key();
     QUrl url(hash);
 
     QNetworkReply *reply = manager->get(QNetworkRequest(url));
