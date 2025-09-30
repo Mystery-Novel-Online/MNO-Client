@@ -308,6 +308,7 @@ add_executable(rp-engine
   src/engine/interface/widgets/workshop_entry.h src/engine/interface/widgets/workshop_entry.cpp
   src/engine/interface/scenes/downloader_prompt.h src/engine/interface/scenes/downloader_prompt.cpp
   src/engine/interface/scenes/workshop_uploader.h src/engine/interface/scenes/workshop_uploader.cpp
+  src/engine/workshop/workshop_cache.h src/engine/workshop/workshop_cache.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)

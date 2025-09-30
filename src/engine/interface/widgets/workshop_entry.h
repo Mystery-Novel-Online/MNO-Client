@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include "engine/workshop/workshop_cache.h"
 
 class WorkshopEntry : public QWidget
 {
@@ -10,6 +11,11 @@ class WorkshopEntry : public QWidget
 public:
   explicit WorkshopEntry(int id, const QString &iconPath, const QString &title, const QString &subtitle, const QString &genderSymbol, QWidget *parent = nullptr);
   int id() const { return m_id; }
+
+  static WorkshopCache& iconCache() {
+    static WorkshopCache instance("cache_data", "cache_data/icon_cache_db.json");
+    return instance;
+  }
 
 signals:
   void clicked(int id);
