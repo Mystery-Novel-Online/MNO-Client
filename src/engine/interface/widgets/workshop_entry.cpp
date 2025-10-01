@@ -76,6 +76,7 @@ WorkshopEntry* WorkshopEntry::createChild(int id, const QString &iconPath, const
 {
   auto* childEntry = new WorkshopEntry(id, iconPath, title, subtitle, genderSymbol, parent);
   m_childrenLayout->addWidget(childEntry);
+  childEntry->hide();
   return childEntry;
 }
 
@@ -83,5 +84,19 @@ void WorkshopEntry::mousePressEvent(QMouseEvent *event)
 {
   if (event->button() == Qt::LeftButton) {
     emit clicked(m_id);
+
+    bool anyVisible = false;
+    for (int i = 0; i < m_childrenLayout->count(); ++i) {
+      QWidget *w = m_childrenLayout->itemAt(i)->widget();
+      if (w && w->isVisible()) {
+        anyVisible = true;
+        break;
+      }
+    }
+
+    for (int i = 0; i < m_childrenLayout->count(); ++i) {
+      QWidget *w = m_childrenLayout->itemAt(i)->widget();
+      if (w) w->setVisible(!anyVisible);
+    }
   }
 }
