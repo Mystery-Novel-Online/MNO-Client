@@ -76,7 +76,7 @@ WorkshopEntry* WorkshopEntry::createChild(int id, const QString &iconPath, const
 {
   auto* childEntry = new WorkshopEntry(id, iconPath, title, subtitle, genderSymbol, parent);
   m_childrenLayout->addWidget(childEntry);
-  childEntry->hide();
+  childEntry->show();
   return childEntry;
 }
 
