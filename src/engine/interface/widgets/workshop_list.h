@@ -22,7 +22,7 @@ public:
   WorkshopListWidget(QWidget *parent = nullptr);
   void addEntry(int id,
                 const QString &icon, const QString &title,
-                const QString &subtitle, const QString &gender);
+                const QString &subtitle, const QString &gender, const QJsonArray &children);
 
   void updateFromApi();
   const WorkshopContentEntry getEntry(int id);

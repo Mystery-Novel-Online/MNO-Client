@@ -23,11 +23,25 @@ WorkshopListWidget::WorkshopListWidget(QWidget *parent) : QWidget(parent)
   scrollArea->setStyleSheet("background-color: transparent; border: none; color: yellow;");
 }
 
-void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &title, const QString &subtitle, const QString &gender)
+void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &title, const QString &subtitle, const QString &gender, const QJsonArray &children)
 {
   WorkshopEntry *entry = new WorkshopEntry(id, icon, title, subtitle, gender, m_container);
   connect(entry, &WorkshopEntry::clicked, this, &WorkshopListWidget::entryClicked);
   m_layout->addWidget(entry);
+  for(const auto & child : children)
+  {
+    int id = child.toObject().value("id").toInt();
+    QString url = child.toObject().value("url_download").toString();
+    if(url.isEmpty() || url == "repo")
+    {
+      url = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/repo";
+    };
+
+    WorkshopContentEntry newEntry = {child.toObject().value("name").toString(), child.toObject().value("submitter").toString(), child.toObject().value("artist").toString(), child.toObject().value("description").toString(), url, child.toObject().value("folder").toString()};
+    auto childWidget = entry->createChild(id, "", newEntry.name, newEntry.submitter, "", nullptr);
+    connect(childWidget, &WorkshopEntry::clicked, this, &WorkshopListWidget::entryClicked);
+    m_EntryData[id] = newEntry;
+  }
 }
 
 void WorkshopListWidget::updateFromApi()
@@ -113,7 +127,8 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
     WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString()};
     QString iconUrl = obj.value("url_icon").toString();
 
-    addEntry(id, iconUrl, newEntry.name, newEntry.submitter, "♀");
+    auto childrenArray = obj.value("children").toArray();
+    addEntry(id, iconUrl, newEntry.name, newEntry.submitter, "♀", childrenArray);
     m_EntryData[id] = newEntry;
   }
 }
