@@ -106,7 +106,7 @@ set(HEADERS
   src/draudiostreamfamily.h
   src/draudiotrackmetadata.h
   src/drcharactermovie.h
-  src/drdiscord.h
+
   src/dreffectmovie.h
   src/drgraphicscene.h
   src/drmasterclient.h
@@ -253,7 +253,7 @@ set(SOURCES
   src/drserversocket.cpp
   src/drshoutmovie.cpp
   src/drsplashmovie.cpp
-  src/drdiscord.cpp
+
   src/drtheme.cpp
   src/drthememovie.cpp
   src/emotes.cpp
@@ -309,6 +309,7 @@ add_executable(rp-engine
   src/engine/interface/scenes/downloader_prompt.h src/engine/interface/scenes/downloader_prompt.cpp
   src/engine/interface/scenes/workshop_uploader.h src/engine/interface/scenes/workshop_uploader.cpp
   src/engine/workshop/workshop_cache.h src/engine/workshop/workshop_cache.cpp
+  src/engine/discord/workshop_discord.h src/engine/discord/workshop_discord.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
@@ -328,7 +329,7 @@ set_target_properties(rp-engine PROPERTIES
 
 target_link_directories(rp-engine PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/bass
-  ${CMAKE_CURRENT_SOURCE_DIR}/3rd/discord-rpc
+  ${CMAKE_CURRENT_SOURCE_DIR}/3rd/discord_social_sdk
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
 )
 
@@ -345,7 +346,7 @@ target_link_libraries(rp-engine
   bass
   bassopus
   bass_fx
-  discord-rpc
+  discord_partner_sdk
   lua54
   rolechat-lib
 )

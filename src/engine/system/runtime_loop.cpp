@@ -6,6 +6,7 @@
 #include "engine/interface/courtroom_layout.h"
 #include "engine/interface/widgets/viewports/legacy_viewport.h"
 #include "engine/system/replay_playback.h"
+#include "engine/discord/workshop_discord.h"
 
 static int s_FrameRate = 60;
 static int s_uptime = 0;
@@ -26,6 +27,7 @@ void RuntimeLoop::Update()
     return;
   }
 
+  WorkshopDiscord::getInstance().runCallbacks();
   if(s_loopPaused) return;
 
   qint64 elapsedNano = timer.nsecsElapsed();

@@ -2,7 +2,7 @@
 #include "aoconfig.h"
 
 #include "debug_functions.h"
-#include "drdiscord.h"
+
 #include "drpacket.h"
 #include "drserversocket.h"
 #include "hardware_functions.h"
@@ -208,9 +208,6 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     m_lobby->set_loading_value(0);
 
     send_server_packet(DRPacket("RC"));
-
-    dr_discord->set_state(DRDiscord::State::Connected);
-    dr_discord->set_server_name(l_current_server.to_info());
   }
   else if (l_header == "CharsCheck")
   {

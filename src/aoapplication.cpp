@@ -3,7 +3,7 @@
 #include "aoconfig.h"
 #include "aoconfigpanel.h"
 #include "debug_functions.h"
-#include "drdiscord.h"
+
 #include "drserversocket.h"
 #include "lobby.h"
 #include "theme.h"
@@ -21,6 +21,7 @@
 #include "engine/network/metadata/server_metadata.h"
 #include <rolechat/config/ConfigUserSettings.h>
 #include "rolechat_config.h"
+#include "engine/discord/workshop_discord.h"
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -38,6 +39,7 @@ AOApplication::AOApplication(int &argc, char **argv)
     : QApplication(argc, argv)
 {
   system::ConfigManager::initializeConfig();
+  WorkshopDiscord instance;
 
   ao_config = new AOConfig(this);
 
@@ -48,7 +50,6 @@ AOApplication::AOApplication(int &argc, char **argv)
 
   ao_config_panel = new AOConfigPanel(this);
 
-  dr_discord = new DRDiscord(this);
 
   m_server_socket = new DRServerSocket(this);
   setInstance(this);
@@ -65,13 +66,6 @@ AOApplication::AOApplication(int &argc, char **argv)
   connect(ao_config_panel, SIGNAL(reload_character()), this, SLOT(handle_character_reloading()));
   connect(ao_config_panel, SIGNAL(reload_audiotracks()), this, SLOT(handle_audiotracks_reloading()));
   ao_config_panel->hide();
-
-  dr_discord->set_presence(ao_config->discord_presence());
-  dr_discord->set_hide_server(ao_config->discord_hide_server());
-  dr_discord->set_hide_character(ao_config->discord_hide_character());
-  connect(ao_config, SIGNAL(discord_presence_changed(bool)), dr_discord, SLOT(set_presence(bool)));
-  connect(ao_config, SIGNAL(discord_hide_server_changed(bool)), dr_discord, SLOT(set_hide_server(bool)));
-  connect(ao_config, SIGNAL(discord_hide_character_changed(bool)), dr_discord, SLOT(set_hide_character(bool)));
 
   connect(m_server_socket, &DRServerSocket::connection_state_changed, this, &AOApplication::_p_handle_server_state_update);
   connect(m_server_socket, SIGNAL(packet_received(DRPacket)), this, SLOT(_p_handle_server_packet(DRPacket)));
@@ -117,9 +111,6 @@ void AOApplication::construct_lobby()
   is_lobby_constructed = true;
   center_widget_to_screen(m_lobby);
   m_lobby->show();
-
-  dr_discord->set_state(DRDiscord::State::Idle);
-  dr_discord->clear_server_name();
 }
 
 void AOApplication::destruct_lobby()
