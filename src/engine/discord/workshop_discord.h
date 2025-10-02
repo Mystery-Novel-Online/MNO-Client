@@ -15,6 +15,8 @@ public:
     static WorkshopDiscord instance;
     return instance;
   }
+
+  bool setRichPresenceState(bool state);
   WorkshopDiscord();
   void processOAuth();
   void runCallbacks();

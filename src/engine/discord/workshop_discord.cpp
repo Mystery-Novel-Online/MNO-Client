@@ -13,6 +13,7 @@
 std::shared_ptr<discordpp::Client> client;
 const uint64_t APPLICATION_ID = 1409897527528128533;
 std::atomic<bool> running = true;
+bool rpEnabled = false;
 
 void signalHandler(int signum) {
   running.store(false);
@@ -53,6 +54,7 @@ void setRichPresence()
   activity.SetState("Browsing Workshop");
   activity.SetDetails("Nothing important here");
   client->UpdateRichPresence(activity, richPresenceStatus);
+  client->ClearRichPresence();
 };
 
 void clientStatusChangedCallback(discordpp::Client::Status status, discordpp::Client::Error error, int32_t errorDetail)
@@ -90,6 +92,11 @@ void authorizeClient()
 
 }
 
+bool WorkshopDiscord::setRichPresenceState(bool state)
+{
+
+}
+
 WorkshopDiscord::WorkshopDiscord()
 {
   std::signal(SIGINT, signalHandler);
@@ -104,7 +111,8 @@ WorkshopDiscord::WorkshopDiscord()
 
     verifyBody["user_key"] = config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE");
 
-    QNetworkRequest verifyRequest(QUrl("http://localhost:3623/api/users/discord/verify"));
+    QString uri = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/"));
+    QNetworkRequest verifyRequest(QUrl(uri + "api/users/discord/verify"));
     verifyRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QNetworkAccessManager* verifyManager = new QNetworkAccessManager(this);
@@ -157,7 +165,8 @@ void WorkshopDiscord::processOAuth()
                                  body["redirect_uri"] = redirectUri;
                                  body["code_verifier"] = codeVerifier.Verifier();
 
-                                 QNetworkRequest request(QUrl("http://localhost:3623/api/users/discord/token"));
+                                 QString uri = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/"));
+                                 QNetworkRequest request(QUrl(uri + "api/users/discord/token"));
                                  request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
                                  QNetworkAccessManager* manager = new QNetworkAccessManager(this);
