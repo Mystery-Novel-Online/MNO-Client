@@ -18,6 +18,8 @@
 #include "engine/system/replay_playback.h"
 #include "engine/system/localization.h"
 
+#include <engine/discord/workshop_discord.h>
+
 using namespace engine::system;
 
 static int s_lastMessageId = -1;
@@ -200,7 +202,15 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     DRServerInfo l_current_server = m_lobby->get_selected_server();
     QString l_window_title = "Mystery Novel Network (" + get_version_string() + ")";
     if (!l_current_server.name.isEmpty())
-      l_window_title = l_window_title + ": " + l_current_server.to_info();
+    {
+      WorkshopDiscord::getInstance().setRichPresenceDetailsText(l_current_server.to_info().toStdString());
+       l_window_title = l_window_title + ": " + l_current_server.to_info();
+    }
+    else
+    {
+      WorkshopDiscord::getInstance().setRichPresenceDetailsText("In a server");
+    }
+    WorkshopDiscord::getInstance().setRichPresenceStateText("Connecting...");
     m_courtroom->set_window_title(l_window_title);
 
     m_lobby->show_loading_overlay();

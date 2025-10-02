@@ -33,6 +33,7 @@
 #include "engine/system/runtime_values.h"
 #include "engine/param/actor_repository.h"
 #include "engine/param/actor/actor_loader.h"
+#include <engine/discord/workshop_discord.h>
 #include <mk2/spritecachingreader.h>
 #include <rolechat/actor/JsonActorData.h>
 #include "engine/system/config_manager.h"
@@ -345,12 +346,15 @@ void Courtroom::enter_courtroom(int p_cid)
   if (spectating)
   {
     ao_config->clear_showname_placeholder();
+    WorkshopDiscord::getInstance().setRichPresenceStateText("Spectating");
   }
   else
   {
     const QString l_showname = QString::fromStdString(actor->showname());
     const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
     ao_config->set_showname_placeholder(l_final_showname);
+
+    WorkshopDiscord::getInstance().setRichPresenceStateText("Playing as " + l_final_showname.toStdString());
 
     QStringList l_content{l_chr_name, l_final_showname};
     if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(QString::fromStdString(engine::actor::user::retrieve()->outfit()));
