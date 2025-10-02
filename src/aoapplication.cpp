@@ -83,7 +83,7 @@ AOApplication::AOApplication(int &argc, char **argv)
 
 AOApplication::~AOApplication()
 {
-  qInfo() << "Closing Mystery Novel Online...";
+  qInfo() << "Closing Mystery Novel Network...";
   destruct_lobby();
   destruct_courtroom();
 }
@@ -430,9 +430,9 @@ void AOApplication::resolve_current_theme()
     call_warning("It doesn't look like your client is set up correctly. This can be "
                  "due to the following reasons: \n"
                  "1. Check you downloaded and extracted the resources correctly from "
-                 "the MNO Discord including the large 'base' folder.\n"
+                 "the MNN Discord including the large 'base' folder.\n"
                  "2. If you did, check that the base folder is in the same folder "
-                 "where you launched Mystery Novel Online from: " +
+                 "where you launched Mystery Novel Network from: " +
                  FS::Paths::ApplicationPath() +
                  "\n"
                  "3. If it is there, check that your current theme folder exists in "

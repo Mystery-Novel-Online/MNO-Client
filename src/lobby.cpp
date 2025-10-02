@@ -21,11 +21,14 @@
 #include "engine/interface/scenes/workshop_uploader.h"
 #include <engine/system/config_manager.h>
 #include "config_tabs/config_tab_theme.h"
+#include <engine/discord/workshop_discord.h>
 
 using namespace engine::system;
 
 Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_ServerSelect)
 {
+  WorkshopDiscord::getInstance().setRichPresenceStateText("Selecting a server");
+  WorkshopDiscord::getInstance().setRichPresenceDetailsText("Lobby");
   workshopPreviewDownloader = new QNetworkAccessManager(this);
   ConfigTabTheme* configTab = ConfigManager::retrieveTab<ConfigTabTheme>("Theme");
 
@@ -36,7 +39,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ao_config = new AOConfig(this);
   m_master_client = new DRMasterClient(this);
 
-  setWindowTitle("Mystery Novel Online (" + get_version_string() + ")");
+  setWindowTitle("Mystery Novel Network (" + get_version_string() + ")");
   Layout::ServerSelect::AssignLobby(this, ao_app);
 
   ui_background = createWidget<AOImageDisplay>("lobby");
@@ -705,7 +708,7 @@ void Lobby::on_connect_released()
       break;
     }
 
-    call_warning("You are connecting to an <b>incompatible</b> MNO server.<br /><br />Reason: " + l_reason +
+    call_warning("You are connecting to an <b>incompatible</b> MNN server.<br /><br />Reason: " + l_reason +
                  "<br /><br />"
                  "The client may not work properly, if at all.");
   }

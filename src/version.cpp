@@ -64,7 +64,7 @@ QString build_about_message()
   const QString git_branch = get_resource_file_text(":/res/git/git_branch.txt");
   const QString git_hash = get_resource_file_text(":/res/git/git_hash.txt");
 
-  QString msg = QString("<h2>Mystery Novel Online</h2>"
+  QString msg = QString("<h2>Mystery Novel Network</h2>"
                         "version: %1"
                         "<p><b>Source code:</b> "
                         "<a href='https://github.com/Mystery-Novel-Online/MNO-Client'>"

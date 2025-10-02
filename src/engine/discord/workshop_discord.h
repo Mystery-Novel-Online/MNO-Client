@@ -16,7 +16,9 @@ public:
     return instance;
   }
 
-  bool setRichPresenceState(bool state);
+  void setRichPresenceState(bool state);
+  void setRichPresenceStateText(std::string sstate);
+  void setRichPresenceDetailsText(std::string sdetails);
   WorkshopDiscord();
   void processOAuth();
   void runCallbacks();

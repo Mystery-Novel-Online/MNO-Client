@@ -5,6 +5,7 @@
 #include "mk2/spritedynamicreader.h"
 
 #include "modules/managers/scene_manager.h"
+#include <engine/discord/workshop_discord.h>
 #include <modules/theme/thememanager.h>
 #include <rolechat/config/ConfigUserSettings.h>
 
@@ -157,6 +158,7 @@ void AOConfigPrivate::load_file()
   focus_performance_mode = cfg.value("focus_performance_mode", true).toBool();
 
   discord_presence = cfg.value("discord_presence", true).toBool();
+  WorkshopDiscord::getInstance().setRichPresenceState(discord_presence);
   discord_hide_server = cfg.value("discord_hide_server", false).toBool();
   discord_hide_character = cfg.value("discord_hide_character", false).toBool();
 
@@ -803,6 +805,7 @@ void AOConfig::set_focus_performance_mode(bool p_enabled)
 
 void AOConfig::set_discord_presence(const bool p_enabled)
 {
+  WorkshopDiscord::getInstance().setRichPresenceState(p_enabled);
   if (d->discord_presence == p_enabled)
     return;
   d->discord_presence = p_enabled;

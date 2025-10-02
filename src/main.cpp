@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
   rolechat::fs::PackageManager::scanPackages();
   //qInstallMessageHandler(logger::log);
-  qInfo() << "Starting Mystery Novel Online...";
+  qInfo() << "Starting Mystery Novel Network...";
 
   bool l_dpi_scaling = false;
   for (int i = 0; i < argc; ++i)

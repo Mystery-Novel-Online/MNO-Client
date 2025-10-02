@@ -15,6 +15,9 @@ const uint64_t APPLICATION_ID = 1409897527528128533;
 std::atomic<bool> running = true;
 bool rpEnabled = false;
 
+std::string state = "Lobby";
+std::string details = "Selecting a server";
+
 void signalHandler(int signum) {
   running.store(false);
 }
@@ -49,12 +52,16 @@ void richPresenceStatus(discordpp::ClientResult result)
 
 void setRichPresence()
 {
+  if(!rpEnabled)
+  {
+    client->ClearRichPresence();
+    return;
+  }
   discordpp::Activity activity;
   activity.SetType(discordpp::ActivityTypes::Playing);
-  activity.SetState("Browsing Workshop");
-  activity.SetDetails("Nothing important here");
+  activity.SetState(state);
+  activity.SetDetails(details);
   client->UpdateRichPresence(activity, richPresenceStatus);
-  client->ClearRichPresence();
 };
 
 void clientStatusChangedCallback(discordpp::Client::Status status, discordpp::Client::Error error, int32_t errorDetail)
@@ -92,9 +99,22 @@ void authorizeClient()
 
 }
 
-bool WorkshopDiscord::setRichPresenceState(bool state)
+void WorkshopDiscord::setRichPresenceState(bool state)
 {
+  rpEnabled = state;
+  setRichPresence();
+}
 
+void WorkshopDiscord::setRichPresenceStateText(std::string sstate)
+{
+  state = sstate;
+  setRichPresence();
+}
+
+void WorkshopDiscord::setRichPresenceDetailsText(std::string sdetails)
+{
+  details = sdetails;
+  setRichPresence();
 }
 
 WorkshopDiscord::WorkshopDiscord()
