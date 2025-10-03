@@ -70,6 +70,22 @@ protected:
               output += "<flip>";
               break;
 
+            case TagType_Hide:
+              output += "<hide>";
+              break;
+
+            case TagType_NewLine:
+              output += "<newline>";
+              break;
+
+            case TagType_Wait:
+              output += "<wait:"+ QString::number(tagArguments.at(1).toInt()) +">";
+              break;
+
+            case TagType_MusicChange:
+              output += "<music:"+ tagArguments.at(1).toString() +">";
+              break;
+
             case TagType_SoundEffect:
               output += "<sfx:"+ tagArguments.at(1).toString() +">";
               break;

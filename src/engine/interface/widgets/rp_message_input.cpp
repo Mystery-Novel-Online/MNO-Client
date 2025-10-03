@@ -266,6 +266,44 @@ void RPMessageInput::handleTextChanged()
           else
             removeData = false;
         }
+        else if (tagTypeStr == "hide")
+        {
+          if(parts.count() == 0)
+            addTag(TagType_Hide, args);
+          else
+            removeData = false;
+        }
+        else if (tagTypeStr == "newline")
+        {
+          if(parts.count() == 0)
+            addTag(TagType_NewLine, args);
+          else
+            removeData = false;
+        }
+        else if (tagTypeStr == "wait")
+        {
+          if(parts.count() == 1)
+          {
+            args.append(parts[0].toInt());
+            addTag(TagType_Wait, args);
+          }
+          else
+          {
+            removeData = false;
+          }
+        }
+        else if (tagTypeStr == "music")
+        {
+          if(parts.count() == 1)
+          {
+            args.append(parts[0]);
+            addTag(TagType_MusicChange, args);
+          }
+          else
+          {
+            removeData = false;
+          }
+        }
         else if (tagTypeStr == "sfx")
         {
           if(parts.count() == 1)
