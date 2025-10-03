@@ -1512,6 +1512,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
 {
 
   currentDelayLeft = 3000;
+  customMessageSpeed = 0;
   int selfOffset = message::horizontalOffset();
   int otherOffset = message::pair::horizontalOffset();
 
@@ -2240,6 +2241,7 @@ void Courtroom::calculate_chat_tick_interval()
   if (m_server_tick_rate.has_value())
     l_tick_rate = qMax(m_server_tick_rate.value(), 0);
   l_tick_rate = qBound(0.0, l_tick_rate * (1.0 - qBound(-1.0, 0.4 * m_tick_speed, 1.0)), l_tick_rate * 2.0);
+  if(customMessageSpeed != 0) l_tick_rate = customMessageSpeed;
   if(is_delay_next_letter)
   {
     m_tick_timer->setInterval(l_tick_rate + ao_config->punctuation_delay() + pendingDelay);
@@ -2288,6 +2290,13 @@ void Courtroom::next_chat_letter()
           pendingDelay = tag.variables.at(1).toInt();
           calculate_chat_tick_interval();
         }
+        break;
+
+      case TagType_Speed:
+        customMessageSpeed = tag.variables.at(1).toInt();
+        if(customMessageSpeed >= 700) customMessageSpeed = 700;
+        if(customMessageSpeed < 1) customMessageSpeed = 1;
+        calculate_chat_tick_interval();
         break;
 
       case TagType_NewLine:

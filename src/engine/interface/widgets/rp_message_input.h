@@ -75,7 +75,11 @@ protected:
               break;
 
             case TagType_NewLine:
-              output += "<newline>";
+              output += "<nl>";
+              break;
+
+            case TagType_Speed:
+              output += "<speed:"+ QString::number(tagArguments.at(1).toInt()) +">";
               break;
 
             case TagType_Wait:

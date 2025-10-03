@@ -279,7 +279,7 @@ void RPMessageInput::handleTextChanged()
           else
             removeData = false;
         }
-        else if (tagTypeStr == "newline")
+        else if (tagTypeStr == "nl")
         {
           if(parts.count() == 0)
             addTag(TagType_NewLine, args);
@@ -292,6 +292,18 @@ void RPMessageInput::handleTextChanged()
           {
             args.append(parts[0].toInt());
             addTag(TagType_Wait, args);
+          }
+          else
+          {
+            removeData = false;
+          }
+        }
+        else if (tagTypeStr == "speed")
+        {
+          if(parts.count() == 1)
+          {
+            args.append(parts[0].toInt());
+            addTag(TagType_Speed, args);
           }
           else
           {

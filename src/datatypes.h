@@ -8,6 +8,7 @@ enum MessageTagType
   TagType_EmoteChange,
   TagType_PlaySequence,
   TagType_Wait,
+  TagType_Speed,
   TagType_Effect,
   TagType_Flip,
   TagType_Hide,

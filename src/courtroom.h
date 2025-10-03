@@ -191,6 +191,7 @@ public:
   int currentIniswapIconIndex = 0;
   int currentDelayLeft = 300;
   int pendingDelay = 0;
+  int customMessageSpeed = 0;
 
   QString get_character_ini();
   QString get_character_content_url();
