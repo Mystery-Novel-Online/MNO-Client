@@ -189,6 +189,8 @@ public:
   void UpdateIniswapList();
   void UpdateIniswapIcons(bool reset, int batch_count, int starting_index = 0);
   int currentIniswapIconIndex = 0;
+  int currentDelayLeft = 300;
+  int pendingDelay = 0;
 
   QString get_character_ini();
   QString get_character_content_url();

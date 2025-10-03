@@ -107,7 +107,13 @@ QVector<MessageTag> RPMessageInput::getTags()
         if(m_tags.contains(targetTagId))
         {
           MessageTag tag = m_tags[targetTagId];
-          tag.index = (frag.position() - (tags.count()));
+          QVariantList tagArguments = engine::encoding::BinaryEncoder::decodeBase64(tag.value);
+          if((MessageTagType)tagArguments.at(0).toInt() == TagType_Wait)
+          {
+            tag.index = (frag.position() - 1 - (tags.count()));
+          }
+          else
+            tag.index = (frag.position() - (tags.count()));
           tag.id = targetTagId;
           tags.append(tag);
         }

@@ -1511,6 +1511,7 @@ void Courtroom::objection_done()
 void Courtroom::handle_chatmessage_2() // handles IC
 {
 
+  currentDelayLeft = 3000;
   int selfOffset = message::horizontalOffset();
   int otherOffset = message::pair::horizontalOffset();
 
@@ -2241,14 +2242,19 @@ void Courtroom::calculate_chat_tick_interval()
   l_tick_rate = qBound(0.0, l_tick_rate * (1.0 - qBound(-1.0, 0.4 * m_tick_speed, 1.0)), l_tick_rate * 2.0);
   if(is_delay_next_letter)
   {
-    m_tick_timer->setInterval(l_tick_rate + ao_config->punctuation_delay());
+    m_tick_timer->setInterval(l_tick_rate + ao_config->punctuation_delay() + pendingDelay);
       return;
   }
-  m_tick_timer->setInterval(l_tick_rate);
+  m_tick_timer->setInterval(l_tick_rate + pendingDelay);
 }
 
 void Courtroom::next_chat_letter()
 {
+  if(pendingDelay != 0)
+  {
+    pendingDelay = 0;
+    calculate_chat_tick_interval();
+  }
   const QString &f_message = m_chatmessage[CMMessage];
 
   static const QList<QChar> punctuationCharacters = { '.', '!', '?', ',' };
@@ -2258,7 +2264,7 @@ void Courtroom::next_chat_letter()
   QVector<IncomingTagData> unprocessedTags = {};
   for(IncomingTagData tag : m_ProcessedTags)
   {
-    if(tag.timestamp == m_tick_step)
+    if(tag.timestamp <= m_tick_step || m_tick_step >= message_length)
     {
       switch(tag.action)
       {
@@ -2269,6 +2275,23 @@ void Courtroom::next_chat_letter()
 
       case TagType_Flip:
         ui_vp_player_char->setMirrored(ui_vp_player_char->mirroredState() == false);
+        break;
+
+      case TagType_Hide:
+        ui_vp_player_char->setVisible(ui_vp_player_char->isVisible() == false);
+        break;
+
+      case TagType_Wait:
+        currentDelayLeft -= tag.variables.at(1).toInt();
+        if(currentDelayLeft >= 0)
+        {
+          pendingDelay = tag.variables.at(1).toInt();
+          calculate_chat_tick_interval();
+        }
+        break;
+
+      case TagType_NewLine:
+        ui_vp_message->textCursor().insertText("\n");
         break;
 
       case TagType_PlaySequence:
