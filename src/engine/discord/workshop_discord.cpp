@@ -15,6 +15,8 @@ const uint64_t APPLICATION_ID = 1409897527528128533;
 std::atomic<bool> running = true;
 bool rpEnabled = false;
 
+discordpp::Activity currentActivity;
+
 std::string state = "Lobby";
 std::string details = "Selecting a server";
 
@@ -57,11 +59,11 @@ void setRichPresence()
     client->ClearRichPresence();
     return;
   }
-  discordpp::Activity activity;
-  activity.SetType(discordpp::ActivityTypes::Playing);
-  activity.SetState(state);
-  activity.SetDetails(details);
-  client->UpdateRichPresence(activity, richPresenceStatus);
+  currentActivity.SetType(discordpp::ActivityTypes::Playing);
+  currentActivity.SetState(state);
+  currentActivity.SetDetails(details);
+  currentActivity.SetSupportedPlatforms(discordpp::ActivityGamePlatforms::Desktop);
+  client->UpdateRichPresence(currentActivity, richPresenceStatus);
 };
 
 void clientStatusChangedCallback(discordpp::Client::Status status, discordpp::Client::Error error, int32_t errorDetail)
