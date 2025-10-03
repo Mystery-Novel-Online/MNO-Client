@@ -6,6 +6,8 @@
 #include <QVector>
 #include <QChar>
 #include <QVariantList>
+#include "engine/encoding/binary_encoding.h"
+#include <qtextdocumentfragment.h>
 
 class QTextCursor;
 class QTextCharFormat;
@@ -30,6 +32,74 @@ public:
   QVector<MessageTag> getTags();
   void clearTags();
   int maxLength();
+
+protected:
+  QMimeData * createMimeDataFromSelection() const override {
+    QTextCursor cursor = textCursor();
+
+    if (!cursor.hasSelection())
+      return nullptr;
+
+    QString output;
+
+    int start = cursor.selectionStart();
+    int end   = cursor.selectionEnd();
+
+    QTextCursor walker(document());
+    walker.setPosition(start);
+
+    while (walker.position() < end)
+    {
+      walker.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+      QTextCharFormat fmt = walker.charFormat();
+
+      if (fmt.isImageFormat())
+      {
+        QTextImageFormat imgFmt = fmt.toImageFormat();
+
+        int targetTagId = imgFmt.property(QTextFormat::UserProperty).toInt();
+        if(m_tags.contains(targetTagId))
+        {
+          MessageTag tag = m_tags[targetTagId];
+          QVariantList tagArguments = engine::encoding::BinaryEncoder::decodeBase64(tag.value);
+
+          QString tagType = "";
+          switch((MessageTagType)tagArguments.at(0).toInt())
+          {
+            case TagType_Flip:
+              output += "<flip>";
+              break;
+
+            case TagType_SoundEffect:
+              output += "<sfx:"+ tagArguments.at(1).toString() +">";
+              break;
+
+            case TagType_PlaySequence:
+              output += "<anim:"+ tagArguments.at(1).toString() +">";
+              break;
+
+          default:
+            break;
+          }
+        }
+
+      } else {
+        output += walker.selectedText();
+      }
+
+      walker.setPosition(walker.position());
+    }
+
+    auto *mime = new QMimeData();
+    mime->setText(output);
+
+    QByteArray orig;
+    QDataStream stream(&orig, QIODevice::WriteOnly);
+    cursor.selection().toHtml().toUtf8();
+    mime->setData("application/x-rpmessage", output.toUtf8());
+
+    return mime;
+  }
 
 signals:
   void returnPressed();
