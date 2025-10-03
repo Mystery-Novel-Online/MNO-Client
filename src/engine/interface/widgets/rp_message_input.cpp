@@ -243,6 +243,74 @@ void RPMessageInput::handleTextChanged()
   QTextCursor cursor(document());
   cursor.beginEditBlock();
 
+  int i = 0;
+  while (i < plain.length())
+  {
+    if (plain[i] == '<')
+    {
+      int end = plain.indexOf('>', i);
+      if (end != -1)
+      {
+        QString tagText = plain.mid(i + 1, end - i - 1);
+        QStringList parts = tagText.split(':');
+        QString tagTypeStr = parts[0];
+        parts.removeFirst();
+
+        QVariantList args;
+
+        bool removeData = true;
+        if (tagTypeStr == "flip")
+        {
+          if(parts.count() == 0)
+            addTag(TagType_Flip, args);
+          else
+            removeData = false;
+        }
+        else if (tagTypeStr == "sfx")
+        {
+          if(parts.count() == 1)
+          {
+            args.append(parts[0]);
+            addTag(TagType_SoundEffect, args);
+          }
+          else
+          {
+            removeData = false;
+          }
+        }
+        else if (tagTypeStr == "anim")
+        {
+          if(parts.count() == 1)
+          {
+            args.append(parts[0]);
+            addTag(TagType_PlaySequence, args);
+          }
+          else
+          {
+            removeData = false;
+          }
+        }
+        else
+        {
+          //cursor.insertText("<" + tagText + ">");
+          removeData = false;
+        }
+
+        if(removeData)
+        {
+          QTextCursor removeCursor(document());
+          removeCursor.setPosition(i);
+          removeCursor.setPosition(end + 1, QTextCursor::KeepAnchor);
+          removeCursor.removeSelectedText();
+        }
+
+        i = end + 1;
+        continue;
+      }
+    }
+    i++;
+  }
+
   applyHighlighting(plain);
 
   cursor.endEditBlock();
