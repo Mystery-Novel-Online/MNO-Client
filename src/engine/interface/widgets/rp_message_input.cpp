@@ -18,6 +18,8 @@ RPMessageInput::RPMessageInput(QWidget *parent)
 
   connect(this, &QTextEdit::textChanged, this, &RPMessageInput::handleTextChanged);
   reloadHighlights();
+
+  setTabChangesFocus(true);
 }
 
 void RPMessageInput::reloadHighlights()
@@ -328,6 +330,11 @@ void RPMessageInput::keyPressEvent(QKeyEvent *e)
   {
     emit returnPressed();
     e->accept();
+  }
+  else if (e->key() == Qt::Key_Tab)
+  {
+    e->ignore();
+    return;
   }
   else
     QTextEdit::keyPressEvent(e);
