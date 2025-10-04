@@ -147,6 +147,12 @@ QTextImageFormat RPMessageInput::createTagFormat(MessageTagType tagType)
   case MessageTagType::TagType_MusicChange:
     format.setName("base/tags/change_music.png");
     break;
+  case MessageTagType::TagType_Flip:
+    format.setName("base/tags/flip.png");
+    break;
+  case MessageTagType::TagType_PlaySequence:
+    format.setName("base/tags/animation.png");
+    break;
   default:
     format.setName("base/tags/default.png");
     break;
