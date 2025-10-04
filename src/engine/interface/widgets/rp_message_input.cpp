@@ -233,136 +233,82 @@ bool RPMessageInput::openHighlight(QChar c, QTextCursor &cursor, QList<QTextChar
 
 void RPMessageInput::handleTextChanged()
 {
-
   static QString lastText = "";
   QSignalBlocker blocker(this);
 
   QString plain = toPlainText();
-  if(plain.length() > m_maxLength)
-  {
-    setText(lastText);
+  QTextCursor cursor = textCursor();
+  int savedPos = cursor.position();
+
+  if (plain.length() > m_maxLength) {
+    plain = plain.left(m_maxLength);
+
+    setPlainText(plain);
+
+    if (savedPos > plain.length())
+      savedPos = plain.length();
+    cursor.setPosition(savedPos);
+    setTextCursor(cursor);
     return;
   }
   lastText = plain;
-  int savedPos = textCursor().position();
 
-  QTextCursor cursor(document());
+  savedPos = textCursor().position();
+  cursor = QTextCursor(document());
   cursor.beginEditBlock();
 
   int i = 0;
-  while (i < plain.length())
-  {
-    if (plain[i] == '<')
-    {
+  while (i < plain.length()) {
+    if (plain[i] == '<') {
       int end = plain.indexOf('>', i);
-      if (end != -1)
-      {
-        QString tagText = plain.mid(i + 1, end - i - 1);
-        QStringList parts = tagText.split(':');
-        QString tagTypeStr = parts[0];
-        parts.removeFirst();
+      if (end == -1)
+        break;
 
-        QVariantList args;
+      QString tagText = plain.mid(i + 1, end - i - 1);
+      QStringList parts = tagText.split(':');
+      QString tagTypeStr = parts[0];
+      parts.removeFirst();
 
-        bool removeData = true;
-        if (tagTypeStr == "flip")
-        {
-          if(parts.count() == 0)
-            addTag(TagType_Flip, args);
-          else
-            removeData = false;
-        }
-        else if (tagTypeStr == "hide")
-        {
-          if(parts.count() == 0)
-            addTag(TagType_Hide, args);
-          else
-            removeData = false;
-        }
-        else if (tagTypeStr == "nl")
-        {
-          if(parts.count() == 0)
-            addTag(TagType_NewLine, args);
-          else
-            removeData = false;
-        }
-        else if (tagTypeStr == "wait")
-        {
-          if(parts.count() == 1)
-          {
-            args.append(parts[0].toInt());
-            addTag(TagType_Wait, args);
-          }
-          else
-          {
-            removeData = false;
-          }
-        }
-        else if (tagTypeStr == "speed")
-        {
-          if(parts.count() == 1)
-          {
-            args.append(parts[0].toInt());
-            addTag(TagType_Speed, args);
-          }
-          else
-          {
-            removeData = false;
-          }
-        }
-        else if (tagTypeStr == "music")
-        {
-          if(parts.count() == 1)
-          {
-            args.append(parts[0]);
-            addTag(TagType_MusicChange, args);
-          }
-          else
-          {
-            removeData = false;
-          }
-        }
-        else if (tagTypeStr == "sfx")
-        {
-          if(parts.count() == 1)
-          {
-            args.append(parts[0]);
-            addTag(TagType_SoundEffect, args);
-          }
-          else
-          {
-            removeData = false;
-          }
-        }
-        else if (tagTypeStr == "anim")
-        {
-          if(parts.count() == 1)
-          {
-            args.append(parts[0]);
-            addTag(TagType_PlaySequence, args);
-          }
-          else
-          {
-            removeData = false;
-          }
-        }
-        else
-        {
-          //cursor.insertText("<" + tagText + ">");
-          removeData = false;
-        }
+      QVariantList args;
+      bool removeData = true;
+      MessageTagType tagType;
 
-        if(removeData)
-        {
-          QTextCursor removeCursor(document());
-          removeCursor.setPosition(i);
-          removeCursor.setPosition(end + 1, QTextCursor::KeepAnchor);
-          removeCursor.removeSelectedText();
-        }
+      if (tagTypeStr == "flip" && parts.isEmpty()) tagType = TagType_Flip;
+      else if (tagTypeStr == "hide" && parts.isEmpty()) tagType = TagType_Hide;
+      else if (tagTypeStr == "nl" && parts.isEmpty()) tagType = TagType_NewLine;
+      else if (tagTypeStr == "wait" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = TagType_Wait; }
+      else if (tagTypeStr == "speed" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = TagType_Speed; }
+      else if (tagTypeStr == "music" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_MusicChange; }
+      else if (tagTypeStr == "sfx" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_SoundEffect; }
+      else if (tagTypeStr == "anim" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_PlaySequence; }
+      else removeData = false;
 
-        i = end + 1;
+      if (removeData) {
+        QTextCursor insertCursor(document());
+        insertCursor.setPosition(i);
+        QTextImageFormat format = createTagFormat(tagType);
+
+        int id = format.property(QTextFormat::UserProperty).toInt();
+        insertCursor.insertImage(format);
+
+        MessageTag tag;
+        tag.id = id;
+        args.prepend(tagType);
+        tag.value = engine::encoding::BinaryEncoder::encodeBase64(args);
+        m_tags[id] = tag;
+
+        QTextCursor removeCursor(document());
+        removeCursor.setPosition(i + 1);
+        removeCursor.setPosition(i + (end - i + 1) + 1, QTextCursor::KeepAnchor);
+        removeCursor.removeSelectedText();
+
+        plain = toPlainText();
+        i++;
         continue;
       }
+
+      i = end + 1;
+      continue;
     }
     i++;
   }
