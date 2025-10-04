@@ -1158,9 +1158,12 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
     p_chatmessage.append(QString{});
   }
 
-  while(m_tick_step < m_chatmessage[CMMessage].length())
+  if(!m_chatmessage[CMMessage].trimmed().isEmpty())
   {
-    next_chat_letter();
+    while(m_tick_step <= m_chatmessage[CMMessage].length())
+    {
+      next_chat_letter();
+    }
   }
   message::incomingMessage(p_chatmessage);
 
@@ -2349,7 +2352,11 @@ void Courtroom::next_chat_letter()
   auto insertChar = [&](QChar ch, const QTextCharFormat &format) {
     ui_vp_message->textCursor().insertText(ch, format);
     LuaBridge::LuaEventCall("OnMessageTick", QString(ch).toStdString());
-    ui_ic_chatlog->textCursor().insertText(ch, format);
+
+    QTextCursor cursor2 = ui_ic_chatlog->textCursor();
+    cursor2.movePosition(QTextCursor::End);
+    ui_ic_chatlog->setTextCursor(cursor2);
+    cursor2.insertText(ch, format);
   };
 
   auto advanceLetter = [&]() {
