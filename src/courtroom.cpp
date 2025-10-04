@@ -469,6 +469,18 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
   QString soundName = weatherParam.getStringValue("sound");
   QString sequenceName = weatherParam.getStringValue("sequence");
 
+
+  bool weatherBehind = weatherParam.getBoolValue("layered_behind");
+
+  if(weatherBehind)
+  {
+    ui_vp_weather->setZValue(ViewportLayers_WeatherBehind);
+  }
+  else
+  {
+    ui_vp_weather->setZValue(ViewportLayers_Weather);
+  }
+
   if(weatherParam.isValueExists(environment))
   {
     weatherParam.SetTargetObject(environment);
@@ -1146,6 +1158,10 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
     p_chatmessage.append(QString{});
   }
 
+  while(m_tick_step < m_chatmessage[CMMessage].length())
+  {
+    next_chat_letter();
+  }
   message::incomingMessage(p_chatmessage);
 
   const int l_message_chr_id = p_chatmessage[CMChrId].toInt();
@@ -1210,7 +1226,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   else if (l_message_chr_id >= 0 && l_message_chr_id < CharacterRepository::serverListLength())
   {
     const int l_client_id = p_chatmessage[CMClientId].toInt();
-    append_ic_text(l_showname, l_message, false, false, l_client_id, user::GetCharacterId() == l_message_chr_id);
+    append_ic_text(l_showname, "", false, false, l_client_id, user::GetCharacterId() == l_message_chr_id);
 
     if (ao_config->log_is_recording_enabled() && !l_message.isEmpty())
     {
@@ -2333,6 +2349,7 @@ void Courtroom::next_chat_letter()
   auto insertChar = [&](QChar ch, const QTextCharFormat &format) {
     ui_vp_message->textCursor().insertText(ch, format);
     LuaBridge::LuaEventCall("OnMessageTick", QString(ch).toStdString());
+    ui_ic_chatlog->textCursor().insertText(ch, format);
   };
 
   auto advanceLetter = [&]() {
@@ -2392,7 +2409,7 @@ void Courtroom::next_chat_letter()
       return;
 
     case 'n':
-      ui_vp_message->textCursor().insertText("\n", vp_message_format);
+      insertChar('\n', vp_message_format);
       advanceLetter();
       next_chat_letter();
       return;
@@ -2405,6 +2422,7 @@ void Courtroom::next_chat_letter()
   if (f_character == Qt::Key_Space)
   {
     ui_vp_message->insertPlainText(f_character);
+    ui_ic_chatlog->insertPlainText(f_character);
   }
   else if (m_chatmessage[CMTextColor].toInt() == DR::CRainbow)
   {

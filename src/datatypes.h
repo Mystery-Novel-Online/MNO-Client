@@ -264,14 +264,15 @@ enum UserState
 enum ViewportLayers
 {
   ViewportLayers_BG = 0,
-  ViewportLayers_PlayerBack = 1,
-  ViewportLayers_PlayerFront = 2,
-  ViewportLayers_Desk = 3,
-  ViewportLayers_Weather = 4,
-  ViewportLayers_Effect = 5,
-  ViewportLayers_WTCE = 6,
-  ViewportLayers_Objection = 7,
-  ViewportLayers_Video = 8
+  ViewportLayers_WeatherBehind,
+  ViewportLayers_PlayerBack,
+  ViewportLayers_PlayerFront,
+  ViewportLayers_Desk,
+  ViewportLayers_Weather,
+  ViewportLayers_Effect,
+  ViewportLayers_WTCE,
+  ViewportLayers_Objection,
+  ViewportLayers_Video
 };
 enum ChatMessage : int32_t
 {
