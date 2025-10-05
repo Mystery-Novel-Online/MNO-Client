@@ -2357,12 +2357,25 @@ void Courtroom::next_chat_letter()
     ui_vp_message->textCursor().insertText(ch, format);
     LuaBridge::LuaEventCall("OnMessageTick", QString(ch).toStdString());
 
+    QScrollBar *l_scrollbar = ui_ic_chatlog->verticalScrollBar();
+    const int l_scroll_pos = l_scrollbar->value();
+    bool l_scroll_limt = l_scroll_pos == l_scrollbar->maximum();
     if(ao_config->log_is_topdown_enabled())
     {
       QTextCursor cursor2 = ui_ic_chatlog->textCursor();
       cursor2.movePosition(QTextCursor::End);
       ui_ic_chatlog->setTextCursor(cursor2);
       cursor2.insertText(ch, format);
+
+
+      if(l_scroll_limt)
+      {
+        l_scrollbar->setValue(l_scrollbar->maximum());
+      }
+      else
+      {
+        l_scrollbar->setValue(l_scroll_pos);
+      }
     }
   };
 
