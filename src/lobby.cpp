@@ -66,6 +66,17 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_workshop_download = createButton("workshop_download", "workshop_download", [this]() {this->onWorkshopBrowser();});
   ui_workshop_upload = createButton("workshop_upload", "workshop_upload", [this]() {this->onWorkshopUpload();});
   ui_workshop_upload->setParent(ui_workshop_background);
+
+
+  ui_workshop_browse = createButton("workshop_browse", "workshop_browse", [this]() {this->onWorkshopUpload();});
+  ui_workshop_collections = createButton("workshop_collections", "workshop_collections", [this]() {this->onWorkshopUpload();});
+  ui_workshop_portfolio = createButton("workshop_portfolio", "workshop_portfolio", [this]() {this->onWorkshopUpload();});
+  ui_workshop_pending = createButton("workshop_pending", "workshop_pending", [this]() {this->onWorkshopUpload();});
+
+  ui_workshop_browse->setParent(ui_workshop_background);
+  ui_workshop_pending->setParent(ui_workshop_background);
+  ui_workshop_portfolio->setParent(ui_workshop_background);
+  ui_workshop_collections->setParent(ui_workshop_background);
   ui_workshop_download->setParent(ui_workshop_background);
 
   ui_config_panel = createWidget<RPButton>("config_panel");
