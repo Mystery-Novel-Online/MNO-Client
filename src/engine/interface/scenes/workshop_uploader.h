@@ -22,6 +22,8 @@ private:
   QPushButton *m_submitButton;
   QProgressBar *m_progress;
 
+  QCheckBox *m_private;
+
   QNetworkAccessManager *m_network;
   QNetworkReply *m_currentReply;
 };

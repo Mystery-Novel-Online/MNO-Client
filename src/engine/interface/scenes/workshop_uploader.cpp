@@ -23,11 +23,15 @@ WorkshopUploader::WorkshopUploader(QWidget *parent) : QDialog{parent}, m_current
   m_progress->setValue(0);
   m_progress->setVisible(false);
 
+  m_private = new QCheckBox(this);
+  m_private->setText("Make Upload Private");
+
   QFormLayout *layout = new QFormLayout(this);
   layout->addRow("Zip File:", m_filePath);
   layout->addRow("", m_chooseButton);
   layout->addRow("Artist:", m_artist);
   layout->addRow("Description:", m_description);
+  layout->addRow("", m_private);
   layout->addRow("", m_submitButton);
   layout->addRow("Progress:", m_progress);
 
@@ -97,6 +101,7 @@ void WorkshopUploader::submitForm()
   addField("artist", m_artist->text());
   addField("description", m_description->toPlainText());
   addField("tags", "untagged");
+  addField("is_private", QString::number(m_private->checkState() == Qt::Checked));
 
   QUrl url(QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/upload");
   QNetworkRequest request(url);
