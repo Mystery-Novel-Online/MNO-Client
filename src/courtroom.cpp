@@ -1160,7 +1160,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
 
   if(!m_chatmessage[CMMessage].trimmed().isEmpty())
   {
-    while(m_tick_step <= m_chatmessage[CMMessage].length())
+    while(m_tick_step <= m_chatmessage[CMMessage].length() - 1)
     {
       next_chat_letter();
     }

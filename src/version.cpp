@@ -35,7 +35,7 @@ VersionNumber get_version_number(int baseVersion)
 
 QString get_post_version()
 {
-  return "b06hf01";
+  return "b06hf02";
 }
 
 QString get_version_string(int baseVersion)
