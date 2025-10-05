@@ -2052,7 +2052,7 @@ void Courtroom::update_ic_log(bool p_reset_log)
 
       l_cursor.insertText(l_record.get_name() + l_separator, l_target_name_format);
 
-      if(!hideMessage)
+      if(!hideMessage || !l_topdown_orientation)
         l_cursor.insertText(l_record.get_message(), l_message_format);
     }
   }
@@ -2357,10 +2357,13 @@ void Courtroom::next_chat_letter()
     ui_vp_message->textCursor().insertText(ch, format);
     LuaBridge::LuaEventCall("OnMessageTick", QString(ch).toStdString());
 
-    QTextCursor cursor2 = ui_ic_chatlog->textCursor();
-    cursor2.movePosition(QTextCursor::End);
-    ui_ic_chatlog->setTextCursor(cursor2);
-    cursor2.insertText(ch, format);
+    if(ao_config->log_is_topdown_enabled())
+    {
+      QTextCursor cursor2 = ui_ic_chatlog->textCursor();
+      cursor2.movePosition(QTextCursor::End);
+      ui_ic_chatlog->setTextCursor(cursor2);
+      cursor2.insertText(ch, format);
+    }
   };
 
   auto advanceLetter = [&]() {
