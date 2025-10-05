@@ -1229,7 +1229,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   else if (l_message_chr_id >= 0 && l_message_chr_id < CharacterRepository::serverListLength())
   {
     const int l_client_id = p_chatmessage[CMClientId].toInt();
-    append_ic_text(l_showname, "", false, false, l_client_id, user::GetCharacterId() == l_message_chr_id);
+    append_ic_text(l_showname, l_message, false, false, l_client_id, user::GetCharacterId() == l_message_chr_id);
 
     if (ao_config->log_is_recording_enabled() && !l_message.isEmpty())
     {
@@ -2007,6 +2007,7 @@ void Courtroom::update_ic_log(bool p_reset_log)
   while (!m_ic_record_queue.isEmpty())
   {
     const DRChatRecord l_record = m_ic_record_queue.takeFirst();
+    bool hideMessage = l_record.is_typed() && m_ic_record_queue.isEmpty();
     m_ic_record_list.append(l_record);
 
     if (!ao_config->log_display_empty_messages_enabled() && l_record.get_message().trimmed().isEmpty())
@@ -2050,7 +2051,9 @@ void Courtroom::update_ic_log(bool p_reset_log)
         l_cursor.insertText(QString::number(l_record.get_client_id()) + " | ", l_target_name_format);
 
       l_cursor.insertText(l_record.get_name() + l_separator, l_target_name_format);
-      l_cursor.insertText(l_record.get_message(), l_message_format);
+
+      if(!hideMessage)
+        l_cursor.insertText(l_record.get_message(), l_message_format);
     }
   }
 
@@ -2108,7 +2111,7 @@ void Courtroom::on_ic_chatlog_scroll_bottomup_clicked()
   l_scrollbar->setValue(l_scrollbar->minimum());
 }
 
-void Courtroom::append_ic_text(QString p_name, QString p_line, bool p_system, bool p_music, int p_client_id, bool p_self)
+void Courtroom::append_ic_text(QString p_name, QString p_line, bool p_system, bool p_music, int p_client_id, bool p_self, bool typingEnabled)
 {
   if (p_name.trimmed().isEmpty())
     p_name = "Anonymous";
@@ -2121,6 +2124,7 @@ void Courtroom::append_ic_text(QString p_name, QString p_line, bool p_system, bo
   new_record.set_client_id(p_client_id);
   new_record.set_self(p_self);
   new_record.set_music(p_music);
+  new_record.set_typed(true);
   m_ic_record_queue.append(new_record);
   update_ic_log(false);
 }

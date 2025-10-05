@@ -108,6 +108,10 @@ public:
   {
     return music;
   }
+  bool is_typed() const
+  {
+    return typed;
+  }
 
   // set
   void set_client_id(const int p_client_id)
@@ -126,6 +130,10 @@ public:
   {
     music = p_enabled;
   }
+  void set_typed(bool p_enabled)
+  {
+    typed = p_enabled;
+  }
 
 private:
   QDateTime timestamp = QDateTime::currentDateTime();
@@ -135,6 +143,7 @@ private:
   bool self = false;
   bool system = false;
   bool music = false;
+  bool typed = false;
 };
 
 struct DRSfx
