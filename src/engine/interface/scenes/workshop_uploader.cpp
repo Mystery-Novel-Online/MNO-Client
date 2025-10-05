@@ -3,6 +3,9 @@
 #include <QFileInfo>
 #include <QFormLayout>
 #include <QHttpPart>
+#include <engine/param/json_reader.h>
+#include <engine/fs/fs_characters.h>
+#include <engine/fs/fs_reading.h>
 
 WorkshopUploader::WorkshopUploader(QWidget *parent) : QDialog{parent}, m_currentReply(nullptr)
 {
@@ -121,6 +124,23 @@ void WorkshopUploader::handleReply(QNetworkReply *reply)
 
   if (reply->error() == QNetworkReply::NoError) {
     QMessageBox::information(this, "Success", "Upload completed! It should be approved soon.");
+
+    JSONReader reader;
+    reader.ReadFromString(reply->readAll());
+
+    const QString characterFolder = reader.getStringValue("folder_name");
+    if(FS::Checks::CharacterExists(characterFolder.toStdString().c_str()))
+    {
+      QString repoUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(reader.getIntValue("character_id")) + "/repo";
+      QString contentFilePath = fs::characters::getFilePath(characterFolder, "CONTENT.txt");
+      QFile contentFile(contentFilePath);
+      if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))
+      {
+        QTextStream out(&contentFile);
+        out << repoUrl;
+        contentFile.close();
+      }
+    }
   } else {
     QMessageBox::critical(this, "Error", reply->errorString());
   }
