@@ -32,6 +32,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
     return;
   }
 
+  url = QUrl(repository += "?key=" + QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE")));
 
   auto reply = QMessageBox::question(
       nullptr,
