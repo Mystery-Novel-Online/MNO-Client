@@ -161,6 +161,7 @@ private slots:
   void onGalleryPlay();
   void onWorkshopBrowser();
   void onWorkshopUpload();
+  void onWorkshopCategoryClicked(const QString& category);
   void on_refresh_released();
   void on_add_to_fav_released();
   void on_connect_released();

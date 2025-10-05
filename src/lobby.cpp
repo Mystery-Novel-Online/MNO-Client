@@ -68,10 +68,10 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_workshop_upload->setParent(ui_workshop_background);
 
 
-  ui_workshop_browse = createButton("workshop_browse", "workshop_browse", [this]() {this->onWorkshopUpload();});
-  ui_workshop_collections = createButton("workshop_collections", "workshop_collections", [this]() {this->onWorkshopUpload();});
-  ui_workshop_portfolio = createButton("workshop_portfolio", "workshop_portfolio", [this]() {this->onWorkshopUpload();});
-  ui_workshop_pending = createButton("workshop_pending", "workshop_pending", [this]() {this->onWorkshopUpload();});
+  ui_workshop_browse = createButton("workshop_browse", "workshop_browse", [this]() {this->onWorkshopCategoryClicked("browse");});
+  ui_workshop_collections = createButton("workshop_collections", "workshop_collections", [this]() {this->onWorkshopCategoryClicked("collections");});
+  ui_workshop_portfolio = createButton("workshop_portfolio", "workshop_portfolio", [this]() {this->onWorkshopCategoryClicked("portfolio");});
+  ui_workshop_pending = createButton("workshop_pending", "workshop_pending", [this]() {this->onWorkshopCategoryClicked("pending");});
 
   ui_workshop_browse->setParent(ui_workshop_background);
   ui_workshop_pending->setParent(ui_workshop_background);
@@ -650,6 +650,11 @@ void Lobby::onWorkshopBrowser()
 void Lobby::onWorkshopUpload()
 {
   WorkshopUploader::StartUpload();
+}
+
+void Lobby::onWorkshopCategoryClicked(const QString &category)
+{
+  workshop_list->updateFromApi(category);
 }
 
 void Lobby::toggle_public_server_filter()

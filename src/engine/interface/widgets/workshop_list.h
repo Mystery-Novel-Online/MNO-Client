@@ -24,7 +24,7 @@ public:
                 const QString &icon, const QString &title,
                 const QString &subtitle, const QString &gender, const QJsonArray &children);
 
-  void updateFromApi();
+  void updateFromApi(const QString& category = "browse");
   const WorkshopContentEntry getEntry(int id);
 
   void updateSearch(QString search);

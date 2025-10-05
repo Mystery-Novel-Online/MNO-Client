@@ -44,10 +44,22 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
   }
 }
 
-void WorkshopListWidget::updateFromApi()
+void WorkshopListWidget::updateFromApi(const QString &category)
 {
+  clearEntries();
+  QString workshopPath = "api/workshop";
 
-  const QString workshopUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop";
+  if(category == "portfolio")
+  {
+    workshopPath += "/my_uploads?key=" + QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
+  }
+  else
+  {
+    workshopPath += "/" + category;
+  }
+
+
+  const QString workshopUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + workshopPath;
   const QUrl url = QUrl(workshopUrl);
   QNetworkRequest request(url);
   m_netManager->get(request);
@@ -105,7 +117,6 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
     return;
   }
 
-  clearEntries();
   m_EntryData.clear();
 
   QJsonArray arr = doc.array();
