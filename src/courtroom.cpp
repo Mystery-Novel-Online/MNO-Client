@@ -2317,7 +2317,7 @@ void Courtroom::next_chat_letter()
 
       case TagType_Speed:
         customMessageSpeed = tag.variables.at(1).toInt();
-        if(customMessageSpeed >= 300) customMessageSpeed = 300;
+        if(customMessageSpeed >= 150) customMessageSpeed = 150;
         if(customMessageSpeed < 1) customMessageSpeed = 1;
         calculate_chat_tick_interval();
         break;
