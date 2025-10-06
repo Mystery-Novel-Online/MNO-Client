@@ -153,8 +153,11 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
                   QFile contentFile(contentFilePath);
                   if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))
                   {
+                    QUrl url(repositoryUrl);
+                    url.setQuery(QString());
+
                     QTextStream out(&contentFile);
-                    out << repositoryUrl;
+                    out << url.toString();
                     contentFile.close();
                   }
                 }
