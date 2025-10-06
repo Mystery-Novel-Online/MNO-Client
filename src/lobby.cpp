@@ -118,6 +118,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_delete_server = ui_server_menu->addAction(localization::getText("SERVER_FAVORITES_REMOVE"));
 
   ui_player_count = createWidget<RPTextEdit>("player_count", "player_count");
+  ui_player_count->setParent(serverTabPanel);
   ui_player_count->setFrameStyle(QFrame::NoFrame);
   ui_player_count->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   ui_player_count->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
