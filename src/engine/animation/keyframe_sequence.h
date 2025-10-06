@@ -20,7 +20,7 @@ public:
   void AddChannel(const std::string& name, std::unique_ptr<KeyframeChannelTemplate> channel);
   void AddTimedSound(float timestamp, const std::string& sound);
   void SequenceJumpEnd();
-  void RunSequence(float deltaTime);
+  virtual void RunSequence(float deltaTime);
   void Evaluate(std::unordered_map<std::string, QVariant>& outValues) const;
 
   void AddTimedSignal(float timestamp, const std::string& signal);

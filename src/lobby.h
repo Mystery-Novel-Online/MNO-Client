@@ -6,6 +6,8 @@
 #include "engine/interface/widgets/workshop_list.h"
 #include "engine/interface/scenes/downloader_prompt.h"
 
+#include <engine/animation/widget_animator.h>
+
 class AOApplication;
 class RPButton;
 class AOConfig;
@@ -178,6 +180,9 @@ private slots:
   void move_down_server();
 
   void _p_update_description();
+
+private:
+  WidgetAnimator *m_AnimatorPanels = nullptr;
 };
 
 #endif // LOBBY_H

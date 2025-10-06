@@ -56,6 +56,19 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_toggle_favorite = createButton("add_to_fav", "addtofav", [this]() {this->on_add_to_fav_released();});
   ui_refresh = createButton("refresh", "refresh", [this]() {this->on_refresh_released();});
   ui_connect = createButton("connect", "connect", [this]() {this->on_connect_released();});
+
+  m_AnimatorPanels = new WidgetAnimator(ui_connect);
+  m_AnimatorPanels->SetLoop(true);
+
+
+  auto frameChannel = std::make_unique<KeyframeChannel<QVector3D>>();
+
+  frameChannel->AddKeyframe(0, {(float)ui_connect->pos().x(), (float)ui_connect->pos().y(), 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+  frameChannel->AddKeyframe(1000, {(float)ui_connect->pos().x(), (float)ui_connect->pos().y() - 200.0f, 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+  frameChannel->AddKeyframe(2000, {(float)ui_connect->pos().x(), (float)ui_connect->pos().y(), 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+
+  m_AnimatorPanels->AddChannel("position", std::move(frameChannel));
+
   ui_gallery_toggle = createButton("toggle_gallery", "toggle_gallery", [this]() {this->onGalleryToggle();});
   ui_workshop_toggle = createButton("toggle_workshop", "toggle_workshop", [this]() {this->onWorkshopToggle();});
   ui_gallery_play = createButton("play_replay", "play_replay", [this]() {this->onGalleryPlay();});
