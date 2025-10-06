@@ -27,6 +27,7 @@ using namespace engine::system;
 
 Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_ServerSelect)
 {
+  panelCollection = new QWidget(this);
   WorkshopDiscord::getInstance().setRichPresenceStateText("Selecting a server");
   WorkshopDiscord::getInstance().setRichPresenceDetailsText("Lobby");
   workshopPreviewDownloader = new QNetworkAccessManager(this);
@@ -43,31 +44,32 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   Layout::ServerSelect::AssignLobby(this, ao_app);
 
   ui_background = createWidget<AOImageDisplay>("lobby");
-  ui_gallery_background = createWidget<AOImageDisplay>("lobby");
+  panelCollection->move(0, 0);
+  panelCollection->resize(ui_background->size().rwidth() * 3, ui_background->size().rheight());
+  serverTabPanel = createWidget<AOImageDisplay>("lobby");
+  serverTabPanel->setParent(panelCollection);
+
+  ui_gallery_background = createWidget<AOImageDisplay>("gallery_panel");
+  ui_gallery_background->setParent(panelCollection);
+  ui_gallery_background->move(ui_gallery_background->width() * 2, ui_gallery_background->y());
   ui_gallery_preview = createWidget<AOImageDisplay>("replay_preview");
   ui_gallery_preview->setParent(ui_gallery_background);
 
-  ui_workshop_background = createWidget<AOImageDisplay>("lobby");
+  ui_workshop_background = createWidget<AOImageDisplay>("workshop_panel");
+  ui_workshop_background->setParent(panelCollection);
+  ui_workshop_background->move(ui_workshop_background->width(), ui_workshop_background->y());
+  panelCollection->show();
 
-  \
+
   ui_public_server_filter = createWidget<RPButton>("public_servers");
   ui_favorite_server_filter = createWidget<RPButton>("favorites");
 
   ui_toggle_favorite = createButton("add_to_fav", "addtofav", [this]() {this->on_add_to_fav_released();});
   ui_refresh = createButton("refresh", "refresh", [this]() {this->on_refresh_released();});
   ui_connect = createButton("connect", "connect", [this]() {this->on_connect_released();});
-
-  m_AnimatorPanels = new WidgetAnimator(ui_connect);
-  m_AnimatorPanels->SetLoop(true);
-
-
-  auto frameChannel = std::make_unique<KeyframeChannel<QVector3D>>();
-
-  frameChannel->AddKeyframe(0, {(float)ui_connect->pos().x(), (float)ui_connect->pos().y(), 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
-  frameChannel->AddKeyframe(1000, {(float)ui_connect->pos().x(), (float)ui_connect->pos().y() - 200.0f, 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
-  frameChannel->AddKeyframe(2000, {(float)ui_connect->pos().x(), (float)ui_connect->pos().y(), 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
-
-  m_AnimatorPanels->AddChannel("position", std::move(frameChannel));
+  ui_toggle_favorite->setParent(serverTabPanel);
+  ui_refresh->setParent(serverTabPanel);
+  ui_connect->setParent(serverTabPanel);
 
   ui_gallery_toggle = createButton("toggle_gallery", "toggle_gallery", [this]() {this->onGalleryToggle();});
   ui_workshop_toggle = createButton("toggle_workshop", "toggle_workshop", [this]() {this->onWorkshopToggle();});
@@ -92,6 +94,8 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_workshop_collections->setParent(ui_workshop_background);
   ui_workshop_download->setParent(ui_workshop_background);
 
+  panelCollection->raise();
+
   ui_config_panel = createWidget<RPButton>("config_panel");
 
   ui_version = createWidget<RPTextEdit>("version", "version");
@@ -101,6 +105,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_version->setReadOnly(true);
   ui_server_list = createWidget<QListWidget>("server_list");
   ui_server_list->setContextMenuPolicy(Qt::CustomContextMenu);
+  ui_server_list->setParent(serverTabPanel);
 
   ui_server_menu = new QMenu(this);
   ui_server_menu->addSection(tr("Server"));
@@ -240,6 +245,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ThemeManager::get().ResetWidgetLists();
   ui_gallery_packages->clear();
   ui_gallery_packages->addItems(engine::system::replays::io::packageNames());
+
 }
 
 Lobby::~Lobby()
@@ -275,6 +281,10 @@ void Lobby::update_widgets()
   ui_gallery_background->raise();
   ui_gallery_background->hide();
 
+  serverTabPanel->set_theme_image("server_panel.png");
+  serverTabPanel->raise();
+  serverTabPanel->show();
+
   ui_workshop_background->set_theme_image("workshop_background.png");
   ui_workshop_background->raise();
   ui_workshop_background->hide();
@@ -282,8 +292,10 @@ void Lobby::update_widgets()
   ui_gallery_preview->set_theme_image("replay_preview.png");
 
   ui_public_server_filter->set_image(m_server_filter == PublicOnly ? "publicservers_selected.png" : "publicservers.png");
+  ui_public_server_filter->setParent(serverTabPanel);
 
   ui_favorite_server_filter->set_image(m_server_filter == FavoriteOnly ? "favorites_selected.png" : "favorites.png");
+  ui_favorite_server_filter->setParent(serverTabPanel);
 
   ui_version->setText("Version: " + get_version_string());
 
@@ -639,14 +651,34 @@ void Lobby::onGalleryCategoryChanged(int index)
 
 void Lobby::onGalleryToggle()
 {
-  ui_gallery_background->setVisible(!ui_gallery_background->isVisible());
-  ui_workshop_background->hide();
+  AnimatePanelsToPosition(-(float)ui_gallery_background->pos().x());
+  ui_gallery_background->setVisible(true);
+}
+
+void Lobby::AnimatePanelsToPosition(float position)
+{
+
+  if(m_AnimatorPanels != nullptr)
+  {
+    delete m_AnimatorPanels;
+  }
+  m_AnimatorPanels = new WidgetAnimator(panelCollection);
+  m_AnimatorPanels->SetLoop(false);
+
+
+  auto frameChannel = std::make_unique<KeyframeChannel<QVector3D>>();
+
+  frameChannel->AddKeyframe(0, {(float)panelCollection->x(), (float)panelCollection->pos().y(), 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+  frameChannel->AddKeyframe(600, {position, 0.0f, 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+
+  m_AnimatorPanels->AddChannel("position", std::move(frameChannel));
+
 }
 
 void Lobby::onWorkshopToggle()
 {
-  ui_workshop_background->setVisible(!ui_workshop_background->isVisible());
-  ui_gallery_background->hide();
+  AnimatePanelsToPosition(-(float)ui_workshop_background->width());
+  ui_workshop_background->setVisible(true);
 }
 
 void Lobby::onGalleryPlay()
