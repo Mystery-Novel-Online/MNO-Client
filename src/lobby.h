@@ -73,6 +73,7 @@ private:
   ServerFilter m_server_filter = NoFilter;
 
 
+  RPButton *ui_servers_toggle = nullptr;
   QWidget *panelCollection = nullptr;
   AOImageDisplay *serverTabPanel = nullptr;
   AOImageDisplay *ui_gallery_background = nullptr;
@@ -161,6 +162,7 @@ private slots:
   void onReplayRowChanged(int row);
   void onGalleryPackageChanged(int index);
   void onGalleryCategoryChanged(int index);
+  void onServersToggle();
   void onGalleryToggle();
   void AnimatePanelsToPosition(float position);
   void onWorkshopToggle();

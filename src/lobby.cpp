@@ -75,6 +75,8 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_workshop_toggle = createButton("toggle_workshop", "toggle_workshop", [this]() {this->onWorkshopToggle();});
   ui_gallery_play = createButton("play_replay", "play_replay", [this]() {this->onGalleryPlay();});
 
+  ui_servers_toggle = createButton("toggle_servers", "toggle_servers", [this]() {this->onServersToggle();});
+
   ui_gallery_play->setParent(ui_gallery_background);
 
 
@@ -125,6 +127,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_description = createWidget<QTextBrowser>("description");
   ui_description->setOpenExternalLinks(true);
   ui_description->setReadOnly(true);
+  ui_description->setParent(serverTabPanel);
 
   ui_workshop_description = createWidget<QTextBrowser>("workshop_description");
   ui_workshop_description->setOpenExternalLinks(true);
@@ -344,6 +347,7 @@ void Lobby::update_widgets()
 
   ui_gallery_toggle->raise();
   ui_workshop_toggle->raise();
+  ui_servers_toggle->raise();
   set_fonts();
   set_stylesheets();
   update_server_listing();
@@ -649,6 +653,11 @@ void Lobby::onGalleryCategoryChanged(int index)
   ui_replay_list->addItems(lReplays);
 }
 
+void Lobby::onServersToggle()
+{
+  AnimatePanelsToPosition(0);
+}
+
 void Lobby::onGalleryToggle()
 {
   AnimatePanelsToPosition(-(float)ui_gallery_background->pos().x());
@@ -669,7 +678,7 @@ void Lobby::AnimatePanelsToPosition(float position)
   auto frameChannel = std::make_unique<KeyframeChannel<QVector3D>>();
 
   frameChannel->AddKeyframe(0, {(float)panelCollection->x(), (float)panelCollection->pos().y(), 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
-  frameChannel->AddKeyframe(600, {position, 0.0f, 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+  frameChannel->AddKeyframe(400, {position, 0.0f, 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
 
   m_AnimatorPanels->AddChannel("position", std::move(frameChannel));
 
