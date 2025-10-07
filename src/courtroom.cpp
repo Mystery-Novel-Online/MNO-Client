@@ -1165,6 +1165,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
       next_chat_letter();
     }
   }
+
   message::incomingMessage(p_chatmessage);
 
   const int l_message_chr_id = p_chatmessage[CMChrId].toInt();
@@ -1229,7 +1230,12 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   else if (l_message_chr_id >= 0 && l_message_chr_id < CharacterRepository::serverListLength())
   {
     const int l_client_id = p_chatmessage[CMClientId].toInt();
-    append_ic_text(l_showname, l_message, false, false, l_client_id, user::GetCharacterId() == l_message_chr_id);
+    append_ic_text(l_showname, l_message, false, false, l_client_id, user::GetCharacterId() == l_message_chr_id, true);
+
+    QTextCursor cursor2 = ui_ic_chatlog->textCursor();
+    cursor2.movePosition(QTextCursor::End);
+    ui_ic_chatlog->setTextCursor(cursor2);
+    m_iclog_cursor_position = cursor2.position();
 
     if (ao_config->log_is_recording_enabled() && !l_message.isEmpty())
     {
@@ -2124,7 +2130,7 @@ void Courtroom::append_ic_text(QString p_name, QString p_line, bool p_system, bo
   new_record.set_client_id(p_client_id);
   new_record.set_self(p_self);
   new_record.set_music(p_music);
-  new_record.set_typed(true);
+  new_record.set_typed(typingEnabled);
   m_ic_record_queue.append(new_record);
   update_ic_log(false);
 }
@@ -2352,6 +2358,7 @@ void Courtroom::next_chat_letter()
   QTextCharFormat vp_message_format = ui_vp_message->currentCharFormat();
   vp_message_format.setTextOutline(m_chatbox_message_outline ? QPen(m_messageOutlineColor, m_messageOutlineSize) : Qt::NoPen);
 
+  QTextCursor cursor2 = ui_ic_chatlog->textCursor();
 
   auto insertChar = [&](QChar ch, const QTextCharFormat &format) {
     ui_vp_message->textCursor().insertText(ch, format);
@@ -2362,10 +2369,10 @@ void Courtroom::next_chat_letter()
     bool l_scroll_limt = l_scroll_pos == l_scrollbar->maximum();
     if(ao_config->log_is_topdown_enabled())
     {
-      QTextCursor cursor2 = ui_ic_chatlog->textCursor();
-      cursor2.movePosition(QTextCursor::End);
+      cursor2.setPosition(m_iclog_cursor_position);
       ui_ic_chatlog->setTextCursor(cursor2);
       cursor2.insertText(ch, format);
+      m_iclog_cursor_position += 1;
 
 
       if(l_scroll_limt)
@@ -2448,8 +2455,9 @@ void Courtroom::next_chat_letter()
 
   if (f_character == Qt::Key_Space)
   {
-    ui_vp_message->insertPlainText(f_character);
-    ui_ic_chatlog->insertPlainText(f_character);
+    //ui_vp_message->insertPlainText(f_character);
+    insertChar(' ', vp_message_format);
+    //ui_ic_chatlog->insertPlainText(f_character);
   }
   else if (m_chatmessage[CMTextColor].toInt() == DR::CRainbow)
   {
