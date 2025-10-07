@@ -42,6 +42,7 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
     jsonReader.SetTargetObject(ref.toObject());
     int playerId = jsonReader.getStringValue("id").toInt();
     QString showname = jsonReader.getStringValue("showname");
+    QString discord = jsonReader.getStringValue("discord");
     QString characterName = jsonReader.getStringValue("character");
     QString charaURL = jsonReader.getStringValue("url");
     QString statusPlayer = jsonReader.getStringValue("status");
@@ -55,6 +56,7 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
     DrPlayer* drp = new DrPlayer(playerId, showname, characterName, charaURL, statusPlayer, characterOutfit);
     drp->setMod(charaIPID, charaHDID);
     drp->setAfk(isAfk);
+    drp->setDiscord(discord);
     SceneManager::get().mPlayerDataList.append(*drp);
   }
   if(AOApplication::getInstance()->m_courtroom != nullptr)

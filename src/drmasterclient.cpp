@@ -16,9 +16,7 @@ QString DRMasterClient::address() const
 
 void DRMasterClient::set_address(QString p_address)
 {
-  if (m_address == p_address)
-    return;
-  m_address = p_address;
+  m_address = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/"));
   emit address_changed();
 }
 
@@ -29,7 +27,7 @@ QString DRMasterClient::motd() const
 
 void DRMasterClient::request_motd()
 {
-  send_get_request("/servers/motd", &DRMasterClient::process_motd);
+  send_get_request("/api/servers/motd", &DRMasterClient::process_motd);
 }
 
 DRServerInfoList DRMasterClient::server_list() const
@@ -39,7 +37,7 @@ DRServerInfoList DRMasterClient::server_list() const
 
 void DRMasterClient::request_server_list()
 {
-  send_get_request("/servers/browse", &DRMasterClient::process_server_list);
+  send_get_request("/api/servers/browse", &DRMasterClient::process_server_list);
 }
 
 void DRMasterClient::send_get_request(QString request, Delegate delegate)

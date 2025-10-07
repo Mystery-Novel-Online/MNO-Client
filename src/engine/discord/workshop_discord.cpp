@@ -101,6 +101,26 @@ void authorizeClient()
 
 }
 
+void WorkshopDiscord::sendPrivateMessage(const QString &discordId, const QString &message)
+{
+  client->SendUserMessage(discordId.toInt(), message.toStdString(), [](auto result, uint64_t messageId) {
+                            if (result.Successful()) {
+                              std::cout << "✅ Message sent successfully\n";
+                            } else {
+                              std::cout << "❌ Failed to send message: " << result.Error() << "\n";
+                            }
+                          });
+}
+
+void WorkshopDiscord::sendFriendRequest(const QString &discordId)
+{
+  client->SendGameFriendRequestById(discordId.toInt(), [](discordpp::ClientResult result) {
+                                      if (result.Successful()) {
+                                        std::cout << "🎮 Game friend request sent successfully!\n";
+                                      }
+                                    });
+}
+
 void WorkshopDiscord::setRichPresenceState(bool state)
 {
   rpEnabled = state;

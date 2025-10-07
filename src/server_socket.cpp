@@ -123,7 +123,10 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     s_lastMessageId = l_content.at(1).toInt();
 
     if (l_content.size() < 3)
+    {
+      send_server_packet(DRPacket("HI", {get_hdid()}));
       return;
+    }
 
     QString accessId = l_content.at(2);
     if(accessId != "-1")
@@ -131,8 +134,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
       const QString joinRequestUrl =
-          QString::fromStdString(config::ConfigUserSettings::stringValue(
-              "workshop_url2", "http://localhost:3623/")) +
+          QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) +
           "api/servers/join";
 
       QUrl url(joinRequestUrl);

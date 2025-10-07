@@ -12,6 +12,7 @@ public:
 
     void setMod(QString ipid, QString hdid);
     void setAfk(bool afkState) { m_Afk = afkState; };
+    void setDiscord(QString discord) { m_discord = discord; };
 
     int m_id;
     bool m_Afk = false;
@@ -22,6 +23,7 @@ public:
     QString mPlayerStatus;
     QString mHDID;
     QString mIPID;
+    QString m_discord;
 };
 
 #endif // DRPLAYER_H

@@ -3855,6 +3855,7 @@ void Courtroom::construct_playerlist_layout()
     ui_playername->setID(playerData.m_id);
     ui_playername->setStatus(playerData.mPlayerStatus);
     ui_playername->setOutfit(playerData.m_CharacterOutfit);
+    ui_playername->setDiscord(playerData.m_discord);
 
     ui_playername->setMod(playerData.mIPID, playerData.mHDID);
 

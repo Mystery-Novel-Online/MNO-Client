@@ -9,6 +9,8 @@
 #include "engine/fs/fs_characters.h"
 #include "engine/interface/scenes/downloader_prompt.h"
 
+#include "engine/discord/workshop_discord.h"
+
 using namespace engine::network::metadata;
 using namespace engine::system;
 
@@ -267,6 +269,26 @@ int DrPlayerListEntry::clientId()
   return m_clientId;
 }
 
+void DrPlayerListEntry::addDiscordFriend()
+{
+  WorkshopDiscord::getInstance().sendFriendRequest(m_discord);
+}
+
+void DrPlayerListEntry::messageDiscordFriend()
+{
+  bool ok;
+  QString text = QInputDialog::getText(nullptr,
+                                       "Message User (TEST)",
+                                       "Insert test message here:",
+                                       QLineEdit::Normal,
+                                       "",
+                                       &ok);
+
+  if (ok && !text.isEmpty()) {
+    WorkshopDiscord::getInstance().sendPrivateMessage(m_discord, text);
+  }
+}
+
 void DrPlayerListEntry::openCharacterFolder()
 {
   QUrl folderUrl = QUrl::fromLocalFile(FS::Paths::FindDirectory("characters/" + m_character));
@@ -388,6 +410,19 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
     connect(copyIPID, &QAction::triggered, this, &DrPlayerListEntry::copyIPID);
   }
 
+
+  if(!m_discord.isEmpty())
+  {
+    QMenu *pairMenu = menu->addMenu("Discord (Debug)");
+
+    QAction *discFriendAction = pairMenu->addAction("Add Friend");
+    connect(discFriendAction, &QAction::triggered, this, &DrPlayerListEntry::addDiscordFriend);
+
+    QAction *discMessageAction = pairMenu->addAction("Send Message");
+    connect(discMessageAction, &QAction::triggered, this, &DrPlayerListEntry::messageDiscordFriend);
+
+    QAction *discFriendWhitelist = pairMenu->addAction("Add to Current Whitelist");
+  }
   QAction *copyIDAction = menu->addAction(localization::getText("PLAYER_LIST_ID"));
   connect(copyIDAction, &QAction::triggered, this, &DrPlayerListEntry::copyID);
 

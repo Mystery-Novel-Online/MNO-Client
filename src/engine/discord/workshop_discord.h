@@ -16,6 +16,9 @@ public:
     return instance;
   }
 
+  void sendPrivateMessage(const QString& discordId, const QString& message);
+  void sendFriendRequest(const QString& discordId);
+
   void setRichPresenceState(bool state);
   void setRichPresenceStateText(std::string sstate);
   void setRichPresenceDetailsText(std::string sdetails);

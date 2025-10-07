@@ -14,6 +14,8 @@ public:
 
   void toggleTyping(bool status);
 
+  void setDiscord(const QString& discord) {m_discord = discord;};
+
   void set_character(QString p_character, bool afkState);
   void setOutfit(QString outfitName);
   void set_name(QString showname);
@@ -37,6 +39,9 @@ public:
 
 
 private slots:
+  void addDiscordFriend();
+  void messageDiscordFriend();
+
   void openCharacterFolder();
   void openBrowserURL();
   void sendPairRequest();
@@ -63,6 +68,7 @@ private:
   QString mHDID = "";
   QString mIPID = "";
   int m_clientId = -1;
+  QString m_discord = "";
 
   QTimer* m_typingTimer = nullptr;
 
