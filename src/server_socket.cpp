@@ -113,14 +113,59 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     s_lastMessageId = -1;
     m_server_client_version = VersionNumber();
     m_server_client_version_status = VersionStatus::NotCompatible;
-    send_server_packet(DRPacket("HI", {get_hdid()}));
 
     if (l_content.size() < 2)
+    {
+      send_server_packet(DRPacket("HI", {get_hdid()}));
       return;
+    }
 
     s_lastMessageId = l_content.at(1).toInt();
 
+    if (l_content.size() < 3)
+      return;
 
+    QString accessId = l_content.at(2);
+    if(accessId != "-1")
+    {
+      QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+
+      const QString joinRequestUrl =
+          QString::fromStdString(config::ConfigUserSettings::stringValue(
+              "workshop_url2", "http://localhost:3623/")) +
+          "api/servers/join";
+
+      QUrl url(joinRequestUrl);
+      QNetworkRequest request(url);
+      request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+      QString apiKey = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
+      QJsonObject json;
+      json["server_id"] = QString::number(l_content.at(2).toInt());
+      json["workshop_key"] = apiKey;
+      QJsonDocument doc(json);
+      QByteArray data = doc.toJson();
+
+      QNetworkReply *reply = manager->post(request, data);
+
+      QObject::connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+                         if (reply->error() == QNetworkReply::NoError) {
+
+                           QByteArray responseData = reply->readAll();
+                           JSONReader response;
+                           response.ReadFromString(responseData);
+
+                           send_server_packet(DRPacket("HI", {get_hdid(), response.getStringValue("access_code")}));
+                           qDebug() << "[JOIN SUCCESS]" << responseData;
+                         } else {
+                           qWarning() << "[JOIN ERROR]" << reply->errorString();
+                         }
+                         reply->deleteLater();
+                       });
+    }
+    else
+    {
+      send_server_packet(DRPacket("HI", {get_hdid(), "-1"}));
+    }
   }
   else if (l_header == "ID")
   {
