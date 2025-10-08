@@ -103,7 +103,7 @@ void authorizeClient()
 
 void WorkshopDiscord::sendPrivateMessage(const QString &discordId, const QString &message)
 {
-  client->SendUserMessage(discordId.toInt(), message.toStdString(), [](auto result, uint64_t messageId) {
+  client->SendUserMessage(discordId.toLongLong(), message.toStdString(), [](auto result, uint64_t messageId) {
                             if (result.Successful()) {
                               std::cout << "✅ Message sent successfully\n";
                             } else {
@@ -114,7 +114,7 @@ void WorkshopDiscord::sendPrivateMessage(const QString &discordId, const QString
 
 void WorkshopDiscord::sendFriendRequest(const QString &discordId)
 {
-  client->SendGameFriendRequestById(discordId.toInt(), [](discordpp::ClientResult result) {
+  client->SendGameFriendRequestById(discordId.toLongLong(), [](discordpp::ClientResult result) {
                                       if (result.Successful()) {
                                         std::cout << "🎮 Game friend request sent successfully!\n";
                                       }
@@ -193,6 +193,7 @@ void WorkshopDiscord::processOAuth()
   discordpp::AuthorizationArgs args{};
   args.SetClientId(APPLICATION_ID);
   args.SetScopes(discordpp::Client::GetDefaultPresenceScopes());
+  args.SetScopes(discordpp::Client::GetDefaultCommunicationScopes());
   args.SetCodeChallenge(codeVerifier.Challenge());
   m_currentClient->Authorize(args, [this, codeVerifier](auto result, auto code, auto redirectUri) {
                                if (!result.Successful()) {

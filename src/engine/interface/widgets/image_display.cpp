@@ -32,13 +32,11 @@ void AOImageDisplay::refreshImage()
 {
   if(!ThemeManager::get().mCurrentThemeReader.IsPixmapExist(m_image))
   {
-    qDebug() << "[AOPixmap] Failed to find in theme, loading manually: " + m_image;
     AOPixmap l_pixmap(m_image);
     setPixmap(l_pixmap.scale(size()));
   }
   else
   {
-    qDebug() << "[AOPixmap] Found in theme, loading: " + m_image;
     setPixmap(ThemeManager::get().mCurrentThemeReader.GetCachedPixmap(m_image).scale(size()));//->scale(size()));
   }
 }

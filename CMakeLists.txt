@@ -311,6 +311,8 @@ add_executable(rp-engine
   src/engine/workshop/workshop_cache.h src/engine/workshop/workshop_cache.cpp
   src/engine/discord/workshop_discord.h src/engine/discord/workshop_discord.cpp
   src/engine/animation/widget_animator.h src/engine/animation/widget_animator.cpp
+  src/engine/interface/widgets/serverselectlist.h src/engine/interface/widgets/serverselectlist.cpp
+  src/engine/interface/widgets/server_select_entry.h src/engine/interface/widgets/server_select_entry.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
