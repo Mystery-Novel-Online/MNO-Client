@@ -108,6 +108,10 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_server_list = createWidget<QListWidget>("server_list");
   ui_server_list->setContextMenuPolicy(Qt::CustomContextMenu);
   ui_server_list->setParent(serverTabPanel);
+  ui_server_list->hide();
+  ui_new_server_list = createWidget<ServerSelectList>("server_list");
+  ui_new_server_list->setContextMenuPolicy(Qt::CustomContextMenu);
+  ui_new_server_list->setParent(serverTabPanel);
 
   ui_server_menu = new QMenu(this);
   ui_server_menu->addSection(tr("Server"));
@@ -231,6 +235,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   connect(ui_server_list, SIGNAL(currentRowChanged(int)), this, SLOT(connect_to_server(int)));
   connect(ui_server_list, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(show_server_context_menu(QPoint)));
+  connect(ui_new_server_list, &ServerSelectList::entryClicked, this, &Lobby::connect_to_server);
 
   connect(ui_create_server, SIGNAL(triggered(bool)), this, SLOT(create_server_info()));
   connect(ui_modify_server, SIGNAL(triggered(bool)), this, SLOT(modify_server_info()));
@@ -553,6 +558,7 @@ void Lobby::update_combined_server_list()
 
 void Lobby::update_server_listing()
 {
+  ui_new_server_list->clearEntries();
   ui_server_list->clear();
   const QIcon l_favorite_icon = QPixmap(ao_app->find_theme_asset_path("favorite_server.png"));
   const QBrush l_favorite_color = ao_app->get_color("favorite_server_color", LOBBY_DESIGN_INI);
@@ -561,6 +567,7 @@ void Lobby::update_server_listing()
     const DRServerInfo &l_server = m_combined_server_list.at(i);
     QListWidgetItem *l_server_item = new QListWidgetItem;
     ui_server_list->addItem(l_server_item);
+    ui_new_server_list->addEntry(l_server.name);
     l_server_item->setText(l_server.name);
     l_server_item->setData(Qt::UserRole, false);
     if (i < m_favorite_server_list.length())
@@ -578,7 +585,9 @@ void Lobby::filter_server_listing()
   for (int i = 0; i < ui_server_list->count(); ++i)
   {
     QListWidgetItem *l_server_item = ui_server_list->item(i);
-    l_server_item->setHidden(m_server_filter == (l_server_item->data(Qt::UserRole).toBool() ? PublicOnly : FavoriteOnly));
+    bool hiddenState = m_server_filter == (l_server_item->data(Qt::UserRole).toBool() ? PublicOnly : FavoriteOnly);
+    l_server_item->setHidden(hiddenState);
+    ui_new_server_list->setHidden(i, hiddenState);
   }
   select_current_server();
 }

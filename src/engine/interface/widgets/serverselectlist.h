@@ -11,6 +11,9 @@ public:
   ServerSelectList(QWidget *parent = nullptr);
   void addEntry(QUrl icon, QString title);
   void addEntry(QString title);
+  void setHidden(int id, bool state);
+  void showEntry(int id);
+  void hideEntry(int id);
 
   void clearEntries();
 signals:

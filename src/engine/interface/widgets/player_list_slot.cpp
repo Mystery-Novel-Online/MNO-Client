@@ -410,7 +410,6 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
     connect(copyIPID, &QAction::triggered, this, &DrPlayerListEntry::copyIPID);
   }
 
-
   if(!m_discord.isEmpty())
   {
     QMenu *pairMenu = menu->addMenu("Discord (Debug)");

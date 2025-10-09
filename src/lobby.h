@@ -3,6 +3,7 @@
 
 #include "engine/interface/scenes/replay_window.h"
 #include "engine/interface/widgets/scene_widget.h"
+#include "engine/interface/widgets/serverselectlist.h"
 #include "engine/interface/widgets/workshop_list.h"
 #include "engine/interface/scenes/downloader_prompt.h"
 
@@ -104,6 +105,7 @@ private:
   RPTextEdit *ui_version = nullptr;
   RPButton *ui_config_panel = nullptr;
   QListWidget *ui_server_list = nullptr;
+  ServerSelectList *ui_new_server_list = nullptr;
   RPTextEdit *ui_player_count = nullptr;
   QTextBrowser *ui_description = nullptr;
   DRChatLog *ui_chatbox = nullptr;

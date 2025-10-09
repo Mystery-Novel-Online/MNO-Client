@@ -9,6 +9,7 @@ class ServerSelectEntry : public QWidget
   Q_OBJECT
 public:
   ServerSelectEntry(const QString& title, QWidget *parent = nullptr);
+  void setId(int id) { m_id = id; }
   int id() const { return m_id; }
 
 signals:

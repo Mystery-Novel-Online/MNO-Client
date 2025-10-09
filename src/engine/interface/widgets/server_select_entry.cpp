@@ -4,7 +4,7 @@ ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QW
 {
   setCursor(Qt::PointingHandCursor);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-
+  setStyleSheet("background-color: #4C485D; border: 2px solid #37304C; border-radius: 10px; color: yellow;");
   m_rootLayout = new QVBoxLayout(this);
   m_rootLayout->setContentsMargins(0, 0, 0, 0);
   m_rootLayout->setSpacing(0);
@@ -16,6 +16,7 @@ ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QW
   QLabel *iconLabel = new QLabel(headerWidget);
   iconLabel->setFixedSize(50, 50);
   m_mainLayout->addWidget(iconLabel);
+  iconLabel->setStyleSheet("border: none;");
 
   QVBoxLayout *textLayout = new QVBoxLayout();
   QLabel *titleLabel = new QLabel(title, headerWidget);
@@ -27,6 +28,7 @@ ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QW
   m_mainLayout->addStretch();
 
   m_rootLayout->addWidget(headerWidget);
+  headerWidget->setStyleSheet("border: none;");
 
   m_childrenLayout = new QVBoxLayout();
   m_childrenLayout->setContentsMargins(35, 0, 0, 0);
