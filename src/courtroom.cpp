@@ -2301,7 +2301,7 @@ void Courtroom::next_chat_letter()
       {
       case TagType_SoundEffect:
         audio::effect::StopAll();
-        audio::effect::Play(tag.variables.at(1).toString().toStdString());
+        audio::effect::PlayCharacter(m_chatmessage[CMChrName].toStdString(), tag.variables.at(1).toString().toStdString());
         break;
 
       case TagType_Flip:
