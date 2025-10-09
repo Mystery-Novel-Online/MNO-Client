@@ -9,13 +9,14 @@ class ServerSelectList : public QWidget
   Q_OBJECT
 public:
   ServerSelectList(QWidget *parent = nullptr);
+  void clearEntries();
   void addEntry(QUrl icon, QString title);
   void addEntry(QString title);
-  void setHidden(int id, bool state);
-  void showEntry(int id);
-  void hideEntry(int id);
 
-  void clearEntries();
+  void setHidden(int id, bool state);
+
+  void setIcon(int id, QString path);
+
 signals:
   void entryClicked(int index);
 

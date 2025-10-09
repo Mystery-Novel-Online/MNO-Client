@@ -54,7 +54,7 @@ void ServerSelectList::setHidden(int id, bool state)
   }
 }
 
-void ServerSelectList::showEntry(int id)
+void ServerSelectList::setIcon(int id, QString path)
 {
   for (int i = 0; i < m_layout->count(); ++i)
   {
@@ -67,30 +67,7 @@ void ServerSelectList::showEntry(int id)
       {
         if (entry->id() == id)
         {
-          entry->show();
-          m_layout->update();
-          return;
-        }
-      }
-    }
-  }
-}
-
-void ServerSelectList::hideEntry(int id)
-{
-  for (int i = 0; i < m_layout->count(); ++i)
-  {
-    QLayoutItem *child = m_layout->itemAt(i);
-    if (!child) continue;
-
-    if (QWidget *w = child->widget())
-    {
-      if (ServerSelectEntry *entry = dynamic_cast<ServerSelectEntry *>(w))
-      {
-        if (entry->id() == id)
-        {
-          entry->hide();
-          m_layout->update();
+          entry->setIcon(path);
           return;
         }
       }

@@ -13,10 +13,10 @@ ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QW
   m_mainLayout = new QHBoxLayout(headerWidget);
   m_mainLayout->setContentsMargins(1, 1, 1, 1);
 
-  QLabel *iconLabel = new QLabel(headerWidget);
-  iconLabel->setFixedSize(50, 50);
-  m_mainLayout->addWidget(iconLabel);
-  iconLabel->setStyleSheet("border: none;");
+  m_iconLabel = new QLabel(headerWidget);
+  m_iconLabel->setFixedSize(50, 50);
+  m_mainLayout->addWidget(m_iconLabel);
+  m_iconLabel->setStyleSheet("border: none;");
 
   QVBoxLayout *textLayout = new QVBoxLayout();
   QLabel *titleLabel = new QLabel(title, headerWidget);
@@ -35,6 +35,13 @@ ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QW
   m_rootLayout->addLayout(m_childrenLayout);
 
   setLayout(m_rootLayout);
+}
+
+void ServerSelectEntry::setIcon(QString path)
+{
+  QPixmap pix;
+  if (pix.load(path))
+    m_iconLabel->setPixmap(pix.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 void ServerSelectEntry::mousePressEvent(QMouseEvent *event)

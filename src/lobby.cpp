@@ -575,6 +575,10 @@ void Lobby::update_server_listing()
       l_server_item->setIcon(l_favorite_icon);
       l_server_item->setBackground(l_favorite_color);
       l_server_item->setData(Qt::UserRole, true);
+      ui_new_server_list->setIcon(i, ao_app->find_theme_asset_path("favorite.png"));
+    }
+    else
+    {
     }
   }
   filter_server_listing();

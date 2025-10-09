@@ -12,6 +12,8 @@ public:
   void setId(int id) { m_id = id; }
   int id() const { return m_id; }
 
+  void setIcon(QString path);
+
 signals:
   void clicked(int id);
 
@@ -21,6 +23,8 @@ protected:
 private:
   int m_id;
   QString m_title;
+
+  QLabel *m_iconLabel = nullptr;
 
   QVBoxLayout *m_rootLayout;
   QHBoxLayout *m_mainLayout;
