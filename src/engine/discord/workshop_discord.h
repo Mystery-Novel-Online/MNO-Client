@@ -28,6 +28,8 @@ public:
   void sendUserMessage(std::string message, uint64_t recipientId);
   void updateRichPresence();
 
+  QVector<DiscordUser> getFriends();
+
 private:
   std::shared_ptr<discordpp::Client> m_currentClient = nullptr;
 };

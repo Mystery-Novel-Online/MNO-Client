@@ -45,7 +45,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   ui_background = createWidget<AOImageDisplay>("lobby");
   panelCollection->move(0, 0);
-  panelCollection->resize(ui_background->size().rwidth() * 3, ui_background->size().rheight());
+  panelCollection->resize(ui_background->size().rwidth() * 3, ui_background->size().rheight() * 2);
   serverTabPanel = createWidget<AOImageDisplay>("lobby");
   serverTabPanel->setParent(panelCollection);
 
@@ -54,6 +54,10 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_gallery_background->move(ui_gallery_background->width() * 2, ui_gallery_background->y());
   ui_gallery_preview = createWidget<AOImageDisplay>("replay_preview");
   ui_gallery_preview->setParent(ui_gallery_background);
+
+  ui_panel_friends = createWidget<AOImageDisplay>("friends_panel");
+  ui_panel_friends->setParent(panelCollection);
+  ui_panel_friends->move(0, ui_gallery_background->height() * 2);
 
   ui_workshop_background = createWidget<AOImageDisplay>("workshop_panel");
   ui_workshop_background->setParent(panelCollection);
@@ -73,6 +77,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   ui_gallery_toggle = createButton("toggle_gallery", "toggle_gallery", [this]() {this->onGalleryToggle();});
   ui_workshop_toggle = createButton("toggle_workshop", "toggle_workshop", [this]() {this->onWorkshopToggle();});
+  ui_friends_toggle = createButton("toggle_friends", "toggle_friends", [this](){this->onFriendsToggle();});
   ui_gallery_play = createButton("play_replay", "play_replay", [this]() {this->onGalleryPlay();});
 
   ui_servers_toggle = createButton("toggle_servers", "toggle_servers", [this]() {this->onServersToggle();});
@@ -112,6 +117,9 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_new_server_list = createWidget<ServerSelectList>("server_list");
   ui_new_server_list->setContextMenuPolicy(Qt::CustomContextMenu);
   ui_new_server_list->setParent(serverTabPanel);
+
+  ui_friends_list = createWidget<ServerSelectList>("friends_list");
+  ui_friends_list->setParent(ui_panel_friends);
 
   ui_server_menu = new QMenu(this);
   ui_server_menu->addSection(tr("Server"));
@@ -290,6 +298,10 @@ void Lobby::update_widgets()
   ui_gallery_background->raise();
   ui_gallery_background->hide();
 
+  ui_panel_friends->set_theme_image("friends_panel.png");
+  ui_panel_friends->raise();
+  ui_panel_friends->hide();
+
   serverTabPanel->set_theme_image("server_panel.png");
   serverTabPanel->raise();
   serverTabPanel->show();
@@ -354,6 +366,7 @@ void Lobby::update_widgets()
   ui_gallery_toggle->raise();
   ui_workshop_toggle->raise();
   ui_servers_toggle->raise();
+  ui_friends_toggle->raise();
   set_fonts();
   set_stylesheets();
   update_server_listing();
@@ -407,6 +420,15 @@ void Lobby::show_loading_overlay()
 void Lobby::hide_loading_overlay()
 {
   ui_loading_background->hide();
+}
+
+void Lobby::refreshFriendsList()
+{
+  ui_friends_list->clearEntries();
+  for(const DiscordUser& user : WorkshopDiscord::getInstance().getFriends())
+  {
+    ui_friends_list->addEntry(user.displayname);
+  }
 }
 
 void Lobby::set_loading_text(QString p_text)
@@ -667,18 +689,25 @@ void Lobby::onGalleryCategoryChanged(int index)
   ui_replay_list->addItems(lReplays);
 }
 
+void Lobby::onFriendsToggle()
+{
+  refreshFriendsList();
+  AnimatePanelsToPosition(-(float)ui_panel_friends->pos().x(), -ui_panel_friends->pos().y());
+  ui_panel_friends->setVisible(true);
+}
+
 void Lobby::onServersToggle()
 {
-  AnimatePanelsToPosition(0);
+  AnimatePanelsToPosition(0, 0);
 }
 
 void Lobby::onGalleryToggle()
 {
-  AnimatePanelsToPosition(-(float)ui_gallery_background->pos().x());
+  AnimatePanelsToPosition(-(float)ui_gallery_background->pos().x(), 0);
   ui_gallery_background->setVisible(true);
 }
 
-void Lobby::AnimatePanelsToPosition(float position)
+void Lobby::AnimatePanelsToPosition(float x, float y)
 {
 
   if(m_AnimatorPanels != nullptr)
@@ -692,7 +721,7 @@ void Lobby::AnimatePanelsToPosition(float position)
   auto frameChannel = std::make_unique<KeyframeChannel<QVector3D>>();
 
   frameChannel->AddKeyframe(0, {(float)panelCollection->x(), (float)panelCollection->pos().y(), 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
-  frameChannel->AddKeyframe(400, {position, 0.0f, 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+  frameChannel->AddKeyframe(400, {x, y, 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
 
   m_AnimatorPanels->AddChannel("position", std::move(frameChannel));
 
@@ -700,7 +729,7 @@ void Lobby::AnimatePanelsToPosition(float position)
 
 void Lobby::onWorkshopToggle()
 {
-  AnimatePanelsToPosition(-(float)ui_workshop_background->width());
+  AnimatePanelsToPosition(-(float)ui_workshop_background->width(), 0);
   ui_workshop_background->setVisible(true);
 }
 

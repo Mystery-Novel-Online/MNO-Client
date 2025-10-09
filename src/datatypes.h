@@ -1,6 +1,13 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H
 
+struct DiscordUser
+{
+  uint64_t snowflake;
+  QString username;
+  QString displayname;
+};
+
 enum MessageTagType
 {
   TagType_SoundEffect,

@@ -14,11 +14,29 @@ std::shared_ptr<discordpp::Client> client;
 const uint64_t APPLICATION_ID = 1409897527528128533;
 std::atomic<bool> running = true;
 bool rpEnabled = false;
+QVector<DiscordUser> s_Friends = {};
 
 discordpp::Activity currentActivity;
 
 std::string state = "Lobby";
 std::string details = "Selecting a server";
+
+void refreshFriendsList()
+{
+  const auto onlineInGame = client->GetRelationships();
+  s_Friends.clear();
+
+  for (const auto& relationship : onlineInGame)
+  {
+    auto user = relationship.User();
+    if (user) {
+      if (relationship.GameRelationshipType() == discordpp::RelationshipType::Friend || relationship.DiscordRelationshipType() == discordpp::RelationshipType::Friend) {
+        s_Friends.append({user->Id(), QString::fromStdString(user->Username()), QString::fromStdString(user->GlobalName().value_or(user->Username()))});
+      }
+
+    }
+  }
+}
 
 void signalHandler(int signum) {
   running.store(false);
@@ -77,6 +95,8 @@ void clientStatusChangedCallback(discordpp::Client::Status status, discordpp::Cl
     std::cout << "[!] Client is Ready!" << std::endl;
 
     discordpp::UserHandle me = client->GetCurrentUser();
+    refreshFriendsList();
+
 
     std::cout << "[!] Logged in as " << me.Username() << " (ID: " << me.Id() << ")" << std::endl;
     std::cout << "[!] Friends count: " << client->GetRelationships().size() << std::endl;
@@ -159,6 +179,10 @@ WorkshopDiscord::WorkshopDiscord()
 
     QNetworkAccessManager* verifyManager = new QNetworkAccessManager(this);
     QNetworkReply* verifyReply = verifyManager->post(verifyRequest, QByteArray::fromStdString(verifyBody.dump()));
+
+    client->SetRelationshipGroupsUpdatedCallback([&](const uint64_t userId) {
+                                                   refreshFriendsList();
+                                                 });
 
     connect(verifyReply, &QNetworkReply::finished, this, [this, verifyReply]() {
               if (verifyReply->error() != QNetworkReply::NoError) {
@@ -257,3 +281,9 @@ void WorkshopDiscord::updateRichPresence()
 {
   setRichPresence();
 }
+
+QVector<DiscordUser> WorkshopDiscord::getFriends()
+{
+  return s_Friends;
+}
+

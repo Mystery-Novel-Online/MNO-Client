@@ -40,6 +40,8 @@ public:
   void set_fonts();
   void show_loading_overlay();
   void hide_loading_overlay();
+
+  void refreshFriendsList();
   DRServerInfo get_selected_server();
   void set_loading_value(int p_value);
 
@@ -79,6 +81,12 @@ private:
   AOImageDisplay *serverTabPanel = nullptr;
   AOImageDisplay *ui_gallery_background = nullptr;
   AOImageDisplay *ui_gallery_preview = nullptr;
+
+
+  RPButton *ui_friends_toggle = nullptr;
+
+  AOImageDisplay *ui_panel_friends = nullptr;
+
   RPButton *ui_gallery_play = nullptr;
   RPButton *ui_gallery_toggle = nullptr;
 
@@ -116,6 +124,7 @@ private:
   WorkshopListWidget *workshop_list = nullptr;
   QTextBrowser *ui_workshop_description = nullptr;
 
+  ServerSelectList *ui_friends_list = nullptr;
 
   QString m_currentBrowserUrl = "";
   QString m_currentWorkshopCharacter = "";
@@ -164,9 +173,10 @@ private slots:
   void onReplayRowChanged(int row);
   void onGalleryPackageChanged(int index);
   void onGalleryCategoryChanged(int index);
+  void onFriendsToggle();
   void onServersToggle();
   void onGalleryToggle();
-  void AnimatePanelsToPosition(float position);
+  void AnimatePanelsToPosition(float x, float y);
   void onWorkshopToggle();
   void onGalleryPlay();
   void onWorkshopBrowser();
