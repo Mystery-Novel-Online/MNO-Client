@@ -55,7 +55,11 @@ void Courtroom::load_current_character_sfx_list()
 
     const QString l_name = l_sfx_entry.at(l_sfx_entry.size() - 1).trimmed();
     const QString l_file = QString(l_sfx_entry.size() >= 2 ? l_sfx_entry.at(0) : nullptr).trimmed();
-    const bool l_is_found = !ao_app->find_asset_path({ao_app->get_sfx_noext_path(l_file)}, FS::Formats::SupportedAudio()).isEmpty();
+    bool l_is_found = !ao_app->find_asset_path({ao_app->get_sfx_noext_path(l_file)}, FS::Formats::SupportedAudio()).isEmpty();
+    if(!l_is_found)
+    {
+      l_is_found  = !FS::Paths::FindFile("characters/" + QString::fromStdString(network::metadata::user::getIniswap()) + "/sounds/" + ao_app->get_sfx_noext_path(l_file), true, FS::Formats::SupportedAudio()).isEmpty();
+    }
     m_sfx_list.append(DRSfx(l_name, l_file, l_is_found));
   }
 
@@ -143,7 +147,7 @@ void Courtroom::on_sfx_list_context_menu_requested(QPoint p_point)
 
 void Courtroom::on_sfx_menu_preview_triggered()
 {
-  audio::effect::Play(current_sfx_file().toStdString());
+  audio::effect::PlayCharacter(engine::network::metadata::user::getIniswap(), current_sfx_file().toStdString());
 }
 
 void Courtroom::on_sfx_menu_insert_file_name_triggered()
