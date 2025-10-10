@@ -408,20 +408,21 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
     QString label = localization::getText("MOD_COPY_IPID") + " [" + mIPID + "]";
     QAction *copyIPID = menu->addAction(label);
     connect(copyIPID, &QAction::triggered, this, &DrPlayerListEntry::copyIPID);
+
+    if(!m_discord.isEmpty())
+    {
+      QMenu *pairMenu = menu->addMenu("Discord (Debug)");
+
+      QAction *discFriendAction = pairMenu->addAction("Add Friend");
+      connect(discFriendAction, &QAction::triggered, this, &DrPlayerListEntry::addDiscordFriend);
+
+      QAction *discMessageAction = pairMenu->addAction("Send Message");
+      connect(discMessageAction, &QAction::triggered, this, &DrPlayerListEntry::messageDiscordFriend);
+
+      QAction *discFriendWhitelist = pairMenu->addAction("Add to Current Whitelist");
+    }
   }
 
-  if(!m_discord.isEmpty())
-  {
-    QMenu *pairMenu = menu->addMenu("Discord (Debug)");
-
-    QAction *discFriendAction = pairMenu->addAction("Add Friend");
-    connect(discFriendAction, &QAction::triggered, this, &DrPlayerListEntry::addDiscordFriend);
-
-    QAction *discMessageAction = pairMenu->addAction("Send Message");
-    connect(discMessageAction, &QAction::triggered, this, &DrPlayerListEntry::messageDiscordFriend);
-
-    QAction *discFriendWhitelist = pairMenu->addAction("Add to Current Whitelist");
-  }
   QAction *copyIDAction = menu->addAction(localization::getText("PLAYER_LIST_ID"));
   connect(copyIDAction, &QAction::triggered, this, &DrPlayerListEntry::copyID);
 

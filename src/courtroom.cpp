@@ -1232,10 +1232,20 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
     const int l_client_id = p_chatmessage[CMClientId].toInt();
     append_ic_text(l_showname, l_message, false, false, l_client_id, user::GetCharacterId() == l_message_chr_id, true);
 
+
+    QScrollBar *l_scrollbar = ui_ic_chatlog->verticalScrollBar();
+    const int l_scroll_pos = l_scrollbar->value();
+    bool l_scroll_limt = l_scroll_pos == l_scrollbar->maximum();
+
+
+
+
     QTextCursor cursor2 = ui_ic_chatlog->textCursor();
     cursor2.movePosition(QTextCursor::End);
     ui_ic_chatlog->setTextCursor(cursor2);
     m_iclog_cursor_position = cursor2.position();
+
+    l_scrollbar->setValue(l_scroll_limt ? l_scrollbar->maximum() : l_scroll_pos);
 
     if (ao_config->log_is_recording_enabled() && !l_message.isEmpty())
     {
