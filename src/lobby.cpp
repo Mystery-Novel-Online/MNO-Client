@@ -214,6 +214,22 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   });
 
+
+  QObject::connect(workshop_list, &WorkshopListWidget::entryRightClicked, [this](int id)
+  {
+                     QMenu menu;
+
+                     QAction *editAction = menu.addAction("Edit");
+
+                     connect(editAction, &QAction::triggered, this, [this, id]()
+                      {
+                        WorkshopUploader::StartEdit(id);
+                      });
+
+                     menu.exec(QCursor::pos());
+
+  });
+
   ui_gallery_packages = createWidget<QComboBox>("replay_packages");
   ui_gallery_categories = createWidget<QComboBox>("replay_category");
   ui_gallery_packages->setParent(ui_gallery_background);
@@ -367,6 +383,7 @@ void Lobby::update_widgets()
   ui_workshop_toggle->raise();
   ui_servers_toggle->raise();
   ui_friends_toggle->raise();
+  ui_friends_toggle->hide();
   set_fonts();
   set_stylesheets();
   update_server_listing();

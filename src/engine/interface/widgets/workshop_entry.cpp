@@ -82,6 +82,9 @@ WorkshopEntry* WorkshopEntry::createChild(int id, const QString &iconPath, const
 
 void WorkshopEntry::mousePressEvent(QMouseEvent *event)
 {
+  if (event->button() == Qt::RightButton) {
+    emit rightClicked(m_id);
+  }
   if (event->button() == Qt::LeftButton) {
     emit clicked(m_id);
 

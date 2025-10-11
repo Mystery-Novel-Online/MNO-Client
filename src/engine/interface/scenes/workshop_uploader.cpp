@@ -7,9 +7,10 @@
 #include <engine/fs/fs_characters.h>
 #include <engine/fs/fs_reading.h>
 
-WorkshopUploader::WorkshopUploader(QWidget *parent) : QDialog{parent}, m_currentReply(nullptr)
+WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) : QDialog{parent}, m_currentReply(nullptr), m_isEdit(edit), m_editTarget(editTarget)
 {
-  setWindowTitle("Upload Zip File");
+
+  setWindowTitle(m_isEdit ? "Edit Character" : "Upload Character");
   setModal(true);
 
   m_filePath = new QLineEdit(this);
@@ -28,6 +29,13 @@ WorkshopUploader::WorkshopUploader(QWidget *parent) : QDialog{parent}, m_current
 
   m_private = new QCheckBox(this);
   m_private->setText("Make Upload Private");
+
+  if(edit)
+  {
+    m_filePath->setText("<No Change>");
+    m_description->setText("<No Change>");
+    m_artist->setText("<No Change>");
+  }
 
   QFormLayout *layout = new QFormLayout(this);
   layout->addRow("Zip File:", m_filePath);
@@ -52,11 +60,24 @@ void WorkshopUploader::StartUpload()
   QString uploadKey = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
   if(uploadKey.trimmed().isEmpty() || uploadKey.trimmed() == "PUT_KEY_HERE")
   {
-    QMessageBox::information(nullptr, "Warning", "In order to upload directly to the workshop, you will need a key. Please request one from Winter to do so.");
+    QMessageBox::information(nullptr, "Warning", "You currently are not authenticated to upload");
     config::ConfigUserSettings::save();
     return;
   }
   WorkshopUploader *prompt = new WorkshopUploader(nullptr);
+  prompt->show();
+}
+
+void WorkshopUploader::StartEdit(int id)
+{
+  QString uploadKey = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
+  if(uploadKey.trimmed().isEmpty() || uploadKey.trimmed() == "PUT_KEY_HERE")
+  {
+    QMessageBox::information(nullptr, "Warning", "You currently are not authenticated to upload");
+    config::ConfigUserSettings::save();
+    return;
+  }
+  WorkshopUploader *prompt = new WorkshopUploader(nullptr, true, id);
   prompt->show();
 }
 
@@ -70,28 +91,33 @@ void WorkshopUploader::chooseFile()
 
 void WorkshopUploader::submitForm()
 {
-  if (m_filePath->text().isEmpty()) {
+  if (m_filePath->text().isEmpty() && !m_isEdit) {
     QMessageBox::warning(this, "Error", "Please select a zip file.");
     return;
   }
 
   QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
-  QFile *file = new QFile(m_filePath->text());
-  if (!file->open(QIODevice::ReadOnly)) {
-    QMessageBox::warning(this, "Error", "Unable to open file.");
-    delete file;
-    delete multiPart;
-    return;
+  if(!m_filePath->text().trimmed().isEmpty() && m_filePath->text() != "<No Change>")
+  {
+    QFile *file = new QFile(m_filePath->text());
+    if (!file->open(QIODevice::ReadOnly)) {
+      QMessageBox::warning(this, "Error", "Unable to open file.");
+      delete file;
+      delete multiPart;
+      return;
+    }
+
+    QHttpPart filePart;
+    filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
+                       QVariant("form-data; name=\"zipfile\"; filename=\"" + QFileInfo(*file).fileName() + "\""));
+    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/zip"));
+    filePart.setBodyDevice(file);
+    file->setParent(multiPart);
+
+    multiPart->append(filePart);
   }
 
-  QHttpPart filePart;
-  filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
-                     QVariant("form-data; name=\"zipfile\"; filename=\"" + QFileInfo(*file).fileName() + "\""));
-  filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/zip"));
-  filePart.setBodyDevice(file);
-  file->setParent(multiPart);
-  multiPart->append(filePart);
 
   auto addField = [&](const QString &name, const QString &value) {
     QHttpPart part;
@@ -101,12 +127,20 @@ void WorkshopUploader::submitForm()
   };
 
   addField("key", QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE")));
-  addField("artist", m_artist->text());
-  addField("description", m_description->toPlainText());
+
+  if(m_editTarget != -1)
+    addField("id", QString::number(m_editTarget));
+
+  if(!m_artist->text().trimmed().isEmpty() && m_artist->text() != "<No Change>")
+    addField("artist", m_artist->text());
+
+  if(!m_description->toPlainText().trimmed().isEmpty() && m_description->toPlainText() != "<No Change>")
+    addField("description", m_description->toPlainText());
+
   addField("tags", "untagged");
   addField("is_private", QString::number(m_private->checkState() == Qt::Checked));
 
-  QUrl url(QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/upload");
+  QUrl url(QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + QString(m_isEdit ? "api/workshop/edit" : "api/workshop/upload"));
   QNetworkRequest request(url);
 
   m_currentReply = m_network->post(request, multiPart);
@@ -143,6 +177,7 @@ void WorkshopUploader::handleReply(QNetworkReply *reply)
     }
   } else {
     QMessageBox::critical(this, "Error", reply->errorString());
+    qDebug() << reply->readAll();;
   }
   reply->deleteLater();
 }

@@ -5,8 +5,9 @@ class WorkshopUploader : public QDialog
 {
   Q_OBJECT
 public:
-  explicit WorkshopUploader(QWidget *parent = nullptr);
+  explicit WorkshopUploader(QWidget *parent = nullptr, bool edit = false, int edit_id = -1);
   static void StartUpload();
+  static void StartEdit(int id);
 
 private slots:
   void chooseFile();
@@ -22,6 +23,8 @@ private:
   QPushButton *m_submitButton;
   QProgressBar *m_progress;
 
+  bool m_isEdit = false;
+  int m_editTarget = -1;
   QCheckBox *m_private;
 
   QNetworkAccessManager *m_network;

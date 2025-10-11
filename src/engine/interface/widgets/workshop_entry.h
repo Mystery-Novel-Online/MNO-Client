@@ -20,6 +20,7 @@ public:
 
 signals:
   void clicked(int id);
+  void rightClicked(int id);
 
 protected:
   void mousePressEvent(QMouseEvent *event) override;

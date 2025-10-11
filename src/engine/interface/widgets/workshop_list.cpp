@@ -27,6 +27,7 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
 {
   WorkshopEntry *entry = new WorkshopEntry(id, icon, title, subtitle, gender, m_container);
   connect(entry, &WorkshopEntry::clicked, this, &WorkshopListWidget::entryClicked);
+  connect(entry, &WorkshopEntry::rightClicked, this, &WorkshopListWidget::entryRightClicked);
   m_layout->addWidget(entry);
   for(const auto & child : children)
   {
