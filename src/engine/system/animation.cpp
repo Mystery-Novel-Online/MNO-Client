@@ -9,7 +9,8 @@ namespace engine::system::animation
   {
     for(auto sequence : s_currentSequences)
     {
-      sequence->RunSequence(deltaTime);
+      if(sequence->runningState())
+        sequence->RunSequence(deltaTime);
     }
   }
 

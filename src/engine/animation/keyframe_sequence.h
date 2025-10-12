@@ -17,7 +17,18 @@ public:
   void setViewportTimestamp(int time) { m_ViewportTimestamp = time; };
 
 
+  void CalculateLength(const std::string& name);
   void AddChannel(const std::string& name, std::unique_ptr<KeyframeChannelTemplate> channel);
+
+  template<typename T>
+  KeyframeChannel<T>* GetChannel(const std::string &name)
+  {
+    auto it = m_Channels.find(name);
+    if (it != m_Channels.end())
+      return dynamic_cast<KeyframeChannel<T>*>(it->second.get());
+    return nullptr;
+  }
+
   void AddTimedSound(float timestamp, const std::string& sound);
   void SequenceJumpEnd();
   virtual void RunSequence(float deltaTime);
@@ -29,7 +40,14 @@ public:
   bool canRenderViewport();
   int viewportTimestamp() {return m_ViewportTimestamp;}
 
+  bool runningState() {return m_Running;}
+  void setRunningState(bool state) {m_Running = state;}
+  QString friendlyName() {return m_FriendlyName;}
+  void setFriendlyName(QString name) {m_FriendlyName = name;}
+
 private:
+  QString m_FriendlyName = "";
+  bool m_Running = true;
   bool m_Loop = false;
   bool m_RenderProcessed = false;
   QString m_SoundEffect = "";

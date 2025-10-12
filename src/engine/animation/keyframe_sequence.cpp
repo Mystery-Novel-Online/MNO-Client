@@ -2,6 +2,7 @@
 #include "engine/system/animation.h"
 #include "engine/system/audio.h"
 #include "engine/interface/courtroom_layout.h"
+#include "engine/system/theme_scripting.h"
 
 KeyframeSequence::KeyframeSequence()
 {
@@ -41,6 +42,12 @@ void KeyframeSequence::SetLoop(bool isLoop)
   m_Loop = isLoop;
 }
 
+void KeyframeSequence::CalculateLength(const std::string &name)
+{
+  float channelLength = m_Channels[name]->GetLength();
+  if(channelLength > m_SequenceLength) m_SequenceLength = channelLength;
+}
+
 void KeyframeSequence::AddChannel(const std::string &name, std::unique_ptr<KeyframeChannelTemplate> channel)
 {
   m_Channels[name] = std::move(channel);
@@ -61,7 +68,16 @@ void KeyframeSequence::SequenceJumpEnd()
 void KeyframeSequence::RunSequence(float deltaTime)
 {
   if(m_SequenceLength == 0) return;
-  if(m_Timestamp > m_SequenceLength && !m_Loop) return;
+  if(m_Timestamp > m_SequenceLength && !m_Loop)
+  {
+    m_Running = false;
+    QString animationCall = "On" + m_FriendlyName + "End";
+    if(m_FriendlyName.isEmpty())
+      LuaBridge::LuaEventCall("OnAnimationEnd");
+    else
+      LuaBridge::LuaEventCall(animationCall.toStdString().c_str());
+    return;
+  }
   if(m_Timestamp == 0) audio::effect::Play(m_SoundEffect.toStdString());
 
 

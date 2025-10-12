@@ -48,6 +48,15 @@ namespace courtroom
     void switchName(const std::string& name);
   }
 
+  namespace animations
+  {
+    void createAnimation(const std::string& name, const std::string& target, bool loop);
+    void reset(const std::string& name);
+    void addKeyframe(const std::string& name, float timeMs, float x, float y, float z);
+    void playAnimation(const std::string& name);
+    void stopAnimation(const std::string& name);
+  }
+
   namespace choice
   {
     //void notifyPair(const char* sender, const char* message);

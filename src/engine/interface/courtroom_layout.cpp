@@ -3,8 +3,11 @@
 #include "modules/theme/thememanager.h"
 #include "engine/system/theme_scripting.h"
 
+#include <engine/animation/widget_animator.h>
+
 static QHash<QString, QWidget *> s_CourtroomWidgets = {};
 static QHash<QString, QWidget *> s_TabWidgets = {};
+static QHash<QString, WidgetAnimator *> s_WidgetAnimators = {};
 
 static QVector<DRStickerViewer *> s_CourtroomStickers = {};
 static QVector<RPButton *> s_CourtroomButtons = {};
@@ -724,6 +727,82 @@ namespace courtroom
       }
 
     }
+  }
+
+  void animations::createAnimation(const std::string &name, const std::string &target, bool loop)
+  {
+    QString qTarget = QString::fromStdString(target);
+    QString qName = QString::fromStdString(name);
+    if (auto *targetWidget = qobject_cast<QWidget *>(s_CourtroomWidgets.value(qTarget)))
+    {
+      if(s_WidgetAnimators.contains(qName)) delete s_WidgetAnimators[qName];
+      s_WidgetAnimators[qName] = new WidgetAnimator(targetWidget);
+      s_WidgetAnimators[qName]->setFriendlyName(qName);
+      s_WidgetAnimators[qName]->setRunningState(false);
+      s_WidgetAnimators[qName]->SetLoop(loop);
+    }
+  }
+
+  void animations::addKeyframe(const std::string &name, float timeMs, float x, float y, float z)
+  {
+    QString qAnimName = QString::fromStdString(name);
+
+    if (!s_WidgetAnimators.contains(qAnimName)) {
+      qWarning() << "Animation" << qAnimName << "not found!";
+      return;
+    }
+
+    auto *animator = s_WidgetAnimators[qAnimName];
+    auto channel = animator->GetChannel<QVector3D>("position");
+
+    if (!channel)
+    {
+      auto newChannel = std::make_unique<KeyframeChannel<QVector3D>>();
+      newChannel->AddKeyframe(timeMs, QVector3D(x, y, z),
+                              static_cast<KeyframeCurve>(CurveLinear),
+                              static_cast<KeyframeCurve>(CurveLinear));
+      animator->AddChannel("position", std::move(newChannel));
+    }
+    else
+    {
+      channel->AddKeyframe(timeMs, QVector3D(x, y, z),
+                           static_cast<KeyframeCurve>(CurveLinear),
+                           static_cast<KeyframeCurve>(CurveLinear));
+      animator->CalculateLength("position");
+    }
+  }
+
+  void animations::reset(const std::string &name)
+  {
+    QString qAnimName = QString::fromStdString(name);
+    if (!s_WidgetAnimators.contains(qAnimName)) {
+      qWarning() << "Animation" << qAnimName << "not found!";
+      return;
+    }
+
+    s_WidgetAnimators[qAnimName]->Cleanup();
+  }
+
+  void animations::playAnimation(const std::string &name)
+  {
+    QString qAnimName = QString::fromStdString(name);
+    if (!s_WidgetAnimators.contains(qAnimName)) {
+      qWarning() << "Animation" << qAnimName << "not found!";
+      return;
+    }
+
+    s_WidgetAnimators[qAnimName]->setRunningState(true);
+  }
+
+  void animations::stopAnimation(const std::string &name)
+  {
+    QString qAnimName = QString::fromStdString(name);
+    if (!s_WidgetAnimators.contains(qAnimName)) {
+      qWarning() << "Animation" << qAnimName << "not found!";
+      return;
+    }
+
+    s_WidgetAnimators[qAnimName]->setRunningState(false);
   }
 
 

@@ -133,6 +133,15 @@ namespace ThemeScripting
       }
 
       {
+        sol::table table = s_themeScript.create_named_table("Animator");
+        table.set_function("Create", &courtroom::animations::createAnimation);
+        table.set_function("AddKeyframe", &courtroom::animations::addKeyframe);
+        table.set_function("Reset", &courtroom::animations::reset);
+        table.set_function("Start", &courtroom::animations::playAnimation);
+        table.set_function("Stop", &courtroom::animations::stopAnimation);
+      }
+
+      {
         sol::table table = s_themeScript.create_named_table("RuntimeValue");
         table.set_function("Resolve", &engine::runtime::values::resolveVariables);
         table.set_function("Assign", &engine::runtime::values::storeValue);
