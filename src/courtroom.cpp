@@ -3629,22 +3629,22 @@ void Courtroom::checkAFKStatus()
 
 void Courtroom::keyPressEvent(QKeyEvent *event)
 {
-  if (event)
-  {
-    int key = event->key();
-    QString keyText = QKeySequence(event->key()).toString();
-    LuaBridge::LuaEventCall("OnKeyPressed", keyText.toStdString(), key);
-  }
+  if (!event || event->isAutoRepeat())
+    return;
+
+  int key = event->key();
+  QString keyText = QKeySequence(key).toString();
+  LuaBridge::LuaEventCall("OnKeyPressed", keyText.toStdString(), key);
 }
 
 void Courtroom::keyReleaseEvent(QKeyEvent *event)
 {
-  if (event)
-  {
-    int key = event->key();
-    QString keyText = QKeySequence(event->key()).toString();
-    LuaBridge::LuaEventCall("OnKeyReleased", keyText.toStdString(), key);
-  }
+  if (!event || event->isAutoRepeat())
+    return;
+
+  int key = event->key();
+  QString keyText = QKeySequence(key).toString();
+  LuaBridge::LuaEventCall("OnKeyReleased", keyText.toStdString(), key);
 }
 
 void Courtroom::mousePressEvent(QMouseEvent *event)
