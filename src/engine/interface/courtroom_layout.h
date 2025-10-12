@@ -43,6 +43,11 @@ namespace courtroom
     void appendMessage(const std::string& sender, const std::string& message);
   }
 
+  namespace areas
+  {
+    void switchName(const std::string& name);
+  }
+
   namespace choice
   {
     //void notifyPair(const char* sender, const char* message);

@@ -709,6 +709,23 @@ namespace courtroom
     }
   }
 
+  void areas::switchName(const std::string &name)
+  {
+    if (auto *areaList = qobject_cast<RPListWidget *>(s_CourtroomWidgets.value("area_list")))
+    {
+      for(int i = 0; i < areaList->count(); i++)
+      {
+        const QString l_area_name = areaList->item(i)->text();
+        if(l_area_name.contains(QString::fromStdString(name)))
+        {
+          AOApplication::getInstance()->send_server_packet(DRPacket("MC", {l_area_name, QString::number(user::GetCharacterId())}));
+          return;
+        }
+      }
+
+    }
+  }
+
 
 }
 

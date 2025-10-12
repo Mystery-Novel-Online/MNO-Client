@@ -128,6 +128,11 @@ namespace ThemeScripting
       }
 
       {
+        sol::table table = s_themeScript.create_named_table("Areas");
+        table.set_function("MoveByName", &courtroom::areas::switchName);
+      }
+
+      {
         sol::table table = s_themeScript.create_named_table("RuntimeValue");
         table.set_function("Resolve", &engine::runtime::values::resolveVariables);
         table.set_function("Assign", &engine::runtime::values::storeValue);
