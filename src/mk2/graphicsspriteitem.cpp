@@ -210,7 +210,7 @@ bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, 
   }
 
   if(startFromEnd) m_KeyframeSequence.SequenceJumpEnd();
-
+  m_KeyframeSequence.setRunningState(true);
   return m_KeyframeSequence.getLoopState();
 }
 
