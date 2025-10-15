@@ -82,10 +82,10 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
 
     if (detach)
     {
-      const float xNorm = overlayRect.x / float(targetResolution.width()) * 1000.0f;
-      const float yNorm = overlayRect.y / float(targetResolution.height()) * 1000.0f;
-      const float wNorm = overlayRect.width / float(targetResolution.width()) * 1000.0f;
-      const float hNorm = overlayRect.height / float(targetResolution.height()) * 1000.0f;
+      const float xNorm = qRectangle.x() / float(targetResolution.width()) * 1000.0f;
+      const float yNorm = qRectangle.y() / float(targetResolution.height()) * 1000.0f;
+      const float wNorm = qRectangle.width() / float(targetResolution.width()) * 1000.0f;
+      const float hNorm = qRectangle.height() / float(targetResolution.height()) * 1000.0f;
 
       overlayRect = {int(xNorm), int(yNorm), int(wNorm), int(hNorm)};
     }
