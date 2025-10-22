@@ -277,13 +277,10 @@ void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QSt
   for(const QString& layerOffset : engine::system::encoding::text::DecodeBase64(overlayString))
   {
     QStringList offsetData = engine::system::encoding::text::DecodePacketContents(layerOffset);
-    TimeDebugger::get().StartTimer("CREATE SPRITE LAYERS");
     if(offsetData.length() == 7)
     {
       createOverlay(character, emotePath, outfitName, offsetData);
-      TimeDebugger::get().CheckpointTimer("CREATE SPRITE LAYERS", "LAYER CREATED");
     }
-    TimeDebugger::get().EndTimer("CREATE SPRITE LAYERS");
   }
   overlayCreationDone();
 }
