@@ -1086,7 +1086,7 @@ void Courtroom::on_ic_message_return_pressed()
     int layerCount = 0;
     for(const ActorLayer &layer : l_emote.emoteOverlays)
     {
-      if(engine::actor::user::layerState(layer.toggleName) && layerCount < 4)
+      if(engine::actor::user::layerState(layer.toggleName) && layerCount < 5)
       {
         layers.append(engine::system::encoding::text::EncodePacketContents({QString::fromStdString(layer.spriteName), QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
         layerCount += 1;
