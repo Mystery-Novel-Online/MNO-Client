@@ -105,6 +105,7 @@ public:
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
   void processOverlays(const QVector<ActorLayer>& ActorLayers, const QString& character, const QString& emotePath, const QString& outfitName);
   SpriteLayer *createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings);
+  void overlayCreationDone();
   SpriteLayer *createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched = false);
   SpriteLayer *createOverlay(const ActorLayer& layer, const QString &imagePath);
   void clearImageLayers();

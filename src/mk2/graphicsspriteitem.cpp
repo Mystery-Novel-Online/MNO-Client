@@ -28,6 +28,7 @@
 #include "engine/fs/fs_reading.h"
 #include "engine/fs/fs_characters.h"
 #include "engine/system/runtime_loop.h"
+#include <engine/system/debug/time_debugger.h>
 
 using namespace mk2;
 
@@ -276,11 +277,15 @@ void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QSt
   for(const QString& layerOffset : engine::system::encoding::text::DecodeBase64(overlayString))
   {
     QStringList offsetData = engine::system::encoding::text::DecodePacketContents(layerOffset);
+    TimeDebugger::get().StartTimer("CREATE SPRITE LAYERS");
     if(offsetData.length() == 7)
     {
       createOverlay(character, emotePath, outfitName, offsetData);
+      TimeDebugger::get().CheckpointTimer("CREATE SPRITE LAYERS", "LAYER CREATED");
     }
+    TimeDebugger::get().EndTimer("CREATE SPRITE LAYERS");
   }
+  overlayCreationDone();
 }
 
 void GraphicsSpriteItem::processOverlays(const QVector<ActorLayer> &ActorLayers, const QString& character, const QString& emotePath, const QString& outfitName)
@@ -360,9 +365,13 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &characterName, con
   m_spriteLayersStatic.append(layer);
   m_player->addLayer(layer);
 
+  return layer;
+}
+
+void GraphicsSpriteItem::overlayCreationDone()
+{
   update();
   m_player->scale_current_frame();
-  return layer;
 }
 
 SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched)
