@@ -192,6 +192,7 @@ bool GraphicsSpriteItem::setThemeAnimation(const QString &animation)
     }
   }
 
+  m_KeyframeSequence.setRunningState(true);
   return m_KeyframeSequence.getLoopState();
 }
 

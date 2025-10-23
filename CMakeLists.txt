@@ -313,6 +313,7 @@ add_executable(rp-engine
   src/engine/animation/widget_animator.h src/engine/animation/widget_animator.cpp
   src/engine/interface/widgets/serverselectlist.h src/engine/interface/widgets/serverselectlist.cpp
   src/engine/interface/widgets/server_select_entry.h src/engine/interface/widgets/server_select_entry.cpp
+  src/engine/interface/widgets/icon_grid_widget.h src/engine/interface/widgets/icon_grid_widget.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
