@@ -41,6 +41,18 @@ rolechat::actor::IActorData *engine::actor::user::load(QString folder)
   {
     s_currentActor = new rolechat::actor::JsonActorData();
     s_currentActor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
+
+    auto outfitNames = s_currentActor->outfitNames();
+    auto outfits = s_currentActor->outfits();
+
+    for(auto outfit : outfitNames)
+    {
+      for(auto layer : outfits[outfit]->layers()){
+        if(!layer.toggleName.empty())
+          toggleLayer(layer.toggleName, !layer.defaultDisabled);
+      }
+    }
+
   }
   else
   {
