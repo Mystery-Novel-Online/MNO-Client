@@ -18,6 +18,9 @@ public:
   bool m_renderGuides = false;
   QImage m_OverlayImage;
 
+  QMap<int, QPoint> m_presetPositions = {};
+  QMap<int, int> m_presetScales = {};
+
 protected:
   void keyPressEvent(QKeyEvent* event) override;
   void paintEvent(QPaintEvent *event) override;
@@ -57,6 +60,7 @@ private:
 
   QImage m_UnderlayImage;
   QImage m_AlphaMaskImage;
+
 
 };
 

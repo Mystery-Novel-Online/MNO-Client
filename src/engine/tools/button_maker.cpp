@@ -285,6 +285,27 @@ ButtonMakerOverlay::ButtonMakerOverlay(QWidget *parent) : QWidget(parent)
 
 void ButtonMakerOverlay::keyPressEvent(QKeyEvent *event)
 {
+  bool ctrlPressed = QApplication::keyboardModifiers() & Qt::ControlModifier;
+
+  if(event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9 && ctrlPressed )
+  {
+    qDebug() << "Saved Preset";
+    int keyPressed = event->key() - Qt::Key_0;
+    m_presetPositions[keyPressed] = m_rectPos;
+    m_presetScales[keyPressed] = m_rectSize;
+    return;
+  }
+
+  if(event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9)
+  {
+    int keyPressed = event->key() - Qt::Key_0;
+    if(!m_presetPositions.contains(keyPressed))
+      return;
+    m_rectPos = m_presetPositions[keyPressed];
+    m_rectSize = m_presetScales[keyPressed];
+    update();
+    return;
+  }
 
   switch(event->key())
   {
