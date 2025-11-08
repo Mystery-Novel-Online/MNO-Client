@@ -63,9 +63,9 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   }
 
   //Legacy Config
-  connect(ao_app, SIGNAL(reload_theme()), this, SLOT(reload_theme()));
-  connect(ao_app, SIGNAL(reload_character()), this, SLOT(load_character()));
-  connect(ao_app, SIGNAL(reload_audiotracks()), this, SLOT(load_audiotracks()));
+  connect(ao_app, &AOApplication::reload_theme, this, &Courtroom::reload_theme);
+  connect(ao_app, &AOApplication::reload_character, this, &Courtroom::load_character);
+  connect(ao_app, &AOApplication::reload_audiotracks, this, &Courtroom::load_audiotracks);
   ThemeManager::get().toggleReload();
 
   create_widgets();
@@ -1948,27 +1948,13 @@ void Courtroom::load_ic_text_format()
   m_ic_log_format.base.setFont(ui_ic_chatlog->font());
   m_ic_log_format.base.setForeground(ui_ic_chatlog->palette().color(ui_ic_chatlog->foregroundRole()));
 
-  auto set_format_color = [this](const QString &f_identifier, QTextCharFormat &f_format) {
+  auto set_format_color = [this](const QString &f_identifier, QTextCharFormat &f_format)
+  {
+    if (const std::optional<QColor> l_color = ThemeManager::get().mCurrentThemeReader.getChatlogColor(f_identifier); l_color.has_value())
+      f_format.setForeground(*l_color);
 
-    if(ao_app->current_theme->m_jsonLoaded)
-    {
-      if (const std::optional<QColor> l_color = ThemeManager::get().mCurrentThemeReader.getChatlogColor(f_identifier); l_color.has_value())
-        f_format.setForeground(*l_color);
-
-      if (ThemeManager::get().mCurrentThemeReader.getChatlogBool(f_identifier))
-        f_format.setFontWeight(QFont::Bold);
-      ;
-    }
-    else
-    {
-      if (const std::optional<QColor> l_color = ao_app->maybe_color(QString("ic_chatlog_%1_color").arg(f_identifier), COURTROOM_FONTS_INI); l_color.has_value())
-        f_format.setForeground(l_color.value());
-      if (ao_app->get_font_property(QString("ic_chatlog_%1_bold").arg(f_identifier), COURTROOM_FONTS_INI))
-        f_format.setFontWeight(QFont::Bold);
-    }
-
-
-
+    if (ThemeManager::get().mCurrentThemeReader.getChatlogBool(f_identifier))
+      f_format.setFontWeight(QFont::Bold);
   };
 
   m_ic_log_format.name = m_ic_log_format.base;
