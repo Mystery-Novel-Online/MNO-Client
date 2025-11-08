@@ -10,6 +10,7 @@ namespace engine::system::theme
   RPRect getDimensions(const QString &identifier, ThemeSceneType scene);
   RPRect getPositionalDimensions(const QString &identifier, const QString &positional);
 
+  void setChatlogColour(const QString &f_identifier, QTextCharFormat &f_format);
 }
 
 

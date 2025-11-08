@@ -93,5 +93,14 @@ namespace engine::system::theme
     return FALLBACK_DIMENSIONS;
   }
 
+  void setChatlogColour(const QString &f_identifier, QTextCharFormat &f_format)
+  {
+    if (const std::optional<QColor> l_color = ThemeManager::get().mCurrentThemeReader.getChatlogColor(f_identifier); l_color.has_value())
+      f_format.setForeground(*l_color);
+
+    if (ThemeManager::get().mCurrentThemeReader.getChatlogBool(f_identifier))
+      f_format.setFontWeight(QFont::Bold);
+  }
+
 
 }

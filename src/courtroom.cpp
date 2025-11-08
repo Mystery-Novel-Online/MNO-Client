@@ -2356,7 +2356,7 @@ void Courtroom::next_chat_letter()
 
   QTextCursor cursor2 = ui_ic_chatlog->textCursor();
 
-  auto insertChar = [&](QChar ch, const QTextCharFormat &format) {
+  auto insertChar = [&](QChar ch, QTextCharFormat format) {
     ui_vp_message->textCursor().insertText(ch, format);
     LuaBridge::LuaEventCall("OnMessageTick", QString(ch).toStdString());
 
@@ -2367,6 +2367,10 @@ void Courtroom::next_chat_letter()
     {
       cursor2.setPosition(m_iclog_cursor_position);
       ui_ic_chatlog->setTextCursor(cursor2);
+      if(format.foreground().color() == m_message_color)
+      {
+        engine::system::theme::setChatlogColour("message", format);
+      }
       cursor2.insertText(ch, format);
       m_iclog_cursor_position += 1;
 
@@ -2451,9 +2455,7 @@ void Courtroom::next_chat_letter()
 
   if (f_character == Qt::Key_Space)
   {
-    //ui_vp_message->insertPlainText(f_character);
     insertChar(' ', vp_message_format);
-    //ui_ic_chatlog->insertPlainText(f_character);
   }
   else if (m_chatmessage[CMTextColor].toInt() == DR::CRainbow)
   {
