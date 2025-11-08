@@ -303,6 +303,12 @@ void ButtonMakerOverlay::keyPressEvent(QKeyEvent *event)
     case Qt::Key_G:
       m_renderGuides = m_renderGuides == false;
       break;
+    case Qt::Key_R:
+      if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
+        m_rectPos = QPoint((width() / 2) - (m_rectSize / 2), 80);
+        m_rectSize = 120;
+      }
+      break;
 
   }
 
