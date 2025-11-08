@@ -19,6 +19,7 @@ namespace engine::actor::user
   rolechat::actor::IActorData *load(QString folder);
   rolechat::actor::IActorData *retrieve();
   QString name();
+  bool isModified(const std::string& name);
   void toggleLayer(const std::string& name, bool state);
   bool layerState(const std::string& name);
   void setOutfitList(QStringList outfits);

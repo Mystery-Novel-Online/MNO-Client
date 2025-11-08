@@ -3581,6 +3581,8 @@ bool Courtroom::event(QEvent *event)
 
   case QEvent::WindowActivate:
     RuntimeLoop::setWindowFocus(true);
+    if(engine::actor::user::isModified(engine::actor::user::name().toStdString()))
+      load_character();
     break;
 
   case QEvent::WindowDeactivate:

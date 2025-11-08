@@ -10,6 +10,7 @@
 
 QMap<QString, bool> s_layersEnabled = {};
 rolechat::actor::IActorData* s_currentActor = nullptr;
+std::unordered_map<std::string, std::unordered_map<QString, QDateTime>> s_fileTimes;
 static QString s_currentFolder = "<NOCHAR>";
 
 bool engine::actor::user::layerState(const std::string &name)
@@ -28,6 +29,7 @@ void engine::actor::user::toggleLayer(const std::string &name, bool state)
 rolechat::actor::IActorData *engine::actor::user::load(QString folder)
 {
   s_layersEnabled.clear();
+  isModified(folder.toStdString());
   if(folder == s_currentFolder)
   {
     if(s_currentActor != nullptr) s_currentActor->reload();
@@ -173,4 +175,78 @@ void engine::actor::user::setOutfitList(QStringList outfits)
     l_outfitSelectorCombo->addItems(outfits);
     if(l_outfitSelectorCombo->count() > 1) l_outfitSelectorCombo->setCurrentIndex(1);
   }
+}
+
+bool engine::actor::user::isModified(const std::string &name)
+{
+  const QString folderPath =
+      FS::Paths::FindDirectory("characters/" + QString::fromStdString(name));
+
+  if (folderPath.isEmpty())
+    return false;
+
+  QDir root(folderPath);
+  if (!root.exists())
+    return false;
+
+  std::vector<QFileInfo> jsonFiles;
+  QList<QDir> stack;
+  stack.append(root);
+
+  while (!stack.isEmpty())
+  {
+    QDir dir = stack.takeLast();
+
+    QFileInfoList files = dir.entryInfoList(
+        {"*.json"},
+        QDir::Files | QDir::Readable
+        );
+
+    for (const QFileInfo &info : files)
+      jsonFiles.push_back(info);
+
+    QFileInfoList subdirs = dir.entryInfoList(
+        QDir::Dirs | QDir::NoDotAndDotDot
+        );
+
+    for (const QFileInfo &sd : subdirs)
+      stack.append(QDir(sd.absoluteFilePath()));
+  }
+
+  auto &prevState = s_fileTimes[name];
+  bool modified = false;
+
+  std::unordered_map<QString, QDateTime> newState;
+
+  for (const QFileInfo &info : jsonFiles)
+  {
+    QString path = info.absoluteFilePath();
+    QDateTime lastMod = info.lastModified();
+    newState[path] = lastMod;
+
+    auto it = prevState.find(path);
+
+    if (it == prevState.end())
+    {
+      modified = true;
+    }
+    else
+    {
+      if (lastMod > it->second)
+        modified = true;
+    }
+  }
+
+  for (const auto &prev : prevState)
+  {
+    if (newState.find(prev.first) == newState.end())
+    {
+      modified = true;
+      break;
+    }
+  }
+
+  prevState = std::move(newState);
+
+  return modified;
 }
