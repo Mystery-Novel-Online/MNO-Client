@@ -315,6 +315,7 @@ add_executable(rp-engine
   src/engine/interface/widgets/server_select_entry.h src/engine/interface/widgets/server_select_entry.cpp
   src/engine/interface/widgets/icon_grid_widget.h src/engine/interface/widgets/icon_grid_widget.cpp
   src/engine/interface/menus/screenshot_menu.h src/engine/interface/menus/screenshot_menu.cpp
+  src/engine/system/user_database.h src/engine/system/user_database.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)

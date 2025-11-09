@@ -22,6 +22,7 @@
 #include <engine/system/config_manager.h>
 #include "config_tabs/config_tab_theme.h"
 #include <engine/discord/workshop_discord.h>
+#include <rolechat/userdata/RolechatDatabase.h>
 
 using namespace engine::system;
 

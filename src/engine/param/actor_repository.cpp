@@ -1,5 +1,6 @@
 #include "actor_repository.h"
 
+#include "engine/system/user_database.h"
 #include "modules/theme/thememanager.h"
 #include "engine/fs/fs_reading.h"
 #include "engine/param/actor/actor_loader.h"
@@ -35,6 +36,8 @@ rolechat::actor::IActorData *engine::actor::user::load(QString folder)
     if(s_currentActor != nullptr) s_currentActor->reload();
     return s_currentActor;
   }
+
+  GetDB()->incrementCharacterUsage(folder.toStdString());
 
   s_currentFolder = folder;
   QString l_jsonPath = fs::characters::getFilePath(folder, "char.json");

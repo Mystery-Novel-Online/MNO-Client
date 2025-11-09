@@ -5,6 +5,7 @@
 #include "lobby.h"
 #include "version.h"
 #include <rolechat/util/FileSystem.h>
+#include "engine/system/user_database.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,6 +15,7 @@ int main(int argc, char *argv[])
   qputenv("QT_MAC_WANTS_LAYER", "1");
 #endif
 
+  InitDB();
   rolechat::fs::PackageManager::scanPackages();
   //qInstallMessageHandler(logger::log);
   qInfo() << "Starting Mystery Novel Network...";
