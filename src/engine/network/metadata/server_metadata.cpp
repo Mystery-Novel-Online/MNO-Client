@@ -1,5 +1,6 @@
 #include "server_metadata.h"
 #include "engine/fs/fs_reading.h"
+#include "engine/system/user_database.h"
 
 using namespace engine::network::metadata;
 
@@ -153,6 +154,16 @@ QVector<ActorSelectEntry> CharacterRepository::filteredList(const QString &packa
 
   if (packageName == "Server Characters") return serverCharacters;
   if (packageName == "Favorites") return favoriteCharacters;
+  if (packageName == "Recently Used")
+  {
+    QVector<ActorSelectEntry> recentCharacters;
+    for (auto entry : GetDB()->getCharactersSortedByLastUsed())
+    {
+      auto& [character, uses, lastUsed] = entry;
+      recentCharacters.append({character});
+    };
+    return recentCharacters;
+  }
 
   if (packageName == "All") {
     QVector<ActorSelectEntry> allCharacters;

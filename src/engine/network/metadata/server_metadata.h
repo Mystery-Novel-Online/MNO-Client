@@ -58,10 +58,11 @@ namespace engine::network::metadata
   private:
     static inline QString lastUsedFilter = "Server Characters";
 
-    static inline const QStringList defaultFilters = { "Server Characters", "Favorites", "All" };
+    static inline const QStringList defaultFilters = { "Server Characters", "Favorites", "Recently Used", "All" };
     static inline QVector<ActorSelectEntry> serverCharacters;
     static inline QVector<ActorSelectEntry> filteredCharacters;
     static inline QVector<ActorSelectEntry> favoriteCharacters;
+    static inline QVector<ActorSelectEntry> recentCharacters;
 
     static inline QHash<QString, QVector<ActorSelectEntry>> repository;
     static inline QHash<QString, bool> claimedCharacters;
