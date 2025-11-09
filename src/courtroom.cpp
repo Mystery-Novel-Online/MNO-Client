@@ -3622,6 +3622,12 @@ void Courtroom::keyPressEvent(QKeyEvent *event)
   if (!event || event->isAutoRepeat())
     return;
 
+  if(event->key() == Qt::Key_Escape)
+  {
+    on_config_panel_clicked();
+    return;
+  }
+
   int key = event->key();
   QString keyText = QKeySequence(key).toString();
   LuaBridge::LuaEventCall("OnKeyPressed", keyText.toStdString(), key);

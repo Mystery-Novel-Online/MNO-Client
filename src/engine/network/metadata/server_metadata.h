@@ -62,7 +62,6 @@ namespace engine::network::metadata
     static inline QVector<ActorSelectEntry> serverCharacters;
     static inline QVector<ActorSelectEntry> filteredCharacters;
     static inline QVector<ActorSelectEntry> favoriteCharacters;
-    static inline QVector<ActorSelectEntry> recentCharacters;
 
     static inline QHash<QString, QVector<ActorSelectEntry>> repository;
     static inline QHash<QString, bool> claimedCharacters;
