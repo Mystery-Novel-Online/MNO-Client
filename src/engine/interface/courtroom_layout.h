@@ -5,6 +5,13 @@
 
 namespace courtroom
 {
+  enum CaptureType
+  {
+    Capture_Viewport,
+    Capture_ICLog,
+    Capture_Window
+  };
+
   void cleanup();
   void reload();
 
@@ -120,7 +127,7 @@ namespace courtroom
   namespace viewport
   {
     void update();
-    void screenshot();
+    void screenshot(CaptureType captureMode = Capture_Viewport);
     void clearInteractions();
     void addInteraction(const std::string& name, const std::string& description, int x, int y, int width, int height);
     QPixmap getScreenshot();

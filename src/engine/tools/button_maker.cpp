@@ -289,7 +289,6 @@ void ButtonMakerOverlay::keyPressEvent(QKeyEvent *event)
 
   if(event->key() >= Qt::Key_0 && event->key() <= Qt::Key_9 && ctrlPressed )
   {
-    qDebug() << "Saved Preset";
     int keyPressed = event->key() - Qt::Key_0;
     m_presetPositions[keyPressed] = m_rectPos;
     m_presetScales[keyPressed] = m_rectSize;

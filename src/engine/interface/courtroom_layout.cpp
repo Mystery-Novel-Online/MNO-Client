@@ -621,26 +621,6 @@ namespace courtroom
 
   namespace viewport
   {
-    void screenshot()
-    {
-      Courtroom *courtroom = dynamic_cast<Courtroom*>(s_CourtroomWidgets["courtroom"]);
-      DRGraphicsView *viewport = dynamic_cast<DRGraphicsView*>(s_CourtroomWidgets["viewport"]);
-
-      if(courtroom != nullptr && viewport != nullptr)
-      {
-        QPixmap courtroomRender = courtroom->grab();
-
-        QRect viewportArea(viewport->x(), viewport->y(), viewport->width(), viewport->height());
-        QPixmap viewportCrop = courtroomRender.copy(viewportArea);
-
-        QString outputFilename = QDateTime::currentDateTime().toString("yyyy-MM-dd (hh.mm.ss.z)'.png'");
-        QString outputPath = "base/screenshots/" + outputFilename;
-
-        if (!viewportCrop.save(outputPath, "PNG"))
-          qWarning("Failed to save the screenshot.");
-      }
-    }
-
     void update()
     {
       DRGraphicsView *viewport = dynamic_cast<DRGraphicsView*>(s_CourtroomWidgets["viewport"]);
@@ -677,6 +657,45 @@ namespace courtroom
     {
       if (auto *overlay = qobject_cast<ViewportOverlay *>(s_CourtroomWidgets.value("viewport_overlay")))
         overlay->addInteraction({x, y, width, height}, QString::fromStdString(name), QString::fromStdString(description));
+    }
+
+    void screenshot(CaptureType captureMode)
+    {
+      Courtroom *courtroom = dynamic_cast<Courtroom*>(s_CourtroomWidgets["courtroom"]);
+
+      QString targetWidget = "viewport";
+      switch(captureMode)
+      {
+      case Capture_Window:
+        targetWidget = "courtroom";
+        break;
+
+      case Capture_ICLog:
+        targetWidget = "ic_chatlog";
+        break;
+
+      default:
+        break;
+      }
+
+      QWidget *viewport = dynamic_cast<QWidget*>(s_CourtroomWidgets[targetWidget]);
+
+      if(courtroom != nullptr && viewport != nullptr)
+      {
+        QPixmap courtroomRender = courtroom->grab();
+
+        QPoint topLeft = viewport->mapTo(courtroom, QPoint(0, 0));
+
+        QRect viewportArea(topLeft, viewport->size());
+
+        QPixmap viewportCrop = courtroomRender.copy(viewportArea);
+
+        QString outputFilename = QDateTime::currentDateTime().toString("yyyy-MM-dd (hh.mm.ss.z)'.png'");
+        QString outputPath = "base/screenshots/" + outputFilename;
+
+        if (!viewportCrop.save(outputPath, "PNG"))
+          qWarning("Failed to save the screenshot.");
+      }
     }
 
   }
