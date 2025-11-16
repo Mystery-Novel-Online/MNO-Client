@@ -14,12 +14,15 @@ std::optional<DRSfx> Courtroom::current_sfx()
 
 QString Courtroom::current_sfx_file()
 {
-  const QString l_current_emote_file = QString::fromStdString(ui_emotes->getSelectedEmote().sound_file);
-  const std::optional<DRSfx> l_optional_sfx = current_sfx();
-  if (!l_optional_sfx.has_value())
-    return l_current_emote_file;
-  const QString l_file = l_optional_sfx->file;
-  return l_file == m_sfx_default_file ? l_current_emote_file : l_file;
+
+  const std::optional<DRSfx> qOptionalSfx = current_sfx();
+  const QString qSoundFile = QString::fromStdString(ui_emotes->getSelectedEmote().sound_file);
+  if(qSoundFile.trimmed().isEmpty() && qOptionalSfx.has_value()) return qOptionalSfx->file;
+
+  if (!qOptionalSfx.has_value())
+    return qSoundFile;
+  const QString l_file = qOptionalSfx->file;
+  return l_file == m_sfx_default_file ? qSoundFile : l_file;
 }
 
 void Courtroom::load_sfx_list_theme()

@@ -289,7 +289,7 @@ void EmotionSelector::emoteClicked(int id)
   RPListWidget* animList = dynamic_cast<RPListWidget*>(ThemeManager::get().getWidget("chara_animations"));
 
   if (sfxList != nullptr)
-    sfxList->selectDefault();
+    sfxList->selectText(QString::fromStdString(getSelectedEmote().sound_file));
 
   if (animList != nullptr)
     animList->selectText(QString::fromStdString(getSelectedEmote().sequence));

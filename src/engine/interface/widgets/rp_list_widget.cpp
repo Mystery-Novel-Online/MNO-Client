@@ -22,7 +22,6 @@ void RPListWidget::selectText(const QString &value)
   if (count() == 0) return;
   if(value.trimmed().isEmpty())
   {
-    setCurrentRow(0);
     return;
   }
   for(QListWidgetItem *item : findItems(value, Qt::MatchExactly))
