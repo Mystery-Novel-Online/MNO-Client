@@ -18,6 +18,7 @@ public slots:
   void OnSmoothPlayAction();
   void OnInstantPlayAction();
   void OnSyncPlayAction();
+  void OnSoloPlayAction();
 
 
 private:
@@ -28,6 +29,7 @@ private:
   QAction *m_PlaySmooth = nullptr;
   QAction *m_PlayInstant = nullptr;
   QAction *m_PlaySync = nullptr;
+  QAction *m_PlaySolo = nullptr;
 
 };
 

@@ -2,6 +2,7 @@
 #include <modules/theme/thememanager.h>
 #include "engine/network/metadata/tracklist_metadata.h"
 #include "engine/interface/courtroom_layout.h"
+#include "engine/system/audio.h"
 
 BGMMenu::BGMMenu(QWidget *parent) : QMenu(parent)
 {
@@ -12,6 +13,8 @@ BGMMenu::BGMMenu(QWidget *parent) : QMenu(parent)
   m_PlaySmooth = playMenu->addAction((tr("Smooth Play")));
   m_PlayInstant = playMenu->addAction((tr("Instant Play")));
   m_PlaySync = playMenu->addAction((tr("Sync Playback")));
+  m_PlaySolo = playMenu->addAction((tr("Solo Playback")));
+
 
 
   p_InsertAction = addAction(tr("Insert into OOC"));
@@ -20,6 +23,8 @@ BGMMenu::BGMMenu(QWidget *parent) : QMenu(parent)
   connect(m_PlaySmooth, &QAction::triggered, this, &BGMMenu::OnSmoothPlayAction);
   connect(m_PlayInstant, &QAction::triggered, this, &BGMMenu::OnInstantPlayAction);
   connect(m_PlaySync, &QAction::triggered, this, &BGMMenu::OnSyncPlayAction);
+  connect(m_PlaySolo, &QAction::triggered, this, &BGMMenu::OnSoloPlayAction);
+
   connect(p_InsertAction, &QAction::triggered, this, &BGMMenu::OnInsertTriggered);
   connect(p_PinAction, &QAction::triggered, this, &BGMMenu::OnPinTriggered);
 }
@@ -64,6 +69,13 @@ void BGMMenu::OnSyncPlayAction()
 {
   if(m_TargetTrack.isEmpty()) return;
   AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback_Continue);
+  courtroom::ic::focusMessageBox();
+}
+
+void BGMMenu::OnSoloPlayAction()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  audio::bgm::Play(m_TargetTrack.toStdString());
   courtroom::ic::focusMessageBox();
 }
 
