@@ -1,6 +1,7 @@
 #include "downloader_prompt.h"
 #include "engine/fs/fs_characters.h"
 #include "engine/fs/fs_mounting.h"
+#include "engine/system/user_database.h"
 DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
   setWindowTitle("Downloading...");
@@ -59,23 +60,17 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
 
                        QByteArray response = reply->readAll();
                        QJsonDocument doc = QJsonDocument::fromJson(response);
-                       if (!doc.isArray() && !isCollection)
-                       {
-                         QMessageBox::warning(prompt, "Error", "Invalid repo format");
-                         reply->deleteLater();
-                         return;
-                       }
+
                        QString collectionName = doc["collection_name"].toString();
 
-                       QJsonArray files;
-                       if(isCollection)
-                       {
-                         files = doc["contents"].toArray();
-                       }
-                        else
-                       {
-                         files = doc.array();
-                       }
+                       QString qGUID = doc["guid"].toString();
+                       QString qFolderName = doc["folder"].toString();
+                       int qContentId = doc["id"].toInt();
+                       int qLastUpdated = doc["last_updated"].toInt();
+
+
+                       QJsonArray files = doc["contents"].toArray();
+
                        QMap<QString, QString> hashMap = {};
                        for (const QJsonValue &val : files)
                        {
@@ -84,6 +79,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
                          QString filePath = isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : directory + "/" + obj["file_path"].toString();
                          hashMap[filePath] = hash;
                        }
+                       GetDB()->cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
                        prompt->ProcessLinks(hashMap, contentName, repository, isRepo);
                        reply->deleteLater();
                      });
