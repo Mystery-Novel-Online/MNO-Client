@@ -23,6 +23,7 @@ public:
 
   int get_emote_number();
   void set_emote_number(int emote_number);
+  void setLayerImage(const QString& character, const QString& layer, const QString& outfit, bool enabled);
   void set_image(ActorEmote emote, bool enabled);
   int findHighestPixel();
 

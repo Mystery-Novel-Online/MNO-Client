@@ -4,7 +4,7 @@
 LayerSelectionPanel::LayerSelectionPanel(QWidget *parent)
     : RPWidget{"layers_panel", parent}
 {
-  setDragable(true);
+  //setDragable(true);
   resetTransform();
   setBackgroundImage("layers_panel");
 
@@ -14,18 +14,43 @@ LayerSelectionPanel::LayerSelectionPanel(QWidget *parent)
 
 
   m_container = new QWidget(scrollArea);
-  m_layout = new QVBoxLayout(m_container);
+  m_layout = new QGridLayout(m_container);
   m_layout->setAlignment(Qt::AlignTop);
   m_layout->setMargin(0);
 
   scrollArea->setWidget(m_container);
 
-  QVBoxLayout *rootLayout = new QVBoxLayout(this);
+  QGridLayout *rootLayout = new QGridLayout(this);
   rootLayout->addWidget(scrollArea);
   setLayout(rootLayout);
 
-  ServerSelectEntry *entry = new ServerSelectEntry("WOW");
-  entry->setId(m_layout->count());
-  m_layout->addWidget(entry);
 
+}
+
+void LayerSelectionPanel::clear()
+{
+  while (QLayoutItem* item = m_layout->takeAt(0))
+  {
+    if (QWidget* w = item->widget())
+      w->deleteLater();
+
+    delete item;
+  }
+}
+
+void LayerSelectionPanel::addLayer(const QString &layer, LayerSelectionType type)
+{
+  AOEmoteButton *emote = new AOEmoteButton(nullptr, m_app, 0, 0);
+  emote->setFixedSize(40, 40);
+  emote->set_emote_number(0);
+  emote->setLayerImage(layer, layer, layer, type == LayerSelection_Toggle);
+  emote->show();
+
+  const int columns = 4;
+
+  int index = m_layout->count();
+  int row = index / columns;
+  int col = index % columns;
+
+  m_layout->addWidget(emote, row, col);
 }

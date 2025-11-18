@@ -7,6 +7,8 @@ static bool s_renderSprites = false;
 #include "engine/interface/courtroom_layout.h"
 #include "engine/param/actor_repository.h"
 
+#include <modules/theme/thememanager.h>
+
 using namespace engine;
 
 EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
@@ -43,11 +45,20 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
   m_currentEmote = emote;
   m_buttonMaker->SetEmote(emote);
 
+
+  LayerSelectionPanel *selectionPanel = static_cast<LayerSelectionPanel*>(ThemeManager::get().getWidget("layers_panel"));
+  if(selectionPanel) selectionPanel->clear();
+
   clearLayers();
   for(const ActorLayer &layer : emote.emoteOverlays)
   {
     if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty())
-      AddLayer(QString::fromStdString(layer.toggleName), engine::actor::user::layerState(layer.toggleName));
+    {
+      QString qToggleName = QString::fromStdString(layer.toggleName);
+      bool toggleEnabled = engine::actor::user::layerState(layer.toggleName);
+      AddLayer(qToggleName, toggleEnabled);
+      selectionPanel->addLayer(qToggleName, toggleEnabled ? LayerSelection_Toggle : LayerSelection_ToggleDisabled);
+    }
   }
 }
 

@@ -32,23 +32,16 @@ void AOEmoteButton::set_emote_number(int p_emote_number)
   m_index = p_emote_number;
 }
 
-int AOEmoteButton::get_emote_number()
+void AOEmoteButton::setLayerImage(const QString &character, const QString &layer, const QString &outfit, bool enabled)
 {
-  return m_index;
-}
+  rolechat::actor::IActorData *actor = retrieve();
 
-void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
-{
-  QString l_texture = QString::fromStdString(retrieve()->buttonImage(p_emote, false));
-  l_texture = fs::characters::getFilePath(QString::fromStdString(p_emote.character), l_texture);
-
-  // reset states
+  QString l_texture = "";
   ui_selected->hide();
 
-  // nested ifs are okay
-  if (p_enabled)
+  if (enabled)
   {
-    const QString l_selected_texture = fs::characters::getFilePath(QString::fromStdString(p_emote.character), QString::fromStdString(retrieve()->selectedImage(p_emote)));
+    const QString l_selected_texture = "THEME TOGGLE TEXTURE HERE";
 
     if (FS::Checks::FileExists(l_selected_texture))
     {
@@ -57,7 +50,47 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
     }
     else
     {
-      const QString l_enabled_texture = fs::characters::getFilePath(QString::fromStdString(p_emote.character), QString::fromStdString(retrieve()->buttonImage(p_emote, true)));;
+        ui_selected->setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, "
+                                   "y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(0, 0, 0, 127)); }");
+        ui_selected->show();
+    }
+
+  }
+
+
+  m_texture.load(l_texture);
+  m_comment = layer;
+  setText(m_texture.isNull() ? layer : nullptr);
+}
+
+int AOEmoteButton::get_emote_number()
+{
+  return m_index;
+}
+
+void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
+{
+  rolechat::actor::IActorData *actor = retrieve();
+
+  QString l_texture = QString::fromStdString(actor->buttonImage(p_emote, false));
+  l_texture = fs::characters::getFilePath(QString::fromStdString(p_emote.character), l_texture);
+
+  // reset states
+  ui_selected->hide();
+
+  // nested ifs are okay
+  if (p_enabled)
+  {
+    const QString l_selected_texture = fs::characters::getFilePath(QString::fromStdString(p_emote.character), QString::fromStdString(actor->selectedImage(p_emote)));
+
+    if (FS::Checks::FileExists(l_selected_texture))
+    {
+      ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(l_selected_texture));
+      ui_selected->show();
+    }
+    else
+    {
+      const QString l_enabled_texture = fs::characters::getFilePath(QString::fromStdString(p_emote.character), QString::fromStdString(actor->buttonImage(p_emote, true)));;
 
       if (FS::Checks::FileExists(l_enabled_texture))
       {
