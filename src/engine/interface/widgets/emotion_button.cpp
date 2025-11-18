@@ -35,8 +35,8 @@ void AOEmoteButton::set_emote_number(int p_emote_number)
 void AOEmoteButton::setLayerImage(const QString &character, const QString &layer, const QString &outfit, bool enabled)
 {
   rolechat::actor::IActorData *actor = retrieve();
+  QString l_texture = fs::characters::getFilePath(QString::fromStdString(actor->folder()), "layer_icons/" + layer + ".png");
 
-  QString l_texture = "";
   ui_selected->hide();
 
   if (enabled)
