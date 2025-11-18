@@ -31,6 +31,7 @@ LayerSelectionPanel::LayerSelectionPanel(QWidget *parent)
 void LayerSelectionPanel::clear()
 {
   m_layers.clear();
+  m_VariantSwitches.clear();
   while (QLayoutItem* item = m_layout->takeAt(0))
   {
     if (QWidget* w = item->widget())
@@ -68,7 +69,9 @@ void LayerSelectionPanel::addLayer(const QString &layer, const QString &variatio
   emote->setFixedSize(40, 40);
   emote->set_emote_number(m_layers.count());
   m_layers.append(data);
-  emote->setLayerImage(layer, layer, layer, state);
+
+  QString name = layer + "_" + variation;
+  emote->setLayerImage(name, name, name, state);
   emote->show();
 
   const int columns = 4;
@@ -86,6 +89,7 @@ void LayerSelectionPanel::layerClicked(int layerId)
 {
   if(layerId > m_layers.count()) return;
   LayerSelectionData data = m_layers.at(layerId);
+  QString VariantName = data.layerName + "_" + data.variation;
   switch(data.type)
   {
   case LayerSelection_Toggle:
@@ -98,6 +102,19 @@ void LayerSelectionPanel::layerClicked(int layerId)
     data.type = LayerSelection_Toggle;
     data.button->setLayerImage(data.toggleName, data.toggleName, data.toggleName, true);
     engine::actor::user::toggleLayer(data.toggleName.toStdString(), true);
+    break;
+
+  case LayerSelection_Variation:
+    for(int i = 0; i < m_layers.count(); i++)
+    {
+      QString name = m_layers.at(i).layerName + "_" + m_layers.at(i).variation;
+      if(m_layers.at(i).layerName == data.layerName)
+      {
+        m_layers.at(i).button->setLayerImage(name, name, name, false);
+      }
+    }
+    m_VariantSwitches[data.layerName] = data.variation;
+    data.button->setLayerImage(VariantName, VariantName, VariantName, true);
     break;
 
   default:

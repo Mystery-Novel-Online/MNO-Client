@@ -27,6 +27,8 @@ public:
   void addLayer(const QString& layer, const QString& toggle, LayerSelectionType type);
   void addLayer(const QString& layer, const QString& variation, bool state, LayerSelectionType type);
 
+  QString getVariant(const QString& layerName, const QString& fallback) { if(!m_VariantSwitches.contains(layerName)) return fallback; return m_VariantSwitches[layerName];};
+
 public slots:
   void layerClicked(int layerId);
 
@@ -35,6 +37,7 @@ private:
   QGridLayout *m_layout;
 
   QList<LayerSelectionData> m_layers = {};
+  QMap<QString, QString> m_VariantSwitches = {};
 };
 
 #endif // LAYER_SELECTION_PANEL_H

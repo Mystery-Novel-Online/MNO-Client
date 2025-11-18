@@ -52,13 +52,21 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
   clearLayers();
   for(const ActorLayer &layer : emote.emoteOverlays)
   {
+    QString qLayerName = QString::fromStdString(layer.offsetName);
     if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty())
     {
       QString qToggleName = QString::fromStdString(layer.toggleName);
-      QString qLayerName = QString::fromStdString(layer.offsetName);
       bool toggleEnabled = engine::actor::user::layerState(layer.toggleName);
       AddLayer(qToggleName, toggleEnabled);
       selectionPanel->addLayer(qLayerName, qToggleName, toggleEnabled ? LayerSelection_Toggle : LayerSelection_ToggleDisabled);
+    }
+    else if(!layer.variationOptions.empty())
+    {
+      for(auto variation : layer.variationOptions)
+      {
+        QString variationName = QString::fromStdString(variation);
+        selectionPanel->addLayer(qLayerName, variationName, variationName == QString::fromStdString(layer.spriteName), LayerSelection_Variation);
+      }
     }
   }
 }

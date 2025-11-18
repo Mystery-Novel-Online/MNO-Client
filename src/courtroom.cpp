@@ -1088,7 +1088,8 @@ void Courtroom::on_ic_message_return_pressed()
     {
       if(engine::actor::user::layerState(layer.toggleName) && layerCount < 5)
       {
-        layers.append(engine::system::encoding::text::EncodePacketContents({QString::fromStdString(layer.spriteName), QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
+        QString spriteName = pLayersPanel->getVariant(QString::fromStdString(layer.offsetName), QString::fromStdString(layer.spriteName));
+        layers.append(engine::system::encoding::text::EncodePacketContents({spriteName, QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
         layerCount += 1;
       }
     }
