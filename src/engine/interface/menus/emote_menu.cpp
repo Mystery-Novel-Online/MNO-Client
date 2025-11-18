@@ -55,9 +55,10 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
     if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty())
     {
       QString qToggleName = QString::fromStdString(layer.toggleName);
+      QString qLayerName = QString::fromStdString(layer.offsetName);
       bool toggleEnabled = engine::actor::user::layerState(layer.toggleName);
       AddLayer(qToggleName, toggleEnabled);
-      selectionPanel->addLayer(qToggleName, toggleEnabled ? LayerSelection_Toggle : LayerSelection_ToggleDisabled);
+      selectionPanel->addLayer(qLayerName, qToggleName, toggleEnabled ? LayerSelection_Toggle : LayerSelection_ToggleDisabled);
     }
   }
 }
