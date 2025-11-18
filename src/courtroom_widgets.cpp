@@ -255,6 +255,7 @@ void Courtroom::create_widgets()
   ui_slider_scale->setSliderPosition(1000);
 
   pNotifyPopup = new ChoiceDialog(this);
+  pLayersPanel = new LayerSelectionPanel(this);
 
   NotifyManager::get().ThemeSetupPopup(pNotifyPopup);
 
@@ -625,6 +626,7 @@ void Courtroom::reset_widget_names()
       {"ao2_ic_chat_message", ui_ic_chat_message},
       {"ao2_ic_chat_message_field", ui_ic_chat_message_field},
       {"notify_popup", pNotifyPopup},
+      {"layers_panel", pLayersPanel},
       // ui_muted
       {"ooc_chat_message", ui_ooc_chat_message},
       {"ooc_chat_name", ui_ooc_chat_name},
@@ -984,6 +986,7 @@ void Courtroom::set_widgets()
     {ui_hide_character, "hidden"},
     {ui_char_buttons, "char_buttons"},
     {pNotifyPopup, "notify_popup"},
+    {pLayersPanel, "layers_panel"},
     {ui_slider_horizontal_axis, "pair_offset"},
     {ui_slider_vertical_axis, "vertical_offset"},
     {ui_slider_scale, "scale_offset"},

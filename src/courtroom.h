@@ -60,6 +60,8 @@ class QLabel;
 #include <mk2/drplayer.h>
 #include "engine/interface/widgets/scene_widget.h"
 
+#include <engine/interface/widgets/layer_selection_panel.h>
+
 using namespace engine;
 using namespace engine::network::metadata;
 
@@ -351,6 +353,7 @@ private:
   bool contains_add_button = false;
 
 
+  LayerSelectionPanel *pLayersPanel = nullptr;
   ChoiceDialog *pNotifyPopup = nullptr;
 
   //////////////
