@@ -43,7 +43,7 @@ void LayerSelectionPanel::clear()
 
 void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, LayerSelectionType type)
 {
-  AOEmoteButton *emote = new AOEmoteButton(nullptr, m_app, 0, 0);
+  AOEmoteButton *emote = new AOEmoteButton(m_container, m_app, 0, 0);
   LayerSelectionData data = {layer, toggle, "", emote, type};
   emote->setFixedSize(40, 40);
   emote->set_emote_number(m_layers.count());
@@ -64,7 +64,7 @@ void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, 
 
 void LayerSelectionPanel::addLayer(const QString &layer, const QString &variation, bool state, LayerSelectionType type)
 {
-  AOEmoteButton *emote = new AOEmoteButton(nullptr, m_app, 0, 0);
+  AOEmoteButton *emote = new AOEmoteButton(m_container, m_app, 0, 0);
   LayerSelectionData data = {layer, "", variation, emote, type};
   emote->setFixedSize(40, 40);
   emote->set_emote_number(m_layers.count());
