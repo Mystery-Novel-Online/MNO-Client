@@ -54,6 +54,10 @@ void WorkshopListWidget::updateFromApi(const QString &category)
   {
     workshopPath += "/my_uploads?key=" + QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
   }
+  else if(category == "pending")
+  {
+    workshopPath += "/verification_queue?key=" + QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
+  }
   else
   {
     workshopPath += "/" + category;
