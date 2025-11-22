@@ -156,10 +156,10 @@ void WorkshopUploader::handleReply(QNetworkReply *reply)
 {
   m_progress->setVisible(false);
 
+  JSONReader reader;
   if (reply->error() == QNetworkReply::NoError) {
     QMessageBox::information(this, "Success", "Upload completed! It should be approved soon.");
 
-    JSONReader reader;
     reader.ReadFromString(reply->readAll());
 
     const QString characterFolder = reader.getStringValue("folder_name");
@@ -176,7 +176,8 @@ void WorkshopUploader::handleReply(QNetworkReply *reply)
       }
     }
   } else {
-    QMessageBox::critical(this, "Error", reply->errorString());
+    reader.ReadFromString(reply->readAll());
+    QMessageBox::critical(this, "Error", reader.getStringValue("error"));
     qDebug() << reply->readAll();;
   }
   reply->deleteLater();
