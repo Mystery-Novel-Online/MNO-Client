@@ -19,6 +19,9 @@ public:
   static QString baseUri();
   static QString authorizationKey();
 
+  static bool appendFile(QHttpMultiPart* multipart, const QString& fieldName, const QString& filePath);
+  static void appendField(QHttpMultiPart* multipart, const QString& name, const QString& value);
+
 private:
   explicit ApiManager(QObject *parent = nullptr);
   ApiManager(const ApiManager&) = delete;

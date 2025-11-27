@@ -101,44 +101,22 @@ void WorkshopUploader::submitForm()
 
   if(!m_filePath->text().trimmed().isEmpty() && m_filePath->text() != "<No Change>")
   {
-    QFile *file = new QFile(m_filePath->text());
-    if (!file->open(QIODevice::ReadOnly)) {
+    if (!ApiManager::appendFile(multiPart, "zipfile", m_filePath->text())) {
       QMessageBox::warning(this, "Error", "Unable to open file.");
-      delete file;
       delete multiPart;
       return;
     }
-
-    QHttpPart filePart;
-    filePart.setHeader(QNetworkRequest::ContentDispositionHeader,
-                       QVariant("form-data; name=\"zipfile\"; filename=\"" + QFileInfo(*file).fileName() + "\""));
-    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/zip"));
-    filePart.setBodyDevice(file);
-    file->setParent(multiPart);
-
-    multiPart->append(filePart);
   }
 
-  auto addField = [&](const QString &name, const QString &value) {
-    QHttpPart part;
-    part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"" + name + "\""));
-    part.setBody(value.toUtf8());
-    multiPart->append(part);
-  };
-
-  addField("key", ApiManager::authorizationKey());
+  ApiManager::appendField(multiPart, "key", ApiManager::authorizationKey());
 
   if(m_editTarget != -1)
-    addField("id", QString::number(m_editTarget));
+    ApiManager::appendField(multiPart, "id", QString::number(m_editTarget));
 
-  if(!m_artist->text().trimmed().isEmpty() && m_artist->text() != "<No Change>")
-    addField("artist", m_artist->text());
-
-  if(!m_description->toPlainText().trimmed().isEmpty() && m_description->toPlainText() != "<No Change>")
-    addField("description", m_description->toPlainText());
-
-  addField("tags", "untagged");
-  addField("is_private", QString::number(m_private->checkState() == Qt::Checked));
+  ApiManager::appendField(multiPart, "artist", m_artist->text());
+  ApiManager::appendField(multiPart, "description", m_description->toPlainText());
+  ApiManager::appendField(multiPart, "tags", "untagged");
+  ApiManager::appendField(multiPart, "is_private", QString::number(m_private->checkState() == Qt::Checked));
 
   m_currentReply = ApiManager::instance().post(QString(m_isEdit ? "api/workshop/edit" : "api/workshop/upload"), multiPart);
 

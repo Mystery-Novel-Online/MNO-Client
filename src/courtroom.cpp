@@ -33,7 +33,9 @@
 #include "engine/system/runtime_values.h"
 #include "engine/param/actor_repository.h"
 #include "engine/param/actor/actor_loader.h"
+#include <QHttpMultiPart>
 #include <engine/discord/workshop_discord.h>
+#include <engine/network/api_manager.h>
 #include <mk2/spritecachingreader.h>
 #include <rolechat/actor/JsonActorData.h>
 #include "engine/system/config_manager.h"
@@ -2790,6 +2792,37 @@ void Courtroom::on_ooc_message_return_pressed()
     ui_text_color->addItem(localization::getText("COLOR_RAINBOW"));
     ui_ooc_chat_message->clear();
     is_rainbow_enabled = true;
+    return;
+  }
+  if (l_message.startsWith("/area_list"))
+  {
+    ui_ooc_chat_message->clear();
+    QString file = QFileDialog::getOpenFileName(this, "Select YAML File", "", "YAML Files (*.yaml)");
+    if (file.trimmed().isEmpty()) return;
+
+    QHttpMultiPart *yamlMultiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
+    if (!ApiManager::appendFile(yamlMultiPart, "zipfile", file)) {
+      QMessageBox::warning(this, "Error", "Unable to open file.");
+      delete yamlMultiPart;
+      return;
+    }
+    ApiManager::appendField(yamlMultiPart, "key", ApiManager::authorizationKey());
+    QNetworkReply* yamlReply = ApiManager::instance().post("api/hubs/areas/upload", yamlMultiPart);
+    connect(yamlReply, &QNetworkReply::finished, this, [this, yamlReply]()
+    {
+      yamlReply->deleteLater();
+      if (yamlReply->error() != QNetworkReply::NoError) {
+        qWarning() << "YAML Upload Failed";
+        return;
+      }
+      QByteArray responseData = yamlReply->readAll();
+      JSONReader response;
+      response.ReadFromString(responseData);
+      const QString fileName = response.getStringValue("cdn_file");
+      if(fileName.trimmed().isEmpty()) return;
+      ao_app->send_server_packet(DRPacket("YAML_AREA", {fileName}));
+    });
+
     return;
   }
   if (l_message.startsWith("/afk") && !m_isAfk)
