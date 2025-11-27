@@ -10,6 +10,8 @@
 #include <discord_social_sdk/discordpp.h>
 
 #include <engine/param/json_reader.h>
+
+#include <engine/network/api_manager.h>
 std::shared_ptr<discordpp::Client> client;
 const uint64_t APPLICATION_ID = 1409897527528128533;
 std::atomic<bool> running = true;
@@ -162,51 +164,49 @@ void WorkshopDiscord::setRichPresenceDetailsText(std::string sdetails)
 WorkshopDiscord::WorkshopDiscord()
 {
   std::signal(SIGINT, signalHandler);
-  std::cout << "🚀 Initializing Discord SDK...\n";
 
   m_currentClient = std::make_shared<discordpp::Client>();
   client = m_currentClient;
   client->SetStatusChangedCallback(clientStatusChangedCallback);
-  m_currentClient->AddLogCallback([](auto message, auto severity) { std::cout << "[" << EnumToString(severity) << "] " << message << std::endl; }, discordpp::LoggingSeverity::Info);
+  m_currentClient->AddLogCallback([](auto message, auto severity) {
+                                    std::cout << "[" << EnumToString(severity) << "] " << message << std::endl;
+                                  }, discordpp::LoggingSeverity::Info);
 
-    nlohmann::json verifyBody;
 
-    verifyBody["user_key"] = config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE");
+  nlohmann::json verifyBody;
+  verifyBody["user_key"] = config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE");
 
-    QString uri = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/"));
-    QNetworkRequest verifyRequest(QUrl(uri + "api/users/discord/verify"));
-    verifyRequest.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+  QString baseUri = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/") );
 
-    QNetworkAccessManager* verifyManager = new QNetworkAccessManager(this);
-    QNetworkReply* verifyReply = verifyManager->post(verifyRequest, QByteArray::fromStdString(verifyBody.dump()));
+  QByteArray jsonData = QByteArray::fromStdString(verifyBody.dump());
 
-    client->SetRelationshipGroupsUpdatedCallback([&](const uint64_t userId) {
-                                                   refreshFriendsList();
-                                                 });
+  QNetworkReply* verifyReply = ApiManager::instance().post(baseUri + "api/users/discord/verify", jsonData);
 
-    connect(verifyReply, &QNetworkReply::finished, this, [this, verifyReply]() {
-              if (verifyReply->error() != QNetworkReply::NoError) {
-                std::cerr << "❌ Verification request failed: " << verifyReply->errorString().toStdString() << std::endl;
-                verifyReply->deleteLater();
-                processOAuth();
-                return;
-              }
+  client->SetRelationshipGroupsUpdatedCallback([&](const uint64_t userId) { refreshFriendsList(); } );
 
-              QString dataString = verifyReply->readAll();
-              nlohmann::json verifyResponse = nlohmann::json::parse(dataString.toStdString());
+  connect(verifyReply, &QNetworkReply::finished, this, [this, verifyReply]() {
+
+            if (verifyReply->error() != QNetworkReply::NoError) {
+              std::cerr << "❌ Verification request failed: "  << verifyReply->errorString().toStdString() << std::endl;
               verifyReply->deleteLater();
+              processOAuth();
+              return;
+            }
 
-              bool isValid = verifyResponse.value("valid", false);
+            QString dataString = verifyReply->readAll();
+            nlohmann::json verifyResponse = nlohmann::json::parse(dataString.toStdString());
+            verifyReply->deleteLater();
 
-              if (isValid) {
-                std::cout << "✅ Workshop key valid. Skipping OAuth and using server tokens.\n";
-                tokenRecieved(verifyResponse["access_token"].get<std::string>());
-              } else {
-                std::cout << "❌ Workshop key invalid or expired. Proceeding with OAuth authorization.\n";
-                processOAuth();
-              }
-            });
+            bool isValid = verifyResponse.value("valid", false);
 
+            if (isValid) {
+              std::cout << "✅ Workshop key valid. Skipping OAuth and using server tokens.\n";
+              tokenRecieved(verifyResponse["access_token"].get<std::string>());
+            } else {
+              std::cout << "❌ Workshop key invalid or expired. Proceeding with OAuth authorization.\n";
+              processOAuth();
+            }
+          });
 }
 
 void WorkshopDiscord::processOAuth()
