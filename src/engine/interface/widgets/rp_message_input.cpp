@@ -170,7 +170,8 @@ QTextImageFormat RPMessageInput::createTagFormat(MessageTagType tagType)
 void RPMessageInput::applyHighlighting(const QString &text)
 {
   QTextCharFormat normalFormat;
-  normalFormat.setForeground(Qt::black);
+  QColor textColor = this->palette().color(QPalette::Text);
+  normalFormat.setForeground(textColor);
 
   QList<QTextCharFormat> formatStack;
   m_highlightQueue.clear();
