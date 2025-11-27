@@ -1,6 +1,7 @@
 #include "layer_selection_panel.h"
 #include "server_select_entry.h"
 #include "engine/param/actor_repository.h"
+#include "engine/interface/courtroom_layout.h"
 
 LayerSelectionPanel::LayerSelectionPanel(QWidget *parent)
     : RPWidget{"layers_panel", parent}
@@ -121,5 +122,6 @@ void LayerSelectionPanel::layerClicked(int layerId)
     break;
   }
   m_layers[layerId] = data;
+  courtroom::ic::focusMessageBox();
 }
 
