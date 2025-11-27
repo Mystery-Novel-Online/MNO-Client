@@ -1,6 +1,8 @@
 #include "drmasterclient.h"
 #include "pch.h"
 
+#include <engine/network/api_manager.h>
+
 DRMasterClient::DRMasterClient(QObject *parent)
     : QObject(parent)
     , m_network(new QNetworkAccessManager(this))
@@ -16,7 +18,7 @@ QString DRMasterClient::address() const
 
 void DRMasterClient::set_address(QString p_address)
 {
-  m_address = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/"));
+  m_address = ApiManager::baseUri();
   emit address_changed();
 }
 

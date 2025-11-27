@@ -20,6 +20,8 @@
 
 #include <engine/discord/workshop_discord.h>
 
+#include <engine/network/api_manager.h>
+
 using namespace engine::system;
 
 static int s_lastMessageId = -1;
@@ -133,21 +135,11 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     {
       QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
-      const QString joinRequestUrl =
-          QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) +
-          "api/servers/join";
-
-      QUrl url(joinRequestUrl);
-      QNetworkRequest request(url);
-      request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-      QString apiKey = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
-      QJsonObject json;
-      json["server_id"] = QString::number(l_content.at(2).toInt());
-      json["workshop_key"] = apiKey;
+      QString apiKey = ApiManager::authorizationKey();
+      QJsonObject json{{"server_id", QString::number(l_content.at(2).toInt())}, {"workshop_key", apiKey}};
       QJsonDocument doc(json);
-      QByteArray data = doc.toJson();
 
-      QNetworkReply *reply = manager->post(request, data);
+      QNetworkReply* reply = ApiManager::instance().post("api/servers/join", doc.toJson());
 
       QObject::connect(reply, &QNetworkReply::finished, this, [this, reply]() {
                          if (reply->error() == QNetworkReply::NoError) {

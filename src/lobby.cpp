@@ -22,6 +22,7 @@
 #include <engine/system/config_manager.h>
 #include "config_tabs/config_tab_theme.h"
 #include <engine/discord/workshop_discord.h>
+#include <engine/network/api_manager.h>
 #include <rolechat/userdata/RolechatDatabase.h>
 
 using namespace engine::system;
@@ -185,9 +186,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     m_currentBrowserUrl = workshop_list->getEntry(id).downloadLink;
     m_currentWorkshopCharacter = workshop_list->getEntry(id).folder;
 
-
-    const QString workshopUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/preview";
-    QNetworkReply *reply = workshopPreviewDownloader->get(QNetworkRequest(QUrl(workshopUrl)));
+    QNetworkReply *reply = ApiManager::instance().get("api/workshop/" + QString::number(id) + "/preview");
 
     ui_workshop_preview->hide();
 
@@ -218,16 +217,16 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   QObject::connect(workshop_list, &WorkshopListWidget::entryRightClicked, [this](int id)
   {
-                     QMenu menu;
+    QMenu menu;
 
-                     QAction *editAction = menu.addAction("Edit");
+    QAction *editAction = menu.addAction("Edit");
 
-                     connect(editAction, &QAction::triggered, this, [this, id]()
-                      {
-                        WorkshopUploader::StartEdit(id);
-                      });
+    connect(editAction, &QAction::triggered, this, [this, id]()
+     {
+       WorkshopUploader::StartEdit(id);
+     });
 
-                     menu.exec(QCursor::pos());
+    menu.exec(QCursor::pos());
 
   });
 

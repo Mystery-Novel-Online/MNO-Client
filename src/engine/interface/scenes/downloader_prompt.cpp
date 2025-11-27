@@ -2,6 +2,8 @@
 #include "engine/fs/fs_characters.h"
 #include "engine/fs/fs_mounting.h"
 #include "engine/system/user_database.h"
+
+#include <engine/network/api_manager.h>
 DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
   setWindowTitle("Downloading...");
@@ -33,7 +35,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
     return;
   }
 
-  url = QUrl(repository += "?key=" + QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE")));
+  url = QUrl(repository += "?key=" + ApiManager::authorizationKey());
 
   auto reply = QMessageBox::question(
       nullptr,

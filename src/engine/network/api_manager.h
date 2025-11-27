@@ -13,6 +13,11 @@ public:
 
   QNetworkReply* get(const QString& url);
   QNetworkReply* post(const QString& url, const QByteArray& data);
+  QNetworkReply* post(const QString& url, QHttpMultiPart* multiPart);
+
+  static QString repoUrl(int characterId);
+  static QString baseUri();
+  static QString authorizationKey();
 
 private:
   explicit ApiManager(QObject *parent = nullptr);

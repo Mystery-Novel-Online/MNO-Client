@@ -174,13 +174,11 @@ WorkshopDiscord::WorkshopDiscord()
 
 
   nlohmann::json verifyBody;
-  verifyBody["user_key"] = config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE");
-
-  QString baseUri = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/") );
+  verifyBody["user_key"] = ApiManager::authorizationKey().toStdString();
 
   QByteArray jsonData = QByteArray::fromStdString(verifyBody.dump());
 
-  QNetworkReply* verifyReply = ApiManager::instance().post(baseUri + "api/users/discord/verify", jsonData);
+  QNetworkReply* verifyReply = ApiManager::instance().post("api/users/discord/verify", jsonData);
 
   client->SetRelationshipGroupsUpdatedCallback([&](const uint64_t userId) { refreshFriendsList(); } );
 
@@ -231,12 +229,7 @@ void WorkshopDiscord::processOAuth()
                                  body["redirect_uri"] = redirectUri;
                                  body["code_verifier"] = codeVerifier.Verifier();
 
-                                 QString uri = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/"));
-                                 QNetworkRequest request(QUrl(uri + "api/users/discord/token"));
-                                 request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-                                 QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-                                 QNetworkReply* reply = manager->post(request, QByteArray::fromStdString(body.dump()));
+                                 QNetworkReply* reply = ApiManager::instance().post("api/users/discord/token", QByteArray::fromStdString(body.dump()));
 
                                  connect(reply, &QNetworkReply::finished, this, [reply, result]() {
                                            if (reply->error() != QNetworkReply::NoError) {

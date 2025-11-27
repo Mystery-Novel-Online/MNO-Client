@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QMouseEvent>
 #include "engine/workshop/workshop_cache.h"
+#include <engine/network/api_manager.h>
 
 WorkshopEntry::WorkshopEntry(int id, const QString &iconPath, const QString &title,
                              const QString &subtitle, const QString &genderSymbol,
@@ -26,10 +27,7 @@ WorkshopEntry::WorkshopEntry(int id, const QString &iconPath, const QString &tit
   iconLabel->setFixedSize(50, 50);
   mainLayout->addWidget(iconLabel);
 
-  const QString workshopUrl =
-      QString::fromStdString(config::ConfigUserSettings::stringValue(
-          "workshop_url", "http://localhost:3623/")) +
-      "api/workshop/" + QString::number(id) + "/icon";
+  const QString workshopUrl = ApiManager::baseUri() + "api/workshop/" + QString::number(id) + "/icon";
 
   connect(&WorkshopEntry::iconCache(), &WorkshopCache::fileCached, this,
           [iconLabel, workshopUrl](const QString &filePath, const QString &hash) {

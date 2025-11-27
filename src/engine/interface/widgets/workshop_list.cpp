@@ -1,5 +1,7 @@
 #include "workshop_list.h"
 
+#include <engine/network/api_manager.h>
+
 WorkshopListWidget::WorkshopListWidget(QWidget *parent) : QWidget(parent)
 {
   QScrollArea *scrollArea = new QScrollArea(this);
@@ -35,7 +37,7 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
     QString url = child.toObject().value("url_download").toString();
     if(url.isEmpty() || url == "repo")
     {
-      url = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/repo";
+      url = ApiManager::repoUrl(id);
     };
 
     WorkshopContentEntry newEntry = {child.toObject().value("name").toString(), child.toObject().value("submitter").toString(), child.toObject().value("artist").toString(), child.toObject().value("description").toString(), url, child.toObject().value("folder").toString()};
@@ -52,11 +54,11 @@ void WorkshopListWidget::updateFromApi(const QString &category)
 
   if(category == "portfolio")
   {
-    workshopPath += "/my_uploads?key=" + QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
+    workshopPath += "/my_uploads?key=" + ApiManager::authorizationKey();
   }
   else if(category == "pending")
   {
-    workshopPath += "/verification_queue?key=" + QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
+    workshopPath += "/verification_queue?key=" + ApiManager::authorizationKey();
   }
   else
   {
@@ -64,7 +66,7 @@ void WorkshopListWidget::updateFromApi(const QString &category)
   }
 
 
-  const QString workshopUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + workshopPath;
+  const QString workshopUrl = ApiManager::baseUri() + workshopPath;
   const QUrl url = QUrl(workshopUrl);
   QNetworkRequest request(url);
   m_netManager->get(request);
@@ -133,11 +135,11 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
     QString url = obj.value("url_download").toString();
     if(url.isEmpty() || url == "repo")
     {
-      url = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/repo";
+      url = ApiManager::baseUri() + "api/workshop/" + QString::number(id) + "/repo";
     };
     if(url == "collection")
     {
-      url = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(id) + "/collection";
+      url = ApiManager::baseUri() + "api/workshop/" + QString::number(id) + "/collection";
     }
 
     WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString()};

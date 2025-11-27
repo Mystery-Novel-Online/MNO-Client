@@ -6,6 +6,7 @@
 #include <engine/param/json_reader.h>
 #include <engine/fs/fs_characters.h>
 #include <engine/fs/fs_reading.h>
+#include <engine/network/api_manager.h>
 
 WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) : QDialog{parent}, m_currentReply(nullptr), m_isEdit(edit), m_editTarget(editTarget)
 {
@@ -57,7 +58,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
 
 void WorkshopUploader::StartUpload()
 {
-  QString uploadKey = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
+  QString uploadKey = ApiManager::authorizationKey();
   if(uploadKey.trimmed().isEmpty() || uploadKey.trimmed() == "PUT_KEY_HERE")
   {
     QMessageBox::information(nullptr, "Warning", "You currently are not authenticated to upload");
@@ -70,7 +71,7 @@ void WorkshopUploader::StartUpload()
 
 void WorkshopUploader::StartEdit(int id)
 {
-  QString uploadKey = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
+  QString uploadKey = ApiManager::authorizationKey();
   if(uploadKey.trimmed().isEmpty() || uploadKey.trimmed() == "PUT_KEY_HERE")
   {
     QMessageBox::information(nullptr, "Warning", "You currently are not authenticated to upload");
@@ -118,7 +119,6 @@ void WorkshopUploader::submitForm()
     multiPart->append(filePart);
   }
 
-
   auto addField = [&](const QString &name, const QString &value) {
     QHttpPart part;
     part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"" + name + "\""));
@@ -126,7 +126,7 @@ void WorkshopUploader::submitForm()
     multiPart->append(part);
   };
 
-  addField("key", QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE")));
+  addField("key", ApiManager::authorizationKey());
 
   if(m_editTarget != -1)
     addField("id", QString::number(m_editTarget));
@@ -140,11 +140,7 @@ void WorkshopUploader::submitForm()
   addField("tags", "untagged");
   addField("is_private", QString::number(m_private->checkState() == Qt::Checked));
 
-  QUrl url(QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + QString(m_isEdit ? "api/workshop/edit" : "api/workshop/upload"));
-  QNetworkRequest request(url);
-
-  m_currentReply = m_network->post(request, multiPart);
-  multiPart->setParent(m_currentReply);
+  m_currentReply = ApiManager::instance().post(QString(m_isEdit ? "api/workshop/edit" : "api/workshop/upload"), multiPart);
 
   m_progress->setVisible(true);
   m_progress->setValue(0);
@@ -165,13 +161,12 @@ void WorkshopUploader::handleReply(QNetworkReply *reply)
     const QString characterFolder = reader.getStringValue("folder_name");
     if(FS::Checks::CharacterExists(characterFolder.toStdString().c_str()))
     {
-      QString repoUrl = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/")) + "api/workshop/" + QString::number(reader.getIntValue("character_id")) + "/repo";
       QString contentFilePath = fs::characters::getFilePath(characterFolder, "CONTENT.txt");
       QFile contentFile(contentFilePath);
       if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))
       {
         QTextStream out(&contentFile);
-        out << repoUrl;
+        out << ApiManager::repoUrl(reader.getIntValue("character_id"));
         contentFile.close();
       }
     }
