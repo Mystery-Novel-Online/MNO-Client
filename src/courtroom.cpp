@@ -2374,6 +2374,7 @@ void Courtroom::next_chat_letter()
       {
         engine::system::theme::setChatlogColour("message", format);
       }
+      format.setTextOutline(Qt::NoPen);
       cursor2.insertText(ch, format);
       m_iclog_cursor_position += 1;
 
