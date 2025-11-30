@@ -22,6 +22,7 @@
 #include <rolechat/config/ConfigUserSettings.h>
 #include "rolechat_config.h"
 #include "engine/discord/workshop_discord.h"
+#include <engine/network/api_manager.h>
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -35,11 +36,25 @@ AOApplication *AOApplication::getInstance()
   return m_Instance;
 }
 
+void registerUrlProtocol()
+{
+  QString appPath = QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+
+  QSettings protocolKey("HKEY_CURRENT_USER\\Software\\Classes\\mnvl", QSettings::NativeFormat);
+  protocolKey.setValue(".", "URL:mnvl Protocol");
+  protocolKey.setValue("URL Protocol", "");
+
+  QSettings commandKey("HKEY_CURRENT_USER\\Software\\Classes\\mnvl\\shell\\open\\command", QSettings::NativeFormat);
+  commandKey.setValue(".", "\"" + appPath + "\" \"%1\"");
+}
+QString pendingMnvlUrl = "";
+
 AOApplication::AOApplication(int &argc, char **argv)
     : QApplication(argc, argv)
 {
 #if defined(Q_OS_WINDOWS)
 #ifndef QT_DEBUG
+  registerUrlProtocol();
   QDir::setCurrent(QCoreApplication::applicationDirPath() + "/");
 #endif
 #endif
@@ -85,6 +100,34 @@ AOApplication::AOApplication(int &argc, char **argv)
   QTimer* timer = new QTimer(this);
   connect(timer, &QTimer::timeout, this, [=]() { RuntimeLoop::Update(); });
   timer->start(16);
+
+  for (int i = 0; i < argc; ++i)
+  {
+    const QString l_arg(argv[i]);
+
+    if(l_arg.startsWith("mnvl://"))
+    {
+      pendingMnvlUrl = l_arg;
+      QString path = pendingMnvlUrl.mid(QString("mnvl://").length());
+      QStringList parts = path.split('/');
+
+      if (parts.size() >= 3) {
+        QString action = parts[0];
+        QString id = parts[1];
+        QString folder = parts[2];
+
+        if (action == "download")
+        {
+          bool ok = false;
+          int downloadId = id.toInt(&ok);
+          if (ok) {
+            DownloaderPrompt::StartDownload(ApiManager::repoUrl(downloadId), "packages/Workshop Downloads/", folder);
+          }
+        }
+      }
+      return;
+    }
+  }
 }
 
 AOApplication::~AOApplication()
