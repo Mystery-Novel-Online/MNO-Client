@@ -38,6 +38,12 @@ AOApplication *AOApplication::getInstance()
 AOApplication::AOApplication(int &argc, char **argv)
     : QApplication(argc, argv)
 {
+#if defined(Q_OS_WINDOWS)
+#ifndef QT_DEBUG
+  QDir::setCurrent(QCoreApplication::applicationDirPath() + "/");
+#endif
+#endif
+
   system::ConfigManager::initializeConfig();
   WorkshopDiscord instance;
 
