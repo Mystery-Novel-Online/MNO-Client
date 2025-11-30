@@ -123,6 +123,7 @@ void WorkshopUploader::submitForm()
   m_progress->setVisible(true);
   m_progress->setValue(0);
 
+  connect(m_currentReply, &QNetworkReply::finished, this, &WorkshopUploader::handleReply);
   connect(m_currentReply, &QNetworkReply::uploadProgress, this, &WorkshopUploader::updateProgress);
 }
 
