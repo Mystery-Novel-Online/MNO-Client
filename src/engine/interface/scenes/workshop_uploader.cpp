@@ -17,10 +17,15 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
   m_filePath = new QLineEdit(this);
   m_filePath->setReadOnly(true);
 
+  m_previewPath = new QLineEdit(this);
+  m_previewPath->setReadOnly(true);
+
+
   m_artist = new QLineEdit(this);
   m_description = new QTextEdit(this);
 
   m_chooseButton = new QPushButton("Choose Zip", this);
+  m_imageButton = new QPushButton("Choose Preview", this);
   m_submitButton = new QPushButton("Submit", this);
 
   m_progress = new QProgressBar(this);
@@ -36,11 +41,14 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
     m_filePath->setText("<No Change>");
     m_description->setText("<No Change>");
     m_artist->setText("<No Change>");
+    m_previewPath->setText("<No Change>");
   }
 
   QFormLayout *layout = new QFormLayout(this);
   layout->addRow("Zip File:", m_filePath);
   layout->addRow("", m_chooseButton);
+  layout->addRow("Preview Image:", m_previewPath);
+  layout->addRow("", m_imageButton);
   layout->addRow("Artist:", m_artist);
   layout->addRow("Description:", m_description);
   layout->addRow("", m_private);
@@ -52,6 +60,8 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
   m_network = new QNetworkAccessManager(this);
 
   connect(m_chooseButton, &QPushButton::clicked, this, &WorkshopUploader::chooseFile);
+  connect(m_imageButton, &QPushButton::clicked, this, &WorkshopUploader::choosePreviewFile);
+
   connect(m_submitButton, &QPushButton::clicked, this, &WorkshopUploader::submitForm);
   connect(m_network, &QNetworkAccessManager::finished, this, &WorkshopUploader::handleReply);
 }
@@ -90,12 +100,26 @@ void WorkshopUploader::chooseFile()
   }
 }
 
+void WorkshopUploader::choosePreviewFile()
+{
+  QString file = QFileDialog::getOpenFileName(this, "Select PNG File", "", "Image Files (*.png)");
+  if (!file.isEmpty()) {
+    m_previewPath->setText(file);
+  }
+}
+
 void WorkshopUploader::submitForm()
 {
   if (m_filePath->text().isEmpty() && !m_isEdit) {
     QMessageBox::warning(this, "Error", "Please select a zip file.");
     return;
   }
+
+  if (m_previewPath->text().isEmpty() && !m_isEdit) {
+    QMessageBox::warning(this, "Error", "Please select a preview file.");
+    return;
+  }
+
 
   QHttpMultiPart *multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
@@ -107,6 +131,16 @@ void WorkshopUploader::submitForm()
       return;
     }
   }
+
+  if(!m_previewPath->text().trimmed().isEmpty() && m_previewPath->text() != "<No Change>")
+  {
+    if (!ApiManager::appendFile(multiPart, "preview", m_previewPath->text())) {
+      QMessageBox::warning(this, "Error", "Unable to open file.");
+      delete multiPart;
+      return;
+    }
+  }
+
 
   ApiManager::appendField(multiPart, "key", ApiManager::authorizationKey());
 
@@ -127,15 +161,15 @@ void WorkshopUploader::submitForm()
   connect(m_currentReply, &QNetworkReply::uploadProgress, this, &WorkshopUploader::updateProgress);
 }
 
-void WorkshopUploader::handleReply(QNetworkReply *reply)
+void WorkshopUploader::handleReply()
 {
   m_progress->setVisible(false);
 
   JSONReader reader;
-  if (reply->error() == QNetworkReply::NoError) {
+  if (m_currentReply->error() == QNetworkReply::NoError) {
     QMessageBox::information(this, "Success", "Upload completed! It should be approved soon.");
 
-    reader.ReadFromString(reply->readAll());
+    reader.ReadFromString(m_currentReply->readAll());
 
     const QString characterFolder = reader.getStringValue("folder_name");
     if(FS::Checks::CharacterExists(characterFolder.toStdString().c_str()))
@@ -150,11 +184,11 @@ void WorkshopUploader::handleReply(QNetworkReply *reply)
       }
     }
   } else {
-    reader.ReadFromString(reply->readAll());
+    reader.ReadFromString(m_currentReply->readAll());
     QMessageBox::critical(this, "Error", reader.getStringValue("error"));
-    qDebug() << reply->readAll();;
+    qDebug() << m_currentReply->readAll();;
   }
-  reply->deleteLater();
+  m_currentReply->deleteLater();
 }
 
 void WorkshopUploader::updateProgress(qint64 bytesSent, qint64 bytesTotal)

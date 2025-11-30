@@ -11,14 +11,17 @@ public:
 
 private slots:
   void chooseFile();
+  void choosePreviewFile();
   void submitForm();
-  void handleReply(QNetworkReply *reply);
+  void handleReply();
   void updateProgress(qint64 bytesSent, qint64 bytesTotal);
 
 private:
   QLineEdit *m_filePath;
+  QLineEdit *m_previewPath;
   QLineEdit *m_artist;
   QTextEdit *m_description;
+  QPushButton *m_imageButton;
   QPushButton *m_chooseButton;
   QPushButton *m_submitButton;
   QProgressBar *m_progress;
