@@ -12,10 +12,10 @@ namespace ThemeScripting
 
 namespace LuaBridge
 {
-  sol::function& GetFunction(const char* functionName);
+  sol::function& GetFunction(const std::string& functionName);
 
   template<typename... Args>
-  inline bool LuaEventCall(const char* functionName, Args&&... args)
+  inline bool LuaEventCall(const std::string& functionName, Args&&... args)
   {
     sol::function function = GetFunction(functionName);
     if(!function.valid()) return false;
@@ -31,11 +31,11 @@ namespace LuaBridge
 
 namespace LuaFunctions
 {
-  void ChangeTab(const char* group, const char* tabName);
-  void CustomChoiceDialog(const char* text, const char* event);
-  void SetNotificationText(const char* text, bool show);
+  void ChangeTab(const std::string& group, const std::string& tabName);
+  void CustomChoiceDialog(const std::string& text, const std::string& event);
+  void SetNotificationText(const std::string& text, bool show);
   void AlertUser(bool playSound);
-  void SwitchCharacter(const char* characterFolder);
+  void SwitchCharacter(const std::string& characterFolder);
 }
 
 #endif // THEME_SCRIPTING_H

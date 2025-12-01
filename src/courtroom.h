@@ -763,7 +763,7 @@ public slots:
   void on_char_select_right_clicked();
   void hide_emote_tooltip(int id);
   void send_mc_packet(QString p_song, BGMPlayback playbackType = BGMPlayback_Standard);
-  void SwitchCharacterByName(const char* characterName);
+  void SwitchCharacterByName(std::string characterName);
   void SwitchRandomCharacter(QString list);
 
 private slots:

@@ -213,13 +213,14 @@ void Courtroom::update_character_icon(QString p_character)
   }
 }
 
-void Courtroom::SwitchCharacterByName(const char *characterName)
+void Courtroom::SwitchCharacterByName(std::string characterName)
 {
+  QString qCharacterName = QString::fromStdString(characterName);
   int serverCharacterId = 0;
-  QString characterPathIni = fs::characters::getFilePath(characterName, CHARACTER_CHAR_INI);
-  QString characterPathJson = fs::characters::getFilePath(characterName, CHARACTER_CHAR_JSON);
+  QString characterPathIni = fs::characters::getFilePath(qCharacterName, CHARACTER_CHAR_INI);
+  QString characterPathJson = fs::characters::getFilePath(qCharacterName, CHARACTER_CHAR_JSON);
 
-  if (user::GetCharacterName() == characterName)
+  if (user::GetCharacterName() == qCharacterName)
   {
     enter_courtroom(user::GetCharacterId());
     return;
@@ -232,15 +233,15 @@ void Courtroom::SwitchCharacterByName(const char *characterName)
     return;
   }
 
-  if(!CharacterRepository::characterExists(characterName))
+  if(!CharacterRepository::characterExists(qCharacterName))
   {
     serverCharacterId = CharacterRepository::findAvailablePersona();
     if(serverCharacterId == -1) return;
-    ao_config->set_character_ini(CharacterRepository::characterNameServer(serverCharacterId), characterName);
+    ao_config->set_character_ini(CharacterRepository::characterNameServer(serverCharacterId), qCharacterName);
   }
   else
   {
-    serverCharacterId = CharacterRepository::networkedIdFromName(characterName);
+    serverCharacterId = CharacterRepository::networkedIdFromName(qCharacterName);
   }
 
   ao_app->send_server_packet(

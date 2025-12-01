@@ -177,7 +177,7 @@ namespace ThemeScripting
 namespace LuaBridge
 {
 
-  sol::function &GetFunction(const char* functionName)
+  sol::function &GetFunction(const std::string& functionName)
   {
     if(s_registeredFunctions.contains(functionName)) return s_registeredFunctions[functionName];
     sol::function eventCall = s_themeScript[functionName];
@@ -209,14 +209,14 @@ namespace LuaBridge
 
 namespace LuaFunctions
 {
-  void ChangeTab(const char *group, const char *tabName)
+  void ChangeTab(const std::string& group, const std::string& tabName)
   {
-    ThemeManager::get().toggleTab(tabName, group);
+    ThemeManager::get().toggleTab(QString::fromStdString(tabName), QString::fromStdString(group));
   }
 
   void AlertUser(bool playSound)
   {
-    if(playSound) audio::system::Play(AOApplication::getInstance()->get_sfx("word_call").toUtf8());
+    if(playSound) audio::system::Play(AOApplication::getInstance()->get_sfx("word_call").toStdString());
 
     Courtroom *courtroom = AOApplication::getInstance()->get_courtroom();
     Lobby *lobby = AOApplication::getInstance()->get_lobby();
@@ -227,17 +227,17 @@ namespace LuaFunctions
       AOApplication::getInstance()->alert(lobby);
   }
 
-  void SetNotificationText(const char *text, bool show)
+  void SetNotificationText(const std::string& text, bool show)
   {
-    NotifyManager::get().SetText(text, show);
+    NotifyManager::get().SetText(QString::fromStdString(text), show);
   }
 
-  void CustomChoiceDialog(const char *text, const char *event)
+  void CustomChoiceDialog(const std::string& text, const std::string& event)
   {
-    NotifyManager::get().SetLuaNotification(text, event);
+    NotifyManager::get().SetLuaNotification(QString::fromStdString(text), QString::fromStdString(event));
   }
 
-  void SwitchCharacter(const char *characterFolder)
+  void SwitchCharacter(const std::string& characterFolder)
   {
     Courtroom *courtroom = AOApplication::getInstance()->get_courtroom();
     if(courtroom == nullptr) return;

@@ -2,9 +2,9 @@
 
 static QString s_AreaDescription = "";
 
-void AreaMetadata::SetDescription(const char *description)
+void AreaMetadata::SetDescription(const std::string& description)
 {
-  s_AreaDescription = QString(description);
+  s_AreaDescription = QString::fromStdString(description);
   if(s_AreaDescription.isEmpty())
   {
     s_AreaDescription = "Nothing particularly interesting.";

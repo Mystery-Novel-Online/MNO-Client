@@ -353,7 +353,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     if(!LuaBridge::LuaEventCall("AreaDescriptionEvent", l_content.at(1).toStdString()))
     {
       LuaBridge::LuaEventCall("OnAreaDescriptionRecieved", l_content.at(1).toStdString());
-      AreaMetadata::SetDescription(l_content.at(1).toUtf8());
+      AreaMetadata::SetDescription(l_content.at(1).toStdString());
     };
 
     m_courtroom->m_current_reportcard_reason = Courtroom::ReportCardReason(prompt);

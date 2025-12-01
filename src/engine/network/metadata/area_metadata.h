@@ -5,7 +5,7 @@ class QString;
 
 namespace AreaMetadata
 {
-  void SetDescription(const char* description);
+  void SetDescription(const std::string& description);
 }
 
 

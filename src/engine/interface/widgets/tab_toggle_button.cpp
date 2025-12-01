@@ -41,7 +41,7 @@ void TabToggleButton::on_clicked()
 {
   if(mIsDetatched) return;
   QString tabEventName = mTabGroup.toLower() + "ToggleEvent";
-  if(!LuaBridge::LuaEventCall(tabEventName.toUtf8(), mTabName.toStdString()))
+  if(!LuaBridge::LuaEventCall(tabEventName.toStdString(), mTabName.toStdString()))
   {
     LuaBridge::OnTabChange(mTabName.toStdString(), mTabGroup.toStdString());
     ThemeManager::get().toggleTab(mTabName, mTabGroup);

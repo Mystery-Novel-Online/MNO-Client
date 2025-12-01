@@ -23,7 +23,7 @@ namespace audio
 
   namespace system
   {
-    void Play(const char *name);
+    void Play(const std::string& name);
   }
 
   namespace shout
@@ -47,8 +47,8 @@ namespace audio
     void setBlipRate(int rate);
 
     void Tick();
-    void SetSound(const char *sound);
-    void SetGender(const char *gender);
+    void SetSound(const std::string& sound);
+    void SetGender(const std::string& gender);
   }
 
 };

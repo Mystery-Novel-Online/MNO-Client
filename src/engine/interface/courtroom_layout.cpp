@@ -138,7 +138,7 @@ namespace courtroom
         QObject::connect(slider, &QAbstractSlider::valueChanged, [=](int value)
         {
           QString eventName = qName + "ValueChanged";
-          LuaBridge::LuaEventCall(eventName.toUtf8(), value);
+          LuaBridge::LuaEventCall(eventName.toStdString(), value);
         });
       }
 
@@ -187,7 +187,7 @@ namespace courtroom
         QObject::connect(slider, &QAbstractSlider::valueChanged, [=](int value)
                          {
                            QString eventName = qName + "ValueChanged";
-                           LuaBridge::LuaEventCall(eventName.toUtf8(), value);
+                           LuaBridge::LuaEventCall(eventName.toStdString(), value);
                          });
       }
 
@@ -253,7 +253,7 @@ namespace courtroom
         QObject::connect(targetButton, &QPushButton::clicked, [=]()
         {
           QString eventName = qName + "ButtonEvent";
-          LuaBridge::LuaEventCall(eventName.toUtf8());
+          LuaBridge::LuaEventCall(eventName.toStdString());
         });
       }
       else
@@ -295,16 +295,16 @@ namespace courtroom
 
         QObject::connect(lineEdit, &QLineEdit::textChanged, [=](const QString &text) {
                            QString eventName = QString::fromStdString(name) + "TextChanged";
-                           LuaBridge::LuaEventCall(eventName.toUtf8(), text.toStdString());
+                           LuaBridge::LuaEventCall(eventName.toStdString(), text.toStdString());
                          });
 
         QObject::connect(lineEdit, &QLineEdit::returnPressed, [=]() {
                            QString eventName = QString::fromStdString(name) + "ReturnPressed";
-                           LuaBridge::LuaEventCall(eventName.toUtf8());
+                           LuaBridge::LuaEventCall(eventName.toStdString());
                          });
-        QObject::connect(lineEdit, &QLineEdit::textEdited, [=](const QString &text) { QString eventName = QString::fromStdString(name) + "TextEdited"; LuaBridge::LuaEventCall(eventName.toUtf8(), text.toStdString()); });
-        QObject::connect(lineEdit, &QLineEdit::editingFinished, [=]() { QString eventName = QString::fromStdString(name) + "EditingFinished"; LuaBridge::LuaEventCall(eventName.toUtf8()); });
-        QObject::connect(lineEdit, &QLineEdit::selectionChanged, [=]() { QString eventName = QString::fromStdString(name) + "SelectionChanged"; LuaBridge::LuaEventCall(eventName.toUtf8()); });
+        QObject::connect(lineEdit, &QLineEdit::textEdited, [=](const QString &text) { QString eventName = QString::fromStdString(name) + "TextEdited"; LuaBridge::LuaEventCall(eventName.toStdString(), text.toStdString()); });
+        QObject::connect(lineEdit, &QLineEdit::editingFinished, [=]() { QString eventName = QString::fromStdString(name) + "EditingFinished"; LuaBridge::LuaEventCall(eventName.toStdString()); });
+        QObject::connect(lineEdit, &QLineEdit::selectionChanged, [=]() { QString eventName = QString::fromStdString(name) + "SelectionChanged"; LuaBridge::LuaEventCall(eventName.toStdString()); });
 
       }
 
@@ -388,12 +388,12 @@ namespace courtroom
 
         QObject::connect(comboBox, &QComboBox::currentTextChanged, [=](const QString &text) {
                            QString eventName = QString::fromStdString(name) + "SelectionChanged";
-                           LuaBridge::LuaEventCall(eventName.toUtf8(), text);
+                           LuaBridge::LuaEventCall(eventName.toStdString(), text);
                          });
 
         QObject::connect(comboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), [=](int index) {
                            QString eventName = QString::fromStdString(name) + "IndexChanged";
-                           LuaBridge::LuaEventCall(eventName.toUtf8(), index);
+                           LuaBridge::LuaEventCall(eventName.toStdString(), index);
                          });
       }
 
@@ -567,21 +567,23 @@ namespace courtroom
     {
       s_CourtroomWidgets = widgetList;
     }
-
-    void moveWidget(const char *name, int axisX, int axisY)
+    
+    void moveWidget(const std::string &name, int axisX, int axisY)
     {
-      if(!s_CourtroomWidgets.contains(name)) return;
-      QWidget *targetWidget = s_CourtroomWidgets[name];
+      QString qName = QString::fromStdString(name);
+      if(!s_CourtroomWidgets.contains(qName)) return;
+      QWidget *targetWidget = s_CourtroomWidgets[qName];
       float resizeFactor = ThemeManager::get().getResize();
       int scaledX = static_cast<int>(axisX * resizeFactor);
       int scaledY = static_cast<int>(axisY * resizeFactor);
       targetWidget->move(scaledX, scaledY);
     }
 
-    void setVisibility(const char *name, bool visibleState)
+    void setVisibility(const std::string& name, bool visibleState)
     {
-      if(!s_CourtroomWidgets.contains(name)) return;
-      QWidget *widgetTarget = s_CourtroomWidgets[name];
+      QString qName = QString::fromStdString(name);
+      if(!s_CourtroomWidgets.contains(qName)) return;
+      QWidget *widgetTarget = s_CourtroomWidgets[qName];
       widgetTarget->setVisible(visibleState);
     }
 
@@ -591,10 +593,11 @@ namespace courtroom
       s_CourtroomWidgets[name] = widget;
     }
 
-    void raiseWidget(const char *name)
+    void raiseWidget(const std::string& name)
     {
-      if(!s_CourtroomWidgets.contains(name)) return;
-      s_CourtroomWidgets[name]->raise();
+      QString qName = QString::fromStdString(name);
+      if(!s_CourtroomWidgets.contains(qName)) return;
+      s_CourtroomWidgets[qName]->raise();
     }
 
     void setParent(const std::string &parent, const std::string &child)
@@ -607,10 +610,11 @@ namespace courtroom
       s_CourtroomWidgets[qChild]->setParent(s_CourtroomWidgets[qParent]);
     }
 
-    void resizeWidget(const char *name, int width, int height)
+    void resizeWidget(const std::string &name, int width, int height)
     {
-      if(!s_CourtroomWidgets.contains(name)) return;
-      QWidget *targetWidget = s_CourtroomWidgets[name];
+      QString qName = QString::fromStdString(name);
+      if(!s_CourtroomWidgets.contains(qName)) return;
+      QWidget *targetWidget = s_CourtroomWidgets[qName];
       float resizeFactor = ThemeManager::get().getResize();
       int scaledX = static_cast<int>(width * resizeFactor);
       int scaledY = static_cast<int>(height * resizeFactor);

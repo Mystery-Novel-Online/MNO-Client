@@ -19,10 +19,10 @@ namespace courtroom
   {
     void setWidgetList(QHash<QString, QWidget *> widgetList);
     void addWidget(QString& name, QWidget* widget);
-    void moveWidget(const char* name, int x, int y);
-    void resizeWidget(const char* name, int width, int height);
-    void raiseWidget(const char* name);
-    void setVisibility(const char* name, bool visible);
+    void moveWidget(const std::string& name, int x, int y);
+    void resizeWidget(const std::string& name, int width, int height);
+    void raiseWidget(const std::string& name);
+    void setVisibility(const std::string&, bool visible);
     void setParent(const std::string& parent, const std::string& child);
     void deleteTab();
   }

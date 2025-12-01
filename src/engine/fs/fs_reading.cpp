@@ -15,10 +15,10 @@ namespace FS::Checks
     QDir check_dir(path);
     return check_dir.exists();
   }
-
-  bool CharacterExists(const char *characterFolder)
+  
+  bool CharacterExists(std::string characterFolder)
   {
-    return DirectoryExists(Paths::FindDirectory("characters/" + QString(characterFolder)));
+    return DirectoryExists(Paths::FindDirectory("characters/" + QString::fromStdString(characterFolder)));
   }
 
 }

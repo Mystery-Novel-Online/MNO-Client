@@ -85,7 +85,7 @@ void ChoiceDialog::OnAcceptClicked()
   else if(m_choiceEvent == ChoiceEvent::ChoiceEvent_Lua)
   {
     QString luaEventName = m_senderKey + "Accepted";
-    LuaBridge::LuaEventCall(luaEventName.toUtf8());
+    LuaBridge::LuaEventCall(luaEventName.toStdString());
   }
 
   m_app->get_courtroom()->SetChatboxFocus();
@@ -104,7 +104,7 @@ void ChoiceDialog::OnDeclineClicked()
   else if(m_choiceEvent == ChoiceEvent::ChoiceEvent_Lua)
   {
     QString luaEventName = m_senderKey + "Declined";
-    LuaBridge::LuaEventCall(luaEventName.toUtf8());
+    LuaBridge::LuaEventCall(luaEventName.toStdString());
   }
 
 

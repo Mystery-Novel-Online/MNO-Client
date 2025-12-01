@@ -90,9 +90,9 @@ namespace audio
 
   namespace system
   {
-    void Play(const char *name)
+    void Play(const std::string& name)
     {
-      s_systemPlayer->play(name);
+      s_systemPlayer->play(QString::fromStdString(name));
     }
   }
 
@@ -137,14 +137,14 @@ namespace audio
       s_blipPlayer->blip_tick();
     }
 
-    void SetGender(const char *gender)
+    void SetGender(const std::string& gender)
     {
-      s_blipPlayer->set_blips("sfx-blip" + QString(gender) + ".wav");
+      s_blipPlayer->set_blips("sfx-blip" + QString::fromStdString(gender) + ".wav");
     }
 
-    void SetSound(const char *sound)
+    void SetSound(const std::string& sound)
     {
-      s_blipPlayer->set_blips(sound);
+      s_blipPlayer->set_blips(QString::fromStdString(sound));
     }
 
     int getBlipRate()
