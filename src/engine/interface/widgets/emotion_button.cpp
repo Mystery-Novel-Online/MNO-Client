@@ -51,7 +51,7 @@ void AOEmoteButton::setLayerImage(const QString &character, const QString &layer
     else
     {
         ui_selected->setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, "
-                                   "y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(0, 0, 0, 127)); }");
+                                   "y2:1, stop:0 rgba(0, 0, 0, 50), stop:1 rgba(0, 0, 0, 210)); }");
         ui_selected->show();
     }
 
