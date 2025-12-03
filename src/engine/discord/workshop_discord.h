@@ -30,6 +30,9 @@ public:
 
   QVector<DiscordUser> getFriends();
 
+private slots:
+  void loginResult(bool staus, std::string token);
+
 private:
   std::shared_ptr<discordpp::Client> m_currentClient = nullptr;
 };

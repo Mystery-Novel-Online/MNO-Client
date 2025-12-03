@@ -221,6 +221,18 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
     QAction *editAction = menu.addAction("Edit");
 
+    if(ApiManager::instance().userPermission() > APIPerms_Auto)
+    {
+      QAction *approveAction = menu.addAction("Approve");
+      connect(approveAction, &QAction::triggered, this, [this, id]()
+      {
+        QJsonObject json{{"key", ApiManager::authorizationKey()}};
+        QJsonDocument doc(json);
+
+        ApiManager::instance().post("api/workshop/approve/" + QString::number(id), doc.toJson());
+      });
+    }
+
     connect(editAction, &QAction::triggered, this, [this, id]()
      {
        WorkshopUploader::StartEdit(id);

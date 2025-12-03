@@ -178,33 +178,11 @@ WorkshopDiscord::WorkshopDiscord()
 
   QByteArray jsonData = QByteArray::fromStdString(verifyBody.dump());
 
-  QNetworkReply* verifyReply = ApiManager::instance().post("api/users/discord/verify", jsonData);
 
   client->SetRelationshipGroupsUpdatedCallback([&](const uint64_t userId) { refreshFriendsList(); } );
 
-  connect(verifyReply, &QNetworkReply::finished, this, [this, verifyReply]() {
-
-            if (verifyReply->error() != QNetworkReply::NoError) {
-              std::cerr << "❌ Verification request failed: "  << verifyReply->errorString().toStdString() << std::endl;
-              verifyReply->deleteLater();
-              processOAuth();
-              return;
-            }
-
-            QString dataString = verifyReply->readAll();
-            nlohmann::json verifyResponse = nlohmann::json::parse(dataString.toStdString());
-            verifyReply->deleteLater();
-
-            bool isValid = verifyResponse.value("valid", false);
-
-            if (isValid) {
-              std::cout << "✅ Workshop key valid. Skipping OAuth and using server tokens.\n";
-              tokenRecieved(verifyResponse["access_token"].get<std::string>());
-            } else {
-              std::cout << "❌ Workshop key invalid or expired. Proceeding with OAuth authorization.\n";
-              processOAuth();
-            }
-          });
+  ApiManager::instance().login();
+  connect(&ApiManager::instance(), &ApiManager::loginStatus, this, &WorkshopDiscord::loginResult);
 }
 
 void WorkshopDiscord::processOAuth()
@@ -278,5 +256,16 @@ void WorkshopDiscord::updateRichPresence()
 QVector<DiscordUser> WorkshopDiscord::getFriends()
 {
   return s_Friends;
+}
+
+void WorkshopDiscord::loginResult(bool staus, std::string token)
+{
+  if (staus) {
+    std::cout << "✅ Workshop key valid. Skipping OAuth and using server tokens.\n";
+    tokenRecieved(token);
+  } else {
+    std::cout << "❌ Workshop key invalid or expired. Proceeding with OAuth authorization.\n";
+    processOAuth();
+  }
 }
 

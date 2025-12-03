@@ -36,6 +36,31 @@ QNetworkReply* ApiManager::post(const QString& url, QHttpMultiPart* multiPart)
   return reply;
 }
 
+void ApiManager::login()
+{
+  nlohmann::json verifyBody;
+  verifyBody["user_key"] = ApiManager::authorizationKey().toStdString();
+  QByteArray jsonData = QByteArray::fromStdString(verifyBody.dump());
+
+  QNetworkReply* verifyReply = ApiManager::instance().post("api/users/discord/verify", jsonData);
+  connect(verifyReply, &QNetworkReply::finished, this, [this, verifyReply]() {
+    bool isValid = false;
+    std::string accessToken = "";
+
+    if (verifyReply->error() == QNetworkReply::NoError) {
+      QString dataString = verifyReply->readAll();
+      nlohmann::json verifyResponse = nlohmann::json::parse(dataString.toStdString());
+      verifyReply->deleteLater();
+
+      isValid = verifyResponse.value("valid", false);
+      m_permissionLevel = verifyResponse.value("permissions", ApiPermissionLevels::APIPerms_None);
+      accessToken = verifyResponse["access_token"].get<std::string>();
+    }
+
+    emit loginStatus(isValid, accessToken);
+  });
+}
+
 QString ApiManager::repoUrl(int characterId)
 {
   return baseUri() + "api/workshop/" + QString::number(characterId) + "/repo";
