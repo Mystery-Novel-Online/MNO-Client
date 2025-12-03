@@ -41,7 +41,7 @@ void AOEmoteButton::setLayerImage(const QString &character, const QString &layer
 
   if (enabled)
   {
-    const QString l_selected_texture = "THEME TOGGLE TEXTURE HERE";
+    const QString l_selected_texture = fs::characters::getFilePath(QString::fromStdString(actor->folder()), "layer_icons/selected.png");
 
     if (FS::Checks::FileExists(l_selected_texture))
     {
