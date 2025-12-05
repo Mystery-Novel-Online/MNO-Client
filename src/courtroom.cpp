@@ -2303,6 +2303,9 @@ void Courtroom::next_chat_letter()
         audio::effect::PlayCharacter(m_chatmessage[CMChrName].toStdString(), tag.variables.at(1).toString().toStdString());
         break;
 
+      case TagType_Layer:
+        break;
+
       case TagType_Flip:
         ui_vp_player_char->setMirrored(ui_vp_player_char->mirroredState() == false);
         break;

@@ -20,7 +20,8 @@ enum MessageTagType
   TagType_Flip,
   TagType_Hide,
   TagType_NewLine,
-  TagType_Color
+  TagType_Color,
+  TagType_Layer
 };
 
 struct ThemeMessageHighlight
