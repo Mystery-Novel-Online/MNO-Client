@@ -1,3 +1,4 @@
+#include "engine/system/user_database.h"
 #include "pch.h"
 
 #include "modules/theme/thememanager.h"
@@ -359,7 +360,8 @@ void Courtroom::enter_courtroom(int p_cid)
     WorkshopDiscord::getInstance().setRichPresenceStateText("Playing as " + l_final_showname.toStdString());
 
     QStringList l_content{l_chr_name, l_final_showname};
-    if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(QString::fromStdString(engine::actor::user::retrieve()->outfit()));
+    l_content.append(QString::fromStdString(engine::actor::user::retrieve()->outfit()));
+    l_content.append(QString::number(GetDB()->workshopUpdateTime(l_chr_name.toStdString())));
 
     ao_app->send_server_packet(DRPacket("chrini", l_content));
   }
@@ -3223,7 +3225,8 @@ void Courtroom::onOutfitChanged(int outfitIndex)
 
   ao_config->set_showname_placeholder(l_final_showname);
   QStringList l_content{l_chr_name, l_final_showname};
-  if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(QString::fromStdString(engine::actor::user::retrieve()->outfit()));
+  l_content.append(QString::fromStdString(engine::actor::user::retrieve()->outfit()));
+  l_content.append(QString::number(GetDB()->workshopUpdateTime(l_chr_name.toStdString())));
 
   ao_app->send_server_packet(DRPacket("chrini", l_content));
 }
