@@ -171,7 +171,9 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
 
     int versionBase = s_lastMessageId == -1 ? 0 : s_lastMessageId;
-    send_server_packet(DRPacket("ID", {"MNN", get_version_string(versionBase)}));
+
+    if(network::metadata::VNServerInformation::featureSupported("tags")) send_server_packet(DRPacket("ID", {"MNN", get_version_string(versionBase)}));
+    else  send_server_packet(DRPacket("ID", {"DRO", "1.9.0"}));
 
   }
   else if (l_header == "FL")
