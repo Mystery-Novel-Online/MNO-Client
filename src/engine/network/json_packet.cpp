@@ -57,6 +57,7 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
     drp->setMod(charaIPID, charaHDID);
     drp->setAfk(isAfk);
     drp->setDiscord(discord);
+    drp->data.contentVersion = jsonReader.getIntValue("content_version");
     SceneManager::get().mPlayerDataList.append(*drp);
   }
   if(AOApplication::getInstance()->m_courtroom != nullptr)

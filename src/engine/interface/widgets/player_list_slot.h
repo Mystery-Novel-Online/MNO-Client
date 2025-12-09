@@ -23,6 +23,7 @@ public:
   void setURL(QString url);
   void setID(int id);
   void setStatus(QString status);
+  void setContentVersion(int versionNumber);
   void setMod(QString ipid, QString hdid);
   AOImageDisplay *pCharacterBorderDisplay = nullptr;
   AOImageDisplay *ui_user_image = nullptr;
@@ -31,6 +32,7 @@ public:
   RPLabel *m_prompt = nullptr;
 
   AOImageDisplay *pStatusDisplay = nullptr;
+  AOImageDisplay *w_UpdateDisplay = nullptr;
 
   void setQUrl(const QUrl &newQUrl);
 

@@ -3,7 +3,22 @@
 
 #include <qstring.h>
 
+struct NovelPlayerData
+{
+  int id;
+  bool afk;
+  QString showname;
+  QString character;
+  QString outfit;
+  QString contentUrl;
 
+  QString status;
+  QString modHDID;
+  QString modIPID;
+
+  QString discordSnowflake;
+  int contentVersion;
+};
 
 class DrPlayer
 {
@@ -11,11 +26,10 @@ public:
     DrPlayer(int id, QString showname, QString character, QString url, QString status, QString outfit);
 
     void setMod(QString ipid, QString hdid);
-    void setAfk(bool afkState) { m_Afk = afkState; };
-    void setDiscord(QString discord) { m_discord = discord; };
+    void setAfk(bool afkState) { data.afk = afkState; };
+    void setDiscord(QString discord) { data.discordSnowflake = discord; };
 
     int m_id;
-    bool m_Afk = false;
     QString m_showname;
     QString m_character;
     QString m_CharacterOutfit = "";
@@ -23,7 +37,9 @@ public:
     QString mPlayerStatus;
     QString mHDID;
     QString mIPID;
-    QString m_discord;
+    int m_contentVersion = 0;
+
+    NovelPlayerData data;
 };
 
 #endif // DRPLAYER_H

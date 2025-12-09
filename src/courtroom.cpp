@@ -3897,13 +3897,14 @@ void Courtroom::construct_playerlist_layout()
     last_entry_height = ui_playername->height();
 
     DrPlayer playerData = SceneManager::get().mPlayerDataList.at(n);
-    ui_playername->set_character(playerData.m_character, playerData.m_Afk);
+    ui_playername->set_character(playerData.m_character, playerData.data.afk);
     ui_playername->set_name(playerData.m_showname);
     ui_playername->setURL(playerData.mURL);
     ui_playername->setID(playerData.m_id);
     ui_playername->setStatus(playerData.mPlayerStatus);
     ui_playername->setOutfit(playerData.m_CharacterOutfit);
-    ui_playername->setDiscord(playerData.m_discord);
+    ui_playername->setDiscord(playerData.data.discordSnowflake);
+    ui_playername->setContentVersion(playerData.data.contentVersion);
 
     ui_playername->setMod(playerData.mIPID, playerData.mHDID);
 

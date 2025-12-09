@@ -1,5 +1,6 @@
 #include "player_list_slot.h"
 
+#include "engine/system/user_database.h"
 #include "theme.h"
 
 #include "engine/fs/fs_reading.h"
@@ -35,6 +36,7 @@ DrPlayerListEntry::DrPlayerListEntry(QWidget *parent, AOApplication *p_ao_app, i
   ui_user_image = new AOImageDisplay(this, ao_app);
   pCharacterBorderDisplay = new AOImageDisplay(this, ao_app);
   pStatusDisplay = new AOImageDisplay(this, ao_app);
+  w_UpdateDisplay = new AOImageDisplay(this, ao_app);
   m_prompt = new RPLabel(this, ao_app);
 
   bool automaticScaling = height() == 0;
@@ -53,6 +55,10 @@ DrPlayerListEntry::DrPlayerListEntry(QWidget *parent, AOApplication *p_ao_app, i
   if (FS::Checks::FileExists(lStatusImagePath)) pStatusDisplay->set_image(lStatusImagePath);
 
 
+  const QString qContentUpdateImage = ao_app->find_theme_asset_path("player_content_update.png");
+  if (FS::Checks::FileExists(qContentUpdateImage)) w_UpdateDisplay->set_image(qContentUpdateImage);
+
+
   const QString l_selected_texture = ao_app->find_theme_asset_path("char_border.png");
   if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
 
@@ -61,6 +67,7 @@ DrPlayerListEntry::DrPlayerListEntry(QWidget *parent, AOApplication *p_ao_app, i
   ui_typing->setText("Typing...");
 
   ui_typing->hide();
+  w_UpdateDisplay->hide();
   ui_showname->hide();
   ui_user_image->hide();
   pCharacterBorderDisplay->hide();
@@ -90,6 +97,8 @@ void DrPlayerListEntry::refreshManual(int width)
   engine::system::theme::applyDimensions(ui_user_image, "player_list_icon", ThemeSceneType::SceneType_Courtroom);
   engine::system::theme::applyDimensions(pCharacterBorderDisplay, "player_list_border", ThemeSceneType::SceneType_Courtroom);
   engine::system::theme::applyDimensions(pStatusDisplay, "player_list_status", ThemeSceneType::SceneType_Courtroom);
+  engine::system::theme::applyDimensions(w_UpdateDisplay, "player_list_update", ThemeSceneType::SceneType_Courtroom);
+
 
   //Prompt (For Blackouts / Look)
   engine::system::theme::applyDimensions(m_prompt, "player_list_prompt", ThemeSceneType::SceneType_Courtroom);
@@ -125,6 +134,10 @@ void DrPlayerListEntry::refreshAutomatic(int width)
 
   pCharacterBorderDisplay->move(0, 0);
   pCharacterBorderDisplay->resize(widgetHeight, widgetHeight);
+
+
+  w_UpdateDisplay->move((int)((float)30 * themeResize),(int)((float)23 * themeResize));
+  w_UpdateDisplay->resize(statusIconSize, statusIconSize);
 
   pStatusDisplay->move((int)((float)30 * themeResize),(int)((float)23 * themeResize));
   pStatusDisplay->resize(statusIconSize, statusIconSize);
@@ -255,6 +268,15 @@ void DrPlayerListEntry::setStatus(QString status)
       mStatus = status;
       setToolTip(status);
       pStatusDisplay->show();
+  }
+}
+
+void DrPlayerListEntry::setContentVersion(int versionNumber)
+{
+  if(versionNumber > GetDB()->workshopUpdateTime(m_character.toStdString()))
+  {
+    w_UpdateDisplay->show();
+    pStatusDisplay->hide();
   }
 }
 
