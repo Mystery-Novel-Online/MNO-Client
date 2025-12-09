@@ -106,6 +106,8 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
   if (l_header == "decryptor")
   {
+
+    network::metadata::VNServerInformation::setFeatureList({});
     // This packet is maintained as is for legacy purposes,
     // even though its sole argument is no longer used for anything
     // productive
@@ -172,7 +174,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
     int versionBase = s_lastMessageId == -1 ? 0 : s_lastMessageId;
 
-    if(network::metadata::VNServerInformation::featureSupported("tags")) send_server_packet(DRPacket("ID", {"MNN", get_version_string(versionBase)}));
+    if(network::metadata::VNServerInformation::featureSupported("mnn_init")) send_server_packet(DRPacket("ID", {"MNN", get_version_string(versionBase)}));
     else  send_server_packet(DRPacket("ID", {"DRO", "1.9.0"}));
 
   }
