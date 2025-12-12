@@ -53,7 +53,9 @@ void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, 
   emote->setLayerImage(toggle, toggle, toggle, type == LayerSelection_Toggle);
   emote->show();
 
-  const int columns = 4;
+
+
+  const int columns = (width() - 22) / 40;
 
   int index = m_layout->count();
   int row = index / columns;
@@ -75,7 +77,7 @@ void LayerSelectionPanel::addLayer(const QString &layer, const QString &variatio
   emote->setLayerImage(name, name, name, state);
   emote->show();
 
-  const int columns = 4;
+  const int columns = (width() - 22) / 40;
 
   int index = m_layout->count();
   int row = index / columns;
