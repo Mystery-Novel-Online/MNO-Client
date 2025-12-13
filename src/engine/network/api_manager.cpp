@@ -68,7 +68,7 @@ QString ApiManager::repoUrl(int characterId)
 
 QString ApiManager::baseUri()
 {
-  return QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_url", "http://localhost:3623/") );
+  return QString::fromStdString(config::ConfigUserSettings::stringValue("api_url", "http://mysterynovel.network:3623/") );
 }
 
 QString ApiManager::authorizationKey()
