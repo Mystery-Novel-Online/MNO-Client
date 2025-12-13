@@ -413,7 +413,7 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
   if(!mURL.isEmpty())
   {
     QUrl url(mURL);
-    QString label = mURL.endsWith("/repo") || mURL.endsWith("/collection") ? "Download Workshop Character" : "Open " + url.host() + " in Browser";
+    QString label = mURL.endsWith("/repo") || mURL.endsWith("/collection") || mURL.endsWith("/content")? "Download Workshop Character" : "Open " + url.host() + " in Browser";
     QAction *browserAction = menu->addAction(label);
     connect(browserAction, &QAction::triggered, this, &DrPlayerListEntry::openBrowserURL);
   }
