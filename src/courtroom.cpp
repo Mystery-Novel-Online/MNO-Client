@@ -1116,6 +1116,7 @@ void Courtroom::on_ic_message_return_pressed()
 
 void Courtroom::handle_ic_message_length()
 {
+  resetAFKTimer();
   LuaBridge::LuaEventCall("OnICTextChanged");
   const int l_length = ui_ic_chat_message_field->text().length();
   const int l_max_length = ui_ic_chat_message_field->maxLength();
