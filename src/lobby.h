@@ -77,6 +77,8 @@ private:
 
 
   RPButton *ui_servers_toggle = nullptr;
+  QLineEdit *w_WorkshopSearchBar = nullptr;
+
   QWidget *panelCollection = nullptr;
   AOImageDisplay *serverTabPanel = nullptr;
   AOImageDisplay *ui_gallery_background = nullptr;
@@ -170,6 +172,7 @@ private slots:
   void filter_server_listing();
   void select_current_server();
 
+  void onWorkshopSearch();
   void onReplayRowChanged(int row);
   void onGalleryPackageChanged(int index);
   void onGalleryCategoryChanged(int index);

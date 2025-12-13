@@ -96,12 +96,15 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_workshop_collections = createButton("workshop_collections", "workshop_collections", [this]() {this->onWorkshopCategoryClicked("collections");});
   ui_workshop_portfolio = createButton("workshop_portfolio", "workshop_portfolio", [this]() {this->onWorkshopCategoryClicked("portfolio");});
   ui_workshop_pending = createButton("workshop_pending", "workshop_pending", [this]() {this->onWorkshopCategoryClicked("pending");});
+  w_WorkshopSearchBar = createWidget<QLineEdit>("workshop_search");
 
   ui_workshop_browse->setParent(ui_workshop_background);
   ui_workshop_pending->setParent(ui_workshop_background);
   ui_workshop_portfolio->setParent(ui_workshop_background);
   ui_workshop_collections->setParent(ui_workshop_background);
   ui_workshop_download->setParent(ui_workshop_background);
+  w_WorkshopSearchBar->setParent(ui_workshop_background);
+  w_WorkshopSearchBar->raise();
 
   panelCollection->raise();
 
@@ -250,7 +253,8 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   connect(ui_gallery_categories, SIGNAL(currentIndexChanged(int)), this, SLOT(onGalleryCategoryChanged(int)));
   connect(ui_gallery_packages, SIGNAL(currentIndexChanged(int)), this, SLOT(onGalleryPackageChanged(int)));
 
-  connect(ui_replay_list, SIGNAL(currentRowChanged(int)), this, SLOT(onReplayRowChanged(int)));
+  connect(ui_replay_list, &QListWidget::currentRowChanged, this, &Lobby::onReplayRowChanged);
+  connect(w_WorkshopSearchBar, &QLineEdit::returnPressed, this, &Lobby::onWorkshopSearch);
 
   connect(configTab, &ConfigTabTheme::reloadTheme, this, &Lobby::update_widgets);
   connect(ao_app, &AOApplication::server_status_changed, this, &Lobby::_p_update_description);
@@ -416,6 +420,7 @@ void Lobby::set_fonts()
   set_font(ui_replay_list, "replay_list", LOBBY_FONTS_INI, ao_app);
   set_font(ui_gallery_packages, "replay_packages", LOBBY_FONTS_INI, ao_app);
   set_font(ui_gallery_categories, "replay_category", LOBBY_FONTS_INI, ao_app);
+  set_font(w_WorkshopSearchBar, "workshop_search", LOBBY_FONTS_INI, ao_app);
 
   set_drtextedit_font(ui_loading_text, "loading_text", LOBBY_FONTS_INI, ao_app);
 }
@@ -439,6 +444,7 @@ void Lobby::set_stylesheets()
   set_stylesheet(ui_replay_list, "[REPLAY LIST]");
   set_stylesheet(ui_gallery_packages, "[REPLAY PACKAGES]");
   set_stylesheet(ui_gallery_categories, "[REPLAY PACKAGES]");
+  set_stylesheet(w_WorkshopSearchBar, "[WORKSHOP SEARCH]");
 }
 
 void Lobby::show_loading_overlay()
@@ -665,6 +671,16 @@ void Lobby::select_current_server()
       break;
     }
   }
+}
+
+void Lobby::onWorkshopSearch()
+{
+  if(w_WorkshopSearchBar->text().trimmed().isEmpty())
+  {
+    onWorkshopCategoryClicked("browse");
+    return;
+  }
+  onWorkshopCategoryClicked("search?q=" + w_WorkshopSearchBar->text());
 }
 
 void Lobby::onReplayRowChanged(int row)
