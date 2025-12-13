@@ -27,7 +27,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
 {
   if(repository.isEmpty()) return;
   QUrl url(repository);
-  bool isRepo = repository.endsWith("/repo", Qt::CaseInsensitive);
+  bool isRepo = repository.endsWith("/repo", Qt::CaseInsensitive) || repository.endsWith("/content", Qt::CaseInsensitive) ;
   bool isCollection = repository.endsWith("/collection", Qt::CaseInsensitive);
   if(!isRepo && !isCollection)
   {

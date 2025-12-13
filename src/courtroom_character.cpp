@@ -1,3 +1,4 @@
+#include "engine/system/user_database.h"
 #include "pch.h"
 
 #include "aoconfig.h"
@@ -7,6 +8,8 @@
 #include "engine/fs/fs_reading.h"
 #include "engine/fs/fs_characters.h"
 #include "engine/fs/fs_mounting.h"
+
+#include <engine/network/api_manager.h>
 
 void Courtroom::set_character_id(const int p_chr_id)
 {
@@ -22,6 +25,10 @@ QString Courtroom::get_character_ini()
 
 QString Courtroom::get_character_content_url()
 {
+  std::string characterGuid = GetDB()->workshopGuid(get_character_ini().toStdString());
+  if(!characterGuid.empty())
+    return ApiManager::baseUri() + "api/workshop/"+ QString::fromStdString(characterGuid) +"/content";
+
   QFile l_contentFile(fs::characters::getFilePath(get_character_ini(), "CONTENT.txt"));
   if (!l_contentFile.open(QIODevice::ReadOnly))
     return nullptr;
