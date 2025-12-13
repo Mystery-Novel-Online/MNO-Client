@@ -59,29 +59,44 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
                          reply->deleteLater();
                          return;
                        }
-
                        QByteArray response = reply->readAll();
                        QJsonDocument doc = QJsonDocument::fromJson(response);
-
                        QString collectionName = doc["collection_name"].toString();
+                       QList<QJsonObject> repoObjects = {};
+                       if(!isCollection)
+                       {
+                         repoObjects.append(doc.object());
+                       }
+                       else
+                       {
+                         for(const QJsonValue &val : doc["repos"].toArray())
+                         {
+                           repoObjects.append(val.toObject());
+                         }
+                       }
 
-                       QString qGUID = doc["guid"].toString();
-                       QString qFolderName = doc["folder"].toString();
-                       int qContentId = doc["id"].toInt();
-                       int qLastUpdated = doc["last_updated"].toInt();
-
-
-                       QJsonArray files = doc["contents"].toArray();
+                       //Cache content into database.
 
                        QMap<QString, QString> hashMap = {};
-                       for (const QJsonValue &val : files)
+                       for(const QJsonObject& repoObject : repoObjects)
                        {
-                         QJsonObject obj = val.toObject();
-                         QString hash = baseUrl + "/api/workshop/file/" + obj["hash"].toString();
-                         QString filePath = isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : directory + "/" + obj["file_path"].toString();
-                         hashMap[filePath] = hash;
+                         QString qGUID = repoObject["guid"].toString();
+                         QString qFolderName = repoObject["folder"].toString();
+                         int qContentId = repoObject["id"].toInt();
+                         int qLastUpdated = repoObject["last_updated"].toInt();
+                         GetDB()->cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
+
+                         QJsonArray files = repoObject["contents"].toArray();
+
+                         for (const QJsonValue &val : files)
+                         {
+                           QJsonObject obj = val.toObject();
+                           QString hash = baseUrl + "/api/workshop/file/" + obj["hash"].toString();
+                           QString filePath = isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : directory + "/" + obj["file_path"].toString();
+                           hashMap[filePath] = hash;
+                         }
                        }
-                       GetDB()->cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
+
                        prompt->ProcessLinks(hashMap, contentName, repository, isRepo);
                        reply->deleteLater();
                      });
