@@ -128,6 +128,11 @@ namespace audio
       s_musicPlayer->play(QString::fromStdString(name), playbackType);
     }
 
+    void PlayDefineLoop(const std::string &name, int start, int end)
+    {
+      s_musicPlayer->customLoopPlay(QString::fromStdString(name), start, end);
+    }
+
   }
 
   namespace blip

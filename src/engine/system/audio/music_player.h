@@ -19,6 +19,7 @@ public:
   AOMusicPlayer(QObject *p_parent = nullptr);
 
 public slots:
+  void customLoopPlay(QString p_song, int loopStart, int loopBack);
   void play(QString p_song, BGMPlayback playbackType = BGMPlayback_Standard);
   void setSpeed(float speed);
   void toggleReverb(bool reverb);

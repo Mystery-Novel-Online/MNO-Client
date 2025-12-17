@@ -10,6 +10,31 @@ AOMusicPlayer::AOMusicPlayer(QObject *p_parent)
   m_family->set_capacity(1); // a single song is needed
 }
 
+void AOMusicPlayer::customLoopPlay(QString p_song, int loopStart, int loopBack)
+{
+  m_filename = p_song;
+
+  QSharedPointer<DRAudioStream> newSong;
+  newSong = m_family->create_stream(p_song);
+
+  if(!newSong)
+  {
+    stop();
+    return;
+  }
+
+  newSong->set_repeatable(true);
+  newSong->set_loop(loopStart, loopBack);
+
+  stop();
+  newSong->play();
+  newSong->set_speed(0.0f);
+  newSong->toggle_reverb(false);
+
+  mLastSong = mCurrentSong;
+  mCurrentSong = newSong;
+}
+
 void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
 {
   m_filename = p_song;

@@ -34,6 +34,7 @@ namespace audio
   namespace bgm
   {
     void Play(const std::string& name);
+    void PlayDefineLoop(const std::string& name, int start, int end);
     void PlayMode(const std::string& name, BGMPlayback playbackType);
     void Stop();
     void SetSpeed(float speed);
