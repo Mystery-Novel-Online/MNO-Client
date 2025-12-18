@@ -341,6 +341,7 @@ void Courtroom::enter_courtroom(int p_cid)
   }
   else
   {
+    horizontalAlign = 0;
     ui_slider_scale->setValue(1000);
     ui_slider_vertical_axis->setValue(0);
   }
