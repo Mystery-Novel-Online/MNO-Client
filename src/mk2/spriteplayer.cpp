@@ -110,6 +110,7 @@ void SpritePlayer::set_file_name(QString p_file_name)
   stop();
   m_reader->set_file_name(p_file_name);
   m_frame_count = m_reader->get_frame_count();
+
   emit file_name_changed(p_file_name);
 }
 
@@ -414,6 +415,14 @@ void SpritePlayer::scale_current_frame()
   }
 
   combiner.drawImage(0, 0, l_image);
+
+  if(!m_reader->m_frame_mask.isNull())
+  {
+    combiner.save();
+    combiner.setCompositionMode(QPainter::CompositionMode_Multiply);
+    combiner.drawImage(0, 0, m_reader->m_frame_mask);
+    combiner.restore();
+  }
 
   for (SpriteLayer* layer : overlayQueue)
   {

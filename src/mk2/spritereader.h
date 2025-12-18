@@ -85,6 +85,8 @@ public:
 
   Error get_last_error() const;
 
+  QImage m_frame_mask;
+
 public slots:
   void set_file_name(QString file_name);
 

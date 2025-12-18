@@ -122,6 +122,11 @@ void SpriteReader::set_file_name(QString p_file_name)
 {
   set_device(new QFile(p_file_name));
   m_own_device = true;
+
+  QFileInfo fi(p_file_name);
+  QString maskFileName = fi.path() + "/" + fi.completeBaseName() + "_mask." + fi.suffix();
+  m_frame_mask = QImage(maskFileName);
+
   emit file_name_changed(get_file_name());
 }
 
