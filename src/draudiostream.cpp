@@ -129,6 +129,18 @@ void DRAudioStream::set_speed(float speed)
   BASS_ChannelSetAttribute(m_hstream, BASS_ATTRIB_TEMPO, speed);
 }
 
+int DRAudioStream::get_sample_rate() const
+{
+  if (!m_hstream)
+    return 0;
+
+  BASS_CHANNELINFO info;
+  if (!BASS_ChannelGetInfo(m_hstream, &info))
+    return 0;
+
+  return info.freq;
+}
+
 void DRAudioStream::set_volume(float p_volume)
 {
   if (!ensure_init())
@@ -340,6 +352,11 @@ void DRAudioStream::toggle_reverb(bool reverb)
   {
     BASS_ChannelRemoveFX(m_hstream, m_reverb_effect);
   }
+}
+
+void DRAudioStream::set_position(double pos)
+{
+  BASS_ChannelSetPosition(m_hstream, BASS_ChannelSeconds2Bytes(m_hstream, pos), BASS_POS_BYTE);
 }
 
 void DRAudioStream::update_device(DRAudioDevice p_device)

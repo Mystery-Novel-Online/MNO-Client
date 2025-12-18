@@ -48,8 +48,9 @@ public slots:
 
   void set_pitch(float pitch);
   void set_speed(float speed);
-
+  int get_sample_rate() const;
   void toggle_reverb(bool reverb);
+  void set_position(double pos);
   void set_volume(float volume);
   void set_repeatable(bool);
   void set_loop(quint64 start, quint64 end);
