@@ -31,7 +31,6 @@ using namespace engine::system;
 
 Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_ServerSelect)
 {
-  LoopDetection::FindLoop("base/sounds/music/Chug Jug.mp3");
   panelCollection = new QWidget(this);
   WorkshopDiscord::getInstance().setRichPresenceStateText("Selecting a server");
   WorkshopDiscord::getInstance().setRichPresenceDetailsText("Lobby");

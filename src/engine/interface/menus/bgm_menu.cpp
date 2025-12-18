@@ -3,6 +3,7 @@
 #include "engine/network/metadata/tracklist_metadata.h"
 #include "engine/interface/courtroom_layout.h"
 #include "engine/system/audio.h"
+#include <engine/system/audio/loop_detection.h>
 
 BGMMenu::BGMMenu(QWidget *parent) : QMenu(parent)
 {
@@ -18,12 +19,15 @@ BGMMenu::BGMMenu(QWidget *parent) : QMenu(parent)
 
 
   p_InsertAction = addAction(tr("Insert into OOC"));
+  p_LoopAction = addAction(tr("Calculate Loop Points"));
   p_PinAction = addAction(tr("Pin"));
 
   connect(m_PlaySmooth, &QAction::triggered, this, &BGMMenu::OnSmoothPlayAction);
   connect(m_PlayInstant, &QAction::triggered, this, &BGMMenu::OnInstantPlayAction);
   connect(m_PlaySync, &QAction::triggered, this, &BGMMenu::OnSyncPlayAction);
   connect(m_PlaySolo, &QAction::triggered, this, &BGMMenu::OnSoloPlayAction);
+
+  connect(p_LoopAction, &QAction::triggered, this, &BGMMenu::OnLoopAction);
 
   connect(p_InsertAction, &QAction::triggered, this, &BGMMenu::OnInsertTriggered);
   connect(p_PinAction, &QAction::triggered, this, &BGMMenu::OnPinTriggered);
@@ -77,6 +81,12 @@ void BGMMenu::OnSoloPlayAction()
   if(m_TargetTrack.isEmpty()) return;
   audio::bgm::Play(m_TargetTrack.toStdString());
   courtroom::ic::focusMessageBox();
+}
+
+void BGMMenu::OnLoopAction()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  LoopDetection::FindLoop(m_TargetTrack);
 }
 
 void BGMMenu::OnPinTriggered()

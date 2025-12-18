@@ -26,6 +26,8 @@ void LoopDetection::FindLoop(QString fileName)
 {
   QProgressDialog progress("Finding loop points...", "Cancel", 0, 100);
 
+  QString filePath = AOApplication::getInstance()->get_music_path(fileName);
+
   progress.setWindowModality(Qt::ApplicationModal);
   progress.setMinimumDuration(0);
   progress.setAutoClose(false);
@@ -34,13 +36,13 @@ void LoopDetection::FindLoop(QString fileName)
 
   HSTREAM stream;
 
-  if (fileName.endsWith("opus", Qt::CaseInsensitive))
+  if (filePath.endsWith("opus", Qt::CaseInsensitive))
   {
-    stream = BASS_OPUS_StreamCreateFile(FALSE, fileName.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
+    stream = BASS_OPUS_StreamCreateFile(FALSE, filePath.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
   }
   else
   {
-    stream = BASS_StreamCreateFile(FALSE, fileName.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
+    stream = BASS_StreamCreateFile(FALSE, filePath.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
   }
 
   if (!stream) return;
@@ -202,7 +204,7 @@ void LoopDetection::FindLoop(QString fileName)
 
     QObject::connect(previewBtn, &QPushButton::clicked, [&]() {
       audio::bgm::PlayDefineLoop(
-        fileName.toStdString(),
+        filePath.toStdString(),
         startSample,
         endSample
       );

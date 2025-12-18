@@ -19,11 +19,13 @@ public slots:
   void OnInstantPlayAction();
   void OnSyncPlayAction();
   void OnSoloPlayAction();
+  void OnLoopAction();
 
 
 private:
   QString m_TargetTrack = "";
   QAction *p_InsertAction = nullptr;
+  QAction *p_LoopAction = nullptr;
   QAction *p_PinAction = nullptr;
 
   QAction *m_PlaySmooth = nullptr;
