@@ -1,6 +1,8 @@
 #include "loop_detection.h"
 #include "engine/system/audio.h"
 
+#include <QProgressDialog>
+
 constexpr int FFT_SIZE = 2048;
 constexpr int FINGERPRINT_BINS = 64;
 constexpr int MIN_LOOP_SECONDS = 15;
@@ -22,6 +24,15 @@ double streamLength(HSTREAM& stream)
 
 void LoopDetection::FindLoop(QString fileName)
 {
+  QProgressDialog progress("Finding loop points...", "Cancel", 0, 100);
+
+  progress.setWindowModality(Qt::ApplicationModal);
+  progress.setMinimumDuration(0);
+  progress.setAutoClose(false);
+  progress.setAutoReset(false);
+  progress.show();
+
+
   HSTREAM stream = BASS_StreamCreateFile(FALSE, fileName.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
   if (!stream) return;
 
@@ -79,6 +90,19 @@ void LoopDetection::FindLoop(QString fileName)
     }
 
     frames.push_back(frame);
+
+    if ((frameIdx & 7) == 0)
+    {
+      int percent = int(30.0f * frameIdx / float(numFrames));
+      progress.setValue(percent);
+      QCoreApplication::processEvents();
+
+      if (progress.wasCanceled())
+      {
+        BASS_StreamFree(stream);
+        return;
+      }
+    }
   }
 
   int lastAudioFrame = frames.size() - 1;
@@ -92,6 +116,19 @@ void LoopDetection::FindLoop(QString fileName)
 
   for (int start = 0; start < lastAudioFrame - minLoopFrames; ++start)
   {
+    if ((start & 15) == 0)
+    {
+      int percent = 30 + int(70.0f * start / float(lastAudioFrame - minLoopFrames));
+      progress.setValue(percent);
+      QCoreApplication::processEvents();
+
+      if (progress.wasCanceled())
+      {
+        BASS_StreamFree(stream);
+        return;
+      }
+    }
+
     for (int end = start + minLoopFrames; end <= lastAudioFrame; ++end)
     {
       float dist = 0.0f;
@@ -113,6 +150,9 @@ void LoopDetection::FindLoop(QString fileName)
       }
     }
   }
+
+
+  progress.setValue(100);
 
   double startTimeSec = double(bestStart) / double(numFrames) * lengthSeconds;
   double endTimeSec = double(bestEnd) / double(numFrames) * lengthSeconds;
