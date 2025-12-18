@@ -43,7 +43,6 @@ void LoopDetection::FindLoop(QString fileName)
     stream = BASS_StreamCreateFile(FALSE, fileName.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
   }
 
-  HSTREAM stream = BASS_StreamCreateFile(FALSE, fileName.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
   if (!stream) return;
 
   double lengthSeconds = streamLength(stream);
@@ -177,10 +176,44 @@ void LoopDetection::FindLoop(QString fileName)
   QWORD startSample = startByte / bytesPerSampleFrame;
   QWORD endSample   = endByte / bytesPerSampleFrame;
 
+  {
+    QDialog dlg;
+    dlg.setWindowTitle("Loop Found");
+
+    QVBoxLayout* layout = new QVBoxLayout(&dlg);
+
+    QLabel* infoLabel = new QLabel(QString("Loop start sample: %1 \nLoop end sample: %2")
+        .arg(startSample)
+        .arg(endSample)
+    );
+    infoLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    layout->addWidget(infoLabel);
+
+    QHBoxLayout* btnLayout = new QHBoxLayout();
+
+    QPushButton* previewBtn = new QPushButton("Preview");
+    QPushButton* closeBtn   = new QPushButton("Close");
+
+    btnLayout->addStretch();
+    btnLayout->addWidget(previewBtn);
+    btnLayout->addWidget(closeBtn);
+
+    layout->addLayout(btnLayout);
+
+    QObject::connect(previewBtn, &QPushButton::clicked, [&]() {
+      audio::bgm::PlayDefineLoop(
+        fileName.toStdString(),
+        startSample,
+        endSample
+      );
+    });
+
+    QObject::connect(closeBtn, &QPushButton::clicked, &dlg, &QDialog::accept);
+
+    dlg.exec();
+  }
   qDebug() << "Loop start: pixel" << bestStart << ", time" << startTimeSec << "s, sample" << startSample;
   qDebug() << "Loop end:   pixel" << bestEnd   << ", time" << endTimeSec   << "s, sample" << endSample;
-
-  audio::bgm::PlayDefineLoop(fileName.toStdString(), startSample, endSample);
 
   BASS_StreamFree(stream);
 }
