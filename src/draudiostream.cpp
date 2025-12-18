@@ -262,7 +262,14 @@ bool DRAudioStream::ensure_init()
       qWarning() << "error:" << m_url << "was not a valid URL for streaming.";
       stream = 0;
     } else {
-      stream = BASS_StreamCreateURL(l_encoded.constData(), 0, 0, nullptr, nullptr);
+      if(m_url.contains(".opus"))
+      {
+        stream = BASS_OPUS_StreamCreateURL(l_encoded.constData(), 0, 0, nullptr, nullptr);
+      }
+      else
+      {
+        stream = BASS_StreamCreateURL(l_encoded.constData(), 0, 0, nullptr, nullptr);
+      }
     }
   }
   else if (m_filename.isEmpty())  return false;
