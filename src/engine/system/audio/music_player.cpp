@@ -31,6 +31,12 @@ void AOMusicPlayer::customLoopPlay(QString p_song, int loopStart, int loopBack)
   newSong->set_speed(0.0f);
   newSong->toggle_reverb(false);
 
+  const int sampleRate = newSong->get_sample_rate();
+  double seconds = static_cast<double>(loopBack) / sampleRate;
+  seconds -= 3;
+
+  newSong->set_position(seconds);
+
   mLastSong = mCurrentSong;
   mCurrentSong = newSong;
 }
