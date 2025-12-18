@@ -1,4 +1,5 @@
 #include "layer_selection_panel.h"
+#include "drtheme.h"
 #include "server_select_entry.h"
 #include "engine/param/actor_repository.h"
 #include "engine/interface/courtroom_layout.h"
@@ -54,13 +55,13 @@ void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, 
   emote->setLayerImage(toggle, toggle, toggle, type == LayerSelection_Toggle);
   emote->show();
 
+  QPoint f_spacing = AOApplication::getInstance()->current_theme->get_widget_settings_spacing("layers_panel", "courtroom", "layers_panel_spacing");
+  m_layout->setHorizontalSpacing(f_spacing.x());
+  m_layout->setVerticalSpacing(f_spacing.y());
 
-
-  const int columns = (width() - 22) / 40;
-
-  int index = m_layout->count();
-  int row = index / columns;
-  int col = index % columns;
+  int maxColumns = (width() - 22 - f_spacing.x()) / 40;
+  int row = m_layout->count() / maxColumns;
+  int col = m_layout->count() % maxColumns;
 
   connect(emote, &AOEmoteButton::emote_clicked, this, &LayerSelectionPanel::layerClicked);
   m_layout->addWidget(emote, row, col);
@@ -78,11 +79,13 @@ void LayerSelectionPanel::addLayer(const QString &layer, const QString &variatio
   emote->setLayerImage(name, name, name, state);
   emote->show();
 
-  const int columns = (width() - 22) / 40;
+  QPoint f_spacing = AOApplication::getInstance()->current_theme->get_widget_settings_spacing("layers_panel", "courtroom", "layers_panel_spacing");
+  m_layout->setHorizontalSpacing(f_spacing.x());
+  m_layout->setVerticalSpacing(f_spacing.y());
 
-  int index = m_layout->count();
-  int row = index / columns;
-  int col = index % columns;
+  int maxColumns = (width() - 22 - f_spacing.x()) / 40;
+  int row = m_layout->count() / maxColumns;
+  int col = m_layout->count() % maxColumns;
 
   connect(emote, &AOEmoteButton::emote_clicked, this, &LayerSelectionPanel::layerClicked);
   m_layout->addWidget(emote, row, col);
