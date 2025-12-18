@@ -32,6 +32,16 @@ void LoopDetection::FindLoop(QString fileName)
   progress.setAutoReset(false);
   progress.show();
 
+  HSTREAM stream;
+
+  if (fileName.endsWith("opus", Qt::CaseInsensitive))
+  {
+    stream = BASS_OPUS_StreamCreateFile(FALSE, fileName.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
+  }
+  else
+  {
+    stream = BASS_StreamCreateFile(FALSE, fileName.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
+  }
 
   HSTREAM stream = BASS_StreamCreateFile(FALSE, fileName.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
   if (!stream) return;
