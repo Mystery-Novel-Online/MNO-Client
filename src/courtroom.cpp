@@ -335,6 +335,7 @@ void Courtroom::enter_courtroom(int p_cid)
   if(!actor->scalingPresets().empty())
   {
     rolechat::actor::ActorScalingPreset preset = actor->scalingPresets().at(0);
+    horizontalAlign = preset.horizontalAlign;
     ui_slider_scale->setValue(preset.scale);
     ui_slider_vertical_axis->setValue(preset.verticalAlign);
   }
@@ -911,7 +912,7 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
 
   static double lastScale = 0.0f;
 
-  targetCharacter->setHorizontalOffset(ui_slider_horizontal_axis->value());
+  targetCharacter->setHorizontalOffset(ui_slider_horizontal_axis->value() + horizontalAlign);
 
   if(lastScale != playerScale)
   {
@@ -1069,13 +1070,13 @@ void Courtroom::on_ic_message_return_pressed()
   {
     if(l_emote.ignore_offsets)
     {
-      packet_contents.append(QString::number(500));
+      packet_contents.append(QString::number(500 + horizontalAlign));
       packet_contents.append(QString::number(0));
       packet_contents.append(QString::number(1000));
     }
     else
     {
-      packet_contents.append(QString::number(ui_slider_horizontal_axis->value()));
+      packet_contents.append(QString::number(ui_slider_horizontal_axis->value() + horizontalAlign));
       packet_contents.append(QString::number(ui_slider_vertical_axis->value()));
       packet_contents.append(QString::number(ui_slider_scale->value()));
     }

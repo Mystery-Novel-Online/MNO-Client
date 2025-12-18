@@ -484,6 +484,8 @@ private:
   RPSlider *ui_slider_vertical_axis = nullptr;
   RPSlider *ui_slider_scale = nullptr;
 
+  int horizontalAlign = 0;
+
   AOImageDisplay *ui_vp_notepad_image = nullptr;
   RPTextEdit *ui_vp_notepad = nullptr;
 
