@@ -996,7 +996,7 @@ void Courtroom::on_ic_message_return_pressed()
   if (ui_hide_character->isChecked())
     packet_contents.append("../../misc/blank");
   else
-    packet_contents.append(QString::fromStdString(l_emote.dialog));
+    packet_contents.append(pLayersPanel->getBaseVariant(QString::fromStdString(l_emote.dialog)));
 
   packet_contents.append(ui_ic_chat_message_field->text());
 
@@ -1092,7 +1092,7 @@ void Courtroom::on_ic_message_return_pressed()
     int layerCount = 0;
     for(const ActorLayer &layer : l_emote.emoteOverlays)
     {
-      if(engine::actor::user::layerState(layer.toggleName) && layerCount < 5)
+      if(engine::actor::user::layerState(layer.toggleName) && layerCount < 5 && layer.offsetName != "base_image")
       {
         QString spriteName = pLayersPanel->getVariant(QString::fromStdString(layer.offsetName), QString::fromStdString(layer.spriteName));
         layers.append(engine::system::encoding::text::EncodePacketContents({spriteName, QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));

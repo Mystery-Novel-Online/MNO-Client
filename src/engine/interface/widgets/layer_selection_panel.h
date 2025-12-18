@@ -5,7 +5,8 @@ enum LayerSelectionType
 {
   LayerSelection_Toggle,
   LayerSelection_ToggleDisabled,
-  LayerSelection_Variation
+  LayerSelection_Variation,
+  LayerSelectionType_VariationBase
 };
 
 struct LayerSelectionData
@@ -28,6 +29,7 @@ public:
   void addLayer(const QString& layer, const QString& variation, bool state, LayerSelectionType type);
 
   QString getVariant(const QString& layerName, const QString& fallback) { if(!m_VariantSwitches.contains(layerName)) return fallback; return m_VariantSwitches[layerName];};
+  QString getBaseVariant(const QString& fallback) { if(baseImage.trimmed().isEmpty()) return fallback; return baseImage;};
 
 public slots:
   void layerClicked(int layerId);
@@ -37,6 +39,7 @@ private:
   QGridLayout *m_layout;
 
   QList<LayerSelectionData> m_layers = {};
+  QString baseImage = "";
   QMap<QString, QString> m_VariantSwitches = {};
 };
 

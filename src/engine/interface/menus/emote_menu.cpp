@@ -53,7 +53,7 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
   for(const ActorLayer &layer : emote.emoteOverlays)
   {
     QString qLayerName = QString::fromStdString(layer.offsetName);
-    if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty())
+    if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty() && layer.offsetName != "base_image")
     {
       QString qToggleName = QString::fromStdString(layer.toggleName);
       bool toggleEnabled = engine::actor::user::layerState(layer.toggleName);
@@ -62,10 +62,11 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
     }
     else if(!layer.variationOptions.empty())
     {
+      LayerSelectionType type = layer.offsetName == "base_image" ? LayerSelectionType_VariationBase : LayerSelection_Variation;
       for(auto variation : layer.variationOptions)
       {
         QString variationName = QString::fromStdString(variation);
-        selectionPanel->addLayer(qLayerName, variationName, variationName == QString::fromStdString(layer.spriteName), LayerSelection_Variation);
+        selectionPanel->addLayer(qLayerName, variationName, variationName == QString::fromStdString(layer.spriteName), type);
       }
     }
   }

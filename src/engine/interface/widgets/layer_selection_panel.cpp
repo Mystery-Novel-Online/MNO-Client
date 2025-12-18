@@ -33,6 +33,7 @@ void LayerSelectionPanel::clear()
 {
   m_layers.clear();
   m_VariantSwitches.clear();
+  baseImage.clear();
   while (QLayoutItem* item = m_layout->takeAt(0))
   {
     if (QWidget* w = item->widget())
@@ -117,6 +118,19 @@ void LayerSelectionPanel::layerClicked(int layerId)
       }
     }
     m_VariantSwitches[data.layerName] = data.variation;
+    data.button->setLayerImage(VariantName, VariantName, VariantName, true);
+    break;
+
+  case LayerSelectionType_VariationBase:
+    for(int i = 0; i < m_layers.count(); i++)
+    {
+      QString name = m_layers.at(i).layerName + "_" + m_layers.at(i).variation;
+      if(m_layers.at(i).layerName == data.layerName)
+      {
+        m_layers.at(i).button->setLayerImage(name, name, name, false);
+      }
+    }
+    baseImage = data.variation;
     data.button->setLayerImage(VariantName, VariantName, VariantName, true);
     break;
 
