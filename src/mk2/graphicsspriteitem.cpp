@@ -390,7 +390,7 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &imageName, const Q
   layer->setName(layerName);
   layer->setDetatch(detatched);
 
-  if(imageOrder.toLower() == "below")
+  if(imageOrder.toLower() == "below"  || imageOrder.toLower() == "behind" || imageOrder.toLower() == "beneath")
   {
     m_spriteLayersBelow.append(layer);
   }
@@ -466,7 +466,7 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const ActorLayer &layer, const QS
   };
   if(compositionTable.contains(QString::fromStdString(layer.blendMode).toLower())) layerData->setCompositionMode(compositionTable.value(QString::fromStdString(layer.blendMode).toLower()));
 
-  if(QString::fromStdString(layer.spriteOrder).toLower() == "below")
+  if(QString::fromStdString(layer.spriteOrder).toLower() == "below" || QString::fromStdString(layer.spriteOrder).toLower() == "behind" || QString::fromStdString(layer.spriteOrder).toLower() == "beneath")
   {
     m_spriteLayersBelow.append(layerData);
   }

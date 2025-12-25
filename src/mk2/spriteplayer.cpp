@@ -401,7 +401,7 @@ void SpritePlayer::scale_current_frame()
   for (SpriteLayer* layer : m_layerPlayers)
   {
     if (!layer) continue;
-    if(layer->layerPosition() != "below")
+    if(layer->layerPosition() != "below" && layer->layerPosition() != "behind" && layer->layerPosition() != "beneath")
     {
       overlayQueue.append(layer);
       continue;
