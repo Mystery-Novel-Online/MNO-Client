@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include "engine/workshop/workshop_cache.h"
 #include <engine/network/api_manager.h>
+#include "engine/fs/fs_reading.h"
 
 WorkshopEntry::WorkshopEntry(int id, const QString &iconPath, const QString &title,
                              const QString &subtitle, const QString &genderSymbol,
@@ -75,7 +76,29 @@ void WorkshopEntry::fileDownloaded(const QString &filePath, const QString &hash)
   {
     QPixmap pix;
     if (pix.load(filePath))
+    {
+      const QString alphaMaskPath = AOApplication::getInstance()->find_theme_asset_path("workshop_alpha.png");
+      if (FS::Checks::FileExists(alphaMaskPath))
+      {
+        QImage base = pix.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
+        QImage mask(alphaMaskPath);
+
+        if (!mask.isNull())
+        {
+          mask = mask.scaled(base.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation).convertToFormat(QImage::Format_ARGB32_Premultiplied);
+
+          QPainter p(&base);
+          p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+          p.drawImage(0, 0, mask);
+          p.end();
+
+          pix = QPixmap::fromImage(base);
+        }
+      }
+
       m_IconLabel->setPixmap(pix.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    }
+
   }
 }
 

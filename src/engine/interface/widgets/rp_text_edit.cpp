@@ -8,8 +8,8 @@ RPTextEdit::RPTextEdit(const QString &name, QWidget *parent)
     : QTextEdit(parent), m_friendlyName(name)
 {
   m_app = AOApplication::getInstance();
-  connect(this, SIGNAL(textChanged()), this, SLOT(on_text_changed()));
-  connect(this, SIGNAL(text_alignment_changed(Qt::Alignment)), this, SLOT(on_text_changed()));
+  connect(this, &QTextEdit::textChanged, this, &RPTextEdit::on_text_changed);
+  connect(this, &RPTextEdit::text_alignment_changed, this, &RPTextEdit::on_text_changed);
 }
 
 void RPTextEdit::resetTransform()

@@ -77,9 +77,9 @@ void LegacyViewport::constructViewport()
   m_transitionWidget = new RPLabel(m_graphicsView, aoApp);
   m_transitionWidget->resize(m_graphicsView->width(), m_graphicsView->height());
 
-  connect(m_shoutMovie, SIGNAL(done()), this, SLOT(onObjectionDone()));
-  connect(m_videoScreen, SIGNAL(finished()), this, SLOT(onVideoDone()));
-  connect(m_characterSprite, SIGNAL(done()), this, SLOT(onPreanimDone()));
+  connect(m_shoutMovie, &DRMovie::done, this, &LegacyViewport::onObjectionDone);
+  connect(m_videoScreen, &DRVideoScreen::finished, this, &LegacyViewport::onVideoDone);
+  connect(m_characterSprite, &DRMovie::done, this, &LegacyViewport::onPreanimDone);
 
   constructInterface();
 }

@@ -76,20 +76,20 @@ AOApplication::AOApplication(int &argc, char **argv)
   setInstance(this);
   audio::Initialize();
 
-  connect(ao_config, SIGNAL(theme_changed(QString)), this, SLOT(handle_theme_modification()));
-  connect(ao_config, SIGNAL(gamemode_changed(QString)), this, SLOT(handle_theme_modification()));
-  connect(ao_config, SIGNAL(timeofday_changed(QString)), this, SLOT(handle_theme_modification()));
-  connect(ao_config, SIGNAL(manual_gamemode_changed(QString)), this, SLOT(handle_theme_modification()));
-  connect(ao_config, SIGNAL(manual_gamemode_selection_changed(bool)), this, SLOT(handle_theme_modification()));
-  connect(ao_config, SIGNAL(manual_timeofday_changed(QString)), this, SLOT(handle_theme_modification()));
-  connect(ao_config, SIGNAL(manual_timeofday_selection_changed(bool)), this, SLOT(handle_theme_modification()));
-  connect(ao_config_panel, SIGNAL(reload_theme()), this, SLOT(handle_theme_modification()));
-  connect(ao_config_panel, SIGNAL(reload_character()), this, SLOT(handle_character_reloading()));
-  connect(ao_config_panel, SIGNAL(reload_audiotracks()), this, SLOT(handle_audiotracks_reloading()));
+  connect(ao_config, &AOConfig::theme_changed, this, &AOApplication::handle_theme_modification);
+  connect(ao_config, &AOConfig::gamemode_changed, this, &AOApplication::handle_theme_modification);
+  connect(ao_config, &AOConfig::timeofday_changed, this, &AOApplication::handle_theme_modification);
+  connect(ao_config, &AOConfig::manual_gamemode_changed, this, &AOApplication::handle_theme_modification);
+  connect(ao_config, &AOConfig::manual_gamemode_selection_changed, this, &AOApplication::handle_theme_modification);
+  connect(ao_config, &AOConfig::manual_timeofday_changed, this, &AOApplication::handle_theme_modification);
+  connect(ao_config, &AOConfig::manual_timeofday_selection_changed, this, &AOApplication::handle_theme_modification);
+  connect(ao_config_panel, &AOConfigPanel::reload_theme, this, &AOApplication::handle_theme_modification);
+  connect(ao_config_panel, &AOConfigPanel::reload_character, this, &AOApplication::handle_character_reloading);
+  connect(ao_config_panel, &AOConfigPanel::reload_audiotracks, this, &AOApplication::handle_audiotracks_reloading);
   ao_config_panel->hide();
 
   connect(m_server_socket, &DRServerSocket::connection_state_changed, this, &AOApplication::_p_handle_server_state_update);
-  connect(m_server_socket, SIGNAL(packet_received(DRPacket)), this, SLOT(_p_handle_server_packet(DRPacket)));
+  connect(m_server_socket, &DRServerSocket::packet_received, this, &AOApplication::_p_handle_server_packet);
 
   CharacterRepository::loadFavorites();
   reload_packages();
