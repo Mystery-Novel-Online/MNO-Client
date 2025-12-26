@@ -46,7 +46,7 @@ void ServerSelectEntry::setIcon(QString path)
 
 void ServerSelectEntry::mousePressEvent(QMouseEvent *event)
 {
-  if (event->button() == Qt::LeftButton) {
+  if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
     emit clicked(m_id);
   }
 }

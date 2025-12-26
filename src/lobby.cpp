@@ -275,9 +275,10 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   connect(ui_config_panel, SIGNAL(pressed()), this, SLOT(on_config_pressed()));
   connect(ui_config_panel, SIGNAL(released()), this, SLOT(on_config_released()));
 
-  connect(ui_server_list, SIGNAL(currentRowChanged(int)), this, SLOT(connect_to_server(int)));
-  connect(ui_server_list, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(show_server_context_menu(QPoint)));
+  connect(ui_server_list, &QListWidget::currentRowChanged, this, &Lobby::connect_to_server);
+  connect(ui_server_list, &QWidget::customContextMenuRequested, this, &Lobby::show_server_context_menu);
   connect(ui_new_server_list, &ServerSelectList::entryClicked, this, &Lobby::connect_to_server);
+  connect(ui_new_server_list, &QWidget::customContextMenuRequested, this, &Lobby::show_server_context_menu);
 
   connect(ui_create_server, SIGNAL(triggered(bool)), this, SLOT(create_server_info()));
   connect(ui_modify_server, SIGNAL(triggered(bool)), this, SLOT(modify_server_info()));
@@ -888,6 +889,7 @@ void Lobby::on_config_released()
 
 void Lobby::connect_to_server(int p_row)
 {
+  ui_server_list->setCurrentRow(p_row);
   if (p_row == -1)
     return;
 
@@ -906,7 +908,7 @@ void Lobby::show_server_context_menu(QPoint p_point)
 
   m_server_index.reset();
   m_server_index_type = NoServerType;
-  const auto l_item = ui_server_list->indexAt(p_point);
+  const auto l_item = ui_server_list->currentIndex();
   ui_create_server->setEnabled(true);
   ui_modify_server->setDisabled(true);
   ui_delete_server->setDisabled(true);
