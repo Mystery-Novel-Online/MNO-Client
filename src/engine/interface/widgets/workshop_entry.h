@@ -18,6 +18,9 @@ public:
     return instance;
   }
 
+public slots:
+  void fileDownloaded(const QString &filePath, const QString &hash);
+
 signals:
   void clicked(int id);
   void rightClicked(int id);
@@ -28,6 +31,9 @@ protected:
 private:
   int m_id;
   QString m_title;
+
+  QLabel *m_IconLabel = nullptr;
+  QString m_IconUrl = "";
 
 
   QVBoxLayout *m_rootLayout;

@@ -238,11 +238,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
       });
     }
 
-    connect(editAction, &QAction::triggered, this, [this, id]()
-     {
-       WorkshopUploader::StartEdit(id);
-     });
-
+    connect(editAction, &QAction::triggered, this, [this, id]() { WorkshopUploader::StartEdit(id); });
     menu.exec(QCursor::pos());
 
   });

@@ -23,28 +23,15 @@ WorkshopEntry::WorkshopEntry(int id, const QString &iconPath, const QString &tit
   mainLayout = new QHBoxLayout(headerWidget);
   mainLayout->setContentsMargins(1, 1, 1, 1);
 
-  QLabel *iconLabel = new QLabel(headerWidget);
-  iconLabel->setFixedSize(50, 50);
-  mainLayout->addWidget(iconLabel);
+  m_IconLabel = new QLabel(headerWidget);
+  m_IconLabel->setFixedSize(50, 50);
+  mainLayout->addWidget(m_IconLabel);
 
-  const QString workshopUrl = ApiManager::baseUri() + "api/workshop/" + QString::number(id) + "/icon";
+  m_IconUrl = ApiManager::baseUri() + "api/workshop/" + QString::number(id) + "/icon";
 
-  connect(&WorkshopEntry::iconCache(), &WorkshopCache::fileCached, this,
-          [iconLabel, workshopUrl](const QString &filePath, const QString &hash) {
-            if (filePath.isEmpty())
-              return;
+  connect(&WorkshopEntry::iconCache(), &WorkshopCache::fileCached, this, &WorkshopEntry::fileDownloaded);
 
-            QString expectedHash = WorkshopEntry::iconCache().getHashForUrl(workshopUrl);
-            if (hash == expectedHash) {
-              QPixmap pix;
-              if (pix.load(filePath)) {
-                iconLabel->setPixmap(
-                    pix.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-              }
-            }
-          });
-
-  WorkshopEntry::iconCache().downloadFile(QUrl(workshopUrl));
+  WorkshopEntry::iconCache().downloadFile(QUrl(m_IconUrl));
 
   QVBoxLayout *textLayout = new QVBoxLayout();
   QLabel *titleLabel = new QLabel(title, headerWidget);
@@ -76,6 +63,20 @@ WorkshopEntry* WorkshopEntry::createChild(int id, const QString &iconPath, const
   m_childrenLayout->addWidget(childEntry);
   childEntry->hide();
   return childEntry;
+}
+
+void WorkshopEntry::fileDownloaded(const QString &filePath, const QString &hash)
+{
+  if (filePath.isEmpty())
+    return;
+
+  QString expectedHash = WorkshopEntry::iconCache().getHashForUrl(m_IconUrl);
+  if (hash == expectedHash)
+  {
+    QPixmap pix;
+    if (pix.load(filePath))
+      m_IconLabel->setPixmap(pix.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+  }
 }
 
 void WorkshopEntry::mousePressEvent(QMouseEvent *event)
