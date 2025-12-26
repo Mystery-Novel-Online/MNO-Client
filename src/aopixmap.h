@@ -14,7 +14,6 @@ public:
   QPixmap scale(QSize p_size);
   QPixmap scale_to_height(QSize p_size);
 
-private:
   QPixmap m_pixmap;
 };
 

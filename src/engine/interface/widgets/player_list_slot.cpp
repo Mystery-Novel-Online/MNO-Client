@@ -129,6 +129,7 @@ void DrPlayerListEntry::refreshAutomatic(int width)
 
   int iconDimensionsoffset = (int)((float)5 * themeResize);
   int iconScale = (int)((float)40 * themeResize);
+  ui_user_image->setAlpha("playerlist_alpha");
   ui_user_image->move(iconDimensionsoffset, iconDimensionsoffset);
   ui_user_image->resize(iconScale, iconScale);
 

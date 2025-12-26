@@ -33,11 +33,32 @@ void AOImageDisplay::refreshImage()
   if(!ThemeManager::get().mCurrentThemeReader.IsPixmapExist(m_image))
   {
     AOPixmap l_pixmap(m_image);
+
+    const QString alphaMaskPath = AOApplication::getInstance()->find_theme_asset_path(m_alphaName + ".png");
+    if (FS::Checks::FileExists(alphaMaskPath))
+    {
+      QImage base = l_pixmap.m_pixmap.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
+      QImage mask(alphaMaskPath);
+
+      if (!mask.isNull())
+      {
+        mask = mask.scaled(base.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation).convertToFormat(QImage::Format_ARGB32_Premultiplied);
+
+        QPainter p(&base);
+        p.setCompositionMode(QPainter::CompositionMode_DestinationIn);
+        p.drawImage(0, 0, mask);
+        p.end();
+
+        l_pixmap.m_pixmap = QPixmap::fromImage(base);
+      }
+    }
+
+
     setPixmap(l_pixmap.scale(size()));
   }
   else
   {
-    setPixmap(ThemeManager::get().mCurrentThemeReader.GetCachedPixmap(m_image).scale(size()));//->scale(size()));
+    setPixmap(ThemeManager::get().mCurrentThemeReader.GetCachedPixmap(m_image).scale(size()));
   }
 }
 
