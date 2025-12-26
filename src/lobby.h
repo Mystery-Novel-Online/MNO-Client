@@ -30,6 +30,11 @@ public:
   Lobby(AOApplication *p_ao_app);
   ~Lobby();
 
+  static WorkshopCache& previewCache() {
+    static WorkshopCache instance("cache_data", "cache_data/preview_cache_db.json");
+    return instance;
+  }
+
   DRServerInfoList get_combined_server_list();
 
   void set_choose_a_server();
@@ -128,6 +133,8 @@ private:
 
   ServerSelectList *ui_friends_list = nullptr;
 
+  QString m_URLWorkshopPreview = "";
+
   QString m_currentBrowserUrl = "";
   QString m_currentWorkshopCharacter = "";
   int m_currentWorkshopId = 0;
@@ -158,6 +165,7 @@ private:
   void save_favorite_server_list();
 
 private slots:
+  void previewDownloaded(const QString &filePath, const QString &hash);
   void update_widgets();
 
   void request_advertiser_update();

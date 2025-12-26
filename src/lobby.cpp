@@ -191,31 +191,10 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     m_currentBrowserUrl = workshop_list->getEntry(id).downloadLink;
     m_currentWorkshopCharacter = workshop_list->getEntry(id).folder;
 
-    QNetworkReply *reply = ApiManager::instance().get("api/workshop/" + QString::number(id) + "/preview");
-
+    m_URLWorkshopPreview = ApiManager::baseUri() + "api/workshop/" + QString::number(id) + "/preview";
+    connect(&Lobby::previewCache(), &WorkshopCache::fileCached, this, &Lobby::previewDownloaded);
     ui_workshop_preview->hide();
-
-    connect(reply, &QNetworkReply::finished, this, [this, reply]()
-            {
-              if(reply->error() == QNetworkReply::NoError) {
-                QByteArray imageData = reply->readAll();
-                QPixmap pix;
-                if(pix.loadFromData(imageData))
-                {
-                  ui_workshop_preview->setPixmap(pix.scaled(ui_workshop_preview->width(), ui_workshop_preview->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-                  ui_workshop_preview->show();
-                }
-                else
-                  qWarning("Failed to load image from data");
-              }
-              else
-              {
-                qWarning() << "Failed to download image:" << reply->errorString();
-              }
-
-
-              reply->deleteLater();
-            });
+    Lobby::previewCache().downloadFile(QUrl(m_URLWorkshopPreview));
 
   });
 
@@ -578,6 +557,24 @@ void Lobby::save_favorite_server_list()
     l_ini.endGroup();
   }
   l_ini.sync();
+}
+
+void Lobby::previewDownloaded(const QString &filePath, const QString &hash)
+{
+  if (filePath.isEmpty())
+    return;
+
+  QString expectedHash = Lobby::previewCache().getHashForUrl(m_URLWorkshopPreview);
+  if (hash == expectedHash)
+  {
+    QPixmap pix;
+    if (pix.load(filePath))
+    {
+      ui_workshop_preview->show();
+      ui_workshop_preview->setPixmap(pix.scaled(ui_workshop_preview->width(), ui_workshop_preview->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+      m_URLWorkshopPreview = "";
+    }
+  }
 }
 
 void Lobby::request_advertiser_update()
