@@ -197,8 +197,6 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     Lobby::previewCache().downloadFile(QUrl(m_URLWorkshopPreview));
 
   });
-
-
   QObject::connect(workshop_list, &WorkshopListWidget::entryRightClicked, [this](int id)
   {
     QMenu menu;
@@ -236,32 +234,31 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   connect(configTab, &ConfigTabTheme::reloadTheme, this, &Lobby::update_widgets);
   connect(ao_app, &AOApplication::server_status_changed, this, &Lobby::_p_update_description);
 
-  connect(ao_config, SIGNAL(theme_changed(QString)), this, SLOT(update_widgets()));
-  connect(ao_config, SIGNAL(server_advertiser_changed(QString)), m_master_client, SLOT(set_address(QString)));
+  connect(ao_config, &AOConfig::theme_changed, this, &Lobby::update_widgets);
+  connect(ao_config, &AOConfig::server_advertiser_changed, m_master_client, &DRMasterClient::set_address);
 
-  connect(m_master_client, SIGNAL(address_changed()), this, SLOT(request_advertiser_update()));
-  connect(m_master_client, SIGNAL(motd_changed()), this, SLOT(update_motd()));
-  connect(m_master_client, SIGNAL(server_list_changed()), this, SLOT(update_server_list()));
+  connect(m_master_client, &DRMasterClient::address_changed, this, &Lobby::request_advertiser_update);
+  connect(m_master_client, &DRMasterClient::motd_changed, this, &Lobby::update_motd);
+  connect(m_master_client, &DRMasterClient::server_list_changed, this, &Lobby::update_server_list);
 
-  connect(ui_public_server_filter, SIGNAL(clicked()), this, SLOT(toggle_public_server_filter()));
+  connect(ui_public_server_filter, &QAbstractButton::clicked, this, &Lobby::toggle_public_server_filter);
+  connect(ui_favorite_server_filter, &QAbstractButton::clicked, this, &Lobby::toggle_favorite_server_filter);
 
-  connect(ui_favorite_server_filter, SIGNAL(clicked()), this, SLOT(toggle_favorite_server_filter()));
-
-  connect(ui_config_panel, SIGNAL(pressed()), this, SLOT(on_config_pressed()));
-  connect(ui_config_panel, SIGNAL(released()), this, SLOT(on_config_released()));
+  connect(ui_config_panel, &QAbstractButton::pressed, this, &Lobby::on_config_pressed);
+  connect(ui_config_panel, &QAbstractButton::released, this, &Lobby::on_config_released);
 
   connect(ui_server_list, &QListWidget::currentRowChanged, this, &Lobby::connect_to_server);
   connect(ui_server_list, &QWidget::customContextMenuRequested, this, &Lobby::show_server_context_menu);
   connect(ui_new_server_list, &ServerSelectList::entryClicked, this, &Lobby::connect_to_server);
   connect(ui_new_server_list, &QWidget::customContextMenuRequested, this, &Lobby::show_server_context_menu);
 
-  connect(ui_create_server, SIGNAL(triggered(bool)), this, SLOT(create_server_info()));
-  connect(ui_modify_server, SIGNAL(triggered(bool)), this, SLOT(modify_server_info()));
-  connect(ui_delete_server, SIGNAL(triggered(bool)), this, SLOT(prompt_delete_server()));
-  connect(ui_move_up_server, SIGNAL(triggered(bool)), this, SLOT(move_up_server()));
-  connect(ui_move_down_server, SIGNAL(triggered(bool)), this, SLOT(move_down_server()));
+  connect(ui_create_server, &QAction::triggered, this, &Lobby::create_server_info);
+  connect(ui_modify_server, &QAction::triggered, this, &Lobby::modify_server_info);
+  connect(ui_delete_server, &QAction::triggered, this, &Lobby::prompt_delete_server);
+  connect(ui_move_up_server, &QAction::triggered, this, &Lobby::move_up_server);
+  connect(ui_move_down_server, &QAction::triggered, this, &Lobby::move_down_server);
 
-  connect(ui_cancel, SIGNAL(clicked()), ao_app, SLOT(loading_cancelled()));
+  connect(ui_cancel, &QAbstractButton::clicked, ao_app, &AOApplication::loading_cancelled);
 
   load_settings();
   load_favorite_server_list();
