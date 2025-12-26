@@ -72,8 +72,8 @@ void AOSfxPlayer::play_ambient(QString p_filename)
       qInfo() << "Playing ambient" << p_filename;
       m_ambient_map.insert(p_filename, l_ambient);
 
-      connect(l_ambient.data(), SIGNAL(faded(DRAudioStream::Fade)), this, SLOT(handle_ambient_fade(DRAudioStream::Fade)));
-      connect(l_ambient.data(), SIGNAL(finished()), this, SLOT(remove_ambient()));
+      connect(l_ambient.data(), &DRAudioStream::faded, this, &AOSfxPlayer::handle_ambient_fade);
+      connect(l_ambient.data(), &DRAudioStream::finished, this, &AOSfxPlayer::remove_ambient);
 
       l_ambient->set_repeatable(true);
     }
