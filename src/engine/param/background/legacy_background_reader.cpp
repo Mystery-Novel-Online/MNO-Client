@@ -25,7 +25,7 @@ void LegacyBackgroundReader::loadBackground(const std::string& backgroundPath)
     //TO-DO: Implement
     const QString l_ambient_sfx = l_settings.value("ambient_sfx").toString();
 
-    assignPosition(l_lower_group.toStdString(), l_positionData);
+    assignPosition("default", l_lower_group.toStdString(), l_positionData);
 
     l_settings.endGroup();
   }
