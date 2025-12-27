@@ -23,6 +23,7 @@
 #include "rolechat_config.h"
 #include "engine/discord/workshop_discord.h"
 #include <engine/network/api_manager.h>
+#include <engine/system/client_worker.h>
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -58,6 +59,16 @@ AOApplication::AOApplication(int &argc, char **argv)
   QDir::setCurrent(QCoreApplication::applicationDirPath() + "/");
 #endif
 #endif
+
+  QThread *thread = new QThread(this);
+  ClientWorker *worker = new ClientWorker();
+  worker->moveToThread(thread);
+  connect(thread, &QThread::started, worker, &ClientWorker::process);
+  connect(worker, &ClientWorker::finished, thread, &QThread::quit);
+  connect(worker, &ClientWorker::finished, worker, &QObject::deleteLater);
+  connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+
+  thread->start();
 
   system::ConfigManager::initializeConfig();
   WorkshopDiscord instance;

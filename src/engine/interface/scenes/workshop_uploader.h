@@ -30,7 +30,6 @@ private:
   int m_editTarget = -1;
   QCheckBox *m_private;
 
-  QNetworkAccessManager *m_network;
   QNetworkReply *m_currentReply;
 };
 

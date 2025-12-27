@@ -22,6 +22,7 @@
 #include <engine/system/config_manager.h>
 #include "config_tabs/config_tab_theme.h"
 #include <engine/discord/workshop_discord.h>
+#include <engine/interface/scenes/collection_creation.h>
 #include <engine/network/api_manager.h>
 #include <rolechat/userdata/RolechatDatabase.h>
 
@@ -197,6 +198,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     Lobby::previewCache().downloadFile(QUrl(m_URLWorkshopPreview));
 
   });
+
   QObject::connect(workshop_list, &WorkshopListWidget::entryRightClicked, [this](int id)
   {
     QMenu menu;
@@ -269,6 +271,10 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ThemeManager::get().ResetWidgetLists();
   ui_gallery_packages->clear();
   ui_gallery_packages->addItems(engine::system::replays::io::packageNames());
+
+
+  ui_workshop_upload->setContextMenuPolicy(Qt::CustomContextMenu);
+  connect(ui_workshop_upload, &QWidget::customContextMenuRequested, this, &Lobby::showUploadContextMenu);
 
 }
 
@@ -890,6 +896,15 @@ void Lobby::connect_to_server(int p_row)
     ui_player_count->setText(nullptr);
     ao_app->connect_to_server(m_current_server);
   }
+}
+
+void Lobby::showUploadContextMenu(QPoint point)
+{
+  QMenu menu;
+
+  QAction *editAction = menu.addAction("Create Collection");
+  connect(editAction, &QAction::triggered, this, [this]() { CollectionCreation::init(); });
+  menu.exec(QCursor::pos());
 }
 
 void Lobby::show_server_context_menu(QPoint p_point)

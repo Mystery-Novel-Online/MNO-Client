@@ -200,6 +200,7 @@ private slots:
   void on_config_released();
   void connect_to_server(int row);
 
+  void showUploadContextMenu(QPoint);
   void show_server_context_menu(QPoint);
   void prompt_server_info_editor();
   void create_server_info();

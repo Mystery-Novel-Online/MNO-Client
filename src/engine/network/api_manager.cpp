@@ -42,7 +42,7 @@ void ApiManager::login()
   verifyBody["user_key"] = ApiManager::authorizationKey().toStdString();
   QByteArray jsonData = QByteArray::fromStdString(verifyBody.dump());
 
-  QNetworkReply* verifyReply = ApiManager::instance().post("api/users/discord/verify", jsonData);
+  QNetworkReply* verifyReply = post("api/users/discord/verify", jsonData);
   connect(verifyReply, &QNetworkReply::finished, this, [this, verifyReply]() {
     bool isValid = false;
     std::string accessToken = "";

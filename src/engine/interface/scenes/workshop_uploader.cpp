@@ -57,13 +57,10 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
 
   setLayout(layout);
 
-  m_network = new QNetworkAccessManager(this);
-
   connect(m_chooseButton, &QPushButton::clicked, this, &WorkshopUploader::chooseFile);
   connect(m_imageButton, &QPushButton::clicked, this, &WorkshopUploader::choosePreviewFile);
 
   connect(m_submitButton, &QPushButton::clicked, this, &WorkshopUploader::submitForm);
-  connect(m_network, &QNetworkAccessManager::finished, this, &WorkshopUploader::handleReply);
 }
 
 void WorkshopUploader::StartUpload()

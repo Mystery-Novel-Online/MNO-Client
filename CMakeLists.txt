@@ -319,6 +319,8 @@ add_executable(rp-engine
   src/engine/interface/widgets/layer_selection_panel.h src/engine/interface/widgets/layer_selection_panel.cpp
   src/engine/network/api_manager.h src/engine/network/api_manager.cpp
   src/engine/system/audio/loop_detection.h src/engine/system/audio/loop_detection.cpp
+  src/engine/system/client_worker.h src/engine/system/client_worker.cpp
+  src/engine/interface/scenes/collection_creation.h src/engine/interface/scenes/collection_creation.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
