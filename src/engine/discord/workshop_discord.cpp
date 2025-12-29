@@ -63,6 +63,7 @@ void tokenRecieved(std::string accessToken)
   std::cout << "🔓 Access token received! Establishing connection...\n";
   client->UpdateToken(discordpp::AuthorizationTokenType::Bearer,  accessToken, tokenUpdated);
 }
+
 void richPresenceStatus(discordpp::ClientResult result)
 {
   if(result.Successful()) {

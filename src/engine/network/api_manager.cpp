@@ -54,7 +54,7 @@ void ApiManager::login()
 
       isValid = verifyResponse.value("valid", false);
       m_permissionLevel = verifyResponse.value("permissions", ApiPermissionLevels::APIPerms_None);
-      accessToken = verifyResponse["access_token"].get<std::string>();
+      accessToken = verifyResponse.value("access_token", "");
     }
 
     emit loginStatus(isValid, accessToken);
