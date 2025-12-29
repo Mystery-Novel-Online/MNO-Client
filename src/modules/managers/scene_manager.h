@@ -17,7 +17,7 @@ public:
     return s_Instance;
   }
 
-  void execLoadPlayerBackground(QString t_backgroundName);
+  void execLoadPlayerBackground(QString t_backgroundName, QString variant);
   QString getBackgroundPath(QString t_position);
   QString getForegroundPath(QString t_position);
   DRBackgroundSettings getBackgroundSettings();

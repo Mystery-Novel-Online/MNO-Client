@@ -544,7 +544,7 @@ void Courtroom::update_background_scene()
   const QString l_prev_background_name = m_background_name;
   m_background_name = get_current_background();
 
-  SceneManager::get().execLoadPlayerBackground(m_background_name);
+  SceneManager::get().execLoadPlayerBackground(m_background_name, m_background.variant);
 
   if (l_prev_background_name.isEmpty() || l_prev_background_name != m_background_name)
   {

@@ -73,6 +73,7 @@ class DRAreaBackground
 {
 public:
   QString background;
+  QString variant;
   QMap<QString, QString> background_tod_map;
 };
 

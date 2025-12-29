@@ -425,7 +425,13 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
       return;
 
     DRAreaBackground l_area_bg;
-    l_area_bg.background = l_content.at(0);
+    QStringList areaBgArgs = l_content.at(0).split(':');
+
+    l_area_bg.background = areaBgArgs.at(0);
+    if(areaBgArgs.count() > 1)
+    {
+      l_area_bg.variant = areaBgArgs.at(1);
+    }
 
     for (int i = 1; i < l_content.size(); ++i)
     {

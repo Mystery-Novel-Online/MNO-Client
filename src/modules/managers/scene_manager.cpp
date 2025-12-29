@@ -8,7 +8,7 @@
 
 SceneManager SceneManager::s_Instance;
 
-void SceneManager::execLoadPlayerBackground(QString t_backgroundName)
+void SceneManager::execLoadPlayerBackground(QString t_backgroundName, QString variant)
 {
   mBackgroundName = t_backgroundName;
   const QString l_backgroundJSONPath = AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(t_backgroundName) + "/" + "background.json");
@@ -16,6 +16,7 @@ void SceneManager::execLoadPlayerBackground(QString t_backgroundName)
   {
     pCurrentBackground = new JsonBackgroundData();
     pCurrentBackground->loadBackground(l_backgroundJSONPath.toStdString());
+    pCurrentBackground->setVariant(variant.toStdString());
   }
   else
   {
