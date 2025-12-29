@@ -71,7 +71,6 @@ AOApplication::AOApplication(int &argc, char **argv)
   thread->start();
 
   system::ConfigManager::initializeConfig();
-  WorkshopDiscord instance;
 
   ao_config = new AOConfig(this);
 
