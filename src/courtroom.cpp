@@ -37,6 +37,7 @@
 #include <QHttpMultiPart>
 #include <engine/discord/workshop_discord.h>
 #include <engine/network/api_manager.h>
+#include <engine/system/audio/loop_detection.h>
 #include <mk2/spritecachingreader.h>
 #include <rolechat/actor/JsonActorData.h>
 #include "engine/system/config_manager.h"
@@ -2832,6 +2833,12 @@ void Courtroom::on_ooc_message_return_pressed()
       ao_app->send_server_packet(DRPacket("YAML_AREA", {fileName}));
     });
 
+    return;
+  }
+  if (l_message.startsWith("/loop_file"))
+  {
+    LoopDetection::FindLoop(l_message.mid(11));
+    ui_ooc_chat_message->clear();
     return;
   }
   if (l_message.startsWith("/afk") && !m_isAfk)
