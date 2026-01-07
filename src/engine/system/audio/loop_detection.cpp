@@ -8,6 +8,7 @@ constexpr int FINGERPRINT_BINS = 64;
 constexpr int MIN_LOOP_SECONDS = 15;
 constexpr float SILENCE_THRESHOLD = 1e-4f;
 constexpr float SMOOTH_ALPHA = 0.7f;
+constexpr int LOOP_WINDOW = 1;
 
 constexpr int PIXELS_PER_SECOND = 80;
 
@@ -143,10 +144,25 @@ void LoopDetection::FindLoop(QString fileName)
     for (int end = start + minLoopFrames; end <= lastAudioFrame; ++end)
     {
       float dist = 0.0f;
-      for (int i = 0; i < FINGERPRINT_BINS; ++i)
+
+      for (int w = -LOOP_WINDOW; w <= LOOP_WINDOW; ++w)
       {
-        float d = frames[start].bins[i] - frames[end].bins[i];
-        dist += d * d;
+        int s = start + w;
+        int e = end   + w;
+
+        if (s < 0 || e < 0 || s >= frames.size() || e >= frames.size())
+          continue;
+
+        for (int i = 0; i < FINGERPRINT_BINS; ++i)
+        {
+          float d = frames[s].bins[i] - frames[e].bins[i];
+          dist += d * d;
+
+          if (dist >= bestScore)
+            goto next_candidate;
+        }
+
+        dist += 0.5f * qAbs(energies[s] - energies[e]);
       }
 
       dist += 0.5f * qAbs(energies[start] - energies[end]);
@@ -159,6 +175,7 @@ void LoopDetection::FindLoop(QString fileName)
         bestStart = start;
         bestEnd = end;
       }
+  next_candidate:;
     }
   }
 
