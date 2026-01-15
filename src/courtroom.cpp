@@ -332,6 +332,7 @@ void Courtroom::enter_courtroom(int p_cid)
   const QString l_chr_name = get_character_ini();
 
   rolechat::actor::IActorData *actor = engine::actor::user::switchCharacter(l_chr_name);
+  pLayersPanel->clearGlobals();
   ui_emotes->actorChange(actor);
   if(!actor->scalingPresets().empty())
   {

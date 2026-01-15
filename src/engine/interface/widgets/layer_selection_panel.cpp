@@ -44,6 +44,11 @@ void LayerSelectionPanel::clear()
   }
 }
 
+void LayerSelectionPanel::clearGlobals()
+{
+  m_GlobalVariants.clear();
+}
+
 void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, LayerSelectionType type)
 {
   AOEmoteButton *emote = new AOEmoteButton(m_container, m_app, 0, 0);
@@ -76,6 +81,10 @@ void LayerSelectionPanel::addLayer(const QString &layer, const QString &variatio
   m_layers.append(data);
 
   QString name = layer + "_" + variation;
+  if(m_GlobalVariants.contains(layer))
+  {
+    state = m_GlobalVariants[layer] == variation;
+  }
   emote->setLayerImage(name, name, name, state);
   emote->show();
 
@@ -121,6 +130,19 @@ void LayerSelectionPanel::layerClicked(int layerId)
       }
     }
     m_VariantSwitches[data.layerName] = data.variation;
+    data.button->setLayerImage(VariantName, VariantName, VariantName, true);
+    break;
+
+  case LayerSelection_VariationGlobal:
+    for(int i = 0; i < m_layers.count(); i++)
+    {
+      QString name = m_layers.at(i).layerName + "_" + m_layers.at(i).variation;
+      if(m_layers.at(i).layerName == data.layerName)
+      {
+        m_layers.at(i).button->setLayerImage(name, name, name, false);
+      }
+    }
+    m_GlobalVariants[data.layerName] = data.variation;
     data.button->setLayerImage(VariantName, VariantName, VariantName, true);
     break;
 
