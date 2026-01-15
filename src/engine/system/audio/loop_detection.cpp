@@ -8,7 +8,7 @@ constexpr int FINGERPRINT_BINS = 64;
 constexpr int MIN_LOOP_SECONDS = 15;
 constexpr float SILENCE_THRESHOLD = 1e-4f;
 constexpr float SMOOTH_ALPHA = 0.7f;
-constexpr int LOOP_WINDOW = 1;
+constexpr int LOOP_WINDOW = 4;
 
 constexpr int PIXELS_PER_SECOND = 80;
 
@@ -21,6 +21,12 @@ double streamLength(HSTREAM& stream)
     return -1;
   }
   return BASS_ChannelBytes2Seconds(stream, lengthBytes);
+}
+
+static bool isUrl(const QString& s)
+{
+  return s.startsWith("http://", Qt::CaseInsensitive) ||
+         s.startsWith("https://", Qt::CaseInsensitive);
 }
 
 void LoopDetection::FindLoop(QString fileName)
@@ -36,8 +42,11 @@ void LoopDetection::FindLoop(QString fileName)
   progress.show();
 
   HSTREAM stream;
-
-  if (filePath.endsWith("opus", Qt::CaseInsensitive))
+  if (isUrl(fileName))
+  {
+    stream = BASS_StreamCreateURL(fileName.toUtf8().constData(), 0, BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT, nullptr, nullptr);
+  }
+  else if (filePath.endsWith("opus", Qt::CaseInsensitive))
   {
     stream = BASS_OPUS_StreamCreateFile(FALSE, filePath.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
   }
