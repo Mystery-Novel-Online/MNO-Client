@@ -177,6 +177,7 @@ void EmoteMenu::ApplyPreset(const QString &presetName)
     {
       courtroom::sliders::setScale(presetData.scale);
       courtroom::sliders::setVertical(presetData.verticalAlign);
+      AOApplication::getInstance()->m_courtroom->horizontalAlign = presetData.horizontalAlign;
       m_defaultVertical = presetData.verticalAlign;
       m_defaultScale = presetData.scale;
     }
