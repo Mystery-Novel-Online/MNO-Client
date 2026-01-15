@@ -3230,6 +3230,23 @@ void Courtroom::onOutfitChanged(int outfitIndex)
   onAnimListItemChanged(nullptr, nullptr);
   ui_emotes->outfitChange();
 
+
+  rolechat::actor::IActorData *actor = engine::actor::user::retrieve();
+
+  if(!actor->scalingPresets().empty() && trueOutfitIndex != -1)
+  {
+    for (int i = 0; i < actor->scalingPresets().size(); ++i)
+    {
+      rolechat::actor::ActorScalingPreset preset = actor->scalingPresets().at(i);
+      if(preset.name == actor->outfitNames()[trueOutfitIndex])
+      {
+        horizontalAlign = preset.horizontalAlign;
+        ui_slider_scale->setValue(preset.scale);
+        ui_slider_vertical_axis->setValue(preset.verticalAlign);
+      }
+    }
+  }
+
   const QString l_chr_name = get_character_ini();
   const QString l_showname = QString::fromStdString(engine::actor::user::retrieve()->showname());
   const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
