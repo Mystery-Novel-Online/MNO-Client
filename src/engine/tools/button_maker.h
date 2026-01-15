@@ -41,6 +41,7 @@ public:
 
 private slots:
   void onGenerateClicked();
+  void onPreviewGenClicked();
   void onAddUnderlayClicked();
   void onAddOverlayClicked();
   void onAlphaClicked();

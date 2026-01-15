@@ -46,6 +46,7 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 
 
   QPushButton *generateButton = new QPushButton("Generate Button");
+  QPushButton *generatePreviewButton = new QPushButton("Generate Preview");
   QPushButton *underlayButton = new QPushButton("Add Underlay");
   QPushButton *overlayButton = new QPushButton("Add Overlay");
   QPushButton *alphaButton = new QPushButton("Add Alpha Mask");
@@ -53,9 +54,11 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
   rightLayout->addWidget(underlayButton);
   rightLayout->addWidget(overlayButton);
   rightLayout->addWidget(alphaButton);
+  rightLayout->addWidget(generatePreviewButton);
   rightLayout->addWidget(generateButton);
 
   connect(generateButton, &QPushButton::clicked, this, &ButtonMaker::onGenerateClicked);
+  connect(generatePreviewButton, &QPushButton::clicked, this, &ButtonMaker::onPreviewGenClicked);
   connect(underlayButton, &QPushButton::clicked, this, &ButtonMaker::onAddUnderlayClicked);
   connect(overlayButton, &QPushButton::clicked, this, &ButtonMaker::onAddOverlayClicked);
   connect(alphaButton, &QPushButton::clicked, this, &ButtonMaker::onAlphaClicked);
@@ -189,8 +192,6 @@ void ButtonMaker::onGenerateClicked()
   m_GraphicsView->render(&viewportPainter);
   viewportPainter.end();
 
-  //cropRect = cropRect.intersected(fullImage.rect());
-
   QImage cropppedSprite = fullImage.copy(cropRect);
   cropppedSprite = cropppedSprite.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
@@ -211,37 +212,66 @@ void ButtonMaker::onGenerateClicked()
   finalPainter.end();
 
   QString buttonDirectory = "/emotions/button" + QString::number(m_EmoteIndex + 1) + "_off.png";
+
   if(m_IsJson)
-  {
     buttonDirectory = QString::fromStdString("/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".png");
-  }
 
   QString filePath = fs::characters::getFilePath(QString::fromStdString(m_Emotes.at(m_EmoteIndex).character), buttonDirectory);
   if(FS::Checks::FileExists(filePath))
   {
     QMessageBox::StandardButton replaceResult;
     replaceResult = QMessageBox::question(nullptr, "Button Maker", "You are about to replace a button that already exists, continue?", QMessageBox::Yes|QMessageBox::No);
-    if(replaceResult == QMessageBox::No)
-    {
-      return;
-    }
 
+    if(replaceResult == QMessageBox::No)
+      return;
   }
+
   if(!FS::Checks::DirectoryExists(QFileInfo(filePath).absolutePath()))
-  {
     QDir().mkdir(QFileInfo(filePath).absolutePath());
-  }
+
   finalOutput.save(filePath);
 
   if(m_EmoteIndex < (m_Emotes.count() - 1))
-  {
     m_EmoteIndex++;
-  }
   else
-  {
     m_EmoteIndex = 0;
+
+
+  forceEmote(m_Emotes.at(m_EmoteIndex));
+}
+
+void ButtonMaker::onPreviewGenClicked()
+{
+
+  m_Overlay->setFocus();
+
+  QImage fullImage(m_GraphicsView->viewport()->size(), QImage::Format_ARGB32_Premultiplied);
+  fullImage.fill(Qt::transparent);
+  QPainter viewportPainter(&fullImage);
+  m_GraphicsView->render(&viewportPainter);
+  viewportPainter.end();
+
+  QString buttonDirectory = "/previews/" + QString::fromStdString(m_Emotes.at(m_EmoteIndex).emoteName) + ".png";
+  QString filePath = fs::characters::getFilePath(QString::fromStdString(m_Emotes.at(m_EmoteIndex).character), buttonDirectory);
+
+  if(FS::Checks::FileExists(filePath))
+  {
+    QMessageBox::StandardButton replaceResult;
+    replaceResult = QMessageBox::question(nullptr, "Button Maker", "You are about to replace a preview that already exists, continue?", QMessageBox::Yes|QMessageBox::No);
+
+    if(replaceResult == QMessageBox::No)
+      return;
   }
 
+  if(!FS::Checks::DirectoryExists(QFileInfo(filePath).absolutePath()))
+    QDir().mkdir(QFileInfo(filePath).absolutePath());
+
+  fullImage.save(filePath);
+
+  if(m_EmoteIndex < (m_Emotes.count() - 1))
+    m_EmoteIndex++;
+  else
+    m_EmoteIndex = 0;
 
   forceEmote(m_Emotes.at(m_EmoteIndex));
 }
