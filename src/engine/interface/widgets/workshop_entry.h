@@ -43,6 +43,7 @@ protected:
 private:
   static WorkshopCache& iconCache() { static WorkshopCache instance("cache_data", "cache_data/icon_cache_db.json"); return instance; }
   void setupUi(const QString& title, const QString& subtitle);
+  void setupUiGrid(const QString& title, const QString& subtitle);
 
   void setupIconDownload();
   void applyAlphaMask(QPixmap& pixmap) const;
@@ -52,6 +53,7 @@ private:
 
 private:
   int m_id;
+  bool m_isGridView = false;
   QString m_title;
   QString m_IconUrl = "";
 

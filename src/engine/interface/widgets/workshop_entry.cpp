@@ -12,12 +12,19 @@ constexpr int ICON_CONTAINER_SIZE = 50;
 constexpr int ICON_RENDER_SIZE    = 48;
 constexpr int CHILD_INDENT        = 35;
 
+constexpr int GRID_BANNER_WIDTH  = 220;
+constexpr int GRID_BANNER_HEIGHT = 124;
+constexpr int GRID_TEXT_SPACING  = 4;
+
 WorkshopEntry::WorkshopEntry(int id, const QString&, const QString &title, const QString &subtitle, const QString&, QWidget *parent) : QWidget(parent), m_id(id), m_title(title)
 {
   setCursor(Qt::PointingHandCursor);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-  setupUi(title, subtitle);
+  if(!m_isGridView)
+    setupUi(title, subtitle);
+  else
+    setupUiGrid(title, subtitle);
   setupIconDownload();
 }
 
@@ -45,9 +52,8 @@ void WorkshopEntry::fileDownloaded(const QString &filePath, const QString &hash)
 
   m_iconLabel->setPixmap(
       pixmap.scaled(
-          ICON_RENDER_SIZE,
-          ICON_RENDER_SIZE,
-          Qt::KeepAspectRatio,
+          m_iconLabel->size(),
+          Qt::KeepAspectRatioByExpanding,
           Qt::SmoothTransformation
           )
       );
@@ -103,9 +109,44 @@ void WorkshopEntry::setupUi(const QString &title, const QString &subtitle)
   m_rootLayout->addLayout(m_childrenLayout);
 }
 
+void WorkshopEntry::setupUiGrid(const QString &title, const QString &subtitle)
+{
+  m_rootLayout = new QVBoxLayout(this);
+  m_rootLayout->setContentsMargins(6, 6, 6, 6);
+  m_rootLayout->setSpacing(6);
+
+  m_iconLabel = new QLabel(this);
+  m_iconLabel->setFixedSize(GRID_BANNER_WIDTH, GRID_BANNER_HEIGHT);
+  m_iconLabel->setAlignment(Qt::AlignCenter);
+  m_iconLabel->setScaledContents(false);
+  m_iconLabel->setStyleSheet("QLabel { background-color: rgba(0,0,0,40); border-radius: 6px; }");
+
+  m_rootLayout->addWidget(m_iconLabel, 0, Qt::AlignCenter);
+
+  auto* textContainer = new QWidget(this);
+  auto* textLayout = new QVBoxLayout(textContainer);
+  textLayout->setContentsMargins(2, 0, 2, 0);
+  textLayout->setSpacing(GRID_TEXT_SPACING);
+
+  auto* titleLabel = new QLabel(title, textContainer);
+  titleLabel->setAlignment(Qt::AlignHCenter);
+  titleLabel->setWordWrap(true);
+  set_stylesheet(titleLabel, "[WORKSHOP NAME]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+
+  auto* subtitleLabel = new QLabel(subtitle, textContainer);
+  subtitleLabel->setAlignment(Qt::AlignHCenter);
+  subtitleLabel->setWordWrap(true);
+  set_stylesheet(subtitleLabel, "[WORKSHOP SUBMITTER]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+
+  textLayout->addWidget(titleLabel);
+  textLayout->addWidget(subtitleLabel);
+
+  m_rootLayout->addWidget(textContainer);
+}
+
 void WorkshopEntry::setupIconDownload()
 {
-  m_IconUrl = ApiManager::baseUri() + "api/workshop/" + QString::number(m_id) + "/icon";
+  m_IconUrl = ApiManager::baseUri() + "api/workshop/" + QString::number(m_id) + QString(m_isGridView ? "/preview" : "/icon");
   connect(&WorkshopEntry::iconCache(), &WorkshopCache::fileCached, this, &WorkshopEntry::fileDownloaded);
   WorkshopEntry::iconCache().downloadFile(QUrl(m_IconUrl));
 }
@@ -137,6 +178,7 @@ void WorkshopEntry::applyAlphaMask(QPixmap &pixmap) const
 
 bool WorkshopEntry::anyChildrenVisible() const
 {
+  if(!m_childrenLayout) return false;
   for (int i = 0; i < m_childrenLayout->count(); ++i)
   {
     if (auto* w = m_childrenLayout->itemAt(i)->widget();
@@ -150,6 +192,7 @@ bool WorkshopEntry::anyChildrenVisible() const
 
 void WorkshopEntry::toggleChildrenVisibility(bool visible)
 {
+  if(!m_childrenLayout) return;
   for (int i = 0; i < m_childrenLayout->count(); ++i)
   {
     if (auto* w = m_childrenLayout->itemAt(i)->widget())
