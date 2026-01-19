@@ -4,17 +4,18 @@
 #include "engine/param/actor_repository.h"
 #include "engine/interface/courtroom_layout.h"
 
+constexpr int ButtonSize   = 40;
+constexpr int LayoutMargin = 22;
+
 LayerSelectionPanel::LayerSelectionPanel(QWidget *parent)
     : RPWidget{"layers_panel", parent}
 {
-  //setDragable(true);
   resetTransform();
   setBackgroundImage("layers_panel");
 
   QScrollArea *scrollArea = new QScrollArea(this);
   scrollArea->setWidgetResizable(true);
   scrollArea->setStyleSheet("background-color: transparent; border: none; color: yellow;");
-
 
   m_container = new QWidget(scrollArea);
   m_layout = new QGridLayout(m_container);
@@ -26,8 +27,6 @@ LayerSelectionPanel::LayerSelectionPanel(QWidget *parent)
   QGridLayout *rootLayout = new QGridLayout(this);
   rootLayout->addWidget(scrollArea);
   setLayout(rootLayout);
-
-
 }
 
 void LayerSelectionPanel::clear()
@@ -49,62 +48,69 @@ void LayerSelectionPanel::clearGlobals()
   m_GlobalVariants.clear();
 }
 
-void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, LayerSelectionType type)
+void LayerSelectionPanel::addButtonToGrid(QWidget *button)
 {
-  AOEmoteButton *emote = new AOEmoteButton(m_container, m_app, 0, 0);
-  LayerSelectionData data = {layer, toggle, "", emote, type};
-  emote->setFixedSize(40, 40);
-  emote->set_emote_number(m_layers.count());
-  m_layers.append(data);
-
-  emote->setLayerImage(toggle, toggle, toggle, type == LayerSelection_Toggle);
-  emote->show();
-
   QPoint f_spacing = AOApplication::getInstance()->current_theme->get_widget_settings_spacing("layers_panel", "courtroom", "layers_panel_spacing");
   m_layout->setHorizontalSpacing(f_spacing.x());
   m_layout->setVerticalSpacing(f_spacing.y());
 
-  int maxColumns = (width() - 22 - f_spacing.x()) / 40;
+  int maxColumns = (width() - LayoutMargin - f_spacing.x()) / ButtonSize;
   int row = m_layout->count() / maxColumns;
   int col = m_layout->count() % maxColumns;
 
+  button->setFixedSize(ButtonSize, ButtonSize);
+  button->show();
+  m_layout->addWidget(button, row, col);
+}
+
+void LayerSelectionPanel::disableLayerVariants(const QString &layerName)
+{
+  for (LayerSelectionData& layer : m_layers)
+  {
+    if (layer.layerName != layerName)
+      continue;
+
+    const QString name = layer.layerName + "_" + layer.variation;
+    layer.button->setLayerImage(name, name, name, false);
+  }
+}
+
+void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, LayerSelectionType type)
+{
+  AOEmoteButton *emote = new AOEmoteButton(m_container, m_app, 0, 0);
+  emote->setLayerImage(toggle, toggle, toggle, type == LayerSelection_Toggle);
+  emote->set_emote_number(m_layers.count());
+
+  LayerSelectionData data = {layer, toggle, "", emote, type};
+  m_layers.append(data);
+
   connect(emote, &AOEmoteButton::emote_clicked, this, &LayerSelectionPanel::layerClicked);
-  m_layout->addWidget(emote, row, col);
+  addButtonToGrid(emote);
 }
 
 void LayerSelectionPanel::addLayer(const QString &layer, const QString &variation, bool state, LayerSelectionType type)
 {
   AOEmoteButton *emote = new AOEmoteButton(m_container, m_app, 0, 0);
-  LayerSelectionData data = {layer, "", variation, emote, type};
-  emote->setFixedSize(40, 40);
   emote->set_emote_number(m_layers.count());
-  m_layers.append(data);
 
   QString name = layer + "_" + variation;
+
   if(m_GlobalVariants.contains(layer))
-  {
     state = m_GlobalVariants[layer] == variation;
-  }
+
   emote->setLayerImage(name, name, name, state);
-  emote->show();
 
-  QPoint f_spacing = AOApplication::getInstance()->current_theme->get_widget_settings_spacing("layers_panel", "courtroom", "layers_panel_spacing");
-  m_layout->setHorizontalSpacing(f_spacing.x());
-  m_layout->setVerticalSpacing(f_spacing.y());
-
-  int maxColumns = (width() - 22 - f_spacing.x()) / 40;
-  int row = m_layout->count() / maxColumns;
-  int col = m_layout->count() % maxColumns;
+  LayerSelectionData data = {layer, "", variation, emote, type};
+  m_layers.append(data);
 
   connect(emote, &AOEmoteButton::emote_clicked, this, &LayerSelectionPanel::layerClicked);
-  m_layout->addWidget(emote, row, col);
-
+  addButtonToGrid(emote);
 }
 
 void LayerSelectionPanel::layerClicked(int layerId)
 {
   if(layerId > m_layers.count()) return;
-  LayerSelectionData data = m_layers.at(layerId);
+  LayerSelectionData& data = m_layers[layerId];
   QString VariantName = data.layerName + "_" + data.variation;
   switch(data.type)
   {
@@ -121,54 +127,20 @@ void LayerSelectionPanel::layerClicked(int layerId)
     break;
 
   case LayerSelection_Variation:
-    for(int i = 0; i < m_layers.count(); i++)
-    {
-      QString name = m_layers.at(i).layerName + "_" + m_layers.at(i).variation;
-      if(m_layers.at(i).layerName == data.layerName)
-      {
-        m_layers.at(i).button->setLayerImage(name, name, name, false);
-      }
-    }
+    disableLayerVariants(data.layerName);
     m_VariantSwitches[data.layerName] = data.variation;
     data.button->setLayerImage(VariantName, VariantName, VariantName, true);
     break;
 
   case LayerSelection_VariationGlobal:
-    for(int i = 0; i < m_layers.count(); i++)
-    {
-      QString name = m_layers.at(i).layerName + "_" + m_layers.at(i).variation;
-      if(m_layers.at(i).layerName == data.layerName)
-      {
-        m_layers.at(i).button->setLayerImage(name, name, name, false);
-      }
-    }
-    m_GlobalVariants[data.layerName] = data.variation;
-    data.button->setLayerImage(VariantName, VariantName, VariantName, true);
-    break;
-
   case LayerSelection_VariationGlobalBase:
-    for(int i = 0; i < m_layers.count(); i++)
-    {
-      QString name = m_layers.at(i).layerName + "_" + m_layers.at(i).variation;
-      if(m_layers.at(i).layerName == data.layerName)
-      {
-        m_layers.at(i).button->setLayerImage(name, name, name, false);
-      }
-    }
+    disableLayerVariants(data.layerName);
     m_GlobalVariants[data.layerName] = data.variation;
     data.button->setLayerImage(VariantName, VariantName, VariantName, true);
     break;
-
 
   case LayerSelectionType_VariationBase:
-    for(int i = 0; i < m_layers.count(); i++)
-    {
-      QString name = m_layers.at(i).layerName + "_" + m_layers.at(i).variation;
-      if(m_layers.at(i).layerName == data.layerName)
-      {
-        m_layers.at(i).button->setLayerImage(name, name, name, false);
-      }
-    }
+    disableLayerVariants(data.layerName);
     baseImage = data.variation;
     data.button->setLayerImage(VariantName, VariantName, VariantName, true);
     break;
@@ -176,7 +148,6 @@ void LayerSelectionPanel::layerClicked(int layerId)
   default:
     break;
   }
-  m_layers[layerId] = data;
   courtroom::ic::focusMessageBox();
 }
 

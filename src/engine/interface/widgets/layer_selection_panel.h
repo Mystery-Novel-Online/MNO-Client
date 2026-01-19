@@ -28,6 +28,10 @@ public:
   LayerSelectionPanel(QWidget *parent = nullptr);
   void clear();
   void clearGlobals();
+
+  void addButtonToGrid(QWidget* button);
+  void disableLayerVariants(const QString& layerName);
+
   void addLayer(const QString& layer, const QString& toggle, LayerSelectionType type);
   void addLayer(const QString& layer, const QString& variation, bool state, LayerSelectionType type);
 
