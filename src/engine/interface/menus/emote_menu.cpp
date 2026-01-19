@@ -1,8 +1,8 @@
 #include "emote_menu.h"
 #include "engine/param/actor/actor_loader.h"
 
-static bool s_sizeDoubled = false;
-static bool s_renderSprites = false;
+bool EmoteMenu::s_sizeDoubled   = false;
+bool EmoteMenu::s_renderSprites = false;
 
 #include "engine/interface/courtroom_layout.h"
 #include "engine/param/actor_repository.h"
@@ -11,17 +11,12 @@ static bool s_renderSprites = false;
 
 using namespace engine;
 
-EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
+EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent), m_EmotionSelector(parent)
 {
-  m_EmotionSelector = parent;
+  m_presetsMenu = addMenu(tr("Offsets"));
+  p_ResetOffsetsAction = m_presetsMenu->addAction(tr("Reset (Center)"));
 
-  m_presetsMenu = new QMenu(tr("Offsets"), this);
-  p_ResetOffsetsAction = new QAction(tr("Reset (Center)"), this);
-  addMenu(m_presetsMenu);
-  m_presetsMenu->addAction(p_ResetOffsetsAction);
-
-  m_layersMenu = new QMenu(tr("Layers"), this);
-  addMenu(m_layersMenu);
+  m_layersMenu = addMenu(tr("Layers"));
   addSeparator();
 
   QMenu *buttonsMenu = addMenu(tr("Buttons"));
@@ -41,7 +36,7 @@ EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent)
 
 void EmoteMenu::EmoteChange(ActorEmote emote)
 {
-  if(m_buttonMaker == nullptr) return;
+  if(!m_buttonMaker->isVisible()) return;
   m_currentEmote = emote;
   m_buttonMaker->SetEmote(emote);
 
@@ -74,16 +69,6 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
       }
     }
   }
-}
-
-bool EmoteMenu::isRealtime()
-{
-  return s_renderSprites;
-}
-
-bool EmoteMenu::isDoubleSize()
-{
-  return s_sizeDoubled;
 }
 
 void EmoteMenu::ClearPresets()
@@ -134,16 +119,12 @@ void EmoteMenu::OnDoubleSizeTriggered()
 
 void EmoteMenu::OnRealtimeTriggered()
 {
-  if(s_renderSprites)
-  {
-    p_RenderAction->setText("Use Sprite Images");
-    s_renderSprites = false;
-  }
-  else
-  {
-    p_RenderAction->setText("Use Button Images");
-    s_renderSprites = true;
-  }
+  s_renderSprites = !s_renderSprites;
+
+  p_RenderAction->setText(
+      s_renderSprites ? tr("Use Button Images")
+                      : tr("Use Sprite Images"));
+
   m_EmotionSelector->refreshEmotes(true);
 }
 
@@ -174,15 +155,18 @@ void EmoteMenu::AddLayer(const QString &name, bool defaultValue)
 
 void EmoteMenu::ApplyPreset(const QString &presetName)
 {
-  for(rolechat::actor::ActorScalingPreset presetData : engine::actor::user::retrieve()->scalingPresets())
+  auto* user = engine::actor::user::retrieve();
+
+  for(const auto& preset : user->scalingPresets())
   {
-    if(presetData.name == presetName.toStdString())
-    {
-      courtroom::sliders::setScale(presetData.scale);
-      courtroom::sliders::setVertical(presetData.verticalAlign);
-      AOApplication::getInstance()->m_courtroom->horizontalAlign = presetData.horizontalAlign;
-      m_defaultVertical = presetData.verticalAlign;
-      m_defaultScale = presetData.scale;
-    }
+    if (preset.name != presetName.toStdString())
+      continue;
+
+    courtroom::sliders::setScale(preset.scale);
+    courtroom::sliders::setVertical(preset.verticalAlign);
+    AOApplication::getInstance()->m_courtroom->horizontalAlign = preset.horizontalAlign;
+
+    m_defaultVertical = preset.verticalAlign;
+    m_defaultScale = preset.scale;
   }
 }

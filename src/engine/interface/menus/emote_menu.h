@@ -15,8 +15,8 @@ public:
   EmoteMenu(EmotionSelector *parent = nullptr);
   void EmoteChange(ActorEmote emote);
 
-  static bool isRealtime();
-  static bool isDoubleSize();
+  static bool isRealtime() { return s_renderSprites; };
+  static bool isDoubleSize() { return s_sizeDoubled; };
 
   void ClearPresets();
   void AddPreset(const QString& name);
@@ -54,6 +54,9 @@ private:
   bool m_presetsClearedCheck = false;
   int m_defaultVertical = 0;
   int m_defaultScale = 1000;
+
+  static bool s_sizeDoubled;
+  static bool s_renderSprites;
 };
 
 #endif // EMOTE_MENU_H
