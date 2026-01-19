@@ -146,6 +146,20 @@ void LayerSelectionPanel::layerClicked(int layerId)
     data.button->setLayerImage(VariantName, VariantName, VariantName, true);
     break;
 
+  case LayerSelection_VariationGlobalBase:
+    for(int i = 0; i < m_layers.count(); i++)
+    {
+      QString name = m_layers.at(i).layerName + "_" + m_layers.at(i).variation;
+      if(m_layers.at(i).layerName == data.layerName)
+      {
+        m_layers.at(i).button->setLayerImage(name, name, name, false);
+      }
+    }
+    m_GlobalVariants[data.layerName] = data.variation;
+    data.button->setLayerImage(VariantName, VariantName, VariantName, true);
+    break;
+
+
   case LayerSelectionType_VariationBase:
     for(int i = 0; i < m_layers.count(); i++)
     {

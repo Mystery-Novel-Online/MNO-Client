@@ -63,7 +63,10 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
     else if(!layer.variationOptions.empty())
     {
       LayerSelectionType type = layer.offsetName == "base_image" ? LayerSelectionType_VariationBase : LayerSelection_Variation;
+
       type = type == LayerSelection_Variation && layer.globalSelection ? LayerSelection_VariationGlobal : type;
+      type = type == LayerSelectionType_VariationBase && layer.globalSelection ? LayerSelection_VariationGlobalBase : type;
+
       for(auto variation : layer.variationOptions)
       {
         QString variationName = QString::fromStdString(variation);

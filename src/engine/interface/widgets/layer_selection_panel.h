@@ -7,7 +7,8 @@ enum LayerSelectionType
   LayerSelection_ToggleDisabled,
   LayerSelection_Variation,
   LayerSelectionType_VariationBase,
-  LayerSelection_VariationGlobal
+  LayerSelection_VariationGlobal,
+  LayerSelection_VariationGlobalBase
 };
 
 struct LayerSelectionData
@@ -31,7 +32,7 @@ public:
   void addLayer(const QString& layer, const QString& variation, bool state, LayerSelectionType type);
 
   QString getVariant(const QString& layerName, const QString& fallback) { if(m_GlobalVariants.contains(layerName)) return m_GlobalVariants[layerName]; if(m_VariantSwitches.contains(layerName)) return m_VariantSwitches[layerName]; return fallback; };
-  QString getBaseVariant(const QString& fallback) { if(baseImage.trimmed().isEmpty()) return fallback; return baseImage;};
+  QString getBaseVariant(const QString& fallback) { if(m_GlobalVariants.contains("base_image")) return m_GlobalVariants["base_image"]; if(baseImage.trimmed().isEmpty()) return fallback; return baseImage;};
 
 public slots:
   void layerClicked(int layerId);
