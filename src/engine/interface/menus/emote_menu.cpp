@@ -13,8 +13,10 @@ using namespace engine;
 
 EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent), m_EmotionSelector(parent)
 {
-  m_presetsMenu = addMenu(tr("Offsets"));
-  p_ResetOffsetsAction = m_presetsMenu->addAction(tr("Reset (Center)"));
+  m_presetsMenu = new QMenu(tr("Offsets"), this);
+  addMenu(m_presetsMenu);
+  p_ResetOffsetsAction = new QAction(tr("Reset (Center)"), this);
+  m_presetsMenu->addAction(p_ResetOffsetsAction);
 
   m_layersMenu = addMenu(tr("Layers"));
   addSeparator();
@@ -36,9 +38,9 @@ EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent), m_EmotionSelector
 
 void EmoteMenu::EmoteChange(ActorEmote emote)
 {
-  if(!m_buttonMaker->isVisible()) return;
+  if(m_buttonMaker->isVisible()) m_buttonMaker->SetEmote(emote);
   m_currentEmote = emote;
-  m_buttonMaker->SetEmote(emote);
+
 
 
   LayerSelectionPanel *selectionPanel = static_cast<LayerSelectionPanel*>(ThemeManager::get().getWidget("layers_panel"));
