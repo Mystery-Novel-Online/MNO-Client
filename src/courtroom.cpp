@@ -173,6 +173,7 @@ void Courtroom::setup_courtroom()
 
 
   w_ViewportOverlay->raise();
+  ui_ic_chat_message_field->reloadHighlights();
 }
 
 void Courtroom::map_viewers()
