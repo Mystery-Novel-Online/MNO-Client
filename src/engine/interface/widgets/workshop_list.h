@@ -27,8 +27,6 @@ public:
   void updateFromApi(const QString& category = "browse");
   const WorkshopContentEntry getEntry(int id);
 
-  void updateSearch(QString search);
-
 signals:
   void entryClicked(int id);
   void entryRightClicked(int id);

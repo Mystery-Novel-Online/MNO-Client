@@ -50,26 +50,18 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
 void WorkshopListWidget::updateFromApi(const QString &category)
 {
   clearEntries();
-  QString workshopPath = "api/workshop";
+
+  QString path = "api/workshop";
 
   if(category == "portfolio")
-  {
-    workshopPath += "/my_uploads?key=" + ApiManager::authorizationKey();
-  }
+    path += "/my_uploads?key=" + ApiManager::authorizationKey();
   else if(category == "pending")
-  {
-    workshopPath += "/verification_queue?key=" + ApiManager::authorizationKey();
-  }
+    path += "/verification_queue?key=" + ApiManager::authorizationKey();
   else
-  {
-    workshopPath += "/" + category;
-  }
+    path += "/" + category;
 
-
-  const QString workshopUrl = ApiManager::baseUri() + workshopPath;
-  const QUrl url = QUrl(workshopUrl);
-  QNetworkRequest request(url);
-  m_netManager->get(request);
+  const QUrl url = QUrl(ApiManager::baseUri() + path);
+  m_netManager->get(QNetworkRequest(url));
 }
 
 const WorkshopContentEntry WorkshopListWidget::getEntry(int id)
@@ -78,32 +70,6 @@ const WorkshopContentEntry WorkshopListWidget::getEntry(int id)
   return {};
 }
 
-void WorkshopListWidget::updateSearch(QString search)
-{
-  QString searchProcessed = search.toLower();
-
-  for (int i = 0; i < m_layout->count(); ++i)
-  {
-    QLayoutItem *child = m_layout->itemAt(i);
-    if (!child) continue;
-
-    if (QWidget *w = child->widget())
-    {
-      if (WorkshopEntry *entry = dynamic_cast<WorkshopEntry *>(w))
-      {
-        WorkshopContentEntry entryData = getEntry(entry->id());
-        QString nameProcessed = entryData.name.toLower();
-
-        if (nameProcessed.contains(searchProcessed))
-          entry->show();
-        else
-          entry->hide();
-      }
-    }
-  }
-
-  m_layout->update();
-}
 
 void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
 {
