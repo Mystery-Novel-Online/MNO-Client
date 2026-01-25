@@ -353,10 +353,13 @@ void Courtroom::enter_courtroom(int p_cid)
   if (spectating)
   {
     ao_config->clear_showname_placeholder();
+    pLayersPanel->clear();
+    pLayersPanel->hide();
     WorkshopDiscord::getInstance().setRichPresenceStateText("Spectating");
   }
   else
   {
+    pLayersPanel->show();
     const QString l_showname = QString::fromStdString(actor->showname());
     const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
     ao_config->set_showname_placeholder(l_final_showname);
