@@ -1817,6 +1817,9 @@ void Courtroom::handle_chatmessage_3()
         int selfOffset = message::horizontalOffset();
         if(ao_app->current_theme->getEffectPairOffset(l_effect_index)) ui_vp_effect->setHorizontalOffset(selfOffset);
 
+        ui_vp_effect->clearImageLayers();
+        ui_vp_effect->setKeyframeAnimation("effects/" + l_effect_name, "anim");
+
         QString s_eff = effect_names.at(l_effect_index - 1);
         QStringList f_eff = ao_app->get_effect(l_effect_index);
 

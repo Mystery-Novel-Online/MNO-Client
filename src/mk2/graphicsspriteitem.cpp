@@ -161,6 +161,7 @@ bool GraphicsSpriteItem::setKeyframeAnimation(const QString &directory, const QS
     }
   }
 
+  m_KeyframeSequence.setRunningState(true);
   return m_KeyframeSequence.getLoopState();
 }
 
