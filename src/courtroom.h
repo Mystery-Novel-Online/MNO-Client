@@ -700,7 +700,6 @@ private:
 
   RPButton *ui_player_list_left = nullptr;
   RPButton *ui_player_list_right = nullptr;
-  RPButton *ui_area_look = nullptr;
 
   ScreenshotButton *p_ScreenshotBtn = nullptr;
 

@@ -194,7 +194,7 @@ void WorkshopDiscord::processOAuth()
   discordpp::AuthorizationArgs args{};
   args.SetClientId(APPLICATION_ID);
   args.SetScopes(discordpp::Client::GetDefaultPresenceScopes());
-  args.SetScopes(discordpp::Client::GetDefaultCommunicationScopes());
+  //args.SetScopes(discordpp::Client::GetDefaultCommunicationScopes());
   args.SetCodeChallenge(codeVerifier.Challenge());
   m_currentClient->Authorize(args, [this, codeVerifier](auto result, auto code, auto redirectUri) {
                                if (!result.Successful()) {

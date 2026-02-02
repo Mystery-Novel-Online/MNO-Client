@@ -3864,42 +3864,6 @@ void Courtroom::construct_playerlist_layout()
 
   player_columns = (( (int)((float)ui_player_list->height() * resize) - player_height) / (y_spacing + player_height)) + 1;
 
-  if(m_current_reportcard_reason != ReportCardReason::None && user::GetCharacterId() != SpectatorId)
-  {
-    m_page_player_list = 0;
-    ui_player_list_right->hide();
-    ui_player_list_left->hide();
-    DrPlayerListEntry* prompt_reason = new DrPlayerListEntry(ui_player_list, ao_app, 1, 0);
-
-    prompt_reason->show();
-
-    m_player_list.append(prompt_reason);
-    switch(m_current_reportcard_reason)
-    {
-      case ReportCardReason::Blackout:
-      prompt_reason->set_reason(localization::getText("REASON_BLACKOUT"));
-        break;
-
-      case ReportCardReason::Blinded:
-        prompt_reason->set_reason(localization::getText("REASON_BLINDED"));
-        break;
-
-      case ReportCardReason::PendingLook:
-        prompt_reason->set_reason(localization::getText("REASON_PENDING"));
-        break;
-
-      case ReportCardReason::NoPlayerList:
-        prompt_reason->set_reason(localization::getText("REASON_DISABLED"));
-        break;
-
-      default:
-        prompt_reason->set_reason("Unimplemented ReportCardReason, please make sure you're up to date.");
-        break;
-    }
-
-
-    return;
-  }
   m_page_max_player_count = qMax(1, player_columns);
 
   //Manage Arrows (Right)

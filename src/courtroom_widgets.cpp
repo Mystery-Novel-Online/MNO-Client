@@ -369,7 +369,6 @@ void Courtroom::create_widgets()
 
   ui_player_list_left = new RPButton("player_list_left", "arrow_left.png", "<-", this);
   ui_player_list_right = new RPButton("player_list_right", "arrow_right.png", "->", this);
-  ui_area_look = new RPButton("area_look", "area_look.png", localization::getText("TITLE_LOOK"), this);
   p_ScreenshotBtn = new ScreenshotButton(this, ao_app);
 
   construct_playerlist();
@@ -520,7 +519,6 @@ void Courtroom::connect_widgets()
   //Player List
   connect(ui_player_list_left, SIGNAL(clicked()), this, SLOT(on_player_list_left_clicked()));
   connect(ui_player_list_right, SIGNAL(clicked()), this, SLOT(on_player_list_right_clicked()));
-  connect(ui_area_look, SIGNAL(clicked()), this, SLOT(on_area_look_clicked()));
 
 }
 
@@ -684,7 +682,6 @@ void Courtroom::reset_widget_names()
       {"player_list", ui_player_list},
       {"player_list_left", ui_player_list_left},
       {"player_list_right", ui_player_list_right},
-      {"area_look", ui_area_look},
       {"area_desc", ui_area_desc},
       {"pair_offset", ui_slider_horizontal_axis},
       {"vertical_offset", ui_slider_vertical_axis},
