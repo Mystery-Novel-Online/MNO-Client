@@ -160,21 +160,6 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
 
               if (m_filesDownloaded == m_totalFiles) {
 
-                if(createContext)
-                {
-                  QString contentFilePath = fs::characters::getFilePath(m_contentName, "CONTENT.txt");
-                  QFile contentFile(contentFilePath);
-                  if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))
-                  {
-                    QUrl url(repositoryUrl);
-                    url.setQuery(QString());
-
-                    QTextStream out(&contentFile);
-                    out << url.toString();
-                    contentFile.close();
-                  }
-                }
-
                 FS::Packages::Scan();
 
                 QMessageBox::information(this, "Download Complete", "All files downloaded successfully!");
