@@ -3223,6 +3223,7 @@ void Courtroom::onOutfitChanged(int outfitIndex)
   if(outfitIndex == -1) return;
   int trueOutfitIndex = outfitIndex -1;
   if(engine::actor::user::retrieve() == nullptr) return;
+  pLayersPanel->clearGlobals();
   if(trueOutfitIndex == -1)
   {
     engine::actor::user::retrieve()->switchOutfit("<All>");
