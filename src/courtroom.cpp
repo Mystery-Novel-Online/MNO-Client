@@ -765,45 +765,6 @@ void Courtroom::list_areas()
   ui_area_list->filterList(ui_area_search->text());
 }
 
-void Courtroom::list_note_files()
-{
-  QString f_config = FS::Paths::BasePath() + CONFIG_FILESABSTRACT_INI;
-  QFile f_file(f_config);
-  if (!f_file.open(QIODevice::ReadOnly))
-  {
-    qDebug() << "Couldn't open" << f_config;
-    return;
-  }
-
-  QString f_filestring = "";
-  QString f_filename = "";
-
-  QTextStream in(&f_file);
-
-  QVBoxLayout *f_layout = ui_note_area->m_layout;
-
-  while (!in.atEnd())
-  {
-    QString line = in.readLine().trimmed();
-
-    QStringList f_contents = line.split("=");
-    if (f_contents.size() < 2)
-      continue;
-
-    int f_index = f_contents.at(0).toInt();
-    f_filestring = f_filename = f_contents.at(1).trimmed();
-
-    if (f_contents.size() > 2)
-      f_filename = f_contents.at(2).trimmed();
-
-    while (f_index >= f_layout->count())
-      on_add_button_clicked();
-
-    AONotePicker *f_notepicker = static_cast<AONotePicker *>(f_layout->itemAt(f_index)->widget());
-    f_notepicker->ui_line->setText(f_filename);
-    f_notepicker->m_file = f_filestring;
-  }
-}
 
 QString Courtroom::get_current_position()
 {
@@ -812,25 +773,6 @@ QString Courtroom::get_current_position()
     return QString::fromStdString(engine::actor::user::retrieve()->side());
   }
   return ui_pos_dropdown->currentData(Qt::UserRole).toString();
-}
-
-void Courtroom::load_note()
-{
-  // Do not attempt to load anything if no file was chosen. This makes it so
-  // that notepad text is kept in client if the user has decided not to choose a
-  // file to save to. Of course, this is ephimeral storage, it will be erased
-  // after the client closes or when the user decides to load a file.
-  if (current_file.isEmpty())
-    return;
-  QString f_text = ao_app->read_note(current_file);
-  ui_vp_notepad->setText(f_text);
-}
-
-void Courtroom::save_note()
-{
-  QString f_text = ui_vp_notepad->toPlainText();
-
-  ao_app->write_note(f_text, current_file);
 }
 
 void Courtroom::save_textlog(QString p_text)
@@ -3599,31 +3541,6 @@ bool Courtroom::ui_in_current_toggle(QString p_ui_name)
   return true;
 }
 
-void Courtroom::on_note_button_clicked()
-{
-  if (!is_note_shown)
-  {
-    load_note();
-    ui_vp_notepad_image->show();
-    ui_vp_notepad->show();
-    ui_vp_notepad->setFocus();
-    is_note_shown = true;
-  }
-  else
-  {
-    save_note();
-    ui_vp_notepad_image->hide();
-    ui_vp_notepad->hide();
-    ui_ic_chat_message_field->setFocus();
-    is_note_shown = false;
-  }
-}
-
-void Courtroom::on_note_text_changed()
-{
-  ao_app->write_note(ui_vp_notepad->toPlainText(), current_file);
-}
-
 void Courtroom::ping_server()
 {
   ao_app->send_server_packet(DRPacket("CH", {QString::number(user::GetCharacterId())}));
@@ -3789,14 +3706,6 @@ void Courtroom::moveEvent(QMoveEvent *event)
     QPoint pos = event->pos();
     LuaBridge::LuaEventCall("OnWindowMoved", pos.x(), pos.y());
   }
-}
-
-void Courtroom::on_set_notes_clicked()
-{
-  if (ui_note_scroll_area->isHidden())
-    ui_note_scroll_area->show();
-  else
-    ui_note_scroll_area->hide();
 }
 
 void Courtroom::resume_timer(int p_id)

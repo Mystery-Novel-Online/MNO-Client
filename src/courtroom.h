@@ -224,9 +224,6 @@ public:
   void list_music();
   void list_areas();
 
-  void list_note_files();
-  void set_note_files();
-
   void set_shouts();
 
   void set_effects();
@@ -350,15 +347,12 @@ private:
   bool is_first_showname_sent = false;
   bool is_next_showname_ignored = false;
   bool is_rainbow_enabled = false;
-  bool is_note_shown = false;
   bool contains_add_button = false;
 
 
   LayerSelectionPanel *pLayersPanel = nullptr;
   ChoiceDialog *pNotifyPopup = nullptr;
 
-  //////////////
-  QScrollArea *ui_note_scroll_area = nullptr;
 
   // delay before sfx plays
   QTimer *m_sound_timer = nullptr;
@@ -476,18 +470,12 @@ private:
   DRSceneMovie *ui_vp_desk = nullptr;
   DRSceneMovie *ui_vp_weather = nullptr;
 
-  AONoteArea *ui_note_area = nullptr;
-
 
   ViewportOverlay *w_ViewportOverlay = nullptr;
 
   RPSlider *ui_slider_horizontal_axis = nullptr;
   RPSlider *ui_slider_vertical_axis = nullptr;
   RPSlider *ui_slider_scale = nullptr;
-
-
-  AOImageDisplay *ui_vp_notepad_image = nullptr;
-  RPTextEdit *ui_vp_notepad = nullptr;
 
   DRStickerViewer *ui_vp_chatbox = nullptr;
   RPTextEdit *ui_vp_showname = nullptr;
@@ -639,8 +627,6 @@ private:
 
   RPButton *ui_config_panel = nullptr;
 
-  RPButton *ui_set_notes = nullptr;
-
   QCheckBox *ui_pre = nullptr;
   QCheckBox *ui_flip = nullptr;
   QCheckBox *ui_hide_character = nullptr;
@@ -660,8 +646,6 @@ private:
   RPButton *ui_prosecution_minus = nullptr;
 
   QComboBox *ui_text_color = nullptr;
-
-  RPButton *ui_note_button = nullptr;
 
   AOImageDisplay *ui_char_select_background = nullptr;
 
@@ -741,8 +725,6 @@ private:
 
   QString get_current_position();
 
-  void load_note();
-  void save_note();
   void save_textlog(QString p_text);
 
 
@@ -836,12 +818,6 @@ private slots:
   void cycle_effect(int p_delta);
   void cycle_wtce(int p_delta);
 
-  void on_add_button_clicked();
-  void on_delete_button_clicked();
-
-  void on_set_file_button_clicked();
-  void on_file_selected();
-
   void delete_widget(QWidget *p_widget);
   void load_shouts();
   void load_effects();
@@ -874,16 +850,11 @@ private slots:
   void on_switch_area_music_clicked();
 
   void on_config_panel_clicked();
-  void on_note_button_clicked();
 
   //toggles
 
   void switchToggle(QString t_tabName);
   bool ui_in_current_toggle(QString p_ui_name);
-
-  void on_set_notes_clicked();
-
-  void on_note_text_changed();
 
   void on_pre_clicked();
   void on_flip_clicked();

@@ -96,9 +96,6 @@ public:
   ////// Functions for reading and writing files //////
   // Implementations file_functions.cpp
 
-  // Returns text from note file
-  QString read_note(QString filename);
-
   // returns a list of call words
   QStringList get_callwords();
 

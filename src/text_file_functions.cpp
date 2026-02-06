@@ -11,22 +11,6 @@ QStringList AOApplication::get_callwords()
   return ao_config->callwords().split(" ", DR::SplitBehavior::SkipEmptyParts);
 }
 
-QString AOApplication::read_note(QString filename)
-{
-  QFile note_txt(filename);
-
-  if (!note_txt.open(QIODevice::ReadOnly | QFile::Text))
-  {
-    qDebug() << "Couldn't open" << filename;
-    return "";
-  }
-
-  QTextStream in(&note_txt);
-  QString text = in.readAll();
-  note_txt.close();
-  return text;
-}
-
 void AOApplication::write_note(QString p_text, QString p_file)
 {
   QFile f_log(p_file);

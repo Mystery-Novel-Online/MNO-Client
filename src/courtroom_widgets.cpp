@@ -236,10 +236,6 @@ void Courtroom::create_widgets()
   ui_ic_chat_showname->setText(ao_config->showname());
   ui_ic_chat_showname->setFrame(false);
 
-  ui_note_area = new AONoteArea(this, ao_app);
-  ui_note_area->add_button = new RPButton(ui_note_area);
-  ui_note_area->m_layout = new QVBoxLayout(ui_note_area);
-
   ui_slider_horizontal_axis = new RPSlider(Qt::Horizontal, this);
   ui_slider_horizontal_axis->setMinimum(1);
   ui_slider_horizontal_axis->setMaximum(1000);
@@ -258,13 +254,6 @@ void Courtroom::create_widgets()
   pLayersPanel = new LayerSelectionPanel(this);
 
   NotifyManager::get().ThemeSetupPopup(pNotifyPopup);
-
-  ui_note_scroll_area = new QScrollArea(this);
-  ui_note_scroll_area->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  ui_note_scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  ui_note_scroll_area->setWidgetResizable(true);
-
-  ui_set_notes = new RPButton(this);
 
   construct_emotes();
 
@@ -297,7 +286,6 @@ void Courtroom::create_widgets()
   ui_switch_area_music = new RPButton("switch_area_music", "switch_area_music.png", "A/M", this);
 
   ui_config_panel = new RPButton("config_panel", "config_panel.png", "Config", this);
-  ui_note_button = new RPButton("note_button", "notebutton.png", "Notes", this);
 
 
   ui_label_images.resize(label_images.size());
@@ -357,11 +345,6 @@ void Courtroom::create_widgets()
 
   ui_chat_type_dropdown = setupComboBoxWidget(l_chatTypes, "chat_type", "[CHAT TYPE]");
   wOutfitDropdown = setupComboBoxWidget({}, "outfit_selector", "[OUTFIT SELECTION]");
-
-
-  ui_vp_notepad_image = new AOImageDisplay(this, ao_app);
-  ui_vp_notepad = new RPTextEdit("notepad", this);
-  ui_vp_notepad->setFrameStyle(QFrame::NoFrame);
 
   ui_timers.resize(1);
   ui_timers[0] = new AOTimer("timer", this);
@@ -482,9 +465,6 @@ void Courtroom::connect_widgets()
   connect(ui_switch_area_music, SIGNAL(clicked()), this, SLOT(on_switch_area_music_clicked()));
 
   connect(ui_config_panel, SIGNAL(clicked()), this, SLOT(on_config_panel_clicked()));
-  connect(ui_note_button, SIGNAL(clicked()), this, SLOT(on_note_button_clicked()));
-
-  connect(ui_vp_notepad, SIGNAL(textChanged()), this, SLOT(on_note_text_changed()));
 
   connect(ui_pre, SIGNAL(clicked()), this, SLOT(on_pre_clicked()));
   connect(ui_flip, SIGNAL(clicked()), this, SLOT(on_flip_clicked()));
@@ -504,9 +484,6 @@ void Courtroom::connect_widgets()
   connect(ui_slider_horizontal_axis, SIGNAL(valueChanged(int)), this, SLOT(OnPlayerOffsetsChanged(int)));
   connect(ui_slider_vertical_axis, SIGNAL(valueChanged(int)), this, SLOT(OnPlayerOffsetsChanged(int)));
   connect(ui_slider_scale, SIGNAL(valueChanged(int)), this, SLOT(OnPlayerOffsetsChanged(int)));
-
-  connect(ui_note_area->add_button, SIGNAL(clicked(bool)), this, SLOT(on_add_button_clicked()));
-  connect(ui_set_notes, SIGNAL(clicked(bool)), this, SLOT(on_set_notes_clicked()));
 
   // performance
   connect(ao_config, SIGNAL(sprite_caching_toggled(int, bool)), this, SLOT(assign_readers_for_viewers(int, bool)));
@@ -628,11 +605,8 @@ void Courtroom::reset_widget_names()
       // ui_muted
       {"ooc_chat_message", ui_ooc_chat_message},
       {"ooc_chat_name", ui_ooc_chat_name},
-      {"note_scroll_area", ui_note_scroll_area},
-      {"note_area", ui_note_area},
       // add_button
       // m_layout
-      {"set_notes_button", ui_set_notes},
       {"emotes", ui_emotes},
       {"emote_left", ui_emote_left},
       {"emote_right", ui_emote_right},
@@ -655,7 +629,6 @@ void Courtroom::reset_widget_names()
       {"call_mod", ui_call_mod},
       {"switch_area_music", ui_switch_area_music},
       {"config_panel", ui_config_panel},
-      {"note_button", ui_note_button},
       // Each ui_label_images[i]
       {"pre", ui_pre},
       {"flip", ui_flip},
@@ -666,8 +639,6 @@ void Courtroom::reset_widget_names()
       {"prosecution_minus", ui_prosecution_minus},
       {"text_color", ui_text_color},
       {"chat_type", ui_chat_type_dropdown},
-      {"notepad_image", ui_vp_notepad_image},
-      {"notepad", ui_vp_notepad},
       // Each ui_timers[i]
       {"char_select", ui_char_select_background},
       {"back_to_lobby", ui_back_to_lobby},
@@ -950,8 +921,6 @@ void Courtroom::set_widgets()
   setupWidgetElement(ui_viewport, "viewport");
   setupWidgetElement(SceneManager::get().GetTransition(), "viewport");
   SceneManager::get().GetTransition()->move(0,0);
-  setupWidgetElement(ui_vp_notepad_image, "notepad_image", "notepad_image.png", false);
-  setupWidgetElement(ui_vp_notepad, "notepad", "", Qt::TextEditable, false);
   setupWidgetElement(ui_vp_showname, "showname");
   setupWidgetElement(ui_vp_showname_image, "showname_image");
 
@@ -987,9 +956,6 @@ void Courtroom::set_widgets()
     {ui_slider_horizontal_axis, "pair_offset"},
     {ui_slider_vertical_axis, "vertical_offset"},
     {ui_slider_scale, "scale_offset"},
-    {ui_set_notes, "set_notes_button"},
-    {ui_note_area, "note_area"},
-    {ui_note_scroll_area, "note_area"},
     {ui_player_list, "player_list"},
     {ui_bgm_filter, "category_dropdown"},
     {ui_pos_dropdown, "pos_dropdown"},
@@ -1246,50 +1212,10 @@ void Courtroom::set_widgets()
     }
   }
 
-
-
-
   ui_char_button_selector->set_theme_image("char_selector.png");
   ui_char_button_selector->hide();
 
-
-
   update_music_text_anim();
-
-
-
-
-  ui_set_notes->set_image("set_notes.png");
-  ui_note_area->m_layout->setSpacing(10);
-
-  ui_note_scroll_area->setWidget(ui_note_area);
-
-  ui_note_area->set_theme_image("note_area.png");
-  ui_note_area->add_button->set_image("add_button.png");
-  ui_note_area->add_button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-  ui_note_area->setLayout(ui_note_area->m_layout);
-  ui_note_area->show();
-  ui_note_scroll_area->hide();
-
-
-  list_note_files();
-
-  if (!contains_add_button)
-  {
-    ui_note_area->m_layout->addWidget(ui_note_area->add_button);
-    contains_add_button = true;
-  }
-
-  // This is used to force already existing notepicker elements to reset their image and theme setting
-  for (AONotePicker *notepicker : ui_note_area->findChildren<AONotePicker *>())
-  {
-    for (RPButton *button : notepicker->findChildren<RPButton *>())
-    {
-      button->refresh_image();
-    }
-    QLineEdit *f_line = notepicker->findChild<QLineEdit *>();
-    set_stylesheet(f_line, "[LINE EDIT]", COURTROOM_STYLESHEETS_CSS, ao_app);
-  }
 
   adapt_numbered_items(ui_timers, "timer_number", "timer");
   set_fonts();
@@ -1697,8 +1623,6 @@ void Courtroom::set_fonts()
 
   set_drtextedit_font(ui_vp_music_name, "music_name", COURTROOM_FONTS_INI, ao_app);
   ui_vp_music_name->setPlainText(ui_vp_music_name->toPlainText());
-  set_drtextedit_font(ui_vp_notepad, "notepad", COURTROOM_FONTS_INI, ao_app);
-  ui_vp_notepad->setPlainText(ui_vp_notepad->toPlainText());
 
   for (int i = 0; i < ui_timers.length(); ++i)
   {
