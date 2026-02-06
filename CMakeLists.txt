@@ -32,8 +32,8 @@ set(HEADERS
   src/engine/interface/widgets/emotion_button.h
   src/engine/interface/widgets/health_bar.h
   src/engine/interface/widgets/image_display.h
-  src/engine/interface/widgets/note_area.h
-  src/engine/interface/widgets/note_picker.h
+
+
   src/engine/interface/widgets/player_list_slot.h
   src/engine/interface/widgets/rp_button.h
   src/engine/interface/widgets/rp_combo_box.h
@@ -164,8 +164,8 @@ set(SOURCES
   src/engine/interface/widgets/emotion_button.cpp
   src/engine/interface/widgets/health_bar.cpp
   src/engine/interface/widgets/image_display.cpp
-  src/engine/interface/widgets/note_area.cpp
-  src/engine/interface/widgets/note_picker.cpp
+
+
   src/engine/interface/widgets/player_list_slot.cpp
   src/engine/interface/widgets/rp_button.cpp
   src/engine/interface/widgets/rp_combo_box.cpp

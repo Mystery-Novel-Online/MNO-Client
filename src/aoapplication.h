@@ -105,9 +105,6 @@ public:
   // TODO document what this does
   QStringList get_sfx_list();
 
-  // Writes to note file
-  void write_note(QString p_text, QString filename);
-
   // appends to note file
   void append_note(QString p_line, QString filename);
 

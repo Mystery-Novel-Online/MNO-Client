@@ -27,8 +27,6 @@ class AOImageDisplay;
 class RPLabel;
 class AOMovie;
 class AOMusicPlayer;
-class AONoteArea;
-class AONotepad;
 class AOSfxPlayer;
 class AOShoutPlayer;
 class AOSystemPlayer;

@@ -118,8 +118,6 @@ using ThemeHighlight = rolechat::theme::ThemeHighlight;
 #include "engine/interface/widgets/rp_label.h"
 #include "engine/interface/widgets/chat_log.h"
 #include "engine/interface/widgets/image_display.h"
-#include "engine/interface/widgets/note_area.h"
-#include "engine/interface/widgets/note_picker.h"
 #include "engine/interface/widgets/rp_button.h"
 #include "engine/interface/widgets/player_list_slot.h"
 #include "engine/interface/widgets/rp_combo_box.h"

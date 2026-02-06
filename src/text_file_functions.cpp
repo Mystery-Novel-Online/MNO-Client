@@ -11,20 +11,6 @@ QStringList AOApplication::get_callwords()
   return ao_config->callwords().split(" ", DR::SplitBehavior::SkipEmptyParts);
 }
 
-void AOApplication::write_note(QString p_text, QString p_file)
-{
-  QFile f_log(p_file);
-  if (f_log.open(QIODevice::WriteOnly | QFile::Text))
-  {
-    QTextStream out(&f_log);
-
-    out << p_text;
-
-    f_log.flush();
-    f_log.close();
-  }
-}
-
 void AOApplication::append_note(QString p_line, QString p_file)
 {
   QFile f_log(p_file);
