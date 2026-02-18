@@ -3208,6 +3208,8 @@ void Courtroom::onOutfitChanged(int outfitIndex)
   if(network::metadata::VNServerInformation::featureSupported("mnn_init")) l_content.append(QString::number(GetDB()->workshopUpdateTime(l_chr_name.toStdString())));
 
   ao_app->send_server_packet(DRPacket("chrini", l_content));
+
+  on_pos_dropdown_changed();
 }
 
 /**
