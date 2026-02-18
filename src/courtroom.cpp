@@ -836,26 +836,28 @@ void Courtroom::OnPlayerOffsetsChanged(int value)
   bool intParse = false;
   int speakerClientId = m_chatmessage[CMClientId].toInt(&intParse);
 
-  DRCharacterMovie* targetCharacter = nullptr;
+  std::optional<DRCharacterMovie*> target;
   rolechat::actor::ActorScalingMode targetScaling = rolechat::actor::ActorScalingMode::AutomaticScaling;
 
   if(user::getClientId() == speakerClientId)
   {
     if(message::recentMessage().characterFolder != engine::actor::user::name()) return;
-    targetCharacter = ui_vp_player_char;
+    target.emplace(ui_vp_player_char);
     if(m_SpeakerActor != nullptr)
       targetScaling = m_SpeakerActor->scalingMode();
   }
   if(speakerClientId == user::partner::clientId())
   {
     if(message::pair::getCharacter() != engine::actor::user::name()) return;
-    targetCharacter = ui_vp_player_pair;
+    target.emplace(ui_vp_player_pair);
     if(m_PairActor != nullptr)
       targetScaling = m_PairActor->scalingMode();
   }
 
   double playerScale = (double)ui_slider_scale->value() / 1000.0f;
-  if(targetCharacter == nullptr) return;
+  if(!target.has_value()) return;
+
+  DRCharacterMovie* targetCharacter = target.value();
 
   targetCharacter->setVerticalOffset(ui_slider_vertical_axis->value());
 
@@ -2247,6 +2249,22 @@ void Courtroom::next_chat_letter()
 
   int message_length = f_message.length();
 
+  QTextCharFormat vp_message_format = ui_vp_message->currentCharFormat();
+
+  static std::optional<double> tagScaleOverride;
+  static std::optional<QColor> tagColourOveride;
+  static qreal m_baseFontSize = 0.0;
+  if(m_tick_step == 0)
+  {
+    m_baseFontSize = getMessageFontStruct("message", "").size;
+    tagScaleOverride.reset();
+    tagColourOveride.reset();
+
+    QFont f = vp_message_format.font();
+    f.setPointSizeF(m_baseFontSize);
+    vp_message_format.setFont(f);
+  }
+
   QVector<IncomingTagData> unprocessedTags = {};
   for(IncomingTagData tag : m_ProcessedTags)
   {
@@ -2294,6 +2312,14 @@ void Courtroom::next_chat_letter()
         ui_vp_player_char->setCharacterAnimation(tag.variables.at(1).toString(), m_chatmessage[CMChrName]);
         break;
 
+      case TagType_Size:
+        tagScaleOverride.emplace(tag.variables.at(1).toDouble());
+        break;
+      case TagType_Color:
+        tagColourOveride.emplace(QColor((tag.variables.at(1).toString())));
+        break;
+
+
       default:
         break;
       }
@@ -2313,28 +2339,51 @@ void Courtroom::next_chat_letter()
 
   // note: this is called fairly often(every 60 ms when char is talking)
   // do not perform heavy operations here
-  QTextCharFormat vp_message_format = ui_vp_message->currentCharFormat();
   vp_message_format.setTextOutline(m_chatbox_message_outline ? QPen(m_messageOutlineColor, m_messageOutlineSize) : Qt::NoPen);
 
   QTextCursor cursor2 = ui_ic_chatlog->textCursor();
 
   auto insertChar = [&](QChar ch, QTextCharFormat format) {
-    ui_vp_message->textCursor().insertText(ch, format);
+
+    // ---- Viewport Message
+    QTextCharFormat messageFormat = format;
+
+    if (tagScaleOverride.has_value()) {
+      QFont f = messageFormat.font();
+      f.setPointSizeF(m_baseFontSize * tagScaleOverride.value());
+      messageFormat.setFont(f);
+    }
+
+    QTextCursor messageCursor = ui_vp_message->textCursor();
+    messageCursor.insertText(ch, messageFormat);
+
     LuaBridge::LuaEventCall("OnMessageTick", QString(ch).toStdString());
 
+    // ---- Chatlog
+    // -------- Scrollbar
     QScrollBar *l_scrollbar = ui_ic_chatlog->verticalScrollBar();
     const int l_scroll_pos = l_scrollbar->value();
     bool l_scroll_limt = l_scroll_pos == l_scrollbar->maximum();
+
     if(ao_config->log_is_topdown_enabled())
     {
       cursor2.setPosition(m_iclog_cursor_position);
       ui_ic_chatlog->setTextCursor(cursor2);
+
+
+      QTextCharFormat logFormat;
+      QFont logFont = ui_ic_chatlog->font();
+      logFormat.setFont(logFont);
+
+      logFormat.setForeground(format.foreground());
+      logFormat.setTextOutline(Qt::NoPen);
+
       if(format.foreground().color() == m_message_color)
       {
         engine::system::theme::setChatlogColour("message", format);
       }
-      format.setTextOutline(Qt::NoPen);
-      cursor2.insertText(ch, format);
+
+      cursor2.insertText(ch, logFormat);
       m_iclog_cursor_position += 1;
 
 
@@ -2453,8 +2502,13 @@ void Courtroom::next_chat_letter()
       }
     }
 
-    QColor text_color = m_message_color_name.isEmpty() ? m_message_color : QColor(m_message_color_name);
-    vp_message_format.setForeground(text_color);
+    if(tagColourOveride.has_value())
+      vp_message_format.setForeground(tagColourOveride.value());
+    else
+    {
+      QColor text_color = m_message_color_name.isEmpty() ? m_message_color : QColor(m_message_color_name);
+      vp_message_format.setForeground(text_color);
+    }
 
     QString m_future_string_color = m_message_color_name;
 
@@ -2754,7 +2808,7 @@ void Courtroom::on_ooc_message_return_pressed()
     is_rainbow_enabled = true;
     return;
   }
-  if (l_message.startsWith("/area_list"))
+  if (l_message.startsWith("/area_list") && !l_message.contains(" "))
   {
     ui_ooc_chat_message->clear();
     QString file = QFileDialog::getOpenFileName(this, "Select YAML File", "", "YAML Files (*.yaml)");

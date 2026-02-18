@@ -21,7 +21,8 @@ enum MessageTagType
   TagType_Hide,
   TagType_NewLine,
   TagType_Color,
-  TagType_Layer
+  TagType_Size,
+  TagType_Layer,
 };
 
 struct ThemeMessageHighlight

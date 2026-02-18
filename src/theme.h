@@ -17,6 +17,8 @@ void set_drtextedit_font(RPTextEdit *widget, QString identifier, QString ini_fil
 void setThemeFont(QWidget *widget, const widgetFontStruct& font_data);
 void setShownameFont(RPTextEdit *widget, QString identifier, QString align);
 
+widgetFontStruct getMessageFontStruct( QString identifier, QString align);
+
 bool set_stylesheet(QWidget *widget, QString identifier, QString ini_file, AOApplication *ao_app);
 void center_widget_to_screen(QWidget *widget);
 void set_sticker_play_once(DRStickerViewer *sticker, QString identifier, QString ini_file, AOApplication *ao_app);

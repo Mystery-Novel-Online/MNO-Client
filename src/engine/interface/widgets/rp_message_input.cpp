@@ -290,6 +290,8 @@ void RPMessageInput::handleTextChanged()
       else if (tagTypeStr == "music" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_MusicChange; }
       else if (tagTypeStr == "sfx" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_SoundEffect; }
       else if (tagTypeStr == "anim" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_PlaySequence; }
+      else if (tagTypeStr == "highlight" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_Color; }
+      else if (tagTypeStr == "size" && parts.count() == 1) { args.append(parts[0].toDouble()); tagType = TagType_Size; }
       else removeData = false;
 
       if (removeData) {

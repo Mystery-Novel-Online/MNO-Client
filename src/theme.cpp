@@ -231,3 +231,10 @@ void setThemeFont(QWidget *widget, const widgetFontStruct& font_data)
                                "}";
   widget->setStyleSheet(style_sheet_string);
 }
+
+widgetFontStruct getMessageFontStruct(QString identifier, QString align)
+{
+  widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontDataPairing(identifier, align);
+  fontData.size = static_cast<int>(fontData.size * ThemeManager::get().getResize());
+  return fontData;
+}
