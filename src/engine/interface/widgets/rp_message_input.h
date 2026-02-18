@@ -98,6 +98,14 @@ protected:
               output += "<anim:"+ tagArguments.at(1).toString() +">";
               break;
 
+            case TagType_Color:
+              output += "<highlight:"+ tagArguments.at(1).toString() +">";
+              break;
+
+            case TagType_Size:
+              output += "<size:"+ QString::number(tagArguments.at(1).toDouble()) +">";
+              break;
+
           default:
             break;
           }
