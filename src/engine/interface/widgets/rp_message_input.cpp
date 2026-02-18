@@ -268,6 +268,16 @@ void RPMessageInput::handleTextChanged()
 
   int i = 0;
   while (i < plain.length()) {
+    if(plain[i] == '\n')
+    {
+      QTextCursor removeCursor(document());
+      removeCursor.setPosition(i + 1);
+      removeCursor.setPosition(i, QTextCursor::KeepAnchor);
+      removeCursor.removeSelectedText();
+      plain = toPlainText();
+      i++;
+      continue;
+    }
     if (plain[i] == '<') {
       int end = plain.indexOf('>', i);
       if (end == -1)
