@@ -75,7 +75,7 @@ void ConfigTabTheme::refreshGamemodeList()
     }
 
 
-    if (optionalGamemodeIndex.has_value()){}
+    if (optionalGamemodeIndex.has_value())
       ui->current_gamemode_dropdown->setCurrentIndex(*optionalGamemodeIndex);
   }
   refreshTimeofDayList();
@@ -144,6 +144,7 @@ void ConfigTabTheme::on_theme_switch_button_clicked()
   ThemeManager::get().toggleReload();
   config::ConfigUserSettings::setString("theme", ui->current_theme_dropdown->currentText().toStdString());
   updateControls();
+  refreshGamemodeList();
 
   emit reloadTheme();
 }
