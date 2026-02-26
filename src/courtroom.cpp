@@ -1970,7 +1970,7 @@ void Courtroom::update_ic_log(bool p_reset_log)
   while (!m_ic_record_queue.isEmpty())
   {
     const DRChatRecord l_record = m_ic_record_queue.takeFirst();
-    bool hideMessage = l_record.is_typed() && m_ic_record_queue.isEmpty();
+    bool hideMessage = l_record.is_typed() && !p_reset_log;
     m_ic_record_list.append(l_record);
 
     if (!ao_config->log_display_empty_messages_enabled() && l_record.get_message().trimmed().isEmpty())
