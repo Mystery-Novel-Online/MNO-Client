@@ -2808,7 +2808,7 @@ void Courtroom::on_ooc_message_return_pressed()
     is_rainbow_enabled = true;
     return;
   }
-  if (l_message.startsWith("/dj_list") && !l_message.contains(" "))
+  if (l_message == "/dj_list" && !l_message.contains(" "))
   {
     ui_ooc_chat_message->clear();
     QString file = QFileDialog::getOpenFileName(this, "Select YAML File", "", "YAML Files (*.yaml)");
@@ -2839,7 +2839,7 @@ void Courtroom::on_ooc_message_return_pressed()
 
     return;
   }
-  if (l_message.startsWith("/area_list") && !l_message.contains(" "))
+  if (l_message == "/area_list" && !l_message.contains(" "))
   {
     ui_ooc_chat_message->clear();
     QString file = QFileDialog::getOpenFileName(this, "Select YAML File", "", "YAML Files (*.yaml)");
