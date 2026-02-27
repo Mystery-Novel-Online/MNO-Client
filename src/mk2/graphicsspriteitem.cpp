@@ -325,39 +325,19 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &characterName, con
 
   QRectF rect = QRectF(layerStrings[2].toInt(), layerStrings[3].toInt(), layerStrings[4].toInt(), layerStrings[5].toInt());
 
-  QString path = QFileInfo(emoteName).path();
-  if (!path.isEmpty()) path += "/";
+  CharaSpriteMetadata metadata = {characterName, emoteName, outfitName};
+  metadata.processLayerStrings(layerStrings);
 
+  QString idleAsset = "";
+  QString talkAsset = "";
 
-  const QString basePath = "characters/" + characterName + "/";
-  const QString outfitPath = basePath + "outfits/" + outfitName + "/";
-  const QString subfolder = layerStrings[6];
-  const QString layerName = layerStrings[0];
+  metadata.findAssets(idleAsset, talkAsset);
 
-  auto buildPaths = [&](const QString &prefix) -> QStringList {
-    return {
-      basePath + path + prefix,
-      basePath + path + subfolder + "/" + prefix,
-      outfitPath + prefix,
-      outfitPath + subfolder + "/" + prefix,
-      basePath + prefix,
-      basePath + subfolder + "/" + prefix
-    };
-  };
-
-  QStringList filePaths = buildPaths(layerName);
-  QString filePath = FS::Paths::FindFile(filePaths, true, FS::Formats::SupportedImages());
-  if(filePath.isEmpty()) filePath = fs::characters::getSpritePathIdle(characterName, layerName);
-
-  stateSprites[ViewportCharacterIdle]->set_file_name(filePath);
-
-  QString prefixedName = "(b)" + layerName;
-  QStringList prefixedFilePaths = buildPaths(prefixedName);
-  QString talkingFilePath = FS::Paths::FindFile(prefixedFilePaths, true, FS::Formats::SupportedImages());
-  stateSprites[ViewportCharacterTalk]->set_file_name(talkingFilePath.isEmpty() ? filePath : talkingFilePath);
+  stateSprites[ViewportCharacterIdle]->set_file_name(idleAsset);
+  stateSprites[ViewportCharacterTalk]->set_file_name(talkAsset);
 
   SpriteLayer *layer = new SpriteLayer(stateSprites, rect, m_spriteState);
-  layer->setName(layerName);
+  layer->setMetadata(metadata);
   layer->setDetatch(false);
 
   layer->setLayerPositioning(layerStrings[1].toLower());
@@ -388,7 +368,9 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &imageName, const Q
   }
 
   SpriteLayer *layer = new SpriteLayer(imageName, rect);
-  layer->setName(layerName);
+  CharaSpriteMetadata metadata;
+  metadata.layerName = layerName;
+  layer->setMetadata(metadata);
   layer->setDetatch(detatched);
 
   if(imageOrder.toLower() == "below"  || imageOrder.toLower() == "behind" || imageOrder.toLower() == "beneath")
@@ -419,7 +401,9 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const ActorLayer &layer, const QS
   }
 
   SpriteLayer *layerData = new SpriteLayer(imagePath, targetRect);
-  layerData->setName(QString::fromStdString(layer.offsetName));
+  CharaSpriteMetadata metadata;
+  metadata.layerName = QString::fromStdString(layer.offsetName);
+  layerData->setMetadata(metadata);
   layerData->setDetatch(layer.detachLayer);
 
   static const QMap<QString, QPainter::CompositionMode> compositionTable
@@ -478,6 +462,14 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const ActorLayer &layer, const QS
   update();
   return layerData;
 }
+
+void GraphicsSpriteItem::updateLayer(const QString &name, const QString &updatedImage)
+{
+  m_player->updateLayer(name, updatedImage);
+  m_player->start();
+  setLayerState(m_spriteState);
+}
+
 
 void GraphicsSpriteItem::clearImageLayers()
 {
@@ -758,17 +750,12 @@ void SpriteLayer::start(double scale)
 
 const QString &SpriteLayer::name()
 {
-  return m_name;
+  return m_Metadata.layerName;
 }
 
 const QString &SpriteLayer::layerPosition()
 {
   return m_layerPosition;
-}
-
-void SpriteLayer::setName(const QString &name)
-{
-  m_name = name;
 }
 
 void SpriteLayer::setLayerPositioning(const QString &name)
@@ -809,11 +796,33 @@ void SpriteLayer::setCompositionMode(QPainter::CompositionMode mode)
   m_compositionMode = mode;
 }
 
+void SpriteLayer::setStateFilename(const QString &name)
+{
+  QString idle = "";
+  QString talk = "";
+
+  m_Metadata.findAssets(idle, talk, name);
+
+  if(m_readerMapping.contains(ViewportCharacterIdle))
+    m_readerMapping[ViewportCharacterIdle]->set_file_name(idle);
+
+  if(m_readerMapping.contains(ViewportCharacterTalk))
+    m_readerMapping[ViewportCharacterTalk]->set_file_name(talk);
+
+  if(m_readerMapping.contains(m_ViewportState))
+  {
+    spritePlayer.stop();
+    spritePlayer.set_reader(m_readerMapping[m_ViewportState]);
+    spritePlayer.set_size(targetRect.size().toSize());
+    start(1.0f);
+  }
+}
+
 QPixmap &SpriteLayer::getPixmap(bool renderAllowed)
 {
   if(renderAllowed)
   {
-    if(m_name == "viewport") m_screenshotPixmap = courtroom::viewport::getScreenshot();
+    if(m_Metadata.layerName == "viewport") m_screenshotPixmap = courtroom::viewport::getScreenshot();
   }
   return m_screenshotPixmap;
 }

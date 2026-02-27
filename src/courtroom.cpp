@@ -2275,6 +2275,8 @@ void Courtroom::next_chat_letter()
         break;
 
       case TagType_Layer:
+        ui_vp_player_char->updateLayer(tag.variables.at(1).toString(), tag.variables.at(2).toString());
+        ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
         break;
 
       case TagType_Flip:

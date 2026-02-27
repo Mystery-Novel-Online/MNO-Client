@@ -95,13 +95,13 @@ QVector<QString> AOApplication::get_all_package_and_base_paths(QString p_path)
 
 QString AOApplication::get_music_path(QString p_song)
 {
-  fs::RCFile musicFile("sounds/music/" + p_song.toStdString());
+  rolechat::fs::RCFile musicFile("sounds/music/" + p_song.toStdString());
   return get_case_sensitive_path(musicFile.findFirst());
 }
 
 QString AOApplication::get_background_path(QString p_identifier)
 {
-  return QString::fromStdString(fs::RCDir("background/" + p_identifier.toStdString()).findFirst());
+  return QString::fromStdString(rolechat::fs::RCDir("background/" + p_identifier.toStdString()).findFirst());
 }
 
 QString AOApplication::get_background_dir_path(QString p_identifier)

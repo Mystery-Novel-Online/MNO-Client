@@ -9,7 +9,7 @@
 AnimationReader::AnimationReader(const QString &animPath, KeyframeSequence &sequence)
 {
   sequence.Cleanup();
-  fs::RCFile animationFile("animations/" + animPath.toStdString() + ".json");
+  rolechat::fs::RCFile animationFile("animations/" + animPath.toStdString() + ".json");
 
   if(!animationFile.exists())
     return;
@@ -23,11 +23,11 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
 {
   sequence.Cleanup();
 
-  fs::RCFile animationFile("characters/" + character.toStdString() + "/animations/"+ name.toStdString() + ".json");
+  rolechat::fs::RCFile animationFile("characters/" + character.toStdString() + "/animations/"+ name.toStdString() + ".json");
 
   if(!animationFile.exists())
   {
-    animationFile = fs::RCFile("animations/characters/" + name.toStdString() + ".json");
+    animationFile = rolechat::fs::RCFile("animations/characters/" + name.toStdString() + ".json");
     if(!animationFile.exists())
       return;
   }
@@ -40,7 +40,7 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
 AnimationReader::AnimationReader(const QString &name, const QString &theme, KeyframeSequence &sequence)
 {
   sequence.Cleanup();
-  fs::RCFile animationFile("themes/" + theme.toStdString() + "/animations/"+ name.toStdString() + ".json");
+  rolechat::fs::RCFile animationFile("themes/" + theme.toStdString() + "/animations/"+ name.toStdString() + ".json");
   if(!animationFile.exists()) return;
   ReadFromFile(animationFile.findFirst());
   loadData(sequence);

@@ -248,6 +248,17 @@ void SpritePlayer::addLayer(SpriteLayer *layer)
   m_layerPlayers.append(layer);
 }
 
+void SpritePlayer::updateLayer(const QString &name, const QString& image)
+{
+  for(auto it : m_layerPlayers)
+  {
+    if(it->name() == name)
+    {
+      it->setStateFilename(image);
+    }
+  }
+}
+
 void SpritePlayer::clearLayers()
 {
   m_layerPlayers.clear();

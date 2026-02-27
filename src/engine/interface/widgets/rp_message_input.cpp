@@ -304,6 +304,7 @@ void RPMessageInput::handleTextChanged()
       else if (tagTypeStr == "scale" && parts.count() == 1) { args.append(parts[0].toDouble()); tagType = TagType_Size; }
       else if (tagTypeStr == "/scale" && parts.isEmpty()) { tagType = TagType_SizeEnd; }
       else if (tagTypeStr == "/highlight" && parts.isEmpty()) { tagType = TagType_ColorEnd; }
+      else if (tagTypeStr == "layer" && parts.count() == 2) { args.append(parts[0]); args.append(parts[1]); tagType = TagType_Layer; }
       else removeData = false;
 
       if (removeData) {

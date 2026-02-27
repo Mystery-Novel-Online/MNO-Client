@@ -27,7 +27,7 @@ void ConfigTabTheme::refreshThemeList()
   ui->current_theme_dropdown->clear();
   std::optional<int> l_theme_index;
 
-  for (std::string &themeName : fs::RCDir("themes").subDirectories())
+  for (std::string &themeName : rolechat::fs::RCDir("themes").subDirectories())
   {
     const QString qThemeName = QString::fromStdString(themeName);
 
@@ -60,7 +60,7 @@ void ConfigTabTheme::refreshGamemodeList()
   {
     std::optional<int> optionalGamemodeIndex;
     QString qGamemodePath = "themes/" + QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")) + "/gamemodes/";
-    fs::RCDir dirGamemodes = fs::RCDir(qGamemodePath.toStdString());
+    rolechat::fs::RCDir dirGamemodes = rolechat::fs::RCDir(qGamemodePath.toStdString());
 
 
     for (const std::string &folder : dirGamemodes.subDirectories())
@@ -102,7 +102,7 @@ void ConfigTabTheme::refreshTimeofDayList()
     const QString qCurrentGamemode = manualTime ? qOverrideGamemode : system::ConfigManager::defaultGamemode();
 
     QString qTimeOfDayPath = qCurrentGamemode.isEmpty() ? "themes/" + qCurrentTheme + "/times/" : "themes/" + qCurrentTheme + "/gamemodes/" + qCurrentGamemode + "/times/";
-    fs::RCDir dirTime = fs::RCDir(qTimeOfDayPath.toStdString());
+    rolechat::fs::RCDir dirTime = rolechat::fs::RCDir(qTimeOfDayPath.toStdString());
 
     for (const std::string &folder : dirTime.subDirectories())
     {

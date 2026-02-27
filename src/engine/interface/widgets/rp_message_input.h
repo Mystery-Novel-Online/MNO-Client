@@ -114,6 +114,10 @@ protected:
               output += "</highlight>";
               break;
 
+            case TagType_Layer:
+              output += "<layer:"+ tagArguments.at(1).toString() +":" + tagArguments.at(2).toString() +">";
+              break;
+
           default:
             break;
           }

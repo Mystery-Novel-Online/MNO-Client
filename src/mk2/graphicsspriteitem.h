@@ -27,6 +27,76 @@
 #include <QPainter>
 
 #include "engine/animation/keyframe_sequence.h"
+#include "engine/fs/fs_characters.h"
+#include "engine/fs/fs_reading.h"
+struct CharaSpriteMetadata
+{
+  QString character;
+  QString emote;
+  QString outfitName;
+
+  QString layerImage;
+  QString layerName;
+
+  QString buildBasePath()
+  {
+    return "characters/" + character + "/";
+  }
+
+  QString buildOutfitPath()
+  {
+    return buildBasePath() + "outfits/" + outfitName + "/";
+  }
+
+  void processLayerStrings(const QStringList& layerContents)
+  {
+    layerImage = layerContents[0];
+    layerName = layerContents[6];
+  }
+
+  QString emotePath()
+  {
+    QString path = QFileInfo(emote).path();
+    if (!path.isEmpty()) path += "/";
+    return path;
+  }
+
+  QStringList buildAllPaths(const QString& imageName)
+  {
+    QString basePath = buildBasePath();
+    QString outfitPath = buildOutfitPath();
+    QString path = emotePath();
+    return {
+        basePath + path + imageName,
+        basePath + path + layerName + "/" + imageName,
+        outfitPath + imageName,
+        outfitPath + layerName + "/" + imageName,
+        basePath + imageName,
+        basePath + layerName + "/" + imageName
+    };
+  }
+
+  void findAssets(QString& idle, QString& talk)
+  {
+    idle = FS::Paths::FindFile(buildAllPaths(layerImage), true, FS::Formats::SupportedImages());
+    if(idle.isEmpty())
+      idle = engine::fs::characters::getSpritePathIdle(character, layerImage);
+
+    QString talkAssetPath = FS::Paths::FindFile(buildAllPaths("(b)" + layerImage), true, FS::Formats::SupportedImages());
+    talk = talkAssetPath.isEmpty() ? idle : talkAssetPath;
+  }
+
+  void findAssets(QString& idle, QString& talk, QString image)
+  {
+    idle = FS::Paths::FindFile(buildAllPaths(image), true, FS::Formats::SupportedImages());
+    if(idle.isEmpty())
+      idle = engine::fs::characters::getSpritePathIdle(character, image);
+
+    QString talkAssetPath = FS::Paths::FindFile(buildAllPaths("(b)" + image), true, FS::Formats::SupportedImages());
+    talk = talkAssetPath.isEmpty() ? idle : talkAssetPath;
+  }
+
+};
 
 class SpriteLayer
 {
@@ -40,11 +110,14 @@ public:
   bool detatched();
   QPainter::CompositionMode compositionMode();
 
+  void setMetadata(const CharaSpriteMetadata& metadata) { m_Metadata = metadata; };
   void setState(ViewportSprite state);
-  void setName(const QString& name);
   void setLayerPositioning(const QString& name);
   void setDetatch(bool state);
   void setCompositionMode(QPainter::CompositionMode mode);
+
+
+  void setStateFilename(const QString& name);
 
   QPixmap &getPixmap(bool renderAllowed = false);
 
@@ -61,7 +134,9 @@ private:
 
 
   bool m_detatch = false;
-  QString m_name = "";
+
+  CharaSpriteMetadata m_Metadata = {};
+
   QString m_layerPosition = "";
   double m_currentScale = 0.0f;
   QPainter::CompositionMode m_compositionMode = QPainter::CompositionMode_SourceOver;
@@ -108,6 +183,7 @@ public:
   void overlayCreationDone();
   SpriteLayer *createOverlay(const QString &imageName, const QString &imageOrder, QRectF rect, const QString &layerName, bool detatched = false);
   SpriteLayer *createOverlay(const ActorLayer& layer, const QString &imagePath);
+  void updateLayer(const QString& name, const QString& updatedImage);
   void clearImageLayers();
 
 

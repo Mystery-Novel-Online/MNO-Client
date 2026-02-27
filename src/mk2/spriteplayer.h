@@ -66,6 +66,7 @@ public:
   int get_frame();
 
   void addLayer(SpriteLayer* layer);
+  void updateLayer(const QString& name, const QString& image);
   void clearLayers();
 
 public slots:
