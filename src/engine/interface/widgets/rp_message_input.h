@@ -103,7 +103,7 @@ protected:
               break;
 
             case TagType_Size:
-              output += "<size:"+ QString::number(tagArguments.at(1).toDouble()) +">";
+              output += "<scale:"+ QString::number(tagArguments.at(1).toDouble()) +">";
               break;
 
           default:
