@@ -110,8 +110,17 @@ void LayerSelectionPanel::addLayer(const QString &layer, const QString &variatio
 void LayerSelectionPanel::layerClicked(int layerId)
 {
   if(layerId > m_layers.count()) return;
+
+
   LayerSelectionData& data = m_layers[layerId];
   QString VariantName = data.layerName + "_" + data.variation;
+
+  if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
+    AOApplication::getInstance()->m_courtroom->ui_ic_chat_message_field->addTag(TagType_Layer, { data.layerName, data.variation });
+    courtroom::ic::focusMessageBox();
+    return;
+  }
+
   switch(data.type)
   {
   case LayerSelection_Toggle:

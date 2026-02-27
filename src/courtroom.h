@@ -552,7 +552,10 @@ private:
 
   QLineEdit *ui_ic_chat_showname = nullptr;
   QWidget *ui_ic_chat_message = nullptr;
+public:
   RPMessageInput *ui_ic_chat_message_field = nullptr;
+
+private:
   QLabel *ui_ic_chat_message_counter = nullptr;
   int m_lastTypingPacket = 0;
 
