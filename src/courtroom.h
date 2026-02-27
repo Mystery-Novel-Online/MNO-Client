@@ -70,6 +70,15 @@ struct IncomingTagData
   QVariantList variables;
 };
 
+struct TagOverrides
+{
+  std::optional<double> tagScaleOverride;
+  std::optional<QColor> tagColourOveride;
+  qreal baseFontSize = 0.0;
+
+  QFont baseFont;
+};
+
 class Courtroom : public SceneWidget
 {
   Q_OBJECT
@@ -176,6 +185,7 @@ public:
 
 private:
   QTimer* iniswapTimer;
+  TagOverrides overrides = {};
 
 private slots:
   void OnIniswapTimerTimeout();

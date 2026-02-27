@@ -302,6 +302,8 @@ void RPMessageInput::handleTextChanged()
       else if (tagTypeStr == "anim" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_PlaySequence; }
       else if (tagTypeStr == "highlight" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_Color; }
       else if (tagTypeStr == "scale" && parts.count() == 1) { args.append(parts[0].toDouble()); tagType = TagType_Size; }
+      else if (tagTypeStr == "/scale" && parts.isEmpty()) { tagType = TagType_SizeEnd; }
+      else if (tagTypeStr == "/highlight" && parts.isEmpty()) { tagType = TagType_ColorEnd; }
       else removeData = false;
 
       if (removeData) {

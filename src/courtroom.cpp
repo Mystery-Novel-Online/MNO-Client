@@ -2251,18 +2251,15 @@ void Courtroom::next_chat_letter()
 
   QTextCharFormat vp_message_format = ui_vp_message->currentCharFormat();
 
-  static std::optional<double> tagScaleOverride;
-  static std::optional<QColor> tagColourOveride;
-  static qreal m_baseFontSize = 0.0;
+
   if(m_tick_step == 0)
   {
-    m_baseFontSize = getMessageFontStruct("message", "").size;
-    tagScaleOverride.reset();
-    tagColourOveride.reset();
+    overrides = {};
+    overrides.baseFontSize = getMessageFontStruct("message", "").size;
 
-    QFont f = vp_message_format.font();
-    f.setPointSizeF(m_baseFontSize);
-    vp_message_format.setFont(f);
+    overrides.baseFont = vp_message_format.font();
+    overrides.baseFont.setPointSizeF(overrides.baseFontSize);
+    vp_message_format.setFont(overrides.baseFont);
   }
 
   QVector<IncomingTagData> unprocessedTags = {};
@@ -2313,12 +2310,19 @@ void Courtroom::next_chat_letter()
         break;
 
       case TagType_Size:
-        tagScaleOverride.emplace(tag.variables.at(1).toDouble());
+        overrides.tagScaleOverride.emplace(tag.variables.at(1).toDouble());
         break;
       case TagType_Color:
-        tagColourOveride.emplace(QColor((tag.variables.at(1).toString())));
+        overrides.tagColourOveride.emplace(QColor((tag.variables.at(1).toString())));
         break;
 
+      case TagType_ColorEnd:
+        overrides.tagColourOveride.reset();
+        break;
+
+      case TagType_SizeEnd:
+        overrides.tagScaleOverride.emplace(1.0f);
+        break;
 
       default:
         break;
@@ -2348,9 +2352,9 @@ void Courtroom::next_chat_letter()
     // ---- Viewport Message
     QTextCharFormat messageFormat = format;
 
-    if (tagScaleOverride.has_value()) {
+    if (overrides.tagScaleOverride.has_value()) {
       QFont f = messageFormat.font();
-      f.setPointSizeF(m_baseFontSize * tagScaleOverride.value());
+      f.setPointSizeF(overrides.baseFontSize * overrides.tagScaleOverride.value());
       messageFormat.setFont(f);
     }
 
@@ -2502,8 +2506,8 @@ void Courtroom::next_chat_letter()
       }
     }
 
-    if(tagColourOveride.has_value())
-      vp_message_format.setForeground(tagColourOveride.value());
+    if(overrides.tagColourOveride.has_value())
+      vp_message_format.setForeground(overrides.tagColourOveride.value());
     else
     {
       QColor text_color = m_message_color_name.isEmpty() ? m_message_color : QColor(m_message_color_name);

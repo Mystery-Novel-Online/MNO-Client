@@ -106,6 +106,14 @@ protected:
               output += "<scale:"+ QString::number(tagArguments.at(1).toDouble()) +">";
               break;
 
+            case TagType_SizeEnd:
+              output += "</scale>";
+              break;
+
+            case TagType_ColorEnd:
+              output += "</highlight>";
+              break;
+
           default:
             break;
           }
