@@ -36,7 +36,10 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
 
   m_collectionList->addItem("No Collection");
 
-  //Loop through owned collections here.
+  for(const QString& name : ApiManager::instance().collections())
+  {
+    m_collectionList->addItem(name);
+  }
 
   m_progress = new QProgressBar(this);
   m_progress->setRange(0, 100);

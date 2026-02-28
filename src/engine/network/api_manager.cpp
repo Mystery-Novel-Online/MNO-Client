@@ -55,6 +55,19 @@ void ApiManager::login()
       isValid = verifyResponse.value("valid", false);
       m_permissionLevel = verifyResponse.value("permissions", ApiPermissionLevels::APIPerms_None);
       accessToken = verifyResponse.value("access_token", "");
+
+
+      m_collections.clear();
+
+      if (verifyResponse.contains("collections") &&
+          verifyResponse["collections"].is_array())
+      {
+        for (const auto& item : verifyResponse["collections"]) {
+          std::string colName = item.value("name", "");
+          if(!colName.empty())
+            m_collections.push_back(QString::fromStdString(colName));
+        }
+      }
     }
 
     emit loginStatus(isValid, accessToken);

@@ -29,8 +29,12 @@ public:
   static QString authorizationKey();
   ApiPermissionLevels userPermission() { return m_permissionLevel;};
 
+  const QStringList& collections() {return m_collections;}
+
   static bool appendFile(QHttpMultiPart* multipart, const QString& fieldName, const QString& filePath);
   static void appendField(QHttpMultiPart* multipart, const QString& name, const QString& value);
+
+
 
 signals:
   void loginStatus(bool state, std::string key);
@@ -44,6 +48,8 @@ private:
 
   QNetworkAccessManager m_network;
   ApiPermissionLevels m_permissionLevel = APIPerms_None;
+
+  QStringList m_collections;
 };
 
 #endif // API_MANAGER_H
