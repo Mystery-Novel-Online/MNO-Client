@@ -28,6 +28,16 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
   m_imageButton = new QPushButton("Choose Preview", this);
   m_submitButton = new QPushButton("Submit", this);
 
+  m_collectionList = new QComboBox(this);
+  if(edit)
+  {
+    m_collectionList->addItem("<No Change>");
+  }
+
+  m_collectionList->addItem("No Collection");
+
+  //Loop through owned collections here.
+
   m_progress = new QProgressBar(this);
   m_progress->setRange(0, 100);
   m_progress->setValue(0);
@@ -51,6 +61,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
   layout->addRow("", m_imageButton);
   layout->addRow("Artist:", m_artist);
   layout->addRow("Description:", m_description);
+  layout->addRow("Collection:", m_collectionList);
   layout->addRow("", m_private);
   layout->addRow("", m_submitButton);
   layout->addRow("Progress:", m_progress);
@@ -148,6 +159,8 @@ void WorkshopUploader::submitForm()
   ApiManager::appendField(multiPart, "description", m_description->toPlainText());
   ApiManager::appendField(multiPart, "tags", "untagged");
   ApiManager::appendField(multiPart, "is_private", QString::number(m_private->checkState() == Qt::Checked));
+
+  ApiManager::appendField(multiPart, "collection", m_collectionList->currentText());
 
   m_currentReply = ApiManager::instance().post(QString(m_isEdit ? "api/workshop/edit" : "api/workshop/upload"), multiPart);
 

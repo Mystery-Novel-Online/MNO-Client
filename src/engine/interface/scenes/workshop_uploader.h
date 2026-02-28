@@ -26,6 +26,8 @@ private:
   QPushButton *m_submitButton;
   QProgressBar *m_progress;
 
+  QComboBox *m_collectionList;
+
   bool m_isEdit = false;
   int m_editTarget = -1;
   QCheckBox *m_private;
