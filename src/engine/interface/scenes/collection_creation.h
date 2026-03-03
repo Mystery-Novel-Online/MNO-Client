@@ -13,6 +13,7 @@ public:
 
 private slots:
   void iconSelection();
+  void previewSelection();
   void submitForm();
   void handleReply();
   void updateProgress(qint64 bytesSent, qint64 bytesTotal);
@@ -20,8 +21,13 @@ private slots:
 private:
   QLineEdit *w_NameLineEdit = nullptr;
   QTextEdit *w_DescTextEdit = nullptr;
+
   QLineEdit *w_IconLineEdit = nullptr;
   QPushButton *w_IconPushBtn = nullptr;
+
+  QLineEdit *w_PreviewLineEdit = nullptr;
+  QPushButton *w_PreviewPushBtn = nullptr;
+
   QPushButton *w_SbmtPushBtn = nullptr;
   QNetworkReply *m_currentReply = nullptr;
 };

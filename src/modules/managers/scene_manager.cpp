@@ -29,7 +29,8 @@ void SceneManager::execLoadPlayerBackground(QString t_backgroundName, QString va
 QString SceneManager::getBackgroundPath(QString t_position)
 {
   if(pCurrentBackground == nullptr) return "";
-  QString l_filename = QString::fromStdString(pCurrentBackground->backgroundFilename(t_position.toStdString()));
+  std::string backgroundFilename = pCurrentBackground->backgroundFilename(t_position.toStdString());
+  QString l_filename = QString::fromStdString(backgroundFilename);
   return AOApplication::getInstance()->get_background_sprite_path(mBackgroundName, l_filename);
 }
 

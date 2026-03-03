@@ -13,21 +13,28 @@ CollectionCreation::CollectionCreation(QWidget *parent) : QDialog{parent}
   w_IconLineEdit = new QLineEdit(this);
   w_IconLineEdit->setReadOnly(true);
 
+  w_PreviewLineEdit = new QLineEdit(this);
   w_NameLineEdit = new QLineEdit(this);
   w_DescTextEdit = new QTextEdit(this);
 
+
+
   w_IconPushBtn = new QPushButton("Choose Icon", this);
   w_SbmtPushBtn = new QPushButton("Submit", this);
+  w_PreviewPushBtn = new QPushButton("Choose Preview", this);
 
   QFormLayout *layout = new QFormLayout(this);
   layout->addRow("Icon Image:", w_IconLineEdit);
   layout->addRow("", w_IconPushBtn);
+  layout->addRow("Preview Image:", w_PreviewLineEdit);
+  layout->addRow("", w_PreviewPushBtn);
   layout->addRow("Name:", w_NameLineEdit);
   layout->addRow("Description:", w_DescTextEdit);
   layout->addRow("", w_SbmtPushBtn);
   setLayout(layout);
 
   connect(w_IconPushBtn, &QPushButton::clicked, this, &CollectionCreation::iconSelection);
+  connect(w_PreviewPushBtn, &QPushButton::clicked, this, &CollectionCreation::previewSelection);
   connect(w_SbmtPushBtn, &QPushButton::clicked, this, &CollectionCreation::submitForm);
 }
 
@@ -50,6 +57,12 @@ void CollectionCreation::iconSelection()
   if (!file.isEmpty()) w_IconLineEdit->setText(file);
 }
 
+void CollectionCreation::previewSelection()
+{
+  QString file = QFileDialog::getOpenFileName(this, "Select Collection Preview", "", "PNG Files (*.png)");
+  if (!file.isEmpty()) w_PreviewLineEdit->setText(file);
+}
+
 void CollectionCreation::submitForm()
 {
   if (w_IconLineEdit->text().isEmpty()) {
@@ -62,6 +75,16 @@ void CollectionCreation::submitForm()
   if(!w_IconLineEdit->text().trimmed().isEmpty() && w_IconLineEdit->text() != "<No Change>")
   {
     if (!ApiManager::appendFile(multiPart, "icon", w_IconLineEdit->text())) {
+      QMessageBox::warning(this, "Error", "Unable to open file.");
+      delete multiPart;
+      return;
+    }
+  }
+
+
+  if(!w_PreviewLineEdit->text().trimmed().isEmpty() && w_PreviewLineEdit->text() != "<No Change>")
+  {
+    if (!ApiManager::appendFile(multiPart, "preview", w_PreviewLineEdit->text())) {
       QMessageBox::warning(this, "Error", "Unable to open file.");
       delete multiPart;
       return;
