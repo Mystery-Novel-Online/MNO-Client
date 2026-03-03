@@ -1,4 +1,5 @@
 #include "workshop_uploader.h"
+#include "engine/system/user_database.h"
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QFormLayout>
@@ -184,11 +185,16 @@ void WorkshopUploader::handleReply()
 
     reader.ReadFromString(m_currentReply->readAll());
 
-    const QString characterFolder = reader.getStringValue("folder_name");
-    if(FS::Checks::CharacterExists(characterFolder.toStdString().c_str()))
-    {
+    const QString qFolderName = reader.getStringValue("folder_name");
+    const QString qGUID = reader.getStringValue("guid");
+    const int qContentId = reader.getIntValue("content_id");
+    const int qLastUpdated = reader.getIntValue("last_updated");
 
+    if(FS::Checks::CharacterExists(qFolderName.toStdString().c_str()))
+    {
+      GetDB()->cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
     }
+
   } else {
     reader.ReadFromString(m_currentReply->readAll());
     QMessageBox::critical(this, "Error", reader.getStringValue("error"));
