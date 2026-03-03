@@ -187,14 +187,7 @@ void WorkshopUploader::handleReply()
     const QString characterFolder = reader.getStringValue("folder_name");
     if(FS::Checks::CharacterExists(characterFolder.toStdString().c_str()))
     {
-      QString contentFilePath = fs::characters::getFilePath(characterFolder, "CONTENT.txt");
-      QFile contentFile(contentFilePath);
-      if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))
-      {
-        QTextStream out(&contentFile);
-        out << ApiManager::repoUrl(reader.getIntValue("character_id"));
-        contentFile.close();
-      }
+
     }
   } else {
     reader.ReadFromString(m_currentReply->readAll());

@@ -180,18 +180,25 @@ private slots:
   void filter_server_listing();
   void select_current_server();
 
+  //Workshop
+  void onWorkshopToggle();
   void onWorkshopSearch();
+  void onWorkshopBrowser();
+  void onWorkshopUpload();
+
+  //Replays
+  void onGalleryToggle();
   void onReplayRowChanged(int row);
   void onGalleryPackageChanged(int index);
   void onGalleryCategoryChanged(int index);
+
+  //Friends (UNUSED)
   void onFriendsToggle();
+
+  //Servers
   void onServersToggle();
-  void onGalleryToggle();
   void AnimatePanelsToPosition(float x, float y);
-  void onWorkshopToggle();
   void onGalleryPlay();
-  void onWorkshopBrowser();
-  void onWorkshopUpload();
   void onWorkshopCategoryClicked(const QString& category);
   void on_refresh_released();
   void on_add_to_fav_released();
