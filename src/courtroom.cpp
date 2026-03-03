@@ -552,6 +552,21 @@ void Courtroom::update_background_scene()
 
   SceneManager::get().execLoadPlayerBackground(m_background_name, m_background.variant);
 
+  ui_pos_dropdown->clear();
+  ui_pos_dropdown->addItem(system::localization::getText("DEFAULT"));
+  for(std::string& position : SceneManager::get().scenePositions())
+  {
+    if(position == "Default")
+      continue;
+
+    ui_pos_dropdown->addItem(QString::fromStdString(position));
+    if(position == m_userPosition.toStdString())
+      set_character_position(m_userPosition);
+
+    //Add a list for legacy position names
+    //ui_pos_dropdown->addItem(system::localization::getText("POS_WIT"), "wit");
+  }
+
   if (l_prev_background_name.isEmpty() || l_prev_background_name != m_background_name)
   {
     const QString l_positions_ini = ao_app->find_asset_path(ao_app->get_background_path(m_background_name) + "/" + "positions.ini");
@@ -772,7 +787,11 @@ QString Courtroom::get_current_position()
   {
     return QString::fromStdString(engine::actor::user::retrieve()->side());
   }
-  return ui_pos_dropdown->currentData(Qt::UserRole).toString();
+
+  QString positionKey = ui_pos_dropdown->currentData(Qt::UserRole).toString();
+  if(positionKey.isEmpty())
+    positionKey = ui_pos_dropdown->currentText();
+  return positionKey;
 }
 
 void Courtroom::save_textlog(QString p_text)
@@ -2721,6 +2740,7 @@ void Courtroom::set_hp_bar(int p_bar, int p_state)
 
 void Courtroom::set_character_position(QString p_pos)
 {
+  m_userPosition = p_pos;
   const bool l_is_default_pos = p_pos.toStdString() == engine::actor::user::retrieve()->side();
 
   int l_pos_index = ui_pos_dropdown->currentIndex();

@@ -18,6 +18,15 @@ public:
   }
 
   void execLoadPlayerBackground(QString t_backgroundName, QString variant);
+
+  std::vector<std::string> scenePositions()
+  {
+    if(!pCurrentBackground)
+      return {};
+
+    return pCurrentBackground->positionsList();
+  }
+
   QString getBackgroundPath(QString t_position);
   QString getForegroundPath(QString t_position);
   DRBackgroundSettings getBackgroundSettings();

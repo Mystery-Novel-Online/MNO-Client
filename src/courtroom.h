@@ -147,6 +147,7 @@ public:
   void set_tick_rate(const int tick_rate);
 
   // sets the character position
+  QString m_userPosition = "Default";
   void set_character_position(QString p_pos);
 
   void send_ooc_packet(QString ooc_message);
