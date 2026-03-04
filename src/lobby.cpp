@@ -207,7 +207,9 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
     if(ApiManager::instance().userPermission() > APIPerms_Auto)
     {
-      QAction *approveAction = menu.addAction("Approve");
+
+      QMenu* modMenu = menu.addMenu("Moderation");
+      QAction *approveAction = modMenu->addAction("Approve");
       connect(approveAction, &QAction::triggered, this, [this, id]()
       {
         QJsonObject json{{"key", ApiManager::authorizationKey()}};
@@ -217,7 +219,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
       });
 
 
-      QAction *deleteAction= menu.addAction("Delete");
+      QAction *deleteAction= modMenu->addAction("Delete");
       connect(deleteAction, &QAction::triggered, this, [this, id]()
               {
                 QJsonObject json{{"key", ApiManager::authorizationKey()}};

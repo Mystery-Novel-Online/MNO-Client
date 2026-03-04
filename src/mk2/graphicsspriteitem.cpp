@@ -77,14 +77,19 @@ void GraphicsSpriteItem::set_mirror(bool p_enabled)
   m_player->set_mirror(p_enabled);
 }
 
-QString GraphicsSpriteItem::get_file_name() const
+void GraphicsSpriteItem::setFileName(const std::string &p_file_name)
 {
-  return m_player->get_file_name();
+  m_player->set_file_name(QString::fromStdString(p_file_name));
 }
 
 void GraphicsSpriteItem::set_file_name(QString p_file_name)
 {
   m_player->set_file_name(p_file_name);
+}
+
+QString GraphicsSpriteItem::get_file_name() const
+{
+  return m_player->get_file_name();
 }
 
 QIODevice *GraphicsSpriteItem::get_device() const

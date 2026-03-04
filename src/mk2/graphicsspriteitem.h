@@ -201,6 +201,7 @@ public slots:
 
   void set_mirror(bool enabled);
 
+  void setFileName(const std::string& file_name);
   void set_file_name(QString file_name);
 
   void set_device(QIODevice *device);

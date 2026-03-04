@@ -462,7 +462,7 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
   replays::recording::weatherChange(weatherName, environment);
   if(!FS::Checks::DirectoryExists(weatherDirectory) || weatherName.trimmed().isEmpty())
   {
-    ui_vp_weather->set_file_name("");
+    ui_vp_weather->set_file_name(QString(""));
     ui_vp_weather->stop();
     ui_vp_weather->hide();
     ui_vp_weather->setKeyframeAnimation("", "");
@@ -524,7 +524,7 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
   }
   else
   {
-    ui_vp_weather->set_file_name("");
+    ui_vp_weather->set_file_name(QString(""));
     ui_vp_weather->stop();
     ui_vp_weather->hide();
   }
@@ -585,15 +585,8 @@ void Courtroom::update_background_scene()
   const QString l_position_id = m_chatmessage[CMPosition];
   DRPosition l_position = m_position_map.get_position(m_chatmessage[CMPosition]);
 
-  {
-    const QString l_file_name = QString::fromStdString(m_viewportScene.backgroundFile(l_position_id.toStdString()));
-    ui_vp_background->set_file_name(l_file_name);
-  }
-
-  {
-    const QString l_file_name = QString::fromStdString(m_viewportScene.foregroundFile(l_position_id.toStdString()));
-    ui_vp_desk->set_file_name(l_file_name);
-  }
+  ui_vp_background->setFileName(m_viewportScene.backgroundFile(l_position_id.toStdString()));
+  ui_vp_desk->setFileName(m_viewportScene.foregroundFile(l_position_id.toStdString()));
 
   if (m_preloader_sync->is_waiting())
   {

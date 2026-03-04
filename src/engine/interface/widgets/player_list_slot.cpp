@@ -12,6 +12,8 @@
 
 #include "engine/discord/workshop_discord.h"
 
+#include <rolechat/filesystem/RCDir.h>
+
 using namespace engine::network::metadata;
 using namespace engine::system;
 
@@ -184,7 +186,7 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
 
   if(!m_CharacterOutfit.isEmpty())
   {
-    characterIconPath = fs::characters::getFilePath(m_character, "outfits/" + m_CharacterOutfit + "/char_icon.png");
+    characterIconPath = engine::fs::characters::getFilePath(m_character, "outfits/" + m_CharacterOutfit + "/char_icon.png");
     if(!FS::Checks::FileExists(characterIconPath))
     {
       characterIconPath = "";
@@ -193,7 +195,7 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
 
   if(characterIconPath.isEmpty())
   {
-    characterIconPath = fs::characters::getFilePath(m_character, "char_icon.png");
+    characterIconPath = engine::fs::characters::getFilePath(m_character, "char_icon.png");
   }
 
   if(FS::Checks::FileExists(characterIconPath))
@@ -205,7 +207,7 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
       }
       else
       {
-        const QString l_selected_texture = fs::characters::getFilePath(p_character, "char_border.png");
+        const QString l_selected_texture = engine::fs::characters::getFilePath(p_character, "char_border.png");
         if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
       }
 
@@ -377,19 +379,18 @@ void DrPlayerListEntry::handleTypingTimeout()
 void DrPlayerListEntry::showContextMenu(QPoint pos)
 {
   QMenu *menu = new QMenu(this);
-  menu->addAction("[" + QString::number(m_clientId) + "] " + m_showname);
-
+  QMenu *playerMenu = menu->addMenu("[" + QString::number(m_clientId) + "] " + m_showname);
   menu->addSeparator();
+
+  QMenu *pairMenu = menu->addMenu("Pair Options");
 
   if(user::partner::isUnpaired())
   {
-    QAction *pairRequest = menu->addAction(localization::getText("PLAYER_LIST_PAIR"));
+    QAction *pairRequest = pairMenu->addAction(localization::getText("PLAYER_LIST_PAIR"));
     connect(pairRequest, &QAction::triggered, this, &DrPlayerListEntry::sendPairRequest);
   }
   else
   {
-    QMenu *pairMenu = menu->addMenu("Pair Options");
-
     QAction *frontAction = pairMenu->addAction("Move Front");
     connect(frontAction, &QAction::triggered, this, &DrPlayerListEntry::sendLayerFront);
 
@@ -399,37 +400,43 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
     QAction *unpairAction = pairMenu->addAction(localization::getText("PLAYER_LIST_UNPAIR"));
     connect(unpairAction, &QAction::triggered, this, &DrPlayerListEntry::sendUnpairRequest);
   }
-  menu->addSeparator();
 
   QAction *followUserAction = menu->addAction("Follow Player");
   connect(followUserAction, &QAction::triggered, this, &DrPlayerListEntry::followPlayer);
 
-  menu->addSeparator();
-
-  QAction *openFolderAction = menu->addAction(localization::getText("OPEN_CHAR_FOLDER"));
-  connect(openFolderAction, &QAction::triggered, this, &DrPlayerListEntry::openCharacterFolder);
 
   menu->addSeparator();
 
   if(!mURL.isEmpty())
   {
     QUrl url(mURL);
-    QString label = mURL.endsWith("/repo") || mURL.endsWith("/collection") || mURL.endsWith("/content")? "Download Workshop Character" : "Open " + url.host() + " in Browser";
+    QString label = mURL.endsWith("/repo") || mURL.endsWith("/collection") || mURL.endsWith("/content")? "Download Character" : "Open " + url.host() + " in Browser";
     QAction *browserAction = menu->addAction(label);
     connect(browserAction, &QAction::triggered, this, &DrPlayerListEntry::openBrowserURL);
   }
 
+  if(rolechat::fs::RCDir("characters/" + m_character.toStdString()).exists())
+  {
+    QAction *openFolderAction = menu->addAction(localization::getText("OPEN_CHAR_FOLDER"));
+    connect(openFolderAction, &QAction::triggered, this, &DrPlayerListEntry::openCharacterFolder);
+  }
+
+  menu->addSeparator();
+
+  QAction *copyIDAction = playerMenu->addAction(localization::getText("PLAYER_LIST_ID"));
+  connect(copyIDAction, &QAction::triggered, this, &DrPlayerListEntry::copyID);
+
   if (!mHDID.isEmpty())
   {
     QString label = localization::getText("MOD_COPY_HDID") + " [" + mHDID + "]";
-    QAction *copyHDID = menu->addAction(label);
+    QAction *copyHDID = playerMenu->addAction(label);
     connect(copyHDID, &QAction::triggered, this, &DrPlayerListEntry::copyHDID);
   }
 
   if (!mIPID.isEmpty())
   {
     QString label = localization::getText("MOD_COPY_IPID") + " [" + mIPID + "]";
-    QAction *copyIPID = menu->addAction(label);
+    QAction *copyIPID = playerMenu->addAction(label);
     connect(copyIPID, &QAction::triggered, this, &DrPlayerListEntry::copyIPID);
 
     if(!m_discord.isEmpty())
@@ -446,8 +453,6 @@ void DrPlayerListEntry::showContextMenu(QPoint pos)
     }
   }
 
-  QAction *copyIDAction = menu->addAction(localization::getText("PLAYER_LIST_ID"));
-  connect(copyIDAction, &QAction::triggered, this, &DrPlayerListEntry::copyID);
 
   menu->popup(this->mapToGlobal(pos));
 }
