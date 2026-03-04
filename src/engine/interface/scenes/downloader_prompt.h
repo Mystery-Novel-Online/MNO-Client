@@ -4,12 +4,19 @@
 #include <QObject>
 #include <QWidget>
 
+enum DownloadType
+{
+  DOWNLOAD_Default,
+  DOWNLOAD_ServerBackground,
+  DOWNLOAD_HubContent
+};
+
 class DownloaderPrompt : public QDialog
 {
   Q_OBJECT
 public:
   explicit DownloaderPrompt(QWidget *parent = nullptr);
-  static void StartDownload(QString repository, QString directory, const QString& contentName);
+  static void StartDownload(QString repository, QString directory, const QString& contentName, DownloadType type = DOWNLOAD_Default);
 
   void ProcessLinks(const QMap<QString, QString>& links, const QString& contentName, const QString& repositoryUrl, bool createContext);
 
@@ -21,6 +28,8 @@ private:
   QString m_contentName = "";
   int m_filesDownloaded;
   int m_totalFiles;
+
+  DownloadType m_downloadType;
 
 signals:
 };

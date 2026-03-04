@@ -60,6 +60,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
                          return;
                        }
                        QByteArray response = reply->readAll();
+                       qDebug() << response;
                        QJsonDocument doc = QJsonDocument::fromJson(response);
                        QString collectionName = doc["collection_name"].toString();
                        QList<QJsonObject> repoObjects = {};
@@ -82,6 +83,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
                        {
                          QString qGUID = repoObject["guid"].toString();
                          QString qFolderName = repoObject["folder"].toString();
+                         QString qDownloadType = repoObject["url_download"].toString();
                          int qContentId = repoObject["id"].toInt();
                          int qLastUpdated = repoObject["last_updated"].toInt();
                          GetDB().cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
@@ -92,7 +94,13 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
                          {
                            QJsonObject obj = val.toObject();
                            QString hash = baseUrl + "/api/workshop/file/" + obj["hash"].toString();
-                           QString filePath = isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : directory + "/" + obj["file_path"].toString();
+                           QString filePath = "";
+                           if(qDownloadType == "background")
+                             filePath = directory + "/background/" + qFolderName + + "/" + obj["file_path"].toString();
+                           else
+                           {
+                             filePath = isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : directory + "/" + obj["file_path"].toString();
+                           }
                            hashMap[filePath] = hash;
                          }
                        }

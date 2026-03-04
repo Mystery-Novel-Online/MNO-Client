@@ -99,14 +99,18 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
     QJsonObject obj = val.toObject();
     int id = obj.value("id").toInt();
     QString url = obj.value("url_download").toString();
-    if(url.isEmpty() || url == "repo")
+
+    QString guid = obj.value("guid").toString();
+
+    if(url.isEmpty() || url == "repo" || url == "background")
     {
-      url = ApiManager::baseUri() + "api/workshop/" + QString::number(id) + "/repo";
+      url = ApiManager::baseUri() + "api/workshop/" + guid + "/content";
     };
     if(url == "collection")
     {
       url = ApiManager::baseUri() + "api/workshop/" + QString::number(id) + "/collection";
     }
+
 
     WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString()};
     QString iconUrl = obj.value("url_icon").toString();

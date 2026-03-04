@@ -2,6 +2,8 @@
 #include <QHttpMultiPart>
 #include <QNetworkRequest>
 
+static bool USE_LOCALHOST = true;
+
 ApiManager::ApiManager(QObject *parent)
     : QObject(parent)
 {
@@ -81,6 +83,9 @@ QString ApiManager::repoUrl(int characterId)
 
 QString ApiManager::baseUri()
 {
+  if(USE_LOCALHOST)
+    return "http://localhost:3623/";
+
   return QString::fromStdString(config::ConfigUserSettings::stringValue("mnn_api", "https://api.mysterynovel.network/") );
 }
 
