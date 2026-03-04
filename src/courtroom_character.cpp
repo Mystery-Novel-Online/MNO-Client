@@ -25,7 +25,7 @@ QString Courtroom::get_character_ini()
 
 QString Courtroom::get_character_content_url()
 {
-  std::string characterGuid = GetDB()->workshopGuid(get_character_ini().toStdString());
+  std::string characterGuid = GetDB().workshopGuid(get_character_ini().toStdString());
   if(!characterGuid.empty())
     return ApiManager::baseUri() + "api/workshop/"+ QString::fromStdString(characterGuid) +"/content";
 

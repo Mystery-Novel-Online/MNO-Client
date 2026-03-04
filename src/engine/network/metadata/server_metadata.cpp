@@ -157,7 +157,7 @@ QVector<ActorSelectEntry> CharacterRepository::filteredList(const QString &packa
   if (packageName == "Recently Used")
   {
     QVector<ActorSelectEntry> recentCharacters;
-    for (auto entry : GetDB()->getCharactersSortedByLastUsed())
+    for (auto entry : GetDB().getCharactersSortedByLastUsed())
     {
       auto& [character, uses, lastUsed] = entry;
       recentCharacters.append({character});

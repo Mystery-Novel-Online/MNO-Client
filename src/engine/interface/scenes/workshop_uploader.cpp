@@ -192,7 +192,7 @@ void WorkshopUploader::handleReply()
 
     if(FS::Checks::CharacterExists(qFolderName.toStdString().c_str()))
     {
-      GetDB()->cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
+      GetDB().cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
     }
 
   } else {

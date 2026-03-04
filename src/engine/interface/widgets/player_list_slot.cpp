@@ -274,7 +274,7 @@ void DrPlayerListEntry::setStatus(QString status)
 
 void DrPlayerListEntry::setContentVersion(int versionNumber)
 {
-  if(versionNumber > GetDB()->workshopUpdateTime(m_character.toStdString()))
+  if(versionNumber > GetDB().workshopUpdateTime(m_character.toStdString()))
   {
     w_UpdateDisplay->show();
     pStatusDisplay->hide();

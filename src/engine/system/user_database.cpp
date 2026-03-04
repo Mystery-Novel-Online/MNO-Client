@@ -11,6 +11,6 @@ void ShutdownDB() {
   g_DB = nullptr;
 }
 
-RolechatDatabase* GetDB() {
-  return g_DB;
+RolechatDatabase& GetDB() {
+  return RolechatDatabase::instance();
 }

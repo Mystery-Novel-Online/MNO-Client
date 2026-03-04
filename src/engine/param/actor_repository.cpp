@@ -37,7 +37,7 @@ rolechat::actor::IActorData *engine::actor::user::load(QString folder)
     return s_currentActor;
   }
 
-  GetDB()->incrementCharacterUsage(folder.toStdString());
+  GetDB().incrementCharacterUsage(folder.toStdString());
 
   s_currentFolder = folder;
   QString l_jsonPath = fs::characters::getFilePath(folder, "char.json");

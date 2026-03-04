@@ -3,7 +3,7 @@
 
 #include <rolechat/userdata/RolechatDatabase.h>
 
-RolechatDatabase* GetDB();
+RolechatDatabase& GetDB();
 void InitDB();
 void ShutdownDB();
 

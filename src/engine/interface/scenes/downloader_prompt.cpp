@@ -84,7 +84,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
                          QString qFolderName = repoObject["folder"].toString();
                          int qContentId = repoObject["id"].toInt();
                          int qLastUpdated = repoObject["last_updated"].toInt();
-                         GetDB()->cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
+                         GetDB().cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
 
                          QJsonArray files = repoObject["contents"].toArray();
 

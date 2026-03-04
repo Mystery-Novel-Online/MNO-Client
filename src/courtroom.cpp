@@ -369,7 +369,7 @@ void Courtroom::enter_courtroom(int p_cid)
 
     QStringList l_content{l_chr_name, l_final_showname};
     if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(QString::fromStdString(engine::actor::user::retrieve()->outfit()));
-    if(network::metadata::VNServerInformation::featureSupported("mnn_init")) l_content.append(QString::number(GetDB()->workshopUpdateTime(l_chr_name.toStdString())));
+    if(network::metadata::VNServerInformation::featureSupported("mnn_init")) l_content.append(QString::number(GetDB().workshopUpdateTime(l_chr_name.toStdString())));
 
     ao_app->send_server_packet(DRPacket("chrini", l_content));
   }
@@ -3318,7 +3318,7 @@ void Courtroom::onOutfitChanged(int outfitIndex)
   QStringList l_content{l_chr_name, l_final_showname};
 
   if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(QString::fromStdString(engine::actor::user::retrieve()->outfit()));
-  if(network::metadata::VNServerInformation::featureSupported("mnn_init")) l_content.append(QString::number(GetDB()->workshopUpdateTime(l_chr_name.toStdString())));
+  if(network::metadata::VNServerInformation::featureSupported("mnn_init")) l_content.append(QString::number(GetDB().workshopUpdateTime(l_chr_name.toStdString())));
 
   ao_app->send_server_packet(DRPacket("chrini", l_content));
 
