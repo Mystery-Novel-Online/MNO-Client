@@ -4,7 +4,5 @@
 #include <rolechat/userdata/RolechatDatabase.h>
 
 RolechatDatabase& GetDB();
-void InitDB();
-void ShutdownDB();
 
 #endif // USER_DATABASE_H

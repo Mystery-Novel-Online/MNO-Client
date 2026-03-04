@@ -2,6 +2,7 @@
 #include "ui_rolechat_config.h"
 #include "config_tabs/config_tab_theme.h"
 #include <rolechat/config/ConfigUserSettings.h>
+#include <config_tabs/config_tab_mounting.h>
 
 RolechatConfig::RolechatConfig(QWidget *parent) : QMainWindow(parent), ui(new Ui::RolechatConfig)
 {
@@ -26,6 +27,7 @@ void RolechatConfig::setupTabs()
 {
   m_tabWidgets.clear();
   m_tabWidgets["Theme"] = new ConfigTabTheme();
+  m_tabWidgets["Mounting"] = new ConfigTabMounting();
   ui->category_list_widget->addItems(m_tabCategories.keys());
 }
 

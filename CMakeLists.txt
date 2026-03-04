@@ -321,6 +321,7 @@ add_executable(rp-engine
   src/engine/system/audio/loop_detection.h src/engine/system/audio/loop_detection.cpp
   src/engine/system/client_worker.h src/engine/system/client_worker.cpp
   src/engine/interface/scenes/collection_creation.h src/engine/interface/scenes/collection_creation.cpp
+  src/config_tabs/config_tab_mounting.h src/config_tabs/config_tab_mounting.cpp src/config_tabs/config_tab_mounting.ui
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
