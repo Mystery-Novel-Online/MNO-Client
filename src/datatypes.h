@@ -62,16 +62,6 @@ struct ReplayOperation
   QMap<QString, QString> variables;
 };
 
-class DRBackgroundSettings
-{
-public:
-  bool isDynamic = false;
-  double mScaleMinimum = 0.1;
-  double mScaleMax = 0.9;
-  double mPositionMinimum = 0;
-  double mPositionMaximum = 1;
-};
-
 class DRAreaBackground
 {
 public:

@@ -41,11 +41,6 @@ QString SceneManager::getForegroundPath(QString t_position)
   return AOApplication::getInstance()->get_background_sprite_path(mBackgroundName, l_filename);
 }
 
-DRBackgroundSettings SceneManager::getBackgroundSettings()
-{
-  return DRBackgroundSettings();
-}
-
 RPLabel *SceneManager::CreateTransition(QWidget *parents, AOApplication *ao_app, DRGraphicsView *viewport)
 {
   pUiTransition = new RPLabel(parents, ao_app);
