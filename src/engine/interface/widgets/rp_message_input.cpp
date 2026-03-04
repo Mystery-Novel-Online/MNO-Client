@@ -300,10 +300,10 @@ void RPMessageInput::handleTextChanged()
       else if (tagTypeStr == "music" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_MusicChange; }
       else if (tagTypeStr == "sfx" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_SoundEffect; }
       else if (tagTypeStr == "anim" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_PlaySequence; }
-      else if (tagTypeStr == "highlight" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_Color; }
-      else if (tagTypeStr == "scale" && parts.count() == 1) { args.append(parts[0].toDouble()); tagType = TagType_Size; }
-      else if (tagTypeStr == "/scale" && parts.isEmpty()) { tagType = TagType_SizeEnd; }
-      else if (tagTypeStr == "/highlight" && parts.isEmpty()) { tagType = TagType_ColorEnd; }
+      else if ((tagTypeStr == "highlight" || tagTypeStr == "hl") && parts.count() == 1) { args.append(parts[0]); tagType = TagType_Color; }
+      else if ((tagTypeStr == "scale"  || tagTypeStr == "sc") && parts.count() == 1) { args.append(parts[0].toDouble()); tagType = TagType_Size; }
+      else if ((tagTypeStr == "/scale" || tagTypeStr == "/sc") && parts.isEmpty()) { tagType = TagType_SizeEnd; }
+      else if ((tagTypeStr == "/highlight" || tagTypeStr == "/hl")&& parts.isEmpty()) { tagType = TagType_ColorEnd; }
       else if (tagTypeStr == "layer" && parts.count() == 2) { args.append(parts[0]); args.append(parts[1]); tagType = TagType_Layer; }
       else removeData = false;
 
