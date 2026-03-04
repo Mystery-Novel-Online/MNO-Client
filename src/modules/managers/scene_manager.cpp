@@ -8,39 +8,6 @@
 
 SceneManager SceneManager::s_Instance;
 
-void SceneManager::execLoadPlayerBackground(QString t_backgroundName, QString variant)
-{
-  mBackgroundName = t_backgroundName;
-  const QString l_backgroundJSONPath = AOApplication::getInstance()->find_asset_path(AOApplication::getInstance()->get_background_path(t_backgroundName) + "/" + "background.json");
-  if(FS::Checks::FileExists(l_backgroundJSONPath))
-  {
-    pCurrentBackground = new JsonBackgroundData();
-    pCurrentBackground->loadBackground(l_backgroundJSONPath.toStdString());
-    pCurrentBackground->setVariant(variant.toStdString());
-  }
-  else
-  {
-    pCurrentBackground = new LegacyBackgroundReader();
-    pCurrentBackground->loadBackground(t_backgroundName.toStdString());
-  }
-
-}
-
-QString SceneManager::getBackgroundPath(QString t_position)
-{
-  if(pCurrentBackground == nullptr) return "";
-  std::string backgroundFilename = pCurrentBackground->backgroundFilename(t_position.toStdString());
-  QString l_filename = QString::fromStdString(backgroundFilename);
-  return AOApplication::getInstance()->get_background_sprite_path(mBackgroundName, l_filename);
-}
-
-QString SceneManager::getForegroundPath(QString t_position)
-{
-  if(pCurrentBackground == nullptr) return "";
-  QString l_filename = QString::fromStdString(pCurrentBackground->foregroundFilename(t_position.toStdString()));
-  return AOApplication::getInstance()->get_background_sprite_path(mBackgroundName, l_filename);
-}
-
 RPLabel *SceneManager::CreateTransition(QWidget *parents, AOApplication *ao_app, DRGraphicsView *viewport)
 {
   pUiTransition = new RPLabel(parents, ao_app);

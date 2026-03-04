@@ -3,7 +3,7 @@
 
 #include "src/drgraphicscene.h"
 #include "mk2/drplayer.h"
-#include "rolechat/background/IBackgroundData.h"
+#include "rolechat/viewport_scene.h"
 
 #include <aoconfig.h>
 
@@ -16,19 +16,6 @@ public:
   {
     return s_Instance;
   }
-
-  void execLoadPlayerBackground(QString t_backgroundName, QString variant);
-
-  std::vector<std::string> scenePositions()
-  {
-    if(!pCurrentBackground)
-      return {};
-
-    return pCurrentBackground->positionsList();
-  }
-
-  QString getBackgroundPath(QString t_position);
-  QString getForegroundPath(QString t_position);
 
   RPLabel *CreateTransition(QWidget *parents, AOApplication* ao_app, DRGraphicsView *viewport);
   RPLabel *GetTransition();
@@ -49,10 +36,6 @@ private:
   int mFadeDuration = 200;
   RPLabel *pUiTransition = nullptr;
   DRGraphicsView *pViewport = nullptr;
-
-
-  QString mBackgroundName = "";
-  rolechat::background::IBackgroundData *pCurrentBackground = nullptr;
 
 };
 

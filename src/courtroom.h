@@ -464,6 +464,8 @@ private:
   QString m_background_name;
   DRPositionMap m_position_map;
 
+  ViewportScene m_viewportScene;
+
   AOImageDisplay *ui_background = nullptr;
 
   DRGraphicsView *ui_viewport = nullptr;

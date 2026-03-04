@@ -1,3 +1,4 @@
+#include "engine/param/background/legacy_background_reader.h"
 #include "engine/system/user_database.h"
 #include "pch.h"
 
@@ -548,13 +549,18 @@ void Courtroom::playEffect(const QString &effectName, const QString &charaName)
 void Courtroom::update_background_scene()
 {
   const QString l_prev_background_name = m_background_name;
+
   m_background_name = get_current_background();
 
-  SceneManager::get().execLoadPlayerBackground(m_background_name, m_background.variant);
+  if(!m_viewportScene.switchBackground(m_background_name.toStdString(), m_background.variant.toStdString()))
+  {
+    m_viewportScene.background().emplace(std::make_unique<LegacyBackgroundReader>());
+    m_viewportScene.background().value()->loadBackground(m_background_name.toStdString());
+  };
 
   ui_pos_dropdown->clear();
   ui_pos_dropdown->addItem(system::localization::getText("DEFAULT"));
-  for(std::string& position : SceneManager::get().scenePositions())
+  for(std::string& position : m_viewportScene.positions())
   {
     if(position == "Default")
       continue;
@@ -580,12 +586,12 @@ void Courtroom::update_background_scene()
   DRPosition l_position = m_position_map.get_position(m_chatmessage[CMPosition]);
 
   {
-    const QString l_file_name = SceneManager::get().getBackgroundPath(l_position_id);
+    const QString l_file_name = QString::fromStdString(m_viewportScene.backgroundFile(l_position_id.toStdString()));
     ui_vp_background->set_file_name(l_file_name);
   }
 
   {
-    const QString l_file_name = SceneManager::get().getForegroundPath(l_position_id);
+    const QString l_file_name = QString::fromStdString(m_viewportScene.foregroundFile(l_position_id.toStdString()));
     ui_vp_desk->set_file_name(l_file_name);
   }
 
@@ -1277,8 +1283,8 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
 
   { // backgrounds
     DRPosition l_position = m_position_map.get_position(l_position_id);
-    l_file_list.insert(ViewportStageBack, SceneManager::get().getBackgroundPath(l_position_id));
-    l_file_list.insert(ViewportStageFront, SceneManager::get().getForegroundPath(l_position_id));
+    l_file_list.insert(ViewportStageBack, QString::fromStdString(m_viewportScene.backgroundFile(l_position_id.toStdString())));
+    l_file_list.insert(ViewportStageFront, QString::fromStdString(m_viewportScene.foregroundFile(l_position_id.toStdString())));
   }
 
   // characters
