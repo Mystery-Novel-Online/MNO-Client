@@ -19,6 +19,7 @@ public:
   static void StartDownload(QString repository, QString directory, const QString& contentName, DownloadType type = DOWNLOAD_Default);
 
   void ProcessLinks(const QMap<QString, QString>& links, const QString& contentName, const QString& repositoryUrl, bool createContext);
+  void setDownloadType(DownloadType type) {m_downloadType = type; }
 
 
 private:
@@ -29,7 +30,7 @@ private:
   int m_filesDownloaded;
   int m_totalFiles;
 
-  DownloadType m_downloadType;
+  DownloadType m_downloadType = DOWNLOAD_Default;
 
 signals:
 };

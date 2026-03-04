@@ -23,7 +23,7 @@ DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
   setLayout(layout);
 }
 
-void DownloaderPrompt::StartDownload(QString repository, QString directory, const QString &contentName)
+void DownloaderPrompt::StartDownload(QString repository, QString directory, const QString &contentName, DownloadType type)
 {
   if(repository.isEmpty()) return;
   QUrl url(repository);
@@ -37,15 +37,22 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
 
   url = QUrl(repository += "?key=" + ApiManager::authorizationKey());
 
+  QString downloadText = "Do you want to start the download?";
+  if(type == DOWNLOAD_ServerBackground)
+  {
+    downloadText = "You are missing the background currently being used in the area. Would you like to download it from the workshop?";
+  }
+
   auto reply = QMessageBox::question(
       nullptr,
       "Start Download",
-      "Do you want to start the download?",
+      downloadText,
       QMessageBox::Yes | QMessageBox::No);
 
   if (reply == QMessageBox::Yes)
   {
     DownloaderPrompt *prompt = new DownloaderPrompt(nullptr);
+    prompt->setDownloadType(type);
     prompt->show();
 
     QString baseUrl = QString("%1://%2").arg(url.scheme(), url.host());

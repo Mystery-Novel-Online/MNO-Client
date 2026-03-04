@@ -37,6 +37,7 @@
 #include "engine/param/actor/actor_loader.h"
 #include <QHttpMultiPart>
 #include <engine/discord/workshop_discord.h>
+#include <engine/interface/scenes/downloader_prompt.h>
 #include <engine/network/api_manager.h>
 #include <engine/system/audio/loop_detection.h>
 #include <mk2/spritecachingreader.h>
@@ -551,6 +552,19 @@ void Courtroom::update_background_scene()
   const QString l_prev_background_name = m_background_name;
 
   m_background_name = get_current_background();
+
+  if(!QUuid(m_background_name).isNull())
+  {
+    auto workshopSearch = GetDB().searchContentGuid(m_background_name.toStdString());
+    if(!workshopSearch.folder.empty()){
+      m_background_name = QString::fromStdString(workshopSearch.folder);
+    }
+    else
+    {
+      workshopSearch.guid = m_background_name.toStdString();
+      DownloaderPrompt::StartDownload(ApiManager::baseUri() + QString::fromStdString(workshopSearch.downloadUri()), "packages/Workshop Downloads", "", DOWNLOAD_ServerBackground);
+    }
+  }
 
   if(!m_viewportScene.switchBackground(m_background_name.toStdString(), m_background.variant.toStdString()))
   {
