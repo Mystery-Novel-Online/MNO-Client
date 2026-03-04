@@ -179,6 +179,10 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
 
                 QMessageBox::information(this, "Download Complete", "All files downloaded successfully!");
                 this->deleteLater();
+                if(m_downloadType == DOWNLOAD_ServerBackground)
+                {
+                  AOApplication::getInstance()->m_courtroom->update_background_scene();
+                }
               }
             });
   }
