@@ -1,7 +1,6 @@
 #include "pch.h"
 
 const QString BASE_CONFIG_INI = "/base/config.ini";
-const QString BASE_PACKAGES_INI = "packages.ini";
 const QString BASE_SERVER_BROWSER_INI = "server_browser.ini";
 const QString BASE_FAVORITE_SERVERS_INI = "favorite_servers.ini";
 const QString BASE_SERVERLIST_TXT = "serverlist.txt";

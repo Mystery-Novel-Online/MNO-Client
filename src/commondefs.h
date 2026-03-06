@@ -1,7 +1,6 @@
 #pragma once
 
 extern const QString BASE_CONFIG_INI;
-extern const QString BASE_PACKAGES_INI;
 extern const QString BASE_SERVER_BROWSER_INI;
 extern const QString BASE_FAVORITE_SERVERS_INI;
 extern const QString BASE_SERVERLIST_TXT;
