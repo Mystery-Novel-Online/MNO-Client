@@ -316,7 +316,7 @@ void DrPlayerListEntry::messageDiscordFriend()
 
 void DrPlayerListEntry::openCharacterFolder()
 {
-  QUrl folderUrl = QUrl::fromLocalFile(FS::Paths::FindDirectory("characters/" + m_character));
+  QUrl folderUrl = QUrl::fromLocalFile(engine::fs::characters::getDirectoryPath(m_character));
   QDesktopServices::openUrl(folderUrl);
 }
 

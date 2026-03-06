@@ -94,7 +94,8 @@ void AOCharButton::removeFavorites()
 
 void AOCharButton::openCharacterFolder()
 {
-  QUrl folderUrl = QUrl::fromLocalFile(FS::Paths::FindDirectory("characters/" + m_character));
+  QString characterPath = engine::fs::characters::getDirectoryPath(m_character);
+  QUrl folderUrl = QUrl::fromLocalFile(characterPath);
   QDesktopServices::openUrl(folderUrl);
 }
 

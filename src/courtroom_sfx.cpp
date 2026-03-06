@@ -61,7 +61,8 @@ void Courtroom::load_current_character_sfx_list()
     bool l_is_found = !ao_app->find_asset_path({ao_app->get_sfx_noext_path(l_file)}, FS::Formats::SupportedAudio()).isEmpty();
     if(!l_is_found)
     {
-      l_is_found  = !FS::Paths::FindFile("characters/" + QString::fromStdString(network::metadata::user::getIniswap()) + "/sounds/" + ao_app->get_sfx_noext_path(l_file), true, FS::Formats::SupportedAudio()).isEmpty();
+      QString characterPath = engine::fs::characters::getDirectoryPath(QString::fromStdString(network::metadata::user::getIniswap()));
+      l_is_found  = !FS::Paths::FindFile(characterPath + "/sounds/" + ao_app->get_sfx_noext_path(l_file), true, FS::Formats::SupportedAudio()).isEmpty();
     }
     m_sfx_list.append(DRSfx(l_name, l_file, l_is_found));
   }

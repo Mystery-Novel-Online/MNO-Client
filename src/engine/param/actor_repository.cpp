@@ -117,7 +117,9 @@ rolechat::actor::IActorData *engine::actor::user::switchCharacter(QString folder
 
   QStringList animations = {"None"};
 
-  QFile characterAnimations(FS::Paths::FindFile("characters/" + folder + "/animations.ini"));
+  QString characterPath = engine::fs::characters::getDirectoryPath(folder);
+
+  QFile characterAnimations(characterPath + "/animations.ini");
   if (characterAnimations.open(QIODevice::ReadOnly | QIODevice::Text)) {
     QTextStream in(&characterAnimations);
     while (!in.atEnd())
@@ -129,7 +131,7 @@ rolechat::actor::IActorData *engine::actor::user::switchCharacter(QString folder
   }
   else
   {
-    animations.append(FS::Paths::GetFileList("characters/" + folder + "/animations", true, "json"));
+    animations.append(FS::Paths::GetFileList(characterPath + "/animations", true, "json"));
   }
 
   for(const QString &animationIniPath : FS::Paths::FindFiles("configs/animations.ini"))
@@ -182,8 +184,7 @@ void engine::actor::user::setOutfitList(QStringList outfits)
 
 bool engine::actor::user::isModified(const std::string &name)
 {
-  const QString folderPath =
-      FS::Paths::FindDirectory("characters/" + QString::fromStdString(name));
+  const QString folderPath = engine::fs::characters::getDirectoryPath(QString::fromStdString(name));
 
   if (folderPath.isEmpty())
     return false;

@@ -208,7 +208,10 @@ bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, 
   {
     QString qOffsetName = QString::fromStdString(layer.offsetName);
 
-    QString filePath = FS::Paths::FindFile("characters/" + character + "/animations/assets/" + qOffsetName, true, FS::Formats::SupportedImages());
+
+    QString characterPath = engine::fs::characters::getDirectoryPath(character);
+
+    QString filePath = FS::Paths::FindFile(characterPath + "/animations/assets/" + qOffsetName, true, FS::Formats::SupportedImages());
     if(!FS::Checks::FileExists(filePath))
       filePath = FS::Paths::FindFile("animations/assets/" + qOffsetName, true, FS::Formats::SupportedImages());
     if(!FS::Checks::FileExists(filePath))

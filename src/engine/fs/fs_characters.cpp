@@ -1,6 +1,8 @@
 #include "fs_characters.h"
 #include "fs_reading.h"
 
+#include <rolechat-lib/src/rolechat/userdata/TemporaryDB.h>
+
 namespace{
 const QStringList SPRITE_PATH_BLACKLIST = { "char_icon.png", "showname.png", "emotions" };
 }
@@ -91,6 +93,9 @@ QString fs::characters::getSpritePathIdle(QString character, QString emote)
 
 QString fs::characters::getDirectoryPath(const QString &character)
 {
+  std::string cachedPath = TemporaryDB::instance().characterPath(character.toStdString());
+  if(!cachedPath.empty())
+    return QString::fromStdString(cachedPath);
   return FS::Paths::FindDirectory("characters/" + character);
 }
 

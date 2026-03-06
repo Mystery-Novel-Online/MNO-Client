@@ -59,10 +59,8 @@ void drSetItemIcon(QComboBox *p_widget, const int p_index, const QString &p_chr_
 
 void Courtroom::update_iniswap_list()
 {
-  //ui_iniswap_dropdown->setEditable(false);
 
-  {
-    QSignalBlocker b_ini_list(ui_iniswap_dropdown);
+    QSignalBlocker iniswapBlocker(ui_iniswap_dropdown);
     ui_iniswap_dropdown->clear();
 
     QFutureWatcher<void> *watcher = new QFutureWatcher<void>(this);
@@ -70,7 +68,6 @@ void Courtroom::update_iniswap_list()
 
     QFuture<void> future = QtConcurrent::run(this, &Courtroom::SearchForCharacterListAsync);
     watcher->setFuture(future);
-  }
 
 }
 
@@ -78,7 +75,7 @@ void Courtroom::update_iniswap_list()
 void Courtroom::SearchForCharacterListAsync()
 {
   currentIniswapList = QStringList{"Default"};
-
+  TemporaryDB::instance().scanCharacters();
   for(const std::string& characterName : TemporaryDB::instance().avaliableCharacters())
   {
     currentIniswapList.append(QString::fromStdString(characterName));

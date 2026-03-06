@@ -23,7 +23,8 @@ AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence
 {
   sequence.Cleanup();
 
-  rolechat::fs::RCFile animationFile("characters/" + character.toStdString() + "/animations/"+ name.toStdString() + ".json");
+  QString characterPath = engine::fs::characters::getDirectoryPath(character);
+  rolechat::fs::RCFile animationFile(QString(characterPath + "/animations/" + name + ".json").toStdString());
 
   if(!animationFile.exists())
   {
