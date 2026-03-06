@@ -6,6 +6,7 @@
 #include "version.h"
 #include <rolechat/util/FileSystem.h>
 #include "engine/system/user_database.h"
+#include <rolechat-lib/src/rolechat/userdata/TemporaryDB.h>
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +17,8 @@ int main(int argc, char *argv[])
 #endif
 
   rolechat::fs::PackageManager::scanPackages();
+  TemporaryDB::instance().scanCharacters();
+
   //qInstallMessageHandler(logger::log);
   qInfo() << "Starting Mystery Novel Network...";
 

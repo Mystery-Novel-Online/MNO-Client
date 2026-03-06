@@ -11,6 +11,8 @@
 
 #include <engine/network/api_manager.h>
 
+#include <rolechat-lib/src/rolechat/userdata/TemporaryDB.h>
+
 void Courtroom::set_character_id(const int p_chr_id)
 {
   if (!user::SetCharacterId(p_chr_id)) return;
@@ -77,34 +79,9 @@ void Courtroom::SearchForCharacterListAsync()
 {
   currentIniswapList = QStringList{"Default"};
 
-  QStringList l_package_folders{};
-  QVector<QString> packageNames = FS::Packages::CachedNames();
-  QVector<QString> disabledPackages = FS::Packages::DisabledList();
-
-  for (int i=0; i< packageNames.size(); i++)
+  for(const std::string& characterName : TemporaryDB::instance().avaliableCharacters())
   {
-    if(!disabledPackages.contains(packageNames.at(i)))
-    {
-      const QString l_path = FS::Paths::Package(packageNames.at(i)) + "/characters";
-      if(FS::Checks::DirectoryExists(l_path)) l_package_folders.append(l_path);
-    }
-  }
-
-  l_package_folders.append(FS::Paths::BasePath() + "/characters");
-
-  for (int i = 0; i < l_package_folders.length(); ++i)
-  {
-    const QFileInfoList l_info_list = QDir(l_package_folders.at(i)).entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot);
-    for (const QFileInfo &i_info : l_info_list)
-    {
-      const QString l_name = i_info.fileName();
-      if (!FS::Checks::FileExists(fs::characters::getFilePath(l_name, CHARACTER_CHAR_INI)) && !FS::Checks::FileExists(fs::characters::getFilePath(l_name, CHARACTER_CHAR_JSON)))
-        continue;
-      if(!currentIniswapList.contains(l_name))
-      {
-        currentIniswapList.append(l_name);
-      }
-    }
+    currentIniswapList.append(QString::fromStdString(characterName));
   }
 
 }
