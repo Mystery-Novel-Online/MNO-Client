@@ -8,7 +8,7 @@
 ConfigTabTheme::ConfigTabTheme(QWidget *parent) : QWidget(parent), ui(new Ui::ConfigTabTheme)
 {
   ui->setupUi(this);
-  ui->resize_spinbox->setValue(config::ConfigUserSettings::floatValue("resize"));
+  ui->resize_spinbox->setValue(config::ConfigUserSettings::floatValue("resize", 1.0f));
   ui->manual_gamemode_checkbox->setChecked(config::ConfigUserSettings::booleanValue("manual_gamemode"));
   ui->manual_timeofday_checkbox->setChecked(config::ConfigUserSettings::booleanValue("manual_timeofday"));
   refreshThemeList();
