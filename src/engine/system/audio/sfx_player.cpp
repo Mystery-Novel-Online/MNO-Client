@@ -22,7 +22,8 @@ void AOSfxPlayer::play(QString p_filename)
 
 void AOSfxPlayer::play_effect(QString p_effect)
 {
-  play(ao_app->find_asset_path({ao_app->get_sfx_noext_path(p_effect)}, FS::Formats::SupportedAudio()));
+  QString assetPath = ao_app->find_asset_path({"sounds/general/" + p_effect}, FS::Formats::SupportedAudio());
+  play(assetPath);
 }
 
 void AOSfxPlayer::play_character_effect(QString p_chr, QString p_effect)

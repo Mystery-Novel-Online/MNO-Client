@@ -183,20 +183,17 @@ QString AOApplication::get_case_sensitive_path(QString p_file)
  */
 QString AOApplication::find_asset_path(QStringList p_file_list, QStringList p_extension_list)
 {
+  std::vector<std::string> fileList;
   for (const QString &i_file : qAsConst(p_file_list))
-  {
-    const QDir l_dir(get_case_sensitive_path(QFileInfo(i_file).absolutePath()));
+    fileList.emplace_back(i_file.toStdString());
 
-    for (const QString &i_extension : qAsConst(p_extension_list))
-    {
-      const QString l_file_path = get_case_sensitive_path(l_dir.filePath(i_file + i_extension));
-      if (FS::Checks::FileExists(l_file_path))
-      {
-        return l_file_path;
-      }
-    }
-  }
+  std::vector<std::string> extensionList;
+  for (const QString &iExtension : qAsConst(p_extension_list))
+    extensionList.emplace_back(iExtension.toStdString());
 
+
+  std::string filePath = rolechat::fs::RCFile(fileList, extensionList).findFirst();
+  return get_case_sensitive_path(filePath);
   return nullptr;
 }
 
