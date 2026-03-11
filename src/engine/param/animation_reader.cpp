@@ -21,19 +21,20 @@ AnimationReader::AnimationReader(const QString &animPath, KeyframeSequence &sequ
 
 AnimationReader::AnimationReader(const QString &name, KeyframeSequence &sequence, const QString &character)
 {
+  using rolechat::fs::RCFile;
   sequence.Cleanup();
 
   QString characterPath = engine::fs::characters::getDirectoryPath(character);
-  rolechat::fs::RCFile animationFile(QString(characterPath + "/animations/" + name + ".json").toStdString());
+  QString animationFile = characterPath + "/animations/" + name + ".json";
 
-  if(!animationFile.exists())
+  if(!RCFile::exists(animationFile.toStdString()))
   {
-    animationFile = rolechat::fs::RCFile("animations/characters/" + name.toStdString() + ".json");
-    if(!animationFile.exists())
+    animationFile = QString::fromStdString(RCFile("animations/characters/" + name.toStdString() + ".json").findFirst());
+    if(!RCFile::exists(animationFile.toStdString()))
       return;
   }
 
-  ReadFromFile(animationFile.findFirst());
+  ReadFromFile(animationFile);
   loadData(sequence);
 
 }
