@@ -1788,9 +1788,14 @@ void Courtroom::handle_chatmessage_3()
       const QString l_effect_name = get_effect_name(l_effect_index);
       if (!l_effect_name.isEmpty() && l_effect_name != "effect_shake") // check to prevent crashing
       {
+
+        auto effectData = engine::system::effects::effectByName(l_effect_name);
+
         QStringList offset = ao_app->get_effect_offset(f_char, l_effect_index);
         ui_vp_effect->setPos(0, offset.at(1).toInt());
-        int selfOffset = message::horizontalOffset();
+
+
+        int selfOffset = effectData.ignorePair ? 0 :  message::horizontalOffset();
         if(ao_app->current_theme->getEffectPairOffset(l_effect_index)) ui_vp_effect->setHorizontalOffset(selfOffset);
 
         ui_vp_effect->clearImageLayers();

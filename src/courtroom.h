@@ -15,6 +15,7 @@
 #include "mk2/graphicsvideoscreen.h"
 #include "mk2/spriteplayer.h"
 #include "mk2/spritereadersynchronizer.h"
+#include "engine/system/effects.h"
 
 
 class AOApplication;
