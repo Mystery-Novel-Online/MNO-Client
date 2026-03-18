@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Outfit File Structure - Mystery Novel Network Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Outfit File Structure";
+        var mkdocs_page_input_path = "Characters\\Outfit Metadata.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Mystery Novel Network Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Characters</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../Character%20Metadata/">Character File Structure</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Outfit File Structure</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#top-level-structure">Top-Level Structure</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#default_rules">default_rules</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#fields">Fields</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#layers">layers</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#layer-object">Layer Object</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example">Example</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#emotes">emotes</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#emote-object">Emote Object</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#using-layers">Using Layers</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#default-behaviour">Default Behaviour</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Themes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Lua</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/events/">Lua Theme Events</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/functions/">Lua Theme Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/signals/">Lua Theme Signals</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Mystery Novel Network Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Characters</li>
+      <li class="breadcrumb-item active">Outfit File Structure</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="outfit-file-structure">Outfit File Structure</h1>
+<p>Outfit parameter files are used to define the various emotes a character can use and its relevant rules. </p>
+<hr />
+<h2 id="top-level-structure">Top-Level Structure</h2>
+<pre><code class="language-json">{
+  &quot;default_rules&quot;: { ... },
+  &quot;layers&quot;: [ ... ],
+  &quot;emotes&quot;: [ ... ]
+}
+</code></pre>
+<hr />
+<h2 id="default_rules"><code>default_rules</code></h2>
+<p>Defines the rules emotes will follow by default unless individually specified.</p>
+<h3 id="fields">Fields</h3>
+<ul>
+<li>
+<p><code>show_desk</code> (boolean):<br />
+  Indicates whether the desk layer should be shown by default.</p>
+</li>
+<li>
+<p><code>ignore_offsets</code> (boolean):
+  Indicates whether or not the player offset sliders should affected the positioning of the sprite.  </p>
+</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-json">&quot;default_rules&quot;: {
+  &quot;show_desk&quot;: true,
+  &quot;ignore_offsets&quot; : true
+}
+</code></pre>
+<hr />
+<h2 id="layers"><code>layers</code></h2>
+<p>An array of layer definitions, each representing the additional sprites that can be drawn alongside the main sprite.</p>
+<h3 id="layer-object">Layer Object</h3>
+<p>Each layer has the following properties:</p>
+<ul>
+<li>
+<p><code>name</code> (string):<br />
+  Identifier for the layer (e.g., <code>"face"</code>, <code>"effect"</code>).</p>
+</li>
+<li>
+<p><code>offset</code> (object):<br />
+  Defines the position and size of the layer in pixels.</p>
+</li>
+<li><code>x</code> (int): X-coordinate of the layer.</li>
+<li><code>y</code> (int): Y-coordinate of the layer.</li>
+<li><code>width</code> (int): Width of the layer.</li>
+<li>
+<p><code>height</code> (int): Height of the layer.</p>
+</li>
+<li>
+<p><code>order</code> (string):<br />
+  The draw order priority. Layers will always use <code>"top"</code> by default. </p>
+<ul>
+<li><code>"top"</code> </li>
+<li><code>"below"</code> </li>
+</ul>
+</li>
+<li>
+<p><code>toggle</code> (optional, string):<br />
+  A toggleable visibility option for user control (e.g., <code>"Effect"</code>). These can be toggled by right-clicking the emote selector in-client. </p>
+</li>
+</ul>
+<h3 id="example">Example</h3>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;face&quot;,
+  &quot;offset&quot;: { &quot;x&quot;: 60, &quot;y&quot;: 60, &quot;width&quot;: 63, &quot;height&quot;: 63 },
+  &quot;order&quot;: &quot;top&quot;
+}
+</code></pre>
+<hr />
+<h2 id="emotes"><code>emotes</code></h2>
+<p>An array defining the metadata for various emotes used in-client.</p>
+<h3 id="emote-object">Emote Object</h3>
+<p>Each emote has the following fields:</p>
+<ul>
+<li>
+<p><code>name</code> (string):<br />
+  Name of the emote (e.g., <code>"smile"</code>, <code>"talk"</code>).</p>
+</li>
+<li>
+<p><code>image</code> (optional, string):<br />
+  The base image used (e.g., <code>"body"</code>).</p>
+</li>
+<li>
+<p><code>video</code> (optional, string):<br />
+  The video file that is played before the emote is displayed.</p>
+</li>
+<li>
+<p><code>pre</code> (optional, string):<br />
+  Specifies a pre-animation to play before the emote appears.</p>
+</li>
+<li>
+<p><code>sequence</code> (optional, string):<br />
+  Defines an animation sequence name (e.g., <code>"Ghost Away"</code>).</p>
+</li>
+<li>
+<p><code>sfx</code> (optional, string):<br />
+  Name of a sound effect to play (e.g., <code>"explosion"</code>).</p>
+</li>
+<li>
+<p><code>sfx_delay</code> (optional, int):<br />
+  Defines how many miliseconds to wait before playing the sound effeect defined in <code>sfx</code> (e.g., <code>3000</code> to wait 3 seconds).</p>
+</li>
+<li>
+<p><code>outfit</code> (optional, string):<br />
+  If wanting to use an <code>image</code> from another outfit folder you can define what folder to grab it from here. (e.g., <code>"Default"</code>).</p>
+<ul>
+<li>If the parameter is present but left blank, it will use the root directory  </li>
+</ul>
+</li>
+<li>
+<p><code>desk</code> (optional, boolean):<br />
+  Overwrites the default rule for displaying the desk.</p>
+</li>
+<li>
+<p><code>ignore_offsets</code> (optional, boolean):<br />
+  Overwrites the default rule for ignoring offsets.</p>
+</li>
+</ul>
+<h3 id="using-layers">Using Layers</h3>
+<p>If planning to use a character layer, you will need to define that image the layer uses within the emote. For example, you would do the following if using a "face" layer.</p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;Front Dissapointed&quot;,
+  &quot;image&quot;: &quot;front&quot;,
+  &quot;face&quot;: &quot;dissapointed&quot;,
+}
+</code></pre>
+<h3 id="default-behaviour">Default Behaviour</h3>
+<p>By default, you only really need the "name" parameter. If an image parameter is not provided, it will be automatically filled by the client with whatever the value of "name" is. </p>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;joyful&quot;
+}
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../Character%20Metadata/" class="btn btn-neutral float-left" title="Character File Structure"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../Themes/Lua/events/" class="btn btn-neutral float-right" title="Lua Theme Events">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../Character%20Metadata/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../Themes/Lua/events/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
