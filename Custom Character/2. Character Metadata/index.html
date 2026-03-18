@@ -76,6 +76,19 @@
                   <li class="toctree-l1"><a class="reference internal" href="../3.%20Outfit%20Metadata/">Outfit JSON</a>
                   </li>
               </ul>
+              <p class="caption"><span class="caption-text">Themes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Lua</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/events/">Lua Theme Events</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/functions/">Lua Theme Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/signals/">Lua Theme Signals</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
       </div>
     </div>
     </nav>
@@ -104,15 +117,15 @@
 <p>Characters user a singular <code>char.json</code> file to define the various variables used across all character outfits. </p>
 <hr />
 <h2 id="top-level-structure">Top-Level Structure</h2>
-<pre><code class="language-json">{
-  &quot;showname&quot;: &quot;...&quot;,
-  &quot;side&quot;: &quot;...&quot;,
-  &quot;gender&quot;: &quot;...&quot;,
-  &quot;outfit_order&quot;: [ ... ],
-  &quot;scaling_mode&quot;: &quot;...&quot;,
-  &quot;scaling_presets&quot;: [ ... ]
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;showname&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;side&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;gender&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;outfit_order&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;scaling_mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;scaling_presets&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div>
 <hr />
 <h3 id="showname"><code>showname</code></h3>
 <ul>
@@ -141,8 +154,8 @@
 <li><strong>Description:</strong> Lists the preferred display order of outfits for the character. Any outfits not listed here will be appended to the bottom of the list in alphabetical order.</li>
 <li><strong>Example:</strong></li>
 </ul>
-<pre><code class="language-json">&quot;outfit_order&quot;: [&quot;Default&quot;, &quot;Swimsuit&quot;]
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="nt">&quot;outfit_order&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;Default&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Swimsuit&quot;</span><span class="p">]</span>
+</code></pre></div>
 <hr />
 <h3 id="scaling_mode"><code>scaling_mode</code></h3>
 <ul>
@@ -167,13 +180,13 @@
 <li><code>scale</code> (integer): Scaling factor to apply.</li>
 </ul>
 <h4 id="example">Example</h4>
-<pre><code class="language-json">{
-  &quot;name&quot;: &quot;Close-up&quot;,
-  &quot;vertical&quot;: -168,
-  &quot;horizontal&quot;: -10,
-  &quot;scale&quot;: 700
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Close-up&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;vertical&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">-168</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;horizontal&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">-10</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;scale&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">700</span>
+<span class="p">}</span>
+</code></pre></div>
 <hr />
               
             </div>

@@ -49,6 +49,8 @@
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#minimal-structure">Minimal Structure</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#shirou-emiya-fsn-charjson-char_iconpng-soundsini-outfits-default-outfitjson">Shirou Emiya (FSN)/ │ char.json │ char_icon.png │ sounds.ini │ └── outfits/ └── Default/ └── outfit.json</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#required-files">Required files</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#optional-files">Optional Files</a>
@@ -64,6 +66,19 @@
                   <li class="toctree-l1"><a class="reference internal" href="../2.%20Character%20Metadata/">Character JSON</a>
                   </li>
                   <li class="toctree-l1"><a class="reference internal" href="../3.%20Outfit%20Metadata/">Outfit JSON</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Themes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Lua</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/events/">Lua Theme Events</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/functions/">Lua Theme Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/signals/">Lua Theme Signals</a>
+                </li>
+    </ul>
                   </li>
               </ul>
       </div>
@@ -94,7 +109,7 @@
 <p>A character is defined by a folder containing configuration files, assets, and one or more outfits.</p>
 <hr />
 <h2 id="minimal-structure">Minimal Structure</h2>
-<pre><code class="language-markdown">Shirou Emiya (FSN)/
+<h2 id="shirou-emiya-fsn-charjson-char_iconpng-soundsini-outfits-default-outfitjson"><div class="highlight"><pre><span></span><code>Shirou Emiya (FSN)/
 │   char.json
 │   char_icon.png
 │   sounds.ini
@@ -102,8 +117,7 @@
 └── outfits/
     └── Default/
         └── outfit.json
-</code></pre>
-<hr />
+</code></pre></div></h2>
 <h2 id="required-files">Required files</h2>
 <ul>
 <li><code>char_icon.png</code> - The preview icon for your character that is displayed throughout the client.</li>
@@ -120,8 +134,8 @@
 </ul>
 <hr />
 <h2 id="outfit-structure">Outfit Structure</h2>
-<p>Each outfit contains its own configuration and assets.</p>
-<pre><code class="language-markdown">outfits/
+<p>Each outfit contains its own configuration and assets.
+<div class="highlight"><pre><span></span><code>outfits/
 ├───Casual/
 │   │   body.webp
 │   │   outfit.json
@@ -152,7 +166,7 @@
             serious.webp
             smile.webp
             sweat.webp
-</code></pre>
+</code></pre></div></p>
 <hr />
 <h3 id="emotions-folder">Emotions Folder</h3>
 <ul>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Lua Theme Signals - Mystery Novel Network Docs</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Lua Theme Signals";
+        var mkdocs_page_input_path = "Themes\\Lua\\signals.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> Mystery Novel Network Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../..">MNN Documentation</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Custom Character</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../Custom%20Character/1.%20Character%20Structure/">Character Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../Custom%20Character/2.%20Character%20Metadata/">Character JSON</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../Custom%20Character/3.%20Outfit%20Metadata/">Outfit JSON</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Themes</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" >Lua</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../events/">Lua Theme Events</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../functions/">Lua Theme Functions</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Lua Theme Signals</a>
+    <ul class="current">
+    </ul>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">Mystery Novel Network Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Themes</li>
+          <li class="breadcrumb-item">Lua</li>
+      <li class="breadcrumb-item active">Lua Theme Signals</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="lua-theme-signals">Lua Theme Signals</h1>
+<p>Signals are functions that are called as a way for the client to tell the script "We just did this thing", letting the script do something with this knowledge before continuing. </p>
+<p>This is an outline of signals that are called by the client.</p>
+<ul>
+<li><a href="#custom-command-signals">Custom Command Signals</a></li>
+<li><a href="#onupdate">OnUpdate</a></li>
+<li><a href="#onarealook">OnAreaLook</a></li>
+<li><a href="#onareadescriptionrecieved">OnAreaDescriptionRecieved</a></li>
+<li><a href="#oncourtroomsetup">OnCourtroomSetup</a></li>
+<li><a href="#ontogglescreated">OnTogglesCreated</a></li>
+<li><a href="#ontabchanged">OnTabChanged</a></li>
+<li><a href="#oncharacterload">OnCharacterLoad</a></li>
+<li><a href="#onpairrequest">OnPairRequest</a></li>
+<li><a href="#onpairrequestaccepted">OnPairRequestAccepted</a></li>
+<li><a href="#onpairrequestdeclined">OnPairRequestDeclined</a></li>
+<li><a href="#onsongchange">OnSongChange</a></li>
+<li><a href="#onbliptick">OnBlipTick</a></li>
+<li><a href="#onmessagereceived">OnMessageReceived</a></li>
+<li><a href="#onmessagestart">OnMessageStart</a></li>
+<li><a href="#onmessagetick">OnMessageTick</a></li>
+<li><a href="#onmessagecompleted">OnMessageCompleted</a></li>
+<li><a href="#onoocmessage">OnOOCMessage</a></li>
+<li><a href="#onoocmessagesend">OnOOCMessageSend</a></li>
+<li><a href="#onictextchanged">OnICTextChanged</a></li>
+<li><a href="#onicmessagesend">OnICMessageSend</a></li>
+<li><a href="#onwindowfocuschange">OnWindowFocusChange</a></li>
+<li><a href="#onwindowresized">OnWindowResized</a></li>
+<li><a href="#onwindowmoved">OnWindowMoved</a></li>
+</ul>
+<hr />
+<h1 id="custom-command-signals">Custom Command Signals</h1>
+<p>It is possible to create custom commands, however they do not currently take in any parameters. For this example the command will be <code>/BGMReverb</code></p>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="w">  </span><span class="kr">function</span><span class="w"> </span><span class="nf">OnCommand_bgmreverb</span><span class="p">()</span>
+<span class="w">      </span><span class="nv">Audio</span><span class="p">.</span><span class="py">BGM</span><span class="p">.</span><span class="nf">ToggleReverb</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">end</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h1 id="onupdate">OnUpdate</h1>
+<p>Called every frame, providing a deltaTime for specific timing related funcitonality. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>deltaTime</code></td>
+<td><code>Int</code></td>
+<td>The nanoseconds since the last OnUpdate.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onarealook">OnAreaLook</h1>
+<p>Called anytime the look button is pressed.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>areaReason</code></td>
+<td><code>Int</code></td>
+<td>The id associated to the message currently displayed on the player list.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onareadescriptionrecieved">OnAreaDescriptionRecieved</h1>
+<p>Called when the area description is updated. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>areaDescription</code></td>
+<td><code>String</code></td>
+<td>The contents of the area description.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="oncourtroomsetup">OnCourtroomSetup</h1>
+<p>Called when the courtroom has finished creating all of its widgets. </p>
+<ul>
+<li><strong>Parameters:</strong> None</li>
+</ul>
+<hr />
+<h1 id="ontogglescreated">OnTogglesCreated</h1>
+<p>Called when the courtroom has finished creating all of the tabs defined in the theme. </p>
+<ul>
+<li><strong>Parameters:</strong> None</li>
+</ul>
+<hr />
+<h1 id="ontabchanged">OnTabChanged</h1>
+<p>Called when user triggers a tab switch.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tabName</code></td>
+<td><code>String</code></td>
+<td>The name of the tab.</td>
+</tr>
+<tr>
+<td><code>tabGroup</code></td>
+<td><code>String</code></td>
+<td>The name of the tabs group.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="oncharacterload">OnCharacterLoad</h1>
+<p>Called when client switches the character folder they are using. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>folderName</code></td>
+<td><code>String</code></td>
+<td>The name of the character folder.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onpairrequest">OnPairRequest</h1>
+<p>Called when a pair request is recieved. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>senderName</code></td>
+<td><code>String</code></td>
+<td>The name of whoever sent the pair request.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onpairrequestaccepted">OnPairRequestAccepted</h1>
+<p>Called when the user accepts a pair request.</p>
+<ul>
+<li><strong>Parameters:</strong> None</li>
+</ul>
+<hr />
+<h1 id="onpairrequestdeclined">OnPairRequestDeclined</h1>
+<p>Called when the user declines a pair request.</p>
+<ul>
+<li><strong>Parameters:</strong> None</li>
+</ul>
+<hr />
+<h1 id="onsongchange">OnSongChange</h1>
+<p>Called when a song change is sent by the server. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>songPath</code></td>
+<td><code>String</code></td>
+<td>The file path of the song.</td>
+</tr>
+<tr>
+<td><code>songName</code></td>
+<td><code>String</code></td>
+<td>The metadata name of the song.</td>
+</tr>
+<tr>
+<td><code>submitter</code></td>
+<td><code>String</code></td>
+<td>The name of the person who changed the song.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onbliptick">OnBlipTick</h1>
+<p>Called after the client plays a blip sound effect.  </p>
+<ul>
+<li><strong>Parameters:</strong> None</li>
+</ul>
+<hr />
+<h1 id="onmessagereceived">OnMessageReceived</h1>
+<p>Called when the client recieves an IC message from the server.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>showname</code></td>
+<td><code>String</code></td>
+<td>The showname of the speaking character.</td>
+</tr>
+<tr>
+<td><code>character</code></td>
+<td><code>String</code></td>
+<td>The folder name of the character.</td>
+</tr>
+<tr>
+<td><code>emote</code></td>
+<td><code>String</code></td>
+<td>The image name of the emote.</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td><code>String</code></td>
+<td>The text contents of the message.</td>
+</tr>
+<tr>
+<td><code>isEmpty</code></td>
+<td><code>Bool</code></td>
+<td>Whether or not the message is empty.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onmessagestart">OnMessageStart</h1>
+<p>Called when the client starts to type out the recieved IC message.</p>
+<ul>
+<li><strong>Parameters:</strong> None</li>
+</ul>
+<hr />
+<h1 id="onmessagetick">OnMessageTick</h1>
+<p>Called when the client inserts a character into the chatbox. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>character</code></td>
+<td><code>String</code></td>
+<td>The character that was inserted into the chatbox.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onmessagecompleted">OnMessageCompleted</h1>
+<p>Called when the client finishes typing out the recieved IC message. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isEmpty</code></td>
+<td><code>Bool</code></td>
+<td>Whether or not the message is empty.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onoocmessage">OnOOCMessage</h1>
+<p>Called when the client recieves an OOC message from the server. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>senderName</code></td>
+<td><code>String</code></td>
+<td>The display name of whoever sent the OOC message.</td>
+</tr>
+<tr>
+<td><code>message</code></td>
+<td><code>String</code></td>
+<td>The contents of the OOC message.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onoocmessagesend">OnOOCMessageSend</h1>
+<p>Called right before an OOC message is sent to the server. </p>
+<ul>
+<li><strong>Parameters:</strong> None</li>
+</ul>
+<hr />
+<h1 id="onictextchanged">OnICTextChanged</h1>
+<p>Called when the input field for the IC message is updated.  </p>
+<ul>
+<li><strong>Parameters:</strong> None</li>
+</ul>
+<hr />
+<h1 id="onicmessagesend">OnICMessageSend</h1>
+<p>Called right before an IC message is sent to the server. </p>
+<ul>
+<li><strong>Parameters:</strong> None</li>
+</ul>
+<hr />
+<h1 id="onwindowfocuschange">OnWindowFocusChange</h1>
+<p>Called when the focus of the window is changed. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>isFocused</code></td>
+<td><code>Bool</code></td>
+<td>Whether or not the window is now focused.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onwindowresized">OnWindowResized</h1>
+<p>Called when the size of the window is changed. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>width</code></td>
+<td><code>Int</code></td>
+<td>The new width of the window.</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td><code>Int</code></td>
+<td>The new height of the window.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="onwindowmoved">OnWindowMoved</h1>
+<p>Called when the position of the window is moved. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>x</code></td>
+<td><code>Int</code></td>
+<td>The new x value of the window.</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td><code>Int</code></td>
+<td>The new y value of the window.</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../functions/" class="btn btn-neutral float-left" title="Lua Theme Functions"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../functions/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Lua Theme Functions - Mystery Novel Network Docs</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Lua Theme Functions";
+        var mkdocs_page_input_path = "Themes\\Lua\\functions.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> Mystery Novel Network Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../..">MNN Documentation</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Custom Character</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../Custom%20Character/1.%20Character%20Structure/">Character Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../Custom%20Character/2.%20Character%20Metadata/">Character JSON</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../Custom%20Character/3.%20Outfit%20Metadata/">Outfit JSON</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Themes</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" >Lua</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../events/">Lua Theme Events</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="#">Lua Theme Functions</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#table-of-contents">📑 Table of Contents</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../signals/">Lua Theme Signals</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">Mystery Novel Network Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Themes</li>
+          <li class="breadcrumb-item">Lua</li>
+      <li class="breadcrumb-item active">Lua Theme Functions</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="lua-theme-functions">Lua Theme Functions</h1>
+<p>This is an outline of functions that you can call from within a lua script in a theme.</p>
+<h2 id="table-of-contents">📑 Table of Contents</h2>
+<ul>
+<li>🔊 Music Audio<ul>
+<li><a href="#audiobgmplay">Audio.BGM.Play</a></li>
+<li><a href="#audiobgmstop">Audio.BGM.Stop</a></li>
+<li><a href="#audiobgmsetspeed">Audio.BGM.SetSpeed</a></li>
+<li><a href="#audiobgmsetpitch">Audio.BGM.SetPitch</a></li>
+<li><a href="#audiobgmtogglereverb">Audio.BGM.ToggleReverb</a></li>
+</ul>
+</li>
+<li>🔔 SFX Audio<ul>
+<li><a href="#audiosfxplay">Audio.SFX.Play</a></li>
+</ul>
+</li>
+<li>💬 Blip Audio<ul>
+<li><a href="#audiobliptick">Audio.Blip.Tick</a></li>
+<li><a href="#audioblipsetrate">Audio.Blip.SetRate</a></li>
+<li><a href="#audioblipsetsound">Audio.Blip.SetSound</a></li>
+<li><a href="#audioblipsetgender">Audio.Blip.SetGender</a></li>
+</ul>
+</li>
+<li>⚙ System Audio<ul>
+<li><a href="#audiosystemplay">Audio.System.Play</a></li>
+</ul>
+</li>
+<li>📦 Widgets<ul>
+<li><a href="#widgetmove">Widget.Move</a></li>
+<li><a href="#widgetraise">Widget.Raise</a></li>
+<li><a href="#widgetsetvisible">Widget.SetVisible</a></li>
+<li><a href="#widgetsetparent">Widget.SetParent</a></li>
+</ul>
+</li>
+<li>🔖 Stickers<ul>
+<li><a href="#stickercreate">Sticker.Create</a></li>
+</ul>
+</li>
+<li>🕹 Buttons<ul>
+<li><a href="#buttoncreate">Button.Create</a></li>
+</ul>
+</li>
+<li>🎚 Sliders<ul>
+<li><a href="#slidercreate">Slider.Create</a></li>
+<li><a href="#slidercreatevertical">Slider.CreateVertical</a></li>
+<li><a href="#slidergetvalue">Slider.GetValue</a></li>
+<li><a href="#slidersetvalue">Slider.SetValue</a></li>
+</ul>
+</li>
+<li>📁 Tabs<ul>
+<li><a href="#tabschange">Tabs.Change</a></li>
+</ul>
+</li>
+<li>💬 ChoiceDialog<ul>
+<li><a href="#choicedialogtriggercustom">ChoiceDialog.TriggerCustom</a></li>
+<li><a href="#choicedialogsettext">ChoiceDialog.SetText</a></li>
+</ul>
+</li>
+<li>📝 In Character<ul>
+<li><a href="#icinputfieldfocus">IC.InputField.Focus</a></li>
+<li><a href="#icinputfieldgettext">IC.InputField.GetText</a></li>
+<li><a href="#icinputfieldsettext">IC.InputField.SetText</a></li>
+<li><a href="#icinputfieldappend">IC.InputField.Append</a></li>
+</ul>
+</li>
+<li>💭 Out of Character<ul>
+<li><a href="#ooclogappend">OOC.Log.Append</a></li>
+<li><a href="#oocnameget">OOC.Name.Get</a></li>
+<li><a href="#oocnameset">OOC.Name.Set</a></li>
+<li><a href="#oocinputfieldgettext">OOC.InputField.GetText</a></li>
+<li><a href="#oocinputfieldsettext">OOC.InputField.SetText</a></li>
+</ul>
+</li>
+<li>🚨 System<ul>
+<li><a href="#systemalert">System.Alert</a></li>
+</ul>
+</li>
+<li>🌐 Server<ul>
+<li><a href="#servergetclientid">Server.GetClientId</a></li>
+<li><a href="#servergetcharacterid">Server.GetCharacterId</a></li>
+<li><a href="#servergetcurrentcharacter">Server.GetCurrentCharacter</a></li>
+</ul>
+</li>
+<li>👤 Character<ul>
+<li><a href="#charactergetshowname">Character.GetShowname</a></li>
+<li><a href="#charactergetiniswap">Character.GetIniswap</a></li>
+<li><a href="#characterexists">Character.Exists</a></li>
+<li><a href="#characterswitch">Character.Switch</a></li>
+<li><a href="#charactersetscale">Character.SetScale</a></li>
+<li><a href="#charactersetvertical">Character.SetVertical</a></li>
+<li><a href="#charactersethorizontal">Character.SetHorizontal</a></li>
+</ul>
+</li>
+</ul>
+<hr />
+<h1 id="music-audio">🔊 Music Audio</h1>
+<h2 id="audiobgmplay">Audio.BGM.Play</h2>
+<p>Plays an audio file located in the <code>sounds/music/</code> directory on the <code>Music</code> track.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>musicPath</code></td>
+<td><code>String</code></td>
+<td>Path to the music file</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">BGM</span><span class="p">.</span><span class="nf">Play</span><span class="p">(</span><span class="s2">&quot;dro_dr1/All All Apologies.opus&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="audiobgmstop">Audio.BGM.Stop</h2>
+<p>Completely stops the audio that is being played on the music track.</p>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">BGM</span><span class="p">.</span><span class="nf">Stop</span><span class="p">()</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h3 id="audiobgmsetspeed">Audio.BGM.SetSpeed</h3>
+<p>Sets the current speed of the audio being played on the music track.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>speedValue</code></td>
+<td><code>Float</code></td>
+<td>The speed at which the music will be played back at.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">BGM</span><span class="p">.</span><span class="nf">SetSpeed</span><span class="p">(</span><span class="mf">1.6</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h3 id="audiobgmsetpitch">Audio.BGM.SetPitch</h3>
+<p>Sets the current pitch of the audio being played on the music track.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pitchValue</code></td>
+<td><code>Float</code></td>
+<td>The pitch at which the music will be played back at.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">BGM</span><span class="p">.</span><span class="nf">SetPitch</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h3 id="audiobgmtogglereverb">Audio.BGM.ToggleReverb</h3>
+<p>Toggles the reverb on the audio currently being played on the music track. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>reverbState</code></td>
+<td><code>Bool</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">BGM</span><span class="p">.</span><span class="nf">ToggleReverb</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<h1 id="sfx-audio">🔔 SFX Audio</h1>
+<h2 id="audiosfxplay">Audio.SFX.Play</h2>
+<p>Plays an audio file located in the <code>sounds/general/</code> directory on the <code>Effects</code> track.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>effectName</code></td>
+<td><code>String</code></td>
+<td>The name of the sound effect you wish to play.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">SFX</span><span class="p">.</span><span class="nf">Play</span><span class="p">(</span><span class="s2">&quot;DRding&quot;</span><span class="p">)</span>
+</code></pre></div>
+<h1 id="blip-audio">💬 Blip Audio</h1>
+<h2 id="audiobliptick">Audio.Blip.Tick</h2>
+<p>Plays the currently set blip file once. </p>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">Blip</span><span class="p">.</span><span class="nf">Tick</span><span class="p">()</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="audioblipsetrate">Audio.Blip.SetRate</h2>
+<p>Sets how often blips will play when typing a message. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>blipRate</code></td>
+<td><code>Int</code></td>
+<td>The specified amount of characters need to be typed out before the sound is played again.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong></li>
+</ul>
+<h2 id="audioblipsetrate14"><div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">Blip</span><span class="p">.</span><span class="nf">SetRate</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>
+</code></pre></div></h2>
+<h2 id="audioblipsetsound">Audio.Blip.SetSound</h2>
+<p>Sets the current blip to a file located in <code>sounds/general/</code>. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>soundFile</code></td>
+<td><code>String</code></td>
+<td>The file name of the sound effect to be used as a blip.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong></li>
+</ul>
+<h2 id="audioblipsetsoundsfx-blipfemaleopus"><div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">Blip</span><span class="p">.</span><span class="nf">SetSound</span><span class="p">(</span><span class="s2">&quot;sfx-blipfemale.opus&quot;</span><span class="p">)</span>
+</code></pre></div></h2>
+<h2 id="audioblipsetgender">Audio.Blip.SetGender</h2>
+<p>Sets the current blip to a file based on the specified gender similarly to the default implementation. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gender</code></td>
+<td><code>String</code></td>
+<td>The gender of the blip file you wish to use.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">Blip</span><span class="p">.</span><span class="nf">SetGender</span><span class="p">(</span><span class="s2">&quot;female&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<h1 id="system-audio">⚙ System Audio</h1>
+<h2 id="audiosystemplay">Audio.System.Play</h2>
+<p>Plays an audio file located in <code>sounds/general/</code> on the <code>System</code> audio track. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>effectName</code></td>
+<td><code>String</code></td>
+<td>The name of the sound effect you wish to play.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">System</span><span class="p">.</span><span class="nf">Play</span><span class="p">(</span><span class="s2">&quot;screenshot&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<h1 id="widgets">📦 Widgets</h1>
+<h2 id="widgetmove">Widget.Move</h2>
+<p>Moves a widget to the specified coordinates.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>widgetName</code></td>
+<td><code>String</code></td>
+<td>The name of the widget that will be moved.</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>Int</code></td>
+<td>The x coordinate.</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td><code>Int</code></td>
+<td>The y coordinate.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Widget</span><span class="p">.</span><span class="nf">Move</span><span class="p">(</span><span class="s2">&quot;player_list&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">41</span><span class="p">,</span><span class="w"> </span><span class="mi">21</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="widgetsetvisible">Widget.SetVisible</h2>
+<p>Sets whether or not the specified widget is currently active.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>widgetName</code></td>
+<td><code>String</code></td>
+<td>The name of the widget that you are targeting.</td>
+</tr>
+<tr>
+<td><code>visibleState</code></td>
+<td><code>Bool</code></td>
+<td>The visiblity state that the widget will be set to.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Widget</span><span class="p">.</span><span class="nf">SetParent</span><span class="p">(</span><span class="s2">&quot;viewport&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="widgetsetparent">Widget.SetParent</h2>
+<p>Parents the target widget onto another one.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parentName</code></td>
+<td><code>String</code></td>
+<td>The name of the widget that will become the parent of the child.</td>
+</tr>
+<tr>
+<td><code>childName</code></td>
+<td><code>String</code></td>
+<td>The name of the widget that will become the child of the parent.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Widget</span><span class="p">.</span><span class="nf">SetParent</span><span class="p">(</span><span class="s2">&quot;char_select&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;player_list&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="widgetraise">Widget.Raise</h2>
+<p>Raises the specified widget to the top of the render stack.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>widgetName</code></td>
+<td><code>String</code></td>
+<td>The name of the widget that will be raised.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Widget</span><span class="p">.</span><span class="nf">Raise</span><span class="p">(</span><span class="s2">&quot;char_select&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<h1 id="stickers">🔖 Stickers</h1>
+<h2 id="stickercreate">Sticker.Create</h2>
+<p>Create a sticker widget that will be rendered on the client. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>stickerName</code></td>
+<td><code>String</code></td>
+<td>The name of the sticker that will be created.</td>
+</tr>
+<tr>
+<td><code>imageFile</code></td>
+<td><code>String</code></td>
+<td>The file name of the image to be used on the sticker sourced from the theme folder.</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>Int</code></td>
+<td>The x coordinate in pixels.</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td><code>Int</code></td>
+<td>The y coordinate in pixels.</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td><code>Int</code></td>
+<td>The width of the sticker in pixels.</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td><code>Int</code></td>
+<td>The height of the sticker in pixels.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Sticker</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s2">&quot;sticker_taskbar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;taskbar&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">823</span><span class="p">,</span><span class="w"> </span><span class="mi">5120</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<h1 id="buttons">⚙ Buttons</h1>
+<h2 id="buttoncreate">Button.Create</h2>
+<p>Creates a button that can call an event when clicked. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>buttonName</code></td>
+<td><code>String</code></td>
+<td>The name of the button that will be created, which will be prefixed with <code>button_</code> after creation.</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>Int</code></td>
+<td>The x coordinate in pixels.</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td><code>Int</code></td>
+<td>The y coordinate in pixels.</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td><code>Int</code></td>
+<td>The width of the button in pixels.</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td><code>Int</code></td>
+<td>The height of the button in pixels.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Button</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s2">&quot;PlayChimes&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">544</span><span class="p">,</span><span class="w"> </span><span class="mi">960</span><span class="p">,</span><span class="w"> </span><span class="mi">200</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">)</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nf">PlayChimesButtonEvent</span><span class="p">()</span>
+<span class="w">  </span><span class="nv">Audio</span><span class="p">.</span><span class="py">System</span><span class="p">.</span><span class="nf">Play</span><span class="p">(</span><span class="s2">&quot;sfx/chimes.mp3&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">Widget</span><span class="p">.</span><span class="nf">Move</span><span class="p">(</span><span class="s2">&quot;button_PlayChimes&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="kr">end</span>
+</code></pre></div></li>
+</ul>
+<h1 id="sliders">🎚 Sliders</h1>
+<h2 id="slidercreate">Slider.Create</h2>
+<p>Creates a slider that can call an event when the value is changed. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sliderName</code></td>
+<td><code>String</code></td>
+<td>The name of the slider that will be created, which will be prefixed with <code>slider_</code> after creation.</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>Int</code></td>
+<td>The x coordinate in pixels.</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td><code>Int</code></td>
+<td>The y coordinate in pixels.</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td><code>Int</code></td>
+<td>The width of the button in pixels.</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td><code>Int</code></td>
+<td>The height of the button in pixels.</td>
+</tr>
+<tr>
+<td><code>minimum</code></td>
+<td><code>Int</code></td>
+<td>The minimum value the slider can reach.</td>
+</tr>
+<tr>
+<td><code>maximum</code></td>
+<td><code>Int</code></td>
+<td>The maximum value the slider can reach.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Slider</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s2">&quot;MusicSpeed&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1004</span><span class="p">,</span><span class="w"> </span><span class="mi">678</span><span class="p">,</span><span class="w"> </span><span class="mi">146</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nf">MusicSpeedValueChanged</span><span class="p">(</span><span class="nv">value</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">Audio</span><span class="p">.</span><span class="py">BGM</span><span class="p">.</span><span class="nf">SetSpeed</span><span class="p">(</span><span class="nv">value</span><span class="p">)</span>
+<span class="kr">end</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="slidercreatevertical">Slider.CreateVertical</h2>
+<p>Creates a vertical slider that can call an event when the value is changed. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sliderName</code></td>
+<td><code>String</code></td>
+<td>The name of the slider that will be created, which will be prefixed with <code>slider_</code> after creation.</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td><code>Int</code></td>
+<td>The x coordinate in pixels.</td>
+</tr>
+<tr>
+<td><code>y</code></td>
+<td><code>Int</code></td>
+<td>The y coordinate in pixels.</td>
+</tr>
+<tr>
+<td><code>width</code></td>
+<td><code>Int</code></td>
+<td>The width of the button in pixels.</td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td><code>Int</code></td>
+<td>The height of the button in pixels.</td>
+</tr>
+<tr>
+<td><code>minimum</code></td>
+<td><code>Int</code></td>
+<td>The minimum value the slider can reach.</td>
+</tr>
+<tr>
+<td><code>maximum</code></td>
+<td><code>Int</code></td>
+<td>The maximum value the slider can reach.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Slider</span><span class="p">.</span><span class="nf">CreateVertical</span><span class="p">(</span><span class="s2">&quot;MusicSpeed&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1004</span><span class="p">,</span><span class="w"> </span><span class="mi">678</span><span class="p">,</span><span class="w"> </span><span class="mi">146</span><span class="p">,</span><span class="w"> </span><span class="mi">20</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">100</span><span class="p">,</span><span class="w"> </span><span class="mi">100</span><span class="p">)</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nf">MusicSpeedValueChanged</span><span class="p">(</span><span class="nv">value</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">Audio</span><span class="p">.</span><span class="py">BGM</span><span class="p">.</span><span class="nf">SetSpeed</span><span class="p">(</span><span class="nv">value</span><span class="p">)</span>
+<span class="kr">end</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="slidergetvalue">Slider.GetValue</h2>
+<p>Returns the current value of the specified slider. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sliderName</code></td>
+<td><code>String</code></td>
+<td>The name of the slider you want the value from.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><strong>Returns:</strong> Int</p>
+</li>
+<li>
+<p><strong>Example:</strong></p>
+</li>
+</ul>
+<h2 id="local-musicspeed-slidergetvalueslider_musicspeed"><div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">musicSpeed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Slider</span><span class="p">.</span><span class="nf">GetValue</span><span class="p">(</span><span class="s2">&quot;slider_MusicSpeed&quot;</span><span class="p">)</span>
+</code></pre></div></h2>
+<h2 id="slidersetvalue">Slider.SetValue</h2>
+<p>Creates a vertical slider that can call an event when the value is changed. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sliderName</code></td>
+<td><code>String</code></td>
+<td>The name of the slider you want to set the value of.</td>
+</tr>
+<tr>
+<td><code>incomingValue</code></td>
+<td><code>Int</code></td>
+<td>The value you want to set the slider to.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Slider</span><span class="p">.</span><span class="nf">SetValue</span><span class="p">(</span><span class="s2">&quot;slider_MusicSpeed&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<h1 id="tabs">📁 Tabs</h1>
+<h2 id="tabschange">Tabs.Change</h2>
+<p>Triggers a tab change without clicking on the tab itself. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>tabGroup</code></td>
+<td><code>String</code></td>
+<td>The group that the target group is part of.</td>
+</tr>
+<tr>
+<td><code>tabName</code></td>
+<td><code>String</code></td>
+<td>The name of the tab you wish to switch to.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Tabs</span><span class="p">.</span><span class="nf">Change</span><span class="p">(</span><span class="s2">&quot;lists&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;areas&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<h1 id="choicedialog">💬 ChoiceDialog</h1>
+<h2 id="choicedialogtriggercustom">ChoiceDialog.TriggerCustom</h2>
+<p>Triggers the choice pop up with a custom event attached to it. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td><code>String</code></td>
+<td>The text that will be displayed on the pop up.</td>
+</tr>
+<tr>
+<td><code>signal</code></td>
+<td><code>String</code></td>
+<td>The signal that will be sent to script when responding to the dialog.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">ChoiceDialog</span><span class="p">.</span><span class="nf">TriggerCustom</span><span class="p">(</span><span class="s2">&quot;Would you like to switch to a new character?&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;SwitchCharacter&quot;</span><span class="p">)</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nf">SwitchCharacterAccepted</span><span class="p">()</span><span class="w"> </span>
+<span class="w">  </span><span class="nv">Character</span><span class="p">.</span><span class="nf">Switch</span><span class="p">(</span><span class="s2">&quot;Persona1&quot;</span><span class="p">)</span>
+<span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nf">SwitchCharacterDeclined</span><span class="p">()</span><span class="w"> </span>
+<span class="w">  </span><span class="nv">Audio</span><span class="p">.</span><span class="py">System</span><span class="p">.</span><span class="nf">Play</span><span class="p">(</span><span class="s2">&quot;sfx/chimes.mp3&quot;</span><span class="p">)</span>
+<span class="kr">end</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="choicedialogsettext">ChoiceDialog.SetText</h2>
+<p>Sets the text that is displayed on the choice pop up.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td><code>String</code></td>
+<td>The text that will be displayed on the pop up.</td>
+</tr>
+<tr>
+<td><code>isVisible</code></td>
+<td><code>Bool</code></td>
+<td>Sets whether or not the pop up will be visible after setting the text.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">ChoiceDialog</span><span class="p">.</span><span class="nf">SetText</span><span class="p">(</span><span class="s2">&quot;You have received a pair request.&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<h1 id="in-character">📝 In Character</h1>
+<h2 id="icinputfieldfocus">IC.InputField.Focus</h2>
+<p>Sets the window focus to the IC text field. </p>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">IC</span><span class="p">.</span><span class="py">InputField</span><span class="p">.</span><span class="nf">Focus</span><span class="p">()</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="icinputfieldgettext">IC.InputField.GetText</h2>
+<p>Returns the current text in the IC text field. </p>
+<ul>
+<li><strong>Returns:</strong> String</li>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">outgoingMessage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">IC</span><span class="p">.</span><span class="py">InputField</span><span class="p">.</span><span class="nf">GetText</span><span class="p">()</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="icinputfieldsettext">IC.InputField.SetText</h2>
+<p>Replaces the text in the IC text field. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td><code>String</code></td>
+<td>The text that will put into the text field.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">IC</span><span class="p">.</span><span class="py">InputField</span><span class="p">.</span><span class="nf">SetText</span><span class="p">(</span><span class="s2">&quot;[Pass]&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="icinputfieldappend">IC.InputField.Append</h2>
+<p>Appends the text to the end of the current contents in the IC text field.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>text</code></td>
+<td><code>String</code></td>
+<td>The text that will be appended to the end of the text field.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">IC</span><span class="p">.</span><span class="py">InputField</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">s&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<h1 id="out-of-character">💭 Out of Character</h1>
+<h2 id="ooclogappend">OOC.Log.Append</h2>
+<p>Adds a message to the OOC chat log.</p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>displayName</code></td>
+<td><code>String</code></td>
+<td>The name of the user that will appear in the chat log.</td>
+</tr>
+<tr>
+<td><code>messageContent</code></td>
+<td><code>String</code></td>
+<td>The message that will appear in the chat log.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">OOC</span><span class="p">.</span><span class="py">Log</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="s2">&quot;Lua&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;This is a message from your Lua script.&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="oocnameget">OOC.Name.Get</h2>
+<p>Returns your current OOC name.</p>
+<ul>
+<li><strong>Returns:</strong> String</li>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">oocName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">OOC</span><span class="p">.</span><span class="py">Name</span><span class="p">.</span><span class="nf">Get</span><span class="p">()</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="oocnameset">OOC.Name.Set</h2>
+<p>Sets your OOC username. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>displayName</code></td>
+<td><code>String</code></td>
+<td>The name that the OOC name will be set to.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">OOC</span><span class="p">.</span><span class="py">Name</span><span class="p">.</span><span class="nf">Set</span><span class="p">(</span><span class="s2">&quot;RoleplayerGuy&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="oocinputfieldgettext">OOC.InputField.GetText</h2>
+<p>Returns your current OOC Message.</p>
+<ul>
+<li><strong>Returns:</strong> String</li>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">outgoingText</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">OOC</span><span class="p">.</span><span class="py">InputField</span><span class="p">.</span><span class="nf">GetText</span><span class="p">()</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="oocinputfieldsettext">OOC.InputField.SetText</h2>
+<p>Sets your OOC message. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>message</code></td>
+<td><code>String</code></td>
+<td>The message that the OOC field will be set to.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">OOC</span><span class="p">.</span><span class="py">InputField</span><span class="p">.</span><span class="nf">SetText</span><span class="p">(</span><span class="s2">&quot;/help&quot;</span><span class="p">)</span>
+</code></pre></div></li>
+</ul>
+<h1 id="system">🚨 System</h1>
+<h2 id="systemalert">System.Alert</h2>
+<p>Causes the application icon in your task bar to behave similarly to a call word.</p>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">System</span><span class="p">.</span><span class="nf">Alert</span><span class="p">()</span>
+</code></pre></div></li>
+</ul>
+<h1 id="server">🌐 Server</h1>
+<h2 id="servergetclientid">Server.GetClientId</h2>
+<p>Returns your current client id that was set by the server.</p>
+<ul>
+<li><strong>Returns:</strong> Int</li>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">currentClientId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Server</span><span class="p">.</span><span class="nf">GetClientId</span><span class="p">();</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="servergetcharacterid">Server.GetCharacterId</h2>
+<p>Returns your current character id as recognized by the server.</p>
+<ul>
+<li><strong>Returns:</strong> Int</li>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">currentCharacterId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Server</span><span class="p">.</span><span class="nf">GetCharacterId</span><span class="p">();</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="servergetcurrentcharacter">Server.GetCurrentCharacter</h2>
+<p>Returns the name of your current character folder as recognized by the server.</p>
+<ul>
+<li><strong>Returns:</strong> String</li>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">serverCharacterName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Server</span><span class="p">.</span><span class="nf">GetCurrentCharacter</span><span class="p">();</span>
+</code></pre></div></li>
+</ul>
+<h1 id="character">👤 Character</h1>
+<h2 id="charactergetshowname">Character.GetShowname</h2>
+<p>Returns your current showname.</p>
+<ul>
+<li><strong>Returns:</strong> String</li>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">userShowname</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Character</span><span class="p">.</span><span class="nf">GetShowname</span><span class="p">();</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="charactergetiniswap">Character.GetIniswap</h2>
+<p>Returns the name of your current character folder as recognized by the client.</p>
+<ul>
+<li><strong>Returns:</strong> String</li>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">currentIniswap</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Character</span><span class="p">.</span><span class="nf">GetIniswap</span><span class="p">();</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="characterexists">Character.Exists</h2>
+<p>Returns whether or not a character exists within your content files. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>character</code></td>
+<td><code>String</code></td>
+<td>The folder name of the character who you want to check for.</td>
+</tr>
+<tr>
+<td>- <strong>Returns:</strong> Bool</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- <strong>Example:</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">personaExists</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Character</span><span class="p">.</span><span class="nf">GetIniswap</span><span class="p">(</span><span class="s2">&quot;Persona3&quot;</span><span class="p">);</span>
+</code></pre></div></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>---</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="characterswitch">Character.Switch</h2>
+<p>Attempts to switch to the character folder specified. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>character</code></td>
+<td><code>String</code></td>
+<td>The folder name of the character who you're attempting to switch to.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Character</span><span class="p">.</span><span class="nf">Switch</span><span class="p">(</span><span class="s2">&quot;Persona3&quot;</span><span class="p">);</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="charactersetscale">Character.SetScale</h2>
+<p>Sets the value of the character scale slider. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td><code>Int</code></td>
+<td>The target value ranging between 1 and 2000.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Character</span><span class="p">.</span><span class="nf">SetScale</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="charactersetvertical">Character.SetVertical</h2>
+<p>Sets the value of the character vertical slider. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td><code>Int</code></td>
+<td>The target value ranging between -1000 and 1000.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong>
+  <div class="highlight"><pre><span></span><code><span class="nv">Character</span><span class="p">.</span><span class="nf">SetVertical</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</code></pre></div></li>
+</ul>
+<hr />
+<h2 id="charactersethorizontal">Character.SetHorizontal</h2>
+<p>Sets the value of the character horizontal slider. </p>
+<ul>
+<li><strong>Parameters:</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>value</code></td>
+<td><code>Int</code></td>
+<td>The target value ranging between 1 and 960.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Example:</strong></li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="nv">Character</span><span class="p">.</span><span class="nf">SetHorizontal</span><span class="p">(</span><span class="mi">480</span><span class="p">);</span>
+</code></pre></div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../events/" class="btn btn-neutral float-left" title="Lua Theme Events"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../signals/" class="btn btn-neutral float-right" title="Lua Theme Signals">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../events/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../signals/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
