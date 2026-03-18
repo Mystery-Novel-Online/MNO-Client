@@ -47,7 +47,9 @@ It is possible to create custom commands, however they do not currently take in 
 
 # OnUpdate
 Called every frame, providing a deltaTime for specific timing related funcitonality. 
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `deltaTime`| `Int` | The nanoseconds since the last OnUpdate. |
@@ -56,7 +58,9 @@ Called every frame, providing a deltaTime for specific timing related funcitonal
 
 # OnAreaLook
 Called anytime the look button is pressed.
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `areaReason`| `Int` | The id associated to the message currently displayed on the player list. |
@@ -64,7 +68,9 @@ Called anytime the look button is pressed.
 ---
 # OnAreaDescriptionRecieved
 Called when the area description is updated. 
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `areaDescription`| `String` | The contents of the area description. |
@@ -72,17 +78,21 @@ Called when the area description is updated.
 ---
 # OnCourtroomSetup
 Called when the courtroom has finished creating all of its widgets. 
+
 - **Parameters:** None
 
 --- 
 # OnTogglesCreated
 Called when the courtroom has finished creating all of the tabs defined in the theme. 
+
 - **Parameters:** None
 
 ---
 # OnTabChanged
 Called when user triggers a tab switch.
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `tabName`| `String` | The name of the tab. |
@@ -91,7 +101,9 @@ Called when user triggers a tab switch.
 --- 
 # OnCharacterLoad
 Called when client switches the character folder they are using. 
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `folderName`| `String` | The name of the character folder. |
@@ -99,7 +111,9 @@ Called when client switches the character folder they are using.
 ---
 # OnPairRequest
 Called when a pair request is recieved. 
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `senderName`| `String` | The name of whoever sent the pair request. |
@@ -108,17 +122,21 @@ Called when a pair request is recieved.
 --- 
 # OnPairRequestAccepted
 Called when the user accepts a pair request.
+
 - **Parameters:** None
 
 ---
 # OnPairRequestDeclined
 Called when the user declines a pair request.
+
 - **Parameters:** None
 
 ---
 # OnSongChange
 Called when a song change is sent by the server. 
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `songPath`| `String` | The file path of the song. |
@@ -128,12 +146,15 @@ Called when a song change is sent by the server.
 ---
 # OnBlipTick
 Called after the client plays a blip sound effect.  
+
 - **Parameters:** None
 
 ---
 # OnMessageReceived
 Called when the client recieves an IC message from the server.
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `showname`| `String` | The showname of the speaking character. |
@@ -145,12 +166,15 @@ Called when the client recieves an IC message from the server.
 ---
 # OnMessageStart
 Called when the client starts to type out the recieved IC message.
+
 - **Parameters:** None
 
 ---
 # OnMessageTick
 Called when the client inserts a character into the chatbox. 
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `character`| `String` | The character that was inserted into the chatbox. |
@@ -158,7 +182,9 @@ Called when the client inserts a character into the chatbox.
 ---
 # OnMessageCompleted
 Called when the client finishes typing out the recieved IC message. 
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `isEmpty`| `Bool` | Whether or not the message is empty. |
@@ -168,6 +194,7 @@ Called when the client finishes typing out the recieved IC message.
 Called when the client recieves an OOC message from the server. 
 
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `senderName`| `String` | The display name of whoever sent the OOC message. |
@@ -176,22 +203,27 @@ Called when the client recieves an OOC message from the server.
 ---
 # OnOOCMessageSend
 Called right before an OOC message is sent to the server. 
+
 - **Parameters:** None
 
 ---
 # OnICTextChanged
 Called when the input field for the IC message is updated.  
+
 - **Parameters:** None
 
 ---
 # OnICMessageSend
 Called right before an IC message is sent to the server. 
+
 - **Parameters:** None
 
 ---
 # OnWindowFocusChange
 Called when the focus of the window is changed. 
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `isFocused`| `Bool` | Whether or not the window is now focused. |
@@ -199,7 +231,9 @@ Called when the focus of the window is changed.
 ---
 # OnWindowResized
 Called when the size of the window is changed. 
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `width`| `Int` | The new width of the window. |
@@ -208,7 +242,9 @@ Called when the size of the window is changed.
 ---
 # OnWindowMoved
 Called when the position of the window is moved. 
+
 - **Parameters:**
+
   | Name       | Type     | Description                 |
   |------------|----------|-----------------------------|
   | `x`| `Int` | The new x value of the window. |
