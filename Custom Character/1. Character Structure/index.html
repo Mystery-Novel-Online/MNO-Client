@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Character Structure - Mystery Novel Network Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Character Structure";
+        var mkdocs_page_input_path = "Custom Character\\1. Character Structure.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Mystery Novel Network Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">MNN Documentation</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Characters</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Characters/Character%20Metadata/">Character File Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Characters/Outfit%20Metadata/">Outfit File Structure</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Custom Character</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Character Structure</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#minimal-structure">Minimal Structure</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#required-files">Required files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#optional-files">Optional Files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#outfit-structure">Outfit Structure</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#emotions-folder">Emotions Folder</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../2.%20Character%20Metadata/">Character JSON</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../3.%20Outfit%20Metadata/">Outfit JSON</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Themes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Lua</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/events/">Lua Theme Events</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/functions/">Lua Theme Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/signals/">Lua Theme Signals</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Mystery Novel Network Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Custom Character</li>
+      <li class="breadcrumb-item active">Character Structure</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="character-structure">Character Structure</h1>
+<p>A character is defined by a folder containing configuration files, assets, and one or more outfits.</p>
+<hr />
+<h2 id="minimal-structure">Minimal Structure</h2>
+<pre><code class="language-markdown">Shirou Emiya (FSN)/
+│   char.json
+│   char_icon.png
+│   sounds.ini
+│
+└── outfits/
+    └── Default/
+        └── outfit.json
+</code></pre>
+<hr />
+<h2 id="required-files">Required files</h2>
+<ul>
+<li><code>char_icon.png</code> - The preview icon for your character that is displayed throughout the client.</li>
+<li><code>char.json</code> - Defines global character variables.</li>
+<li><code>outfits/</code> - Contains all the outfit folders. </li>
+<li>At least one outfit subfolder which contains an <code>outfit.json</code></li>
+</ul>
+<hr />
+<h2 id="optional-files">Optional Files</h2>
+<ul>
+<li><code>sounds.ini</code> - Assigns a custom list of sound effects to be loaded by the client when the character is selected.</li>
+<li><code>animations.ini</code> - Assigns a custom list of animations to be loaded by the client when the character is selected.</li>
+<li><code>animations/</code> - Contains animation files that are exclusive to this character, and has priority over global animations with the same name.</li>
+</ul>
+<hr />
+<h2 id="outfit-structure">Outfit Structure</h2>
+<p>Each outfit contains its own configuration and assets.</p>
+<pre><code class="language-markdown">outfits/
+├───Casual/
+│   │   body.webp
+│   │   outfit.json
+│   │
+│   └───emotions
+│           Blush.png
+│           Closed.png
+│           Dumbfounded.png
+│           Happy.png
+│           Smile.png
+│
+└───School Uniform/
+    │   cautious.webp
+    │   default.webp
+    │   outfit.json
+    │
+    ├───emotions
+    │       Cautious.png
+    │       Closed.png
+    │       Confused.png
+    │       Serious.png
+    │       Smile.png
+    │       Sweat.png
+    │
+    └───face
+            closed.webp
+            confused.webp
+            serious.webp
+            smile.webp
+            sweat.webp
+</code></pre>
+<hr />
+<h3 id="emotions-folder">Emotions Folder</h3>
+<ul>
+<li>This folder is found in every outfit folder and contains the button images used by the emote selector. </li>
+<li>These images are suggested to be 82x82 in file size and stored in <code>.png</code> format. </li>
+<li>The file name for each button must share the name of the emote it is targetting. </li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../Characters/Outfit%20Metadata/" class="btn btn-neutral float-left" title="Outfit File Structure"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../2.%20Character%20Metadata/" class="btn btn-neutral float-right" title="Character JSON">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../Characters/Outfit%20Metadata/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../2.%20Character%20Metadata/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

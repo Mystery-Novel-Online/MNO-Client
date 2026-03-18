@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Character File Structure - Mystery Novel Network Docs</title>
+    <title>Character JSON - Mystery Novel Network Docs</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Character File Structure";
-        var mkdocs_page_input_path = "Characters\\Character Metadata.md";
+        var mkdocs_page_name = "Character JSON";
+        var mkdocs_page_input_path = "Custom Character\\2. Character Metadata.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -44,41 +44,43 @@
                 </li>
               </ul>
               <p class="caption"><span class="caption-text">Characters</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Characters/Character%20Metadata/">Character File Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Characters/Outfit%20Metadata/">Outfit File Structure</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Custom Character</span></p>
               <ul class="current">
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Character File Structure</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../1.%20Character%20Structure/">Character Structure</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Character JSON</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#top-level-structure">Top-Level Structure</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#showname">showname</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#side">side</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#gender">gender</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#outfit_order">outfit_order</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#scaling_mode">scaling_mode</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#scaling_presets">scaling_presets</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#preset-object-fields">Preset Object Fields:</a>
+    <li class="toctree-l3"><a class="reference internal" href="#showname">showname</a>
     </li>
-    <li class="toctree-l3"><a class="reference internal" href="#example">Example</a>
+    <li class="toctree-l3"><a class="reference internal" href="#side">side</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#gender">gender</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#outfit_order">outfit_order</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#scaling_mode">scaling_mode</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#scaling_presets">scaling_presets</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#preset-object-fields">Preset Object Fields:</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#example">Example</a>
+    </li>
+        </ul>
     </li>
         </ul>
     </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../Outfit%20Metadata/">Outfit File Structure</a>
-                  </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Custom Character</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="reference internal" href="../../Custom%20Character/1.%20Character%20Structure/">Character Structure</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../Custom%20Character/2.%20Character%20Metadata/">Character JSON</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../Custom%20Character/3.%20Outfit%20Metadata/">Outfit JSON</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../3.%20Outfit%20Metadata/">Outfit JSON</a>
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">Themes</span></p>
@@ -108,8 +110,8 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Characters</li>
-      <li class="breadcrumb-item active">Character File Structure</li>
+          <li class="breadcrumb-item">Custom Character</li>
+      <li class="breadcrumb-item active">Character JSON</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -118,8 +120,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="character-file-structure">Character File Structure</h1>
-<p>Character parameter files are used to define the various variables used across all character outfits. </p>
+                <h1 id="character-json">Character JSON</h1>
+<p>Characters user a singular <code>char.json</code> file to define the various variables used across all character outfits. </p>
 <hr />
 <h2 id="top-level-structure">Top-Level Structure</h2>
 <pre><code class="language-json">{
@@ -132,28 +134,28 @@
 }
 </code></pre>
 <hr />
-<h2 id="showname"><code>showname</code></h2>
+<h3 id="showname"><code>showname</code></h3>
 <ul>
 <li><strong>Type:</strong> <code>string</code></li>
 <li><strong>Description:</strong> The display name of the character.</li>
 <li><strong>Example:</strong> <code>"Makoto Naegi"</code></li>
 </ul>
 <hr />
-<h2 id="side"><code>side</code></h2>
+<h3 id="side"><code>side</code></h3>
 <ul>
 <li><strong>Type:</strong> <code>string</code></li>
 <li><strong>Description:</strong> Indicates the background position the character is assigned to by default.</li>
 <li><strong>Example:</strong> <code>"wit"</code></li>
 </ul>
 <hr />
-<h2 id="gender"><code>gender</code></h2>
+<h3 id="gender"><code>gender</code></h3>
 <ul>
 <li><strong>Type:</strong> <code>string</code></li>
 <li><strong>Description:</strong> The gender of the character.</li>
 <li><strong>Example:</strong> <code>"female"</code></li>
 </ul>
 <hr />
-<h2 id="outfit_order"><code>outfit_order</code></h2>
+<h3 id="outfit_order"><code>outfit_order</code></h3>
 <ul>
 <li><strong>Type:</strong> <code>array of strings</code></li>
 <li><strong>Description:</strong> Lists the preferred display order of outfits for the character. Any outfits not listed here will be appended to the bottom of the list in alphabetical order.</li>
@@ -162,7 +164,7 @@
 <pre><code class="language-json">&quot;outfit_order&quot;: [&quot;Default&quot;, &quot;Swimsuit&quot;]
 </code></pre>
 <hr />
-<h2 id="scaling_mode"><code>scaling_mode</code></h2>
+<h3 id="scaling_mode"><code>scaling_mode</code></h3>
 <ul>
 <li><strong>Type:</strong> <code>string</code></li>
 <li><strong>Description:</strong> Determines how the character is scaled in the view.<ul>
@@ -172,21 +174,23 @@
 </li>
 </ul>
 <hr />
-<h2 id="scaling_presets"><code>scaling_presets</code></h2>
+<h3 id="scaling_presets"><code>scaling_presets</code></h3>
 <ul>
 <li><strong>Type:</strong> <code>array of objects</code></li>
 <li><strong>Description:</strong> Preset configurations for scaling the character in different contexts (e.g., close-up shots).</li>
 </ul>
-<h3 id="preset-object-fields">Preset Object Fields:</h3>
+<h4 id="preset-object-fields">Preset Object Fields:</h4>
 <ul>
 <li><code>name</code> (string): The name of the preset (e.g., <code>"Close-up"</code>).</li>
 <li><code>vertical</code> (integer): Vertical offset applied when the preset is active.</li>
+<li><code>horizontal</code> (integer): Horizontal offset applied when the preset is active. Unlike the vertical field, this does not set the slider value but instead adds the value to the current slider value when sending a message. </li>
 <li><code>scale</code> (integer): Scaling factor to apply.</li>
 </ul>
-<h3 id="example">Example</h3>
+<h4 id="example">Example</h4>
 <pre><code class="language-json">{
   &quot;name&quot;: &quot;Close-up&quot;,
   &quot;vertical&quot;: -168,
+  &quot;horizontal&quot;: -10,
   &quot;scale&quot;: 700
 }
 </code></pre>
@@ -195,8 +199,8 @@
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../.." class="btn btn-neutral float-left" title="MNN Documentation"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../Outfit%20Metadata/" class="btn btn-neutral float-right" title="Outfit File Structure">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../1.%20Character%20Structure/" class="btn btn-neutral float-left" title="Character Structure"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../3.%20Outfit%20Metadata/" class="btn btn-neutral float-right" title="Outfit JSON">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -219,10 +223,10 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../.." style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../1.%20Character%20Structure/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../Outfit%20Metadata/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../3.%20Outfit%20Metadata/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
