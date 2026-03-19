@@ -2379,6 +2379,7 @@ void Courtroom::next_chat_letter()
   if (m_tick_step >= message_length || ui_vp_chatbox->isHidden())
   {
     post_chatmessage();
+    m_tick_step = message_length;
     return;
   }
 
