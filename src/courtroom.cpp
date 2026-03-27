@@ -442,8 +442,7 @@ void Courtroom::play_ambient()
   QString l_ambient = m_ambient_sfx;
   if (l_ambient.isEmpty())
   {
-    DRPosition l_position = m_position_map.get_position(m_chatmessage[CMPosition]);
-    l_ambient = l_position.get_ambient_sfx();
+    l_ambient = QString::fromStdString(m_viewportScene.ambienceSound(m_chatmessage[CMPosition].toStdString()));
   }
 
   QString l_filepath = ao_app->get_ambient_sfx_path(l_ambient);
