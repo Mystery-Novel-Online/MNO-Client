@@ -133,7 +133,7 @@ void ThemeManager::execLayerTabs()
       for(QString r_WidgetName : r_tabInfo.m_WidgetContents)
       {
         QWidget *l_ChildWidget = getWidget(r_WidgetName);
-        if(l_ChildWidget != nullptr)
+        if(l_ChildWidget != nullptr && m_TabWidgets.contains(r_tabInfo.m_Name))
         {
           l_ChildWidget->setParent(m_TabWidgets[r_tabInfo.m_Name]);
         }
