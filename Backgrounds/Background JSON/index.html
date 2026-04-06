@@ -47,14 +47,12 @@
               <ul class="current">
                   <li class="toctree-l1 current"><a class="reference internal current" href="#">Background JSON</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#positions">Positions</a>
+    </li>
     <li class="toctree-l2"><a class="reference internal" href="#variants">Variants</a>
         <ul>
     <li class="toctree-l3"><a class="reference internal" href="#default-variant">Default Variant</a>
     </li>
-        </ul>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#positions">Positions</a>
-        <ul>
     <li class="toctree-l3"><a class="reference internal" href="#additional-variants">Additional Variants</a>
     </li>
         </ul>
@@ -113,19 +111,6 @@
                 <h1 id="background-json">Background JSON</h1>
 <p>Each background folder contains a single <code>background.json</code> file. This file defines how the client should render and behave when the background is used. </p>
 <hr />
-<h2 id="variants">Variants</h2>
-<p>A <strong>variant</strong> is an alternative version of background.</p>
-<h3 id="default-variant">Default Variant</h3>
-<p>If you JSON only contains the base fields:</p>
-<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span>
-<span class="w">    </span><span class="nt">&quot;background&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bg_name.png&quot;</span><span class="p">,</span><span class="w"> </span>
-<span class="w">    </span><span class="nt">&quot;foreground&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fg_name.png&quot;</span><span class="p">,</span><span class="w"> </span>
-<span class="w">    </span><span class="nt">&quot;ambience&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ambience_sound.opus&quot;</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>This will automatically be treated as a single variant named <code>Default</code>.
-This is the most common setup and is sufficent for most backgrounds.</p>
-<hr />
 <h2 id="positions">Positions</h2>
 <p>A position represents an alternative view of the current background, usually different camera angles or different character placements. </p>
 <div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span>
@@ -152,6 +137,19 @@ This is the most common setup and is sufficent for most backgrounds.</p>
 <li>The data structure of positions are nearly-identical to variants.</li>
 <li>Positions can't contain variant data, but variant data can contain positions. </li>
 </ul>
+<hr />
+<h2 id="variants">Variants</h2>
+<p>A <strong>variant</strong> is an alternative version of background.</p>
+<h3 id="default-variant">Default Variant</h3>
+<p>If you JSON only contains the base fields:</p>
+<div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"> </span>
+<span class="w">    </span><span class="nt">&quot;background&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bg_name.png&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="nt">&quot;foreground&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;fg_name.png&quot;</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="nt">&quot;ambience&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ambience_sound.opus&quot;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This will automatically be treated as a single variant named <code>Default</code>.
+This is the most common setup and is sufficent for most backgrounds.</p>
 <hr />
 <h3 id="additional-variants">Additional Variants</h3>
 <p>You can define extra variants by adding additional parameters to the base JSON.</p>
