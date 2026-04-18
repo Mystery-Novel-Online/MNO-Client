@@ -29,6 +29,8 @@
 #include "engine/fs/fs_characters.h"
 #include "engine/system/runtime_loop.h"
 #include <engine/system/debug/time_debugger.h>
+#include <rolechat/util/FileSystem.h>
+#include <rolechat/filesystem/RCFile.h>
 
 using namespace mk2;
 
@@ -204,18 +206,29 @@ bool GraphicsSpriteItem::setThemeAnimation(const QString &animation)
 
 bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, bool startFromEnd)
 {
+  using rolechat::fs::RCFile;
   for(const ActorLayer &layer : AnimationReader(name, m_KeyframeSequence, character).m_Layers)
   {
     QString qOffsetName = QString::fromStdString(layer.offsetName);
 
+    QString assetPathCharacter = engine::fs::characters::getDirectoryPath(character) + "/animations/assets/" + qOffsetName;
 
-    QString characterPath = engine::fs::characters::getDirectoryPath(character);
+    QString filePath = "";
+    auto targetFile = RCFile(assetPathCharacter.toStdString(), rolechat::fs::formats::supportedImages());
+    std::string targetFilePath = targetFile.findFirst();
 
-    QString filePath = FS::Paths::FindFile(characterPath + "/animations/assets/" + qOffsetName, true, FS::Formats::SupportedImages());
-    if(!FS::Checks::FileExists(filePath))
-      filePath = FS::Paths::FindFile("animations/assets/" + qOffsetName, true, FS::Formats::SupportedImages());
-    if(!FS::Checks::FileExists(filePath))
-      filePath = fs::characters::getSpritePathIdle(character, qOffsetName);
+    if(targetFilePath.empty())
+      targetFilePath = RCFile("animations/assets/" + qOffsetName.toStdString(), rolechat::fs::formats::supportedImages()).findFirst();
+
+
+    if(targetFilePath.empty()){
+      filePath = engine::fs::characters::getSpritePathIdle(character, qOffsetName);
+    }
+    else
+    {
+      filePath = QString::fromStdString(targetFilePath);
+    }
+
 
     createOverlay(layer, filePath);
   }
@@ -305,15 +318,15 @@ void GraphicsSpriteItem::processOverlays(const QVector<ActorLayer> &ActorLayers,
   for(const ActorLayer &layer : ActorLayers)
   {
     QString qSpriteName = QString::fromStdString(layer.spriteName);
-    QString filePath = fs::characters::getSpritePathIdle(character, path + qSpriteName);
+    QString filePath = engine::fs::characters::getSpritePathIdle(character, path + qSpriteName);
     if(!outfitName.isEmpty())
     {
-      const QString currentOutfitName = fs::characters::getSpritePathIdle(character, "outfits/" + outfitName +  "/" + qSpriteName);
+      const QString currentOutfitName = engine::fs::characters::getSpritePathIdle(character, "outfits/" + outfitName +  "/" + qSpriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
     else
     {
-      const QString currentOutfitName = fs::characters::getSpritePathIdle(character, qSpriteName);
+      const QString currentOutfitName = engine::fs::characters::getSpritePathIdle(character, qSpriteName);
       if(FS::Checks::FileExists(currentOutfitName)) filePath = currentOutfitName;
     }
     createOverlay(layer, filePath);
