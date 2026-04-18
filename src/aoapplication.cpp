@@ -283,7 +283,7 @@ QString AOApplication::get_sfx_noext_path(QString p_file)
 
 QString AOApplication::get_ambient_sfx_path(QString p_file)
 {
-  return find_asset_path(FS::Paths::FindFile("sounds/ambient/" + p_file));
+  return find_asset_path("sounds/ambient/" + p_file);
 }
 
 QString AOApplication::get_background_sprite_path(QString p_background_name, QString p_image)
