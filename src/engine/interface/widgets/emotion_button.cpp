@@ -61,6 +61,7 @@ void AOEmoteButton::setLayerImage(const QString &character, const QString &layer
   m_texture.load(l_texture);
   m_comment = layer;
   setText(m_texture.isNull() ? layer : nullptr);
+  setToolTip(m_texture.isNull() ? layer : QString());
 }
 
 int AOEmoteButton::get_emote_number()
