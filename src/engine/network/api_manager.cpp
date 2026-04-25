@@ -51,6 +51,7 @@ void ApiManager::login()
 
     if (verifyReply->error() == QNetworkReply::NoError) {
       QString dataString = verifyReply->readAll();
+      qDebug() << dataString;
       nlohmann::json verifyResponse = nlohmann::json::parse(dataString.toStdString());
       verifyReply->deleteLater();
 
@@ -60,6 +61,20 @@ void ApiManager::login()
 
 
       m_collections.clear();
+
+      if(verifyResponse.contains("content_categories"))
+      {
+        const auto& categories = verifyResponse["content_categories"];
+
+        for (auto it = categories.begin(); it != categories.end(); ++it)
+        {
+          int id = std::stoi(it.key());   // keys are strings in JSON
+          std::string name = it.value();
+
+          if (!name.empty())
+            m_categoryMap[id] = name;
+        }
+      }
 
       if (verifyResponse.contains("collections") &&
           verifyResponse["collections"].is_array())

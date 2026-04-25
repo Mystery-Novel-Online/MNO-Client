@@ -49,6 +49,8 @@ private:
   QNetworkAccessManager m_network;
   ApiPermissionLevels m_permissionLevel = APIPerms_None;
 
+  QMap<int, std::string> m_categoryMap = {};
+
   QStringList m_collections;
 };
 
