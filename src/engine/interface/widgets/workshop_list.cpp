@@ -31,6 +31,9 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
   connect(entry, &WorkshopEntry::clicked, this, &WorkshopListWidget::entryClicked);
   connect(entry, &WorkshopEntry::rightClicked, this, &WorkshopListWidget::entryRightClicked);
   m_layout->addWidget(entry);
+
+  QMap<int, std::string> categories = ApiManager::instance().categoryMap();
+
   for(const auto & child : children)
   {
     int id = child.toObject().value("id").toInt();
@@ -40,7 +43,29 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
       url = ApiManager::repoUrl(id);
     };
 
-    WorkshopContentEntry newEntry = {child.toObject().value("name").toString(), child.toObject().value("submitter").toString(), child.toObject().value("artist").toString(), child.toObject().value("description").toString(), url, child.toObject().value("folder").toString()};
+    QMap<QString, QString> tagMap = {};
+
+    for(auto tag : child.toObject().value("tags").toArray())
+    {
+      QJsonObject tagObj = tag.toObject();
+      QString value = tagObj.value("name").toString();
+      int key = tagObj.value("id").toInt(0);
+      if(categories.contains(key))
+      {
+        tagMap[QString::fromStdString(categories[key])] = value;
+      }
+    }
+
+    WorkshopContentEntry newEntry = {
+        child.toObject().value("name").toString(),
+        child.toObject().value("submitter").toString(),
+        child.toObject().value("artist").toString(),
+        child.toObject().value("description").toString(),
+        url,
+        child.toObject().value("folder").toString(),
+        tagMap
+    };
+
     auto childWidget = entry->createChild(id, "", newEntry.name, newEntry.submitter, "", nullptr);
     connect(childWidget, &WorkshopEntry::clicked, this, &WorkshopListWidget::entryClicked);
     m_EntryData[id] = newEntry;

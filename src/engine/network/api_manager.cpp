@@ -68,7 +68,7 @@ void ApiManager::login()
 
         for (auto it = categories.begin(); it != categories.end(); ++it)
         {
-          int id = std::stoi(it.key());   // keys are strings in JSON
+          int id = std::stoi(it.key());
           std::string name = it.value();
 
           if (!name.empty())

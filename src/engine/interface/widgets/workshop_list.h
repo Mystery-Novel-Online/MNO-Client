@@ -13,6 +13,7 @@ struct WorkshopContentEntry
   QString description;
   QString downloadLink;
   QString folder;
+  QMap<QString, QString> tagMap;
 };
 
 class WorkshopListWidget : public QWidget

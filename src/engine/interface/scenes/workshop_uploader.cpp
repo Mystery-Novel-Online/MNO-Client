@@ -152,7 +152,7 @@ void WorkshopUploader::StartUpload()
   prompt->show();
 }
 
-void WorkshopUploader::StartEdit(int id)
+void WorkshopUploader::StartEdit(int id, QMap<QString, QString> tagMap)
 {
   QString uploadKey = ApiManager::authorizationKey();
   if(uploadKey.trimmed().isEmpty() || uploadKey.trimmed() == "PUT_KEY_HERE")
@@ -161,7 +161,7 @@ void WorkshopUploader::StartEdit(int id)
     config::ConfigUserSettings::save();
     return;
   }
-  WorkshopUploader *prompt = new WorkshopUploader(nullptr, true, id);
+  WorkshopUploader *prompt = new WorkshopUploader(nullptr, true, id, tagMap);
   prompt->show();
 }
 
