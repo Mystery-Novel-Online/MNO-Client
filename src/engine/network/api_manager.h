@@ -31,6 +31,8 @@ public:
 
   const QStringList& collections() {return m_collections;}
 
+  const QList<std::string> contentCategories() { return m_categoryMap.values(); }
+
   static bool appendFile(QHttpMultiPart* multipart, const QString& fieldName, const QString& filePath);
   static void appendField(QHttpMultiPart* multipart, const QString& name, const QString& value);
 

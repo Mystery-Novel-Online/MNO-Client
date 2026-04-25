@@ -8,6 +8,8 @@
 #include <engine/fs/fs_characters.h>
 #include <engine/fs/fs_reading.h>
 #include <engine/network/api_manager.h>
+#include <QDialogButtonBox>
+#include <QHeaderView>
 
 WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) : QDialog{parent}, m_currentReply(nullptr), m_isEdit(edit), m_editTarget(editTarget)
 {
@@ -25,9 +27,34 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
   m_artist = new QLineEdit(this);
   m_description = new QTextEdit(this);
 
+  m_tagTable = new QTableWidget(this);
+  m_tagTable->setColumnCount(3);
+
+  QStringList headers;
+  headers << "Category" << "Tag" << "";
+  m_tagTable->setHorizontalHeaderLabels(headers);
+
+  m_tagTable->horizontalHeader()->setStretchLastSection(false);
+  m_tagTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+  m_tagTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+  m_tagTable->setColumnWidth(2, 80);
+
+  m_tagTable->setEditTriggers(
+      QAbstractItemView::DoubleClicked |
+      QAbstractItemView::EditKeyPressed
+      );
+
+  connect(m_tagTable, &QTableWidget::itemChanged, this, [=](QTableWidgetItem* item)
+          {
+            if (item->column() != 1) return;
+            item->setText(item->text().trimmed());
+          });
+
   m_chooseButton = new QPushButton("Choose Zip", this);
   m_imageButton = new QPushButton("Choose Preview", this);
   m_submitButton = new QPushButton("Submit", this);
+
+  m_addTag = new QPushButton("Add Tag", this);
 
   m_collectionList = new QComboBox(this);
   if(edit)
@@ -65,6 +92,8 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
   layout->addRow("", m_imageButton);
   layout->addRow("Artist:", m_artist);
   layout->addRow("Description:", m_description);
+  layout->addRow("", m_addTag);
+  layout->addRow("Tags:", m_tagTable);
   layout->addRow("Collection:", m_collectionList);
   layout->addRow("", m_private);
   layout->addRow("", m_submitButton);
@@ -76,6 +105,10 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
   connect(m_imageButton, &QPushButton::clicked, this, &WorkshopUploader::choosePreviewFile);
 
   connect(m_submitButton, &QPushButton::clicked, this, &WorkshopUploader::submitForm);
+  connect(m_addTag, &QPushButton::clicked, this, &WorkshopUploader::addTagClicked);
+
+  addTag(2, "Artist", "Unknown", true);
+  addTag(2, "Franchise", "Unkown", true);
 }
 
 void WorkshopUploader::StartUpload()
@@ -104,11 +137,97 @@ void WorkshopUploader::StartEdit(int id)
   prompt->show();
 }
 
+void WorkshopUploader::addTag(int categoryId, const QString &categoryName, const QString &tagName, bool forcedTag)
+{
+  int row = m_tagTable->rowCount();
+  m_tagTable->insertRow(row);
+
+  QTableWidgetItem* categoryItem = new QTableWidgetItem(categoryName);
+  categoryItem->setFlags(categoryItem->flags() & ~Qt::ItemIsEditable);
+  m_tagTable->setItem(row, 0, categoryItem);
+
+  QTableWidgetItem* tagItem = new QTableWidgetItem(tagName.trimmed());
+  tagItem->setFlags(tagItem->flags() | Qt::ItemIsEditable);
+  m_tagTable->setItem(row, 1, tagItem);
+
+  QTableWidgetItem* dummyItem = new QTableWidgetItem();
+  dummyItem->setFlags(Qt::NoItemFlags);  // fully disabled
+  m_tagTable->setItem(row, 2, dummyItem);
+
+  if (!forcedTag)
+  {
+    QPushButton* removeBtn = new QPushButton("-", this);
+
+    connect(removeBtn, &QPushButton::clicked, this, [this, removeBtn]() {
+              for (int i = 0; i < m_tagTable->rowCount(); i++)
+              {
+                if (m_tagTable->cellWidget(i, 2) == removeBtn)
+                {
+                  m_tagTable->removeRow(i);
+                  break;
+                }
+              }
+            });
+
+    m_tagTable->setCellWidget(row, 2, removeBtn);
+  }
+}
+
 void WorkshopUploader::chooseFile()
 {
   QString file = QFileDialog::getOpenFileName(this, "Select Zip File", "", "Zip Files (*.zip)");
   if (!file.isEmpty()) {
     m_filePath->setText(file);
+  }
+}
+
+void WorkshopUploader::addTagClicked()
+{
+  QDialog dialog(this);
+  dialog.setWindowTitle("Add Tag");
+
+  auto *layout = new QVBoxLayout(&dialog);
+
+  auto *categoryLabel = new QLabel("Category:", &dialog);
+  auto *categoryCombo = new QComboBox(&dialog);
+
+  int i = 1;
+  for(std::string cat : ApiManager::instance().contentCategories())
+  {
+    if(cat != "System")
+      categoryCombo->addItem(QString::fromStdString(cat), i);
+    i++;
+  };
+
+  auto *tagLabel = new QLabel("Tag:", &dialog);
+  auto *tagEdit = new QLineEdit(&dialog);
+  tagEdit->setPlaceholderText("Enter tag name...");
+
+  auto *buttons = new QDialogButtonBox(
+      QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
+      Qt::Horizontal,
+      &dialog
+      );
+
+  layout->addWidget(categoryLabel);
+  layout->addWidget(categoryCombo);
+  layout->addWidget(tagLabel);
+  layout->addWidget(tagEdit);
+  layout->addWidget(buttons);
+
+  QObject::connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+  QObject::connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
+
+  if (dialog.exec() == QDialog::Accepted)
+  {
+    int categoryId = categoryCombo->currentData().toInt();
+    QString categoryName = categoryCombo->currentText();
+    QString tagName = tagEdit->text().trimmed();
+
+    if (tagName.isEmpty())
+      return;
+
+    addTag(categoryId, categoryName, tagName, false);
   }
 }
 

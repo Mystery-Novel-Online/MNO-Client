@@ -1,3 +1,5 @@
+
+#include <QTableWidget>
 #ifndef WORKSHOP_UPLOADER_H
 #define WORKSHOP_UPLOADER_H
 
@@ -8,9 +10,11 @@ public:
   explicit WorkshopUploader(QWidget *parent = nullptr, bool edit = false, int edit_id = -1);
   static void StartUpload();
   static void StartEdit(int id);
+  void addTag(int categoryId, const QString& categoryName, const QString& tagName, bool forcedTag = false);
 
 private slots:
   void chooseFile();
+  void addTagClicked();
   void choosePreviewFile();
   void submitForm();
   void handleReply();
@@ -21,12 +25,15 @@ private:
   QLineEdit *m_previewPath;
   QLineEdit *m_artist;
   QTextEdit *m_description;
+  QPushButton *m_addTag;
   QPushButton *m_imageButton;
   QPushButton *m_chooseButton;
   QPushButton *m_submitButton;
   QProgressBar *m_progress;
 
   QComboBox *m_collectionList;
+
+  QTableWidget* m_tagTable;
 
   bool m_isEdit = false;
   int m_editTarget = -1;
