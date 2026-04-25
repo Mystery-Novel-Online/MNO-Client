@@ -7,7 +7,7 @@ class WorkshopUploader : public QDialog
 {
   Q_OBJECT
 public:
-  explicit WorkshopUploader(QWidget *parent = nullptr, bool edit = false, int edit_id = -1);
+  explicit WorkshopUploader(QWidget *parent = nullptr, bool edit = false, int edit_id = -1, QMap<QString, QString> tagMap = {});
   static void StartUpload();
   static void StartEdit(int id);
   void addTag(int categoryId, const QString& categoryName, const QString& tagName, bool forcedTag = false);

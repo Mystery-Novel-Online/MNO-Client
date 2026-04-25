@@ -11,7 +11,7 @@
 #include <QDialogButtonBox>
 #include <QHeaderView>
 
-WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) : QDialog{parent}, m_currentReply(nullptr), m_isEdit(edit), m_editTarget(editTarget)
+WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, QMap<QString, QString> tagMap) : QDialog{parent}, m_currentReply(nullptr), m_isEdit(edit), m_editTarget(editTarget)
 {
 
   setWindowTitle(m_isEdit ? "Edit Character" : "Upload Character");
@@ -107,8 +107,36 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget) :
   connect(m_submitButton, &QPushButton::clicked, this, &WorkshopUploader::submitForm);
   connect(m_addTag, &QPushButton::clicked, this, &WorkshopUploader::addTagClicked);
 
-  addTag(2, "Artist", "Unknown", true);
-  addTag(2, "Franchise", "Unkown", true);
+  if(tagMap.isEmpty() && !m_isEdit)
+  {
+    addTag(2, "Artist", "Unknown", true);
+    addTag(2, "Franchise", "Unkown", true);
+  }
+  else
+  {
+    bool artistAdded = false;
+    bool franchiseAdded = false;
+
+
+    for (auto it = tagMap.begin(); it != tagMap.end(); ++it)
+    {
+      QString key = it.key();
+      QString value = it.value();
+      bool notOptionalTag = false;
+      if(key == "Artist" && !artistAdded)
+      {
+        artistAdded = true;
+        notOptionalTag = true;
+      }
+      if(key == "Franchise" && !franchiseAdded)
+      {
+        franchiseAdded = true;
+        notOptionalTag = true;
+      }
+      addTag(-1, key, value, notOptionalTag);
+    }
+  }
+
 }
 
 void WorkshopUploader::StartUpload()
