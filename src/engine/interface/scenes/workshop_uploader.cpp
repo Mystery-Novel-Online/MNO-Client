@@ -24,7 +24,6 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
   m_previewPath->setReadOnly(true);
 
 
-  m_artist = new QLineEdit(this);
   m_description = new QTextEdit(this);
 
   m_tagTable = new QTableWidget(this);
@@ -81,7 +80,6 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
   {
     m_filePath->setText("<No Change>");
     m_description->setText("<No Change>");
-    m_artist->setText("<No Change>");
     m_previewPath->setText("<No Change>");
   }
 
@@ -90,7 +88,6 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
   layout->addRow("", m_chooseButton);
   layout->addRow("Preview Image:", m_previewPath);
   layout->addRow("", m_imageButton);
-  layout->addRow("Artist:", m_artist);
   layout->addRow("Description:", m_description);
   layout->addRow("", m_addTag);
   layout->addRow("Tags:", m_tagTable);
@@ -306,7 +303,8 @@ void WorkshopUploader::submitForm()
   if(m_editTarget != -1)
     ApiManager::appendField(multiPart, "id", QString::number(m_editTarget));
 
-  ApiManager::appendField(multiPart, "artist", m_artist->text());
+  //ApiManager::appendField(multiPart, "artist", m_artist->text());
+
   ApiManager::appendField(multiPart, "description", m_description->toPlainText());
   ApiManager::appendField(multiPart, "tags", "untagged");
   ApiManager::appendField(multiPart, "is_private", QString::number(m_private->checkState() == Qt::Checked));
