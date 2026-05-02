@@ -117,6 +117,9 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
 
   m_EntryData.clear();
 
+
+  QMap<int, std::string> categories = ApiManager::instance().categoryMap();
+
   QJsonArray arr = doc.array();
   for (const QJsonValue &val : arr) {
     if (!val.isObject()) continue;
@@ -137,7 +140,20 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
     }
 
 
-    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString()};
+    QMap<QString, QString> tagMap = {};
+
+    for(auto tag : obj.value("tags").toArray())
+    {
+      QJsonObject tagObj = tag.toObject();
+      QString value = tagObj.value("name").toString();
+      int key = tagObj.value("category").toInt(0);
+      if(categories.contains(key))
+      {
+        tagMap[QString::fromStdString(categories[key])] = value;
+      }
+    }
+
+    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString(), tagMap};
     QString iconUrl = obj.value("url_icon").toString();
 
     auto childrenArray = obj.value("children").toArray();
