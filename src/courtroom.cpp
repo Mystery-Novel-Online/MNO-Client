@@ -2410,7 +2410,7 @@ void Courtroom::next_chat_letter()
     const int l_scroll_pos = l_scrollbar->value();
     bool l_scroll_limt = l_scroll_pos == l_scrollbar->maximum();
 
-    if(ao_config->log_is_topdown_enabled())
+    if(ao_config->log_is_topdown_enabled() && !is_system_speaking)
     {
       cursor2.setPosition(m_iclog_cursor_position);
       ui_ic_chatlog->setTextCursor(cursor2);
