@@ -12,10 +12,14 @@ public:
 
   void addTag(const QString& text);
   void setMaxColumns(int cols) { m_maxCols = cols; };
+  void clearAllTags();
 
 
 private:
-  QGridLayout* m_layout;
+  QScrollArea* m_scrollArea = nullptr;
+  QWidget* m_container = nullptr;
+  QHBoxLayout* m_layout = nullptr;
+
   int m_maxCols = 6;
 
 signals:
