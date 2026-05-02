@@ -306,10 +306,38 @@ void WorkshopUploader::submitForm()
   //ApiManager::appendField(multiPart, "artist", m_artist->text());
 
   ApiManager::appendField(multiPart, "description", m_description->toPlainText());
-  ApiManager::appendField(multiPart, "tags", "untagged");
   ApiManager::appendField(multiPart, "is_private", QString::number(m_private->checkState() == Qt::Checked));
 
   ApiManager::appendField(multiPart, "collection", m_collectionList->currentText());
+
+
+  QJsonArray arr;
+
+  for (int row = 0; row < m_tagTable->rowCount(); ++row)
+  {
+    auto categoryItem = m_tagTable->item(row, 0);
+    auto tagItem      = m_tagTable->item(row, 1);
+
+    if (!categoryItem || !tagItem)
+      continue;
+
+    QString category = categoryItem->text().trimmed();
+    QString tag      = tagItem->text().trimmed();
+
+    if (category.isEmpty() || tag.isEmpty())
+      continue;
+
+
+    QJsonObject obj;
+    obj["category"] = category;
+    obj["tag"] = tag;
+    arr.append(obj);
+
+  }
+
+  QJsonDocument doc(arr);
+
+  ApiManager::appendField(multiPart, "tags", doc.toJson(QJsonDocument::Compact));
 
   m_currentReply = ApiManager::instance().post(QString(m_isEdit ? "api/workshop/edit" : "api/workshop/upload"), multiPart);
 
