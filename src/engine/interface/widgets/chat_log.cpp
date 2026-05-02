@@ -6,6 +6,7 @@ DRChatLog::DRChatLog(QWidget *parent)
     : QTextBrowser(parent)
     , dr_config(new AOConfig(this))
 {
+  setMouseTracking(true);
   connect(this, SIGNAL(message_queued()), this, SLOT(_p_write_message_queue()));
 }
 
@@ -46,6 +47,7 @@ void DRChatLog::_p_write_message_queue()
   const bool l_is_end_scroll_pos = l_scrollbar->value() == l_scrollbar->maximum();
 
   QTextCharFormat l_normal_format;
+
   l_normal_format.setFont(font());
   l_normal_format.setFontWeight(QFont::Normal);
   QTextCharFormat l_name_format = l_normal_format;
@@ -62,12 +64,13 @@ void DRChatLog::_p_write_message_queue()
 
   while (!m_message_queue.isEmpty())
   {
+
     if (!m_message_list.isEmpty())
       l_cursor.insertText(QString(QChar::LineFeed));
     const Message l_message = m_message_queue.dequeue();
+    l_normal_format.setToolTip(l_message.timestamp.toString("hh:mm:ss"));
+    l_name_format.setToolTip(l_message.timestamp.toString("hh:mm:ss"));
     m_message_list.append(l_message);
-
-    l_cursor.insertText(QString(QString("[%1] ").arg(l_message.timestamp.toString("hh:mm"))), l_normal_format);
 
     if (!l_message.name.isEmpty())
     {
@@ -123,13 +126,19 @@ void DRChatLog::_p_write_message_queue()
           continue;
 
         QTextCharFormat l_piece_format = l_normal_format;
+
+
         if (i_piece.is_href)
         {
           l_piece_format = l_href_format;
           l_piece_format.setAnchorHref(i_piece.text);
+          l_piece_format.setToolTip(l_message.timestamp.toString("hh:mm:ss"));
         }
 
-        l_cursor.insertText(i_piece.is_href ? QUrl(i_piece.text).toString() : i_piece.text, l_piece_format);
+        l_cursor.insertText(
+            i_piece.is_href ? QUrl(i_piece.text).toString() : i_piece.text,
+            l_piece_format
+            );
       }
     }
   }
