@@ -235,18 +235,6 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     for (const QString& tag : workshop_list->getEntry(id).tagMap.values())
       ui_workshop_tags->addTag(tag);
 
-    for (const QString& tag : workshop_list->getEntry(id).tagMap.values())
-      ui_workshop_tags->addTag(tag);
-
-    for (const QString& tag : workshop_list->getEntry(id).tagMap.values())
-      ui_workshop_tags->addTag(tag);
-
-    for (const QString& tag : workshop_list->getEntry(id).tagMap.values())
-      ui_workshop_tags->addTag(tag);
-
-    for (const QString& tag : workshop_list->getEntry(id).tagMap.values())
-      ui_workshop_tags->addTag(tag);
-
     m_currentBrowserUrl = workshop_list->getEntry(id).downloadLink;
     m_currentWorkshopCharacter = workshop_list->getEntry(id).folder;
 
