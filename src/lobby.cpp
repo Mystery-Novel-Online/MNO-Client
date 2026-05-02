@@ -182,8 +182,14 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   workshop_list = createWidget<WorkshopListWidget>("workshop_list");
   workshop_list->setParent(ui_workshop_background);
-  workshop_list->updateFromApi();
   ui_workshop_preview->setAlignment(Qt::AlignCenter);
+
+
+  QObject::connect(&ApiManager::instance(), &ApiManager::loginStatus, [this](bool staus, std::string token)
+  {
+    workshop_list->updateFromApi();
+  });
+
   QObject::connect(workshop_list, &WorkshopListWidget::entryClicked, [this](int id)
   {
     m_currentWorkshopId = id;
