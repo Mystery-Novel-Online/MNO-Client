@@ -11,7 +11,7 @@
 #include <QDialogButtonBox>
 #include <QHeaderView>
 
-WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, QMap<QString, QString> tagMap) : QDialog{parent}, m_currentReply(nullptr), m_isEdit(edit), m_editTarget(editTarget)
+WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, QVector<QPair<QString, QString>> tagMap) : QDialog{parent}, m_currentReply(nullptr), m_isEdit(edit), m_editTarget(editTarget)
 {
 
   setWindowTitle(m_isEdit ? "Edit Character" : "Upload Character");
@@ -115,10 +115,10 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
     bool franchiseAdded = false;
 
 
-    for (auto it = tagMap.begin(); it != tagMap.end(); ++it)
+    for (const QPair<QString, QString>& pair : tagMap)
     {
-      QString key = it.key();
-      QString value = it.value();
+      QString key = pair.first;
+      QString value = pair.second;
       bool notOptionalTag = false;
       if(key == "Artist" && !artistAdded)
       {
@@ -149,7 +149,7 @@ void WorkshopUploader::StartUpload()
   prompt->show();
 }
 
-void WorkshopUploader::StartEdit(int id, QMap<QString, QString> tagMap)
+void WorkshopUploader::StartEdit(int id, QVector<QPair<QString, QString>> tagMap)
 {
   QString uploadKey = ApiManager::authorizationKey();
   if(uploadKey.trimmed().isEmpty() || uploadKey.trimmed() == "PUT_KEY_HERE")

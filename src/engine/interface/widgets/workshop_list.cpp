@@ -43,7 +43,7 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
       url = ApiManager::repoUrl(id);
     };
 
-    QMap<QString, QString> tagMap = {};
+    QVector<QPair<QString, QString>> tagMap = {};
 
     for(auto tag : child.toObject().value("tags").toArray())
     {
@@ -52,7 +52,7 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
       int key = tagObj.value("id").toInt(0);
       if(categories.contains(key))
       {
-        tagMap[QString::fromStdString(categories[key])] = value;
+        tagMap.append({QString::fromStdString(categories[key]), value});
       }
     }
 
@@ -140,7 +140,7 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
     }
 
 
-    QMap<QString, QString> tagMap = {};
+    QVector<QPair<QString, QString>> tagMap = {};
 
     for(auto tag : obj.value("tags").toArray())
     {
@@ -149,7 +149,7 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
       int key = tagObj.value("category").toInt(0);
       if(categories.contains(key))
       {
-        tagMap[QString::fromStdString(categories[key])] = value;
+        tagMap.append({QString::fromStdString(categories[key]), value});
       }
     }
 

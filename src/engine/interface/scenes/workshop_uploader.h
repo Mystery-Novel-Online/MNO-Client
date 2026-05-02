@@ -7,9 +7,9 @@ class WorkshopUploader : public QDialog
 {
   Q_OBJECT
 public:
-  explicit WorkshopUploader(QWidget *parent = nullptr, bool edit = false, int edit_id = -1, QMap<QString, QString> tagMap = {});
+  explicit WorkshopUploader(QWidget *parent = nullptr, bool edit = false, int edit_id = -1, QVector<QPair<QString, QString>> tagMap = {});
   static void StartUpload();
-  static void StartEdit(int id, QMap<QString, QString> tagMap = {});
+  static void StartEdit(int id, QVector<QPair<QString, QString>> tagMap = {});
   void addTag(int categoryId, const QString& categoryName, const QString& tagName, bool forcedTag = false);
 
 private slots:
