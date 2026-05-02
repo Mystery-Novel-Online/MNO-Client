@@ -70,9 +70,21 @@ void DRChatLog::_p_write_message_queue()
     const Message l_message = m_message_queue.dequeue();
     l_normal_format.setToolTip(l_message.timestamp.toString("hh:mm:ss"));
     l_name_format.setToolTip(l_message.timestamp.toString("hh:mm:ss"));
+    l_name_format.setForeground(QColor("#3F8839"));
+
     m_message_list.append(l_message);
 
-    if (!l_message.name.isEmpty())
+    bool isClient = l_message.name == "CLIENT";
+
+    if(isClient)
+    {
+      l_name_format.setForeground(QColor("#CAE7EB"));
+      l_normal_format.setForeground(QColor("#CAE7EB"));
+      l_cursor.insertText("[" + l_message.name + "] " , l_name_format);
+    }
+
+
+    if (!l_message.name.isEmpty() && !isClient)
     {
       l_cursor.insertText(l_message.name, l_name_format);
       l_cursor.insertText(": ", l_normal_format);
