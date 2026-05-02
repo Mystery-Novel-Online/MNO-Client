@@ -9,6 +9,8 @@
 
 #include <engine/animation/widget_animator.h>
 
+#include <engine/interface/widgets/workshop_tags.h>
+
 class AOApplication;
 class RPButton;
 class AOConfig;
@@ -130,6 +132,10 @@ private:
   RPButton *ui_cancel = nullptr;
   WorkshopListWidget *workshop_list = nullptr;
   QTextBrowser *ui_workshop_description = nullptr;
+  WorkshopTags *ui_workshop_tags = nullptr;
+
+  QScrollArea* ui_workshop_metadata = nullptr;
+  QWidget* ui_workshop_metadata_content = nullptr;
 
   ServerSelectList *ui_friends_list = nullptr;
 

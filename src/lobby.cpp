@@ -23,6 +23,7 @@
 #include "config_tabs/config_tab_theme.h"
 #include <engine/discord/workshop_discord.h>
 #include <engine/interface/scenes/collection_creation.h>
+#include <engine/interface/widgets/workshop_tags.h>
 #include <engine/network/api_manager.h>
 #include <rolechat/userdata/RolechatDatabase.h>
 
@@ -150,10 +151,42 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_description->setReadOnly(true);
   ui_description->setParent(serverTabPanel);
 
-  ui_workshop_description = createWidget<QTextBrowser>("workshop_description");
+
+  ui_workshop_metadata = createWidget<QScrollArea>("workshop_description");
+  ui_workshop_metadata->setParent(ui_workshop_background);
+  ui_workshop_metadata->setWidgetResizable(true);
+  ui_workshop_metadata->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui_workshop_metadata->setSizeAdjustPolicy(QAbstractScrollArea::AdjustToContents);
+
+  ui_workshop_metadata->setStyleSheet(R"(
+    QScrollArea {
+        background: transparent;
+        border: none;
+    }
+    QScrollArea > QWidget > QWidget {
+        background: transparent;
+    }
+  )");
+
+  ui_workshop_metadata_content = new QWidget();
+  ui_workshop_metadata->setWidget(ui_workshop_metadata_content);
+  ui_workshop_metadata_content->setMinimumWidth(ui_workshop_metadata->width());
+
+  QVBoxLayout* layout = new QVBoxLayout(ui_workshop_metadata_content);
+  layout->setContentsMargins(4, 4, 4, 4);
+  layout->setSpacing(10);
+
+  ui_workshop_description = new QTextBrowser(this);
   ui_workshop_description->setOpenExternalLinks(true);
   ui_workshop_description->setReadOnly(true);
-  ui_workshop_description->setParent(ui_workshop_background);
+
+  ui_workshop_description->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui_workshop_description->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+  layout->addWidget(ui_workshop_description);
+
+  ui_workshop_tags = new WorkshopTags();
+  layout->addWidget(ui_workshop_tags);
 
   ui_chatbox = createWidget<DRChatLog>("chatbox");
   ui_chatbox->hide();
@@ -194,6 +227,25 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   {
     m_currentWorkshopId = id;
     ui_workshop_description->setText(workshop_list->getEntry(id).description);
+    ui_workshop_description->setMinimumHeight(ui_workshop_description->document()->size().height());
+    ui_workshop_description->resize(ui_workshop_metadata_content->width(), ui_workshop_description->document()->size().height());
+
+    ui_workshop_tags->clearAllTags();
+
+    for (const QString& tag : workshop_list->getEntry(id).tagMap.values())
+      ui_workshop_tags->addTag(tag);
+
+    for (const QString& tag : workshop_list->getEntry(id).tagMap.values())
+      ui_workshop_tags->addTag(tag);
+
+    for (const QString& tag : workshop_list->getEntry(id).tagMap.values())
+      ui_workshop_tags->addTag(tag);
+
+    for (const QString& tag : workshop_list->getEntry(id).tagMap.values())
+      ui_workshop_tags->addTag(tag);
+
+    for (const QString& tag : workshop_list->getEntry(id).tagMap.values())
+      ui_workshop_tags->addTag(tag);
 
     m_currentBrowserUrl = workshop_list->getEntry(id).downloadLink;
     m_currentWorkshopCharacter = workshop_list->getEntry(id).folder;
@@ -303,6 +355,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_workshop_upload->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(ui_workshop_upload, &QWidget::customContextMenuRequested, this, &Lobby::showUploadContextMenu);
 
+
 }
 
 Lobby::~Lobby()
@@ -332,6 +385,8 @@ void Lobby::update_widgets()
 
   reload();
 
+
+  ui_workshop_metadata_content->setMinimumWidth(ui_workshop_metadata->viewport()->width());
   ui_background->set_theme_image("lobbybackground.png");
 
   ui_gallery_background->set_theme_image("replaybackground.png");
