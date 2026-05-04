@@ -5,12 +5,14 @@ ServerSelectList::ServerSelectList(QWidget *parent) : QWidget{parent}
 {
   QScrollArea *scrollArea = new QScrollArea(this);
   scrollArea->setWidgetResizable(true);
-  scrollArea->setStyleSheet("background-color: transparent; border: none; color: yellow;");
+
+  scrollArea->viewport()->setStyleSheet("background: transparent; border: none;");
+  set_stylesheet(scrollArea, "[SERVER LIST]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
 
   m_container = new QWidget(scrollArea);
   m_layout = new QVBoxLayout(m_container);
   m_layout->setAlignment(Qt::AlignTop);
-  m_layout->setMargin(0);
+  m_layout->setMargin(16);
 
   scrollArea->setWidget(m_container);
 
