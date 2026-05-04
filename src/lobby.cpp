@@ -697,15 +697,18 @@ void Lobby::update_server_listing()
     ui_new_server_list->addEntry(l_server.name);
     l_server_item->setText(l_server.name);
     l_server_item->setData(Qt::UserRole, false);
-    if (i < m_favorite_server_list.length())
+
+    for(auto& server : m_favorite_server_list)
     {
-      l_server_item->setIcon(l_favorite_icon);
-      l_server_item->setBackground(l_favorite_color);
-      l_server_item->setData(Qt::UserRole, true);
-      ui_new_server_list->setIcon(i, ao_app->find_theme_asset_path("favorite.png"));
-    }
-    else
-    {
+      if(server.address == l_server.address && server.port == l_server.port)
+      {
+        l_server_item->setIcon(l_favorite_icon);
+        l_server_item->setBackground(l_favorite_color);
+        l_server_item->setData(Qt::UserRole, i < m_favorite_server_list.length());
+        l_server_item->setData(Qt::UserRole + 0x1, true);
+        ui_new_server_list->setIcon(i, ao_app->find_theme_asset_path("favorite.png"));
+        break;
+      }
     }
   }
   filter_server_listing();
