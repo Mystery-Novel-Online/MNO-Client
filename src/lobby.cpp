@@ -821,12 +821,18 @@ void Lobby::onFriendsToggle()
 void Lobby::onServersToggle()
 {
   AnimatePanelsToPosition(0, 0);
+  ui_gallery_toggle->set_image("toggle_gallery.png");
+  ui_servers_toggle->set_image("toggle_servers_active.png");
+  ui_workshop_toggle->set_image("toggle_workshop.png");
 }
 
 void Lobby::onGalleryToggle()
 {
   AnimatePanelsToPosition(-(float)ui_gallery_background->pos().x(), 0);
   ui_gallery_background->setVisible(true);
+  ui_gallery_toggle->set_image("toggle_gallery_active.png");
+  ui_servers_toggle->set_image("toggle_servers.png");
+  ui_workshop_toggle->set_image("toggle_workshop.png");
 }
 
 void Lobby::AnimatePanelsToPosition(float x, float y)
@@ -853,6 +859,9 @@ void Lobby::onWorkshopToggle()
 {
   AnimatePanelsToPosition(-(float)ui_workshop_background->width(), 0);
   ui_workshop_background->setVisible(true);
+  ui_gallery_toggle->set_image("toggle_gallery.png");
+  ui_servers_toggle->set_image("toggle_servers.png");
+  ui_workshop_toggle->set_image("toggle_workshop_active.png");
 }
 
 void Lobby::onGalleryPlay()
