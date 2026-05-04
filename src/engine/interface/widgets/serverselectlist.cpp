@@ -28,6 +28,7 @@ void ServerSelectList::addEntry(QString title)
 {
   ServerSelectEntry *entry = new ServerSelectEntry(title);
   connect(entry, &ServerSelectEntry::clicked, this, &ServerSelectList::entryClicked);
+  connect(entry, &ServerSelectEntry::favoriteToggled, this, &ServerSelectList::favoriteClicked);
   entry->setId(m_layout->count());
   m_layout->addWidget(entry);
 }

@@ -319,6 +319,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   connect(ui_server_list, &QListWidget::currentRowChanged, this, &Lobby::connect_to_server);
   connect(ui_server_list, &QWidget::customContextMenuRequested, this, &Lobby::show_server_context_menu);
   connect(ui_new_server_list, &ServerSelectList::entryClicked, this, &Lobby::connect_to_server);
+  connect(ui_new_server_list, &ServerSelectList::favoriteClicked, this, &Lobby::favorite_toggle);
   connect(ui_new_server_list, &QWidget::customContextMenuRequested, this, &Lobby::show_server_context_menu);
 
   connect(ui_create_server, &QAction::triggered, this, &Lobby::create_server_info);
@@ -910,6 +911,38 @@ void Lobby::on_add_to_fav_released()
   {
     l_server_list.append(m_current_server);
   }
+  set_favorite_server_list(l_server_list);
+}
+
+void Lobby::favorite_toggle(int id)
+{
+  if (id > m_favorite_server_list.length())
+    return;
+
+  const DRServerInfo& l_selected_server = m_combined_server_list.at(id);
+
+  DRServerInfoList l_server_list = m_favorite_server_list;
+
+  if (m_favorite_server_list.contains(l_selected_server))
+  {
+
+    QMessageBox::StandardButton reply = QMessageBox::question(
+        this,
+        "Remove Favorite",
+        "Are you sure you want to remove \"" + l_selected_server.name + "\" from your favorites?",
+        QMessageBox::Yes | QMessageBox::No
+        );
+
+    if (reply == QMessageBox::Yes)
+    {
+      l_server_list.removeAll(l_selected_server);
+    }
+  }
+  else
+  {
+    l_server_list.append(l_selected_server);
+  }
+
   set_favorite_server_list(l_server_list);
 }
 

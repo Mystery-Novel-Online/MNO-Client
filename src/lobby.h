@@ -208,6 +208,7 @@ private slots:
   void onWorkshopCategoryClicked(const QString& category);
   void on_refresh_released();
   void on_add_to_fav_released();
+  void favorite_toggle(int id);
   void on_connect_released();
   void on_config_pressed();
   void on_config_released();

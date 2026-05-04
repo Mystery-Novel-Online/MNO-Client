@@ -19,6 +19,7 @@ public:
 
 signals:
   void entryClicked(int index);
+  void favoriteClicked(int index);
 
 private:
   QWidget *m_container;
