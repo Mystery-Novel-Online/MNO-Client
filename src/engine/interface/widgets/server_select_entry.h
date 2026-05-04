@@ -4,6 +4,28 @@
 #include <QObject>
 #include <QWidget>
 
+class FavoritesLabel : public QLabel
+{
+  Q_OBJECT
+public:
+  explicit FavoritesLabel(QWidget* parent = nullptr) : QLabel(parent)
+  {
+    setCursor(Qt::PointingHandCursor);
+  }
+
+signals:
+  void clicked();
+
+protected:
+  void mousePressEvent(QMouseEvent* event) override
+  {
+    if (event->button() == Qt::LeftButton)
+      emit clicked();
+
+    QLabel::mousePressEvent(event);
+  }
+};
+
 class ServerSelectEntry : public QWidget
 {
   Q_OBJECT
@@ -16,19 +38,30 @@ public:
 
 signals:
   void clicked(int id);
+  void favoriteToggled(int id);
 
 protected:
   void mousePressEvent(QMouseEvent *event) override;
 
 private:
-  int m_id;
-  QString m_title;
+  void setupLayout();
+  QWidget* createMainRow();
+  QWidget* createIcon();
+  QVBoxLayout* createText();
+  void createShadow();
 
-  QLabel *m_iconLabel = nullptr;
+private:
+  QString m_title;
+  int m_id;
 
   QVBoxLayout *m_rootLayout;
   QHBoxLayout *m_mainLayout;
   QVBoxLayout *m_childrenLayout;
+
+  FavoritesLabel *m_iconLabel = nullptr;
+  QLabel* m_titleLabel = nullptr;
+  QPushButton* m_favoriteButton = nullptr;
 };
+
 
 #endif // SERVER_SELECT_ENTRY_H

@@ -8,44 +8,73 @@ ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QW
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
   set_stylesheet(this, "[SERVER ENTRY]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+
+  setupLayout();
+  createShadow();
+
+}
+
+void ServerSelectEntry::setupLayout()
+{
   m_rootLayout = new QVBoxLayout(this);
   m_rootLayout->setContentsMargins(2, 2, 2, 2);
   m_rootLayout->setSpacing(0);
 
-  QWidget *headerWidget = new QWidget(this);
-  m_mainLayout = new QHBoxLayout(headerWidget);
-  m_mainLayout->setContentsMargins(1, 1, 1, 1);
-
-  m_iconLabel = new QLabel(headerWidget);
-  m_iconLabel->setFixedSize(50, 50);
-  m_mainLayout->addWidget(m_iconLabel);
-  m_iconLabel->setStyleSheet("border: none;");
-
-  QVBoxLayout *textLayout = new QVBoxLayout();
-  QLabel *titleLabel = new QLabel(title, headerWidget);
-  set_stylesheet(titleLabel, "[SERVER NAME]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
-  textLayout->addWidget(titleLabel);
-
-  m_mainLayout->addLayout(textLayout);
-
-  m_mainLayout->addStretch();
-
-  m_rootLayout->addWidget(headerWidget);
-  headerWidget->setStyleSheet("border: none;");
+  m_rootLayout->addWidget(createMainRow());
 
   m_childrenLayout = new QVBoxLayout();
   m_childrenLayout->setContentsMargins(35, 0, 0, 0);
   m_rootLayout->addLayout(m_childrenLayout);
+}
 
-  setLayout(m_rootLayout);
+QWidget *ServerSelectEntry::createMainRow()
+{
+  QWidget *mainRow = new QWidget(this);
+  mainRow->setStyleSheet("border: none;");
 
+  m_mainLayout = new QHBoxLayout(mainRow);
+  m_mainLayout->setContentsMargins(1, 1, 1, 1);
+
+  m_mainLayout->addWidget(createIcon());
+  m_mainLayout->addLayout(createText());
+
+  m_mainLayout->addStretch();
+
+  return mainRow;
+}
+
+QWidget *ServerSelectEntry::createIcon()
+{
+  m_iconLabel = new FavoritesLabel(this);
+  m_iconLabel->setFixedSize(50, 50);
+  m_iconLabel->setStyleSheet("border: none;");
+
+  connect(m_iconLabel, &FavoritesLabel::clicked, this, [this]() {
+            emit favoriteToggled(m_id);
+          });
+
+  return m_iconLabel;
+}
+
+QVBoxLayout *ServerSelectEntry::createText()
+{
+  QVBoxLayout* layout = new QVBoxLayout();
+
+  m_titleLabel = new QLabel(m_title, this);
+  set_stylesheet(m_titleLabel, "[SERVER NAME]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+
+  layout->addWidget(m_titleLabel);
+  return layout;
+}
+
+void ServerSelectEntry::createShadow()
+{
   QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
   shadow->setBlurRadius(10);
   shadow->setOffset(0, 2);
   shadow->setColor(QColor(0, 0, 0, 160));
 
   this->setGraphicsEffect(shadow);
-
 }
 
 void ServerSelectEntry::setIcon(QString path)
@@ -58,6 +87,11 @@ void ServerSelectEntry::setIcon(QString path)
 void ServerSelectEntry::mousePressEvent(QMouseEvent *event)
 {
   if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
+    QWidget* child = childAt(event->pos());
+
+    if (child == m_iconLabel)
+      return;
+
     emit clicked(m_id);
   }
 }
