@@ -698,6 +698,7 @@ void Lobby::update_server_listing()
     l_server_item->setText(l_server.name);
     l_server_item->setData(Qt::UserRole, false);
 
+    bool isFavorited = false;
     for(auto& server : m_favorite_server_list)
     {
       if(server.address == l_server.address && server.port == l_server.port)
@@ -707,9 +708,14 @@ void Lobby::update_server_listing()
         l_server_item->setData(Qt::UserRole, i < m_favorite_server_list.length());
         l_server_item->setData(Qt::UserRole + 0x1, true);
         ui_new_server_list->setIcon(i, ao_app->find_theme_asset_path("favorite.png"));
+        isFavorited = true;
         break;
       }
     }
+
+    if(!isFavorited)
+      ui_new_server_list->setIcon(i, ao_app->find_theme_asset_path("favorite_off.png"));
+
   }
   filter_server_listing();
 }
