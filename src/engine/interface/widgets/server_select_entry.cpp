@@ -1,12 +1,15 @@
 #include "server_select_entry.h"
+#include <QGraphicsDropShadowEffect>
 
 ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QWidget{parent}, m_title(title)
 {
+  setAttribute(Qt::WA_StyledBackground, true);
   setCursor(Qt::PointingHandCursor);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-  setStyleSheet("background-color: #4C485D; border: 2px solid #37304C; border-radius: 10px; color: yellow;");
+
+  set_stylesheet(this, "[SERVER ENTRY]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
   m_rootLayout = new QVBoxLayout(this);
-  m_rootLayout->setContentsMargins(0, 0, 0, 0);
+  m_rootLayout->setContentsMargins(2, 2, 2, 2);
   m_rootLayout->setSpacing(0);
 
   QWidget *headerWidget = new QWidget(this);
@@ -20,7 +23,7 @@ ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QW
 
   QVBoxLayout *textLayout = new QVBoxLayout();
   QLabel *titleLabel = new QLabel(title, headerWidget);
-  set_stylesheet(titleLabel, "[WORKSHOP NAME]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(titleLabel, "[SERVER NAME]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
   textLayout->addWidget(titleLabel);
 
   m_mainLayout->addLayout(textLayout);
@@ -35,6 +38,14 @@ ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QW
   m_rootLayout->addLayout(m_childrenLayout);
 
   setLayout(m_rootLayout);
+
+  QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
+  shadow->setBlurRadius(10);
+  shadow->setOffset(0, 2);
+  shadow->setColor(QColor(0, 0, 0, 160));
+
+  this->setGraphicsEffect(shadow);
+
 }
 
 void ServerSelectEntry::setIcon(QString path)
