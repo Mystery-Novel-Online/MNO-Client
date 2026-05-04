@@ -919,7 +919,7 @@ void Lobby::on_add_to_fav_released()
 
 void Lobby::favorite_toggle(int id)
 {
-  if (id > m_favorite_server_list.length())
+  if (id >= m_combined_server_list.length())
     return;
 
   const DRServerInfo& l_selected_server = m_combined_server_list.at(id);
