@@ -74,10 +74,8 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_public_server_filter = createWidget<RPButton>("public_servers");
   ui_favorite_server_filter = createWidget<RPButton>("favorites");
 
-  ui_toggle_favorite = createButton("add_to_fav", "addtofav", [this]() {this->on_add_to_fav_released();});
   ui_refresh = createButton("refresh", "refresh", [this]() {this->on_refresh_released();});
   ui_connect = createButton("connect", "connect", [this]() {this->on_connect_released();});
-  ui_toggle_favorite->setParent(serverTabPanel);
   ui_refresh->setParent(serverTabPanel);
   ui_connect->setParent(serverTabPanel);
 
@@ -901,26 +899,6 @@ void Lobby::on_refresh_released()
 {
   m_master_client->request_server_list();
   load_favorite_server_list();
-}
-
-void Lobby::on_add_to_fav_released()
-{
-  const auto l_index = ui_server_list->currentIndex();
-  if (!l_index.isValid() || l_index.row() < m_favorite_server_list.length())
-  {
-    return;
-  }
-  const DRServerInfo& l_selected_server = m_combined_server_list.at(l_index.row());
-  DRServerInfoList l_server_list = m_favorite_server_list;
-  if (m_favorite_server_list.contains(l_selected_server))
-  {
-    l_server_list.removeAll(m_current_server);
-  }
-  else
-  {
-    l_server_list.append(m_current_server);
-  }
-  set_favorite_server_list(l_server_list);
 }
 
 void Lobby::favorite_toggle(int id)

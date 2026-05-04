@@ -116,7 +116,6 @@ private:
   QComboBox *ui_gallery_categories = nullptr;
 
   RPButton *ui_refresh = nullptr;
-  RPButton *ui_toggle_favorite = nullptr;
   RPButton *ui_connect = nullptr;
 
   RPTextEdit *ui_version = nullptr;
@@ -207,7 +206,6 @@ private slots:
   void onGalleryPlay();
   void onWorkshopCategoryClicked(const QString& category);
   void on_refresh_released();
-  void on_add_to_fav_released();
   void favorite_toggle(int id);
   void on_connect_released();
   void on_config_pressed();
