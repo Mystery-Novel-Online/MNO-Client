@@ -33,12 +33,12 @@ QWidget *ServerSelectEntry::createMainRow()
   mainRow->setStyleSheet("border: none;");
 
   m_mainLayout = new QHBoxLayout(mainRow);
-  m_mainLayout->setContentsMargins(1, 1, 1, 1);
+  m_mainLayout->setContentsMargins(16, 1, 8, 1);
 
-  m_mainLayout->addWidget(createIcon());
   m_mainLayout->addLayout(createText());
-
   m_mainLayout->addStretch();
+  m_mainLayout->addWidget(createIcon());
+
 
   return mainRow;
 }
