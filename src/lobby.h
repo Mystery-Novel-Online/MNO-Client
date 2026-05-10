@@ -123,6 +123,7 @@ private:
   QListWidget *ui_server_list = nullptr;
   ServerSelectList *ui_new_server_list = nullptr;
   RPTextEdit *ui_player_count = nullptr;
+  RPTextEdit *ui_page_count = nullptr;
   QTextBrowser *ui_description = nullptr;
   DRChatLog *ui_chatbox = nullptr;
   AOImageDisplay *ui_loading_background = nullptr;
@@ -190,6 +191,7 @@ private slots:
   void onWorkshopSearch();
   void onWorkshopBrowser();
   void onWorkshopUpload();
+  void onDiscoveryLoaded(int current, int total);
 
   //Replays
   void onGalleryToggle();

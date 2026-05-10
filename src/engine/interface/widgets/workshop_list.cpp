@@ -164,6 +164,8 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
     auto childrenArray = obj.value("children").toArray();
     addEntry(id, iconUrl, newEntry.name, newEntry.submitter, "♀", childrenArray);
     m_EntryData[id] = newEntry;
+
+    emit contentParsed(m_pageCurrent, m_pageTotal);
   }
 }
 

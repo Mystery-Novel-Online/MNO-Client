@@ -34,6 +34,7 @@ public:
 signals:
   void entryClicked(int id);
   void entryRightClicked(int id);
+  void contentParsed(int current, int total);
 
 private slots:
   void handleApiReply(QNetworkReply *reply);

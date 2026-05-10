@@ -144,6 +144,16 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_player_count->setWordWrapMode(QTextOption::NoWrap);
   ui_player_count->setReadOnly(true);
 
+  ui_page_count = createWidget<RPTextEdit>("page_count", "page_count");
+  ui_page_count->setParent(ui_workshop_background);
+  ui_page_count->setFrameStyle(QFrame::NoFrame);
+  ui_page_count->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui_page_count->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  ui_page_count->setWordWrapMode(QTextOption::NoWrap);
+  ui_page_count->setReadOnly(true);
+
+  ui_page_count->setText("Page 0/0");
+
   ui_description = createWidget<QTextBrowser>("description");
   ui_description->setOpenExternalLinks(true);
   ui_description->setReadOnly(true);
@@ -215,6 +225,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   workshop_list->setParent(ui_workshop_background);
   ui_workshop_preview->setAlignment(Qt::AlignCenter);
 
+  connect(workshop_list, &WorkshopListWidget::contentParsed, this, &Lobby::onDiscoveryLoaded);
 
   QObject::connect(&ApiManager::instance(), &ApiManager::loginStatus, [this](bool staus, std::string token)
   {
@@ -420,6 +431,10 @@ void Lobby::update_widgets()
                                  "color: white;"
                                  "qproperty-alignment: AlignCenter;");
 
+  ui_page_count->setStyleSheet("font: bold;"
+                                 "color: white;"
+                                 "qproperty-alignment: AlignCenter;");
+
   ui_description->setStyleSheet("background-color: rgba(0, 0, 0, 0);"
                                 "color: white;");
 
@@ -462,6 +477,7 @@ void Lobby::update_widgets()
 void Lobby::set_fonts()
 {
   set_drtextedit_font(ui_player_count, "player_count", LOBBY_FONTS_INI, ao_app);
+  set_drtextedit_font(ui_page_count, "page_count", LOBBY_FONTS_INI, ao_app);
 
   set_font(ui_description, "description", LOBBY_FONTS_INI, ao_app);
   set_font(ui_workshop_description, "workshop_description", LOBBY_FONTS_INI, ao_app);
@@ -485,6 +501,7 @@ void Lobby::set_stylesheet(QWidget *widget, QString target_tag)
 
 void Lobby::set_stylesheets()
 {
+  set_stylesheet(ui_page_count, "[PAGE COUNT]");
   set_stylesheet(ui_player_count, "[PLAYER COUNT]");
   set_stylesheet(ui_description, "[DESCRIPTION]");
   set_stylesheet(ui_workshop_description, "[DESCRIPTION]");
@@ -878,6 +895,11 @@ void Lobby::onWorkshopBrowser()
 void Lobby::onWorkshopUpload()
 {
   WorkshopUploader::StartUpload();
+}
+
+void Lobby::onDiscoveryLoaded(int current, int total)
+{
+  ui_page_count->setText("Page " + QString::number(current) + "/" + QString::number(total));
 }
 
 void Lobby::onWorkshopCategoryClicked(const QString &category)
