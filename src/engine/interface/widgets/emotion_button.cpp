@@ -6,6 +6,9 @@
 #include "engine/param/actor_repository.h"
 
 using namespace engine::actor::user;
+
+const float DOUBLE_SIZE = 82;
+
 AOEmoteButton::AOEmoteButton(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y)
     : QPushButton(p_parent)
 {
@@ -13,7 +16,7 @@ AOEmoteButton::AOEmoteButton(QWidget *p_parent, AOApplication *p_ao_app, int p_x
 
   this->move(p_x, p_y);
 
-  float buttonSize = EmoteMenu::isDoubleSize() ? 82 : 40;
+  float buttonSize = EmoteMenu::isDoubleSize() ? DOUBLE_SIZE : 40;
 
   int resizedButtonSize = (int)(buttonSize * ThemeManager::get().getResize());
 
@@ -117,12 +120,12 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
     int cropY = 0;
     if (highestPixel != -1) cropY = highestPixel + 30;
 
-    if (cropY + 82 > m_texture.height()) cropY = m_texture.height() - 82;
+    if (cropY + DOUBLE_SIZE > m_texture.height()) cropY = m_texture.height() - DOUBLE_SIZE;
     if (cropY < 0) cropY = 0;
 
-    int cropX = (m_texture.width() - 82) / 2;
+    int cropX = (m_texture.width() - DOUBLE_SIZE) / 2;
 
-    m_texture = m_texture.copy(cropX, cropY, 82, 82);
+    m_texture = m_texture.copy(cropX, cropY, DOUBLE_SIZE, DOUBLE_SIZE);
   }
   else
   {
