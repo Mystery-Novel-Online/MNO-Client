@@ -79,6 +79,8 @@ void WorkshopListWidget::updateFromApi(const QString &category)
 {
   clearEntries();
 
+  m_currentCategory = category;
+
   QString path = "api/workshop";
 
   if(category == "portfolio")
@@ -86,7 +88,7 @@ void WorkshopListWidget::updateFromApi(const QString &category)
   else if(category == "pending")
     path += "/verification_queue?key=" + ApiManager::authorizationKey();
   else
-    path += "/" + category;
+    path += "/" + category + "?page=" + QString::number(m_pageCurrent);
 
   const QUrl url = QUrl(ApiManager::baseUri() + path);
   m_netManager->get(QNetworkRequest(url));
@@ -96,6 +98,24 @@ const WorkshopContentEntry WorkshopListWidget::getEntry(int id)
 {
   if(m_EntryData.contains(id)) return m_EntryData[id];
   return {};
+}
+
+void WorkshopListWidget::nextPage()
+{
+  if(m_pageCurrent >= m_pageTotal)
+    return;
+
+  m_pageCurrent += 1;
+  updateFromApi(m_currentCategory);
+}
+
+void WorkshopListWidget::previousPage()
+{
+  if(m_pageCurrent <= 1)
+    return;
+
+  m_pageCurrent -= 1;
+  updateFromApi(m_currentCategory);
 }
 
 

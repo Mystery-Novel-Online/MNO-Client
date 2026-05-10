@@ -94,6 +94,11 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_workshop_upload->setParent(ui_workshop_background);
 
 
+  ui_workshop_nav_prev = createButton("workshop_nav_prev", "workshop_nav_prev", [this]() {this->workshop_list->previousPage();});
+  ui_workshop_nav_next = createButton("workshop_nav_next", "workshop_nav_next", [this]() {this->workshop_list->nextPage();});
+  ui_workshop_nav_prev->setParent(ui_workshop_background);
+  ui_workshop_nav_next->setParent(ui_workshop_background);
+
   ui_workshop_browse = createButton("workshop_browse", "workshop_browse", [this]() {this->onWorkshopCategoryClicked("browse");});
   ui_workshop_collections = createButton("workshop_collections", "workshop_collections", [this]() {this->onWorkshopCategoryClicked("collections");});
   ui_workshop_portfolio = createButton("workshop_portfolio", "workshop_portfolio", [this]() {this->onWorkshopCategoryClicked("portfolio");});

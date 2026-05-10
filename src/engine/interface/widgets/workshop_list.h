@@ -28,6 +28,9 @@ public:
   void updateFromApi(const QString& category = "browse");
   const WorkshopContentEntry getEntry(int id);
 
+  void nextPage();
+  void previousPage();
+
   int totalPages() { return m_pageTotal; }
   int currentPage() { return m_pageCurrent; }
 
@@ -48,8 +51,12 @@ private:
 
   QMap<int, WorkshopContentEntry> m_EntryData = {};
 
-  int m_pageCurrent = 0;
+  QString m_currentCategory = "browse";
+
+  int m_pageCurrent = 1;
   int m_pageTotal = 0;
+
+
 };
 
 #endif // WORKSHOP_LIST_H

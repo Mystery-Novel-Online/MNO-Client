@@ -102,6 +102,9 @@ private:
   RPButton *ui_workshop_download = nullptr;
   RPButton *ui_workshop_upload = nullptr;
 
+  RPButton *ui_workshop_nav_prev = nullptr;
+  RPButton *ui_workshop_nav_next = nullptr;
+
   RPButton *ui_workshop_browse = nullptr;
   RPButton *ui_workshop_collections = nullptr;
   RPButton *ui_workshop_portfolio = nullptr;
