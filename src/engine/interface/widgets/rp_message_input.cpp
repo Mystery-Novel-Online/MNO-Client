@@ -285,7 +285,7 @@ void RPMessageInput::handleTextChanged()
 
       QString tagText = plain.mid(i + 1, end - i - 1);
       QStringList parts = tagText.split(':');
-      QString tagTypeStr = parts[0];
+      QString tagTypeStr = parts[0].toLower();
       parts.removeFirst();
 
       QVariantList args;
