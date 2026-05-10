@@ -28,6 +28,7 @@ public:
   void updateFromApi(const QString& category = "browse");
   const WorkshopContentEntry getEntry(int id);
 
+  void setPageNumber(int page) { m_pageCurrent = page; }
   void nextPage();
   void previousPage();
 

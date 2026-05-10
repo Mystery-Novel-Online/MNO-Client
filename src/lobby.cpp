@@ -234,6 +234,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   QObject::connect(&ApiManager::instance(), &ApiManager::loginStatus, [this](bool staus, std::string token)
   {
+    workshop_list->setPageNumber(1);
     workshop_list->updateFromApi();
   });
 
@@ -909,6 +910,7 @@ void Lobby::onDiscoveryLoaded(int current, int total)
 
 void Lobby::onWorkshopCategoryClicked(const QString &category)
 {
+  workshop_list->setPageNumber(1);
   workshop_list->updateFromApi(category);
 }
 
