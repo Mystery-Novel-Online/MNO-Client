@@ -11,6 +11,7 @@ WorkshopListWidget::WorkshopListWidget(QWidget *parent) : QWidget(parent)
   m_layout = new QVBoxLayout(m_container);
   m_layout->setAlignment(Qt::AlignTop);
   m_layout->setMargin(0);
+  m_layout->setSpacing(4);
 
   scrollArea->setWidget(m_container);
 
@@ -22,7 +23,9 @@ WorkshopListWidget::WorkshopListWidget(QWidget *parent) : QWidget(parent)
   //Setup API Manager
   m_netManager = new QNetworkAccessManager(this);
   connect(m_netManager, &QNetworkAccessManager::finished, this, &WorkshopListWidget::handleApiReply);
-  scrollArea->setStyleSheet("background-color: transparent; border: none; color: yellow;");
+
+  scrollArea->viewport()->setStyleSheet("background: transparent; border: none;");
+  set_stylesheet(scrollArea, "[WORKSHOP LIST]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
 }
 
 void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &title, const QString &subtitle, const QString &gender, const QJsonArray &children)

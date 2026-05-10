@@ -26,6 +26,7 @@ WorkshopEntry::WorkshopEntry(int id, const QString&, const QString &title, const
   else
     setupUiGrid(title, subtitle);
   setupIconDownload();
+  createShadow();
 }
 
 WorkshopEntry* WorkshopEntry::createChild(int id, const QString &iconPath, const QString &title, const QString &subtitle, const QString &genderSymbol, QWidget *parent)
@@ -77,12 +78,12 @@ void WorkshopEntry::mousePressEvent(QMouseEvent *event)
 void WorkshopEntry::setupUi(const QString &title, const QString &subtitle)
 {
   m_rootLayout = new QVBoxLayout(this);
-  m_rootLayout->setContentsMargins(0, 0, 0, 0);
+  m_rootLayout->setContentsMargins(2, 2, 2, 2);
   m_rootLayout->setSpacing(0);
 
   auto* headerWidget = new QWidget(this);
   auto* headerLayout = new QHBoxLayout(headerWidget);
-  headerLayout->setContentsMargins(1, 1, 1, 1);
+  headerLayout->setContentsMargins(4, 4, 4, 4);
 
   m_iconLabel = new QLabel(headerWidget);
   m_iconLabel->setFixedSize(ICON_CONTAINER_SIZE, ICON_CONTAINER_SIZE);
@@ -90,14 +91,15 @@ void WorkshopEntry::setupUi(const QString &title, const QString &subtitle)
 
   auto* textLayout = new QVBoxLayout();
 
+  textLayout->setContentsMargins(0, 0, 0, 0);
+  textLayout->setSpacing(1);
+  textLayout->setAlignment(Qt::AlignVCenter);
+
   auto* titleLabel = new QLabel(title, headerWidget);
-  set_stylesheet(titleLabel, "[WORKSHOP NAME]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
-
   auto* subtitleLabel = new QLabel(subtitle, headerWidget);
-  set_stylesheet(subtitleLabel, "[WORKSHOP SUBMITTER]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
 
-  textLayout->addWidget(titleLabel);
-  textLayout->addWidget(subtitleLabel);
+  textLayout->addWidget(titleLabel, 0, Qt::AlignBottom);
+  textLayout->addWidget(subtitleLabel, 0, Qt::AlignTop);
 
   headerLayout->addLayout(textLayout);
   headerLayout->addStretch();
@@ -107,6 +109,12 @@ void WorkshopEntry::setupUi(const QString &title, const QString &subtitle)
   m_childrenLayout = new QVBoxLayout();
   m_childrenLayout->setContentsMargins(CHILD_INDENT, 0, 0, 0);
   m_rootLayout->addLayout(m_childrenLayout);
+
+  m_iconLabel->setStyleSheet("border: none;");
+  set_stylesheet(this, "[WORKSHOP ENTRY]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(titleLabel, "[WORKSHOP NAME]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(subtitleLabel, "[WORKSHOP SUBMITTER]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+
 }
 
 void WorkshopEntry::setupUiGrid(const QString &title, const QString &subtitle)
@@ -198,4 +206,14 @@ void WorkshopEntry::toggleChildrenVisibility(bool visible)
     if (auto* w = m_childrenLayout->itemAt(i)->widget())
       w->setVisible(visible);
   }
+}
+
+void WorkshopEntry::createShadow()
+{
+  QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(this);
+  shadow->setBlurRadius(10);
+  shadow->setOffset(0, 2);
+  shadow->setColor(QColor(0, 0, 0, 160));
+
+  this->setGraphicsEffect(shadow);
 }

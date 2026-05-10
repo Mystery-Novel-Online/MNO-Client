@@ -51,6 +51,8 @@ private:
   bool anyChildrenVisible() const;
   void toggleChildrenVisibility(bool visible);
 
+  void createShadow();
+
 private:
   int m_id;
   bool m_isGridView = false;
