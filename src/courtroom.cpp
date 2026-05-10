@@ -2293,7 +2293,7 @@ void Courtroom::next_chat_letter()
     overrides = {};
     overrides.baseFontSize = getMessageFontStruct("message", "").size;
 
-    overrides.baseFont = vp_message_format.font();
+    overrides.baseFont = getMessageFontStruct("message", "").font;
     overrides.baseFont.setPointSizeF(overrides.baseFontSize);
     vp_message_format.setFont(overrides.baseFont);
   }
