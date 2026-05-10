@@ -112,7 +112,7 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
   reply->deleteLater();
 
   QJsonDocument doc = QJsonDocument::fromJson(responseData);
-  if (!doc.isArray())
+  if (!doc.object().value("contents").isArray())
   {
     qWarning() << "Invalid JSON received!";
     return;
@@ -123,7 +123,9 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
 
   QMap<int, std::string> categories = ApiManager::instance().categoryMap();
 
-  QJsonArray arr = doc.array();
+  m_pageCurrent = doc.object().value("page_current").toInt();
+  m_pageTotal = doc.object().value("page_total").toInt();
+  QJsonArray arr = doc.object().value("contents").toArray();
   for (const QJsonValue &val : arr) {
     if (!val.isObject()) continue;
 
