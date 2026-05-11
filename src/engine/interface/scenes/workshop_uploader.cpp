@@ -104,6 +104,8 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
   connect(m_submitButton, &QPushButton::clicked, this, &WorkshopUploader::submitForm);
   connect(m_addTag, &QPushButton::clicked, this, &WorkshopUploader::addTagClicked);
 
+  bool allowSystem = ApiManager::instance().userPermission() > APIPerms_Auto;
+
   if(tagMap.isEmpty() && !m_isEdit)
   {
     addTag(2, "Artist", "Unknown", true);
@@ -130,6 +132,10 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
         franchiseAdded = true;
         notOptionalTag = true;
       }
+
+      if(key == "System" && !allowSystem)
+        notOptionalTag = true;
+
       addTag(-1, key, value, notOptionalTag);
     }
   }
@@ -217,9 +223,14 @@ void WorkshopUploader::addTagClicked()
   auto *categoryCombo = new QComboBox(&dialog);
 
   int i = 1;
+
+  bool allowSystem = ApiManager::instance().userPermission() > APIPerms_Auto;
+
   for(std::string cat : ApiManager::instance().contentCategories())
   {
     if(cat != "System")
+      categoryCombo->addItem(QString::fromStdString(cat), i);
+    else if (allowSystem)
       categoryCombo->addItem(QString::fromStdString(cat), i);
     i++;
   };
