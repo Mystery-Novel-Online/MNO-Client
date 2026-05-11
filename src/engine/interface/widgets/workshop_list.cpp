@@ -88,7 +88,12 @@ void WorkshopListWidget::updateFromApi(const QString &category)
   else if(category == "pending")
     path += "/verification_queue?key=" + ApiManager::authorizationKey();
   else
-    path += "/" + category + "?page=" + QString::number(m_pageCurrent);
+  {
+    if(category.contains("search"))
+      path += "/" + category + "&page=" + QString::number(m_pageCurrent);
+    else
+      path += "/" + category + "?page=" + QString::number(m_pageCurrent);
+  }
 
   const QUrl url = QUrl(ApiManager::baseUri() + path);
   m_netManager->get(QNetworkRequest(url));
