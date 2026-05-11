@@ -25,7 +25,7 @@ WorkshopListWidget::WorkshopListWidget(QWidget *parent) : QWidget(parent)
   connect(m_netManager, &QNetworkAccessManager::finished, this, &WorkshopListWidget::handleApiReply);
 
   scrollArea->viewport()->setStyleSheet("background: transparent; border: none;");
-  set_stylesheet(scrollArea, "[WORKSHOP LIST]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(scrollArea, "[WORKSHOP LIST]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 }
 
 void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &title, const QString &subtitle, const QString &gender, const QJsonArray &children)

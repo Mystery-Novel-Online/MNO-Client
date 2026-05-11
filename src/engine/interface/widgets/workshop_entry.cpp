@@ -111,9 +111,9 @@ void WorkshopEntry::setupUi(const QString &title, const QString &subtitle)
   m_rootLayout->addLayout(m_childrenLayout);
 
   m_iconLabel->setStyleSheet("border: none;");
-  set_stylesheet(this, "[WORKSHOP ENTRY]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
-  set_stylesheet(titleLabel, "[WORKSHOP NAME]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
-  set_stylesheet(subtitleLabel, "[WORKSHOP SUBMITTER]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(this, "[WORKSHOP ENTRY]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(titleLabel, "[WORKSHOP NAME]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(subtitleLabel, "[WORKSHOP SUBMITTER]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 
 }
 
@@ -139,12 +139,12 @@ void WorkshopEntry::setupUiGrid(const QString &title, const QString &subtitle)
   auto* titleLabel = new QLabel(title, textContainer);
   titleLabel->setAlignment(Qt::AlignHCenter);
   titleLabel->setWordWrap(true);
-  set_stylesheet(titleLabel, "[WORKSHOP NAME]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(titleLabel, "[WORKSHOP NAME]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 
   auto* subtitleLabel = new QLabel(subtitle, textContainer);
   subtitleLabel->setAlignment(Qt::AlignHCenter);
   subtitleLabel->setWordWrap(true);
-  set_stylesheet(subtitleLabel, "[WORKSHOP SUBMITTER]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(subtitleLabel, "[WORKSHOP SUBMITTER]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 
   textLayout->addWidget(titleLabel);
   textLayout->addWidget(subtitleLabel);

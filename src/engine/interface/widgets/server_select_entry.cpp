@@ -7,7 +7,7 @@ ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QW
   setCursor(Qt::PointingHandCursor);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
-  set_stylesheet(this, "[SERVER ENTRY]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(this, "[SERVER ENTRY]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 
   setupLayout();
   createShadow();
@@ -61,7 +61,7 @@ QVBoxLayout *ServerSelectEntry::createText()
   QVBoxLayout* layout = new QVBoxLayout();
 
   m_titleLabel = new QLabel(m_title, this);
-  set_stylesheet(m_titleLabel, "[SERVER NAME]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(m_titleLabel, "[SERVER NAME]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 
   layout->addWidget(m_titleLabel);
   return layout;

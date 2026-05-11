@@ -7,7 +7,7 @@ ServerSelectList::ServerSelectList(QWidget *parent) : QWidget{parent}
   scrollArea->setWidgetResizable(true);
 
   scrollArea->viewport()->setStyleSheet("background: transparent; border: none;");
-  set_stylesheet(scrollArea, "[SERVER LIST]", COURTROOM_STYLESHEETS_CSS, AOApplication::getInstance());
+  set_stylesheet(scrollArea, "[SERVER LIST]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 
   m_container = new QWidget(scrollArea);
   m_layout = new QVBoxLayout(m_container);
