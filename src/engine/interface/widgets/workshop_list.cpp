@@ -82,17 +82,18 @@ void WorkshopListWidget::updateFromApi(const QString &category)
   m_currentCategory = category;
 
   QString path = "api/workshop";
+  const QString apiKey = ApiManager::authorizationKey();
 
   if(category == "portfolio")
-    path += "/my_uploads?key=" + ApiManager::authorizationKey();
+    path += "/my_uploads?key=" + apiKey;
   else if(category == "pending")
-    path += "/verification_queue?key=" + ApiManager::authorizationKey();
+    path += "/verification_queue?key=" + apiKey;
   else
   {
     if(category.contains("search"))
-      path += "/" + category + "&page=" + QString::number(m_pageCurrent);
+      path += "/" + category + "&page=" + QString::number(m_pageCurrent) + "&key=" + apiKey;
     else
-      path += "/" + category + "?page=" + QString::number(m_pageCurrent);
+      path += "/" + category + "?page=" + QString::number(m_pageCurrent) + "&key=" + apiKey;
   }
 
   const QUrl url = QUrl(ApiManager::baseUri() + path);
