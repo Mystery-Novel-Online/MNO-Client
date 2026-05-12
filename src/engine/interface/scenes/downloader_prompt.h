@@ -21,6 +21,14 @@ public:
   void ProcessLinks(const QMap<QString, QString>& links, const QString& contentName, const QString& repositoryUrl, bool createContext);
   void setDownloadType(DownloadType type) {m_downloadType = type; }
 
+  void setIsRepo(bool state) { m_isRepo = state; }
+  void setIsCollection(bool state) { m_isCollection = state; }
+
+  void setContentName(QString name) { m_contentName = name; }
+  void setDirectory(QString directory) { m_directory = directory; }
+  void setBaseUrl(QString url) { m_baseUrl = url; }
+  void setRepository(QString repo) { m_repository = repo; }
+
 
 private:
   QProgressBar *m_progressBar;
@@ -32,7 +40,17 @@ private:
 
   DownloadType m_downloadType = DOWNLOAD_Default;
 
-signals:
+  QString m_directory = "";
+  QString m_baseUrl = "";
+  QString m_repository = "";
+
+  bool m_isRepo = false;
+  bool m_isCollection = false;
+
+
+public slots:
+  void repoDownloaded(QNetworkReply *reply);
+
 };
 
 #endif // DOWNLOADER_PROMPT_H

@@ -55,66 +55,21 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
     prompt->setDownloadType(type);
     prompt->show();
 
+
+
     QString baseUrl = QString("%1://%2").arg(url.scheme(), url.host());
     if (url.port() != -1) baseUrl += QString(":%1").arg(url.port());
 
+    prompt->setDirectory(directory);
+    prompt->setBaseUrl(baseUrl);
+    prompt->setIsCollection(isCollection);
+    prompt->setContentName(contentName);
+    prompt->setRepository(repository);
+    prompt->setIsRepo(isRepo);
+
     QNetworkAccessManager *manager = new QNetworkAccessManager(prompt);
-    QObject::connect(manager, &QNetworkAccessManager::finished,[prompt, directory, baseUrl, isCollection, contentName, repository, isRepo](QNetworkReply *reply) {
-                       if (reply->error() != QNetworkReply::NoError)
-                       {
-                         QMessageBox::warning(prompt, "Error", reply->errorString());
-                         reply->deleteLater();
-                         return;
-                       }
-                       QByteArray response = reply->readAll();
-                       qDebug() << response;
-                       QJsonDocument doc = QJsonDocument::fromJson(response);
-                       QString collectionName = doc["collection_name"].toString();
-                       QList<QJsonObject> repoObjects = {};
-                       if(!isCollection)
-                       {
-                         repoObjects.append(doc.object());
-                       }
-                       else
-                       {
-                         for(const QJsonValue &val : doc["repos"].toArray())
-                         {
-                           repoObjects.append(val.toObject());
-                         }
-                       }
 
-                       //Cache content into database.
-
-                       QMap<QString, QString> hashMap = {};
-                       for(const QJsonObject& repoObject : repoObjects)
-                       {
-                         QString qGUID = repoObject["guid"].toString();
-                         QString qFolderName = repoObject["folder"].toString();
-                         QString qDownloadType = repoObject["url_download"].toString();
-                         int qContentId = repoObject["id"].toInt();
-                         int qLastUpdated = repoObject["last_updated"].toInt();
-                         GetDB().cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
-
-                         QJsonArray files = repoObject["contents"].toArray();
-
-                         for (const QJsonValue &val : files)
-                         {
-                           QJsonObject obj = val.toObject();
-                           QString hash = baseUrl + "/api/workshop/file/" + obj["hash"].toString();
-                           QString filePath = "";
-                           if(qDownloadType == "background")
-                             filePath = directory + "/background/" + qFolderName + + "/" + obj["file_path"].toString();
-                           else
-                           {
-                             filePath = isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : directory + "/" + obj["file_path"].toString();
-                           }
-                           hashMap[filePath] = hash;
-                         }
-                       }
-
-                       prompt->ProcessLinks(hashMap, contentName, repository, isRepo);
-                       reply->deleteLater();
-                     });
+    connect(manager, &QNetworkAccessManager::finished, prompt, &DownloaderPrompt::repoDownloaded);
 
     manager->get(QNetworkRequest(url));
   }
@@ -186,5 +141,65 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
               }
             });
   }
+}
+
+void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
+{
+  if (reply->error() != QNetworkReply::NoError)
+  {
+    QMessageBox::warning(this, "Error", reply->errorString());
+    reply->deleteLater();
+    return;
+  }
+
+  QByteArray response = reply->readAll();
+  qDebug() << response;
+  QJsonDocument doc = QJsonDocument::fromJson(response);
+  QString collectionName = doc["collection_name"].toString();
+  QList<QJsonObject> repoObjects = {};
+
+  if(!m_isCollection)
+  {
+    repoObjects.append(doc.object());
+  }
+  else
+  {
+    for(const QJsonValue &val : doc["repos"].toArray())
+    {
+      repoObjects.append(val.toObject());
+    }
+  }
+
+  //Cache content into database.
+
+  QMap<QString, QString> hashMap = {};
+  for(const QJsonObject& repoObject : repoObjects)
+  {
+    QString qGUID = repoObject["guid"].toString();
+    QString qFolderName = repoObject["folder"].toString();
+    QString qDownloadType = repoObject["url_download"].toString();
+    int qContentId = repoObject["id"].toInt();
+    int qLastUpdated = repoObject["last_updated"].toInt();
+    GetDB().cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
+
+    QJsonArray files = repoObject["contents"].toArray();
+
+    for (const QJsonValue &val : files)
+    {
+      QJsonObject obj = val.toObject();
+      QString hash = m_baseUrl + "/api/workshop/file/" + obj["hash"].toString();
+      QString filePath = "";
+      if(qDownloadType == "background")
+        filePath = m_directory + "/background/" + qFolderName + + "/" + obj["file_path"].toString();
+      else
+      {
+        filePath = m_isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : m_directory + "/" + obj["file_path"].toString();
+      }
+      hashMap[filePath] = hash;
+    }
+  }
+
+  ProcessLinks(hashMap, m_contentName, m_repository, m_isRepo);
+  reply->deleteLater();
 }
 
