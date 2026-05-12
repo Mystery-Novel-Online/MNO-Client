@@ -133,6 +133,11 @@ AOApplication::AOApplication(int &argc, char **argv)
           if (ok) {
             DownloaderPrompt::StartDownload(ApiManager::repoUrl(downloadId), "packages/Workshop Downloads/", folder);
           }
+          else
+          {
+            QString url = ApiManager::baseUri() + "api/workshop/" + id + "/content";
+            DownloaderPrompt::StartDownload(url, "packages/Workshop Downloads/", folder);
+          }
         }
       }
       return;
