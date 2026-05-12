@@ -24,6 +24,8 @@
 #include "engine/discord/workshop_discord.h"
 #include <engine/network/api_manager.h>
 #include <engine/system/client_worker.h>
+#include <rolechat-lib/src/rolechat/userdata/TemporaryDB.h>
+#include <rolechat/util/FileSystem.h>
 
 AOApplication *AOApplication::m_Instance = nullptr;
 
@@ -69,6 +71,9 @@ AOApplication::AOApplication(int &argc, char **argv)
   connect(thread, &QThread::finished, thread, &QObject::deleteLater);
 
   thread->start();
+
+  rolechat::fs::PackageManager::scanPackages();
+  TemporaryDB::instance().scanCharacters();
 
   system::ConfigManager::initializeConfig();
 
@@ -310,10 +315,10 @@ QString AOApplication::getWeatherSprite(QString weather)
 QString AOApplication::get_shout_sprite_path(QString p_character, QString p_shout, const QString &outfit)
 {
   QStringList l_filepath_list{
-      fs::characters::getFilePath(p_character, "outfits/" + outfit + "/" + p_shout),
-      fs::characters::getFilePath(p_character, "outfits/" + outfit + "/" + p_shout + "_bubble"),
-      fs::characters::getFilePath(p_character, p_shout),
-      fs::characters::getFilePath(p_character, p_shout + "_bubble"),
+      engine::fs::characters::getFilePath(p_character, "outfits/" + outfit + "/" + p_shout),
+      engine::fs::characters::getFilePath(p_character, "outfits/" + outfit + "/" + p_shout + "_bubble"),
+      engine::fs::characters::getFilePath(p_character, p_shout),
+      engine::fs::characters::getFilePath(p_character, p_shout + "_bubble"),
   };
 
   QString l_filename = find_asset_path(l_filepath_list, FS::Formats::AnimatedImages());
@@ -348,8 +353,8 @@ QString AOApplication::get_theme_sprite_path(QString p_file_name, QString p_char
     }
 
     QStringList l_path_list{
-        fs::characters::getFilePath(p_character, l_character_file_name),
-        fs::characters::getFilePath(p_character, "overlay/" + l_character_file_name),
+        engine::fs::characters::getFilePath(p_character, l_character_file_name),
+        engine::fs::characters::getFilePath(p_character, "overlay/" + l_character_file_name),
     };
     l_file_path = find_asset_path(l_path_list, FS::Formats::SupportedImages());
   }

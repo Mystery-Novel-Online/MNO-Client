@@ -16,8 +16,6 @@ int main(int argc, char *argv[])
   qputenv("QT_MAC_WANTS_LAYER", "1");
 #endif
 
-  rolechat::fs::PackageManager::scanPackages();
-  TemporaryDB::instance().scanCharacters();
 
   //qInstallMessageHandler(logger::log);
   qInfo() << "Starting Mystery Novel Network...";
