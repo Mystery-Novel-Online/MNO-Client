@@ -59,6 +59,20 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
       }
     }
 
+    QVector<WorkshopCollaborator> collaborators;
+
+    for(auto collab : child.toObject().value("collaborators").toArray())
+    {
+      QJsonObject collabObj = collab.toObject();
+      int user_id = collabObj.value("user_id").toInt(0);
+      int permissions = collabObj.value("permissions").toInt(0);
+      QString username = collabObj.value("username").toString();
+
+      collaborators.append({user_id, username, permissions});
+    }
+
+
+
     WorkshopContentEntry newEntry = {
         child.toObject().value("name").toString(),
         child.toObject().value("submitter").toString(),
@@ -66,7 +80,8 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
         child.toObject().value("description").toString(),
         url,
         child.toObject().value("folder").toString(),
-        tagMap
+        tagMap,
+        collaborators
     };
 
     auto childWidget = entry->createChild(id, "", newEntry.name, newEntry.submitter, "", nullptr);
@@ -184,11 +199,33 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
       }
     }
 
-    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString(), tagMap};
+
+    QVector<WorkshopCollaborator> collaborators;
+
+    for(auto collab : obj.value("collaborators").toArray())
+    {
+      QJsonObject collabObj = collab.toObject();
+      int user_id = collabObj.value("user_id").toInt(0);
+      int permissions = collabObj.value("permissions").toInt(0);
+      QString username = collabObj.value("username").toString();
+
+      collaborators.append({user_id, username, permissions});
+    }
+
+
+    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString(), tagMap, collaborators};
     QString iconUrl = obj.value("url_icon").toString();
 
+
+    QString collabText = "";
+    for(int i = 0; i < newEntry.collaborators.count(); i++)
+    {
+      collabText += ", ";
+      collabText += newEntry.collaborators.at(i).username;
+    }
+
     auto childrenArray = obj.value("children").toArray();
-    addEntry(id, iconUrl, newEntry.name, newEntry.submitter, "♀", childrenArray);
+    addEntry(id, iconUrl, newEntry.name, newEntry.submitter + collabText, "♀", childrenArray);
     m_EntryData[id] = newEntry;
 
     emit contentParsed(m_pageCurrent, m_pageTotal);

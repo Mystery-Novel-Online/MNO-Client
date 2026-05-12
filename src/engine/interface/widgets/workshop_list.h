@@ -5,6 +5,13 @@
 #include <QWidget>
 #include "workshop_entry.h"
 
+struct WorkshopCollaborator
+{
+  int user_id;
+  QString username;
+  int permissions;
+};
+
 struct WorkshopContentEntry
 {
   QString name;
@@ -14,7 +21,9 @@ struct WorkshopContentEntry
   QString downloadLink;
   QString folder;
   QVector<QPair<QString, QString>> tagMap;
+  QVector<WorkshopCollaborator> collaborators;
 };
+
 
 class WorkshopListWidget : public QWidget
 {
