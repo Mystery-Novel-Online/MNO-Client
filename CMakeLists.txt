@@ -336,6 +336,8 @@ target_include_directories(rp-engine PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/FennEngine/engine/include
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/FennEngine/external/glad/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/3rd/FennEngine/external/imgui
+  ${CMAKE_CURRENT_SOURCE_DIR}/3rd/FennEngine/external/imgui/backends
 )
 
 set_target_properties(rp-engine PROPERTIES
@@ -367,6 +369,7 @@ target_link_libraries(rp-engine
   lua54
   rolechat-lib
   FennEngine
+  imgui
 )
 
 if(WIN32)
