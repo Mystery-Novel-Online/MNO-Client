@@ -1,6 +1,8 @@
 #ifndef PCH_H
 #define PCH_H
 
+#include <glad/glad.h>
+
 #include <bass/bass.h>
 #include <bass/bassopus.h>
 #include <bass/bass_fx.h>

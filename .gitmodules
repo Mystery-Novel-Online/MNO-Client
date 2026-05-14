@@ -1,3 +1,6 @@
 [submodule "3rd/rolechat-lib"]
 	path = 3rd/rolechat-lib
 	url = https://github.com/Mystery-Novel-Online/RoleChatLib
+[submodule "3rd/FennEngine"]
+	path = 3rd/FennEngine
+	url = https://github.com/Keightiie/FennEngine
