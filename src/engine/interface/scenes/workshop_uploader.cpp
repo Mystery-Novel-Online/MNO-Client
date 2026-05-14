@@ -26,7 +26,13 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
 
   m_description = new QTextEdit(this);
 
-  m_tagTable = new QTableWidget(this);
+  m_tagTable = new UploaderTagTable(this);
+
+  m_tagTable->onTagPaste = [this](const QString& categoryName, const QString& tagName)
+  {
+    addTag(0, categoryName, tagName, false);
+  };
+
   m_tagTable->setColumnCount(3);
 
   QStringList headers;

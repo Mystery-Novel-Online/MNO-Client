@@ -1,5 +1,7 @@
 
 #include <QTableWidget>
+
+#include <engine/interface/widgets/uploadertagtable.h>
 #ifndef WORKSHOP_UPLOADER_H
 #define WORKSHOP_UPLOADER_H
 
@@ -32,7 +34,7 @@ private:
 
   QComboBox *m_collectionList;
 
-  QTableWidget* m_tagTable;
+  UploaderTagTable* m_tagTable;
 
   bool m_isEdit = false;
   int m_editTarget = -1;

@@ -323,6 +323,7 @@ add_executable(rp-engine
   src/engine/interface/scenes/collection_creation.h src/engine/interface/scenes/collection_creation.cpp
   src/config_tabs/config_tab_mounting.h src/config_tabs/config_tab_mounting.cpp src/config_tabs/config_tab_mounting.ui
   src/engine/interface/widgets/workshop_tags.h src/engine/interface/widgets/workshop_tags.cpp
+  src/engine/interface/widgets/uploadertagtable.h src/engine/interface/widgets/uploadertagtable.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
@@ -333,6 +334,10 @@ target_include_directories(rp-engine PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd
   ${CMAKE_CURRENT_SOURCE_DIR}/3rd/lua
+  ${CMAKE_CURRENT_SOURCE_DIR}/3rd/FennEngine/engine/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/3rd/FennEngine/external/glad/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/3rd/FennEngine/external/imgui
+  ${CMAKE_CURRENT_SOURCE_DIR}/3rd/FennEngine/external/imgui/backends
 )
 
 set_target_properties(rp-engine PROPERTIES
@@ -347,6 +352,7 @@ target_link_directories(rp-engine PRIVATE
 )
 
 add_subdirectory(3rd/rolechat-lib)
+add_subdirectory(3rd/FennEngine)
 
 target_link_libraries(rp-engine
   Qt5::Core
@@ -362,6 +368,8 @@ target_link_libraries(rp-engine
   discord_partner_sdk
   lua54
   rolechat-lib
+  FennEngine
+  imgui
 )
 
 if(WIN32)
