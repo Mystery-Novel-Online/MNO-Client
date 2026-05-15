@@ -265,6 +265,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     QMenu menu;
 
     QAction *editAction = menu.addAction("Edit");
+    QAction *copyGuid = menu.addAction("Copy GUID");
 
     if(ApiManager::instance().userPermission() > APIPerms_Auto)
     {
@@ -300,6 +301,9 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     }
 
     connect(editAction, &QAction::triggered, this, [this, id]() { WorkshopUploader::StartEdit(id,  workshop_list->getEntry(id).tagMap); });
+    connect(copyGuid, &QAction::triggered, this, [this, id]() { QClipboard *clipboard = QGuiApplication::clipboard(); clipboard->setText(workshop_list->getEntry(id).guid); });
+
+
     menu.exec(QCursor::pos());
 
   });

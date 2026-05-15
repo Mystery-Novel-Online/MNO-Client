@@ -22,6 +22,7 @@ struct WorkshopContentEntry
   QString folder;
   QVector<QPair<QString, QString>> tagMap;
   QVector<WorkshopCollaborator> collaborators;
+  QString guid;
 };
 
 

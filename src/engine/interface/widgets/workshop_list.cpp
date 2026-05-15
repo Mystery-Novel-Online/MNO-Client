@@ -81,7 +81,8 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
         url,
         child.toObject().value("folder").toString(),
         tagMap,
-        collaborators
+        collaborators,
+        child.toObject().value("guid").toString()
     };
 
     auto childWidget = entry->createChild(id, "", newEntry.name, newEntry.submitter, "", nullptr);
@@ -213,7 +214,7 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
     }
 
 
-    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString(), tagMap, collaborators};
+    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString(), tagMap, collaborators, guid};
     QString iconUrl = obj.value("url_icon").toString();
 
 
