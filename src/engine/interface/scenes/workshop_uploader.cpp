@@ -28,11 +28,6 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
 
   m_tagTable = new UploaderTagTable(this);
 
-  m_tagTable->onTagPaste = [this](const QString& categoryName, const QString& tagName)
-  {
-    addTag(0, categoryName, tagName, false);
-  };
-
   m_chooseButton = new QPushButton("Choose Zip", this);
   m_imageButton = new QPushButton("Choose Preview", this);
   m_submitButton = new QPushButton("Submit", this);
@@ -97,8 +92,8 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
 
   if(tagMap.isEmpty() && !m_isEdit)
   {
-    addTag(2, "Artist", "Unknown", true);
-    addTag(2, "Franchise", "Unkown", true);
+    m_tagTable->addTag("Artist", "Unknown", true);
+    m_tagTable->addTag("Franchise", "Unknown", true);
   }
   else
   {
@@ -125,7 +120,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
       if(key == "System" && !allowSystem)
         notOptionalTag = true;
 
-      addTag(-1, key, value, notOptionalTag);
+      m_tagTable->addTag(key, value, notOptionalTag);
     }
   }
 
@@ -133,64 +128,28 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
 
 void WorkshopUploader::StartUpload()
 {
-  QString uploadKey = ApiManager::authorizationKey();
-  if(uploadKey.trimmed().isEmpty() || uploadKey.trimmed() == "PUT_KEY_HERE")
+  bool loginStatus = ApiManager::loggedIn();
+  if(!loginStatus)
   {
     QMessageBox::information(nullptr, "Warning", "You currently are not authenticated to upload");
-    config::ConfigUserSettings::save();
     return;
   }
+
   WorkshopUploader *prompt = new WorkshopUploader(nullptr);
   prompt->show();
 }
 
 void WorkshopUploader::StartEdit(int id, QVector<QPair<QString, QString>> tagMap)
 {
-  QString uploadKey = ApiManager::authorizationKey();
-  if(uploadKey.trimmed().isEmpty() || uploadKey.trimmed() == "PUT_KEY_HERE")
+  bool loginStatus = ApiManager::loggedIn();
+  if(!loginStatus)
   {
     QMessageBox::information(nullptr, "Warning", "You currently are not authenticated to upload");
-    config::ConfigUserSettings::save();
     return;
   }
+
   WorkshopUploader *prompt = new WorkshopUploader(nullptr, true, id, tagMap);
   prompt->show();
-}
-
-void WorkshopUploader::addTag(int categoryId, const QString &categoryName, const QString &tagName, bool forcedTag)
-{
-  int row = m_tagTable->rowCount();
-  m_tagTable->insertRow(row);
-
-  QTableWidgetItem* categoryItem = new QTableWidgetItem(categoryName);
-  categoryItem->setFlags(categoryItem->flags() & ~Qt::ItemIsEditable);
-  m_tagTable->setItem(row, 0, categoryItem);
-
-  QTableWidgetItem* tagItem = new QTableWidgetItem(tagName.trimmed());
-  tagItem->setFlags(tagItem->flags() | Qt::ItemIsEditable);
-  m_tagTable->setItem(row, 1, tagItem);
-
-  QTableWidgetItem* dummyItem = new QTableWidgetItem();
-  dummyItem->setFlags(Qt::NoItemFlags);  // fully disabled
-  m_tagTable->setItem(row, 2, dummyItem);
-
-  if (!forcedTag)
-  {
-    QPushButton* removeBtn = new QPushButton("-", this);
-
-    connect(removeBtn, &QPushButton::clicked, this, [this, removeBtn]() {
-              for (int i = 0; i < m_tagTable->rowCount(); i++)
-              {
-                if (m_tagTable->cellWidget(i, 2) == removeBtn)
-                {
-                  m_tagTable->removeRow(i);
-                  break;
-                }
-              }
-            });
-
-    m_tagTable->setCellWidget(row, 2, removeBtn);
-  }
 }
 
 void WorkshopUploader::chooseFile()
@@ -252,7 +211,7 @@ void WorkshopUploader::addTagClicked()
     if (tagName.isEmpty())
       return;
 
-    addTag(categoryId, categoryName, tagName, false);
+    m_tagTable->addTag(categoryName, tagName);
   }
 }
 

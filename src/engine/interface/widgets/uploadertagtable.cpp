@@ -23,6 +23,43 @@ UploaderTagTable::UploaderTagTable(QWidget *parent) : QTableWidget(parent)
   connect(this, &QTableWidget::itemChanged, this, &UploaderTagTable::itemChangeEvent);
 }
 
+void UploaderTagTable::addTag(const QString &category, const QString &value, bool disableRemove)
+{
+  int row = rowCount();
+  insertRow(row);
+
+  QTableWidgetItem* categoryItem = new QTableWidgetItem(category);
+  categoryItem->setFlags(categoryItem->flags() & ~Qt::ItemIsEditable);
+  setItem(row, 0, categoryItem);
+
+  QTableWidgetItem* tagItem = new QTableWidgetItem(value.trimmed());
+  tagItem->setFlags(tagItem->flags() | Qt::ItemIsEditable);
+  setItem(row, 1, tagItem);
+
+  QTableWidgetItem* dummyItem = new QTableWidgetItem();
+  dummyItem->setFlags(Qt::NoItemFlags);
+  setItem(row, 2, dummyItem);
+
+  if (!disableRemove)
+  {
+    QPushButton* removeBtn = new QPushButton("Remove", this);
+
+    connect(removeBtn, &QPushButton::clicked, this, [this, removeBtn]() {
+              for (int i = 0; i < rowCount(); i++)
+              {
+                if (cellWidget(i, 2) == removeBtn)
+                {
+                  removeRow(i);
+                  break;
+                }
+              }
+            });
+
+    setCellWidget(row, 2, removeBtn);
+  }
+}
+
+
 void UploaderTagTable::keyPressEvent(QKeyEvent *event)
 {
   if (event->matches(QKeySequence::Copy))
@@ -100,7 +137,6 @@ void UploaderTagTable::pasteSelection()
     QString categoryName = parts[0].trimmed();
     QString tagName = parts[1].trimmed();
 
-    if (onTagPaste)
-      onTagPaste(categoryName, tagName);
+    addTag(categoryName, tagName);
   }
 }

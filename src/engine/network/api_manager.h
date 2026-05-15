@@ -27,6 +27,7 @@ public:
   static QString repoUrl(int characterId);
   static QString baseUri();
   static QString authorizationKey();
+  static bool loggedIn();
   ApiPermissionLevels userPermission() { return m_permissionLevel;};
 
   const QStringList& collections() {return m_collections;}

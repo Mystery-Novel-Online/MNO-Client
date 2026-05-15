@@ -109,6 +109,18 @@ QString ApiManager::authorizationKey()
   return QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
 }
 
+bool ApiManager::loggedIn()
+{
+  const QString& uploadKey = ApiManager::authorizationKey();
+  if(uploadKey.trimmed().isEmpty() || uploadKey.trimmed() == "PUT_KEY_HERE")
+  {
+    config::ConfigUserSettings::save();
+    return false;
+  }
+
+  return true;
+}
+
 bool ApiManager::appendFile(QHttpMultiPart *multipart, const QString &fieldName, const QString &filePath)
 {
   QFile* file = new QFile(filePath);
