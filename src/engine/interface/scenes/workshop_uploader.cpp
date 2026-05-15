@@ -33,28 +33,6 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
     addTag(0, categoryName, tagName, false);
   };
 
-  m_tagTable->setColumnCount(3);
-
-  QStringList headers;
-  headers << "Category" << "Tag" << "";
-  m_tagTable->setHorizontalHeaderLabels(headers);
-
-  m_tagTable->horizontalHeader()->setStretchLastSection(false);
-  m_tagTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
-  m_tagTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
-  m_tagTable->setColumnWidth(2, 80);
-
-  m_tagTable->setEditTriggers(
-      QAbstractItemView::DoubleClicked |
-      QAbstractItemView::EditKeyPressed
-      );
-
-  connect(m_tagTable, &QTableWidget::itemChanged, this, [=](QTableWidgetItem* item)
-          {
-            if (item->column() != 1) return;
-            item->setText(item->text().trimmed());
-          });
-
   m_chooseButton = new QPushButton("Choose Zip", this);
   m_imageButton = new QPushButton("Choose Preview", this);
   m_submitButton = new QPushButton("Submit", this);
@@ -77,7 +55,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
   m_progress = new QProgressBar(this);
   m_progress->setRange(0, 100);
   m_progress->setValue(0);
-  m_progress->setVisible(false);
+  m_progress->setVisible(true);
 
   m_private = new QCheckBox(this);
   m_private->setText("Make Upload Private");
@@ -94,11 +72,10 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
   QFormLayout *layout = new QFormLayout();
   layout->addRow(m_chooseButton, m_filePath);
   layout->addRow(m_imageButton, m_previewPath);
-  layout->addRow("Description:", m_description);
   layout->addRow("Collection:", m_collectionList);
+  layout->addRow("Description:", m_description);
   layout->addRow("", m_private);
-  layout->addRow("", m_submitButton);
-  layout->addRow("Progress:", m_progress);
+  layout->addRow(m_submitButton, m_progress);
 
   QFormLayout *tagLayout = new QFormLayout();
   tagLayout->addRow("", m_addTag);
