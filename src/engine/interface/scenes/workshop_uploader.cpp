@@ -89,20 +89,26 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
     m_previewPath->setText("<No Change>");
   }
 
-  QFormLayout *layout = new QFormLayout(this);
-  layout->addRow("Zip File:", m_filePath);
-  layout->addRow("", m_chooseButton);
-  layout->addRow("Preview Image:", m_previewPath);
-  layout->addRow("", m_imageButton);
+  m_chooseButton->setMinimumWidth(100);
+  m_imageButton->setMinimumWidth(100);
+  QFormLayout *layout = new QFormLayout();
+  layout->addRow(m_chooseButton, m_filePath);
+  layout->addRow(m_imageButton, m_previewPath);
   layout->addRow("Description:", m_description);
-  layout->addRow("", m_addTag);
-  layout->addRow("Tags:", m_tagTable);
   layout->addRow("Collection:", m_collectionList);
   layout->addRow("", m_private);
   layout->addRow("", m_submitButton);
   layout->addRow("Progress:", m_progress);
 
-  setLayout(layout);
+  QFormLayout *tagLayout = new QFormLayout();
+  tagLayout->addRow("", m_addTag);
+  tagLayout->addRow("Tags:", m_tagTable);
+
+  QHBoxLayout *overallLayout = new QHBoxLayout();
+  overallLayout->addLayout(layout);
+  overallLayout->addLayout(tagLayout);
+
+  setLayout(overallLayout);
 
   connect(m_chooseButton, &QPushButton::clicked, this, &WorkshopUploader::chooseFile);
   connect(m_imageButton, &QPushButton::clicked, this, &WorkshopUploader::choosePreviewFile);
