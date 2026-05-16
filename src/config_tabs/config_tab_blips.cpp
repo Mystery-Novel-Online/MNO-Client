@@ -9,11 +9,22 @@ config_tab_blips::config_tab_blips(QWidget *parent) : QWidget(parent), ui(new Ui
 {
   ui->setupUi(this);
   rolechat::fs::RCDir blipDirectory("sounds/blips/");
+
+  const QString qCurrentBlipSet = QString::fromStdString(config::ConfigUserSettings::stringValue("blip_set", "default"));
+
+  std::optional<int> lBlipIndex;
+
   for(const auto& subDir : blipDirectory.subDirectories())
   {
-    ui->blipSet->addItem(QString::fromStdString(subDir));
+    const QString qBlipName = QString::fromStdString(subDir);
+    if (qBlipName == qCurrentBlipSet)
+      lBlipIndex = ui->blipSet->count();
+
+    ui->blipSet->addItem(qBlipName);
   }
-  BlipConfig blip("danganronpa");
+
+  if (lBlipIndex.has_value())
+    ui->blipSet->setCurrentIndex(*lBlipIndex);
 }
 
 config_tab_blips::~config_tab_blips()
@@ -30,5 +41,7 @@ void config_tab_blips::on_blipSet_currentIndexChanged(int index)
 
   if(!m_currentBlip->valid())
     m_currentBlip.reset();
+
+  config::ConfigUserSettings::setString("blip_set", ui->blipSet->currentText().toStdString());
 }
 
