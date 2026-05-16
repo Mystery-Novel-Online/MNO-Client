@@ -61,6 +61,8 @@ class QLabel;
 
 #include <engine/interface/widgets/layer_selection_panel.h>
 
+#include <config_tabs/config_tab_blips.h>
+
 using namespace engine;
 using namespace engine::network::metadata;
 
@@ -193,6 +195,7 @@ private slots:
   void OnIniswapTimerTimeout();
 
 public:
+  config_tab_blips* m_configBlips = nullptr;
   QHash<QString, QWidget *> widget_names;
   int horizontalAlign = 0;
 

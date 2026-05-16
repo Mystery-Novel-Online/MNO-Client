@@ -36,6 +36,7 @@
 #include "engine/param/actor_repository.h"
 #include "engine/param/actor/actor_loader.h"
 #include <QHttpMultiPart>
+#include <config_tabs/config_tab_blips.h>
 #include <engine/discord/workshop_discord.h>
 #include <engine/interface/scenes/downloader_prompt.h>
 #include <engine/network/api_manager.h>
@@ -58,6 +59,8 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   ao_app = p_ao_app;
   ao_config = new AOConfig(this);
   RuntimeLoop::setWindowFocus(true);
+
+  m_configBlips = engine::system::ConfigManager::retrieveTab<config_tab_blips>("Blips");
 
   m_preloader_sync = new mk2::SpriteReaderSynchronizer(this);
   m_preloader_sync->set_threshold(ao_config->caching_threshold());
@@ -2586,11 +2589,11 @@ void Courtroom::next_chat_letter()
   QScrollBar *scroll = ui_vp_message->verticalScrollBar();
   scroll->setValue(scroll->maximum());
 
-  if ((f_message.at(m_tick_step) != ' ' || ao_config->blank_blips_enabled()))
+  if ((f_message.at(m_tick_step) != ' ' || m_configBlips->useBlanks()))
   {
 
     int overideBlipRate = audio::blip::getBlipRate();
-    overideBlipRate = overideBlipRate == -1 ? ao_config->blip_rate() : overideBlipRate;
+    overideBlipRate = overideBlipRate == -1 ? m_configBlips->blipRate() : overideBlipRate;
 
     if (m_blip_step % overideBlipRate == 0)
     {
