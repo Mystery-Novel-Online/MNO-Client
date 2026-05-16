@@ -556,7 +556,7 @@ void Courtroom::update_background_scene()
   if(!QUuid(m_background_name).isNull())
   {
     auto workshopSearch = GetDB().searchContentGuid(m_background_name.toStdString());
-    if(!workshopSearch.folder.empty() && rolechat::fs::RCDir::exists("backgrounds/" + workshopSearch.folder)){
+    if(!workshopSearch.folder.empty() && !rolechat::fs::RCDir("backgrounds/" + workshopSearch.folder).exists()){
       m_background_name = QString::fromStdString(workshopSearch.folder);
     }
     else
