@@ -29,7 +29,14 @@
     </layout>
    </item>
    <item>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="overrideRuleTheme">
+     <property name="text">
+      <string>Allow Theme to Override</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QCheckBox" name="overrideRuleCharacter">
      <property name="text">
       <string>Allow Character to Override</string>
      </property>
