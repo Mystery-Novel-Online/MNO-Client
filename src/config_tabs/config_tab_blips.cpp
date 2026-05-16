@@ -18,7 +18,7 @@ config_tab_blips::config_tab_blips(QWidget *parent) : QWidget(parent), ui(new Ui
   ui->setupUi(this);
   rolechat::fs::RCDir blipDirectory("sounds/blips/");
 
-  const QString qCurrentBlipSet = QString::fromStdString(config::ConfigUserSettings::stringValue("blip_set", "default"));
+  const QString qCurrentBlipSet = QString::fromStdString(config::ConfigUserSettings::stringValue("blip_set", "Danganronpa"));
 
   ui->blipOverride->setChecked(m_useOverrides);
 
