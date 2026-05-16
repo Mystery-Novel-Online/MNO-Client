@@ -5,7 +5,7 @@
 
 namespace Ui
 {
-class config_tab_blips;
+class ConfigTabBlips;
 }
 
 class config_tab_blips : public QWidget
@@ -17,7 +17,7 @@ public:
   ~config_tab_blips();
 
 private:
-  Ui::config_tab_blips *ui;
+  Ui::ConfigTabBlips *ui;
 };
 
 #endif // CONFIG_TAB_BLIPS_H

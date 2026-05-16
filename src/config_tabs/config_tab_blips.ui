@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>config_tab_blips</class>
- <widget class="QWidget" name="config_tab_blips">
+ <class>ConfigTabBlips</class>
+ <widget class="QWidget" name="ConfigTabBlips">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -17,7 +17,7 @@
    <item>
     <layout class="QFormLayout" name="formLayout_2">
      <item row="0" column="1">
-      <widget class="QComboBox" name="comboBox"/>
+      <widget class="QComboBox" name="blipSet"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label">
@@ -29,7 +29,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="blipOverride">
      <property name="title">
       <string>Override Blip Settings</string>
      </property>
@@ -48,10 +48,10 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QSpinBox" name="spinBox"/>
+       <widget class="QSpinBox" name="blipRate"/>
       </item>
       <item row="1" column="0">
-       <widget class="QCheckBox" name="checkBox">
+       <widget class="QCheckBox" name="blipBlanks">
         <property name="text">
          <string>Blanks</string>
         </property>

@@ -699,7 +699,8 @@ void AOConfigPanel::updateTabsVisibility(const QModelIndex &current)
 
   QHash<QString, QStringList> dynamicTabs =
   {
-    {"Content", {"Theme", "Mounting"}}
+    {"Content", {"Theme", "Mounting"}},
+    {"Message", {"Blips"}}
   };
 
   std::map<QString, QVector<int>> tabInfoMap = {
