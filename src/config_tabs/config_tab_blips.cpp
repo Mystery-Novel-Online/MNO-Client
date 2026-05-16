@@ -7,10 +7,30 @@
 
 config_tab_blips::config_tab_blips(QWidget *parent) : QWidget(parent), ui(new Ui::ConfigTabBlips)
 {
+
+  m_allowCharacters = config::ConfigUserSettings::booleanValue("blip_override_characters", true);
+  m_allowTheme = config::ConfigUserSettings::booleanValue("blip_override_themes", true);
+  m_useOverrides = config::ConfigUserSettings::booleanValue("blip_override_custom", false);
+
+  int configBlipRate = config::ConfigUserSettings::intergerValue("blip_custom_bliprate", 3000);
+  m_useBlanks = config::ConfigUserSettings::booleanValue("blip_custom_blanks", false);
+
   ui->setupUi(this);
   rolechat::fs::RCDir blipDirectory("sounds/blips/");
 
   const QString qCurrentBlipSet = QString::fromStdString(config::ConfigUserSettings::stringValue("blip_set", "default"));
+
+  ui->blipOverride->setChecked(m_useOverrides);
+
+  ui->overrideRuleTheme->setChecked(m_allowTheme);
+  ui->overrideRuleCharacter->setChecked(m_allowCharacters);
+
+  ui->blipRate->setMinimum(1);
+  ui->blipRate->setMaximum(999999999);
+  ui->blipRate->setValue(configBlipRate);
+  m_blipRate = configBlipRate;
+
+  ui->blipBlanks->setChecked(m_useBlanks);
 
   std::optional<int> lBlipIndex;
 
@@ -40,6 +60,28 @@ QString config_tab_blips::getBlipSound(const QString &gender)
   return "sounds/general/sfx-blip" + gender + ".wav";
 }
 
+bool config_tab_blips::useBlanks()
+{
+  if(m_useOverrides)
+    return m_useBlanks;
+
+  if(m_currentBlip.has_value())
+    return m_currentBlip->blanksAllowed();
+
+  return false;
+}
+
+int config_tab_blips::blipRate()
+{
+  if(m_useOverrides)
+    return m_blipRate;
+
+  if(m_currentBlip.has_value())
+    return m_currentBlip->blipRate();
+
+  return 99999;
+}
+
 void config_tab_blips::on_blipSet_currentIndexChanged(int index)
 {
   if(m_currentBlip.has_value())
@@ -51,5 +93,39 @@ void config_tab_blips::on_blipSet_currentIndexChanged(int index)
     m_currentBlip.reset();
 
   config::ConfigUserSettings::setString("blip_set", ui->blipSet->currentText().toStdString());
+}
+
+void config_tab_blips::on_overrideRuleCharacter_stateChanged(int arg1)
+{
+  m_allowCharacters = ui->overrideRuleCharacter->isChecked();
+  config::ConfigUserSettings::setValue("characters_override_blip", m_allowCharacters);
+}
+
+
+void config_tab_blips::on_overrideRuleTheme_stateChanged(int arg1)
+{
+  m_allowCharacters = ui->overrideRuleTheme->isChecked();
+  config::ConfigUserSettings::setValue("blip_override_themes", m_allowCharacters);
+}
+
+
+void config_tab_blips::on_blipOverride_toggled(bool arg1)
+{
+  m_useOverrides = arg1;
+  config::ConfigUserSettings::setValue("blip_override_custom", m_useOverrides);
+}
+
+
+void config_tab_blips::on_blipRate_valueChanged(int arg1)
+{
+  m_blipRate = arg1;
+  config::ConfigUserSettings::setValue("blip_custom_bliprate", arg1);
+}
+
+
+void config_tab_blips::on_blipBlanks_stateChanged(int arg1)
+{
+  m_useBlanks = ui->blipBlanks->isChecked();
+  config::ConfigUserSettings::setValue("blip_custom_blanks", m_useBlanks);
 }
 

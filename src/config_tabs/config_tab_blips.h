@@ -18,13 +18,31 @@ public:
   ~config_tab_blips();
 
   QString getBlipSound(const QString& gender);
+  bool useBlanks();
+  int blipRate();
 
 private slots:
   void on_blipSet_currentIndexChanged(int index);
+  void on_overrideRuleCharacter_stateChanged(int arg1);
+  void on_overrideRuleTheme_stateChanged(int arg1);
+
+  void on_blipOverride_toggled(bool arg1);
+
+  void on_blipRate_valueChanged(int arg1);
+
+  void on_blipBlanks_stateChanged(int arg1);
 
 private:
   Ui::ConfigTabBlips *ui;
   std::optional<BlipConfig> m_currentBlip;
+
+  bool m_allowCharacters = true;
+  bool m_allowTheme = true;
+
+  bool m_useOverrides = false;
+
+  int m_blipRate = 0;
+  bool m_useBlanks = false;
 };
 
 #endif // CONFIG_TAB_BLIPS_H
