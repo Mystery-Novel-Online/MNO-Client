@@ -29,6 +29,13 @@
     </layout>
    </item>
    <item>
+    <widget class="QCheckBox" name="checkBox">
+     <property name="text">
+      <string>Allow Character to Override</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QGroupBox" name="blipOverride">
      <property name="title">
       <string>Override Blip Settings</string>
