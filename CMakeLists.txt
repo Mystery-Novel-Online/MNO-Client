@@ -324,6 +324,7 @@ add_executable(rp-engine
   src/config_tabs/config_tab_mounting.h src/config_tabs/config_tab_mounting.cpp src/config_tabs/config_tab_mounting.ui
   src/engine/interface/widgets/workshop_tags.h src/engine/interface/widgets/workshop_tags.cpp
   src/engine/interface/widgets/uploadertagtable.h src/engine/interface/widgets/uploadertagtable.cpp
+  src/config_tabs/config_tab_blips.h src/config_tabs/config_tab_blips.cpp src/config_tabs/config_tab_blips.ui
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
@@ -352,8 +353,6 @@ target_link_directories(rp-engine PRIVATE
 )
 
 add_subdirectory(3rd/rolechat-lib)
-add_subdirectory(3rd/FennEngine)
-
 target_link_libraries(rp-engine
   Qt5::Core
   Qt5::Gui
@@ -368,8 +367,6 @@ target_link_libraries(rp-engine
   discord_partner_sdk
   lua54
   rolechat-lib
-  FennEngine
-  imgui
 )
 
 if(WIN32)
