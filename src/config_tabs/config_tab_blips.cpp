@@ -2,7 +2,6 @@
 #include "ui_config_tab_blips.h"
 
 #include <iostream>
-#include <rolechat-lib/src/rolechat/audio/blip_config.h>
 
 #include <rolechat/filesystem/RCDir.h>
 
@@ -21,3 +20,15 @@ config_tab_blips::~config_tab_blips()
 {
   delete ui;
 }
+
+void config_tab_blips::on_blipSet_currentIndexChanged(int index)
+{
+  if(m_currentBlip.has_value())
+    m_currentBlip.reset();
+
+  m_currentBlip.emplace(BlipConfig(ui->blipSet->currentText().toStdString()));
+
+  if(!m_currentBlip->valid())
+    m_currentBlip.reset();
+}
+
