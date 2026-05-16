@@ -42,6 +42,7 @@
 #include <engine/system/audio/loop_detection.h>
 #include <mk2/spritecachingreader.h>
 #include <rolechat/actor/JsonActorData.h>
+#include <rolechat/filesystem/RCDir.h>
 #include "engine/system/config_manager.h"
 #include "config_tabs/config_tab_theme.h"
 
@@ -555,7 +556,7 @@ void Courtroom::update_background_scene()
   if(!QUuid(m_background_name).isNull())
   {
     auto workshopSearch = GetDB().searchContentGuid(m_background_name.toStdString());
-    if(!workshopSearch.folder.empty()){
+    if(!workshopSearch.folder.empty() && rolechat::fs::RCDir::exists("backgrounds/" + workshopSearch.folder)){
       m_background_name = QString::fromStdString(workshopSearch.folder);
     }
     else
@@ -1294,11 +1295,11 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
   }
 
   // characters
-  l_file_list.insert(ViewportCharacterPre, fs::characters::getSpritePathPre(l_character, l_emote_anim));
-  l_file_list.insert(ViewportCharacterIdle, fs::characters::getSpritePathIdle(l_character, l_emote));
-  l_file_list.insert(ViewportCharacterTalk, fs::characters::getSpritePathTalk(l_character, l_emote));
+  l_file_list.insert(ViewportCharacterPre, engine::fs::characters::getSpritePathPre(l_character, l_emote_anim));
+  l_file_list.insert(ViewportCharacterIdle, engine::fs::characters::getSpritePathIdle(l_character, l_emote));
+  l_file_list.insert(ViewportCharacterTalk, engine::fs::characters::getSpritePathTalk(l_character, l_emote));
 
-  l_file_list.insert(ViewportPairCharacterIdle, fs::characters::getSpritePathIdle(message::pair::getCharacter(), message::pair::getEmote()));
+  l_file_list.insert(ViewportPairCharacterIdle, engine::fs::characters::getSpritePathIdle(message::pair::getCharacter(), message::pair::getEmote()));
 
   // shouts
   l_file_list.insert(ViewportShout, ao_app->get_shout_sprite_path(l_character, get_shout_name(l_shout_id), l_outfit));
@@ -1707,7 +1708,7 @@ void Courtroom::handle_chatmessage_3()
         l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname", FS::Formats::StaticImages());
 
       if (l_showname_image.isEmpty())
-        l_showname_image = ao_app->find_asset_path({fs::characters::getFilePath(f_char, "showname")}, FS::Formats::StaticImages());
+        l_showname_image = ao_app->find_asset_path({engine::fs::characters::getFilePath(f_char, "showname")}, FS::Formats::StaticImages());
     }
 
     if (!l_showname_image.isEmpty())
@@ -2225,11 +2226,11 @@ void Courtroom::setup_chat()
   m_chatbox_message_highlight_colors = ao_app->get_highlight_colors();
 
   QString f_gender = "male";
-  QString l_jsonPath = fs::characters::getFilePath(m_chatmessage[CMChrName], "char.json");
+  QString l_jsonPath = engine::fs::characters::getFilePath(m_chatmessage[CMChrName], "char.json");
   if(FS::Checks::FileExists(l_jsonPath))
   {
     rolechat::actor::JsonActorData speakerActor;
-    speakerActor.load(m_chatmessage[CMChrName].toStdString(), fs::characters::getDirectoryPath(m_chatmessage[CMChrName]).toStdString());
+    speakerActor.load(m_chatmessage[CMChrName].toStdString(), engine::fs::characters::getDirectoryPath(m_chatmessage[CMChrName]).toStdString());
     f_gender = QString::fromStdString(speakerActor.gender());
   }
   else
@@ -3496,8 +3497,8 @@ void Courtroom::OnCharRandomClicked()
     return;
   }
 
-  QString char_json_path = fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_JSON);
-  QString char_ini_path = fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_INI);
+  QString char_json_path = engine::fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_JSON);
+  QString char_ini_path = engine::fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_INI);
 
   if (!FS::Checks::FileExists(char_json_path))
   {
@@ -3544,8 +3545,8 @@ void Courtroom::SwitchRandomCharacter(QString list)
     return;
   }
 
-  QString char_json_path = fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_JSON);
-  QString char_ini_path = fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_INI);
+  QString char_json_path = engine::fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_JSON);
+  QString char_ini_path = engine::fs::characters::getFilePath(QString::fromStdString(selectedChar.name), CHARACTER_CHAR_INI);
 
   if (!FS::Checks::FileExists(char_json_path))
   {
