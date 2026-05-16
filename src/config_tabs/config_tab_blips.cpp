@@ -4,6 +4,7 @@
 config_tab_blips::config_tab_blips(QWidget *parent) : QWidget(parent), ui(new Ui::ConfigTabBlips)
 {
   ui->setupUi(this);
+  ui->blipSet->addItem("<Legacy Blips>");
 }
 
 config_tab_blips::~config_tab_blips()
