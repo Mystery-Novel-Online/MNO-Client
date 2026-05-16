@@ -17,6 +17,8 @@ public:
   explicit config_tab_blips(QWidget *parent = nullptr);
   ~config_tab_blips();
 
+  QString getBlipSound(const QString& gender);
+
 private slots:
   void on_blipSet_currentIndexChanged(int index);
 

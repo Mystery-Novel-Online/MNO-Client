@@ -7,6 +7,9 @@
 #include "engine/system/audio/shout_player.h"
 #include "engine/system/audio/ambience_player.h"
 
+#include <config_tabs/config_tab_blips.h>
+#include "engine/system/config_manager.h"
+
 
 static AOBlipPlayer *s_blipPlayer;
 static int s_blipRateOverride = -1;
@@ -144,7 +147,11 @@ namespace audio
 
     void SetGender(const std::string& gender)
     {
-      s_blipPlayer->set_blips("sfx-blip" + QString::fromStdString(gender) + ".wav");
+      config_tab_blips* configTab = engine::system::ConfigManager::retrieveTab<config_tab_blips>("Blips");
+      if(!configTab)
+        s_blipPlayer->set_blips("sfx-blip" + QString::fromStdString(gender) + ".wav");
+      else
+        s_blipPlayer->set_blips(configTab->getBlipSound(QString::fromStdString(gender)));
     }
 
     void SetSound(const std::string& sound)

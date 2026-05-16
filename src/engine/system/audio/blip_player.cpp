@@ -1,5 +1,7 @@
 #include "blip_player.h"
 
+#include <rolechat/filesystem/RCFile.h>
+
 const int AOBlipPlayer::BLIP_COUNT = 5;
 
 AOBlipPlayer::AOBlipPlayer(QObject *p_parent)
@@ -15,7 +17,7 @@ void AOBlipPlayer::set_blips(QString p_blip)
     return;
 
   m_name = p_blip;
-  m_file = ao_app->get_sfx_noext_path(m_name.value());
+  m_file = QString::fromStdString(rolechat::fs::RCFile(p_blip.toStdString()).findFirst());
 }
 
 void AOBlipPlayer::blip_tick()

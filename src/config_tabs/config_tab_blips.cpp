@@ -32,6 +32,14 @@ config_tab_blips::~config_tab_blips()
   delete ui;
 }
 
+QString config_tab_blips::getBlipSound(const QString &gender)
+{
+  if(m_currentBlip.has_value())
+    return QString::fromStdString("sounds/blips/" + m_currentBlip->name() + "/" + m_currentBlip->soundFile(gender.toStdString()));
+
+  return "sounds/general/sfx-blip" + gender + ".wav";
+}
+
 void config_tab_blips::on_blipSet_currentIndexChanged(int index)
 {
   if(m_currentBlip.has_value())
