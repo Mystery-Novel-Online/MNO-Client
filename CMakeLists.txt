@@ -325,6 +325,7 @@ add_executable(rp-engine
   src/engine/interface/widgets/workshop_tags.h src/engine/interface/widgets/workshop_tags.cpp
   src/engine/interface/widgets/uploadertagtable.h src/engine/interface/widgets/uploadertagtable.cpp
   src/config_tabs/config_tab_blips.h src/config_tabs/config_tab_blips.cpp src/config_tabs/config_tab_blips.ui
+  src/config_tabs/config_tab_callwords.h src/config_tabs/config_tab_callwords.cpp src/config_tabs/config_tab_callwords.ui
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
