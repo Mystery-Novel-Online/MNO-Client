@@ -125,8 +125,6 @@ private:
 
   // dialog
   QSpinBox *ui_chat_tick_interval = nullptr;
-  QSpinBox *ui_blip_rate = nullptr;
-  QCheckBox *ui_blank_blips = nullptr;
   QSpinBox *ui_punctuation_delay = nullptr;
 
   // game

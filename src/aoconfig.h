@@ -72,9 +72,7 @@ public:
   bool video_ignore_suppression() const;
   int blip_volume() const;
   bool blip_ignore_suppression() const;
-  int blip_rate() const;
   int punctuation_delay() const;
-  bool blank_blips_enabled() const;
 
   int fade_duration() const;
 
@@ -138,9 +136,7 @@ public slots:
   void set_video_ignore_suppression(bool p_enabled);
   void set_blip_volume(int p_number);
   void set_blip_ignore_suppression(bool p_enabled);
-  void set_blip_rate(int p_number);
   void set_punctuation_delay(int p_number);
-  void set_blank_blips(bool p_enabled);
   void setThemeResize(double resize);
   void setFadeDuration(int duration);
 
@@ -212,9 +208,7 @@ signals:
   void video_ignore_suppression_changed(bool);
   void blip_volume_changed(int);
   void blip_ignore_suppression_changed(bool);
-  void blip_rate_changed(int);
   void punctuation_delay_changed(int);
-  void blank_blips_changed(bool);
 
   //Theme
   void theme_resize_changed(double);

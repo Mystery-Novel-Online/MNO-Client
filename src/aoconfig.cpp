@@ -98,10 +98,8 @@ private:
   bool video_ignore_suppression;
   int blip_volume;
   bool blip_ignore_suppression;
-  int blip_rate;
   int punctuation_delay;
   int fade_duration;
-  bool blank_blips;
 
   // audio sync
   DRAudioEngine *audio_engine = nullptr;
@@ -214,12 +212,10 @@ void AOConfigPrivate::load_file()
   video_ignore_suppression = cfg.value("video_ignore_suppression", false).toBool();
   blip_volume = cfg.value("default_blip", 50).toInt();
   blip_ignore_suppression = cfg.value("blip_ignore_suppression", false).toBool();
-  blip_rate = cfg.value("blip_rate", 1000000000).toInt();
   punctuation_delay = cfg.value("punctuation_delay", 110).toInt();
   ThemeManager::get().setResize(config::ConfigUserSettings::floatValue("resize", 1.0f));
   fade_duration = cfg.value("fade_duration", 200).toInt();
   SceneManager::get().setFadeDuration(fade_duration);
-  blank_blips = cfg.value("blank_blips").toBool();
 
   // audio update
   audio_engine->set_volume(master_volume);
@@ -328,11 +324,9 @@ void AOConfigPrivate::save_file()
   cfg.setValue("video_ignore_suppression", video_ignore_suppression);
   cfg.setValue("default_blip", blip_volume);
   cfg.setValue("blip_ignore_suppression", blip_ignore_suppression);
-  cfg.setValue("blip_rate", blip_rate);
   cfg.setValue("punctuation_delay", punctuation_delay);
   cfg.setValue("theme_resize", config::ConfigUserSettings::floatValue("resize", 1.0f));
   cfg.setValue("fade_duration", fade_duration);
-  cfg.setValue("blank_blips", blank_blips);
 
   cfg.remove("character_ini");
   { // ini swap
@@ -643,20 +637,9 @@ bool AOConfig::blip_ignore_suppression() const
 {
   return d->blip_ignore_suppression;
 }
-
-int AOConfig::blip_rate() const
-{
-  return d->blip_rate;
-}
-
 int AOConfig::punctuation_delay() const
 {
   return d->punctuation_delay;
-}
-
-bool AOConfig::blank_blips_enabled() const
-{
-  return d->blank_blips;
 }
 
 int AOConfig::fade_duration() const
@@ -1091,29 +1074,12 @@ void AOConfig::set_blip_ignore_suppression(bool p_enabled)
   d->invoke_signal("blip_ignore_suppression_changed", Q_ARG(bool, p_enabled));
 }
 
-void AOConfig::set_blip_rate(int p_number)
-{
-  if (d->blip_rate == p_number)
-    return;
-  d->blip_rate = p_number;
-  d->invoke_signal("blip_rate_changed", Q_ARG(int, p_number));
-}
-
 void AOConfig::set_punctuation_delay(int p_number)
 {
   if (d->punctuation_delay == p_number)
     return;
   d->punctuation_delay = p_number;
   d->invoke_signal("punctuation_delay_changed", Q_ARG(int, p_number));
-}
-
-void AOConfig::set_blank_blips(bool p_enabled)
-{
-  if (d->blank_blips == p_enabled)
-    return;
-  d->blank_blips = p_enabled;
-  d->audio_engine->get_family(DRAudio::Family::FBlip)->set_ignore_suppression(p_enabled);
-  d->invoke_signal("blank_blips_changed", Q_ARG(bool, p_enabled));
 }
 
 void AOConfig::setThemeResize(double resize)

@@ -139,8 +139,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_blip = AO_GUI_WIDGET(QSlider, "blip");
   ui_blip_ignore_suppression = AO_GUI_WIDGET(QCheckBox, "blip_ignore_suppression");
   ui_blip_value = AO_GUI_WIDGET(QLabel, "blip_value");
-  ui_blip_rate = AO_GUI_WIDGET(QSpinBox, "blip_rate");
-  ui_blank_blips = AO_GUI_WIDGET(QCheckBox, "blank_blips");
   ui_punctuation_delay = AO_GUI_WIDGET(QSpinBox, "punctuation_delay");
   ui_reload_audiotracks = AO_GUI_WIDGET(QPushButton, "reload_audiotracks");
   ui_fade_duration = AO_GUI_WIDGET(QSpinBox, "FadeDurationBox");
@@ -222,9 +220,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(m_config, SIGNAL(video_ignore_suppression_changed(bool)), ui_video_ignore_suppression, SLOT(setChecked(bool)));
   connect(m_config, SIGNAL(blip_volume_changed(int)), ui_blip, SLOT(setValue(int)));
   connect(m_config, SIGNAL(blip_ignore_suppression_changed(bool)), ui_blip_ignore_suppression, SLOT(setChecked(bool)));
-  connect(m_config, SIGNAL(blip_rate_changed(int)), ui_blip_rate, SLOT(setValue(int)));
   connect(m_config, SIGNAL(punctuation_delay_changed(int)), ui_punctuation_delay, SLOT(setValue(int)));
-  connect(m_config, SIGNAL(blank_blips_changed(bool)), ui_blank_blips, SLOT(setChecked(bool)));
 
   connect(m_config, &AOConfig::fade_duration_changed, ui_fade_duration, &QSpinBox::setValue);
 
@@ -295,9 +291,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(ui_video, &QAbstractSlider::valueChanged, m_config, &AOConfig::set_video_volume);
   connect(ui_blip, &QAbstractSlider::valueChanged, m_config, &AOConfig::set_blip_volume);
 
-  connect(ui_blip_rate, SIGNAL(valueChanged(int)), m_config, SLOT(set_blip_rate(int)));
   connect(ui_punctuation_delay, SIGNAL(valueChanged(int)), m_config, SLOT(set_punctuation_delay(int)));
-  connect(ui_blank_blips, SIGNAL(toggled(bool)), m_config, SLOT(set_blank_blips(bool)));
 
   connect(ui_fade_duration, SIGNAL(valueChanged(int)), m_config, SLOT(setFadeDuration(int)));
 
@@ -392,9 +386,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_video_ignore_suppression->setChecked(m_config->video_ignore_suppression());
   ui_blip->setValue(m_config->blip_volume());
   ui_blip_ignore_suppression->setChecked(m_config->blip_ignore_suppression());
-  ui_blip_rate->setValue(m_config->blip_rate());
   ui_punctuation_delay->setValue(m_config->punctuation_delay());
-  ui_blank_blips->setChecked(m_config->blank_blips_enabled());
 
   ui_fade_duration->setValue(m_config->fade_duration());
 
