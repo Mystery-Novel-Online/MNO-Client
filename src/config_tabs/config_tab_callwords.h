@@ -32,6 +32,8 @@ private slots:
 
 private:
   Ui::ConfigTabCallwords *ui;
+
+  void save();
 };
 
 #endif // CONFIG_TAB_CALLWORDS_H

@@ -1,5 +1,7 @@
 #include "config_tab_callwords.h"
 #include "ui_config_tab_callwords.h"
+#include <rolechat/userdata/RolechatDatabase.h>
+#include <vector>
 
 ConfigTabCallwords::ConfigTabCallwords(QWidget *parent) : QWidget(parent), ui(new Ui::ConfigTabCallwords)
 {
@@ -19,6 +21,11 @@ ConfigTabCallwords::ConfigTabCallwords(QWidget *parent) : QWidget(parent), ui(ne
   ui->callwordTable->setSelectionBehavior(QAbstractItemView::SelectRows);
   ui->callwordTable->setSelectionMode(QAbstractItemView::SingleSelection);
 
+  for(auto& callword : RolechatDatabase::instance().getCallwords())
+  {
+    addWord(QString::fromStdString(callword.word), (WordMatchMode)callword.mode);
+  }
+
 }
 
 ConfigTabCallwords::~ConfigTabCallwords()
@@ -35,6 +42,7 @@ void ConfigTabCallwords::addWord(const QString &word, WordMatchMode mode)
   ui->callwordTable->setItem(row, 0, wordItem);
 
   QComboBox* combo = new QComboBox(ui->callwordTable);
+  connect(combo, &QComboBox::currentTextChanged, this, [this]() {save();});
 
   combo->addItem("Contains Anywhere",
                  static_cast<int>(WordMatchMode::ContainsAnywhere));
@@ -57,12 +65,14 @@ void ConfigTabCallwords::addWord(const QString &word, WordMatchMode mode)
               if (ui->callwordTable->cellWidget(row, 2) == removeButton)
               {
                 ui->callwordTable->removeRow(row);
+                save();
                 return;
               }
             }
           });
 
   ui->callwordTable->setCellWidget(row, 2, removeButton);
+  save();
 }
 
 bool ConfigTabCallwords::matchWord(const QString &message, const QString &word, WordMatchMode mode)
@@ -126,6 +136,37 @@ bool ConfigTabCallwords::messageCheck(const QString &message, QString& matchedWo
 
 void ConfigTabCallwords::on_callwordAdd_released()
 {
+  if(ui->callwordInput->text().trimmed().isEmpty())
+    return;
+
   addWord(ui->callwordInput->text(), WordMatchMode::ContainsAnywhere);
+}
+
+void ConfigTabCallwords::save()
+{
+  QTableWidget* table = ui->callwordTable;
+  std::vector<UserCallword> data = {};
+
+  for (int row = 0; row < table->rowCount(); ++row)
+  {
+    QTableWidgetItem* wordItem = table->item(row, 0);
+
+    if (!wordItem)
+      continue;
+
+    const QString word = wordItem->text().trimmed();
+
+    if (word.isEmpty())
+      continue;
+
+    QComboBox* combo = qobject_cast<QComboBox*>(table->cellWidget(row, 1));
+
+    if (!combo)
+      continue;
+
+    WordMatchMode mode = static_cast<WordMatchMode>(combo->currentData().toInt());
+    data.push_back({word.toStdString(), (int)mode});
+    RolechatDatabase::instance().setCallwords(data);
+  }
 }
 
