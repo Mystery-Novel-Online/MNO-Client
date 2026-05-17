@@ -62,6 +62,7 @@ class QLabel;
 #include <engine/interface/widgets/layer_selection_panel.h>
 
 #include <config_tabs/config_tab_blips.h>
+#include <config_tabs/config_tab_callwords.h>
 
 using namespace engine;
 using namespace engine::network::metadata;
@@ -196,6 +197,7 @@ private slots:
 
 public:
   config_tab_blips* m_configBlips = nullptr;
+  ConfigTabCallwords *m_configCallwords = nullptr;
   QHash<QString, QWidget *> widget_names;
   int horizontalAlign = 0;
 

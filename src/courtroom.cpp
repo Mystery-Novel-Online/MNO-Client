@@ -61,6 +61,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   RuntimeLoop::setWindowFocus(true);
 
   m_configBlips = engine::system::ConfigManager::retrieveTab<config_tab_blips>("Blips");
+  m_configCallwords = engine::system::ConfigManager::retrieveTab<ConfigTabCallwords>("Callwords");
 
   m_preloader_sync = new mk2::SpriteReaderSynchronizer(this);
   m_preloader_sync->set_threshold(ao_config->caching_threshold());
@@ -1827,22 +1828,21 @@ void Courtroom::handle_chatmessage_3()
   }
 
   QString f_message = m_chatmessage[CMMessage];
-  QStringList callwords = ao_app->get_callwords();
 
-  for (const QString &word : callwords)
+  QString callwordMatch = "";
+  m_configCallwords->messageCheck(f_message, callwordMatch);
+
+  if(!callwordMatch.isEmpty())
   {
-    if (f_message.contains(word, Qt::CaseInsensitive))
-    {
-      audio::system::Play(ao_app->get_sfx("word_call").toStdString());
-      ao_app->alert(this);
-      const QString name = "CLIENT";
-      const QString message = ui_vp_showname->toPlainText() + " has called you via your callword \"" + word + "\": \"" + f_message + "\"";
-      ui_ooc_chatlog->append_chatmessage(name, message);
-      if (ao_config->log_is_recording_enabled())
-        save_textlog("(OOC)" + name + ": " + message);
-      break;
-    }
+    audio::system::Play(ao_app->get_sfx("word_call").toStdString());
+    ao_app->alert(this);
+    const QString name = "CLIENT";
+    const QString message = ui_vp_showname->toPlainText() + " has called you via your callword \"" + callwordMatch + "\": \"" + f_message + "\"";
+    ui_ooc_chatlog->append_chatmessage(name, message);
+    if (ao_config->log_is_recording_enabled())
+      save_textlog("(OOC)" + name + ": " + message);
   }
+
 
   calculate_chat_tick_interval();
 
