@@ -161,6 +161,7 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
   }
 
   m_EntryData.clear();
+  clearEntries();
 
 
   QMap<int, std::string> categories = ApiManager::instance().categoryMap();
