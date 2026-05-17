@@ -6,11 +6,6 @@
 #include "engine/fs/fs_characters.h"
 #include "utils.h"
 
-QStringList AOApplication::get_callwords()
-{
-  return ao_config->callwords().split(" ", DR::SplitBehavior::SkipEmptyParts);
-}
-
 void AOApplication::append_note(QString p_line, QString p_file)
 {
   QFile f_log(p_file);

@@ -96,9 +96,6 @@ public:
   ////// Functions for reading and writing files //////
   // Implementations file_functions.cpp
 
-  // returns a list of call words
-  QStringList get_callwords();
-
   // returns whatever the client should simulate first person dialog
   bool get_first_person_enabled();
 

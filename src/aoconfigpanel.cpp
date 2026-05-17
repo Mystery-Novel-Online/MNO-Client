@@ -59,7 +59,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
 
   // general
   ui_username = AO_GUI_WIDGET(QLineEdit, "username");
-  ui_callwords = AO_GUI_WIDGET(QLineEdit, "callwords");
   ui_advertiser = AO_GUI_WIDGET(QLineEdit, "advertiser");
   ui_server_alerts = AO_GUI_WIDGET(QCheckBox, "server_alerts");
   ui_discord_presence = AO_GUI_WIDGET(QGroupBox, "discord_presence");
@@ -178,7 +177,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
 
   // general
   connect(m_config, SIGNAL(username_changed(QString)), ui_username, SLOT(setText(QString)));
-  connect(m_config, SIGNAL(callwords_changed(QString)), ui_callwords, SLOT(setText(QString)));
   connect(m_config, SIGNAL(server_advertiser_changed(QString)), ui_advertiser, SLOT(setText(QString)));
   connect(m_config, SIGNAL(server_alerts_changed(bool)), ui_server_alerts, SLOT(setChecked(bool)));
   connect(m_config, SIGNAL(discord_presence_changed(bool)), ui_discord_presence, SLOT(setChecked(bool)));
@@ -241,7 +239,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
 
   // general
   connect(ui_username, SIGNAL(editingFinished()), this, SLOT(username_editing_finished()));
-  connect(ui_callwords, SIGNAL(editingFinished()), this, SLOT(callwords_editing_finished()));
   connect(ui_advertiser, SIGNAL(editingFinished()), this, SLOT(advertiser_editing_finished()));
   connect(ui_server_alerts, SIGNAL(toggled(bool)), m_config, SLOT(set_server_alerts(bool)));
   connect(ui_discord_presence, SIGNAL(toggled(bool)), m_config, SLOT(set_discord_presence(bool)));
@@ -310,7 +307,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
 
   // general
   ui_username->setText(m_config->username());
-  ui_callwords->setText(m_config->callwords());
   ui_advertiser->setText(m_config->server_advertiser());
   ui_server_alerts->setChecked(m_config->server_alerts_enabled());
 
@@ -757,11 +753,6 @@ void AOConfigPanel::showname_editing_finished()
 void AOConfigPanel::advertiser_editing_finished()
 {
   m_config->set_server_advertiser(ui_advertiser->text());
-}
-
-void AOConfigPanel::callwords_editing_finished()
-{
-  m_config->set_callwords(ui_callwords->text());
 }
 
 void AOConfigPanel::on_config_reload_theme_requested()

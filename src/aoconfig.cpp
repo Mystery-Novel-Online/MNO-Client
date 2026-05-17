@@ -52,7 +52,6 @@ private:
   bool autosave;
   QStringList notification_filter;
   QString username;
-  QString callwords;
   QString server_advertiser;
   bool server_alerts;
   bool discord_presence = false;
@@ -149,7 +148,6 @@ void AOConfigPrivate::load_file()
 
   username = cfg.value("username").toString();
   showname = cfg.value("showname").toString();
-  callwords = cfg.value("callwords").toString();
   server_advertiser = cfg.value("server_advertiser", "https://servers.aceattorneyonline.com").toString();
   server_alerts = cfg.value("server_alerts", true).toBool();
 
@@ -268,7 +266,6 @@ void AOConfigPrivate::save_file()
 
   cfg.setValue("username", username);
   cfg.setValue("showname", showname);
-  cfg.setValue("callwords", callwords);
   cfg.setValue("server_advertiser", server_advertiser);
   cfg.setValue("server_alerts", server_alerts);
 
@@ -451,11 +448,6 @@ QString AOConfig::character_ini(QString p_base_chr) const
   if (d->ini_map.contains(p_base_chr))
     return d->ini_map[p_base_chr];
   return p_base_chr;
-}
-
-QString AOConfig::callwords() const
-{
-  return d->callwords;
 }
 
 QString AOConfig::server_advertiser() const
@@ -761,14 +753,6 @@ void AOConfig::set_character_ini_remote(QString p_base_chr, QString p_target_chr
     d->ini_map.remove(p_base_chr);
   else
     d->ini_map.insert(p_base_chr, p_target_chr);
-}
-
-void AOConfig::set_callwords(QString p_string)
-{
-  if (d->callwords == p_string)
-    return;
-  d->callwords = p_string;
-  d->invoke_signal("callwords_changed", Q_ARG(QString, p_string));
 }
 
 void AOConfig::set_server_advertiser(QString p_address)
