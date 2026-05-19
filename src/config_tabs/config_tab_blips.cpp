@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include <rolechat/filesystem/RCDir.h>
-
+#include "engine/system/audio.h"
 config_tab_blips::config_tab_blips(QWidget *parent) : QWidget(parent), ui(new Ui::ConfigTabBlips)
 {
 
@@ -126,6 +126,20 @@ void config_tab_blips::setTagBlip(const std::string &set)
 
   if(!m_tagBlip->valid())
     m_tagBlip.reset();
+}
+
+void config_tab_blips::playEndingSfx()
+{
+  auto blip = activeBlip();
+  if (!blip)
+    return;
+
+  auto endingSound = blip->get().endingSfx();
+  if(endingSound.empty())
+    return;
+
+  audio::blip::SetSound(endingSound);
+  audio::blip::Tick();
 }
 
 void config_tab_blips::on_blipSet_currentIndexChanged(int index)

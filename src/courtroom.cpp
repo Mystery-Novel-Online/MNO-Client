@@ -2628,7 +2628,10 @@ void Courtroom::next_chat_letter()
 
 void Courtroom::post_chatmessage()
 {
-  LuaBridge::LuaEventCall("OnMessageCompleted", m_chatmessage[CMMessage].trimmed().isEmpty());
+  bool emptyMessage = m_chatmessage[CMMessage].trimmed().isEmpty();
+  LuaBridge::LuaEventCall("OnMessageCompleted", emptyMessage);
+  if(!emptyMessage)
+    m_configBlips->playEndingSfx();
   m_tick_timer->stop();
   if (m_game_state != GameState::Preloading)
   {

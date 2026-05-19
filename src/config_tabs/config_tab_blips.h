@@ -24,6 +24,8 @@ public:
   void setCharacterBlip(const std::string& set);
   void setTagBlip(const std::string& set);
 
+  void playEndingSfx();
+
 private slots:
   void on_blipSet_currentIndexChanged(int index);
   void on_overrideRuleCharacter_stateChanged(int arg1);
