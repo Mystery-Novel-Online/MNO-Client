@@ -248,6 +248,18 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
 
       hashMap[filePath] = hash;
     }
+
+    for (auto it = existingFileMap.begin(); it != existingFileMap.end(); ++it)
+    {
+      const QString &staleFilePath = it.key();
+
+      QFile file(staleFilePath);
+      if (file.exists())
+      {
+        file.remove();
+      }
+    }
+
   }
 
   ProcessLinks(hashMap, m_contentName, m_repository, m_isRepo);
