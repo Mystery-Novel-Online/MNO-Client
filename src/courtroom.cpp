@@ -2228,20 +2228,19 @@ void Courtroom::setup_chat()
   m_chatbox_message_enable_highlighting = (ao_app->current_theme->read_config_bool("enable_highlighting"));
   m_chatbox_message_highlight_colors = ao_app->get_highlight_colors();
 
-  QString f_gender = "male";
   QString l_jsonPath = engine::fs::characters::getFilePath(m_chatmessage[CMChrName], "char.json");
   if(FS::Checks::FileExists(l_jsonPath))
   {
     rolechat::actor::JsonActorData speakerActor;
     speakerActor.load(m_chatmessage[CMChrName].toStdString(), engine::fs::characters::getDirectoryPath(m_chatmessage[CMChrName]).toStdString());
-    f_gender = QString::fromStdString(speakerActor.gender());
+    m_gender = QString::fromStdString(speakerActor.gender());
   }
   else
   {
-    f_gender = ao_app->get_gender(m_chatmessage[CMChrName]);
+    m_gender = ao_app->get_gender(m_chatmessage[CMChrName]);
   }
 
-  audio::blip::SetGender(f_gender.toStdString());
+  audio::blip::SetGender(m_gender.toStdString());
 
   // means text is currently ticking
   text_state = 1;
@@ -2407,6 +2406,7 @@ void Courtroom::next_chat_letter()
     messageCursor.insertText(ch, messageFormat);
 
     LuaBridge::LuaEventCall("OnMessageTick", QString(ch).toStdString());
+    audio::blip::SetGender(m_gender.toStdString());
 
     // ---- Chatlog
     // -------- Scrollbar

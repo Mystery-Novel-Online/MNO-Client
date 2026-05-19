@@ -438,6 +438,7 @@ private:
   QVector<QStringList> m_chatbox_message_highlight_colors;
 
   QString current_file;
+  QString m_gender = "male";
 
   // if true, a reload theme order was delayed to be executed *after* a shout
   // this allows reload theme orders that were received while a shout was
