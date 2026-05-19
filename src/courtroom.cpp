@@ -2241,6 +2241,7 @@ void Courtroom::setup_chat()
     m_gender = ao_app->get_gender(m_chatmessage[CMChrName]);
     m_configBlips->setCharacterBlip("");
   }
+  m_configBlips->setTagBlip("");
 
   audio::blip::SetGender(m_gender.toStdString());
 
@@ -2310,6 +2311,10 @@ void Courtroom::next_chat_letter()
     {
       switch(tag.action)
       {
+      case TagType_Blip:
+        m_configBlips->setTagBlip(tag.variables.at(1).toString().toStdString());
+        break;
+
       case TagType_SoundEffect:
         audio::effect::StopAll();
         audio::effect::PlayCharacter(m_chatmessage[CMChrName].toStdString(), tag.variables.at(1).toString().toStdString());

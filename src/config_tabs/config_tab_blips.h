@@ -22,6 +22,7 @@ public:
   int blipRate();
 
   void setCharacterBlip(const std::string& set);
+  void setTagBlip(const std::string& set);
 
 private slots:
   void on_blipSet_currentIndexChanged(int index);
@@ -38,6 +39,7 @@ private:
   Ui::ConfigTabBlips *ui;
   std::optional<BlipConfig> m_currentBlip;
   std::optional<BlipConfig> m_characterBlip;
+  std::optional<BlipConfig> m_tagBlip;
 
   std::optional<std::reference_wrapper<const BlipConfig>> activeBlip() const;
 

@@ -107,6 +107,27 @@ void config_tab_blips::setCharacterBlip(const std::string &set)
     m_characterBlip.reset();
 }
 
+void config_tab_blips::setTagBlip(const std::string &set)
+{
+  if(set.empty())
+  {
+    m_tagBlip.reset();
+    return;
+  }
+
+  if(m_tagBlip.has_value())
+  {
+    if(m_tagBlip->name() == set)
+      return;
+    m_tagBlip.reset();
+  }
+
+  m_tagBlip.emplace(BlipConfig(set));
+
+  if(!m_tagBlip->valid())
+    m_tagBlip.reset();
+}
+
 void config_tab_blips::on_blipSet_currentIndexChanged(int index)
 {
   if(m_currentBlip.has_value())
@@ -156,6 +177,9 @@ void config_tab_blips::on_blipBlanks_stateChanged(int arg1)
 
 std::optional<std::reference_wrapper<const BlipConfig> > config_tab_blips::activeBlip() const
 {
+  if(m_tagBlip)
+    return *m_tagBlip;
+
   if (m_allowCharacters && m_characterBlip.has_value())
     return *m_characterBlip;
 
