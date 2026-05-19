@@ -4,6 +4,33 @@
 #include "engine/system/user_database.h"
 
 #include <engine/network/api_manager.h>
+
+
+QMap<QString, QString> buildFileHashMap(const QString &scanDirectory)
+{
+  QMap<QString, QString> fileHashMap;
+
+  QDirIterator it(scanDirectory,
+                  QDir::Files,
+                  QDirIterator::Subdirectories);
+
+  while (it.hasNext())
+  {
+    QString filePath = it.next();
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly))
+      continue;
+
+    QByteArray data = file.readAll();
+    QByteArray hash = QCryptographicHash::hash(data, QCryptographicHash::Md5);
+
+    fileHashMap.insert(filePath, QString(hash.toHex()));
+  }
+
+  return fileHashMap;
+}
+
 DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
   setWindowTitle("Downloading...");
@@ -83,7 +110,11 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
   m_progressBar->setValue(0);
 
   if (m_cdnFiles.isEmpty())
+  {
+    QMessageBox::information(this, "Download Complete", "All files are already up-to-date!");
+    this->deleteLater();
     return;
+  }
 
   m_filesDownloaded = 0;
   m_totalFiles = m_cdnFiles.size();
@@ -172,6 +203,7 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
 
   //Cache content into database.
 
+
   QMap<QString, QString> hashMap = {};
   for(const QJsonObject& repoObject : repoObjects)
   {
@@ -182,19 +214,38 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
     int qLastUpdated = repoObject["last_updated"].toInt();
     GetDB().cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
 
+    QMap<QString, QString> existingFileMap = {};
+
+    if(m_directory == "packages/Workshop Downloads/")
+    {
+      QString scanDirectory = m_directory + "characters/" + qFolderName + "/";
+      existingFileMap = buildFileHashMap(scanDirectory);
+    }
+
     QJsonArray files = repoObject["contents"].toArray();
 
     for (const QJsonValue &val : files)
     {
       QJsonObject obj = val.toObject();
-      QString hash = m_baseUrl + "/api/workshop/file/" + obj["hash"].toString();
+      QString rawHash = obj["hash"].toString();
+      QString hash = m_baseUrl + "/api/workshop/file/" + rawHash;
       QString filePath = "";
       if(qDownloadType == "background")
-        filePath = m_directory + "/background/" + qFolderName + + "/" + obj["file_path"].toString();
+        filePath = m_directory + "background/" + qFolderName + + "/" + obj["file_path"].toString();
       else
       {
-        filePath = m_isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : m_directory + "/" + obj["file_path"].toString();
+        filePath = m_isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : m_directory + obj["file_path"].toString();
       }
+
+      if(existingFileMap.contains(filePath))
+      {
+        bool hashMatches = existingFileMap[filePath] == rawHash;
+        existingFileMap.remove(filePath);
+
+        if(hashMatches)
+          continue;
+      }
+
       hashMap[filePath] = hash;
     }
   }
