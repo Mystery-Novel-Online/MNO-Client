@@ -305,6 +305,7 @@ void RPMessageInput::handleTextChanged()
       else if ((tagTypeStr == "/scale" || tagTypeStr == "/sc") && parts.isEmpty()) { tagType = TagType_SizeEnd; }
       else if ((tagTypeStr == "/highlight" || tagTypeStr == "/hl")&& parts.isEmpty()) { tagType = TagType_ColorEnd; }
       else if (tagTypeStr == "layer" && parts.count() == 2) { args.append(parts[0]); args.append(parts[1]); tagType = TagType_Layer; }
+      else if ((tagTypeStr == "blip"  || tagTypeStr == "bl") && parts.count() == 1) { args.append(parts[0]); tagType = TagType_Blip; }
       else removeData = false;
 
       if (removeData) {

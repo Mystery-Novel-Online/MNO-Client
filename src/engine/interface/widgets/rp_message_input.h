@@ -118,6 +118,10 @@ protected:
               output += "<layer:"+ tagArguments.at(1).toString() +":" + tagArguments.at(2).toString() +">";
               break;
 
+            case TagType_Blip:
+              output += "<blip:"+ tagArguments.at(1).toString() +">";
+              break;
+
           default:
             break;
           }

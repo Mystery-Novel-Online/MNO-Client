@@ -25,6 +25,7 @@ enum MessageTagType
   TagType_Layer,
   TagType_SizeEnd,
   TagType_ColorEnd,
+  TagType_Blip,
 };
 
 struct ThemeMessageHighlight
