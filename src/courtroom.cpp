@@ -2597,6 +2597,10 @@ void Courtroom::next_chat_letter()
     int overideBlipRate = audio::blip::getBlipRate();
     overideBlipRate = overideBlipRate == -1 ? m_configBlips->blipRate() : overideBlipRate;
 
+    if(overideBlipRate <= 0)
+      overideBlipRate = 1;
+
+
     if (m_blip_step % overideBlipRate == 0)
     {
       m_blip_step = 0;
