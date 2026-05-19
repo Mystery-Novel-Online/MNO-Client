@@ -21,6 +21,8 @@ public:
   bool useBlanks();
   int blipRate();
 
+  void setCharacterBlip(const std::string& set);
+
 private slots:
   void on_blipSet_currentIndexChanged(int index);
   void on_overrideRuleCharacter_stateChanged(int arg1);
@@ -35,6 +37,9 @@ private slots:
 private:
   Ui::ConfigTabBlips *ui;
   std::optional<BlipConfig> m_currentBlip;
+  std::optional<BlipConfig> m_characterBlip;
+
+  std::optional<std::reference_wrapper<const BlipConfig>> activeBlip() const;
 
   bool m_allowCharacters = true;
   bool m_allowTheme = true;

@@ -2234,10 +2234,12 @@ void Courtroom::setup_chat()
     rolechat::actor::JsonActorData speakerActor;
     speakerActor.load(m_chatmessage[CMChrName].toStdString(), engine::fs::characters::getDirectoryPath(m_chatmessage[CMChrName]).toStdString());
     m_gender = QString::fromStdString(speakerActor.gender());
+    m_configBlips->setCharacterBlip(speakerActor.blips());
   }
   else
   {
     m_gender = ao_app->get_gender(m_chatmessage[CMChrName]);
+    m_configBlips->setCharacterBlip("");
   }
 
   audio::blip::SetGender(m_gender.toStdString());

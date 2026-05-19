@@ -54,8 +54,10 @@ config_tab_blips::~config_tab_blips()
 
 QString config_tab_blips::getBlipSound(const QString &gender)
 {
-  if(m_currentBlip.has_value())
-    return QString::fromStdString("sounds/blips/" + m_currentBlip->name() + "/" + m_currentBlip->soundFile(gender.toStdString()));
+  auto blip = activeBlip();
+
+  if(blip)
+    return QString::fromStdString("sounds/blips/" + blip->get().name() + "/" + blip->get().soundFile(gender.toStdString()));
 
   return "sounds/general/sfx-blip" + gender + ".wav";
 }
@@ -65,8 +67,9 @@ bool config_tab_blips::useBlanks()
   if(m_useOverrides)
     return m_useBlanks;
 
-  if(m_currentBlip.has_value())
-    return m_currentBlip->blanksAllowed();
+  auto blip = activeBlip();
+  if (blip)
+    return blip->get().blanksAllowed();
 
   return false;
 }
@@ -76,10 +79,32 @@ int config_tab_blips::blipRate()
   if(m_useOverrides)
     return m_blipRate;
 
-  if(m_currentBlip.has_value())
-    return m_currentBlip->blipRate();
+  auto blip = activeBlip();
+  if (blip)
+    return blip->get().blipRate();
 
   return 99999;
+}
+
+void config_tab_blips::setCharacterBlip(const std::string &set)
+{
+  if(set.empty())
+  {
+    m_characterBlip.reset();
+    return;
+  }
+
+  if(m_characterBlip.has_value())
+  {
+    if(m_characterBlip->name() == set)
+      return;
+    m_characterBlip.reset();
+  }
+
+  m_characterBlip.emplace(BlipConfig(set));
+
+  if(!m_characterBlip->valid())
+    m_characterBlip.reset();
 }
 
 void config_tab_blips::on_blipSet_currentIndexChanged(int index)
@@ -127,5 +152,16 @@ void config_tab_blips::on_blipBlanks_stateChanged(int arg1)
 {
   m_useBlanks = ui->blipBlanks->isChecked();
   config::ConfigUserSettings::setValue("blip_custom_blanks", m_useBlanks);
+}
+
+std::optional<std::reference_wrapper<const BlipConfig> > config_tab_blips::activeBlip() const
+{
+  if (m_allowCharacters && m_characterBlip.has_value())
+    return *m_characterBlip;
+
+  if (m_currentBlip.has_value())
+    return *m_currentBlip;
+
+  return std::nullopt;
 }
 
