@@ -2313,6 +2313,7 @@ void Courtroom::next_chat_letter()
       {
       case TagType_Blip:
         m_configBlips->setTagBlip(tag.variables.at(1).toString().toStdString());
+        m_blip_step = 0;
         break;
 
       case TagType_SoundEffect:
