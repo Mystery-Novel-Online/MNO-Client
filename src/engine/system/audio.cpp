@@ -9,6 +9,7 @@
 
 #include <config_tabs/config_tab_blips.h>
 #include "engine/system/config_manager.h"
+#include <rolechat/filesystem/RCFile.h>
 
 
 static AOBlipPlayer *s_blipPlayer;
@@ -87,6 +88,12 @@ namespace audio
     void stopWeather()
     {
       s_weatherPlayer->stop();
+    }
+
+    void PlayGlobal(const std::string &name)
+    {
+      s_effectsPlayer->play(QString::fromStdString(rolechat::fs::RCFile(name).findFirst()));
+
     }
 
   }

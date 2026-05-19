@@ -14,6 +14,8 @@ namespace audio
   namespace effect
   {
     void Play(const std::string& name);
+    void PlayGlobal(const std::string& name);
+
     void PlayCharacter(const std::string& character, const std::string& name);
     void PlayAmbient(const std::string& filepath);
     void PlayWeather(const std::string& filepath);

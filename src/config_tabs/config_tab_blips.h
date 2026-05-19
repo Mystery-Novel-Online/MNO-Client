@@ -24,6 +24,7 @@ public:
   void setCharacterBlip(const std::string& set);
   void setTagBlip(const std::string& set);
 
+  void playStartingSfx();
   void playEndingSfx();
 
 private slots:

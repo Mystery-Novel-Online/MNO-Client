@@ -128,6 +128,19 @@ void config_tab_blips::setTagBlip(const std::string &set)
     m_tagBlip.reset();
 }
 
+void config_tab_blips::playStartingSfx()
+{
+  auto blip = activeBlip();
+  if (!blip)
+    return;
+
+  auto startingSound = blip->get().startingSfx();
+  if(startingSound.empty())
+    return;
+
+  audio::effect::PlayGlobal(startingSound);
+}
+
 void config_tab_blips::playEndingSfx()
 {
   auto blip = activeBlip();

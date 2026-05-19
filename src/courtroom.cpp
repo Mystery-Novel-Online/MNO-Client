@@ -1847,6 +1847,10 @@ void Courtroom::handle_chatmessage_3()
   calculate_chat_tick_interval();
 
   LuaBridge::LuaEventCall("OnMessageStart");
+  bool emptyMessage = m_chatmessage[CMMessage].trimmed().isEmpty();
+  if(!emptyMessage)
+    m_configBlips->playStartingSfx();
+
   start_chat_timer();
   message::pair::disable();
 
