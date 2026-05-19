@@ -15,6 +15,8 @@
 
 #include <engine/system/config_manager.h>
 
+#include <config_tabs/config_tab_theme.h>
+
 using namespace engine::system;
 
 AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
@@ -434,6 +436,14 @@ void AOConfigPanel::refresh_packages_list()
 
 void AOConfigPanel::refresh_theme_list()
 {
+  ConfigTabTheme* tab = ConfigManager::retrieveTab<ConfigTabTheme>("Theme");
+  if(tab)
+    tab->refreshThemeList();
+
+  config_tab_blips* blipTab = ConfigManager::retrieveTab<config_tab_blips>("Blips");
+  if(!blipTab)
+    return;
+
 }
 
 void AOConfigPanel::refresh_gamemode_list()
