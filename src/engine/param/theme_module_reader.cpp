@@ -35,7 +35,8 @@ void ThemeModuleReader::ParseModuleConfig()
   for (const QString& optionName : configOptionNames) {
     if (isValueExists(optionName)) m_configBooleans[optionName] = getBoolValue(optionName);
   }
-  
+
+  if(isValueExists("blips")) m_configBlips = getStringValue("blips");
   if(isValueExists("music_scroll_speed")) m_configMusicSpeed = getIntValue("music_scroll_speed");
   if(isValueExists("timer_number")) m_configTimer = getIntValue("timer_number");
 

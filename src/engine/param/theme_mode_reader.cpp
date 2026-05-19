@@ -32,6 +32,12 @@ ThemeModeReader::ThemeModeReader(QString filePath) : m_FilePath(filePath)
       m_MusicDisplayScrollSpeed = getIntValue("music_scroll_speed");
     }
 
+    if(isValueExists("blips"))
+      m_blipOverride = getStringValue("blips");
+
+
+
+
     if(isValueExists("timer_number"))
     {
       m_TimerCount = getIntValue("timer_number");
@@ -259,6 +265,17 @@ QVector2D ThemeModeReader::getWidgetSpacing(QString t_name)
   }
 
   return QVector2D(-1, -1);
+}
+
+const QString &ThemeModeReader::getBlips()
+{
+  if(m_TimeOfDayCurrent != nullptr)
+  {
+    if(!m_TimeOfDayCurrent->m_blipOverride.isEmpty())
+      return m_TimeOfDayCurrent->m_blipOverride;
+  }
+
+  return m_blipOverride;
 }
 
 int ThemeModeReader::getMusicScrollSpeed()

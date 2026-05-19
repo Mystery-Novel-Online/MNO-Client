@@ -23,6 +23,7 @@ public:
 
   void setCharacterBlip(const std::string& set);
   void setTagBlip(const std::string& set);
+  void setThemeBlip(const std::string& set);
 
   void playStartingSfx();
   void playEndingSfx();
@@ -43,6 +44,7 @@ private:
   std::optional<BlipConfig> m_currentBlip;
   std::optional<BlipConfig> m_characterBlip;
   std::optional<BlipConfig> m_tagBlip;
+  std::optional<BlipConfig> m_themeBlip;
 
   std::optional<std::reference_wrapper<const BlipConfig>> activeBlip() const;
 

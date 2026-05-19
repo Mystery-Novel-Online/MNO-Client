@@ -232,6 +232,23 @@ QString ThemeReader::GetConfigSoundName(QString soundName)
   return "";
 }
 
+const QString &ThemeReader::getBlips()
+{
+  if(m_GameModeCurrent != nullptr)
+  {
+    const QString& blips = m_GameModeCurrent->getBlips();
+    if(!blips.isEmpty()) return blips;
+  }
+
+  const QString& defaultBlips = m_GameModeCollection["default"]->getBlips();
+  if(!defaultBlips.isEmpty())
+  {
+    return defaultBlips;
+  }
+
+  return m_defaultBlips;
+}
+
 QVector<QStringList> ThemeReader::GetColorsHighlights()
 {
   QVector<QStringList> f_vec;

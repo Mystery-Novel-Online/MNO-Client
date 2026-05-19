@@ -42,6 +42,7 @@ public:
   QString getDirectoryPath();
 private:
   //Config
+  QString m_configBlips = "";
   int m_configMusicSpeed = -1;
   int m_configTimer = -1;
   QHash<QString, bool> m_configBooleans = {};

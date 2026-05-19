@@ -1220,6 +1220,9 @@ void Courtroom::set_widgets()
   adapt_numbered_items(ui_timers, "timer_number", "timer");
   set_fonts();
 
+  QString blips = ThemeManager::get().mCurrentThemeReader.getBlips();
+  m_configBlips->setThemeBlip(blips.toStdString());
+
   Q_EMIT loaded_theme();
 
 }

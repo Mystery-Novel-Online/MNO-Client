@@ -39,6 +39,7 @@ public:
 
   //Data Retrieval
   QVector2D getWidgetSpacing(QString widget_name);
+  const QString& getBlips();
   int getMusicScrollSpeed();
   int getTimerNumber();
 
@@ -59,6 +60,7 @@ public:
 
 private:
   QString m_FilePath = "";
+  QString m_blipOverride = "";
   int m_MusicDisplayScrollSpeed = -1;
   int m_TimerCount = -1;
 

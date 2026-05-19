@@ -27,6 +27,7 @@ public:
   bool GetConfigBool(QString boolValue);
   QString GetConfigSoundName(QString soundName);
 
+  const QString& getBlips();
   int getMusicScrollSpeed();
   int getTimerNumber();
 
@@ -127,6 +128,7 @@ private:
 
   }
 
+  QString m_defaultBlips = "";
   QString m_ThemeName = "";
   QString m_ThemeDirectory = "";
   QString m_TimeOfDay = "";

@@ -128,6 +128,27 @@ void config_tab_blips::setTagBlip(const std::string &set)
     m_tagBlip.reset();
 }
 
+void config_tab_blips::setThemeBlip(const std::string &set)
+{
+  if(set.empty())
+  {
+    m_themeBlip.reset();
+    return;
+  }
+
+  if(m_themeBlip.has_value())
+  {
+    if(m_themeBlip->name() == set)
+      return;
+    m_themeBlip.reset();
+  }
+
+  m_themeBlip.emplace(BlipConfig(set));
+
+  if(!m_themeBlip->valid())
+    m_themeBlip.reset();
+}
+
 void config_tab_blips::playStartingSfx()
 {
   auto blip = activeBlip();
@@ -209,6 +230,9 @@ std::optional<std::reference_wrapper<const BlipConfig> > config_tab_blips::activ
 
   if (m_allowCharacters && m_characterBlip.has_value())
     return *m_characterBlip;
+
+  if (m_allowTheme && m_themeBlip.has_value())
+    return *m_themeBlip;
 
   if (m_currentBlip.has_value())
     return *m_currentBlip;
