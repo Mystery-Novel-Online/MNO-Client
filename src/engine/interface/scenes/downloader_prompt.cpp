@@ -105,12 +105,6 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
 
     QNetworkReply *reply = manager->get(QNetworkRequest(url));
 
-    connect(reply, &QNetworkReply::downloadProgress, this, [this](qint64 bytesReceived, qint64 bytesTotal) {
-              if (bytesTotal > 0) {
-                qDebug() << "File progress:" << (100 * bytesReceived / bytesTotal) << "%";
-              }
-            });
-
     connect(reply, &QNetworkReply::finished, this, [this, reply, filePath, repositoryUrl, createContext]() {
               reply->deleteLater();
 
