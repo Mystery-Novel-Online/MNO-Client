@@ -198,8 +198,8 @@ void config_tab_blips::on_overrideRuleCharacter_stateChanged(int arg1)
 
 void config_tab_blips::on_overrideRuleTheme_stateChanged(int arg1)
 {
-  m_allowCharacters = ui->overrideRuleTheme->isChecked();
-  config::ConfigUserSettings::setValue("blip_override_themes", m_allowCharacters);
+  m_allowTheme = ui->overrideRuleTheme->isChecked();
+  config::ConfigUserSettings::setValue("blip_override_themes", m_allowTheme);
 }
 
 
