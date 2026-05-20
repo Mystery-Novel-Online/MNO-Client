@@ -107,7 +107,7 @@ QString ConfigTabDiscord::serverText()
 QString ConfigTabDiscord::characterText()
 {
   if(m_hideCharacter)
-    return "Keeping their identity hidden.";
+    return "Keeping their identity hidden";
 
   if(m_currentState == PresenceStateSpectating)
     return "Spectating";
