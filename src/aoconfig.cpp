@@ -54,9 +54,6 @@ private:
   QString username;
   QString server_advertiser;
   bool server_alerts;
-  bool discord_presence = false;
-  bool discord_hide_server = false;
-  bool discord_hide_character = false;
   QString language;
   QString showname;
   QString showname_placeholder;
@@ -149,14 +146,8 @@ void AOConfigPrivate::load_file()
   server_advertiser = cfg.value("server_advertiser", "https://servers.aceattorneyonline.com").toString();
   server_alerts = cfg.value("server_alerts", true).toBool();
 
-
   enable_opengl = cfg.value("enable_opengl", true).toBool();
   focus_performance_mode = cfg.value("focus_performance_mode", true).toBool();
-
-  discord_presence = cfg.value("discord_presence", true).toBool();
-  WorkshopDiscord::getInstance().setRichPresenceState(discord_presence);
-  discord_hide_server = cfg.value("discord_hide_server", false).toBool();
-  discord_hide_character = cfg.value("discord_hide_character", false).toBool();
 
   language = cfg.value("language").toString();
   if (language.trimmed().isEmpty())
@@ -264,10 +255,6 @@ void AOConfigPrivate::save_file()
   cfg.setValue("showname", showname);
   cfg.setValue("server_advertiser", server_advertiser);
   cfg.setValue("server_alerts", server_alerts);
-
-  cfg.setValue("discord_presence", discord_presence);
-  cfg.setValue("discord_hide_server", discord_hide_server);
-  cfg.setValue("discord_hide_character", discord_hide_character);
 
   cfg.setValue("theme", QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")));
   cfg.setValue("language", language);
@@ -462,21 +449,6 @@ bool AOConfig::focus_performance_mode_enabled() const
 bool AOConfig::server_alerts_enabled() const
 {
   return d->server_alerts;
-}
-
-bool AOConfig::discord_presence() const
-{
-  return d->discord_presence;
-}
-
-bool AOConfig::discord_hide_server() const
-{
-  return d->discord_hide_server;
-}
-
-bool AOConfig::discord_hide_character() const
-{
-  return d->discord_hide_character;
 }
 
 QString AOConfig::language() const
@@ -768,31 +740,6 @@ void AOConfig::set_focus_performance_mode(bool p_enabled)
     return;
   d->focus_performance_mode = p_enabled;
   d->invoke_signal("focus_performance_mode_changed", Q_ARG(bool, p_enabled));
-}
-
-void AOConfig::set_discord_presence(const bool p_enabled)
-{
-  WorkshopDiscord::getInstance().setRichPresenceState(p_enabled);
-  if (d->discord_presence == p_enabled)
-    return;
-  d->discord_presence = p_enabled;
-  d->invoke_signal("discord_presence_changed", Q_ARG(bool, d->discord_presence));
-}
-
-void AOConfig::set_discord_hide_server(const bool p_enabled)
-{
-  if (d->discord_hide_server == p_enabled)
-    return;
-  d->discord_hide_server = p_enabled;
-  d->invoke_signal("discord_hide_server_changed", Q_ARG(bool, d->discord_hide_server));
-}
-
-void AOConfig::set_discord_hide_character(const bool p_enabled)
-{
-  if (d->discord_hide_character == p_enabled)
-    return;
-  d->discord_hide_character = p_enabled;
-  d->invoke_signal("discord_hide_character_changed", Q_ARG(bool, d->discord_hide_character));
 }
 
 void AOConfig::setLanguage(QString t_language)

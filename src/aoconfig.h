@@ -33,9 +33,6 @@ public:
   bool opengl_enabled() const;
   bool focus_performance_mode_enabled() const;
   bool server_alerts_enabled() const;
-  bool discord_presence() const;
-  bool discord_hide_server() const;
-  bool discord_hide_character() const;
   QString language() const;
   bool searchable_iniswap_enabled() const;
   bool always_pre_enabled() const;
@@ -96,9 +93,6 @@ public slots:
   void set_server_alerts(bool p_enabled);
   void set_opengl_enabled(bool p_enabled);
   void set_focus_performance_mode(bool p_enabled);
-  void set_discord_presence(const bool p_enabled);
-  void set_discord_hide_server(const bool p_enabled);
-  void set_discord_hide_character(const bool p_enabled);
   void setLanguage(QString t_language);
   void set_theme(QString p_string);
   void set_searchable_iniswap(bool);
@@ -149,9 +143,6 @@ signals:
   void username_changed(QString);
   void server_advertiser_changed(QString);
   void server_alerts_changed(bool);
-  void discord_presence_changed(bool);
-  void discord_hide_server_changed(bool);
-  void discord_hide_character_changed(bool);
 
   // game
   void showname_changed(QString);

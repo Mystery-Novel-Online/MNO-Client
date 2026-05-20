@@ -63,9 +63,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_username = AO_GUI_WIDGET(QLineEdit, "username");
   ui_advertiser = AO_GUI_WIDGET(QLineEdit, "advertiser");
   ui_server_alerts = AO_GUI_WIDGET(QCheckBox, "server_alerts");
-  ui_discord_presence = AO_GUI_WIDGET(QGroupBox, "discord_presence");
-  ui_discord_hide_server = AO_GUI_WIDGET(QCheckBox, "discord_hide_server");
-  ui_discord_hide_character = AO_GUI_WIDGET(QCheckBox, "discord_hide_character");
 
   // game
   //ui_themeModules = AO_GUI_WIDGET(QTreeView, "themeModules");
@@ -179,9 +176,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(m_config, SIGNAL(username_changed(QString)), ui_username, SLOT(setText(QString)));
   connect(m_config, SIGNAL(server_advertiser_changed(QString)), ui_advertiser, SLOT(setText(QString)));
   connect(m_config, SIGNAL(server_alerts_changed(bool)), ui_server_alerts, SLOT(setChecked(bool)));
-  connect(m_config, SIGNAL(discord_presence_changed(bool)), ui_discord_presence, SLOT(setChecked(bool)));
-  connect(m_config, SIGNAL(discord_hide_server_changed(bool)), ui_discord_hide_server, SLOT(setChecked(bool)));
-  connect(m_config, SIGNAL(discord_hide_character_changed(bool)), ui_discord_hide_character, SLOT(setChecked(bool)));
 
   // game
   connect(m_config, SIGNAL(theme_changed(QString)), this, SLOT(on_theme_changed(QString)));
@@ -239,9 +233,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(ui_username, SIGNAL(editingFinished()), this, SLOT(username_editing_finished()));
   connect(ui_advertiser, SIGNAL(editingFinished()), this, SLOT(advertiser_editing_finished()));
   connect(ui_server_alerts, SIGNAL(toggled(bool)), m_config, SLOT(set_server_alerts(bool)));
-  connect(ui_discord_presence, SIGNAL(toggled(bool)), m_config, SLOT(set_discord_presence(bool)));
-  connect(ui_discord_hide_server, SIGNAL(toggled(bool)), m_config, SLOT(set_discord_hide_server(const bool)));
-  connect(ui_discord_hide_character, SIGNAL(toggled(bool)), m_config, SLOT(set_discord_hide_character(const bool)));
 
   // game
   connect(wSettingsLanguage, SIGNAL(currentIndexChanged(QString)), this, SLOT(updateLanguage(QString)));
@@ -338,10 +329,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_log_display_empty_messages->setChecked(m_config->log_display_empty_messages_enabled());
   ui_log_display_music_switch->setChecked(m_config->log_display_music_switch_enabled());
   ui_log_is_recording->setChecked(m_config->log_is_recording_enabled());
-
-  ui_discord_presence->setChecked(m_config->discord_presence());
-  ui_discord_hide_server->setChecked(m_config->discord_hide_server());
-  ui_discord_hide_character->setChecked(m_config->discord_hide_character());
 
   // performance
 

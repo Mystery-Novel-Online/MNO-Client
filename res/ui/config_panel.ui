@@ -62,7 +62,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>4</number>
+        <number>7</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -159,6 +159,19 @@
            </layout>
           </widget>
          </item>
+         <item row="2" column="0">
+          <spacer name="verticalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
          <item row="0" column="0">
           <widget class="QGroupBox" name="groupBox_5">
            <property name="minimumSize">
@@ -213,19 +226,6 @@
             </item>
            </layout>
           </widget>
-         </item>
-         <item row="2" column="0">
-          <spacer name="verticalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </widget>
@@ -1240,55 +1240,11 @@
         <attribute name="title">
          <string>Misc</string>
         </attribute>
-        <widget class="QGroupBox" name="discord_presence">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>10</y>
-           <width>444</width>
-           <height>56</height>
-          </rect>
-         </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="toolTip">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Enable Discord presence.&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#0000ff;&quot;&gt;[NOTE] &lt;/span&gt;Changes may take up to 15 seconds to be reflected in your Discord profile.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="title">
-          <string>Discord Presence</string>
-         </property>
-         <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
-          <bool>false</bool>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QCheckBox" name="discord_hide_server">
-            <property name="text">
-             <string>Hide Server</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="discord_hide_character">
-            <property name="text">
-             <string>Hide Character</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
         <widget class="QGroupBox" name="groupBox_9">
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>70</y>
+           <y>10</y>
            <width>444</width>
            <height>60</height>
           </rect>
@@ -1346,7 +1302,7 @@
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>190</y>
+           <y>140</y>
            <width>247</width>
            <height>26</height>
           </rect>
@@ -1391,7 +1347,7 @@
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>130</y>
+           <y>70</y>
            <width>501</width>
            <height>58</height>
           </rect>

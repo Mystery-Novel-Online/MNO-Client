@@ -109,9 +109,6 @@ private:
   QLineEdit *ui_username = nullptr;
   QLineEdit *ui_advertiser = nullptr;
   QCheckBox *ui_server_alerts = nullptr;
-  QGroupBox *ui_discord_presence = nullptr;
-  QCheckBox *ui_discord_hide_server = nullptr;
-  QCheckBox *ui_discord_hide_character = nullptr;
 
   // character
   QLineEdit *ui_showname = nullptr;
