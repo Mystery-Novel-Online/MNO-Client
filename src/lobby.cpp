@@ -34,8 +34,7 @@ using namespace engine::system;
 Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_ServerSelect)
 {
   panelCollection = new QWidget(this);
-  WorkshopDiscord::getInstance().setRichPresenceStateText("Selecting a server");
-  WorkshopDiscord::getInstance().setRichPresenceDetailsText("Lobby");
+  engine::system::ConfigManager::retrieveTab<ConfigTabDiscord>("Discord")->toggleState(PresenceStateServerSelect);
   workshopPreviewDownloader = new QNetworkAccessManager(this);
   ConfigTabTheme* configTab = ConfigManager::retrieveTab<ConfigTabTheme>("Theme");
 

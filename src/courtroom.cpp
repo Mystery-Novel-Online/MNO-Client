@@ -62,6 +62,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
 
   m_configBlips = engine::system::ConfigManager::retrieveTab<config_tab_blips>("Blips");
   m_configCallwords = engine::system::ConfigManager::retrieveTab<ConfigTabCallwords>("Callwords");
+  m_configDiscord = engine::system::ConfigManager::retrieveTab<ConfigTabDiscord>("Discord");
 
   m_preloader_sync = new mk2::SpriteReaderSynchronizer(this);
   m_preloader_sync->set_threshold(ao_config->caching_threshold());
@@ -363,6 +364,7 @@ void Courtroom::enter_courtroom(int p_cid)
     ao_config->clear_showname_placeholder();
     pLayersPanel->clear();
     pLayersPanel->hide();
+    m_configDiscord->toggleState(PresenceStateSpectating);
     WorkshopDiscord::getInstance().setRichPresenceStateText("Spectating");
   }
   else
@@ -372,7 +374,7 @@ void Courtroom::enter_courtroom(int p_cid)
     const QString l_final_showname = l_showname.trimmed().isEmpty() ? l_chr_name : l_showname;
     ao_config->set_showname_placeholder(l_final_showname);
 
-    WorkshopDiscord::getInstance().setRichPresenceStateText("Playing as " + l_final_showname.toStdString());
+    m_configDiscord->setCharacterText(l_final_showname);
 
     QStringList l_content{l_chr_name, l_final_showname};
     if(network::metadata::VNServerInformation::featureSupported("outfits")) l_content.append(QString::fromStdString(engine::actor::user::retrieve()->outfit()));

@@ -80,6 +80,7 @@ void setRichPresence()
     client->ClearRichPresence();
     return;
   }
+
   currentActivity.SetType(discordpp::ActivityTypes::Playing);
   currentActivity.SetState(state);
   currentActivity.SetDetails(details);

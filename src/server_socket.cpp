@@ -244,16 +244,13 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 
     DRServerInfo l_current_server = m_lobby->get_selected_server();
     QString l_window_title = "Mystery Novel Network (" + get_version_string() + ")";
+    engine::system::ConfigManager::retrieveTab<ConfigTabDiscord>("Discord")->setServerText(l_current_server.name);
     if (!l_current_server.name.isEmpty())
     {
-      WorkshopDiscord::getInstance().setRichPresenceDetailsText(l_current_server.to_info().toStdString());
-       l_window_title = l_window_title + ": " + l_current_server.to_info();
+      l_window_title = l_window_title + ": " + l_current_server.to_info();
     }
-    else
-    {
-      WorkshopDiscord::getInstance().setRichPresenceDetailsText("In a server");
-    }
-    WorkshopDiscord::getInstance().setRichPresenceStateText("Connecting...");
+
+    engine::system::ConfigManager::retrieveTab<ConfigTabDiscord>("Discord")->toggleState(PresenceStateConnecting);
     m_courtroom->set_window_title(l_window_title);
 
     m_lobby->show_loading_overlay();

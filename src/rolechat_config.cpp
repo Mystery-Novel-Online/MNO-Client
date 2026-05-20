@@ -4,6 +4,7 @@
 #include <rolechat/config/ConfigUserSettings.h>
 #include <config_tabs/config_tab_blips.h>
 #include <config_tabs/config_tab_callwords.h>
+#include <config_tabs/config_tab_discord.h>
 #include <config_tabs/config_tab_mounting.h>
 
 RolechatConfig::RolechatConfig(QWidget *parent) : QMainWindow(parent), ui(new Ui::RolechatConfig)
@@ -32,6 +33,7 @@ void RolechatConfig::setupTabs()
   m_tabWidgets["Theme"] = new ConfigTabTheme();
   m_tabWidgets["Mounting"] = new ConfigTabMounting();
   m_tabWidgets["Callwords"] = new ConfigTabCallwords();
+  m_tabWidgets["Discord"] = new ConfigTabDiscord();
   ui->category_list_widget->addItems(m_tabCategories.keys());
 }
 
