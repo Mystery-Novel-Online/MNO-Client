@@ -16,9 +16,6 @@ config_tab_blips::config_tab_blips(QWidget *parent) : QWidget(parent), ui(new Ui
   m_useBlanks = config::ConfigUserSettings::booleanValue("blip_custom_blanks", false);
 
   ui->setupUi(this);
-  rolechat::fs::RCDir blipDirectory("sounds/blips/");
-
-  const QString qCurrentBlipSet = QString::fromStdString(config::ConfigUserSettings::stringValue("blip_set", "Danganronpa"));
 
   ui->blipOverride->setChecked(m_useOverrides);
 
@@ -31,20 +28,7 @@ config_tab_blips::config_tab_blips(QWidget *parent) : QWidget(parent), ui(new Ui
   m_blipRate = configBlipRate;
 
   ui->blipBlanks->setChecked(m_useBlanks);
-
-  std::optional<int> lBlipIndex;
-
-  for(const auto& subDir : blipDirectory.subDirectories())
-  {
-    const QString qBlipName = QString::fromStdString(subDir);
-    if (qBlipName == qCurrentBlipSet)
-      lBlipIndex = ui->blipSet->count();
-
-    ui->blipSet->addItem(qBlipName);
-  }
-
-  if (lBlipIndex.has_value())
-    ui->blipSet->setCurrentIndex(*lBlipIndex);
+  reloadBlipList();
 }
 
 config_tab_blips::~config_tab_blips()
@@ -84,6 +68,28 @@ int config_tab_blips::blipRate()
     return blip->get().blipRate();
 
   return 99999;
+}
+
+void config_tab_blips::reloadBlipList()
+{
+  ui->blipSet->clear();
+  rolechat::fs::RCDir blipDirectory("sounds/blips/");
+
+  const QString qCurrentBlipSet = QString::fromStdString(config::ConfigUserSettings::stringValue("blip_set", "Danganronpa"));
+
+  std::optional<int> lBlipIndex;
+
+  for(const auto& subDir : blipDirectory.subDirectories())
+  {
+    const QString qBlipName = QString::fromStdString(subDir);
+    if (qBlipName == qCurrentBlipSet)
+      lBlipIndex = ui->blipSet->count();
+
+    ui->blipSet->addItem(qBlipName);
+  }
+
+  if (lBlipIndex.has_value())
+    ui->blipSet->setCurrentIndex(*lBlipIndex);
 }
 
 void config_tab_blips::setCharacterBlip(const std::string &set)

@@ -441,8 +441,8 @@ void AOConfigPanel::refresh_theme_list()
     tab->refreshThemeList();
 
   config_tab_blips* blipTab = ConfigManager::retrieveTab<config_tab_blips>("Blips");
-  if(!blipTab)
-    return;
+  if(blipTab)
+    blipTab->reloadBlipList();
 
 }
 

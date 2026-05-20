@@ -21,6 +21,8 @@ public:
   bool useBlanks();
   int blipRate();
 
+  void reloadBlipList();
+
   void setCharacterBlip(const std::string& set);
   void setTagBlip(const std::string& set);
   void setThemeBlip(const std::string& set);
