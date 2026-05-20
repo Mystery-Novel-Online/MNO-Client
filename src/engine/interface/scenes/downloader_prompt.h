@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWidget>
+#include "engine/network/workshop/workshop_parser.h"
 
 enum DownloadType
 {

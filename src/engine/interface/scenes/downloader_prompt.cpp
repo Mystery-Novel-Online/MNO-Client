@@ -4,32 +4,7 @@
 #include "engine/system/user_database.h"
 
 #include <engine/network/api_manager.h>
-
-
-QMap<QString, QString> buildFileHashMap(const QString &scanDirectory)
-{
-  QMap<QString, QString> fileHashMap;
-
-  QDirIterator it(scanDirectory,
-                  QDir::Files,
-                  QDirIterator::Subdirectories);
-
-  while (it.hasNext())
-  {
-    QString filePath = it.next();
-
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly))
-      continue;
-
-    QByteArray data = file.readAll();
-    QByteArray hash = QCryptographicHash::hash(data, QCryptographicHash::Md5);
-
-    fileHashMap.insert(filePath, QString(hash.toHex()));
-  }
-
-  return fileHashMap;
-}
+#include "utils/file_hash_util.h"
 
 DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
@@ -184,69 +159,52 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
   }
 
   QByteArray response = reply->readAll();
-  qDebug() << response;
-  QJsonDocument doc = QJsonDocument::fromJson(response);
-  QString collectionName = doc["collection_name"].toString();
-  QList<QJsonObject> repoObjects = {};
-
-  if(!m_isCollection)
-  {
-    repoObjects.append(doc.object());
-  }
-  else
-  {
-    for(const QJsonValue &val : doc["repos"].toArray())
-    {
-      repoObjects.append(val.toObject());
-    }
-  }
-
-  //Cache content into database.
+  WorkshopCollection collection = WorkshopParser::parseCollection(response);
+  QString packageDirectory = collection.packageDirectory();
 
 
   QMap<QString, QString> hashMap = {};
-  for(const QJsonObject& repoObject : repoObjects)
+
+  for (const WorkshopRepository& repo : collection.repositories)
   {
-    QString qGUID = repoObject["guid"].toString();
-    QString qFolderName = repoObject["folder"].toString();
-    QString qDownloadType = repoObject["url_download"].toString();
-    int qContentId = repoObject["id"].toInt();
-    int qLastUpdated = repoObject["last_updated"].toInt();
-    GetDB().cacheContentData(qGUID.toStdString(), qFolderName.toStdString(), qLastUpdated, qContentId);
-
+    GetDB().cacheContentData(repo.guid.toStdString(), repo.folderName.toStdString(), repo.lastUpdated, repo.contentId);
     QMap<QString, QString> existingFileMap = {};
+    QString scanDirectory = "";
 
-    if(m_directory == "packages/Workshop Downloads/")
+    if(repo.downloadType == "repo")
     {
-      QString scanDirectory = m_directory + "characters/" + qFolderName + "/";
-      existingFileMap = buildFileHashMap(scanDirectory);
+      scanDirectory = packageDirectory + "characters/" + repo.folderName + "/";
+      existingFileMap = FileHashUtil::buildMd5Map(scanDirectory);
     }
 
-    QJsonArray files = repoObject["contents"].toArray();
-
-    for (const QJsonValue &val : files)
+    for (const WorkshopFile& file : repo.files)
     {
-      QJsonObject obj = val.toObject();
-      QString rawHash = obj["hash"].toString();
-      QString hash = m_baseUrl + "/api/workshop/file/" + rawHash;
+      QString cdnUri = m_baseUrl + "/api/workshop/file/" + file.hash;
       QString filePath = "";
-      if(qDownloadType == "background")
-        filePath = m_directory + "background/" + qFolderName + + "/" + obj["file_path"].toString();
+
+      if(repo.downloadType == "background")
+        filePath = packageDirectory + "background/" + repo.folderName + + "/" + file.relativePath;
       else
+        filePath = packageDirectory + file.relativePath;
+
+      if(!filePath.startsWith(scanDirectory))
       {
-        filePath = m_isCollection ? "packages/" + collectionName + "/" + obj["file_path"].toString() : m_directory + obj["file_path"].toString();
+        if (QFile(filePath).exists())
+        {
+          existingFileMap[filePath] = FileHashUtil::md5File(filePath);
+        }
       }
 
       if(existingFileMap.contains(filePath))
       {
-        bool hashMatches = existingFileMap[filePath] == rawHash;
+        bool hashMatches = existingFileMap[filePath] == file.hash;
         existingFileMap.remove(filePath);
 
         if(hashMatches)
           continue;
       }
 
-      hashMap[filePath] = hash;
+      hashMap[filePath] = cdnUri;
     }
 
     for (auto it = existingFileMap.begin(); it != existingFileMap.end(); ++it)
@@ -259,7 +217,6 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
         file.remove();
       }
     }
-
   }
 
   ProcessLinks(hashMap, m_contentName, m_repository, m_isRepo);

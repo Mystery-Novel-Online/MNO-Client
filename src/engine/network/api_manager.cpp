@@ -2,7 +2,7 @@
 #include <QHttpMultiPart>
 #include <QNetworkRequest>
 
-static bool USE_LOCALHOST = false;
+static bool USE_LOCALHOST = true;
 
 ApiManager::ApiManager(QObject *parent)
     : QObject(parent)
@@ -91,9 +91,9 @@ void ApiManager::login()
   });
 }
 
-QString ApiManager::repoUrl(int characterId)
+QString ApiManager::repoUrl(QString guid)
 {
-  return baseUri() + "api/workshop/" + QString::number(characterId) + "/repo";
+  return baseUri() + "api/workshop/" + guid + "/content";
 }
 
 QString ApiManager::baseUri()

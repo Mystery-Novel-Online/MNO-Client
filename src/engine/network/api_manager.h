@@ -24,7 +24,7 @@ public:
 
   void login();
 
-  static QString repoUrl(int characterId);
+  static QString repoUrl(QString guid);
   static QString baseUri();
   static QString authorizationKey();
   static bool loggedIn();

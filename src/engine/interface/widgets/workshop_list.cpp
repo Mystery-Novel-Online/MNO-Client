@@ -40,10 +40,13 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
   for(const auto & child : children)
   {
     int id = child.toObject().value("id").toInt();
+    QString contentGuid = child.toObject().value("guid").toString();
+
+
     QString url = child.toObject().value("url_download").toString();
     if(url.isEmpty() || url == "repo")
     {
-      url = ApiManager::repoUrl(id);
+      url = ApiManager::repoUrl(contentGuid);
     };
 
     QVector<QPair<QString, QString>> tagMap = {};
@@ -82,7 +85,8 @@ void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &ti
         child.toObject().value("folder").toString(),
         tagMap,
         collaborators,
-        child.toObject().value("guid").toString()
+        contentGuid
+
     };
 
     auto childWidget = entry->createChild(id, "", newEntry.name, newEntry.submitter, "", nullptr);

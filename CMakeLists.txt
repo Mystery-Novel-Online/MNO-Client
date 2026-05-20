@@ -326,6 +326,9 @@ add_executable(rp-engine
   src/engine/interface/widgets/uploadertagtable.h src/engine/interface/widgets/uploadertagtable.cpp
   src/config_tabs/config_tab_blips.h src/config_tabs/config_tab_blips.cpp src/config_tabs/config_tab_blips.ui
   src/config_tabs/config_tab_callwords.h src/config_tabs/config_tab_callwords.cpp src/config_tabs/config_tab_callwords.ui
+  src/utils/file_hash_util.h src/utils/file_hash_util.cpp
+  src/engine/network/workshop/workshop_parser.h src/engine/network/workshop/workshop_parser.cpp
+  src/engine/network/workshop/workshop_models.h
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
