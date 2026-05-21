@@ -72,6 +72,7 @@ int config_tab_blips::blipRate()
 
 void config_tab_blips::reloadBlipList()
 {
+  ui->blipSet->blockSignals(true);
   ui->blipSet->clear();
   rolechat::fs::RCDir blipDirectory("sounds/blips/");
 
@@ -87,7 +88,7 @@ void config_tab_blips::reloadBlipList()
 
     ui->blipSet->addItem(qBlipName);
   }
-
+  ui->blipSet->blockSignals(false);
   if (lBlipIndex.has_value())
     ui->blipSet->setCurrentIndex(*lBlipIndex);
 }
