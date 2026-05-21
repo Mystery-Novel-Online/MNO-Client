@@ -131,7 +131,6 @@ void DrPlayerListEntry::refreshAutomatic(int width)
 
   int iconDimensionsoffset = (int)((float)5 * themeResize);
   int iconScale = (int)((float)40 * themeResize);
-  ui_user_image->setAlpha("playerlist_alpha");
   ui_user_image->move(iconDimensionsoffset, iconDimensionsoffset);
   ui_user_image->resize(iconScale, iconScale);
 
@@ -173,6 +172,9 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
   QString characterIconPath = "";
   const QString afkBoarderImagePath = ao_app->find_theme_asset_path("char_border_afk.png");
   const QString nonAfkBoarderPath = ao_app->find_theme_asset_path("char_border.png");
+
+
+  ui_user_image->setAlpha("playerlist_alpha");
 
   if(m_afk && FS::Checks::FileExists(afkBoarderImagePath))
   {
@@ -221,6 +223,7 @@ void DrPlayerListEntry::set_character(QString p_character, bool afkState)
       }
 
   }
+
   ui_user_image->show();
   pCharacterBorderDisplay->show();
 
