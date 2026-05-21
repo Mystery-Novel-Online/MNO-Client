@@ -449,7 +449,7 @@ void Courtroom::play_ambient()
   QString l_ambient = m_ambient_sfx;
   if (l_ambient.isEmpty())
   {
-    l_ambient = QString::fromStdString(m_viewportScene.ambienceSound(m_chatmessage[CMPosition].toStdString()));
+    l_ambient = QString::fromStdString(m_viewportScene.ambienceSound(m_chatmessage[CMPosition].toStdString(), ConfigManager::timeOfDay().toStdString()));
   }
 
   QString l_filepath = ao_app->get_ambient_sfx_path(l_ambient);
@@ -605,8 +605,8 @@ void Courtroom::update_background_scene()
   const QString l_position_id = m_chatmessage[CMPosition];
   DRPosition l_position = m_position_map.get_position(m_chatmessage[CMPosition]);
 
-  ui_vp_background->setFileName(m_viewportScene.backgroundFile(l_position_id.toStdString()));
-  ui_vp_desk->setFileName(m_viewportScene.foregroundFile(l_position_id.toStdString()));
+  ui_vp_background->setFileName(m_viewportScene.backgroundFile(l_position_id.toStdString(), ConfigManager::timeOfDay().toStdString()));
+  ui_vp_desk->setFileName(m_viewportScene.foregroundFile(l_position_id.toStdString(), ConfigManager::timeOfDay().toStdString()));
 
   if (m_preloader_sync->is_waiting())
   {
