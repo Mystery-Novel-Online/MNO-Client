@@ -5,6 +5,7 @@
 
 #include <engine/network/api_manager.h>
 #include "utils/file_hash_util.h"
+#include <rolechat/util/FileSystem.h>
 
 DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
@@ -130,7 +131,7 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
 
               if (m_filesDownloaded == m_totalFiles) {
 
-                FS::Packages::Scan();
+                rolechat::fs::PackageManager::scanPackages();
 
                 QMessageBox::information(this, "Download Complete", "All files downloaded successfully!");
                 this->deleteLater();

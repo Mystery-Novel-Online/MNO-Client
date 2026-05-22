@@ -9,6 +9,7 @@
 #include "engine/network/metadata/server_metadata.h"
 #include <rolechat/filesystem/RCDir.h>
 #include <rolechat/filesystem/RCFile.h>
+#include <rolechat/util/FileSystem.h>
 
 // Copied over from Vanilla.
 // As said in the comments there, this is a *super broad* definition.
@@ -25,8 +26,8 @@ void AOApplication::reload_packages()
   // Reset cached data
   CharacterRepository::reset();
   engine::system::replays::io::resetCache();
+  std::vector<std::string> packagesNames = rolechat::fs::PackageManager::scanPackages();
 
-  QVector<QString> packageNames = FS::Packages::Scan();
   QString packagesPath = FS::Paths::ApplicationPath() + "/packages/";
 
   QDir baseCharactersDir (FS::Paths::BasePath() + "/characters");
@@ -43,9 +44,10 @@ void AOApplication::reload_packages()
     CharacterRepository::setFilteredList("base", baseCharacters);
   }
 
-  for(QString packageName : packageNames)
+  for(auto& packageName : packagesNames)
   {
-    QDir charactersPath (packagesPath + packageName + "/characters");
+    QString qPackageName = QString::fromStdString(packageName);
+    QDir charactersPath (packagesPath + qPackageName + "/characters");
     if (charactersPath.exists())
     {
       QVector<ActorSelectEntry> packageCharacters;
@@ -56,14 +58,14 @@ void AOApplication::reload_packages()
         packageChar.name = character_folder.toStdString();
         packageCharacters.append(std::move(packageChar));
       }
-      CharacterRepository::setFilteredList(packageName, packageCharacters);
+      CharacterRepository::setFilteredList(qPackageName, packageCharacters);
     }
 
-    const QDir replaysDir(packagesPath + packageName + "/replays");
+    const QDir replaysDir(packagesPath + qPackageName + "/replays");
     if (replaysDir.exists())
     {
       const QStringList replayFolders = replaysDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-      engine::system::replays::io::cachePackage(packageName, replayFolders);
+      engine::system::replays::io::cachePackage(qPackageName, replayFolders);
     }
   }
 

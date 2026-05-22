@@ -2,6 +2,9 @@
 #include "fs_mounting.h"
 
 #include <rolechat/filesystem/RCDir.h>
+#include <rolechat/filesystem/RCFile.h>
+
+#include <rolechat/util/FileSystem.h>
 
 namespace FS::Checks
 {
@@ -231,20 +234,21 @@ QString FindFile(const QStringList &filePaths, bool allowPackages, const QString
 
   if (allowPackages)
   {
-    QVector<QString> packageNames = Packages::CachedNames();
-    QVector<QString> disabledList = Packages::DisabledList();
+    std::vector<std::string> packageNames = rolechat::fs::PackageManager::packageNames();
+    std::vector<std::string> disabledList = rolechat::fs::PackageManager::disabledList();
 
-    for (const QString &packageName : packageNames)
+    for (const std::string &packageName : packageNames)
     {
-      if (!disabledList.contains(packageName))
+
+      auto it = std::find(disabledList.begin(), disabledList.end(), packageName);
+      if (it == disabledList.end())
       {
         for (const QString &path : allCandidatePaths)
         {
-          QString packagePath = Paths::Package(packageName) + path;
-          if (Checks::FileExists(packagePath))
-          {
-            return packagePath;
-          }
+          std::string packagePath = rolechat::fs::RCDir::packagePath(packageName) + path.toStdString();
+          if (rolechat::fs::RCFile::exists(packagePath))
+            return QString::fromStdString(packagePath);
+
         }
       }
     }
