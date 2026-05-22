@@ -1721,6 +1721,8 @@ void Courtroom::handle_chatmessage_3()
     {
       ui_vp_showname_image->set_image(l_showname_image);
       ui_vp_showname_image->show();
+      if(ao_app->current_theme->read_config_bool("force_showname_text"))
+        ui_vp_showname->show();
     }
     else
     {
