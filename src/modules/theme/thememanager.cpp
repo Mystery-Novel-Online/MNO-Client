@@ -273,9 +273,14 @@ void ThemeManager::addWidgetName(QString t_widgetName, QWidget *t_widget)
   m_WidgetNames[t_widgetName] = t_widget;
 }
 
+const QString &ThemeManager::getConfigString(const QString &key)
+{
+  return mCurrentThemeReader.getConfigString(key);
+}
+
 QVector<ThemeTabInfo> ThemeManager::getTabsInfo()
 {
-  return ThemeManager::get().mCurrentThemeReader.getTabs();
+  return mCurrentThemeReader.getTabs();
 }
 
 bool ThemeManager::getConfigBool(QString value)

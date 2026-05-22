@@ -30,10 +30,25 @@ void ThemeModuleReader::ParseModule()
 void ThemeModuleReader::ParseModuleConfig()
 {
   SetTargetObject("config");
-  QStringList configOptionNames = {"enable_single_shout" , "enable_music_and_area_list_separation", "enable_single_effect",  "detatchable_viewport", "enable_single_wtce", "enable_const_music_speed", "force_showname_text", "enable_showname_image", "enable_highlighting", "enable_button_images", "enable_label_images", "enable_cycle_ding", "use_toggles"};
 
-  for (const QString& optionName : configOptionNames) {
-    if (isValueExists(optionName)) m_configBooleans[optionName] = getBoolValue(optionName);
+  for(auto it = mTargetObject.begin(); it != mTargetObject.end(); ++it)
+  {
+    QString key = it.key();
+    QJsonValue value = it.value();
+
+    switch (value.type())
+    {
+    case QJsonValue::Bool:
+      m_configBooleans[key] = value.toBool();
+      break;
+
+    case QJsonValue::String:
+      m_configStrings[key] = value.toString();
+      break;
+
+    default:
+      break;
+    }
   }
 
   if(isValueExists("blips")) m_configBlips = getStringValue("blips");
@@ -302,9 +317,22 @@ bool ThemeModuleReader::getContainsBool(QString t_setting)
   return m_configBooleans.contains(t_setting);
 }
 
+bool ThemeModuleReader::getContainsString(QString t_setting)
+{
+  return m_configStrings.contains(t_setting);
+}
+
 bool ThemeModuleReader::getSettingBool(QString t_setting)
 {
   return m_configBooleans[t_setting];
+}
+
+const QString &ThemeModuleReader::getSettingString(QString t_setting)
+{
+  if(!m_configStrings.contains(t_setting))
+    return m_empty;
+
+  return m_configStrings[t_setting];
 }
 
 bool ThemeModuleReader::getContainsSound(QString t_sfxName)

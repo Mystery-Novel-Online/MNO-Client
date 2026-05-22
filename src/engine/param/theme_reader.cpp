@@ -217,6 +217,21 @@ bool ThemeReader::GetConfigBool(QString boolValue)
   return false;
 }
 
+const QString &ThemeReader::getConfigString(const QString &key)
+{
+  QVector<ThemeModuleReader *> l_modules = RetrieveModuleOrder();
+
+  for(ThemeModuleReader * r_module : l_modules)
+  {
+    if(r_module != nullptr)
+    {
+      if(r_module->getContainsString(key)) return r_module->getSettingString(key);
+    }
+  }
+
+  return m_empty;
+}
+
 QString ThemeReader::GetConfigSoundName(QString soundName)
 {
   QVector<ThemeModuleReader *> l_modules = RetrieveModuleOrder();

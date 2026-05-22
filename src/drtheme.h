@@ -27,6 +27,7 @@ public:
   void setup_layers();
   void setup_free_blocks();
 
+  const QString& readConfigString(const QString& key);
   bool read_config_bool(QString p_setting_name);
   int read_config_int(QString p_setting_name);
   QVector<QStringList> get_highlight_characters();

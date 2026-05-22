@@ -73,6 +73,11 @@ void DRTheme::setup_free_blocks()
   return;
 }
 
+const QString &DRTheme::readConfigString(const QString &key)
+{
+  return ThemeManager::get().getConfigString(key);
+}
+
 QString DRTheme::LoadFileString(QString p_path)
 {
   if(!FS::Checks::FileExists(p_path))

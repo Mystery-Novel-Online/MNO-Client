@@ -33,7 +33,9 @@ public:
 
   //Config
   bool getContainsBool(QString t_setting);
+  bool getContainsString(QString t_setting);
   bool getSettingBool(QString t_setting);
+  const QString& getSettingString(QString t_setting);
 
   //Config - Sounds
   bool getContainsSound(QString t_sfxName);
@@ -49,6 +51,7 @@ private:
   QHash<QString, QString> m_configSounds = {};
   QMap<QString, DR::ColorInfo> m_configColors = {};
   QHash<QString, ThemeHighlight> m_configHighlights = {};
+  QMap<QString, QString> m_configStrings = {};
 
   //Scenes
   ThemeScene *m_CourtroomScene = nullptr;
@@ -62,6 +65,8 @@ private:
   QVector<QStringList> m_WidgetLayers = {};
 
   QString m_moduleDirectory = "";
+
+  QString m_empty = "";
 };
 
 #endif // THEMEMODULEREADER_H

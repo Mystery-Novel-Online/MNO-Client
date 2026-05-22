@@ -1703,6 +1703,8 @@ void Courtroom::handle_chatmessage_3()
   const QString f_char = m_chatmessage[CMChrName];
   const QString f_emote = m_chatmessage[CMEmote];
 
+  qDebug() << ao_app->current_theme->readConfigString("TEST_CONFIG");
+
   if (!chatmessage_is_empty)
   {
     QString l_showname_image;

@@ -25,6 +25,7 @@ public:
   QStringList GetLayerChildren(QString t_widget);
 
   bool GetConfigBool(QString boolValue);
+  const QString& getConfigString(const QString& key);
   QString GetConfigSoundName(QString soundName);
 
   const QString& getBlips();
@@ -132,6 +133,8 @@ private:
   QString m_ThemeName = "";
   QString m_ThemeDirectory = "";
   QString m_TimeOfDay = "";
+
+  QString m_empty = "";
 };
 
 #endif // THEMEREADER_H
