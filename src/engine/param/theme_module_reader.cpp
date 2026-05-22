@@ -62,7 +62,17 @@ void ThemeModuleReader::ParseModuleConfig()
   for(QJsonValueRef colorValue : configColorsArray)
   {
     SetTargetObject(colorValue.toObject());
+    QString color_name = getStringValue("color");
+    QString color_code = getStringValue("code");
+
     m_configColors[getStringValue("color")].code = getStringValue("code");
+    if(isValueExists("highlight_characters"))
+    {
+      QString highlightChars = getStringValue("highlight_characters");
+      m_configHighlights[highlightChars].chars = highlightChars.toStdString();
+      m_configHighlights[highlightChars].color = color_code.toStdString();
+      m_configHighlights[highlightChars].keepCharacters = getBoolValue("keep_characters");
+    }
   }
 
   for(QJsonValueRef soundValue : configSoundsArray)
@@ -71,13 +81,6 @@ void ThemeModuleReader::ParseModuleConfig()
     m_configSounds[getStringValue("sound")] = getStringValue("file");
   }
 
-  for(QJsonValueRef highlighValue : configHighlightsArray)
-  {
-    SetTargetObject(highlighValue.toObject());
-    m_configHighlights[getStringValue("chars")].chars = getStringValue("chars").toStdString();
-    m_configHighlights[getStringValue("chars")].color = getStringValue("color").toStdString();
-    m_configHighlights[getStringValue("chars")].keepCharacters = getBoolValue("keep_characters");
-  }
 }
 
 void ThemeModuleReader::ParseLayers()
