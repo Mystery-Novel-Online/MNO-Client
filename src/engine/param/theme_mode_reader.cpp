@@ -48,19 +48,22 @@ ThemeModeReader::ThemeModeReader(QString filePath) : m_FilePath(filePath)
     QJsonArray jsonHighlightsArray = getArrayValue("highlights");
     QJsonArray jsonSoundsArray = getArrayValue("sounds");
 
-    for(QJsonValueRef colourObject : jsonColoursArray)
+    for(QJsonValueRef colorValue : jsonColoursArray)
     {
-      SetTargetObject(colourObject.toObject());
-      m_CourtroomFontColorsDefault[getStringValue("color")].code = getStringValue("code");
+      SetTargetObject(colorValue.toObject());
+      QString color_name = getStringValue("color");
+      QString color_code = getStringValue("code");
+
+      m_CourtroomFontColorsDefault[color_name].code = color_code;
+      if(isValueExists("highlight_characters"))
+      {
+        QString highlightChars = getStringValue("highlight_characters");
+        m_CourtroomFontColorsHighlights[highlightChars].chars = highlightChars.toStdString();
+        m_CourtroomFontColorsHighlights[highlightChars].color = color_code.toStdString();
+        m_CourtroomFontColorsHighlights[highlightChars].keepCharacters = getBoolValue("keep_characters");
+      }
     }
 
-    for(QJsonValueRef highlights : jsonHighlightsArray)
-    {
-      SetTargetObject(highlights.toObject());
-      m_CourtroomFontColorsHighlights[getStringValue("chars")].chars = getStringValue("chars").toStdString();
-      m_CourtroomFontColorsHighlights[getStringValue("chars")].color = getStringValue("color").toStdString();
-      m_CourtroomFontColorsHighlights[getStringValue("chars")].keepCharacters = getBoolValue("keep_characters");
-    }
 
   }
   LoadTimeMode();
