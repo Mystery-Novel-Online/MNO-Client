@@ -18,7 +18,6 @@ EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent), m_EmotionSelector
   p_ResetOffsetsAction = new QAction(tr("Reset (Center)"), this);
   m_presetsMenu->addAction(p_ResetOffsetsAction);
 
-  m_layersMenu = addMenu(tr("Layers"));
   addSeparator();
 
   QMenu *buttonsMenu = addMenu(tr("Buttons"));
@@ -46,7 +45,6 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
   LayerSelectionPanel *selectionPanel = static_cast<LayerSelectionPanel*>(ThemeManager::get().getWidget("layers_panel"));
   if(selectionPanel) selectionPanel->clear();
 
-  clearLayers();
   for(const ActorLayer &layer : emote.emoteOverlays)
   {
     QString qLayerName = QString::fromStdString(layer.offsetName);
@@ -54,7 +52,6 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
     {
       QString qToggleName = QString::fromStdString(layer.toggleName);
       bool toggleEnabled = engine::actor::user::layerState(layer.toggleName);
-      AddLayer(qToggleName, toggleEnabled);
       selectionPanel->addLayer(qLayerName, qToggleName, toggleEnabled ? LayerSelection_Toggle : LayerSelection_ToggleDisabled);
     }
     else if(!layer.variationOptions.empty())
@@ -101,12 +98,6 @@ void EmoteMenu::AddPreset(const QString &name)
   m_presetsClearedCheck = true;
 }
 
-void EmoteMenu::clearLayers()
-{
-  m_layersMenu->clear();
-  m_layersMenu->hide();
-}
-
 void EmoteMenu::OnMenuRequested(QPoint p_point)
 {
   const QPoint l_global_point = parentWidget()->mapToGlobal(p_point);
@@ -142,17 +133,6 @@ void EmoteMenu::OnOffsetResetTriggered()
   courtroom::sliders::setScale(m_defaultScale);
   courtroom::sliders::setVertical(m_defaultVertical);
   courtroom::sliders::setHorizontal(500);
-}
-
-void EmoteMenu::AddLayer(const QString &name, bool defaultValue)
-{
-  QAction* action = m_layersMenu->addAction(name);
-  action->setCheckable(true);
-  action->setChecked(defaultValue);
-
-  connect(action, &QAction::toggled, this, [=](bool checked){
-    engine::actor::user::toggleLayer(name.toStdString(), checked);
-  });
 }
 
 void EmoteMenu::ApplyPreset(const QString &presetName)

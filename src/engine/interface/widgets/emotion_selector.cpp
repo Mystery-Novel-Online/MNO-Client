@@ -49,7 +49,6 @@ void EmotionSelector::outfitChange()
   {
     m_ContextMenu->EmoteChange(m_ActorEmotions[0]);
   }
-  else m_ContextMenu->clearLayers();
 }
 
 int EmotionSelector::calculateTrueIndex(int id)

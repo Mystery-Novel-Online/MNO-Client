@@ -21,9 +21,6 @@ public:
   void ClearPresets();
   void AddPreset(const QString& name);
 
-  void clearLayers();
-  void AddLayer(const QString& name, bool defaultValue);
-
 
 public slots:
   void OnMenuRequested(QPoint p_point);
@@ -46,7 +43,6 @@ private:
   QAction *p_ResetOffsetsAction = nullptr;
 
   QMenu* m_presetsMenu;
-  QMenu* m_layersMenu;
 
 
   ActorEmote m_currentEmote;
