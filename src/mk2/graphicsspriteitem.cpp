@@ -361,9 +361,22 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &characterName, con
   layer->setMetadata(metadata);
   layer->setDetatch(false);
 
-  layer->setLayerPositioning(layerStrings[1].toLower());
-  m_spriteLayersStatic.append(layer);
-  m_player->addLayer(layer);
+  QString imageOrder = layerStrings[1].toLower();
+  layer->setLayerPositioning(imageOrder);
+
+  if(imageOrder == "detach-below"  || imageOrder == "detach-behind" || imageOrder == "detach-beneath")
+  {
+    m_spriteLayersBelow.append(layer);
+  }
+  else if (imageOrder == "detach")
+  {
+    m_spriteLayers.append(layer);
+  }
+  else
+  {
+    m_spriteLayersStatic.append(layer);
+    m_player->addLayer(layer);
+  }
 
   return layer;
 }
