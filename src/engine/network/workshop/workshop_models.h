@@ -34,7 +34,9 @@ struct WorkshopCollection
   QList<WorkshopRepository> repositories;
 
   QString packageDirectory() {
-    QString inputName = name.replace(QRegularExpression(R"([<>:"/\\|?*])"), "_");
+    QString inputName = name.replace(QRegularExpression(R"([<>:"/\\|?*])"), "");
+
+    inputName = inputName.replace(QRegularExpression(R"([<>:"/\\|?*\x00-\x1F])"), " ");
 
     while (inputName.endsWith(' ') || inputName.endsWith('.'))
       inputName.chop(1);
