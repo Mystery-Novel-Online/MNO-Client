@@ -48,6 +48,7 @@ struct WorkshopContentEntry
   int id;
   QString name;
   QString submitter;
+  QString submitterText;
   QString description;
   QString downloadLink;
   QString folder;

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "engine/workshop/workshop_cache.h"
+#include "engine/network/workshop/workshop_models.h"
 
 class WorkshopEntry : public QWidget
 {
@@ -11,17 +12,12 @@ class WorkshopEntry : public QWidget
 
 public:
   explicit WorkshopEntry(
-      int id,
-      const QString &title,
-      const QString &subtitle,
-      QWidget *parent = nullptr,
-      bool grid = false
+      const WorkshopContentEntry &contentData,
+      QWidget *parent = nullptr
   );
 
   WorkshopEntry* createChild(
-      int id,
-      const QString &title,
-      const QString &subtitle,
+      const WorkshopContentEntry &contentData,
       QWidget *parent = nullptr
   );
 

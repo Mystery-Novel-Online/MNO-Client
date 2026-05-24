@@ -93,6 +93,9 @@ WorkshopContentEntry WorkshopParser::parseEntry(const QJsonObject &obj)
   if(entry.downloadLink == "collection")
     entry.downloadLink = ApiManager::baseUri() + "api/workshop/" + QString::number(entry.id) + "/collection";
 
+  entry.submitter = obj.value("submitter").toString();
+  entry.submitterText = entry.submitter;
+
   for(auto collab : obj.value("collaborators").toArray())
   {
     QJsonObject collabObj = collab.toObject();
@@ -101,6 +104,9 @@ WorkshopContentEntry WorkshopParser::parseEntry(const QJsonObject &obj)
     QString username = collabObj.value("username").toString();
 
     entry.collaborators.append({user_id, username, permissions});
+
+    entry.submitterText += ", ";
+    entry.submitterText += username;
   }
 
 
@@ -117,7 +123,6 @@ WorkshopContentEntry WorkshopParser::parseEntry(const QJsonObject &obj)
   }
 
   entry.name = obj.value("name").toString();
-  entry.submitter = obj.value("submitter").toString();
   entry.description = obj.value("description").toString();
   entry.folder = obj.value("folder").toString();
 

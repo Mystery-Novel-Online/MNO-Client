@@ -31,14 +31,7 @@ WorkshopListWidget::WorkshopListWidget(QWidget *parent) : QWidget(parent)
 
 void WorkshopListWidget::addEntry(const WorkshopContentEntry &entryData)
 {
-  QString collabText = entryData.submitter;
-  for(int i = 0; i < entryData.collaborators.count(); i++)
-  {
-    collabText += ", ";
-    collabText += entryData.collaborators.at(i).username;
-  }
-
-  WorkshopEntry *entry = new WorkshopEntry(entryData.id, entryData.name, collabText, m_container);
+  WorkshopEntry *entry = new WorkshopEntry(entryData, m_container);
   connect(entry, &WorkshopEntry::clicked, this, &WorkshopListWidget::entryClicked);
   connect(entry, &WorkshopEntry::rightClicked, this, &WorkshopListWidget::entryRightClicked);
   m_layout->addWidget(entry);
@@ -47,7 +40,7 @@ void WorkshopListWidget::addEntry(const WorkshopContentEntry &entryData)
 
   for(const auto & childEntry : entryData.children)
   {
-    auto childWidget = entry->createChild(childEntry.id, childEntry.name, childEntry.submitter, nullptr);
+    auto childWidget = entry->createChild(childEntry, nullptr);
     connect(childWidget, &WorkshopEntry::clicked, this, &WorkshopListWidget::entryClicked);
     m_EntryData[childEntry.id] = childEntry;
   }
