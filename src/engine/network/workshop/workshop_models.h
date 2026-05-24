@@ -35,3 +35,24 @@ struct WorkshopCollection
 
   QString packageDirectory() { return "packages/" + name + "/"; }
 };
+
+struct WorkshopCollaborator
+{
+  int user_id;
+  QString username;
+  int permissions;
+};
+
+struct WorkshopContentEntry
+{
+  int id;
+  QString name;
+  QString submitter;
+  QString description;
+  QString downloadLink;
+  QString folder;
+  QVector<QPair<QString, QString>> tagMap;
+  QVector<WorkshopCollaborator> collaborators;
+  QString guid;
+  QVector<WorkshopContentEntry> children;
+};

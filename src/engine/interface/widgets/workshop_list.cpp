@@ -1,4 +1,5 @@
 #include "workshop_list.h"
+#include "engine/network/workshop/workshop_parser.h"
 
 #include <engine/network/api_manager.h>
 
@@ -28,70 +29,27 @@ WorkshopListWidget::WorkshopListWidget(QWidget *parent) : QWidget(parent)
   set_stylesheet(scrollArea, "[WORKSHOP LIST]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 }
 
-void WorkshopListWidget::addEntry(int id, const QString &icon, const QString &title, const QString &subtitle, const QString &gender, const QJsonArray &children)
+void WorkshopListWidget::addEntry(const WorkshopContentEntry &entryData)
 {
-  WorkshopEntry *entry = new WorkshopEntry(id, icon, title, subtitle, gender, m_container);
+  QString collabText = entryData.submitter;
+  for(int i = 0; i < entryData.collaborators.count(); i++)
+  {
+    collabText += ", ";
+    collabText += entryData.collaborators.at(i).username;
+  }
+
+  WorkshopEntry *entry = new WorkshopEntry(entryData.id, entryData.name, collabText, m_container);
   connect(entry, &WorkshopEntry::clicked, this, &WorkshopListWidget::entryClicked);
   connect(entry, &WorkshopEntry::rightClicked, this, &WorkshopListWidget::entryRightClicked);
   m_layout->addWidget(entry);
 
   QMap<int, std::string> categories = ApiManager::instance().categoryMap();
 
-  for(const auto & child : children)
+  for(const auto & childEntry : entryData.children)
   {
-    int id = child.toObject().value("id").toInt();
-    QString contentGuid = child.toObject().value("guid").toString();
-
-
-    QString url = child.toObject().value("url_download").toString();
-    if(url.isEmpty() || url == "repo")
-    {
-      url = ApiManager::repoUrl(contentGuid);
-    };
-
-    QVector<QPair<QString, QString>> tagMap = {};
-
-    for(auto tag : child.toObject().value("tags").toArray())
-    {
-      QJsonObject tagObj = tag.toObject();
-      QString value = tagObj.value("name").toString();
-      int key = tagObj.value("id").toInt(0);
-      if(categories.contains(key))
-      {
-        tagMap.append({QString::fromStdString(categories[key]), value});
-      }
-    }
-
-    QVector<WorkshopCollaborator> collaborators;
-
-    for(auto collab : child.toObject().value("collaborators").toArray())
-    {
-      QJsonObject collabObj = collab.toObject();
-      int user_id = collabObj.value("user_id").toInt(0);
-      int permissions = collabObj.value("permissions").toInt(0);
-      QString username = collabObj.value("username").toString();
-
-      collaborators.append({user_id, username, permissions});
-    }
-
-
-
-    WorkshopContentEntry newEntry = {
-        child.toObject().value("name").toString(),
-        child.toObject().value("submitter").toString(),
-        child.toObject().value("artist").toString(),
-        child.toObject().value("description").toString(),
-        url,
-        child.toObject().value("folder").toString(),
-        tagMap,
-        collaborators,
-        contentGuid
-
-    };
-
-    auto childWidget = entry->createChild(id, "", newEntry.name, newEntry.submitter, "", nullptr);
+    auto childWidget = entry->createChild(childEntry.id, childEntry.name, childEntry.submitter, nullptr);
     connect(childWidget, &WorkshopEntry::clicked, this, &WorkshopListWidget::entryClicked);
-    m_EntryData[id] = newEntry;
+    m_EntryData[childEntry.id] = childEntry;
   }
 }
 
@@ -173,66 +131,15 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
   m_pageCurrent = doc.object().value("page_current").toInt();
   m_pageTotal = doc.object().value("page_total").toInt();
   QJsonArray arr = doc.object().value("contents").toArray();
-  for (const QJsonValue &val : arr) {
+  for (const QJsonValue &val : arr)
+  {
     if (!val.isObject()) continue;
 
     QJsonObject obj = val.toObject();
-    int id = obj.value("id").toInt();
-    QString url = obj.value("url_download").toString();
+    WorkshopContentEntry newEntry = WorkshopParser::parseEntry(obj);
 
-    QString guid = obj.value("guid").toString();
-
-    if(url.isEmpty() || url == "repo" || url == "background")
-    {
-      url = ApiManager::baseUri() + "api/workshop/" + guid + "/content";
-    };
-    if(url == "collection")
-    {
-      url = ApiManager::baseUri() + "api/workshop/" + QString::number(id) + "/collection";
-    }
-
-
-    QVector<QPair<QString, QString>> tagMap = {};
-
-    for(auto tag : obj.value("tags").toArray())
-    {
-      QJsonObject tagObj = tag.toObject();
-      QString value = tagObj.value("name").toString();
-      int key = tagObj.value("category").toInt(0);
-      if(categories.contains(key))
-      {
-        tagMap.append({QString::fromStdString(categories[key]), value});
-      }
-    }
-
-
-    QVector<WorkshopCollaborator> collaborators;
-
-    for(auto collab : obj.value("collaborators").toArray())
-    {
-      QJsonObject collabObj = collab.toObject();
-      int user_id = collabObj.value("user_id").toInt(0);
-      int permissions = collabObj.value("permissions").toInt(0);
-      QString username = collabObj.value("username").toString();
-
-      collaborators.append({user_id, username, permissions});
-    }
-
-
-    WorkshopContentEntry newEntry = {obj.value("name").toString(), obj.value("submitter").toString(), obj.value("artist").toString(), obj.value("description").toString(), url, obj.value("folder").toString(), tagMap, collaborators, guid};
-    QString iconUrl = obj.value("url_icon").toString();
-
-
-    QString collabText = "";
-    for(int i = 0; i < newEntry.collaborators.count(); i++)
-    {
-      collabText += ", ";
-      collabText += newEntry.collaborators.at(i).username;
-    }
-
-    auto childrenArray = obj.value("children").toArray();
-    addEntry(id, iconUrl, newEntry.name, newEntry.submitter + collabText, "♀", childrenArray);
-    m_EntryData[id] = newEntry;
+    addEntry(newEntry);
+    m_EntryData[newEntry.id] = newEntry;
 
     emit contentParsed(m_pageCurrent, m_pageTotal);
   }

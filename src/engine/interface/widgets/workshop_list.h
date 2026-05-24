@@ -4,26 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "workshop_entry.h"
-
-struct WorkshopCollaborator
-{
-  int user_id;
-  QString username;
-  int permissions;
-};
-
-struct WorkshopContentEntry
-{
-  QString name;
-  QString submitter;
-  QString artist;
-  QString description;
-  QString downloadLink;
-  QString folder;
-  QVector<QPair<QString, QString>> tagMap;
-  QVector<WorkshopCollaborator> collaborators;
-  QString guid;
-};
+#include "engine/network/workshop/workshop_models.h"
 
 
 class WorkshopListWidget : public QWidget
@@ -31,9 +12,7 @@ class WorkshopListWidget : public QWidget
   Q_OBJECT
 public:
   WorkshopListWidget(QWidget *parent = nullptr);
-  void addEntry(int id,
-                const QString &icon, const QString &title,
-                const QString &subtitle, const QString &gender, const QJsonArray &children);
+  void addEntry(const WorkshopContentEntry& entryData);
 
   void updateFromApi(const QString& category = "browse");
   const WorkshopContentEntry getEntry(int id);

@@ -16,7 +16,7 @@ constexpr int GRID_BANNER_WIDTH  = 220;
 constexpr int GRID_BANNER_HEIGHT = 124;
 constexpr int GRID_TEXT_SPACING  = 4;
 
-WorkshopEntry::WorkshopEntry(int id, const QString&, const QString &title, const QString &subtitle, const QString&, QWidget *parent) : QWidget(parent), m_id(id), m_title(title)
+WorkshopEntry::WorkshopEntry(int id, const QString &title, const QString &subtitle, QWidget *parent, bool grid) : QWidget(parent), m_id(id), m_title(title), m_isGridView(grid)
 {
   setCursor(Qt::PointingHandCursor);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -29,9 +29,9 @@ WorkshopEntry::WorkshopEntry(int id, const QString&, const QString &title, const
   createShadow();
 }
 
-WorkshopEntry* WorkshopEntry::createChild(int id, const QString &iconPath, const QString &title, const QString &subtitle, const QString &genderSymbol, QWidget *parent)
+WorkshopEntry* WorkshopEntry::createChild(int id, const QString &title, const QString &subtitle, QWidget *parent)
 {
-  auto* child = new WorkshopEntry(id, iconPath, title, subtitle, genderSymbol, parent);
+  auto* child = new WorkshopEntry(id, title, subtitle, parent);
   m_childrenLayout->addWidget(child);
   child->hide();
   return child;

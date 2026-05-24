@@ -12,19 +12,16 @@ class WorkshopEntry : public QWidget
 public:
   explicit WorkshopEntry(
       int id,
-      const QString &iconPath,
       const QString &title,
       const QString &subtitle,
-      const QString &genderSymbol,
-      QWidget *parent = nullptr
+      QWidget *parent = nullptr,
+      bool grid = false
   );
 
   WorkshopEntry* createChild(
       int id,
-      const QString &iconPath,
       const QString &title,
       const QString &subtitle,
-      const QString &genderSymbol,
       QWidget *parent = nullptr
   );
 

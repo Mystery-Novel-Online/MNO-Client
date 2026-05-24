@@ -65,7 +65,7 @@ void ThemeModuleReader::ParseModuleConfig()
     QString color_name = getStringValue("color");
     QString color_code = getStringValue("code");
 
-    m_configColors[getStringValue("color")].code = getStringValue("code");
+    m_configColors[color_name].code = color_code;
     if(isValueExists("highlight_characters"))
     {
       QString highlightChars = getStringValue("highlight_characters");

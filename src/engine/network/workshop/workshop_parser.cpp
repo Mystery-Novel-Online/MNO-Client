@@ -1,5 +1,7 @@
 #include "workshop_parser.h"
 
+#include <engine/network/api_manager.h>
+
 WorkshopCollection WorkshopParser::parseCollection(const QByteArray &json)
 {
   WorkshopCollection collection;
@@ -74,4 +76,59 @@ WorkshopFile WorkshopParser::parseFile(const QJsonObject &object)
   file.hash = object["hash"].toString();
 
   return file;
+}
+
+WorkshopContentEntry WorkshopParser::parseEntry(const QJsonObject &obj)
+{
+  WorkshopContentEntry entry;
+
+  entry.id = obj.value("id").toInt();
+
+  entry.downloadLink = obj.value("url_download").toString();
+  entry.guid = obj.value("guid").toString();
+
+  if(entry.downloadLink.isEmpty() || entry.downloadLink == "repo" || entry.downloadLink == "background")
+    entry.downloadLink = ApiManager::baseUri() + "api/workshop/" + entry.guid + "/content";
+
+  if(entry.downloadLink == "collection")
+    entry.downloadLink = ApiManager::baseUri() + "api/workshop/" + QString::number(entry.id) + "/collection";
+
+  for(auto collab : obj.value("collaborators").toArray())
+  {
+    QJsonObject collabObj = collab.toObject();
+    int user_id = collabObj.value("user_id").toInt(0);
+    int permissions = collabObj.value("permissions").toInt(0);
+    QString username = collabObj.value("username").toString();
+
+    entry.collaborators.append({user_id, username, permissions});
+  }
+
+
+  QMap<int, std::string> categories = ApiManager::instance().categoryMap();
+  for(auto tag : obj.value("tags").toArray())
+  {
+    QJsonObject tagObj = tag.toObject();
+    QString value = tagObj.value("name").toString();
+    int key = tagObj.value("category").toInt(0);
+    if(categories.contains(key))
+    {
+      entry.tagMap.append({QString::fromStdString(categories[key]), value});
+    }
+  }
+
+  entry.name = obj.value("name").toString();
+  entry.submitter = obj.value("submitter").toString();
+  entry.description = obj.value("description").toString();
+  entry.folder = obj.value("folder").toString();
+
+  auto childrenArray = obj.value("children").toArray();
+
+  for(const auto & child : childrenArray)
+  {
+    WorkshopContentEntry newEntry = parseEntry(child.toObject());
+    entry.children.append(newEntry);
+  }
+
+
+  return entry;
 }
