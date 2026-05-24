@@ -33,7 +33,17 @@ struct WorkshopCollection
   QString name;
   QList<WorkshopRepository> repositories;
 
-  QString packageDirectory() { return "packages/" + name + "/"; }
+  QString packageDirectory() {
+    QString inputName = name.replace(QRegularExpression(R"([<>:"/\\|?*])"), "_");
+
+    while (inputName.endsWith(' ') || inputName.endsWith('.'))
+      inputName.chop(1);
+
+    if (inputName.isEmpty())
+      inputName = "Workshop Downloads";
+
+    return "packages/" + name + "/";
+  }
 };
 
 struct WorkshopCollaborator
