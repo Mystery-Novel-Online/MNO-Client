@@ -17,6 +17,8 @@
 
 #include <config_tabs/config_tab_theme.h>
 
+#include <rolechat/util/FileSystem.h>
+
 using namespace engine::system;
 
 AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
@@ -410,14 +412,14 @@ void AOConfigPanel::refresh_packages_list()
 {
   ui_packages_list->clear();
   //Parse through the stored packages
-  QVector<QString> packageNames = FS::Packages::CachedNames();
-  QVector<QString> disabledPackages = FS::Packages::DisabledList();
+  std::vector<std::string> packageNames = rolechat::fs::PackageManager::packageNames();
+  std::vector<std::string> disabledPackages = rolechat::fs::PackageManager::disabledList();
 
-  for (const QString &package : packageNames)
+  for (const std::string &package : packageNames)
   {
-    QListWidgetItem* item = new QListWidgetItem(package, ui_packages_list);
+    QListWidgetItem* item = new QListWidgetItem(QString::fromStdString(package), ui_packages_list);
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
-    item->setCheckState(disabledPackages.contains(package) ? Qt::Unchecked : Qt::Checked);
+    item->setCheckState(std::find(disabledPackages.begin(), disabledPackages.end(), package) == disabledPackages.end() ? Qt::Checked : Qt::Unchecked);
   }
 }
 
