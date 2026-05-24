@@ -51,6 +51,7 @@ struct WorkshopContentEntry
   QString submitterText;
   QString description;
   QString downloadLink;
+  QString content_type;
   QString folder;
   QVector<QPair<QString, QString>> tagMap;
   QVector<WorkshopCollaborator> collaborators;

@@ -84,13 +84,13 @@ WorkshopContentEntry WorkshopParser::parseEntry(const QJsonObject &obj)
 
   entry.id = obj.value("id").toInt();
 
-  entry.downloadLink = obj.value("url_download").toString();
+  entry.content_type = obj.value("url_download").toString();
   entry.guid = obj.value("guid").toString();
 
-  if(entry.downloadLink.isEmpty() || entry.downloadLink == "repo" || entry.downloadLink == "background")
+  if(entry.content_type.isEmpty() || entry.content_type == "repo" || entry.content_type == "background")
     entry.downloadLink = ApiManager::baseUri() + "api/workshop/" + entry.guid + "/content";
 
-  if(entry.downloadLink == "collection")
+  if(entry.content_type == "collection")
     entry.downloadLink = ApiManager::baseUri() + "api/workshop/" + QString::number(entry.id) + "/collection";
 
   entry.submitter = obj.value("submitter").toString();

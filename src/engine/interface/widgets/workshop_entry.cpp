@@ -18,6 +18,7 @@ constexpr int GRID_TEXT_SPACING  = 4;
 
 WorkshopEntry::WorkshopEntry(const WorkshopContentEntry &contentData, QWidget *parent) : QWidget(parent), m_id(contentData.id), m_title(contentData.name), m_isGridView(false)
 {
+  m_isGridView = (contentData.content_type == "background" || contentData.content_type == "theme");
   setCursor(Qt::PointingHandCursor);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
