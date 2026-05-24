@@ -16,7 +16,7 @@ DRCharacterMovie::~DRCharacterMovie()
 
 void DRCharacterMovie::play(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder, bool p_play_once)
 {
-  set_file_name(fs::characters::getSpritePath(p_character, p_emote, p_prefix, p_use_placeholder));
+  set_file_name(engine::fs::characters::getSpritePath(p_character, p_emote, p_prefix, p_use_placeholder));
   set_play_once(p_play_once);
   start();
 }

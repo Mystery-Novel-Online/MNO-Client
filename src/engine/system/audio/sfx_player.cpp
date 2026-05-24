@@ -30,7 +30,7 @@ void AOSfxPlayer::play_character_effect(QString p_chr, QString p_effect)
 {
   QStringList l_file_list;
   for (const QString &i_chr : ao_app->get_char_include_tree(p_chr))
-    l_file_list.append(fs::characters::getFilePath(i_chr, QString("sounds/%1").arg(p_effect)));
+    l_file_list.append(engine::fs::characters::getFilePath(i_chr, QString("sounds/%1").arg(p_effect)));
 
   const QString l_target_file = ao_app->find_asset_path(l_file_list, FS::Formats::SupportedAudio());
   if (l_target_file.isEmpty())

@@ -20,7 +20,7 @@ EmotionSelector::EmotionSelector(QWidget *parent)
 void EmotionSelector::emotionChange(ActorEmote emote)
 {
   if(m_ContextMenu == nullptr) return;
-  m_ContextMenu->EmoteChange(emote);
+    m_ContextMenu->EmoteChange(emote);
 }
 
 void EmotionSelector::actorChange(rolechat::actor::IActorData *actor)

@@ -7,7 +7,7 @@ namespace{
 const QStringList SPRITE_PATH_BLACKLIST = { "char_icon.png", "showname.png", "emotions" };
 }
 
-QString fs::characters::getSpritePath(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder)
+QString engine::fs::characters::getSpritePath(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder)
 {
   bool l_valid = true;
 
@@ -76,22 +76,22 @@ QString fs::characters::getSpritePath(QString p_character, QString p_emote, QStr
   return l_file_path;
 }
 
-QString fs::characters::getSpritePathPre(QString character, QString emote)
+QString engine::fs::characters::getSpritePathPre(QString character, QString emote)
 {
   return getSpritePath(character, emote, QString{}, false);
 }
 
-QString fs::characters::getSpritePathTalk(QString character, QString emote)
+QString engine::fs::characters::getSpritePathTalk(QString character, QString emote)
 {
   return getSpritePath(character, emote, "(b)", true);
 }
 
-QString fs::characters::getSpritePathIdle(QString character, QString emote)
+QString engine::fs::characters::getSpritePathIdle(QString character, QString emote)
 {
   return getSpritePath(character, emote, "(a)", true);
 }
 
-QString fs::characters::getDirectoryPath(const QString &character)
+QString engine::fs::characters::getDirectoryPath(const QString &character)
 {
   std::string cachedPath = TemporaryDB::instance().characterPath(character.toStdString());
   if(!cachedPath.empty())
@@ -99,12 +99,12 @@ QString fs::characters::getDirectoryPath(const QString &character)
   return FS::Paths::FindDirectory("characters/" + character);
 }
 
-QString fs::characters::getFilePath(const QString &character, const QString &file)
+QString engine::fs::characters::getFilePath(const QString &character, const QString &file)
 {
   return getDirectoryPath(character) + "/" + file;
 }
 
-QString fs::characters::getSpritePath(const std::string &p_character, const std::string &p_emote, const std::string &p_prefix, bool p_use_placeholder)
+QString engine::fs::characters::getSpritePath(const std::string &p_character, const std::string &p_emote, const std::string &p_prefix, bool p_use_placeholder)
 {
   return getSpritePath(QString::fromStdString(p_character), QString::fromStdString(p_emote), QString::fromStdString(p_prefix), p_use_placeholder);
 }

@@ -145,12 +145,12 @@ void ButtonMaker::SetCharacter(QString character)
   m_EmoteIndex = 0;
   m_Emotes.clear();
 
-  m_Path = fs::characters::getFilePath(character, "char.json");
+  m_Path = engine::fs::characters::getFilePath(character, "char.json");
   if(FS::Checks::FileExists(m_Path))
   {
     m_IsJson = true;
     rolechat::actor::JsonActorData jsonActor = rolechat::actor::JsonActorData();
-    jsonActor.load(character.toStdString(), fs::characters::getDirectoryPath(character).toStdString());
+    jsonActor.load(character.toStdString(), engine::fs::characters::getDirectoryPath(character).toStdString());
     jsonActor.switchOutfit("<All>");
     const std::vector<ActorEmote>& outfits = jsonActor.emotes();
     m_Emotes.clear();
@@ -160,7 +160,7 @@ void ButtonMaker::SetCharacter(QString character)
   {
     m_IsJson = false;
     LegacyActorReader legacyActor = LegacyActorReader();
-    legacyActor.load(character.toStdString(), fs::characters::getDirectoryPath(character).toStdString());
+    legacyActor.load(character.toStdString(), engine::fs::characters::getDirectoryPath(character).toStdString());
     const std::vector<ActorEmote>& outfits = legacyActor.emotes();
     m_Emotes.clear();
     for (const ActorEmote& emote : outfits) { m_Emotes << emote; }
@@ -216,7 +216,7 @@ void ButtonMaker::onGenerateClicked()
   if(m_IsJson)
     buttonDirectory = QString::fromStdString("/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".png");
 
-  QString filePath = fs::characters::getFilePath(QString::fromStdString(m_Emotes.at(m_EmoteIndex).character), buttonDirectory);
+  QString filePath = engine::fs::characters::getFilePath(QString::fromStdString(m_Emotes.at(m_EmoteIndex).character), buttonDirectory);
   if(FS::Checks::FileExists(filePath))
   {
     QMessageBox::StandardButton replaceResult;
@@ -252,7 +252,7 @@ void ButtonMaker::onPreviewGenClicked()
   viewportPainter.end();
 
   QString buttonDirectory = "/previews/" + QString::fromStdString(m_Emotes.at(m_EmoteIndex).emoteName) + ".png";
-  QString filePath = fs::characters::getFilePath(QString::fromStdString(m_Emotes.at(m_EmoteIndex).character), buttonDirectory);
+  QString filePath = engine::fs::characters::getFilePath(QString::fromStdString(m_Emotes.at(m_EmoteIndex).character), buttonDirectory);
 
   if(FS::Checks::FileExists(filePath))
   {

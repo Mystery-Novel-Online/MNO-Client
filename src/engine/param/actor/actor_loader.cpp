@@ -37,7 +37,7 @@ std::vector<ActorEmote> LegacyActorReader::emotes()
 
   for (const QString &i_chr : l_chr_list)
   {
-    if (!FS::Checks::DirectoryExists(fs::characters::getDirectoryPath(i_chr)))
+    if (!FS::Checks::DirectoryExists(engine::fs::characters::getDirectoryPath(i_chr)))
     {
       qWarning().noquote()
       << QString("Parent character <%1> not found, character <%2> cannot use it.").arg(i_chr, QString::fromStdString(folder()));
@@ -47,7 +47,7 @@ std::vector<ActorEmote> LegacyActorReader::emotes()
     qDebug().noquote() << QString("Adding <%1>").arg(i_chr);
 #endif
 
-    QSettings l_chrini(fs::characters::getFilePath(i_chr, CHARACTER_CHAR_INI), QSettings::IniFormat);
+    QSettings l_chrini(engine::fs::characters::getFilePath(i_chr, CHARACTER_CHAR_INI), QSettings::IniFormat);
     l_chrini.setIniCodec("UTF-8");
     utils::QSettingsKeyFetcher l_fetcher(l_chrini);
 

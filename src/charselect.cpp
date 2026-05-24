@@ -217,8 +217,8 @@ void Courtroom::SwitchCharacterByName(std::string characterName)
 {
   QString qCharacterName = QString::fromStdString(characterName);
   int serverCharacterId = 0;
-  QString characterPathIni = fs::characters::getFilePath(qCharacterName, CHARACTER_CHAR_INI);
-  QString characterPathJson = fs::characters::getFilePath(qCharacterName, CHARACTER_CHAR_JSON);
+  QString characterPathIni = engine::fs::characters::getFilePath(qCharacterName, CHARACTER_CHAR_INI);
+  QString characterPathJson = engine::fs::characters::getFilePath(qCharacterName, CHARACTER_CHAR_JSON);
 
   if (user::GetCharacterName() == qCharacterName)
   {
@@ -260,8 +260,8 @@ void Courtroom::char_clicked(int n_char)
 
   int n_real_char = n_char + m_current_chr_page * m_page_max_chr_count;
 
-  QString l_pathCharIni = fs::characters::getFilePath(CharacterRepository::characterNameFiltered(n_real_char), CHARACTER_CHAR_INI);
-  QString l_pathCharJson = fs::characters::getFilePath(CharacterRepository::characterNameFiltered(n_real_char), CHARACTER_CHAR_JSON);
+  QString l_pathCharIni = engine::fs::characters::getFilePath(CharacterRepository::characterNameFiltered(n_real_char), CHARACTER_CHAR_INI);
+  QString l_pathCharJson = engine::fs::characters::getFilePath(CharacterRepository::characterNameFiltered(n_real_char), CHARACTER_CHAR_JSON);
 
   qDebug() << "char_ini_path" << l_pathCharIni;
 

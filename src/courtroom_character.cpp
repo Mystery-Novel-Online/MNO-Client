@@ -31,7 +31,7 @@ QString Courtroom::get_character_content_url()
   if(!characterGuid.empty())
     return ApiManager::baseUri() + "api/workshop/"+ QString::fromStdString(characterGuid) +"/content";
 
-  QFile l_contentFile(fs::characters::getFilePath(get_character_ini(), "CONTENT.txt"));
+  QFile l_contentFile(engine::fs::characters::getFilePath(get_character_ini(), "CONTENT.txt"));
   if (!l_contentFile.open(QIODevice::ReadOnly))
     return nullptr;
 
@@ -52,7 +52,7 @@ void drSetItemIcon(QComboBox *p_widget, const int p_index, const QString &p_chr_
     return QIcon(l_blank_texture);
   }();
 
-  const QString l_icon_file = fs::characters::getFilePath(p_chr_name, "char_icon.png");
+  const QString l_icon_file = engine::fs::characters::getFilePath(p_chr_name, "char_icon.png");
   p_widget->setItemIcon(p_index, FS::Checks::FileExists(l_icon_file) ? QIcon(l_icon_file) : s_blank_icon);
 }
 } // namespace
@@ -179,7 +179,7 @@ void Courtroom::refresh_character_content_url()
 
 void Courtroom::update_character_content_url(QString url)
 {
-  QString contentFilePath = fs::characters::getFilePath(get_character_ini(), "CONTENT.txt");
+  QString contentFilePath = engine::fs::characters::getFilePath(get_character_ini(), "CONTENT.txt");
 
   QFile contentFile(contentFilePath);
   if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))

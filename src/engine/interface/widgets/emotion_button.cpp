@@ -38,13 +38,13 @@ void AOEmoteButton::set_emote_number(int p_emote_number)
 void AOEmoteButton::setLayerImage(const QString &character, const QString &layer, const QString &outfit, bool enabled)
 {
   rolechat::actor::IActorData *actor = retrieve();
-  QString l_texture = fs::characters::getFilePath(QString::fromStdString(actor->folder()), "layer_icons/" + layer + ".png");
+  QString l_texture = engine::fs::characters::getFilePath(QString::fromStdString(actor->folder()), "layer_icons/" + layer + ".png");
 
   ui_selected->hide();
 
   if (enabled)
   {
-    const QString l_selected_texture = fs::characters::getFilePath(QString::fromStdString(actor->folder()), "layer_icons/selected.png");
+    const QString l_selected_texture = engine::fs::characters::getFilePath(QString::fromStdString(actor->folder()), "layer_icons/selected.png");
 
     if (FS::Checks::FileExists(l_selected_texture))
     {
@@ -77,7 +77,7 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
   rolechat::actor::IActorData *actor = retrieve();
 
   QString l_texture = QString::fromStdString(actor->buttonImage(p_emote, false));
-  l_texture = fs::characters::getFilePath(QString::fromStdString(p_emote.character), l_texture);
+  l_texture = engine::fs::characters::getFilePath(QString::fromStdString(p_emote.character), l_texture);
 
   // reset states
   ui_selected->hide();
@@ -85,7 +85,7 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
   // nested ifs are okay
   if (p_enabled)
   {
-    const QString l_selected_texture = fs::characters::getFilePath(QString::fromStdString(p_emote.character), QString::fromStdString(actor->selectedImage(p_emote)));
+    const QString l_selected_texture = engine::fs::characters::getFilePath(QString::fromStdString(p_emote.character), QString::fromStdString(actor->selectedImage(p_emote)));
 
     if (FS::Checks::FileExists(l_selected_texture))
     {
@@ -94,7 +94,7 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
     }
     else
     {
-      const QString l_enabled_texture = fs::characters::getFilePath(QString::fromStdString(p_emote.character), QString::fromStdString(actor->buttonImage(p_emote, true)));;
+      const QString l_enabled_texture = engine::fs::characters::getFilePath(QString::fromStdString(p_emote.character), QString::fromStdString(actor->buttonImage(p_emote, true)));;
 
       if (FS::Checks::FileExists(l_enabled_texture))
       {
@@ -112,7 +112,7 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
 
   if(EmoteMenu::isRealtime())
   {
-    m_texture.load(fs::characters::getSpritePath(p_emote.character, p_emote.dialog, "", false));
+    m_texture.load(engine::fs::characters::getSpritePath(p_emote.character, p_emote.dialog, "", false));
     m_texture = m_texture.scaledToHeight(250, Qt::SmoothTransformation);
 
     int highestPixel = findHighestPixel();

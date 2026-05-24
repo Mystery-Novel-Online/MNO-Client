@@ -29,6 +29,10 @@
 #include "engine/animation/keyframe_sequence.h"
 #include "engine/fs/fs_characters.h"
 #include "engine/fs/fs_reading.h"
+
+#include <rolechat/filesystem/RCFile.h>
+#include <rolechat/util/FileSystem.h>
+
 struct CharaSpriteMetadata
 {
   QString character;
@@ -78,21 +82,52 @@ struct CharaSpriteMetadata
 
   void findAssets(QString& idle, QString& talk)
   {
-    idle = FS::Paths::FindFile(buildAllPaths(layerImage), true, FS::Formats::SupportedImages());
+    QStringList paths = buildAllPaths(layerImage);
+    QStringList bPaths = buildAllPaths("(b)" + layerImage);
+
+    std::vector<std::string> convertedPaths;
+    std::vector<std::string> convertedBPaths;
+
+    convertedPaths.reserve(paths.size());
+    convertedBPaths.reserve(bPaths.size());
+
+    for(const QString& path : paths)
+      convertedPaths.push_back(path.toStdString());
+
+    for(const QString& path : bPaths)
+      convertedBPaths.push_back(path.toStdString());
+
+    idle = QString::fromStdString(rolechat::fs::RCFile(convertedPaths, rolechat::fs::formats::supportedImages(), true).findFirst());
     if(idle.isEmpty())
       idle = engine::fs::characters::getSpritePathIdle(character, layerImage);
 
-    QString talkAssetPath = FS::Paths::FindFile(buildAllPaths("(b)" + layerImage), true, FS::Formats::SupportedImages());
+    QString talkAssetPath = QString::fromStdString(rolechat::fs::RCFile(convertedBPaths, rolechat::fs::formats::supportedImages(), true).findFirst());
     talk = talkAssetPath.isEmpty() ? idle : talkAssetPath;
   }
 
   void findAssets(QString& idle, QString& talk, QString image)
   {
-    idle = FS::Paths::FindFile(buildAllPaths(image), true, FS::Formats::SupportedImages());
+    QStringList paths = buildAllPaths(layerImage);
+    QStringList bPaths = buildAllPaths("(b)" + layerImage);
+
+
+    std::vector<std::string> convertedPaths;
+    std::vector<std::string> convertedBPaths;
+
+    convertedPaths.reserve(paths.size());
+    convertedBPaths.reserve(bPaths.size());
+
+    for(const QString& path : paths)
+      convertedPaths.push_back(path.toStdString());
+
+    for(const QString& path : bPaths)
+      convertedBPaths.push_back(path.toStdString());
+
+    idle = QString::fromStdString(rolechat::fs::RCFile(convertedPaths, rolechat::fs::formats::supportedImages(), true).findFirst());
     if(idle.isEmpty())
       idle = engine::fs::characters::getSpritePathIdle(character, image);
 
-    QString talkAssetPath = FS::Paths::FindFile(buildAllPaths("(b)" + image), true, FS::Formats::SupportedImages());
+    QString talkAssetPath = QString::fromStdString(rolechat::fs::RCFile(convertedBPaths, rolechat::fs::formats::supportedImages(), true).findFirst());
     talk = talkAssetPath.isEmpty() ? idle : talkAssetPath;
   }
 
