@@ -82,7 +82,7 @@ DrPlayerListEntry::DrPlayerListEntry(QWidget *parent, AOApplication *p_ao_app, i
 
   m_typingTimer = new QTimer(this);
   m_typingTimer->setSingleShot(true);
-  m_typingTimer->setInterval(8000);
+  m_typingTimer->setInterval(6000);
 
   connect(m_typingTimer, &QTimer::timeout, this, &DrPlayerListEntry::handleTypingTimeout);
 

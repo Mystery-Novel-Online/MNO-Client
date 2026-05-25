@@ -6,8 +6,6 @@
 namespace FS::Packages
 {
   QVector<QString> &Scan();
-  QVector<QString> &CachedNames();
-  QVector<QString> &DisabledList();
   void SetDisabled(QVector<QString> disableList);
   void SaveDisabled();
 }

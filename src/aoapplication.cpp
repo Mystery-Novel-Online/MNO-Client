@@ -25,6 +25,7 @@
 #include <engine/network/api_manager.h>
 #include <engine/system/client_worker.h>
 #include <rolechat-lib/src/rolechat/userdata/TemporaryDB.h>
+#include <rolechat/filesystem/RCDir.h>
 #include <rolechat/util/FileSystem.h>
 
 AOApplication *AOApplication::m_Instance = nullptr;
@@ -484,9 +485,9 @@ void AOApplication::on_courtroom_destroyed()
 
 void AOApplication::resolve_current_theme()
 {
-  QVector<QString> l_theme_directories = get_all_package_and_base_paths("themes");
+  std::vector<std::string> l_theme_directories = rolechat::fs::RCDir("themes").subDirectories();
 
-  if (l_theme_directories.isEmpty())
+  if(l_theme_directories.empty())
   {
     call_warning("It doesn't look like your client is set up correctly. This can be "
                  "due to the following reasons: \n"
@@ -499,36 +500,17 @@ void AOApplication::resolve_current_theme()
                  "3. If it is there, check that your current theme folder exists in "
                  "base/themes. ");
   }
-  const QString l_current_theme = QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default"));
+  std::string currentTheme = config::ConfigUserSettings::stringValue("theme", "default");
+  const QString l_current_theme = QString::fromStdString(currentTheme);
   std::optional<QString> l_target_theme;
 
-
-  for (QString &l_theme_dir : l_theme_directories)
+  if (std::find(l_theme_directories.begin(), l_theme_directories.end(), currentTheme) == l_theme_directories.end())
   {
-    bool l_theme_found = false;
-    //Grab file info from directory.
-    const QList<QFileInfo> l_info_list = QDir(l_theme_dir).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot);
-
-    for (const QFileInfo &i_info : l_info_list)
-    {
-      const QString l_theme = i_info.fileName();
-      if (l_theme == l_current_theme)
-      {
-        l_target_theme.reset();
-        l_theme_found = true;
-        break;
-      }
-
-      // target theme is always the first
-      if (!l_target_theme.has_value())
-      {
-        l_target_theme = l_theme;
-      }
-    }
-
-    if (l_theme_found) break;
+    if(!l_theme_directories.empty())
+      l_target_theme = QString::fromStdString(l_theme_directories[0]);
+    else
+      l_target_theme = QString::fromStdString("default");
   }
-
 
   if (l_target_theme.has_value())
   {

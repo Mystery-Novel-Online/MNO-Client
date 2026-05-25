@@ -90,16 +90,17 @@ QString FindFile(const QString &filePath, bool allowPackages, const QStringList 
     appendedFileList.append(filePath + extension);
   }
 
-  QVector<QString> packageNames = Packages::CachedNames();
-  QVector<QString> disabledList = Packages::DisabledList();
+  std::vector<std::string> packageNames = rolechat::fs::PackageManager::packageNames();
+  std::vector<std::string> disabledList = rolechat::fs::PackageManager::disabledList();
 
-  for(QString &packageName : packageNames)
+  for(std::string &packageName : packageNames)
   {
-    if(!disabledList.contains(packageName))
+    auto it = std::find(disabledList.begin(), disabledList.end(), packageName);
+    if (it == disabledList.end())
     {
       for(const QString& path : appendedFileList)
       {
-        QString package_path = Paths::Package(packageName) + path;
+        QString package_path = Paths::Package(QString::fromStdString(packageName)) + path;
         if(Checks::FileExists(package_path))
         {
           return package_path;
@@ -163,10 +164,12 @@ QStringList GetFileList(const QString &directoryPath, bool includePackages, cons
 
   if(includePackages)
   {
-    QVector<QString> searchArchives = Packages::CachedNames();
-    for(const QString& packageName : searchArchives)
+    std::vector<std::string> packageNames = rolechat::fs::PackageManager::packageNames();
+    std::vector<std::string> disabledList = rolechat::fs::PackageManager::disabledList();
+
+    for(const std::string& packageName : packageNames)
     {
-      QDir targetDirectory("packages/" + packageName + "/" + directoryPath);
+      QDir targetDirectory("packages/" + QString::fromStdString(packageName) + "/" + directoryPath);
       QStringList fileList = targetDirectory.entryList(QStringList() << "*." + extensionFilter, QDir::Files);
       for (const QString &fileName : fileList)
       {
@@ -195,7 +198,8 @@ QStringList GetDirectoryList(const QString &directoryPath, bool includePackages)
   if(includePackages)
   {
     //TO-DO
-    QVector<QString> searchArchives = Packages::CachedNames();
+    std::vector<std::string> packageNames = rolechat::fs::PackageManager::packageNames();
+    std::vector<std::string> disabledList = rolechat::fs::PackageManager::disabledList();
   }
 
   return returnValues;
@@ -292,16 +296,17 @@ QStringList FindFiles(const QString &filePath, const QStringList &extensions)
     }
   }
 
-  QVector<QString> packageNames = Packages::CachedNames();
-  QVector<QString> disabledList = Packages::DisabledList();
+  std::vector<std::string> packageNames = rolechat::fs::PackageManager::packageNames();
+  std::vector<std::string> disabledList = rolechat::fs::PackageManager::disabledList();
 
-  for(QString &packageName : packageNames)
+  for(std::string &packageName : packageNames)
   {
-    if(!disabledList.contains(packageName))
+    auto it = std::find(disabledList.begin(), disabledList.end(), packageName);
+    if(it == disabledList.end())
     {
       for(const QString& path : appendedFileList)
       {
-        QString package_path = Paths::Package(packageName) + path;
+        QString package_path = Paths::Package(QString::fromStdString(packageName)) + path;
         if(Checks::FileExists(package_path))
         {
           returnValues.append(package_path);

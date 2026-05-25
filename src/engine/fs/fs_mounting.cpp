@@ -38,16 +38,6 @@ QVector<QString> &FS::Packages::Scan()
   return s_foundPackages;
 }
 
-QVector<QString> &FS::Packages::CachedNames()
-{
-  return s_foundPackages;
-}
-
-QVector<QString> &FS::Packages::DisabledList()
-{
-  return s_disabledPackages;
-}
-
 void FS::Packages::SetDisabled(QVector<QString> disableList)
 {
   s_disabledPackages.clear();

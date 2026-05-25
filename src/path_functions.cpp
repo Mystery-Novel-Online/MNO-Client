@@ -74,14 +74,16 @@ void AOApplication::reload_packages()
 QVector<QString> AOApplication::get_all_package_and_base_paths(QString p_path)
 {
   QVector<QString> found_paths;
-  QVector<QString> disabledList = FS::Packages::DisabledList();
-  QVector<QString> packageNames = FS::Packages::CachedNames();
+
+  std::vector<std::string> packageNames = rolechat::fs::PackageManager::packageNames();
+  std::vector<std::string> disabledList = rolechat::fs::PackageManager::disabledList();
 
   for (int i=0; i< packageNames.size(); i++)
   {
-    if(!disabledList.contains(packageNames.at(i)))
+    auto it = std::find(disabledList.begin(), disabledList.end(), packageNames.at(i));
+    if (it == disabledList.end())
     {
-      QString package_path = FS::Paths::Package(packageNames.at(i))  + p_path;
+      QString package_path = FS::Paths::Package(QString::fromStdString(packageNames.at(i)))  + p_path;
       if(FS::Checks::DirectoryExists(package_path))
       {
         found_paths.append(package_path);
