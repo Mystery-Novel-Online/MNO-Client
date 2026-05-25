@@ -1121,7 +1121,7 @@ void Courtroom::handle_ic_message_length()
   if(!network::metadata::VNServerInformation::featureSupported("sequence")) return;
 
   const int currentUptime = RuntimeLoop::uptime();
-  if(m_lastTypingPacket == 0 || (currentUptime - m_lastTypingPacket) > (1000 * 10))
+  if(m_lastTypingPacket == 0 || (currentUptime - m_lastTypingPacket) > (1000 * 4))
   {
     ao_app->send_server_packet(DRPacket("STATUS", {QString::number(UserState_Typing), QString::number(true)}));
     m_lastTypingPacket = currentUptime;
