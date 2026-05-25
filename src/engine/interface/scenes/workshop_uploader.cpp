@@ -120,6 +120,9 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
       if(key == "System" && !allowSystem)
         notOptionalTag = true;
 
+      if(key == "Gender" && !allowSystem)
+        notOptionalTag = true;
+
       m_tagTable->addTag(key, value, notOptionalTag);
     }
   }
@@ -176,7 +179,7 @@ void WorkshopUploader::addTagClicked()
 
   for(std::string cat : ApiManager::instance().contentCategories())
   {
-    if(cat != "System")
+    if(cat != "System" && cat != "Gender")
       categoryCombo->addItem(QString::fromStdString(cat), i);
     else if (allowSystem)
       categoryCombo->addItem(QString::fromStdString(cat), i);
