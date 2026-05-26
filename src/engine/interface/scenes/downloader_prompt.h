@@ -43,6 +43,7 @@ private:
   int m_totalFiles;
 
   DownloadType m_downloadType = DOWNLOAD_Default;
+  WorkshopCollection m_currentCollection;
 
   QString m_directory = "";
   QString m_baseUrl = "";
@@ -50,6 +51,8 @@ private:
 
   bool m_isRepo = false;
   bool m_isCollection = false;
+
+  int m_downloadedBytes = 0;
 
 
 public slots:

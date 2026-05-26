@@ -2,7 +2,7 @@
 #include <QHttpMultiPart>
 #include <QNetworkRequest>
 
-static bool USE_LOCALHOST = true;
+static bool USE_LOCALHOST = false;
 
 ApiManager::ApiManager(QObject *parent)
     : QObject(parent)

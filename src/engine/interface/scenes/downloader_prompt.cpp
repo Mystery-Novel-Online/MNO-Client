@@ -130,7 +130,15 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
     QString filePath = it.key();
     QUrl url(hash);
 
+
     QNetworkReply *reply = manager->get(QNetworkRequest(url));
+
+    connect(reply, &QNetworkReply::downloadProgress, this, [this](qint64 bytesReceived, qint64 bytesTotal) {
+              m_downloadedBytes += bytesReceived;
+              int progress = static_cast<int>((double)m_downloadedBytes / (double)m_currentCollection.sizeBytes * 100.0);
+              m_progressBar->setValue(progress);
+            });
+
 
     connect(reply, &QNetworkReply::finished, this, [this, reply, filePath, repositoryUrl, createContext]() {
               reply->deleteLater();
@@ -152,8 +160,6 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
               }
 
               m_filesDownloaded++;
-              int progress = static_cast<int>((double)m_filesDownloaded / m_totalFiles * 100.0);
-              m_progressBar->setValue(progress);
 
               if (m_filesDownloaded == m_totalFiles) {
 
@@ -180,13 +186,13 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
   }
 
   QByteArray response = reply->readAll();
-  WorkshopCollection collection = WorkshopParser::parseCollection(response);
-  QString packageDirectory = collection.packageDirectory();
+  m_currentCollection = WorkshopParser::parseCollection(response);
+  QString packageDirectory = m_currentCollection.packageDirectory();
 
 
   QMap<QString, QString> hashMap = {};
 
-  for (const WorkshopRepository& repo : collection.repositories)
+  for (const WorkshopRepository& repo : m_currentCollection.repositories)
   {
     GetDB().cacheContentData(repo.guid.toStdString(), repo.folderName.toStdString(), repo.lastUpdated, repo.contentId);
     QMap<QString, QString> existingFileMap = {};
@@ -210,14 +216,19 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
 
       if(!filePath.startsWith(scanDirectory))
       {
-        if (QFile(filePath).exists())
+        QFile scanningFile(filePath);
+        if (scanningFile.exists())
         {
           existingFileMap[filePath] = FileHashUtil::md5File(filePath);
+          m_downloadedBytes += scanningFile.size();
         }
       }
 
       if(existingFileMap.contains(filePath))
       {
+        QFile scanningFile(filePath);
+        m_downloadedBytes += scanningFile.size();
+
         bool hashMatches = existingFileMap[filePath] == file.hash;
         existingFileMap.remove(filePath);
 
@@ -238,7 +249,11 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
         file.remove();
       }
     }
+
   }
+
+  int progress = static_cast<int>((double)m_downloadedBytes / (double)m_currentCollection.sizeBytes * 100.0);
+  m_progressBar->setValue(progress);
 
   ProcessLinks(hashMap, m_contentName, m_repository, m_isRepo);
   reply->deleteLater();
