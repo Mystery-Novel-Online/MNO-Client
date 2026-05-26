@@ -11,7 +11,7 @@ DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
   setWindowTitle("Downloading...");
   setModal(true);
-  setFixedSize(300, 100);
+  setFixedSize(400, 100);
 
   auto *layout = new QVBoxLayout(this);
 
@@ -133,10 +133,17 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
 
     QNetworkReply *reply = manager->get(QNetworkRequest(url));
 
-    connect(reply, &QNetworkReply::downloadProgress, this, [this](qint64 bytesReceived, qint64 bytesTotal) {
-              m_downloadedBytes += bytesReceived;
-              int progress = static_cast<int>((double)m_downloadedBytes / (double)m_currentCollection.sizeBytes * 100.0);
-              m_progressBar->setValue(progress);
+    connect(reply, &QNetworkReply::downloadProgress, this,
+            [this, reply](qint64 bytesReceived, qint64 bytesTotal)
+            {
+              qint64 &prev = m_replyProgress[reply];
+
+              qint64 delta = bytesReceived - prev;
+              prev = bytesReceived;
+
+              m_downloadedBytes += delta;
+
+              updateUi();
             });
 
 
@@ -174,6 +181,48 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
               }
             });
   }
+}
+
+void DownloaderPrompt::updateUi()
+{
+  if (m_downloadedBytes <= 0) return;
+
+  int progress = static_cast<int>((double)m_downloadedBytes / (double)m_currentCollection.sizeBytes * 100.0);
+  m_progressBar->setValue(progress);
+
+  if (!m_speedTimer.isValid())
+    m_speedTimer.start();
+
+  qint64 elapsedMs = m_speedTimer.elapsed();
+  if (elapsedMs > 0)
+  {
+    m_currentSpeed = (double)(m_downloadedBytes - m_lastBytes) / (elapsedMs / 1000.0);
+    m_lastBytes = m_downloadedBytes;
+    m_speedTimer.restart();
+  }
+
+  setWindowTitle(
+      QString("Downloading... %2 / %3 | %1/s")
+          .arg(formatBytes(m_currentSpeed))
+          .arg(formatBytes(m_downloadedBytes))
+          .arg(formatBytes(m_currentCollection.sizeBytes))
+      );
+}
+
+QString DownloaderPrompt::formatBytes(double bytes)
+{
+  const char* units[] = {"B", "KB", "MB", "GB", "TB"};
+
+  int i = 0;
+  while (bytes >= 1024.0 && i < 4)
+  {
+    bytes /= 1024.0;
+    ++i;
+  }
+
+  return QString("%1 %2")
+      .arg(bytes, 0, 'f', (i == 0) ? 0 : 1)
+      .arg(units[i]);
 }
 
 void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)

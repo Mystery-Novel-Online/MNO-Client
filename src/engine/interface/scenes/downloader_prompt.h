@@ -33,6 +33,9 @@ public:
   void setBaseUrl(QString url) { m_baseUrl = url; }
   void setRepository(QString repo) { m_repository = repo; }
 
+  void updateUi();
+  QString formatBytes(double bytes);
+
 
 private:
   QProgressBar *m_progressBar;
@@ -53,6 +56,11 @@ private:
   bool m_isCollection = false;
 
   int m_downloadedBytes = 0;
+  QElapsedTimer m_speedTimer;
+  double m_currentSpeed = 0.0;
+  qint64 m_lastBytes = 0;
+
+  QHash<QNetworkReply*, qint64> m_replyProgress;
 
 
 public slots:
