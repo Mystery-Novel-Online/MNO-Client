@@ -68,8 +68,10 @@ void KeyframeSequence::SequenceJumpEnd()
 void KeyframeSequence::RunSequence(float deltaTime)
 {
   if(m_SequenceLength == 0) return;
+  if(!m_Running) return;
   if(m_Timestamp > m_SequenceLength && !m_Loop)
   {
+    emit finished();
     m_Running = false;
     QString animationCall = "On" + m_FriendlyName + "End";
     if(m_FriendlyName.isEmpty())

@@ -1828,6 +1828,13 @@ void Courtroom::handle_chatmessage_3()
           overlay_name = s_eff;
         ui_vp_effect->set_play_once(once);
         swap_viewport_reader(ui_vp_effect, ViewportEffect);
+
+        if(ui_vp_effect->keyAnimLoaded())
+        {
+          ui_vp_effect->get_reader()->set_file_name("");
+          ui_vp_effect->show();
+          return;
+        }
         ui_vp_effect->start();
       }
     }

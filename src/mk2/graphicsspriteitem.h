@@ -256,6 +256,8 @@ public slots:
   void setMirrored(bool state);
   bool mirroredState();
 
+  bool keyAnimLoaded();
+
 signals:
   void size_changed(QSizeF);
 

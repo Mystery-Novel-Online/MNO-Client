@@ -168,6 +168,8 @@ bool GraphicsSpriteItem::setKeyframeAnimation(const QString &directory, const QS
     }
   }
 
+  connect(&m_KeyframeSequence, &KeyframeSequence::finished, this, &GraphicsSpriteItem::finished);
+
   m_KeyframeSequence.setRunningState(true);
   return m_KeyframeSequence.getLoopState();
 }
@@ -256,6 +258,11 @@ void GraphicsSpriteItem::setMirrored(bool state)
 bool GraphicsSpriteItem::mirroredState()
 {
   return m_isMirrored;
+}
+
+bool GraphicsSpriteItem::keyAnimLoaded()
+{
+  return m_KeyframeSequence.loaded();
 }
 
 bool GraphicsSpriteItem::is_valid() const

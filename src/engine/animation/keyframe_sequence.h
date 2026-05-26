@@ -6,8 +6,9 @@
 #include <unordered_set>
 #include "engine/animation/keyframe_channel.h"
 
-class KeyframeSequence
+class KeyframeSequence : public QObject
 {
+  Q_OBJECT
 public:
   KeyframeSequence();
   ~KeyframeSequence();
@@ -15,6 +16,7 @@ public:
   void SetSound(QString name);
   void SetLoop(bool isLoop);
   void setViewportTimestamp(int time) { m_ViewportTimestamp = time; };
+  bool loaded() { return m_SequenceLength > 0; }
 
 
   void CalculateLength(const std::string& name);
@@ -44,6 +46,9 @@ public:
   void setRunningState(bool state) {m_Running = state;}
   QString friendlyName() {return m_FriendlyName;}
   void setFriendlyName(QString name) {m_FriendlyName = name;}
+
+signals:
+  void finished();
 
 private:
   QString m_FriendlyName = "";
