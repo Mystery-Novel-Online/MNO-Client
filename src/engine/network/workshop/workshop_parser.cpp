@@ -18,6 +18,7 @@ WorkshopCollection WorkshopParser::parseCollection(const QByteArray &json)
   QJsonObject root = doc.object();
 
   collection.name = root["collection_name"].toString();
+  collection.sizeBytes = root["file_size"].toInt();
 
   if (root.contains("contents"))
   {

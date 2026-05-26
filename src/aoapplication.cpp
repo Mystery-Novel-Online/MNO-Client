@@ -135,7 +135,7 @@ AOApplication::AOApplication(int &argc, char **argv)
         if (action == "download")
         {
           QString url = ApiManager::baseUri() + "api/workshop/" + id + "/content";
-          DownloaderPrompt::StartDownload(url, "packages/Workshop Downloads/", folder);
+          DownloaderPrompt::StartDownload(url, "packages/Workshop Downloads/", folder, DOWNLOAD_Discord);
         }
       }
       return;

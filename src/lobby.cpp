@@ -898,7 +898,7 @@ void Lobby::onGalleryPlay()
 
 void Lobby::onWorkshopBrowser()
 {
-  DownloaderPrompt::StartDownload(m_currentBrowserUrl, "packages/Workshop Downloads/", m_currentWorkshopCharacter);
+  DownloaderPrompt::StartDownload(m_currentBrowserUrl, "packages/Workshop Downloads/", m_currentWorkshopCharacter, DOWNLOAD_Workshop);
 }
 
 void Lobby::onWorkshopUpload()

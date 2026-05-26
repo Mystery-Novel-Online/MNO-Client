@@ -31,6 +31,7 @@ struct WorkshopRepository
 struct WorkshopCollection
 {
   QString name;
+  int sizeBytes;
   QList<WorkshopRepository> repositories;
 
   QString packageDirectory() {

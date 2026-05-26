@@ -325,7 +325,7 @@ void DrPlayerListEntry::openCharacterFolder()
 
 void DrPlayerListEntry::openBrowserURL()
 {
-  DownloaderPrompt::StartDownload(mURL, "packages/Workshop Downloads", m_character);
+  DownloaderPrompt::StartDownload(mURL, "packages/Workshop Downloads", m_character, DOWNLOAD_PlayerList);
 }
 
 void DrPlayerListEntry::sendPairRequest()

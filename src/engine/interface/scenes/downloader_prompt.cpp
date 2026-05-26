@@ -38,7 +38,33 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
     return;
   }
 
-  url = QUrl(repository += "?key=" + ApiManager::authorizationKey());
+  std::optional<int> originType;
+
+  switch(type)
+  {
+  case DOWNLOAD_Discord:
+    originType = 4;
+    break;
+
+  case DOWNLOAD_PlayerList:
+    originType = 2;
+    break;
+
+  case DOWNLOAD_Workshop:
+    originType = 0;
+    break;
+
+  default:
+    originType.reset();
+    break;
+  }
+
+  QString repoUrl = repository += "?key=" + ApiManager::authorizationKey();
+
+  if(originType.has_value())
+    repoUrl += "&origin=" + QString::number(originType.value());
+
+  url = QUrl(repoUrl);
 
   QString downloadText = "Do you want to start the download?";
   if(type == DOWNLOAD_ServerBackground)

@@ -9,7 +9,10 @@ enum DownloadType
 {
   DOWNLOAD_Default,
   DOWNLOAD_ServerBackground,
-  DOWNLOAD_HubContent
+  DOWNLOAD_HubContent,
+  DOWNLOAD_Workshop,
+  DOWNLOAD_PlayerList,
+  DOWNLOAD_Discord
 };
 
 class DownloaderPrompt : public QDialog
