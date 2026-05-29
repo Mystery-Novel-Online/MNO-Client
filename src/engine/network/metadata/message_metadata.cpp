@@ -147,6 +147,7 @@ namespace engine::network::metadata::message
     s_CurrentMessage.characterPre = operation.variables["pre"];
     s_CurrentMessage.characterVideo = operation.variables["video"];
     s_CurrentMessage.backgroundPosition = operation.variables["pos"];
+    s_CurrentMessage.messageTags = operation.variables["tags"];
     s_CurrentMessage.modifiers.Hidden = operation.variables["hide"] == "1";
     s_CurrentMessage.modifiers.Flipped = operation.variables["flip"] == "1";
     s_CurrentMessage.effect = engine::system::effects::effectByName(operation.variables["effect"]);

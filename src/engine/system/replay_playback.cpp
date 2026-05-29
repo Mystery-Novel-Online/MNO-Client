@@ -123,6 +123,7 @@ namespace engine::system::replays
       lNewOperation.variables["emote"] = message.characterEmote;
       lNewOperation.variables["outfit"] = message.characterOutfit;
       lNewOperation.variables["msg"] = message.textContent;
+      lNewOperation.variables["tags"] = message.messageTags;
       lNewOperation.variables["pos"] = message.backgroundPosition;
       lNewOperation.variables["sound"] = message.sfxName;
       lNewOperation.variables["color"] = QString::number(message.modifiers.TextColor);
