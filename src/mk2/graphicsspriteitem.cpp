@@ -144,6 +144,9 @@ void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
 
 bool GraphicsSpriteItem::setKeyframeAnimation(const QString &directory, const QString &animation)
 {
+  if(directory.startsWith("effects/"))
+    m_layersUseHorizontalOffset = true;
+
   clearImageLayers();
   for(const ActorLayer &layer : AnimationReader(directory + "/" + animation, m_KeyframeSequence).m_Layers)
   {
@@ -563,7 +566,9 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
 {
   for (SpriteLayer *layer : layers)
   {
-    QPixmap pixmap = layer->name() == "viewport" ? layer->getPixmap(m_KeyframeSequence.canRenderViewport()) : layer->spritePlayer.getCurrentPixmap();
+    QPixmap pixmap = layer->name() == "viewport"
+                         ? layer->getPixmap(m_KeyframeSequence.canRenderViewport())
+                         : layer->spritePlayer.getCurrentPixmap();
 
     if (pixmap.isNull())
       continue;
@@ -572,61 +577,74 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
     //painter->save();
 
     const bool isDetached = layer->detatched();
-    const double scaleValue = isDetached ? 1.0 : scale;
-    const QPointF basePosition = isDetached ? QPointF(0, 0) : basePos;
+    const double worldScale = isDetached ? 1.0 : scale;
+
     const QString name = layer->name();
 
-    // Channel keys
+           // Channel keys
     const std::string posKey = (name + "_position").toStdString();
     const std::string alphaKey = (name + "_alpha").toStdString();
     const std::string scaleKey = (name + "_scale").toStdString();
     const std::string rotKey = (name + "_rotation").toStdString();
 
-    QVector3D newPosition;
-    double alphaValue = alpha;
-    double animScaleValue = 1.0;
-    double animRotationValue = 0.0;
+
+    //const double scaleValue = isDetached ? 1.0 : scale;
+
+
+    //const QPointF basePosition = isDetached ? QPointF(0, 0) : basePos;
+
+
+    QVector3D pos(0, 0, 0);
+    double a = alpha;
+    double s = 1.0;
+    double r = 0.0;
 
 
     if (auto it = evaluatedFrames.find(posKey); it != evaluatedFrames.end())
-      newPosition = it->second.value<QVector3D>();
+      pos = it->second.value<QVector3D>();
 
     if (auto it = evaluatedFrames.find(alphaKey); it != evaluatedFrames.end())
     {
-      alphaValue = it->second.toFloat();
-      if (alphaValue == 0.0f)
+      a = it->second.toFloat();
+      if (a == 0.0f)
         continue;
     }
 
     if (auto it = evaluatedFrames.find(scaleKey); it != evaluatedFrames.end())
-      animScaleValue = it->second.toFloat();
+      s = it->second.toFloat();
 
     if (auto it = evaluatedFrames.find(rotKey); it != evaluatedFrames.end())
-      animRotationValue = it->second.toFloat();
+      r = it->second.toFloat();
 
 
     painter->save();
-    painter->setOpacity(alphaValue);
-    painter->scale(animScaleValue, animScaleValue);
+    painter->setOpacity(a);
 
     QRectF target = layer->targetRect;
-    QRectF scaledRect(
-        (target.left() + newPosition.x()) * scaleValue,
-        (target.top() + newPosition.y()) * scaleValue,
-        target.width() * scaleValue,
-        target.height() * scaleValue
-        );
-    scaledRect.moveTopLeft(scaledRect.topLeft() + basePosition);
 
-    const QPointF pivot(scaledRect.center().x(), scaledRect.bottom());
+    QPointF worldPos(
+        (target.left() + pos.x() + (m_layersUseHorizontalOffset ? (m_HorizontalOffset) : 0)) * worldScale,
+        (target.top() + pos.y()) * worldScale
+        );
+
+
+    worldPos += isDetached ? QPointF(0, 0) : basePos;
+
+
+    QPointF pivot(target.width() * 0.5, target.height() * 0.5);
+    painter->translate(worldPos);
 
     painter->translate(pivot);
-    painter->rotate(animRotationValue);
+    painter->rotate(r);
+    painter->scale(s, s);
     painter->translate(-pivot);
 
     QPainter::CompositionMode mode = layer->compositionMode();
-    if(mode != QPainter::CompositionMode_SourceOver) painter->setCompositionMode(mode);
-    painter->drawPixmap(scaledRect, pixmap, QRectF(0, 0, pixmap.width(), pixmap.height()));
+    if (mode != QPainter::CompositionMode_SourceOver)
+      painter->setCompositionMode(mode);
+
+    painter->drawPixmap(QPointF(0, 0), pixmap);
+
     painter->restore();
   }
 }
@@ -702,7 +720,7 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
     drawSpriteLayers(&combiner, m_spriteLayersBelow, drawPos, scale, evaluatedValues, 1.0);
 
-    if(renderPixmap)
+    if(renderPixmap && !get_file_name().isEmpty())
     {
       combiner.save();
       combiner.translate(pivot);

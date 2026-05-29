@@ -282,6 +282,8 @@ private:
   bool m_isMirrored = false;
   bool m_isFlipped = false;
 
+  bool m_layersUseHorizontalOffset = false;
+
 private slots:
   void notify_size();
 
