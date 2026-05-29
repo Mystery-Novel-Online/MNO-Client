@@ -278,6 +278,11 @@ const QString &ThemeManager::getConfigString(const QString &key)
   return mCurrentThemeReader.getConfigString(key);
 }
 
+int ThemeManager::getConfigInt(QString value)
+{
+  return mCurrentThemeReader.GetConfigInt(value);
+}
+
 QVector<ThemeTabInfo> ThemeManager::getTabsInfo()
 {
   return mCurrentThemeReader.getTabs();

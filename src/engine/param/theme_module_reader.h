@@ -34,7 +34,10 @@ public:
   //Config
   bool getContainsBool(QString t_setting);
   bool getContainsString(QString t_setting);
+  bool getContainsInt(QString t_setting);
+
   bool getSettingBool(QString t_setting);
+  int getSettingInt(QString t_setting);
   const QString& getSettingString(QString t_setting);
 
   //Config - Sounds
@@ -52,6 +55,7 @@ private:
   QMap<QString, DR::ColorInfo> m_configColors = {};
   QHash<QString, ThemeHighlight> m_configHighlights = {};
   QMap<QString, QString> m_configStrings = {};
+  QMap<QString, int> m_configInt = {};
 
   //Scenes
   ThemeScene *m_CourtroomScene = nullptr;

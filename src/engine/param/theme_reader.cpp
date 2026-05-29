@@ -189,6 +189,21 @@ QVector<QStringList> ThemeReader::GetLayers()
   return {};
 }
 
+int ThemeReader::GetConfigInt(QString boolValue)
+{
+  QVector<ThemeModuleReader *> l_modules = RetrieveModuleOrder();
+
+  for(ThemeModuleReader * r_module : l_modules)
+  {
+    if(r_module != nullptr)
+    {
+      if(r_module->getContainsInt(boolValue)) return r_module->getSettingInt(boolValue);
+    }
+  }
+
+  return 0;
+}
+
 QVector<ThemeTabInfo> ThemeReader::getTabs()
 {
   QVector<ThemeTabInfo> return_data = {};

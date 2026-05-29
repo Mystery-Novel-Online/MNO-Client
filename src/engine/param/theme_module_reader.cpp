@@ -46,6 +46,10 @@ void ThemeModuleReader::ParseModuleConfig()
       m_configStrings[key] = value.toString();
       break;
 
+    case QJsonValue::Double:
+      m_configInt[key] = value.toDouble();
+      break;
+
     default:
       break;
     }
@@ -325,9 +329,19 @@ bool ThemeModuleReader::getContainsString(QString t_setting)
   return m_configStrings.contains(t_setting);
 }
 
+bool ThemeModuleReader::getContainsInt(QString t_setting)
+{
+  return m_configInt.contains(t_setting);
+}
+
 bool ThemeModuleReader::getSettingBool(QString t_setting)
 {
   return m_configBooleans[t_setting];
+}
+
+int ThemeModuleReader::getSettingInt(QString t_setting)
+{
+  return m_configInt[t_setting];
 }
 
 const QString &ThemeModuleReader::getSettingString(QString t_setting)

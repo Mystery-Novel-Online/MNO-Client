@@ -191,7 +191,7 @@ int DRTheme::read_config_int(QString p_setting_name)
     return lReturnValue;
   }
 
-  lReturnValue = ThemeManager::get().mCurrentThemeReader.getTimerNumber();
+  lReturnValue = ThemeManager::get().mCurrentThemeReader.GetConfigInt(p_setting_name);
 
   if(lReturnValue < 0) lReturnValue = 0;
   return lReturnValue;

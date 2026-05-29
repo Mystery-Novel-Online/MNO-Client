@@ -24,6 +24,7 @@ public:
   QVector<QStringList> GetLayers();
   QStringList GetLayerChildren(QString t_widget);
 
+  int GetConfigInt(QString boolValue);
   bool GetConfigBool(QString boolValue);
   const QString& getConfigString(const QString& key);
   QString GetConfigSoundName(QString soundName);

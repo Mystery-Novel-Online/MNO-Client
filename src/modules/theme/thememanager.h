@@ -50,6 +50,7 @@ public:
 
   //Data Management
   const QString& getConfigString(const QString& key);
+  int getConfigInt(QString value);
   bool getConfigBool(QString value);
   bool getReloadPending();
   void toggleReload();
