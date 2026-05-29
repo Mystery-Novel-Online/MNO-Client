@@ -1808,8 +1808,8 @@ void Courtroom::handle_chatmessage_3()
         int selfOffset = effectData.ignorePair ? 0 :  message::horizontalOffset();
         if(ao_app->current_theme->getEffectPairOffset(l_effect_index)) ui_vp_effect->setHorizontalOffset(selfOffset);
 
-        ui_vp_effect->clearImageLayers();
-        ui_vp_effect->setKeyframeAnimation("effects/" + l_effect_name, "anim");
+        //ui_vp_effect->clearImageLayers();
+        //ui_vp_effect->setKeyframeAnimation("effects/" + l_effect_name, "anim");
 
         QString s_eff = effect_names.at(l_effect_index - 1);
         QStringList f_eff = ao_app->get_effect(l_effect_index);
@@ -1829,12 +1829,13 @@ void Courtroom::handle_chatmessage_3()
         ui_vp_effect->set_play_once(once);
         swap_viewport_reader(ui_vp_effect, ViewportEffect);
 
-        if(ui_vp_effect->keyAnimLoaded())
-        {
-          ui_vp_effect->get_reader()->set_file_name("");
-          ui_vp_effect->show();
-          return;
-        }
+        //if(ui_vp_effect->keyAnimLoaded())
+        //{
+        //  ui_vp_effect->get_reader()->set_file_name("");
+        //  ui_vp_effect->start();
+        //  ui_vp_effect->show();
+        //  return;
+        //}
         ui_vp_effect->start();
       }
     }
