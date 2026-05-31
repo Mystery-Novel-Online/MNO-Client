@@ -22,6 +22,7 @@ void RPTypewriter::setInput(QString inputText, const QString& character)
   m_currentIndex = 0;
   m_queuedHighlights.clear();
   m_appendMessage = false;
+  m_QueuedActions.clear();
 
   bool messageContinuation = character == m_character;
   if(!messageContinuation)
@@ -62,6 +63,11 @@ void RPTypewriter::setInput(QString inputText, const QString& character)
     {
       ignoreNextCharacter = false;
       m_QueuedActions[m_inputText.count()] = TypeWriterAction_Shake;
+    }
+    else if(ignoreNextCharacter && letter == 'n')
+    {
+      ignoreNextCharacter = false;
+      m_QueuedActions[m_inputText.count()] = TypeWriterAction_NewLine;
     }
     else
     {
@@ -126,6 +132,19 @@ void RPTypewriter::update()
         m_inputText.remove(m_currentIndex, 1);
         return;
       }
+    }
+  }
+
+  if(m_QueuedActions.contains(m_currentIndex))
+  {
+    switch(m_QueuedActions[m_currentIndex])
+    {
+      case TypeWriterAction_NewLine:
+        textCursor().insertText("\n", charFormat);
+        break;
+
+      default:
+        break;
     }
   }
 
