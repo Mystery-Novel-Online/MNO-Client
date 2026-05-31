@@ -280,7 +280,7 @@ namespace engine::system::replays
           audio::bgm::Play(s_playbackOperations[s_playbackTimestamp].variables["track"].toStdString());
 
         if(operation == "bg")
-          s_replayViewport->loadBackground(s_playbackOperations[s_playbackTimestamp].variables["name"]);
+          s_replayViewport->loadBackground(s_playbackOperations[s_playbackTimestamp].variables["name"], s_playbackOperations[s_playbackTimestamp].variables["variant"]);
 
         //if(mOp == "weather")
         //  p_SceneReplay->setWeather(s_playbackOperations[s_playbackTimestamp].variables["name"]);
@@ -331,7 +331,7 @@ namespace engine::system::replays
         }
         if(l_currentOp == "bg" && !m_BGFound)
         {
-          s_replayViewport->loadBackground(s_playbackOperations[l_position].variables["name"]);
+          s_replayViewport->loadBackground(s_playbackOperations[l_position].variables["name"], s_playbackOperations[l_position].variables["variant"]);
           m_BGFound = true;
         }
         if(l_currentOp == "msg" && !m_MSGFound)
@@ -378,7 +378,7 @@ namespace engine::system::replays
         audio::bgm::Play(s_playbackOperations[s_playbackTimestamp].variables["track"].toStdString());
 
       if(nextOperation.operation == "bg")
-        s_replayViewport->loadBackground(s_playbackOperations[s_playbackTimestamp].variables["name"]);
+        s_replayViewport->loadBackground(s_playbackOperations[s_playbackTimestamp].variables["name"], s_playbackOperations[s_playbackTimestamp].variables["variant"]);
 
       s_replayWindow->setScrubberPosition(s_playbackTimestamp);
 

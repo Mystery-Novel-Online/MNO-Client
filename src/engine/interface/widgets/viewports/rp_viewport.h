@@ -13,7 +13,7 @@ public:
   virtual void constructViewport() = 0;
   virtual void update() = 0;
   virtual void loadCurrentMessage() = 0;
-  virtual void loadBackground(QString background) = 0;
+  virtual void loadBackground(QString background, const QString& variant) = 0;
   virtual void refreshBackground(QString position) = 0;
   virtual void toggleChatbox(bool state) = 0;
 

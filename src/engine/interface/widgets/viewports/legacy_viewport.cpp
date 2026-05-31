@@ -1,8 +1,10 @@
+#include "engine/system/user_database.h"
 #include "pch.h"
 #include "legacy_viewport.h"
 #include "drcharactermovie.h"
 #include "engine/network/metadata/message_metadata.h"
 #include "drscenemovie.h"
+#include "rolechat/filesystem/RCDir.h"
 #include "theme.h"
 
 #include "engine/fs/fs_reading.h"
@@ -19,6 +21,10 @@
 #include "engine/system/theme.h"
 
 #include <rolechat/background/JsonBackgroundData.h>
+
+#include <engine/interface/scenes/downloader_prompt.h>
+
+#include <engine/network/api_manager.h>
 
 
 using namespace engine::network::metadata;
@@ -135,23 +141,32 @@ void LegacyViewport::loadCurrentMessage()
   m_videoScreen->play_character_video(message.characterFolder, message.characterVideo);
 }
 
-void LegacyViewport::loadBackground(QString background)
+void LegacyViewport::loadBackground(QString background, const QString& variant)
 {
-  if(background == m_backgroundName) return;
-  m_backgroundName = background;
+  if(background == m_backgroundName && m_variantName == variant) return;
 
-  AOApplication *aoApp = AOApplication::getInstance();
-  const QString jsonPath = aoApp->find_asset_path(aoApp->get_background_path(m_backgroundName) + "/" + "background.json");
-
-  if(FS::Checks::FileExists(jsonPath))
+  if(!QUuid(background).isNull())
   {
-    m_backgroundData = new JsonBackgroundData();
-    m_backgroundData->loadBackground(jsonPath.toStdString());
+    auto workshopSearch = GetDB().searchContentGuid(background.toStdString());
+    if(!workshopSearch.folder.empty() && !rolechat::fs::RCDir("backgrounds/" + workshopSearch.folder).exists()){
+      m_backgroundName = QString::fromStdString(workshopSearch.folder);
+    }
+    else
+    {
+      workshopSearch.guid = m_backgroundName.toStdString();
+      DownloaderPrompt::StartDownload(ApiManager::baseUri() + QString::fromStdString(workshopSearch.downloadUri()), "packages/Workshop Downloads", "", DOWNLOAD_ServerBackground);
+    }
   }
-  else
+
+
+  m_backgroundName = background;
+  m_variantName = variant;
+
+
+  if(!m_currentScene.switchBackground(background.toStdString(), variant.toStdString()))
   {
-    m_backgroundData = new LegacyBackgroundReader();
-    m_backgroundData->loadBackground(m_backgroundName.toStdString());
+    m_currentScene.background().emplace(std::make_unique<LegacyBackgroundReader>());
+    m_currentScene.background().value()->loadBackground(background.toStdString());
   }
 
   refreshBackground("wit");
@@ -159,8 +174,8 @@ void LegacyViewport::loadBackground(QString background)
 
 void LegacyViewport::refreshBackground(QString position)
 {
-  if(m_backgroundData == nullptr) return;
-  std::string l_filename = m_backgroundData->backgroundFilename(position.toStdString());
+  if(!m_currentScene.background().has_value()) return;
+  std::string l_filename = m_currentScene.background().value()->backgroundFilename(position.toStdString());
   m_backgroundSprite->set_file_name(AOApplication::getInstance()->get_background_sprite_path(m_backgroundName, QString::fromStdString(l_filename)));
   m_backgroundSprite->start();
 }

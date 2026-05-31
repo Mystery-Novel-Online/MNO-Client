@@ -6,6 +6,8 @@
 #include "mk2/graphicsvideoscreen.h"
 #include "rolechat/background/IBackgroundData.h"
 
+#include <rolechat/viewport_scene.h>
+
 class RPTypewriter;
 class DRSceneMovie;
 class DRCharacterMovie;
@@ -21,7 +23,7 @@ public:
   void update() override;
   void constructViewport() override;
   void loadCurrentMessage() override;
-  void loadBackground(QString background) override;
+  void loadBackground(QString background, const QString& variant) override;
   void refreshBackground(QString position) override;
   void toggleChatbox(bool state) override;
 
@@ -58,9 +60,10 @@ private:
   DREffectMovie *m_effectMovie = nullptr;
   DRShoutMovie *m_shoutMovie = nullptr;
 
+  ViewportScene m_currentScene;
   //Backgrounds
-  rolechat::background::IBackgroundData *m_backgroundData = nullptr;
   QString m_backgroundName = "Blackout_HD";
+  QString m_variantName = "";
 
   rolechat::actor::IActorData *m_currentActor = nullptr;
   rolechat::actor::IActorData *m_pairActor = nullptr;
