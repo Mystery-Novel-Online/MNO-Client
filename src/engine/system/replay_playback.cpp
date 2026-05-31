@@ -184,12 +184,13 @@ namespace engine::system::replays
       save();
     }
 
-    void backgroundChange(QString background)
+    void backgroundChange(QString background, const QString &variant)
     {
       const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
       ReplayOperation lNewOperation = {"bg", timestampElapsed, {}};
 
       lNewOperation.variables["name"] = background;
+      lNewOperation.variables["variant"] = variant;
       s_recordingOperations.append(lNewOperation);
       save();
     }

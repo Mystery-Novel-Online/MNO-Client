@@ -16,7 +16,7 @@ namespace engine::system::replays
     void start();
 
     void musicChange(QString music);
-    void backgroundChange(QString background);
+    void backgroundChange(QString background, const QString& variant = "default");
     void messageCharacter();
     void messageSystem(QString name, QString message);
     void weatherChange(QString name, QString environment);
