@@ -1,6 +1,10 @@
 #ifndef DIALOGUECUES_H
 #define DIALOGUECUES_H
 
+inline constexpr int CueSpeedMin = 1;
+inline constexpr int CueSpeedMax = 150;
+inline constexpr int CueWaitMax = 3000;
+
 enum class CueType
 {
   SoundEffect,

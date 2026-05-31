@@ -1545,7 +1545,7 @@ void Courtroom::objection_done()
 void Courtroom::handle_chatmessage_2() // handles IC
 {
 
-  currentDelayLeft = 3000;
+  currentDelayLeft = CueWaitMax;
   customMessageSpeed = 0;
   int selfOffset = message::horizontalOffset();
   int otherOffset = message::pair::horizontalOffset();
@@ -2361,8 +2361,8 @@ void Courtroom::next_chat_letter()
 
       case CueType::Speed:
         customMessageSpeed = tag.arguments.at(1).toInt();
-        if(customMessageSpeed >= 150) customMessageSpeed = 150;
-        if(customMessageSpeed < 1) customMessageSpeed = 1;
+        if(customMessageSpeed >= CueSpeedMax) customMessageSpeed = CueSpeedMax;
+        if(customMessageSpeed < CueSpeedMin) customMessageSpeed = CueSpeedMin;
         calculate_chat_tick_interval();
         break;
 
