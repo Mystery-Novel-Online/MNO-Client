@@ -88,6 +88,9 @@ void LegacyViewport::loadCurrentMessage()
 {
   MessageMetadata &message = message::recentMessage();
   m_currentActor = engine::actor::repository::retrieve(message.characterFolder);
+  audio::blip::SetGender(m_currentActor->gender());
+
+
   m_pairActor = engine::actor::repository::retrieve(message.pairData.characterFolder);
   if(message.characterPre.trimmed().isEmpty()) message.characterPre = "-";
   m_message->setInput("");
