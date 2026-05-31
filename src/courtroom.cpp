@@ -37,6 +37,7 @@
 #include "engine/param/actor/actor_loader.h"
 #include <QHttpMultiPart>
 #include <config_tabs/config_tab_blips.h>
+#include <dialogue/CueParser.h>
 #include <engine/discord/workshop_discord.h>
 #include <engine/interface/scenes/downloader_prompt.h>
 #include <engine/network/api_manager.h>
@@ -1658,21 +1659,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
 void Courtroom::handle_chatmessage_3()
 {
-  QStringList tagInformation = engine::system::encoding::text::DecodeBase64(m_pre_chatmessage[CMMessageTags]);
-
-  m_ProcessedTags.clear();
-
-  for(QString tagInfo : tagInformation)
-  {
-    QStringList tagArray = system::encoding::text::DecodePacketContents(tagInfo);
-    if(tagArray.count() == 2)
-    {
-      int tagPosition = tagArray[0].toInt();
-      QVariantList tagArguments = engine::encoding::BinaryEncoder::decodeBase64(tagArray[1]);
-      CueData data = {tagPosition, (CueType)tagArguments.at(0).toInt(), tagArguments};
-      m_ProcessedTags.append(data);
-    }
-  }
+  m_ProcessedTags = CueParser::parse(m_pre_chatmessage[CMMessageTags]);
 
   qDebug() << "handle_chatmessage_3";
 
@@ -2331,7 +2318,7 @@ void Courtroom::next_chat_letter()
     vp_message_format.setFont(overrides.baseFont);
   }
 
-  QVector<CueData> unprocessedTags = {};
+  std::vector<CueData> unprocessedTags = {};
   for(CueData tag : m_ProcessedTags)
   {
     if(tag.timestamp <= m_tick_step || m_tick_step >= message_length)
@@ -2408,7 +2395,7 @@ void Courtroom::next_chat_letter()
     }
     else
     {
-      unprocessedTags.append(tag);
+      unprocessedTags.push_back(std::move(tag));
     }
   }
 

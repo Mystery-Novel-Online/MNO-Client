@@ -399,7 +399,7 @@ private:
 
   QString previous_ic_message;
 
-  QVector<CueData> m_ProcessedTags = {};
+  std::vector<CueData> m_ProcessedTags = {};
 
   QColor m_message_color;
   QString m_message_color_name;
