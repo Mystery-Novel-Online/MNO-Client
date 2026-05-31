@@ -668,7 +668,9 @@ DRAreaBackground Courtroom::get_background()
 
 void Courtroom::set_background(DRAreaBackground p_background)
 {
-  replays::recording::backgroundChange(p_background.background);
+  replays::recording::backgroundChange(p_background.background, p_background.variant);
+
+
   m_background = p_background;
 
   QStringList l_background_list{m_background.background};
