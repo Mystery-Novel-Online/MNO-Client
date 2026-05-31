@@ -330,6 +330,7 @@ add_executable(rp-engine
   src/engine/network/workshop/workshop_parser.h src/engine/network/workshop/workshop_parser.cpp
   src/engine/network/workshop/workshop_models.h
   src/config_tabs/config_tab_discord.h src/config_tabs/config_tab_discord.cpp src/config_tabs/config_tab_discord.ui
+  src/dialogue/DialogueCues.h
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)

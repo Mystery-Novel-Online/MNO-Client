@@ -8,6 +8,7 @@
 #include <QVariantList>
 #include "engine/encoding/binary_encoding.h"
 #include <qtextdocumentfragment.h>
+#include "dialogue/DialogueCues.h"
 
 class QTextCursor;
 class QTextCharFormat;
@@ -26,7 +27,7 @@ public:
   // Public API
   void reloadHighlights();
   void setMaxLength(int length);
-  void addTag(MessageTagType type, QVariantList arguments);
+  void addTag(CueType type, QVariantList arguments);
 
   QString text() const;
   QVector<MessageTag> getTags();
@@ -64,61 +65,61 @@ protected:
           QVariantList tagArguments = engine::encoding::BinaryEncoder::decodeBase64(tag.value);
 
           QString tagType = "";
-          switch((MessageTagType)tagArguments.at(0).toInt())
+          switch((CueType)tagArguments.at(0).toInt())
           {
-            case TagType_Flip:
+          case CueType::Flip:
               output += "<flip>";
               break;
 
-            case TagType_Hide:
+          case CueType::Hide:
               output += "<hide>";
               break;
 
-            case TagType_NewLine:
+            case CueType::NewLine:
               output += "<nl>";
               break;
 
-            case TagType_Speed:
+            case CueType::Speed:
               output += "<speed:"+ QString::number(tagArguments.at(1).toInt()) +">";
               break;
 
-            case TagType_Wait:
+            case CueType::Wait:
               output += "<wait:"+ QString::number(tagArguments.at(1).toInt()) +">";
               break;
 
-            case TagType_MusicChange:
+            case CueType::MusicChange:
               output += "<music:"+ tagArguments.at(1).toString() +">";
               break;
 
-            case TagType_SoundEffect:
+            case CueType::SoundEffect:
               output += "<sfx:"+ tagArguments.at(1).toString() +">";
               break;
 
-            case TagType_PlaySequence:
+            case CueType::PlaySequence:
               output += "<anim:"+ tagArguments.at(1).toString() +">";
               break;
 
-            case TagType_Color:
+            case CueType::Color:
               output += "<highlight:"+ tagArguments.at(1).toString() +">";
               break;
 
-            case TagType_Size:
+            case CueType::Size:
               output += "<scale:"+ QString::number(tagArguments.at(1).toDouble()) +">";
               break;
 
-            case TagType_SizeEnd:
+            case CueType::SizeEnd:
               output += "</scale>";
               break;
 
-            case TagType_ColorEnd:
+            case CueType::ColorEnd:
               output += "</highlight>";
               break;
 
-            case TagType_Layer:
+            case CueType::Layer:
               output += "<layer:"+ tagArguments.at(1).toString() +":" + tagArguments.at(2).toString() +">";
               break;
 
-            case TagType_Blip:
+            case CueType::Blip:
               output += "<blip:"+ tagArguments.at(1).toString() +">";
               break;
 
@@ -156,7 +157,7 @@ private slots:
 
 private:
   // Tag helpers
-  QTextImageFormat createTagFormat(MessageTagType tagType);
+  QTextImageFormat createTagFormat(CueType tagType);
 
   // Highlighting logic
   void applyHighlighting(const QString& text);

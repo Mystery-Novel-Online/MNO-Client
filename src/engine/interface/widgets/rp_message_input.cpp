@@ -47,7 +47,7 @@ void RPMessageInput::setMaxLength(int length)
   m_maxLength = length;
 }
 
-void RPMessageInput::addTag(MessageTagType type, QVariantList arguments)
+void RPMessageInput::addTag(CueType type, QVariantList arguments)
 {
   QTextCursor cursor = textCursor();
   QTextImageFormat format = createTagFormat(type);
@@ -56,7 +56,7 @@ void RPMessageInput::addTag(MessageTagType type, QVariantList arguments)
 
   MessageTag tag;
   tag.id = id;
-  arguments.prepend(type);
+  arguments.prepend((int)type);
   tag.value = engine::encoding::BinaryEncoder::encodeBase64(arguments);
   m_tags[id] = tag;
 }
@@ -110,7 +110,7 @@ QVector<MessageTag> RPMessageInput::getTags()
         {
           MessageTag tag = m_tags[targetTagId];
           QVariantList tagArguments = engine::encoding::BinaryEncoder::decodeBase64(tag.value);
-          if((MessageTagType)tagArguments.at(0).toInt() == TagType_Wait)
+          if((CueType)tagArguments.at(0).toInt() == CueType::Wait)
           {
             tag.index = (frag.position() - 1 - (tags.count()));
           }
@@ -140,17 +140,17 @@ int RPMessageInput::maxLength()
   return m_maxLength;
 }
 
-QTextImageFormat RPMessageInput::createTagFormat(MessageTagType tagType)
+QTextImageFormat RPMessageInput::createTagFormat(CueType tagType)
 {
   QTextImageFormat format;
   switch (tagType) {
-  case MessageTagType::TagType_MusicChange:
+  case CueType::MusicChange:
     format.setName("base/tags/change_music.png");
     break;
-  case MessageTagType::TagType_Flip:
+  case CueType::Flip:
     format.setName("base/tags/flip.png");
     break;
-  case MessageTagType::TagType_PlaySequence:
+  case CueType::PlaySequence:
     format.setName("base/tags/animation.png");
     break;
   default:
@@ -290,22 +290,22 @@ void RPMessageInput::handleTextChanged()
 
       QVariantList args;
       bool removeData = true;
-      MessageTagType tagType;
+      CueType tagType;
 
-      if (tagTypeStr == "flip" && parts.isEmpty()) tagType = TagType_Flip;
-      else if (tagTypeStr == "hide" && parts.isEmpty()) tagType = TagType_Hide;
-      else if (tagTypeStr == "nl" && parts.isEmpty()) tagType = TagType_NewLine;
-      else if (tagTypeStr == "wait" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = TagType_Wait; }
-      else if (tagTypeStr == "speed" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = TagType_Speed; }
-      else if (tagTypeStr == "music" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_MusicChange; }
-      else if (tagTypeStr == "sfx" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_SoundEffect; }
-      else if (tagTypeStr == "anim" && parts.count() == 1) { args.append(parts[0]); tagType = TagType_PlaySequence; }
-      else if ((tagTypeStr == "highlight" || tagTypeStr == "hl") && parts.count() == 1) { args.append(parts[0]); tagType = TagType_Color; }
-      else if ((tagTypeStr == "scale"  || tagTypeStr == "sc") && parts.count() == 1) { args.append(parts[0].toDouble()); tagType = TagType_Size; }
-      else if ((tagTypeStr == "/scale" || tagTypeStr == "/sc") && parts.isEmpty()) { tagType = TagType_SizeEnd; }
-      else if ((tagTypeStr == "/highlight" || tagTypeStr == "/hl")&& parts.isEmpty()) { tagType = TagType_ColorEnd; }
-      else if (tagTypeStr == "layer" && parts.count() == 2) { args.append(parts[0]); args.append(parts[1]); tagType = TagType_Layer; }
-      else if ((tagTypeStr == "blip"  || tagTypeStr == "bl") && parts.count() == 1) { args.append(parts[0]); tagType = TagType_Blip; }
+      if (tagTypeStr == "flip" && parts.isEmpty()) tagType = CueType::Flip;
+      else if (tagTypeStr == "hide" && parts.isEmpty()) tagType = CueType::Hide;
+      else if (tagTypeStr == "nl" && parts.isEmpty()) tagType = CueType::NewLine;
+      else if (tagTypeStr == "wait" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = CueType::Wait; }
+      else if (tagTypeStr == "speed" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = CueType::Speed; }
+      else if (tagTypeStr == "music" && parts.count() == 1) { args.append(parts[0]); tagType = CueType::MusicChange; }
+      else if (tagTypeStr == "sfx" && parts.count() == 1) { args.append(parts[0]); tagType = CueType::SoundEffect; }
+      else if (tagTypeStr == "anim" && parts.count() == 1) { args.append(parts[0]); tagType = CueType::PlaySequence; }
+      else if ((tagTypeStr == "highlight" || tagTypeStr == "hl") && parts.count() == 1) { args.append(parts[0]); tagType = CueType::Color; }
+      else if ((tagTypeStr == "scale"  || tagTypeStr == "sc") && parts.count() == 1) { args.append(parts[0].toDouble()); tagType = CueType::Size; }
+      else if ((tagTypeStr == "/scale" || tagTypeStr == "/sc") && parts.isEmpty()) { tagType = CueType::SizeEnd; }
+      else if ((tagTypeStr == "/highlight" || tagTypeStr == "/hl")&& parts.isEmpty()) { tagType = CueType::ColorEnd; }
+      else if (tagTypeStr == "layer" && parts.count() == 2) { args.append(parts[0]); args.append(parts[1]); tagType = CueType::Layer; }
+      else if ((tagTypeStr == "blip"  || tagTypeStr == "bl") && parts.count() == 1) { args.append(parts[0]); tagType = CueType::Blip; }
       else removeData = false;
 
       if (removeData) {
@@ -318,7 +318,7 @@ void RPMessageInput::handleTextChanged()
 
         MessageTag tag;
         tag.id = id;
-        args.prepend(tagType);
+        args.prepend((int)tagType);
         tag.value = engine::encoding::BinaryEncoder::encodeBase64(args);
         m_tags[id] = tag;
 

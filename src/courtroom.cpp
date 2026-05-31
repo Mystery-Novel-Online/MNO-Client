@@ -1669,7 +1669,7 @@ void Courtroom::handle_chatmessage_3()
     {
       int tagPosition = tagArray[0].toInt();
       QVariantList tagArguments = engine::encoding::BinaryEncoder::decodeBase64(tagArray[1]);
-      IncomingTagData data = {tagPosition, (MessageTagType)tagArguments.at(0).toInt(), tagArguments};
+      CueData data = {tagPosition, (CueType)tagArguments.at(0).toInt(), tagArguments};
       m_ProcessedTags.append(data);
     }
   }
@@ -1949,7 +1949,7 @@ void Courtroom::OnBgmFilterChanged()
 
 void Courtroom::onFlipTagActivated()
 {
-  ui_ic_chat_message_field->addTag(TagType_Flip, {});
+  ui_ic_chat_message_field->addTag(CueType::Flip, {});
   ui_ic_chat_message_field->setFocus();
 }
 
@@ -1958,7 +1958,7 @@ void Courtroom::onAnimationTag()
   auto item = ui_anim_list->currentItem();
   if (!item) return;
 
-  ui_ic_chat_message_field->addTag(TagType_PlaySequence, { item->text() });
+  ui_ic_chat_message_field->addTag(CueType::PlaySequence, { item->text() });
   ui_anim_list->setCurrentRow(-1);
   ui_ic_chat_message_field->setFocus();
 }
@@ -2331,74 +2331,74 @@ void Courtroom::next_chat_letter()
     vp_message_format.setFont(overrides.baseFont);
   }
 
-  QVector<IncomingTagData> unprocessedTags = {};
-  for(IncomingTagData tag : m_ProcessedTags)
+  QVector<CueData> unprocessedTags = {};
+  for(CueData tag : m_ProcessedTags)
   {
     if(tag.timestamp <= m_tick_step || m_tick_step >= message_length)
     {
-      switch(tag.action)
+      switch(tag.type)
       {
-      case TagType_Blip:
-        m_configBlips->setTagBlip(tag.variables.at(1).toString().toStdString());
+      case CueType::Blip:
+        m_configBlips->setTagBlip(tag.arguments.at(1).toString().toStdString());
         m_blip_step = 0;
         break;
 
-      case TagType_SoundEffect:
+      case CueType::SoundEffect:
         audio::effect::StopAll();
-        audio::effect::PlayCharacter(m_chatmessage[CMChrName].toStdString(), tag.variables.at(1).toString().toStdString());
+        audio::effect::PlayCharacter(m_chatmessage[CMChrName].toStdString(), tag.arguments.at(1).toString().toStdString());
         break;
 
-      case TagType_Layer:
+      case CueType::Layer:
         SceneManager::get().RenderTransition();
-        ui_vp_player_char->updateLayer(tag.variables.at(1).toString(), tag.variables.at(2).toString());
+        ui_vp_player_char->updateLayer(tag.arguments.at(1).toString(), tag.arguments.at(2).toString());
         ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
         SceneManager::get().AnimateTransition();
         break;
 
-      case TagType_Flip:
+      case CueType::Flip:
         ui_vp_player_char->setMirrored(ui_vp_player_char->mirroredState() == false);
         break;
 
-      case TagType_Hide:
+      case CueType::Hide:
         ui_vp_player_char->setVisible(ui_vp_player_char->isVisible() == false);
         break;
 
-      case TagType_Wait:
-        currentDelayLeft -= tag.variables.at(1).toInt();
+      case CueType::Wait:
+        currentDelayLeft -= tag.arguments.at(1).toInt();
         if(currentDelayLeft >= 0)
         {
-          pendingDelay = tag.variables.at(1).toInt();
+          pendingDelay = tag.arguments.at(1).toInt();
           calculate_chat_tick_interval();
         }
         break;
 
-      case TagType_Speed:
-        customMessageSpeed = tag.variables.at(1).toInt();
+      case CueType::Speed:
+        customMessageSpeed = tag.arguments.at(1).toInt();
         if(customMessageSpeed >= 150) customMessageSpeed = 150;
         if(customMessageSpeed < 1) customMessageSpeed = 1;
         calculate_chat_tick_interval();
         break;
 
-      case TagType_NewLine:
+      case CueType::NewLine:
         ui_vp_message->textCursor().insertText("\n");
         break;
 
-      case TagType_PlaySequence:
-        ui_vp_player_char->setCharacterAnimation(tag.variables.at(1).toString(), m_chatmessage[CMChrName]);
+      case CueType::PlaySequence:
+        ui_vp_player_char->setCharacterAnimation(tag.arguments.at(1).toString(), m_chatmessage[CMChrName]);
         break;
 
-      case TagType_Size:
-        overrides.tagScaleOverride.emplace(tag.variables.at(1).toDouble());
+      case CueType::Size:
+        overrides.tagScaleOverride.emplace(tag.arguments.at(1).toDouble());
         break;
-      case TagType_Color:
-        overrides.tagColourOveride.emplace(QColor((tag.variables.at(1).toString())));
+      case CueType::Color:
+        overrides.tagColourOveride.emplace(QColor((tag.arguments.at(1).toString())));
         break;
 
-      case TagType_ColorEnd:
+      case CueType::ColorEnd:
         overrides.tagColourOveride.reset();
         break;
 
-      case TagType_SizeEnd:
+      case CueType::SizeEnd:
         overrides.tagScaleOverride.emplace(1.0f);
         break;
 

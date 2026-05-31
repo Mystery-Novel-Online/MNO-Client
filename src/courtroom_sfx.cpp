@@ -140,7 +140,7 @@ void Courtroom::on_sfx_list_current_item_changed(QListWidgetItem *p_current_item
 void Courtroom::on_sfx_list_context_menu_requested(QPoint p_point)
 {
   if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
-    ui_ic_chat_message_field->addTag(TagType_SoundEffect, { current_sfx_file() });
+    ui_ic_chat_message_field->addTag(CueType::SoundEffect, { current_sfx_file() });
     ui_sfx_list->clearSelection();
     return;
   }

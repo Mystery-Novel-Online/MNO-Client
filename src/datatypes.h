@@ -8,26 +8,6 @@ struct DiscordUser
   QString displayname;
 };
 
-enum MessageTagType
-{
-  TagType_SoundEffect,
-  TagType_MusicChange,
-  TagType_EmoteChange,
-  TagType_PlaySequence,
-  TagType_Wait,
-  TagType_Speed,
-  TagType_Effect,
-  TagType_Flip,
-  TagType_Hide,
-  TagType_NewLine,
-  TagType_Color,
-  TagType_Size,
-  TagType_Layer,
-  TagType_SizeEnd,
-  TagType_ColorEnd,
-  TagType_Blip,
-};
-
 struct ThemeMessageHighlight
 {
   bool hideCharacter;

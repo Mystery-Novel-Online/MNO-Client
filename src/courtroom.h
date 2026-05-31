@@ -68,13 +68,6 @@ class QLabel;
 using namespace engine;
 using namespace engine::network::metadata;
 
-struct IncomingTagData
-{
-  int timestamp;
-  MessageTagType action;
-  QVariantList variables;
-};
-
 struct TagOverrides
 {
   std::optional<double> tagScaleOverride;
@@ -406,7 +399,7 @@ private:
 
   QString previous_ic_message;
 
-  QVector<IncomingTagData> m_ProcessedTags = {};
+  QVector<CueData> m_ProcessedTags = {};
 
   QColor m_message_color;
   QString m_message_color_name;

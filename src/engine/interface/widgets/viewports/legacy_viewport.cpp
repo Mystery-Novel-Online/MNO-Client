@@ -285,6 +285,7 @@ void LegacyViewport::onPreanimDone()
   if(!message.textContent.trimmed().isEmpty()) toggleChatbox(true);
   else onTypingDone();
   m_message->setInput(message.textContent, message.characterFolder);
+  m_message->setTags(message.messageTags);
 
   if(message.modifiers.Hidden)
   {

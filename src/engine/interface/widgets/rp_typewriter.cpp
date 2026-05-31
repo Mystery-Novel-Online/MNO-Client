@@ -78,6 +78,11 @@ void RPTypewriter::setInput(QString inputText, const QString& character)
   update();
 }
 
+void RPTypewriter::setTags(const QString &tags)
+{
+  m_tagData = tags;
+}
+
 void RPTypewriter::update()
 {
   int currentUptime = RuntimeLoop::uptime();

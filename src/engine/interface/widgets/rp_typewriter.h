@@ -19,6 +19,7 @@ public:
   ~RPTypewriter();
 
   void setInput(QString inputText, const QString& character);
+  void setTags(const QString& tags);
   void update();
   bool typingComplete();
 
@@ -30,6 +31,8 @@ private:
 
   QString m_inputText = "";
   QString m_renderedText = "";
+
+  QString m_tagData = "";
 
   int m_lastUpdate = 0;
 

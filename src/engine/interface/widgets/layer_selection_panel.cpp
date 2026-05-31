@@ -116,7 +116,7 @@ void LayerSelectionPanel::layerClicked(int layerId)
   QString VariantName = data.layerName + "_" + data.variation;
 
   if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
-    AOApplication::getInstance()->m_courtroom->ui_ic_chat_message_field->addTag(TagType_Layer, { data.layerName, data.variation });
+    AOApplication::getInstance()->m_courtroom->ui_ic_chat_message_field->addTag(CueType::Layer, { data.layerName, data.variation });
     courtroom::ic::focusMessageBox();
     return;
   }
