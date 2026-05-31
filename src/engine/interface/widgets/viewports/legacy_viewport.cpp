@@ -157,16 +157,19 @@ void LegacyViewport::loadBackground(QString background, const QString& variant)
       DownloaderPrompt::StartDownload(ApiManager::baseUri() + QString::fromStdString(workshopSearch.downloadUri()), "packages/Workshop Downloads", "", DOWNLOAD_ServerBackground);
     }
   }
+  else
+  {
+    m_backgroundName = background;
+  }
 
 
-  m_backgroundName = background;
   m_variantName = variant;
 
 
-  if(!m_currentScene.switchBackground(background.toStdString(), variant.toStdString()))
+  if(!m_currentScene.switchBackground(m_backgroundName.toStdString(), variant.toStdString()))
   {
     m_currentScene.background().emplace(std::make_unique<LegacyBackgroundReader>());
-    m_currentScene.background().value()->loadBackground(background.toStdString());
+    m_currentScene.background().value()->loadBackground(m_backgroundName.toStdString());
   }
 
   refreshBackground("wit");
