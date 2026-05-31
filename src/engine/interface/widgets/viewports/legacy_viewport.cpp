@@ -99,7 +99,7 @@ void LegacyViewport::loadCurrentMessage()
 
   m_pairActor = engine::actor::repository::retrieve(message.pairData.characterFolder);
   if(message.characterPre.trimmed().isEmpty()) message.characterPre = "-";
-  m_message->setInput("");
+  m_message->setInput("", message.characterFolder);
   toggleChatbox(false);
 
   if(message.userShowname.isEmpty())
@@ -284,7 +284,7 @@ void LegacyViewport::onPreanimDone()
   MessageMetadata &message = message::recentMessage();
   if(!message.textContent.trimmed().isEmpty()) toggleChatbox(true);
   else onTypingDone();
-  m_message->setInput(message.textContent);
+  m_message->setInput(message.textContent, message.characterFolder);
 
   if(message.modifiers.Hidden)
   {

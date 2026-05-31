@@ -18,7 +18,7 @@ public:
   RPTypewriter(QWidget *p_parent = nullptr);
   ~RPTypewriter();
 
-  void setInput(QString inputText);
+  void setInput(QString inputText, const QString& character);
   void update();
   bool typingComplete();
 
@@ -38,6 +38,9 @@ private:
   QChar m_currentColor = ' ';
   QVector<QString> m_queuedHighlights = {};
   QMap<int, TypeWriterAction> m_QueuedActions = {};
+
+  QString m_character = "";
+  bool m_appendMessage = false;
 };
 
 #endif // RP_TYPEWRITER_H

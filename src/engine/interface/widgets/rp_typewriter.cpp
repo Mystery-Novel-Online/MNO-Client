@@ -13,16 +13,37 @@ RPTypewriter::~RPTypewriter()
   RuntimeLoop::assignTypewriter(nullptr);
 }
 
-void RPTypewriter::setInput(QString inputText)
+void RPTypewriter::setInput(QString inputText, const QString& character)
 {
-  setText("");
   m_lastUpdate = 0;
   m_inputText = "";
   m_renderedText = "";
   m_currentColor = ' ';
   m_currentIndex = 0;
   m_queuedHighlights.clear();
+  m_appendMessage = false;
+
+  bool messageContinuation = character == m_character;
+  if(!messageContinuation)
+    m_character = character;
+
   if(inputText.trimmed().isEmpty()) return;
+
+
+  if(messageContinuation)
+  {
+    m_appendMessage = inputText.startsWith("<a>");
+
+    if(m_appendMessage)
+    {
+      QString appendPrefix = toPlainText().right(1) == " " ? "" : " ";
+      inputText = appendPrefix + inputText.mid(3);
+    }
+  }
+
+  if(!m_appendMessage)
+    setText("");
+
   bool ignoreNextCharacter = false;
 
   for(const QChar& letter : inputText)
