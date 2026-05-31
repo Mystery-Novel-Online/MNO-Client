@@ -210,10 +210,19 @@ void LoopDetection::FindLoop(QString fileName)
 
     QVBoxLayout* layout = new QVBoxLayout(&dlg);
 
-    QLabel* infoLabel = new QLabel(QString("Loop start sample: %1 \nLoop end sample: %2")
-        .arg(startSample)
-        .arg(endSample)
-    );
+    float accuracy = 100.0f * (1.0f / (1.0f + bestScore));
+
+    QLabel* infoLabel = new QLabel(
+        QString(
+            "Loop start sample: %1\n"
+            "Loop end sample: %2\n"
+            "Match confidence: %3%"
+            )
+            .arg(startSample)
+            .arg(endSample)
+            .arg(accuracy, 0, 'f', 1)
+        );
+
     infoLabel->setTextInteractionFlags(Qt::TextSelectableByMouse);
     layout->addWidget(infoLabel);
 
