@@ -12,10 +12,11 @@ DRTheme::DRTheme(AOApplication *p_ao_app)
 
 void DRTheme::InitTheme()
 {
+  const QString& gamemode = system::ConfigManager::gamemode();
   QString currentThemeName = ao_app->getCurrentTheme();
   ThemeManager::get().loadTheme(currentThemeName);
-  ThemeManager::get().LoadGamemode(system::ConfigManager::gamemode());
-  ThemeScripting::InitializeLua(FS::Paths::FindDirectory("minigames/" + system::ConfigManager::gamemode(), true, false), LuaTarget::Minigame);
+  ThemeManager::get().LoadGamemode(gamemode);
+  ThemeScripting::InitializeLua(FS::Paths::FindDirectory("minigames/" + gamemode, true, false), LuaTarget::Minigame);
   ThemeManager::get().mCurrentThemeReader.SetTimeOfDay(system::ConfigManager::timeOfDay());
   const QString l_json_path = ao_app->find_theme_asset_path(THEME_JSON);
   m_themePath = ao_app->find_current_theme_path();
@@ -27,7 +28,12 @@ void DRTheme::InitTheme()
   }
   else
   {
-    ThemeScripting::InitializeLua(FS::Paths::FindDirectory("themes/" + currentThemeName, true, false));
+    QString themePath = FS::Paths::FindDirectory("themes/" + currentThemeName, true, false);
+
+    if (FS::Checks::FileExists(themePath + "/" + gamemode + "/script.lua"))
+      themePath += "/" + gamemode;
+
+    ThemeScripting::InitializeLua(themePath);
     QFile json_file(l_json_path); json_file.open(QIODevice::ReadOnly | QIODevice::Text);
     m_currentThemeString = json_file.readAll();
     json_file.close();
