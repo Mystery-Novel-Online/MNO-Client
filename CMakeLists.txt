@@ -332,6 +332,8 @@ add_executable(rp-engine
   src/config_tabs/config_tab_discord.h src/config_tabs/config_tab_discord.cpp src/config_tabs/config_tab_discord.ui
   src/dialogue/DialogueCues.h
   src/dialogue/CueParser.h src/dialogue/CueParser.cpp
+  src/scripting/lua/LuaSyncedVariable.h src/scripting/lua/LuaSyncedVariable.cpp
+  src/networking/SyncedVariable.h src/networking/SyncedVariable.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)

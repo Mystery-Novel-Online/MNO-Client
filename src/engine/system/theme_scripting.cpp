@@ -6,6 +6,7 @@
 #include "modules/managers/notify_manager.h"
 #include "engine/network/metadata/area_metadata.h"
 #include "engine/system/runtime_values.h"
+#include "scripting/lua/LuaSyncedVariable.h"
 
 #include <lobby.h>
 
@@ -23,6 +24,13 @@ namespace ThemeScripting
     s_registeredFunctions.clear();
     s_themeScript = sol::state();
     s_themeScript.open_libraries(sol::lib::base, sol::lib::io, sol::lib::math, sol::lib::string, sol::lib::table);
+
+    s_themeScript.new_usertype<LuaSyncedVariable>("SyncedVariable",
+        sol::constructors<LuaSyncedVariable(const std::string&)>(),
+        sol::meta_function::index, &LuaSyncedVariable::get,
+        sol::meta_function::new_index, &LuaSyncedVariable::set
+    );
+
     QString filePath = themePath + "/script.lua";
     if(FS::Checks::FileExists(filePath))
     {
