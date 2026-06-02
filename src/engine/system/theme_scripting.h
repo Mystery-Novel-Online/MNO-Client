@@ -8,6 +8,7 @@ struct LuaRuntime
 {
   sol::state state;
   QMap<std::string, sol::function> functionCache;
+  std::unordered_set<std::string> loaded;
 };
 
 enum class LuaTarget

@@ -49,6 +49,31 @@ void InitializeLua(QString themePath, LuaTarget target)
       return LuaSyncedVariable(key, SyncedScope::User);
     });
 
+    targetScript.set_function("LoadScript", [&](const std::string& path)
+    {
+      std::string fullPath = themePath.toStdString() + "/scripts/" + path;
+      if (runtime.loaded.find(path) != runtime.loaded.end())
+        return true;
+
+      if (!FS::Checks::FileExists(QString::fromStdString(fullPath)))
+        return false;
+
+      sol::load_result script = targetScript.load_file(fullPath);
+
+      if (!script.valid())
+      {
+        sol::error err = script;
+        std::cout << err.what() << std::endl;
+        return false;
+      }
+
+      runtime.loaded.insert(path);
+
+      script();
+      return true;
+    });
+
+
     QString filePath = themePath + "/script.lua";
     if(FS::Checks::FileExists(filePath))
     {
