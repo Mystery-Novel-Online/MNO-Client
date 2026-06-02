@@ -7,7 +7,7 @@
 class LuaSyncedVariable
 {
 public:
-  LuaSyncedVariable(const std::string& name);
+  LuaSyncedVariable(const std::string& name, SyncedScope scope);
 
   sol::object get(sol::this_state ts) const;
   void set(sol::this_state ts, sol::object value);
@@ -15,6 +15,7 @@ public:
 
 private:
   SyncedVariable m_value;
+  SyncedScope m_scope;
 };
 
 #endif // LUASYNCEDVARIABLE_H

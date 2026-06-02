@@ -2,6 +2,13 @@
 #define SYNCEDVARIABLE_H
 #include <variant>
 
+enum class SyncedScope
+{
+  Area,
+  Hub,
+  User
+};
+
 using SyncedValue = std::variant<int, std::string>;
 
 class SyncedVariable
@@ -11,6 +18,10 @@ public:
 
   SyncedValue get() const;
   void set(const SyncedValue& value);
+
+  void broadcastArea();
+  void broadcastHub();
+  void broadcastSelf();
 
 private:
   std::string m_name = "";

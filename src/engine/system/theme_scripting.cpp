@@ -26,10 +26,24 @@ namespace ThemeScripting
     s_themeScript.open_libraries(sol::lib::base, sol::lib::io, sol::lib::math, sol::lib::string, sol::lib::table);
 
     s_themeScript.new_usertype<LuaSyncedVariable>("SyncedVariable",
-        sol::constructors<LuaSyncedVariable(const std::string&)>(),
         sol::meta_function::index, &LuaSyncedVariable::get,
         sol::meta_function::new_index, &LuaSyncedVariable::set
     );
+
+    s_themeScript.set_function("AreaVariable", [](const std::string& key)
+    {
+      return LuaSyncedVariable(key, SyncedScope::Area);
+    });
+
+    s_themeScript.set_function("HubVariable", [](const std::string& key)
+    {
+      return LuaSyncedVariable(key, SyncedScope::Hub);
+    });
+
+    s_themeScript.set_function("UserVariable", [](const std::string& key)
+    {
+      return LuaSyncedVariable(key, SyncedScope::User);
+    });
 
     QString filePath = themePath + "/script.lua";
     if(FS::Checks::FileExists(filePath))

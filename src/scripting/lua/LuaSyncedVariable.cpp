@@ -1,6 +1,6 @@
 #include "LuaSyncedVariable.h"
 
-LuaSyncedVariable::LuaSyncedVariable(const std::string &name) : m_value(name)
+LuaSyncedVariable::LuaSyncedVariable(const std::string &name, SyncedScope scope) : m_value(name), m_scope(scope)
 {
 
 }
@@ -31,6 +31,18 @@ void LuaSyncedVariable::set(sol::this_state ts, sol::object value)
   {
     m_value.set(SyncedValue(value.as<std::string>()));
     std::cout << "VALUE STRING SET! " << std::get<std::string>(m_value.get())  << "\n";
+  }
+
+  switch (m_scope)
+  {
+  case SyncedScope::Area:
+    m_value.broadcastArea();
+
+  case SyncedScope::Hub:
+    m_value.broadcastHub();
+
+  case SyncedScope::User:
+    m_value.broadcastSelf();
   }
 
 }

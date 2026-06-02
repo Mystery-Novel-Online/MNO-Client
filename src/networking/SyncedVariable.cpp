@@ -15,3 +15,18 @@ void SyncedVariable::set(const SyncedValue &value)
 {
   m_value = value;
 }
+
+void SyncedVariable::broadcastArea()
+{
+
+}
+
+void SyncedVariable::broadcastHub()
+{
+
+}
+
+void SyncedVariable::broadcastSelf()
+{
+
+}
