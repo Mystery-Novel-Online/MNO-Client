@@ -267,6 +267,14 @@ QString AOApplication::find_theme_asset_path(QString p_file, QStringList p_exten
 
   // Check if default folder exists. We do this here as it is cheaper than doing it in find_asset_path
   // (as we know there should not be capitalization or folder jumping shenanigans here.
+
+
+  if (!l_gamemode.isEmpty())
+  {
+    const QString l_minigame_root = FS::Paths::FindDirectory("minigames/" + l_gamemode);
+    l_path_list.append(l_minigame_root + "/" + p_file);
+  }
+
   const QString l_default_theme_path = FS::Paths::BasePath() + "themes/default/";
   if (FS::Checks::DirectoryExists(l_default_theme_path))
     l_path_list.append(l_default_theme_path + p_file);
