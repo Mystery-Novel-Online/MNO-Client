@@ -4,23 +4,49 @@
 #define SOL_ALL_SAFETIES_ON 1
 #include <sol/sol.hpp>
 
+struct LuaRuntime
+{
+  sol::state state;
+  QMap<std::string, sol::function> functionCache;
+};
+
+enum class LuaTarget
+{
+  Theme,
+  Minigame
+};
 
 namespace ThemeScripting
 {
-  void InitializeLua(QString themePath);
+  void InitializeLua(QString themePath, LuaTarget target = LuaTarget::Theme);
 };
 
 namespace LuaBridge
 {
-  sol::function& GetFunction(const std::string& functionName);
+  sol::function& GetFunction(const std::string& functionName, LuaTarget target = LuaTarget::Theme);
 
   template<typename... Args>
   inline bool LuaEventCall(const std::string& functionName, Args&&... args)
   {
-    sol::function function = GetFunction(functionName);
-    if(!function.valid()) return false;
-    function(std::forward<Args>(args)...);
-    return true;
+    bool success = false;
+    {
+      sol::function function = GetFunction(functionName);
+      if(function.valid())
+      {
+        function(std::forward<Args>(args)...);
+        success = true;
+      }
+    }
+
+    {
+      sol::function function = GetFunction(functionName, LuaTarget::Minigame);
+      if(function.valid())
+      {
+        function(std::forward<Args>(args)...);
+        success = true;
+      }
+    }
+    return success;
   }
 
   bool OnTabChange(std::string name, std::string group);

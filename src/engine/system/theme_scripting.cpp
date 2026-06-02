@@ -12,35 +12,39 @@
 
 #pragma comment(lib, "lua54.lib")
 
-static sol::state s_themeScript;
-static QMap<std::string, sol::function> s_registeredFunctions;
+static LuaRuntime s_theme;
+static LuaRuntime s_minigame;
 
 namespace ThemeScripting
 {
 
-  void InitializeLua(QString themePath)
+void InitializeLua(QString themePath, LuaTarget target)
   {
-    audio::blip::setBlipRate(-1);
-    s_registeredFunctions.clear();
-    s_themeScript = sol::state();
-    s_themeScript.open_libraries(sol::lib::base, sol::lib::io, sol::lib::math, sol::lib::string, sol::lib::table);
 
-    s_themeScript.new_usertype<LuaSyncedVariable>("SyncedVariable",
+    auto& runtime = target == LuaTarget::Minigame ? s_minigame : s_theme;
+    sol::state& targetScript = runtime.state;
+
+    audio::blip::setBlipRate(-1);
+    runtime.functionCache.clear();
+    targetScript = sol::state();
+    targetScript.open_libraries(sol::lib::base, sol::lib::io, sol::lib::math, sol::lib::string, sol::lib::table);
+
+    targetScript.new_usertype<LuaSyncedVariable>("SyncedVariable",
         sol::meta_function::index, &LuaSyncedVariable::get,
         sol::meta_function::new_index, &LuaSyncedVariable::set
     );
 
-    s_themeScript.set_function("AreaVariable", [](const std::string& key)
+    targetScript.set_function("AreaVariable", [](const std::string& key)
     {
       return LuaSyncedVariable(key, SyncedScope::Area);
     });
 
-    s_themeScript.set_function("HubVariable", [](const std::string& key)
+    targetScript.set_function("HubVariable", [](const std::string& key)
     {
       return LuaSyncedVariable(key, SyncedScope::Hub);
     });
 
-    s_themeScript.set_function("UserVariable", [](const std::string& key)
+    targetScript.set_function("UserVariable", [](const std::string& key)
     {
       return LuaSyncedVariable(key, SyncedScope::User);
     });
@@ -50,7 +54,7 @@ namespace ThemeScripting
     {
 
       {
-        sol::table audio = s_themeScript.create_named_table("Audio");
+        sol::table audio = targetScript.create_named_table("Audio");
 
         sol::table bgm = audio.create_named("BGM");
         sol::table blip = audio.create_named("Blip");
@@ -72,18 +76,18 @@ namespace ThemeScripting
         blip.set_function("SetSound", &audio::blip::SetSound);
       }
 
-      sol::table widgetTable = s_themeScript.create_named_table("Widget");
+      sol::table widgetTable = targetScript.create_named_table("Widget");
       widgetTable.set_function("Move", &courtroom::layout::moveWidget);
       widgetTable.set_function("Resize", &courtroom::layout::resizeWidget);
       widgetTable.set_function("Raise", &courtroom::layout::raiseWidget);
       widgetTable.set_function("SetVisible", &courtroom::layout::setVisibility);
       widgetTable.set_function("SetParent", &courtroom::layout::setParent);
 
-      sol::table dialogTable = s_themeScript.create_named_table("ChoiceDialog");
+      sol::table dialogTable = targetScript.create_named_table("ChoiceDialog");
       dialogTable.set_function("TriggerCustom", &LuaFunctions::CustomChoiceDialog);
       dialogTable.set_function("SetText", &LuaFunctions::SetNotificationText);
 
-      sol::table characterTable = s_themeScript.create_named_table("Character");
+      sol::table characterTable = targetScript.create_named_table("Character");
       characterTable.set_function("GetShowname", &user::getShowname);
       characterTable.set_function("GetIniswap", &user::getIniswap);
       characterTable.set_function("Exists", &FS::Checks::CharacterExists);
@@ -92,48 +96,48 @@ namespace ThemeScripting
       characterTable.set_function("SetVertical", &courtroom::sliders::setVertical);
       characterTable.set_function("SetHorizontal", &courtroom::sliders::setHorizontal);
 
-      sol::table buttonsTable = s_themeScript.create_named_table("Button");
+      sol::table buttonsTable = targetScript.create_named_table("Button");
       buttonsTable.set_function("Create", &courtroom::buttons::create);
 
-      sol::table displayTextTable = s_themeScript.create_named_table("TextDisplay");
+      sol::table displayTextTable = targetScript.create_named_table("TextDisplay");
       displayTextTable.set_function("Create", &courtroom::textedit::create);
       displayTextTable.set_function("SetText", &courtroom::textedit::setText);
       displayTextTable.set_function("SetFrame", &courtroom::textedit::setFrame);
 
-      sol::table hoverWidgetTable = s_themeScript.create_named_table("HoverController");
+      sol::table hoverWidgetTable = targetScript.create_named_table("HoverController");
       hoverWidgetTable.set_function("Create", &courtroom::hovercontroller::create);
       hoverWidgetTable.set_function("AddWidget", &courtroom::hovercontroller::addWidget);
 
-      sol::table lineeditTable = s_themeScript.create_named_table("LineEdit");
+      sol::table lineeditTable = targetScript.create_named_table("LineEdit");
       lineeditTable.set_function("Create", &courtroom::lineedit::create);
       lineeditTable.set_function("GetValue", &courtroom::lineedit::getValue);
       lineeditTable.set_function("SetValue", &courtroom::lineedit::setValue);
 
-      sol::table comboboxTable = s_themeScript.create_named_table("ComboBox");
+      sol::table comboboxTable = targetScript.create_named_table("ComboBox");
       comboboxTable.set_function("Create", &courtroom::combobox::create);
       comboboxTable.set_function("AddItem", &courtroom::combobox::addItem);
       comboboxTable.set_function("Clear", &courtroom::combobox::clearItems);
 
-      sol::table slidersTable = s_themeScript.create_named_table("Slider");
+      sol::table slidersTable = targetScript.create_named_table("Slider");
       slidersTable.set_function("Create", &courtroom::sliders::create);
       slidersTable.set_function("CreateVertical", &courtroom::sliders::createVertical);
       slidersTable.set_function("SetValue", &courtroom::sliders::setValue);
       slidersTable.set_function("GetValue", &courtroom::sliders::getValue);
 
 
-      sol::table stickerTable = s_themeScript.create_named_table("Sticker");
+      sol::table stickerTable = targetScript.create_named_table("Sticker");
       stickerTable.set_function("Create", &courtroom::stickers::create);
 
-      sol::table tabTable = s_themeScript.create_named_table("Tabs");
+      sol::table tabTable = targetScript.create_named_table("Tabs");
       tabTable.set_function("Change", &LuaFunctions::ChangeTab);
 
-      sol::table serverTable = s_themeScript.create_named_table("Server");
+      sol::table serverTable = targetScript.create_named_table("Server");
       tabTable.set_function("GetClientId", &user::getClientId);
       tabTable.set_function("GetCharacterId", &user::GetCharacterId);
       tabTable.set_function("GetCurrentCharacter", &user::GetCharacterName);
 
       {
-        sol::table ic = s_themeScript.create_named_table("IC");
+        sol::table ic = targetScript.create_named_table("IC");
         sol::table inputField = ic.create_named("InputField");
 
         inputField.set_function("Focus", &courtroom::ic::focusMessageBox);
@@ -143,19 +147,19 @@ namespace ThemeScripting
       }
 
       {
-        sol::table table = s_themeScript.create_named_table("Viewport");
+        sol::table table = targetScript.create_named_table("Viewport");
         table.set_function("Screenshot", &courtroom::viewport::screenshot);
         table.set_function("AddInteraction", &courtroom::viewport::addInteraction);
         table.set_function("ClearInteractions", &courtroom::viewport::clearInteractions);
       }
 
       {
-        sol::table table = s_themeScript.create_named_table("Areas");
+        sol::table table = targetScript.create_named_table("Areas");
         table.set_function("MoveByName", &courtroom::areas::switchName);
       }
 
       {
-        sol::table table = s_themeScript.create_named_table("Animator");
+        sol::table table = targetScript.create_named_table("Animator");
         table.set_function("Create", &courtroom::animations::createAnimation);
         table.set_function("AddKeyframe", &courtroom::animations::addKeyframe);
         table.set_function("Reset", &courtroom::animations::reset);
@@ -164,13 +168,13 @@ namespace ThemeScripting
       }
 
       {
-        sol::table table = s_themeScript.create_named_table("RuntimeValue");
+        sol::table table = targetScript.create_named_table("RuntimeValue");
         table.set_function("Resolve", &engine::runtime::values::resolveVariables);
         table.set_function("Assign", &engine::runtime::values::storeValue);
       }
 
       {
-        sol::table ooc = s_themeScript.create_named_table("OOC");
+        sol::table ooc = targetScript.create_named_table("OOC");
 
         sol::table log = ooc.create_named("Log");
         sol::table name = ooc.create_named("Name");
@@ -185,26 +189,27 @@ namespace ThemeScripting
         inputField.set_function("SetText", &courtroom::ooc::setInputFieldContents);
       }
 
-      sol::table systemTable = s_themeScript.create_named_table("System");
+      sol::table systemTable = targetScript.create_named_table("System");
       systemTable.set_function("Alert", &LuaFunctions::AlertUser);
 
-      sol::table areaTable = s_themeScript.create_named_table("Area");
+      sol::table areaTable = targetScript.create_named_table("Area");
       areaTable.set_function("SetDescription", &AreaMetadata::SetDescription);
 
-      s_themeScript.safe_script_file(filePath.toUtf8().constData());
+      targetScript.safe_script_file(filePath.toUtf8().constData());
     }
   }
 }
 
 namespace LuaBridge
 {
-
-  sol::function &GetFunction(const std::string& functionName)
+  sol::function &GetFunction(const std::string &functionName, LuaTarget target)
   {
-    if(s_registeredFunctions.contains(functionName)) return s_registeredFunctions[functionName];
-    sol::function eventCall = s_themeScript[functionName];
-    if(eventCall.valid()) s_registeredFunctions[functionName] = eventCall;
-    return s_registeredFunctions[functionName];
+    auto& runtime = target == LuaTarget::Minigame ? s_minigame : s_theme;
+
+    if(runtime.functionCache.contains(functionName)) return runtime.functionCache[functionName];
+    sol::function eventCall = runtime.state[functionName];
+    if(eventCall.valid()) runtime.functionCache[functionName] = eventCall;
+    return runtime.functionCache[functionName];
   }
 
   bool OnTabChange(std::string name, std::string group)
@@ -226,6 +231,7 @@ namespace LuaBridge
   {
     return LuaEventCall("OnSongChange", path, name, submitter);
   }
+
 
 }
 

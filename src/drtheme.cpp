@@ -15,6 +15,7 @@ void DRTheme::InitTheme()
   QString currentThemeName = ao_app->getCurrentTheme();
   ThemeManager::get().loadTheme(currentThemeName);
   ThemeManager::get().LoadGamemode(system::ConfigManager::gamemode());
+  ThemeScripting::InitializeLua(FS::Paths::FindDirectory("minigames/" + system::ConfigManager::gamemode(), true, false), LuaTarget::Minigame);
   ThemeManager::get().mCurrentThemeReader.SetTimeOfDay(system::ConfigManager::timeOfDay());
   const QString l_json_path = ao_app->find_theme_asset_path(THEME_JSON);
   m_themePath = ao_app->find_current_theme_path();
