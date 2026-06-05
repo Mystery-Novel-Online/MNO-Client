@@ -1,6 +1,6 @@
 #include "viewport_overlay.h"
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 #include <modules/managers/scene_manager.h>
 #include "engine/interface/courtroom_layout.h"
 #include "engine/system/theme_scripting.h"
@@ -78,11 +78,11 @@ QAction *ViewportOverlay::createResizeAction(int t_width, int t_height)
 void ViewportOverlay::resizeWidgetAndChildren(QString t_widget, int t_width, int t_height)
 {
   
-  QWidget* l_widget = ThemeManager::get().getWidget(t_widget);
+  QWidget* l_widget = LegacyThemeManager::get().getWidget(t_widget);
   if(l_widget == nullptr) return;
 
-  int l_viewportNativeHeight = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(ThemeSceneType::SceneType_Courtroom, "viewport").height;
-  RPRect l_widgetSize = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(ThemeSceneType::SceneType_Courtroom, t_widget);
+  int l_viewportNativeHeight = LegacyThemeManager::get().mCurrentThemeReader.GetWidgetTransform(ThemeSceneType::SceneType_Courtroom, "viewport").height;
+  RPRect l_widgetSize = LegacyThemeManager::get().mCurrentThemeReader.GetWidgetTransform(ThemeSceneType::SceneType_Courtroom, t_widget);
 
   double l_scalingFactor = static_cast<double>(t_height) / l_viewportNativeHeight;
 
@@ -91,7 +91,7 @@ void ViewportOverlay::resizeWidgetAndChildren(QString t_widget, int t_width, int
   int l_scaledX = static_cast<int>(l_widgetSize.x * l_scalingFactor);
   int l_scaledY = static_cast<int>(l_widgetSize.y * l_scalingFactor);
 
-  ThemeManager::get().setViewporResize(l_scalingFactor);
+  LegacyThemeManager::get().setViewporResize(l_scalingFactor);
 
   if(t_widget.startsWith("viewport"))
   {
@@ -110,7 +110,7 @@ void ViewportOverlay::resizeWidgetAndChildren(QString t_widget, int t_width, int
     l_imageDisplay->refreshImage();
   }
 
-  QStringList l_viewportChildren = ThemeManager::get().mCurrentThemeReader.GetLayerChildren(t_widget);
+  QStringList l_viewportChildren = LegacyThemeManager::get().mCurrentThemeReader.GetLayerChildren(t_widget);
   for(QString l_child : l_viewportChildren)
   {
     resizeWidgetAndChildren(l_child, t_width, t_height);
@@ -163,7 +163,7 @@ void ViewportOverlay::displayContextMenu(QPoint t_position)
 
 void ViewportOverlay::detatchViewport()
 {
-  QWidget* l_viewport = ThemeManager::get().getWidget("viewport");
+  QWidget* l_viewport = LegacyThemeManager::get().getWidget("viewport");
 
   l_viewport->setParent(nullptr);
   l_viewport->show();
@@ -172,10 +172,10 @@ void ViewportOverlay::detatchViewport()
 
 void ViewportOverlay::resizeViewport(int t_width, int t_height)
 {
-  QWidget* l_viewport = ThemeManager::get().getWidget("viewport");
+  QWidget* l_viewport = LegacyThemeManager::get().getWidget("viewport");
   l_viewport->resize(t_width, t_height);
 
-  QStringList l_viewportChildren = ThemeManager::get().mCurrentThemeReader.GetLayerChildren("viewport");
+  QStringList l_viewportChildren = LegacyThemeManager::get().mCurrentThemeReader.GetLayerChildren("viewport");
   for(QString l_child : l_viewportChildren)
   {
     resizeWidgetAndChildren(l_child, t_width, t_height);

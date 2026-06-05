@@ -6,7 +6,7 @@
 #include "drgraphicscene.h"
 #include "theme.h"
 #include "drtheme.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 
 #include "engine/param/actor_repository.h"
 #include "engine/param/actor/actor_loader.h"

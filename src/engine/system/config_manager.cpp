@@ -1,7 +1,7 @@
 #include "config_manager.h"
 #include "config_tabs/config_tab_theme.h"
 #include "rolechat_config.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 #include "engine/system/replay_playback.h"
 
 RolechatConfig *system::ConfigManager::m_configWindow = nullptr;
@@ -33,7 +33,7 @@ void system::ConfigManager::setDefaultGamemode(const QString &defaultGamemode)
   engine::system::replays::recording::gamemodeChange(defaultGamemode);
   if(m_defaultGamemode == defaultGamemode) return;
   m_defaultGamemode = defaultGamemode;
-  ThemeManager::get().LoadGamemode(defaultGamemode);
+  LegacyThemeManager::get().LoadGamemode(defaultGamemode);
 
   ConfigTabTheme* themeConfig = retrieveTab<ConfigTabTheme>("Theme");
   if(!themeConfig)

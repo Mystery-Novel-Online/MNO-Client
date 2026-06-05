@@ -15,7 +15,7 @@
 #include "engine/fs/fs_reading.h"
 #include "engine/interface/lobby_layout.h"
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 #include "engine/interface/scenes/replay_window.h"
 #include "engine/system/replay_playback.h"
 #include "engine/interface/scenes/workshop_uploader.h"
@@ -354,7 +354,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   m_master_client->set_address(ao_config->server_advertiser());
   set_choose_a_server();
 
-  ThemeManager::get().ResetWidgetLists();
+  LegacyThemeManager::get().ResetWidgetLists();
   ui_gallery_packages->clear();
   ui_gallery_packages->addItems(engine::system::replays::io::packageNames());
 

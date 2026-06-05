@@ -6,7 +6,7 @@
 
 #include "version.h"
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 
 #include "engine/system/localization.h"
 #include "engine/fs/fs_mounting.h"
@@ -523,7 +523,7 @@ void AOConfigPanel::on_load_packages_clicked()
 
 void AOConfigPanel::on_reload_theme_clicked()
 {
-  ThemeManager::get().toggleReload();
+  LegacyThemeManager::get().toggleReload();
   Q_EMIT reload_theme();
 }
 

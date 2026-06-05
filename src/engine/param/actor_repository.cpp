@@ -1,7 +1,7 @@
 #include "actor_repository.h"
 
 #include "engine/system/user_database.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 #include "engine/fs/fs_reading.h"
 #include "engine/param/actor/actor_loader.h"
 #include "engine/interface/courtroom_layout.h"
@@ -171,7 +171,7 @@ rolechat::actor::IActorData *engine::actor::user::switchCharacter(QString folder
 
 void engine::actor::user::setOutfitList(QStringList outfits)
 {
-  QWidget *l_outfitSelectorWidget = ThemeManager::get().getWidget("outfit_selector");
+  QWidget *l_outfitSelectorWidget = LegacyThemeManager::get().getWidget("outfit_selector");
 
   if (dynamic_cast<QComboBox*>(l_outfitSelectorWidget) != nullptr)
   {

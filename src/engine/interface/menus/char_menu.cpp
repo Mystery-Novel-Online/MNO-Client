@@ -1,5 +1,5 @@
 #include "char_menu.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 #include "engine/fs/fs_reading.h"
 #include "engine/param/actor_repository.h"
 #include "engine/param/actor/actor_loader.h"
@@ -30,7 +30,7 @@ CharMenu::CharMenu(Courtroom *parent) : QMenu(parent), parentCourtroom(parent)
 
 void CharMenu::OnMenuRequested(QPoint p_point)
 {
-  QPushButton *changeCharacterButton = ThemeManager::get().GetWidgetType<QPushButton>("change_character");
+  QPushButton *changeCharacterButton = LegacyThemeManager::get().GetWidgetType<QPushButton>("change_character");
   const QPoint l_global_point = changeCharacterButton->mapToGlobal(p_point);
   popup(l_global_point);
 }

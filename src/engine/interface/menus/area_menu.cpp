@@ -1,5 +1,5 @@
 #include "area_menu.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 
 AreaMenu::AreaMenu(QWidget *parent) : QMenu(parent)
 {
@@ -12,7 +12,7 @@ AreaMenu::AreaMenu(QWidget *parent) : QMenu(parent)
 
 void AreaMenu::OnMenuRequested(QPoint p_point)
 {
-  QListWidget *areaList = ThemeManager::get().GetWidgetType<QListWidget>("area_list");
+  QListWidget *areaList = LegacyThemeManager::get().GetWidgetType<QListWidget>("area_list");
 
   QListWidgetItem *l_item = areaList->currentItem();
 

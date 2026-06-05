@@ -1,4 +1,4 @@
-#include "thememanager.h"
+#include "legacythememanager.h"
 #include "pch.h"
 
 #include "drtheme.h"
@@ -6,9 +6,9 @@
 #include "engine/system/theme_scripting.h"
 #include "engine/interface/courtroom_layout.h"
 
-ThemeManager ThemeManager::s_Instance;
+LegacyThemeManager LegacyThemeManager::s_Instance;
 
-void ThemeManager::ResetWidgetLists()
+void LegacyThemeManager::ResetWidgetLists()
 {
   m_TabWidgets.clear();
   m_TabDeletionQueue.clear();
@@ -19,7 +19,7 @@ void ThemeManager::ResetWidgetLists()
   m_DetatchedTabList.clear();
 }
 
-void ThemeManager::deleteTabPanels()
+void LegacyThemeManager::deleteTabPanels()
 {
   for(const QString& tabName : m_TabWidgets.keys())
   {
@@ -47,18 +47,18 @@ void ThemeManager::deleteTabPanels()
   }
 }
 
-void ThemeManager::createTabPanels()
+void LegacyThemeManager::createTabPanels()
 {
 
 }
 
-void ThemeManager::parentTabWidgets()
+void LegacyThemeManager::parentTabWidgets()
 {
 
 }
 
 
-void ThemeManager::createTabParent()
+void LegacyThemeManager::createTabParent()
 {
   m_TabDeletionQueue = m_TabWidgets;
   m_TabWidgets = {};
@@ -67,7 +67,7 @@ void ThemeManager::createTabParent()
     courtroom::tabs::deleteToggle(oldTabs);
   }
 
-  for(ThemeTabInfo r_tabInfo : ThemeManager::get().getTabsInfo())
+  for(ThemeTabInfo r_tabInfo : LegacyThemeManager::get().getTabsInfo())
   {
     QWidget *l_courtroom = getWidget("courtroom");
 
@@ -124,9 +124,9 @@ void ThemeManager::createTabParent()
   LuaBridge::LuaEventCall("OnTogglesCreated");
 }
 
-void ThemeManager::execLayerTabs()
+void LegacyThemeManager::execLayerTabs()
 {
-  for(ThemeTabInfo r_tabInfo : ThemeManager::get().getTabsInfo())
+  for(ThemeTabInfo r_tabInfo : LegacyThemeManager::get().getTabsInfo())
   {
     if(m_TabWidgets.contains(r_tabInfo.m_Name))
     {
@@ -144,10 +144,10 @@ void ThemeManager::execLayerTabs()
   };
 }
 
-void ThemeManager::resetSelectedTabs()
+void LegacyThemeManager::resetSelectedTabs()
 {
   QStringList l_resetTabs = {};
-  for(ThemeTabInfo r_tabInfo : ThemeManager::get().getTabsInfo())
+  for(ThemeTabInfo r_tabInfo : LegacyThemeManager::get().getTabsInfo())
   {
     if(l_resetTabs.contains(r_tabInfo.m_Group)) continue;
     toggleTab(r_tabInfo.m_Name, r_tabInfo.m_Group);
@@ -155,9 +155,9 @@ void ThemeManager::resetSelectedTabs()
   }
 }
 
-void ThemeManager::toggleTab(const QString& name, const QString& group)
+void LegacyThemeManager::toggleTab(const QString& name, const QString& group)
 {
-  QVector<ThemeTabInfo> tabsInfo = ThemeManager::get().getTabsInfo();
+  QVector<ThemeTabInfo> tabsInfo = LegacyThemeManager::get().getTabsInfo();
   const ThemeTabInfo* selectedTab = nullptr;
 
   for (const ThemeTabInfo& tabInfo : tabsInfo)
@@ -203,7 +203,7 @@ void ThemeManager::toggleTab(const QString& name, const QString& group)
 
 }
 
-void ThemeManager::detatchTab(QString t_tabName)
+void LegacyThemeManager::detatchTab(QString t_tabName)
 {
   QString l_panelName = t_tabName + "_panel";
   QWidget *l_widget = getWidget(l_panelName);
@@ -219,27 +219,29 @@ void ThemeManager::detatchTab(QString t_tabName)
   }
 }
 
-void ThemeManager::execRemoveWidget(QString t_name)
+void LegacyThemeManager::execRemoveWidget(QString t_name)
 {
   if(m_WidgetNames.contains(t_name)) m_WidgetNames.remove(t_name);
 }
 
 
-void ThemeManager::loadTheme(QString theme_name)
+void LegacyThemeManager::loadTheme(QString theme_name)
 {
   if(mRequiresReload)
   {
+    rolechat::theme::ThemeManager::Instance().LoadTheme(theme_name.toStdString());
     mCurrentThemeReader.LoadTheme(theme_name);
     mRequiresReload = false;
   }
 }
 
-void ThemeManager::LoadGamemode(QString gamemode)
+void LegacyThemeManager::LoadGamemode(QString gamemode)
 {
+  rolechat::theme::ThemeManager::Instance().SwitchGamemode(gamemode.toStdString());
   mCurrentThemeReader.SetGamemode(gamemode);
 }
 
-void ThemeManager::setWidgetPosition(QWidget *t_widget, int t_x, int t_y)
+void LegacyThemeManager::setWidgetPosition(QWidget *t_widget, int t_x, int t_y)
 {
   int l_PositionX = static_cast<int>(t_x * mClientResize);
   int l_PositionY = static_cast<int>(t_y * mClientResize);
@@ -247,7 +249,7 @@ void ThemeManager::setWidgetPosition(QWidget *t_widget, int t_x, int t_y)
   t_widget->move(l_PositionX, l_PositionY);
 }
 
-void ThemeManager::setWidgetDimensions(QWidget *t_widget, int t_width, int t_height)
+void LegacyThemeManager::setWidgetDimensions(QWidget *t_widget, int t_width, int t_height)
 {
   int l_PositionWidth = static_cast<int>(t_width * mClientResize);
   int l_PositionHeight = static_cast<int>(t_height * mClientResize);
@@ -255,55 +257,55 @@ void ThemeManager::setWidgetDimensions(QWidget *t_widget, int t_width, int t_hei
   t_widget->resize(l_PositionWidth, l_PositionHeight);
 }
 
-void ThemeManager::AssignDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene)
+void LegacyThemeManager::AssignDimensions(QWidget *t_widget, QString t_name, ThemeSceneType t_scene)
 {
   RPRect lPositionData = mCurrentThemeReader.GetWidgetTransform(t_scene, t_name);
   t_widget->move(lPositionData.x, lPositionData.y);
   t_widget->resize(lPositionData.width, lPositionData.height);
 }
 
-void ThemeManager::SetWidgetNames(QHash<QString, QWidget *> t_WidgetNames)
+void LegacyThemeManager::SetWidgetNames(QHash<QString, QWidget *> t_WidgetNames)
 {
   m_WidgetNames = t_WidgetNames;
 }
 
-void ThemeManager::addWidgetName(QString t_widgetName, QWidget *t_widget)
+void LegacyThemeManager::addWidgetName(QString t_widgetName, QWidget *t_widget)
 {
   courtroom::layout::addWidget(t_widgetName, t_widget);
   m_WidgetNames[t_widgetName] = t_widget;
 }
 
-const QString &ThemeManager::getConfigString(const QString &key)
+const QString &LegacyThemeManager::getConfigString(const QString &key)
 {
   return mCurrentThemeReader.getConfigString(key);
 }
 
-int ThemeManager::getConfigInt(QString value)
+int LegacyThemeManager::getConfigInt(QString value)
 {
   return mCurrentThemeReader.GetConfigInt(value);
 }
 
-QVector<ThemeTabInfo> ThemeManager::getTabsInfo()
+QVector<ThemeTabInfo> LegacyThemeManager::getTabsInfo()
 {
   return mCurrentThemeReader.getTabs();
 }
 
-bool ThemeManager::getConfigBool(QString value)
+bool LegacyThemeManager::getConfigBool(QString value)
 {
   return mCurrentThemeReader.GetConfigBool(value);
 }
 
-bool ThemeManager::getReloadPending()
+bool LegacyThemeManager::getReloadPending()
 {
   return mRequiresReload;
 }
 
-void ThemeManager::toggleReload()
+void LegacyThemeManager::toggleReload()
 {
   mRequiresReload = true;
 }
 
-RPRect ThemeManager::resizePosition(RPRect t_position, double t_scale)
+RPRect LegacyThemeManager::resizePosition(RPRect t_position, double t_scale)
 {
   t_position.x = static_cast<int>(t_position.x * t_scale);
   t_position.y = static_cast<int>(t_position.y * t_scale);
@@ -313,44 +315,44 @@ RPRect ThemeManager::resizePosition(RPRect t_position, double t_scale)
   return t_position;
 }
 
-void ThemeManager::setResize(double size)
+void LegacyThemeManager::setResize(double size)
 {
   mClientResize = size;
 }
 
-double ThemeManager::getResize()
+double LegacyThemeManager::getResize()
 {
   return mClientResize;
 }
 
-void ThemeManager::setViewporResize(double size)
+void LegacyThemeManager::setViewporResize(double size)
 {
   mViewportResize = size;
 }
 
-double ThemeManager::getViewporResize()
+double LegacyThemeManager::getViewporResize()
 {
   return mViewportResize;
 }
 
-void ThemeManager::addComboBox(QString name, RPComboBox *comboBox)
+void LegacyThemeManager::addComboBox(QString name, RPComboBox *comboBox)
 {
   mComboBoxWidgets[name] = comboBox;
 }
 
 
-void ThemeManager::setCourtroomBackground(AOImageDisplay *t_background)
+void LegacyThemeManager::setCourtroomBackground(AOImageDisplay *t_background)
 {
   wCourtroomBackground = t_background;
 }
 
-QWidget *ThemeManager::getWidget(QString name)
+QWidget *LegacyThemeManager::getWidget(QString name)
 {
   if(m_WidgetNames.contains(name)) return m_WidgetNames[name];
   return nullptr;
 }
 
-RPButton *ThemeManager::GetButton(QString t_name)
+RPButton *LegacyThemeManager::GetButton(QString t_name)
 {
-  return dynamic_cast<RPButton*>(ThemeManager::get().getWidget(t_name));
+  return dynamic_cast<RPButton*>(LegacyThemeManager::get().getWidget(t_name));
 }

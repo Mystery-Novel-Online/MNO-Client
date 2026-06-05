@@ -3,7 +3,7 @@
 #include <rolechat/filesystem/RCDir.h>
 #include <rolechat/config/ConfigUserSettings.h>
 #include "engine/system/config_manager.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 
 ConfigTabTheme::ConfigTabTheme(QWidget *parent) : QWidget(parent), ui(new Ui::ConfigTabTheme)
 {
@@ -141,7 +141,7 @@ void ConfigTabTheme::triggerReload()
 
 void ConfigTabTheme::on_theme_switch_button_clicked()
 {
-  ThemeManager::get().toggleReload();
+  LegacyThemeManager::get().toggleReload();
   config::ConfigUserSettings::setString("theme", ui->current_theme_dropdown->currentText().toStdString());
   updateControls();
   refreshGamemodeList();
@@ -201,6 +201,6 @@ void ConfigTabTheme::on_current_time_dropdown_currentTextChanged(const QString &
 void ConfigTabTheme::on_resize_spinbox_valueChanged(double arg1)
 {
   config::ConfigUserSettings::setValue("resize", (float)arg1);
-  ThemeManager::get().setResize(arg1);
+  LegacyThemeManager::get().setResize(arg1);
 }
 

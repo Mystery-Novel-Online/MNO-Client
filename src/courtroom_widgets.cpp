@@ -14,7 +14,7 @@
 #include "modules/managers/notify_manager.h"
 #include "theme.h"
 
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 #include "engine/system/debug/time_debugger.h"
 #include "engine/system/localization.h"
 
@@ -44,7 +44,7 @@ void Courtroom::create_widgets()
 
   ui_background = new AOImageDisplay(this, ao_app);
 
-  ThemeManager::get().setCourtroomBackground(ui_background);
+  LegacyThemeManager::get().setCourtroomBackground(ui_background);
 
   ui_viewport = new DRGraphicsView(this);
   if(ao_config->opengl_enabled())
@@ -366,7 +366,7 @@ QComboBox *Courtroom::setupComboBoxWidget(const QStringList& items, QString name
   RPComboBox *comboBox = new RPComboBox(this, ao_app);
   comboBox->addItems(items);
   comboBox->setWidgetInfo(name, cssHeader, "courtroom");
-  ThemeManager::get().addComboBox(name, comboBox);
+  LegacyThemeManager::get().addComboBox(name, comboBox);
   return comboBox;
 }
 
@@ -669,7 +669,7 @@ void Courtroom::reset_widget_names()
   }
 
     courtroom::layout::setWidgetList(widget_names);
-    ThemeManager::get().SetWidgetNames(widget_names);
+    LegacyThemeManager::get().SetWidgetNames(widget_names);
 }
 
 void Courtroom::insert_widget_name(QString p_widget_name, QWidget *p_widget)
@@ -705,7 +705,7 @@ void Courtroom::set_widget_names()
   for (auto *i_block : qAsConst(ui_free_blocks))
   {
     widget_names.insert(i_block->objectName(), i_block);
-    ThemeManager::get().addWidgetName(i_block->objectName(), i_block);
+    LegacyThemeManager::get().addWidgetName(i_block->objectName(), i_block);
   }
 
   // timers are special children
@@ -736,7 +736,7 @@ void Courtroom::set_widget_layers()
 
     for(QString l_child_name : widget_layers)
     {
-      if(l_child_name == "char_select") ThemeManager::get().execLayerTabs();
+      if(l_child_name == "char_select") LegacyThemeManager::get().execLayerTabs();
       if(count != 0)
       {
         l_parent_name = widget_layers[0];
@@ -1043,7 +1043,7 @@ void Courtroom::set_widgets()
 
   ui_emotes->constructEmotes();
 
-  if(ThemeManager::get().getReloadPending())
+  if(LegacyThemeManager::get().getReloadPending())
   {
     { // emote preview
       RPRect l_emote_preview_size = engine::system::theme::getDimensions("emote_preview", ThemeSceneType::SceneType_Courtroom);
@@ -1099,7 +1099,7 @@ void Courtroom::set_widgets()
   for (int i = 0; i < effect_names.size(); ++i)
   {
     engine::system::theme::applyDimensions(ui_effects[i], effect_names[i], ThemeSceneType::SceneType_Courtroom);
-    ThemeManager::get().addWidgetName(effect_names[i], ui_effects[i]);
+    LegacyThemeManager::get().addWidgetName(effect_names[i], ui_effects[i]);
   }
   reset_effect_buttons();
 
@@ -1120,7 +1120,7 @@ void Courtroom::set_widgets()
   for (int i = 0; i < wtce_names.size(); ++i)
   {
     engine::system::theme::applyDimensions(ui_wtce[i],  wtce_names[i], ThemeSceneType::SceneType_Courtroom);
-    ThemeManager::get().addWidgetName(wtce_names[i], ui_wtce[i]);
+    LegacyThemeManager::get().addWidgetName(wtce_names[i], ui_wtce[i]);
   }
 
   if (ao_app->current_theme->read_config_bool("enable_single_wtce")) // courtroom_config.ini necessary
@@ -1163,7 +1163,7 @@ void Courtroom::set_widgets()
   for (int i = 0; i < ui_label_images.size(); ++i)
   {
     reloadList[ui_label_images[i]] = label_images[i].toLower() + "_image";
-    ThemeManager::get().addWidgetName(label_images[i].toLower() + "_image", ui_label_images[i]);
+    LegacyThemeManager::get().addWidgetName(label_images[i].toLower() + "_image", ui_label_images[i]);
   }
 
   for (auto [widget, identifier] : reloadList.toStdMap())
@@ -1220,7 +1220,7 @@ void Courtroom::set_widgets()
   adapt_numbered_items(ui_timers, "timer_number", "timer");
   set_fonts();
 
-  QString blips = ThemeManager::get().mCurrentThemeReader.getBlips();
+  QString blips = LegacyThemeManager::get().mCurrentThemeReader.getBlips();
   m_configBlips->setThemeBlip(blips.toStdString());
 
   Q_EMIT loaded_theme();
@@ -1371,7 +1371,7 @@ void Courtroom::delete_widget(QWidget *p_widget)
   // remove the widget from recorded names
   QString l_widgetName = p_widget->objectName();
   widget_names.remove(l_widgetName);
-  ThemeManager::get().execRemoveWidget(l_widgetName);
+  LegacyThemeManager::get().execRemoveWidget(l_widgetName);
 
   // transfer the children to our grandparent since our parent is about to be deleted
   QWidget *grand_parent = p_widget->parentWidget();
@@ -1456,7 +1456,7 @@ void Courtroom::load_free_blocks()
     l_block->setObjectName(l_block_name);
     ui_free_blocks.append(l_block);
     widget_names.insert(l_block_name, l_block);
-    ThemeManager::get().addWidgetName(l_block_name, l_block);
+    LegacyThemeManager::get().addWidgetName(l_block_name, l_block);
   }
 }
 

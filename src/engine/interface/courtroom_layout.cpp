@@ -1,6 +1,6 @@
 #include "courtroom_layout.h"
 
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 #include "engine/system/theme_scripting.h"
 
 #include <engine/animation/widget_animator.h>
@@ -142,7 +142,7 @@ namespace courtroom
         });
       }
 
-      float resizeFactor = ThemeManager::get().getResize();
+      float resizeFactor = LegacyThemeManager::get().getResize();
 
       int l_scaledWidth = static_cast<int>(width * resizeFactor);
       int l_scaledHeight = static_cast<int>(height * resizeFactor);
@@ -191,7 +191,7 @@ namespace courtroom
                          });
       }
 
-      float resizeFactor = ThemeManager::get().getResize();
+      float resizeFactor = LegacyThemeManager::get().getResize();
 
       int l_scaledWidth = static_cast<int>(width * resizeFactor);
       int l_scaledHeight = static_cast<int>(height * resizeFactor);
@@ -262,7 +262,7 @@ namespace courtroom
         targetButton = dynamic_cast<RPButton*>(buttonWidget);
         if(targetButton == nullptr) return;
       }
-      float resizeFactor = ThemeManager::get().getResize();
+      float resizeFactor = LegacyThemeManager::get().getResize();
 
       int l_scaledWidth = static_cast<int>(sizeX * resizeFactor);
       int l_scaledHeight = static_cast<int>(sizeY * resizeFactor);
@@ -308,7 +308,7 @@ namespace courtroom
 
       }
 
-      float resizeFactor = ThemeManager::get().getResize();
+      float resizeFactor = LegacyThemeManager::get().getResize();
       s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
       s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
     }
@@ -349,7 +349,7 @@ namespace courtroom
         textEdit->show();
       }
 
-      float resizeFactor = ThemeManager::get().getResize();
+      float resizeFactor = LegacyThemeManager::get().getResize();
       s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
       s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
     }
@@ -397,7 +397,7 @@ namespace courtroom
                          });
       }
 
-      float resizeFactor = ThemeManager::get().getResize();
+      float resizeFactor = LegacyThemeManager::get().getResize();
       s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
       s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
     }
@@ -450,7 +450,7 @@ namespace courtroom
         if(targetSticker == nullptr) return;
 
       }
-      float resizeFactor = ThemeManager::get().getResize();
+      float resizeFactor = LegacyThemeManager::get().getResize();
 
       int l_scaledWidth = static_cast<int>(sizeX * resizeFactor);
       int l_scaledHeight = static_cast<int>(sizeY * resizeFactor);
@@ -573,7 +573,7 @@ namespace courtroom
       QString qName = QString::fromStdString(name);
       if(!s_CourtroomWidgets.contains(qName)) return;
       QWidget *targetWidget = s_CourtroomWidgets[qName];
-      float resizeFactor = ThemeManager::get().getResize();
+      float resizeFactor = LegacyThemeManager::get().getResize();
       int scaledX = static_cast<int>(axisX * resizeFactor);
       int scaledY = static_cast<int>(axisY * resizeFactor);
       targetWidget->move(scaledX, scaledY);
@@ -615,7 +615,7 @@ namespace courtroom
       QString qName = QString::fromStdString(name);
       if(!s_CourtroomWidgets.contains(qName)) return;
       QWidget *targetWidget = s_CourtroomWidgets[qName];
-      float resizeFactor = ThemeManager::get().getResize();
+      float resizeFactor = LegacyThemeManager::get().getResize();
       int scaledX = static_cast<int>(width * resizeFactor);
       int scaledY = static_cast<int>(height * resizeFactor);
       targetWidget->resize(scaledX, scaledY);
@@ -719,7 +719,7 @@ namespace courtroom
       hoverWidget->show();
     }
 
-    float resizeFactor = ThemeManager::get().getResize();
+    float resizeFactor = LegacyThemeManager::get().getResize();
     s_CourtroomWidgets[qName]->resize(width * resizeFactor, height * resizeFactor);
     s_CourtroomWidgets[qName]->move(x * resizeFactor, y * resizeFactor);
   }

@@ -6,7 +6,7 @@
 #include "engine/fs/fs_reading.h"
 #include "engine/system/localization.h"
 #include "engine/network/metadata/user_metadata.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 #include "engine/fs/fs_characters.h"
 #include "engine/interface/scenes/downloader_prompt.h"
 
@@ -111,7 +111,7 @@ void DrPlayerListEntry::refreshManual(int width)
 void DrPlayerListEntry::refreshAutomatic(int width)
 {
 
-  const double themeResize = ThemeManager::get().getResize();
+  const double themeResize = LegacyThemeManager::get().getResize();
 
   const int widgetHeight = static_cast<int>(DEFAULT_HEIGHT * themeResize);
   const int widgetWidth = width;

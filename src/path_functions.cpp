@@ -2,7 +2,7 @@
 
 #include "aoconfig.h"
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 #include "engine/fs/fs_reading.h"
 #include "engine/fs/fs_mounting.h"
 #include "engine/system/replay_playback.h"
@@ -239,7 +239,7 @@ QString AOApplication::find_asset_path(QString p_file)
  */
 QString AOApplication::find_theme_asset_path(QString p_file, QStringList p_extension_list)
 {
-  QStringList themeManagerDirs = ThemeManager::get().mCurrentThemeReader.getThemeDirOrder();
+  QStringList themeManagerDirs = LegacyThemeManager::get().mCurrentThemeReader.getThemeDirOrder();
 
   QStringList l_path_list = {};
 

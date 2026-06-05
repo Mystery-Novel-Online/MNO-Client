@@ -1,5 +1,5 @@
 #include "engine/param/actor/actor_loader.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 #include "engine/interface/menus/emote_menu.h"
 #include "engine/fs/fs_reading.h"
 #include "engine/fs/fs_characters.h"
@@ -18,7 +18,7 @@ AOEmoteButton::AOEmoteButton(QWidget *p_parent, AOApplication *p_ao_app, int p_x
 
   float buttonSize = EmoteMenu::isDoubleSize() ? DOUBLE_SIZE : 40;
 
-  int resizedButtonSize = (int)(buttonSize * ThemeManager::get().getResize());
+  int resizedButtonSize = (int)(buttonSize * LegacyThemeManager::get().getResize());
 
   this->resize(resizedButtonSize, resizedButtonSize);
 

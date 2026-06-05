@@ -138,7 +138,7 @@ set(HEADERS
   src/modules/managers/notify_manager.h
 
   src/modules/managers/scene_manager.h
-  src/modules/theme/thememanager.h
+  src/modules/theme/legacythememanager.h
   src/theme.h
   src/utils.h
   src/version.h
@@ -272,7 +272,7 @@ set(SOURCES
   src/modules/managers/notify_manager.cpp
 
   src/modules/managers/scene_manager.cpp
-  src/modules/theme/thememanager.cpp
+  src/modules/theme/legacythememanager.cpp
   src/path_functions.cpp
   src/server_socket.cpp
   src/mk2/spritereader.cpp

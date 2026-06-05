@@ -1,6 +1,6 @@
 #include "rp_widget.h"
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 #include "engine/fs/fs_reading.h"
 #include "engine/system/theme.h"
 

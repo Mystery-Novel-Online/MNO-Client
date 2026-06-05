@@ -3,7 +3,7 @@
 
 #include "drtheme.h"
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 
 void set_text_alignment_or_default(QWidget *p_widget, QString p_identifier, QString p_ini_file, AOApplication *ao_app,
                                    std::string p_property, Qt::Alignment p_default_horizontal,
@@ -73,7 +73,7 @@ void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOAppli
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontdata = ThemeManager::get().mCurrentThemeReader.GetFontData(l_scene, p_identifier);
+    widgetFontStruct fontdata = LegacyThemeManager::get().mCurrentThemeReader.GetFontData(l_scene, p_identifier);
     font_name = fontdata.font;
     is_bold = fontdata.bold;
     is_antialias = fontdata.sharp;
@@ -126,7 +126,7 @@ void set_drtextedit_font(RPTextEdit *p_widget, QString p_identifier, QString p_i
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontData(ThemeSceneType::SceneType_Courtroom, p_identifier);
+    widgetFontStruct fontData = LegacyThemeManager::get().mCurrentThemeReader.GetFontData(ThemeSceneType::SceneType_Courtroom, p_identifier);
     outline = fontData.outline;
     outlineWidth = fontData.outlineSize;
     outlineColor = fontData.outlineColor;
@@ -187,9 +187,9 @@ void set_sticker_play_once(DRStickerViewer *p_sticker, QString p_identifier, QSt
 
 void setShownameFont(RPTextEdit *widget, QString identifier, QString align)
 {
-  widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontDataPairing(identifier, align);
+  widgetFontStruct fontData = LegacyThemeManager::get().mCurrentThemeReader.GetFontDataPairing(identifier, align);
 
-  fontData.size = static_cast<int>(fontData.size * ThemeManager::get().getResize());
+  fontData.size = static_cast<int>(fontData.size * LegacyThemeManager::get().getResize());
 
   setThemeFont(widget, fontData);
 
@@ -234,7 +234,7 @@ void setThemeFont(QWidget *widget, const widgetFontStruct& font_data)
 
 widgetFontStruct getMessageFontStruct(QString identifier, QString align)
 {
-  widgetFontStruct fontData = ThemeManager::get().mCurrentThemeReader.GetFontDataPairing(identifier, align);
-  fontData.size = static_cast<int>(fontData.size * ThemeManager::get().getResize());
+  widgetFontStruct fontData = LegacyThemeManager::get().mCurrentThemeReader.GetFontDataPairing(identifier, align);
+  fontData.size = static_cast<int>(fontData.size * LegacyThemeManager::get().getResize());
   return fontData;
 }

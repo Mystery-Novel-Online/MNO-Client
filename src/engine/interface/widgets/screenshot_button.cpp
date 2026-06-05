@@ -1,5 +1,5 @@
 #include "screenshot_button.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 #include "engine/interface/courtroom_layout.h"
 #include "engine/system/audio.h"
 #include "engine/interface/menus/screenshot_menu.h"
@@ -17,7 +17,7 @@ ScreenshotButton::ScreenshotButton(QWidget *parent, AOApplication *p_ao_app) : R
 
 void ScreenshotButton::UpdateDimensions()
 {
-  ThemeManager::get().AssignDimensions(this, "screenshot", ThemeSceneType::SceneType_Courtroom);
+  LegacyThemeManager::get().AssignDimensions(this, "screenshot", ThemeSceneType::SceneType_Courtroom);
   set_theme_image("screenshot", "screenshot.png", "courtroom", "Screenshot");
 }
 

@@ -7,7 +7,7 @@ bool EmoteMenu::s_renderSprites = false;
 #include "engine/interface/courtroom_layout.h"
 #include "engine/param/actor_repository.h"
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 
 using namespace engine;
 
@@ -42,7 +42,7 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
 
 
 
-  LayerSelectionPanel *selectionPanel = static_cast<LayerSelectionPanel*>(ThemeManager::get().getWidget("layers_panel"));
+  LayerSelectionPanel *selectionPanel = static_cast<LayerSelectionPanel*>(LegacyThemeManager::get().getWidget("layers_panel"));
   if(selectionPanel) selectionPanel->clear();
 
   for(const ActorLayer &layer : emote.emoteOverlays)

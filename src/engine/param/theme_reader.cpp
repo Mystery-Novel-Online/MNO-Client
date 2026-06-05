@@ -1,6 +1,6 @@
 #include "theme_reader.h"
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 #include "engine/fs/fs_reading.h"
 
 
@@ -380,7 +380,7 @@ RPRect ThemeReader::GetWidgetTransform(ThemeSceneType sceneType, QString element
 {
   RPRect return_value;
 
-  double resize = ThemeManager::get().getResize();
+  double resize = LegacyThemeManager::get().getResize();
 
   if(m_GameModeCurrent != nullptr)
   {

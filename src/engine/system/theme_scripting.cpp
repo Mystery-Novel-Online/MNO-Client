@@ -2,7 +2,7 @@
 #include "engine/fs/fs_reading.h"
 #include "engine/system/audio.h"
 #include "engine/interface/courtroom_layout.h"
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 #include "modules/managers/notify_manager.h"
 #include "engine/network/metadata/area_metadata.h"
 #include "engine/system/runtime_values.h"
@@ -264,7 +264,7 @@ namespace LuaFunctions
 {
   void ChangeTab(const std::string& group, const std::string& tabName)
   {
-    ThemeManager::get().toggleTab(QString::fromStdString(tabName), QString::fromStdString(group));
+    LegacyThemeManager::get().toggleTab(QString::fromStdString(tabName), QString::fromStdString(group));
   }
 
   void AlertUser(bool playSound)

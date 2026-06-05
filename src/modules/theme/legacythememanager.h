@@ -1,15 +1,16 @@
-#ifndef THEMEMANAGER_H
-#define THEMEMANAGER_H
+#ifndef LEGACYTHEMEMANAGER_H
+#define LEGACYTHEMEMANAGER_H
 
 #include <QHash>
 #include "engine/param/theme_reader.h"
+#include "rolechat/theme/ThemeManager.h"
 
-class ThemeManager
+class LegacyThemeManager
 {
 public:
-  ThemeManager(const ThemeManager&) = delete;
+  LegacyThemeManager(const LegacyThemeManager&) = delete;
 
-  static ThemeManager& get()
+  static LegacyThemeManager& get()
   {
     return s_Instance;
   }
@@ -70,7 +71,7 @@ public:
   template<typename T>
   T* GetWidgetType(QString t_name)
   {
-    QWidget *mReturnWidget = ThemeManager::get().getWidget(t_name);
+    QWidget *mReturnWidget = LegacyThemeManager::get().getWidget(t_name);
     if (dynamic_cast<T*>(mReturnWidget) != nullptr)
     {
       T* l_return = dynamic_cast<T*>(mReturnWidget);
@@ -86,8 +87,8 @@ public:
   ThemeReader mCurrentThemeReader = ThemeReader();
 
 private:
-  ThemeManager() = default;
-  static ThemeManager s_Instance;
+  LegacyThemeManager() = default;
+  static LegacyThemeManager s_Instance;
 
   double mClientResize = 1;
 
@@ -108,4 +109,4 @@ private:
   QMap<QString, QVector2D> m_DetatchedTabList = {};
 };
 
-#endif // THEMEMANAGER_H
+#endif // LEGACYTHEMEMANAGER_H

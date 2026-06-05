@@ -387,7 +387,7 @@ QString AOApplication::get_char_name(QString p_chr)
 
 #include <QQueue>
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 
 QStringList AOApplication::get_char_include(QString p_chr)
 {

@@ -6,7 +6,7 @@
 
 #include "modules/managers/scene_manager.h"
 #include <engine/discord/workshop_discord.h>
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 #include <rolechat/config/ConfigUserSettings.h>
 
 #include "engine/fs/fs_reading.h"
@@ -204,7 +204,7 @@ void AOConfigPrivate::load_file()
   blip_volume = cfg.value("default_blip", 50).toInt();
   blip_ignore_suppression = cfg.value("blip_ignore_suppression", false).toBool();
   punctuation_delay = cfg.value("punctuation_delay", 110).toInt();
-  ThemeManager::get().setResize(config::ConfigUserSettings::floatValue("resize", 1.0f));
+  LegacyThemeManager::get().setResize(config::ConfigUserSettings::floatValue("resize", 1.0f));
   fade_duration = cfg.value("fade_duration", 200).toInt();
   SceneManager::get().setFadeDuration(fade_duration);
 

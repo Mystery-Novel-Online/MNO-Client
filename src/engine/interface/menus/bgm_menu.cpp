@@ -1,5 +1,5 @@
 #include "bgm_menu.h"
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 #include "engine/network/metadata/tracklist_metadata.h"
 #include "engine/interface/courtroom_layout.h"
 #include "engine/system/audio.h"
@@ -35,7 +35,7 @@ BGMMenu::BGMMenu(QWidget *parent) : QMenu(parent)
 
 void BGMMenu::OnMenuRequested(QPoint p_point)
 {
-  QListWidget *musicList = ThemeManager::get().GetWidgetType<QListWidget>("music_list");
+  QListWidget *musicList = LegacyThemeManager::get().GetWidgetType<QListWidget>("music_list");
   if(musicList == nullptr) return;
 
   QListWidgetItem *l_item = musicList->currentItem();
@@ -50,7 +50,7 @@ void BGMMenu::OnMenuRequested(QPoint p_point)
 void BGMMenu::OnInsertTriggered()
 {
   if(m_TargetTrack.isEmpty()) return;
-  QLineEdit *oocChat = ThemeManager::get().GetWidgetType<QLineEdit>("ooc_chat_message");
+  QLineEdit *oocChat = LegacyThemeManager::get().GetWidgetType<QLineEdit>("ooc_chat_message");
   oocChat->insert(m_TargetTrack);
   oocChat->setFocus();
 }

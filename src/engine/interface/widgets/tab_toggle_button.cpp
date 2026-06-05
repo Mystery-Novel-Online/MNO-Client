@@ -1,6 +1,6 @@
 #include "tab_toggle_button.h"
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 #include "engine/system/theme_scripting.h"
 
 TabToggleButton::TabToggleButton(QWidget *parent, AOApplication *p_ao_app) : RPButton(parent)
@@ -44,13 +44,13 @@ void TabToggleButton::on_clicked()
   if(!LuaBridge::LuaEventCall(tabEventName.toStdString(), mTabName.toStdString()))
   {
     LuaBridge::OnTabChange(mTabName.toStdString(), mTabGroup.toStdString());
-    ThemeManager::get().toggleTab(mTabName, mTabGroup);
+    LegacyThemeManager::get().toggleTab(mTabName, mTabGroup);
   }
 }
 
 void TabToggleButton::detatchTab()
 {
   if(mIsDetatched) return;
-  ThemeManager::get().detatchTab(mTabName);
+  LegacyThemeManager::get().detatchTab(mTabName);
   mIsDetatched = true;
 }

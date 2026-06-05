@@ -2,7 +2,7 @@
 #include "engine/system/user_database.h"
 #include "pch.h"
 
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 #include "engine/system/debug/time_debugger.h"
 #include "aoconfig.h"
 #include "engine/encoding/binary_encoding.h"
@@ -79,7 +79,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   connect(ao_app, &AOApplication::reload_theme, this, &Courtroom::reload_theme);
   connect(ao_app, &AOApplication::reload_character, this, &Courtroom::load_character);
   connect(ao_app, &AOApplication::reload_audiotracks, this, &Courtroom::load_audiotracks);
-  ThemeManager::get().toggleReload();
+  LegacyThemeManager::get().toggleReload();
 
   create_widgets();
   connect_widgets();
@@ -94,7 +94,7 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   map_viewport_viewers();
   map_viewport_readers();
   if (ao_app->current_theme->read_config_bool("use_toggles"))
-    ThemeManager::get().resetSelectedTabs();
+    LegacyThemeManager::get().resetSelectedTabs();
 
   set_char_select();
   load_audiotracks();
@@ -112,7 +112,7 @@ Courtroom::~Courtroom()
 {
   courtroom::cleanup();
   courtroom::tabs::cleanupToggles();
-  ThemeManager::get().ResetWidgetLists();
+  LegacyThemeManager::get().ResetWidgetLists();
   cleanup_preload_readers();
   system::ConfigManager::setDefaultGamemode("");
   system::ConfigManager::setdefaultTimeOfDay("");
@@ -143,7 +143,7 @@ void Courtroom::setup_courtroom()
   ui_flip->show();
 
   load_effects();
-  if(ThemeManager::get().getReloadPending())
+  if(LegacyThemeManager::get().getReloadPending())
   {
     load_wtce();
     map_viewers();
@@ -160,8 +160,8 @@ void Courtroom::setup_courtroom()
 
   set_widget_names();
   set_widgets();
-  ThemeManager::get().deleteTabPanels();
-  ThemeManager::get().createTabParent();
+  LegacyThemeManager::get().deleteTabPanels();
+  LegacyThemeManager::get().createTabParent();
   set_widget_layers();
 
   reset_widget_toggles();
@@ -1593,8 +1593,8 @@ void Courtroom::handle_chatmessage_2() // handles IC
     if(!message::pair::isActive())
     {
       ui_vp_player_pair->hide();
-      RPRect showname = ThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("showname", "center"), ThemeManager::get().getViewporResize());
-      RPRect l_MessagePos = ThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("message", "center"), ThemeManager::get().getViewporResize());
+      RPRect showname = LegacyThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("showname", "center"), LegacyThemeManager::get().getViewporResize());
+      RPRect l_MessagePos = LegacyThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("message", "center"), LegacyThemeManager::get().getViewporResize());
 
       ui_vp_showname->move(showname.x, showname.y);
       ui_vp_showname->resize(showname.width, showname.height);
@@ -1604,8 +1604,8 @@ void Courtroom::handle_chatmessage_2() // handles IC
     }
     else
     {
-      RPRect showname = ThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("showname", offsetTextbox), ThemeManager::get().getViewporResize());
-      RPRect l_MessagePos = ThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("message", offsetTextbox), ThemeManager::get().getViewporResize());
+      RPRect showname = LegacyThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("showname", offsetTextbox), LegacyThemeManager::get().getViewporResize());
+      RPRect l_MessagePos = LegacyThemeManager::get().resizePosition(engine::system::theme::getPositionalDimensions("message", offsetTextbox), LegacyThemeManager::get().getViewporResize());
 
       ui_vp_showname->move(showname.x, showname.y);
       ui_vp_showname->resize(showname.width, showname.height);
@@ -1965,10 +1965,10 @@ void Courtroom::load_ic_text_format()
 
   auto set_format_color = [this](const QString &f_identifier, QTextCharFormat &f_format)
   {
-    if (const std::optional<QColor> l_color = ThemeManager::get().mCurrentThemeReader.getChatlogColor(f_identifier); l_color.has_value())
+    if (const std::optional<QColor> l_color = LegacyThemeManager::get().mCurrentThemeReader.getChatlogColor(f_identifier); l_color.has_value())
       f_format.setForeground(*l_color);
 
-    if (ThemeManager::get().mCurrentThemeReader.getChatlogBool(f_identifier))
+    if (LegacyThemeManager::get().mCurrentThemeReader.getChatlogBool(f_identifier))
       f_format.setFontWeight(QFont::Bold);
   };
 
@@ -2227,7 +2227,7 @@ void Courtroom::setup_chat()
   // Cache these so chat_tick performs better
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct messageFont = ThemeManager::get().mCurrentThemeReader.GetFontData(ThemeSceneType::SceneType_Courtroom, "message");
+    widgetFontStruct messageFont = LegacyThemeManager::get().mCurrentThemeReader.GetFontData(ThemeSceneType::SceneType_Courtroom, "message");
     m_chatbox_message_outline = messageFont.outline;
     m_messageOutlineColor = messageFont.outlineColor;
     m_messageOutlineSize = messageFont.outlineSize;
@@ -3434,13 +3434,13 @@ void Courtroom::load_theme()
   setup_courtroom();
   update_background_scene();
 
-  if (ao_app->current_theme->read_config_bool("use_toggles")) ThemeManager::get().resetSelectedTabs();
+  if (ao_app->current_theme->read_config_bool("use_toggles")) LegacyThemeManager::get().resetSelectedTabs();
 }
 
 void Courtroom::reload_theme()
 {
 
-  if(ThemeManager::get().getReloadPending())
+  if(LegacyThemeManager::get().getReloadPending())
   {
     m_shout_state = 0;
     m_shout_current = 0;
@@ -3668,7 +3668,7 @@ void Courtroom::on_config_panel_clicked()
 
 void Courtroom::switchToggle(QString t_tabName)
 {
-    ThemeManager::get().toggleTab(t_tabName, "default");
+    LegacyThemeManager::get().toggleTab(t_tabName, "default");
     set_judge_enabled(is_judge);
 }
 
@@ -3930,7 +3930,7 @@ void Courtroom::construct_playerlist_layout()
   QPoint f_spacing = ao_app->current_theme->get_widget_settings_spacing("player_list", "courtroom", "player_list_spacing");
 
   engine::system::theme::applyDimensions(ui_player_list, "player_list", ThemeSceneType::SceneType_Courtroom);
-  float resize = ThemeManager::get().getResize();
+  float resize = LegacyThemeManager::get().getResize();
 
   int player_height = engine::system::theme::getDimensions("player_list_slot", ThemeSceneType::SceneType_Courtroom).height;
   if(player_height == 0) player_height = (int)((float)50 * resize);
@@ -4037,7 +4037,7 @@ void Courtroom::write_area_desc()
 
   if(ao_app->current_theme->m_jsonLoaded)
   {
-    widgetFontStruct fontstruct = ThemeManager::get().mCurrentThemeReader.GetFontData(ThemeSceneType::SceneType_Courtroom, "area_desc");
+    widgetFontStruct fontstruct = LegacyThemeManager::get().mCurrentThemeReader.GetFontData(ThemeSceneType::SceneType_Courtroom, "area_desc");
     l_color = fontstruct.color;
     is_bold = fontstruct.bold;
   }

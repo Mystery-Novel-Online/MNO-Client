@@ -3,7 +3,7 @@
 
 #include "engine/fs/fs_reading.h"
 #include "engine/param/background/legacy_background_reader.h"
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 #include "rolechat/background/JsonBackgroundData.h"
 
 SceneManager SceneManager::s_Instance;

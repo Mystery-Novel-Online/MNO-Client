@@ -2,7 +2,7 @@
 #include "engine/param/actor/actor_loader.h"
 #include "engine/param/actor_repository.h"
 
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 
 #include "drtheme.h"
 #include "engine/interface/courtroom_layout.h"
@@ -65,7 +65,7 @@ void EmotionSelector::constructEmotes()
 
   float buttonSize = EmoteMenu::isDoubleSize() ? 82 : 40;
 
-  int buttonResize = (int)(buttonSize * ThemeManager::get().getResize());
+  int buttonResize = (int)(buttonSize * LegacyThemeManager::get().getResize());
   const int button_width = buttonResize;
   int x_spacing = f_spacing.x();
   int x_mod_count = 0;
@@ -88,7 +88,7 @@ void EmotionSelector::constructEmotes()
 
     f_emote->set_emote_number(n);
 
-    Courtroom *courtroom = static_cast<Courtroom*>(ThemeManager::get().getWidget("courtroom"));
+    Courtroom *courtroom = static_cast<Courtroom*>(LegacyThemeManager::get().getWidget("courtroom"));
     connect(f_emote, &AOEmoteButton::emote_clicked, this, &EmotionSelector::emoteClicked);
     if(courtroom != nullptr)
     {
@@ -110,8 +110,8 @@ void EmotionSelector::constructEmotes()
 
 void EmotionSelector::refreshEmotes(bool scrollToCurrent)
 {
-  RPButton* l_emotesLeft = ThemeManager::get().GetButton("emote_left");
-  RPButton* l_emotesRight = ThemeManager::get().GetButton("emote_right");
+  RPButton* l_emotesLeft = LegacyThemeManager::get().GetButton("emote_left");
+  RPButton* l_emotesRight = LegacyThemeManager::get().GetButton("emote_right");
 
   l_emotesLeft->hide();
   l_emotesRight->hide();
@@ -149,8 +149,8 @@ void EmotionSelector::refreshSelection(bool changedActor)
   const int l_prev_emote_count = m_ActorEmotions.count();
   m_ActorEmotions = QVector<ActorEmote>::fromStdVector(retrieve()->emotes());
 
-  QComboBox* l_emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
-  QCheckBox* l_preCheckbox = dynamic_cast<QCheckBox*>(ThemeManager::get().getWidget("pre"));
+  QComboBox* l_emoteCombobox = dynamic_cast<QComboBox*>(LegacyThemeManager::get().getWidget("emote_dropdown"));
+  QCheckBox* l_preCheckbox = dynamic_cast<QCheckBox*>(LegacyThemeManager::get().getWidget("pre"));
 
   if(l_emoteCombobox == nullptr)
     return;
@@ -185,7 +185,7 @@ void EmotionSelector::resetPage()
   m_SelectedIndex = 0;
   m_PageIndex = 0;
 
-  QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
+  QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(LegacyThemeManager::get().getWidget("emote_dropdown"));
 
   if (emoteCombobox != nullptr)
   {
@@ -248,7 +248,7 @@ void EmotionSelector::selectEmote(int emoteTarget)
 
   const int emote_mod = l_emote.modifier;
 
-  QCheckBox* l_preCheckbox = dynamic_cast<QCheckBox*>(ThemeManager::get().getWidget("pre"));
+  QCheckBox* l_preCheckbox = dynamic_cast<QCheckBox*>(LegacyThemeManager::get().getWidget("pre"));
   if (l_prev_emote_id == m_SelectedIndex) // toggle
     l_preCheckbox->setChecked(!l_preCheckbox->isChecked());
   else
@@ -262,9 +262,9 @@ void EmotionSelector::dropdownChanged(int id)
   m_PageIndex = 0;
   selectEmote(id);
 
-  QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
-  RPListWidget* sfxList = dynamic_cast<RPListWidget*>(ThemeManager::get().getWidget("sfx_list"));
-  RPListWidget* animList = dynamic_cast<RPListWidget*>(ThemeManager::get().getWidget("chara_animations"));
+  QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(LegacyThemeManager::get().getWidget("emote_dropdown"));
+  RPListWidget* sfxList = dynamic_cast<RPListWidget*>(LegacyThemeManager::get().getWidget("sfx_list"));
+  RPListWidget* animList = dynamic_cast<RPListWidget*>(LegacyThemeManager::get().getWidget("chara_animations"));
 
   if (sfxList != nullptr)
     sfxList->selectDefault();
@@ -283,9 +283,9 @@ void EmotionSelector::emoteClicked(int id)
 {
   selectEmote(id);
 
-  QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(ThemeManager::get().getWidget("emote_dropdown"));
-  RPListWidget* sfxList = dynamic_cast<RPListWidget*>(ThemeManager::get().getWidget("sfx_list"));
-  RPListWidget* animList = dynamic_cast<RPListWidget*>(ThemeManager::get().getWidget("chara_animations"));
+  QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(LegacyThemeManager::get().getWidget("emote_dropdown"));
+  RPListWidget* sfxList = dynamic_cast<RPListWidget*>(LegacyThemeManager::get().getWidget("sfx_list"));
+  RPListWidget* animList = dynamic_cast<RPListWidget*>(LegacyThemeManager::get().getWidget("chara_animations"));
 
   if (sfxList != nullptr)
     sfxList->selectText(QString::fromStdString(getSelectedEmote().sound_file));

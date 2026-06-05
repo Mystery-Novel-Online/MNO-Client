@@ -13,7 +13,7 @@
 #include "engine/param/background/legacy_background_reader.h"
 #include "engine/param/actor/actor_loader.h"
 
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 
 #include "engine/param/actor_repository.h"
 #include "engine/system/runtime_loop.h"
@@ -310,7 +310,7 @@ void LegacyViewport::constructInterface()
   m_userInterface->setStyleSheet("background: transparent;");
   m_userInterface->setBackgroundBrush(Qt::transparent);
 
-  QStringList viewporWidgets = ThemeManager::get().mCurrentThemeReader.GetSceneWidgetNames(ThemeSceneType::SceneType_Viewport);
+  QStringList viewporWidgets = LegacyThemeManager::get().mCurrentThemeReader.GetSceneWidgetNames(ThemeSceneType::SceneType_Viewport);
   QStringList blacklistedWidgets = { "showname" };
   std::reverse(viewporWidgets.begin(), viewporWidgets.end());
 
@@ -349,7 +349,7 @@ void LegacyViewport::constructInterface()
 
   QGraphicsProxyWidget* pProxy = m_userInterface->scene()->addWidget(m_showname);
 
-  WidgetThemeData * l_shownameData = ThemeManager::get().mCurrentThemeReader.GetWidgetData(ThemeSceneType::SceneType_Viewport, "showname");
+  WidgetThemeData * l_shownameData = LegacyThemeManager::get().mCurrentThemeReader.GetWidgetData(ThemeSceneType::SceneType_Viewport, "showname");
 
 
   if(l_shownameData != nullptr)

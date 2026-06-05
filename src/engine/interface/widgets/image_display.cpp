@@ -1,6 +1,6 @@
 #include "aopixmap.h"
 #include "engine/fs/fs_reading.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 
 /*!
  * @class AOImageDisplay
@@ -30,7 +30,7 @@ void AOImageDisplay::set_image(QString p_image)
 
 void AOImageDisplay::refreshImage()
 {
-  if(!ThemeManager::get().mCurrentThemeReader.IsPixmapExist(m_image))
+  if(!LegacyThemeManager::get().mCurrentThemeReader.IsPixmapExist(m_image))
   {
     AOPixmap l_pixmap(m_image);
 
@@ -58,7 +58,7 @@ void AOImageDisplay::refreshImage()
   }
   else
   {
-    setPixmap(ThemeManager::get().mCurrentThemeReader.GetCachedPixmap(m_image).scale(size()));
+    setPixmap(LegacyThemeManager::get().mCurrentThemeReader.GetCachedPixmap(m_image).scale(size()));
   }
 }
 

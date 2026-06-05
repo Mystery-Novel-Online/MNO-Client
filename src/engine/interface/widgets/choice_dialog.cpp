@@ -2,7 +2,7 @@
 
 #include "theme.h"
 #include "engine/system/theme_scripting.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 
 ChoiceDialog::ChoiceDialog(QWidget *parent)
     : RPWidget{"notify_popup", parent}
@@ -29,8 +29,8 @@ void ChoiceDialog::resetTransform()
 
   if(m_choiceText->width() == 0)
   {
-    ThemeManager::get().setWidgetPosition(m_choiceText, 5, 5);
-    ThemeManager::get().setWidgetDimensions(m_choiceText, 224, 95);
+    LegacyThemeManager::get().setWidgetPosition(m_choiceText, 5, 5);
+    LegacyThemeManager::get().setWidgetDimensions(m_choiceText, 224, 95);
   }
 
   m_choiceText->setReadOnly(true);
@@ -51,8 +51,8 @@ void ChoiceDialog::resetTransform()
 
 void ChoiceDialog::SetupButton(RPButton *t_button, int t_x, int t_y, int t_width, int t_height, QString name)
 {
-  ThemeManager::get().setWidgetPosition(t_button, t_x, t_y);
-  ThemeManager::get().setWidgetDimensions(t_button, t_width, t_height);
+  LegacyThemeManager::get().setWidgetPosition(t_button, t_x, t_y);
+  LegacyThemeManager::get().setWidgetDimensions(t_button, t_width, t_height);
 }
 
 void ChoiceDialog::setText(QString message)

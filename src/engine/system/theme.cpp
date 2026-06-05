@@ -1,7 +1,8 @@
 #include "theme.h"
 
 #include "drtheme.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
+#include "rolechat/theme/ThemeManager.h"
 #include "pch.h"
 
 const RPRect FALLBACK_DIMENSIONS = {0, 0, -1, -1};
@@ -23,7 +24,10 @@ namespace engine::system::theme
 {
   void applyDimensions(QWidget *widget, const QString &identifier, ThemeSceneType scene, bool allowResize)
   {
-    RPRect dimensions = getDimensions(identifier, scene);
+
+    auto& element = rolechat::theme::ThemeManager::Instance().GetElement(scene, identifier.toStdString());
+
+    RPRect dimensions = element.position;
 
     if (dimensions.width < 0 || dimensions.height < 0)
     {
@@ -42,7 +46,7 @@ namespace engine::system::theme
 
     if(AOApplication::getInstance()->current_theme->m_jsonLoaded)
     {
-      RPRect json_pos = ThemeManager::get().mCurrentThemeReader.GetWidgetTransform(scene, identifier);
+      RPRect json_pos = LegacyThemeManager::get().mCurrentThemeReader.GetWidgetTransform(scene, identifier);
       if(json_pos.width != -1) return json_pos;
     }
 
@@ -95,10 +99,10 @@ namespace engine::system::theme
 
   void setChatlogColour(const QString &f_identifier, QTextCharFormat &f_format)
   {
-    if (const std::optional<QColor> l_color = ThemeManager::get().mCurrentThemeReader.getChatlogColor(f_identifier); l_color.has_value())
+    if (const std::optional<QColor> l_color = LegacyThemeManager::get().mCurrentThemeReader.getChatlogColor(f_identifier); l_color.has_value())
       f_format.setForeground(*l_color);
 
-    if (ThemeManager::get().mCurrentThemeReader.getChatlogBool(f_identifier))
+    if (LegacyThemeManager::get().mCurrentThemeReader.getChatlogBool(f_identifier))
       f_format.setFontWeight(QFont::Bold);
   }
 

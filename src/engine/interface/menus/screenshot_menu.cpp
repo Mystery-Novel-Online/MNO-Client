@@ -3,7 +3,7 @@
 #include "engine/interface/courtroom_layout.h"
 #include "engine/fs/fs_reading.h"
 
-#include <modules/theme/thememanager.h>
+#include <modules/theme/legacythememanager.h>
 ScreenshotMenu::ScreenshotMenu()
 {
   m_CaptureLogAction = addAction(tr("Capture IC Log"));
@@ -17,7 +17,7 @@ ScreenshotMenu::ScreenshotMenu()
 
 void ScreenshotMenu::OnMenuRequested(QPoint p_point)
 {
-  QPushButton *screenshotBtn = ThemeManager::get().GetWidgetType<ScreenshotButton>("screenshot");
+  QPushButton *screenshotBtn = LegacyThemeManager::get().GetWidgetType<ScreenshotButton>("screenshot");
   const QPoint l_global_point = screenshotBtn->mapToGlobal(p_point);
   popup(l_global_point);
 }

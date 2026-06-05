@@ -3,7 +3,7 @@
 
 #include "engine/fs/fs_reading.h"
 #include "engine/system/theme_scripting.h"
-#include "modules/theme/thememanager.h"
+#include "modules/theme/legacythememanager.h"
 
 DRTheme::DRTheme(AOApplication *p_ao_app)
 {
@@ -14,10 +14,12 @@ void DRTheme::InitTheme()
 {
   const QString& gamemode = system::ConfigManager::gamemode();
   QString currentThemeName = ao_app->getCurrentTheme();
-  ThemeManager::get().loadTheme(currentThemeName);
-  ThemeManager::get().LoadGamemode(gamemode);
+  LegacyThemeManager::get().loadTheme(currentThemeName);
+  LegacyThemeManager::get().LoadGamemode(gamemode);
   ThemeScripting::InitializeLua(FS::Paths::FindDirectory("minigames/" + gamemode, true, false), LuaTarget::Minigame);
-  ThemeManager::get().mCurrentThemeReader.SetTimeOfDay(system::ConfigManager::timeOfDay());
+  LegacyThemeManager::get().mCurrentThemeReader.SetTimeOfDay(system::ConfigManager::timeOfDay());
+  rolechat::theme::ThemeManager::Instance().SwitchTime(system::ConfigManager::timeOfDay().toStdString());
+
   const QString l_json_path = ao_app->find_theme_asset_path(THEME_JSON);
   m_themePath = ao_app->find_current_theme_path();
 
@@ -54,7 +56,7 @@ void DRTheme::InitTheme()
 
 void DRTheme::setup_layers()
 {
-  widget_layers = ThemeManager::get().mCurrentThemeReader.GetLayers();
+  widget_layers = LegacyThemeManager::get().mCurrentThemeReader.GetLayers();
   return;
 }
 
@@ -82,7 +84,7 @@ void DRTheme::setup_free_blocks()
 
 const QString &DRTheme::readConfigString(const QString &key)
 {
-  return ThemeManager::get().getConfigString(key);
+  return LegacyThemeManager::get().getConfigString(key);
 }
 
 QString DRTheme::LoadFileString(QString p_path)
@@ -185,7 +187,7 @@ bool DRTheme::read_config_bool(QString p_setting_name)
     return ao_app->read_theme_ini_bool(p_setting_name, COURTROOM_CONFIG_INI);
   }
 
-  return ThemeManager::get().getConfigBool(p_setting_name);
+  return LegacyThemeManager::get().getConfigBool(p_setting_name);
 }
 
 int DRTheme::read_config_int(QString p_setting_name)
@@ -198,7 +200,7 @@ int DRTheme::read_config_int(QString p_setting_name)
     return lReturnValue;
   }
 
-  lReturnValue = ThemeManager::get().mCurrentThemeReader.GetConfigInt(p_setting_name);
+  lReturnValue = LegacyThemeManager::get().mCurrentThemeReader.GetConfigInt(p_setting_name);
 
   if(lReturnValue < 0) lReturnValue = 0;
   return lReturnValue;
@@ -206,7 +208,7 @@ int DRTheme::read_config_int(QString p_setting_name)
 
 QVector<QStringList>DRTheme::get_highlight_characters()
 {
-  return ThemeManager::get().mCurrentThemeReader.GetColorsHighlights();
+  return LegacyThemeManager::get().mCurrentThemeReader.GetColorsHighlights();
 }
 
 QString DRTheme::get_widget_image(QString p_identifier, QString p_fallback, QString p_scene)
@@ -239,7 +241,7 @@ QString DRTheme::get_widget_font_string_setting(QString p_identifier, QString p_
 
   ThemeSceneType sceneType = ThemeSceneType::SceneType_Courtroom;
   if(p_scene == LOBBY_FONTS_INI) sceneType = ThemeSceneType::SceneType_ServerSelect;
-  return ThemeManager::get().mCurrentThemeReader.GetFontData(sceneType, p_identifier).align;
+  return LegacyThemeManager::get().mCurrentThemeReader.GetFontData(sceneType, p_identifier).align;
 }
 
 bool DRTheme::get_widget_font_bool(QString p_identifier, QString p_scene, QString p_param, QString p_type)
@@ -342,7 +344,7 @@ QColor DRTheme::get_widget_settings_color(QString p_identifier, QString p_scene,
     return ao_app->get_color(ini_fallback, COURTROOM_DESIGN_INI);
   }
 
-  QString l_color = ThemeManager::get().mCurrentThemeReader.GetConfigSoundName(p_type + "_color");
+  QString l_color = LegacyThemeManager::get().mCurrentThemeReader.GetConfigSoundName(p_type + "_color");
   if(l_color.isEmpty())
   {
     return ao_app->get_color(ini_fallback, COURTROOM_DESIGN_INI);
@@ -361,7 +363,7 @@ QPoint DRTheme::get_widget_settings_spacing(QString p_identifier, QString p_scen
     return ao_app->get_button_spacing(ini_fallback, COURTROOM_DESIGN_INI);
   }
 
-  QVector2D spacing = ThemeManager::get().mCurrentThemeReader.GetWidgetSpacing(p_identifier);
+  QVector2D spacing = LegacyThemeManager::get().mCurrentThemeReader.GetWidgetSpacing(p_identifier);
   QPoint return_value = QPoint(spacing.x(),spacing.y());
   return return_value;
 }
@@ -385,7 +387,7 @@ QMap<DR::Color, DR::ColorInfo> DRTheme::get_chat_colors()
   QJsonArray array = item["colors"].toArray();
 
 
-  QMap<QString, DR::ColorInfo> color_replacement_map = ThemeManager::get().mCurrentThemeReader.GetColorsDefault();
+  QMap<QString, DR::ColorInfo> color_replacement_map = LegacyThemeManager::get().mCurrentThemeReader.GetColorsDefault();
 
   for (DR::Color &i_color : color_map.keys())
   {
@@ -404,7 +406,7 @@ QString DRTheme::get_sfx_file(QString p_identifier)
 {
   if(!m_jsonLoaded) return ao_app->read_theme_ini(p_identifier, COURTROOM_SOUNDS_INI);
 
-  return ThemeManager::get().mCurrentThemeReader.GetConfigSoundName(p_identifier);
+  return LegacyThemeManager::get().mCurrentThemeReader.GetConfigSoundName(p_identifier);
 }
 
 QStringList DRTheme::get_effect(int index)
@@ -481,7 +483,7 @@ int DRTheme::get_free_block_count()
 QStringList DRTheme::get_tab_names()
 {
   QStringList l_tab_names = {};
-  QVector<ThemeTabInfo> l_tabs = ThemeManager::get().mCurrentThemeReader.getTabs();
+  QVector<ThemeTabInfo> l_tabs = LegacyThemeManager::get().mCurrentThemeReader.getTabs();
 
   for(ThemeTabInfo tab : l_tabs)
   {
@@ -498,7 +500,7 @@ QStringList DRTheme::get_tab_widgets(QString p_tab_name)
 {
   QStringList widget_names = {};
 
-  QVector<ThemeTabInfo> l_tabs = ThemeManager::get().mCurrentThemeReader.getTabs();
+  QVector<ThemeTabInfo> l_tabs = LegacyThemeManager::get().mCurrentThemeReader.getTabs();
 
   for(ThemeTabInfo tab : l_tabs)
   {
@@ -518,7 +520,7 @@ QStringList DRTheme::get_tab_widgets_disable(QString p_tab_name)
 {
   QStringList widget_names = {};
 
-  QVector<ThemeTabInfo> l_tabs = ThemeManager::get().mCurrentThemeReader.getTabs();
+  QVector<ThemeTabInfo> l_tabs = LegacyThemeManager::get().mCurrentThemeReader.getTabs();
 
   for(ThemeTabInfo tab : l_tabs)
   {
@@ -544,7 +546,7 @@ int DRTheme::get_music_name_speed()
   }
   else
   {
-    speed = ThemeManager::get().mCurrentThemeReader.getMusicScrollSpeed();
+    speed = LegacyThemeManager::get().mCurrentThemeReader.getMusicScrollSpeed();
   }
 
   return speed;
