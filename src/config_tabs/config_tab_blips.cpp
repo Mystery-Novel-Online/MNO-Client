@@ -199,7 +199,7 @@ void config_tab_blips::on_blipSet_currentIndexChanged(int index)
 void config_tab_blips::on_overrideRuleCharacter_stateChanged(int arg1)
 {
   m_allowCharacters = ui->overrideRuleCharacter->isChecked();
-  config::ConfigUserSettings::setValue("characters_override_blip", m_allowCharacters);
+  config::ConfigUserSettings::setValue("blip_override_characters", m_allowCharacters);
 }
 
 
