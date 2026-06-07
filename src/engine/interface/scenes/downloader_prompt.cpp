@@ -6,6 +6,7 @@
 #include <engine/network/api_manager.h>
 #include "utils/file_hash_util.h"
 #include <rolechat/util/FileSystem.h>
+#include <rolechat/filesystem/RCDir.h>
 
 DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
@@ -243,15 +244,31 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
 
   for (const WorkshopRepository& repo : m_currentCollection.repositories)
   {
-    GetDB().cacheContentData(repo.guid.toStdString(), repo.folderName.toStdString(), repo.lastUpdated, repo.contentId);
-    QMap<QString, QString> existingFileMap = {};
     QString scanDirectory = "";
+    QMap<QString, QString> existingFileMap = {};
 
     if(repo.downloadType == "repo")
     {
       scanDirectory = packageDirectory + "characters/" + repo.folderName + "/";
+
+      auto workshopSearch = GetDB().searchContentGuid(repo.guid.toStdString());
+      if(!workshopSearch.folder.empty())
+      {
+        QString existingPath = QString::fromStdString(rolechat::fs::RCDir("characters/" + repo.folderName.toStdString()).findFirst());
+
+        if (!QDir(scanDirectory).exists())
+        {
+          if (QDir().rename(existingPath, scanDirectory))
+          {
+            qDebug() << "Moved successfully";
+          }
+        }
+      }
+
       existingFileMap = FileHashUtil::buildMd5Map(scanDirectory);
     }
+
+    GetDB().cacheContentData(repo.guid.toStdString(), repo.folderName.toStdString(), repo.lastUpdated, repo.contentId);
 
     for (const WorkshopFile& file : repo.files)
     {
