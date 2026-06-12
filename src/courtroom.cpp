@@ -1588,6 +1588,12 @@ void Courtroom::handle_chatmessage_2() // handles IC
   ui_vp_player_char->stop();
   ui_vp_player_pair->stop();
 
+  if (m_shout_reload_theme)
+  {
+    load_theme();
+  }
+  m_shout_reload_theme = false;
+
   if(ao_app->current_theme->m_jsonLoaded)
   {
     if(!message::pair::isActive())
@@ -1617,12 +1623,6 @@ void Courtroom::handle_chatmessage_2() // handles IC
     setShownameFont(ui_vp_showname, "showname", offsetTextbox);
     setShownameFont(ui_vp_message, "message", offsetTextbox);
   }
-
-  if (m_shout_reload_theme)
-  {
-    load_theme();
-  }
-  m_shout_reload_theme = false;
 
   const QString l_chatbox_name = ao_app->get_chat(m_chatmessage[CMChrName]);
   const bool l_is_self = (ao_config->log_display_self_highlight_enabled() && m_speaker_chr_id == user::GetCharacterId());
