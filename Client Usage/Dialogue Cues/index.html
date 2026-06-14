@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Dialogue Cues - Mystery Novel Network Docs</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Dialogue Cues";
+        var mkdocs_page_input_path = "Client Usage\\Dialogue Cues.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Mystery Novel Network Docs
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">MNN Documentation</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Backgrounds</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Backgrounds/Background%20JSON/">Background JSON</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Client Usage</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Dialogue Cues</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#quick-examples">Quick Examples</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#change-text-color-hlcolor">Change Text Color - &lt;hl:color&gt;</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#change-text-scale-scvalue">Change Text Scale - &lt;sc:value&gt;</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#new-line-nl">New Line - &lt;nl&gt;</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#pause-dialogue-waitduration">Pause Dialogue - &lt;wait:duration&gt;</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#change-text-speed-speedvalue">Change Text Speed - &lt;speed:value&gt;</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#flip-flip">Flip - &lt;flip&gt;</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#hide-hide">Hide - &lt;hide&gt;</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#layer-swap-layernameasset">Layer Swap - &lt;layer:name:asset&gt;</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#sound-effect-sfxsound">Sound Effect - &lt;sfx:sound&gt;</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#swap-message-blips-blipblip_set">Swap Message Blips - &lt;blip:blip_set&gt;</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Custom Character</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Custom%20Character/1.%20Character%20Structure/">Character Structure</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Custom%20Character/2.%20Character%20Metadata/">Character JSON</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Custom%20Character/3.%20Outfit%20Metadata/">Outfit JSON</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Themes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" >Lua</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/events/">Lua Theme Events</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/functions/">Lua Theme Functions</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../Themes/Lua/signals/">Lua Theme Signals</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Mystery Novel Network Docs</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Client Usage</li>
+      <li class="breadcrumb-item active">Dialogue Cues</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="dialogue-cues">Dialogue Cues</h1>
+<p>Dialogue cues are tags embedded into dialogue text which controls how the message appears, sounds and behaves. </p>
+<h2 id="quick-examples">Quick Examples</h2>
+<div class="highlight"><pre><span></span><code>&lt;hl:red&gt;Warning!&lt;/hl&gt;
+
+&lt;scale:1.5&gt;Big text!&lt;/scale&gt;
+
+Wait for it...&lt;wait:1000&gt;Now!
+
+&lt;sfx:explosion.opus&gt;BOOM!
+
+&lt;blip:Typewriter&gt;To whom it may concern...
+</code></pre></div>
+<hr />
+<h2 id="change-text-color-hlcolor">Change Text Color - <code>&lt;hl:color&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>&lt;hl:red&gt;red text&lt;/hl&gt;
+</code></pre></div>
+<p>Hex values can also be specified:</p>
+<div class="highlight"><pre><span></span><code>&lt;hl:FFAA00&gt;orange text&lt;/hl&gt;
+</code></pre></div>
+<hr />
+<h2 id="change-text-scale-scvalue">Change Text Scale - <code>&lt;sc:value&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>&lt;sc:2.0&gt;large text&lt;/sc&gt;
+</code></pre></div>
+<hr />
+<h2 id="new-line-nl">New Line - <code>&lt;nl&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>Line One&lt;nl&gt;
+Line Two
+</code></pre></div>
+<hr />
+<h2 id="pause-dialogue-waitduration">Pause Dialogue - <code>&lt;wait:duration&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>Wait for it...&lt;wait:1000&gt;Now!
+</code></pre></div>
+<p>Pauses the text progression for 1000 milliseconds (1 second).</p>
+<hr />
+<h2 id="change-text-speed-speedvalue">Change Text Speed - <code>&lt;speed:value&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>&lt;speed:10&gt;Fast text
+</code></pre></div>
+<p>Adjusts how quickly text is revealed for everyone.</p>
+<hr />
+<h2 id="flip-flip">Flip - <code>&lt;flip&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>Let&#39;s &lt;flip&gt;flip &lt;flip&gt;together!&lt;flip&gt;
+</code></pre></div>
+<p>Toggles the "flip" state of the character sprite. </p>
+<hr />
+<h2 id="hide-hide">Hide - <code>&lt;hide&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>Now you see me: &lt;hide&gt;now you don&#39;t. 
+</code></pre></div>
+<p>Toggles the "visibility" state of the character on screen.</p>
+<hr />
+<h2 id="layer-swap-layernameasset">Layer Swap - <code>&lt;layer:name:asset&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>&lt;layer:eyes:closed&gt;
+</code></pre></div>
+<p>Changes the asset that is loaded for a specified layer.</p>
+<hr />
+<h2 id="sound-effect-sfxsound">Sound Effect - <code>&lt;sfx:sound&gt;</code></h2>
+<p>Plays a sound effect at a specified point.</p>
+<div class="highlight"><pre><span></span><code>&lt;sfx:sparkle.opus&gt;
+</code></pre></div>
+<p>A shortcut for this tag can be activated by holding Ctrl and right clicking a sound in the SFX list.</p>
+<hr />
+<h2 id="swap-message-blips-blipblip_set">Swap Message Blips - <code>&lt;blip:blip_set&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>&lt;blip:Typewriter&gt;&quot;To whom it may concern...&quot;
+</code></pre></div>
+<p>Changes the blip set that is used for the rest of the message.</p>
+<hr />
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../Backgrounds/Background%20JSON/" class="btn btn-neutral float-left" title="Background JSON"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../Custom%20Character/1.%20Character%20Structure/" class="btn btn-neutral float-right" title="Character Structure">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../Backgrounds/Background%20JSON/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../Custom%20Character/1.%20Character%20Structure/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
