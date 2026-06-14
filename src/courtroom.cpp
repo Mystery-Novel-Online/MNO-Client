@@ -468,7 +468,7 @@ void Courtroom::updateWeather(QString weatherName, const QString &environment)
   const QString weatherDirectory = FS::Paths::FindDirectory("animations/weather/" + weatherName + "/");
 
   replays::recording::weatherChange(weatherName, environment);
-  if(!FS::Checks::DirectoryExists(weatherDirectory) || weatherName.trimmed().isEmpty())
+  if(weatherDirectory.trimmed().isEmpty() || weatherName.trimmed().isEmpty())
   {
     ui_vp_weather->set_file_name(QString(""));
     ui_vp_weather->stop();
