@@ -303,6 +303,9 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     connect(copyGuid, &QAction::triggered, this, [this, id]() { QClipboard *clipboard = QGuiApplication::clipboard(); clipboard->setText(workshop_list->getEntry(id).guid); });
 
 
+    QAction *openFolderAction = menu.addAction("Open Content Folder");
+    connect(openFolderAction, &QAction::triggered, this, [this, id]() {   QUrl folderUrl = QUrl::fromLocalFile(engine::fs::characters::getDirectoryPath(workshop_list->getEntry(id).folder)); QDesktopServices::openUrl(folderUrl); });
+
     menu.exec(QCursor::pos());
 
   });
