@@ -42,6 +42,7 @@ void ApiManager::login()
 {
   nlohmann::json verifyBody;
   verifyBody["user_key"] = ApiManager::authorizationKey().toStdString();
+  verifyBody["last_notify"] = 0;
   QByteArray jsonData = QByteArray::fromStdString(verifyBody.dump());
 
   QNetworkReply* verifyReply = post("api/users/discord/verify", jsonData);

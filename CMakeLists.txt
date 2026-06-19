@@ -334,6 +334,7 @@ add_executable(rp-engine
   src/dialogue/CueParser.h src/dialogue/CueParser.cpp
   src/scripting/lua/LuaSyncedVariable.h src/scripting/lua/LuaSyncedVariable.cpp
   src/networking/SyncedVariable.h src/networking/SyncedVariable.cpp
+  src/dialogs/RenameContentDialog.h src/dialogs/RenameContentDialog.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)

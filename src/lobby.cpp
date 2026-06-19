@@ -21,6 +21,7 @@
 #include "engine/interface/scenes/workshop_uploader.h"
 #include <engine/system/config_manager.h>
 #include "config_tabs/config_tab_theme.h"
+#include <dialogs/RenameContentDialog.h>
 #include <engine/discord/workshop_discord.h>
 #include <engine/interface/scenes/collection_creation.h>
 #include <engine/interface/widgets/workshop_tags.h>
@@ -297,6 +298,16 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
         ApiManager::instance().post("api/workshop/unapprove/" + QString::number(id), doc.toJson());
       });
+
+
+
+      QAction *renameAction = modMenu->addAction("Rename");
+      connect(renameAction, &QAction::triggered, this, [this, id]()
+              {
+                RenameContentDialog dlg(id, workshop_list->getEntry(id).name);
+                dlg.exec();
+              });
+
     }
 
     connect(editAction, &QAction::triggered, this, [this, id]() { WorkshopUploader::StartEdit(id,  workshop_list->getEntry(id).tagMap); });
@@ -305,6 +316,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
     QAction *openFolderAction = menu.addAction("Open Content Folder");
     connect(openFolderAction, &QAction::triggered, this, [this, id]() {   QUrl folderUrl = QUrl::fromLocalFile(engine::fs::characters::getDirectoryPath(workshop_list->getEntry(id).folder)); QDesktopServices::openUrl(folderUrl); });
+
 
     menu.exec(QCursor::pos());
 
