@@ -10,7 +10,7 @@
 
 ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 {
-  resize(960, 544);
+  resize(960, 540);
   setStyleSheet(R"(
         QWidget { background-color: black; }
         QPushButton
@@ -25,7 +25,7 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 
 
   m_GraphicsView = new DRGraphicsView(this);
-  m_GraphicsView->resize(960, 544);
+  m_GraphicsView->resize(960, 540);
 
   m_GraphicsView->setStyleSheet("background: transparent");
   m_GraphicsView->setAttribute(Qt::WA_TranslucentBackground);
@@ -33,7 +33,7 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
   m_GraphicsView->scene()->setBackgroundBrush(Qt::NoBrush);
 
   m_CharacterSprite = new DRCharacterMovie(AOApplication::getInstance());
-  m_CharacterSprite->set_size(QSizeF(960, 544));
+  m_CharacterSprite->set_size(QSizeF(960, 540));
   m_GraphicsView->scene()->addItem(m_CharacterSprite);
   m_CharacterSprite->show();
 
@@ -307,7 +307,7 @@ QImage ButtonMaker::LoadImageDialog()
 ButtonMakerOverlay::ButtonMakerOverlay(QWidget *parent) : QWidget(parent)
 {
   setMouseTracking(true);
-  resize(960, 544);
+  resize(960, 540);
   m_rectPos = QPoint((width() / 2) - (m_rectSize / 2), 80);
   setFocusPolicy(Qt::StrongFocus);
   setFocus();
