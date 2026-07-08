@@ -42,6 +42,56 @@ WorkshopCollection WorkshopParser::parseCollection(const QByteArray &json)
   return collection;
 }
 
+QList<WorkshopCollection> WorkshopParser::parseCollections(const QByteArray &json)
+{
+  QList<WorkshopCollection> collections;
+
+  QJsonParseError error;
+  QJsonDocument doc = QJsonDocument::fromJson(json, &error);
+
+  if (error.error != QJsonParseError::NoError || !doc.isArray())
+  {
+    qWarning() << "Failed to parse workshop collections:" << error.errorString();
+    return collections;
+  }
+
+  QJsonArray root = doc.array();
+
+  for (const QJsonValue &value : root)
+  {
+    if (!value.isObject())
+      continue;
+
+    QJsonObject object = value.toObject();
+
+    WorkshopCollection collection;
+
+    collection.name = object["collection_name"].toString();
+    collection.sizeBytes = object["file_size"].toInt();
+
+    if (object.contains("contents"))
+    {
+      collection.repositories.append(parseRepository(object));
+    }
+    else if (object.contains("repos") && object["repos"].isArray())
+    {
+      QJsonArray repos = object["repos"].toArray();
+
+      for (const QJsonValue &repo : repos)
+      {
+        if (!repo.isObject())
+          continue;
+
+        collection.repositories.append(parseRepository(repo.toObject()));
+      }
+    }
+
+    collections.append(collection);
+  }
+
+  return collections;
+}
+
 WorkshopRepository WorkshopParser::parseRepository(const QJsonObject &object)
 {
   WorkshopRepository repo;

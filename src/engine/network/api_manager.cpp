@@ -2,7 +2,7 @@
 #include <QHttpMultiPart>
 #include <QNetworkRequest>
 
-static bool USE_LOCALHOST = false;
+static bool USE_LOCALHOST = true;
 
 ApiManager::ApiManager(QObject *parent)
     : QObject(parent)
@@ -42,7 +42,7 @@ void ApiManager::login()
 {
   nlohmann::json verifyBody;
   verifyBody["user_key"] = ApiManager::authorizationKey().toStdString();
-  verifyBody["last_notify"] = 0;
+  verifyBody["last_notify"] = config::ConfigUserSettings::intergerValue("last_notification", 0);
   QByteArray jsonData = QByteArray::fromStdString(verifyBody.dump());
 
   QNetworkReply* verifyReply = post("api/users/discord/verify", jsonData);

@@ -12,7 +12,8 @@ enum DownloadType
   DOWNLOAD_HubContent,
   DOWNLOAD_Workshop,
   DOWNLOAD_PlayerList,
-  DOWNLOAD_Discord
+  DOWNLOAD_Discord,
+  DOWNLOAD_ServerContent
 };
 
 class DownloaderPrompt : public QDialog
@@ -21,6 +22,7 @@ class DownloaderPrompt : public QDialog
 public:
   explicit DownloaderPrompt(QWidget *parent = nullptr);
   static void StartDownload(QString repository, QString directory, const QString& contentName, DownloadType type = DOWNLOAD_Default);
+  static bool StartDownload(const QStringList &guids, DownloadType type);
 
   void ProcessLinks(const QMap<QString, QString>& links, const QString& contentName, const QString& repositoryUrl, bool createContext);
   void setDownloadType(DownloadType type) {m_downloadType = type; }
@@ -46,7 +48,7 @@ private:
   int m_totalFiles;
 
   DownloadType m_downloadType = DOWNLOAD_Default;
-  WorkshopCollection m_currentCollection;
+  QList<WorkshopCollection> m_currentCollection;
 
   QString m_directory = "";
   QString m_baseUrl = "";
@@ -61,6 +63,8 @@ private:
   qint64 m_lastBytes = 0;
 
   QHash<QNetworkReply*, qint64> m_replyProgress;
+
+  double m_totalDownloadBytes = 0;
 
 
 public slots:

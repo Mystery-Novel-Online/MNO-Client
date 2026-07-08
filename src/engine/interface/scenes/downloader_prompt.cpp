@@ -68,9 +68,12 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
   url = QUrl(repoUrl);
 
   QString downloadText = "Do you want to start the download?";
-  if(type == DOWNLOAD_ServerBackground)
+  switch(type)
   {
-    downloadText = "You are missing the background currently being used in the area. Would you like to download it from the workshop?";
+    case DOWNLOAD_ServerBackground:
+      downloadText = "You are missing the background currently being used in the area. Would you like to download it from the workshop?";
+    default:
+      break;
   }
 
   auto reply = QMessageBox::question(
@@ -103,6 +106,78 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
 
     manager->get(QNetworkRequest(url));
   }
+
+}
+
+bool DownloaderPrompt::StartDownload(const QStringList &guids, DownloadType type)
+{
+  if(guids.empty())
+    return false;
+
+  QString urlString = ApiManager::baseUri() + "api/workshop/multi";
+
+  std::optional<int> originType;
+
+  switch(type)
+  {
+  case DOWNLOAD_ServerContent:
+    originType = 5;
+    break;
+
+  default:
+    originType.reset();
+    break;
+  }
+
+  urlString += "?key=" + ApiManager::authorizationKey();
+
+  if(originType.has_value())
+    urlString += "&origin=" + QString::number(originType.value());
+
+  QUrl url(urlString);
+
+  QString downloadText = "Do you want to start the download?";
+  switch(type)
+  {
+    case DOWNLOAD_ServerContent:
+      downloadText = "The content this server recommends is either not installed or is out-of-date.\nWould you like download the missing files?";
+    default:
+      break;
+  }
+
+  auto reply = QMessageBox::question(
+      nullptr,
+      "Start Download",
+      downloadText,
+      QMessageBox::Yes | QMessageBox::No);
+
+  if (reply == QMessageBox::Yes)
+  {
+    DownloaderPrompt *prompt = new DownloaderPrompt(nullptr);
+    prompt->setDownloadType(type);
+    prompt->show();
+
+    QString baseUrl = QString("%1://%2").arg(url.scheme(), url.host());
+    if (url.port() != -1) baseUrl += QString(":%1").arg(url.port());
+
+    prompt->setBaseUrl(baseUrl);
+
+    QNetworkAccessManager *manager = new QNetworkAccessManager(prompt);
+
+    connect(manager, &QNetworkAccessManager::finished, prompt, &DownloaderPrompt::repoDownloaded);
+
+    QJsonObject body;
+    body["guids"] = QJsonArray::fromStringList(guids);
+
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    manager->post(request, QJsonDocument(body).toJson());
+
+    return true;
+  }
+
+  return false;
 
 }
 
@@ -188,7 +263,7 @@ void DownloaderPrompt::updateUi()
 {
   if (m_downloadedBytes <= 0) return;
 
-  int progress = static_cast<int>((double)m_downloadedBytes / (double)m_currentCollection.sizeBytes * 100.0);
+  int progress = static_cast<int>((double)m_downloadedBytes / m_totalDownloadBytes * 100.0);
   m_progressBar->setValue(progress);
 
   if (!m_speedTimer.isValid())
@@ -206,7 +281,7 @@ void DownloaderPrompt::updateUi()
       QString("Downloading... %2 / %3 | %1/s")
           .arg(formatBytes(m_currentSpeed))
           .arg(formatBytes(m_downloadedBytes))
-          .arg(formatBytes(m_currentCollection.sizeBytes))
+          .arg(formatBytes(m_totalDownloadBytes))
       );
 }
 
@@ -236,89 +311,104 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
   }
 
   QByteArray response = reply->readAll();
-  m_currentCollection = WorkshopParser::parseCollection(response);
-  QString packageDirectory = m_currentCollection.packageDirectory();
 
+  if(response.startsWith('['))
+  {
+    m_currentCollection = WorkshopParser::parseCollections(response);
+  }
+  else
+  {
+    m_currentCollection.append(WorkshopParser::parseCollection(response));
+  }
 
   QMap<QString, QString> hashMap = {};
 
-  for (const WorkshopRepository& repo : m_currentCollection.repositories)
+  for(auto& collection : m_currentCollection)
   {
-    QString scanDirectory = "";
-    QMap<QString, QString> existingFileMap = {};
 
-    if(repo.downloadType == "repo")
+    QString packageDirectory = collection.packageDirectory();
+    m_totalDownloadBytes += (double)collection.sizeBytes;
+
+
+    for (const WorkshopRepository& repo : collection.repositories)
     {
-      scanDirectory = packageDirectory + "characters/" + repo.folderName + "/";
+      QString scanDirectory = "";
+      QMap<QString, QString> existingFileMap = {};
 
-      auto workshopSearch = GetDB().searchContentGuid(repo.guid.toStdString());
-      if(!workshopSearch.folder.empty())
+      if(repo.downloadType == "repo")
       {
-        QString existingPath = QString::fromStdString(rolechat::fs::RCDir("characters/" + repo.folderName.toStdString()).findFirst());
+        scanDirectory = packageDirectory + "characters/" + repo.folderName + "/";
 
-        if (!QDir(scanDirectory).exists())
+        auto workshopSearch = GetDB().searchContentGuid(repo.guid.toStdString());
+        if(!workshopSearch.folder.empty())
         {
-          if (QDir().rename(existingPath, scanDirectory))
+          QString existingPath = QString::fromStdString(rolechat::fs::RCDir("characters/" + repo.folderName.toStdString()).findFirst());
+
+          if (!QDir(scanDirectory).exists())
           {
-            qDebug() << "Moved successfully";
+            if (QDir().rename(existingPath, scanDirectory))
+            {
+              qDebug() << "Moved successfully";
+            }
           }
         }
+
+        existingFileMap = FileHashUtil::buildMd5Map(scanDirectory);
       }
 
-      existingFileMap = FileHashUtil::buildMd5Map(scanDirectory);
-    }
+      GetDB().cacheContentData(repo.guid.toStdString(), repo.folderName.toStdString(), repo.lastUpdated, repo.contentId);
 
-    GetDB().cacheContentData(repo.guid.toStdString(), repo.folderName.toStdString(), repo.lastUpdated, repo.contentId);
-
-    for (const WorkshopFile& file : repo.files)
-    {
-      QString cdnUri = m_baseUrl + "/api/workshop/file/" + file.hash;
-      QString filePath = "";
-
-      if(repo.downloadType == "background")
-        filePath = packageDirectory + "background/" + repo.folderName + + "/" + file.relativePath;
-      else
-        filePath = packageDirectory + file.relativePath;
-
-      if(!filePath.startsWith(scanDirectory))
+      for (const WorkshopFile& file : repo.files)
       {
-        QFile scanningFile(filePath);
-        if (scanningFile.exists())
+        QString cdnUri = m_baseUrl + "/api/workshop/file/" + file.hash;
+        QString filePath = "";
+
+        if(repo.downloadType == "background")
+          filePath = packageDirectory + "background/" + repo.folderName + + "/" + file.relativePath;
+        else
+          filePath = packageDirectory + file.relativePath;
+
+        if(!filePath.startsWith(scanDirectory))
         {
-          existingFileMap[filePath] = FileHashUtil::md5File(filePath);
+          QFile scanningFile(filePath);
+          if (scanningFile.exists())
+          {
+            existingFileMap[filePath] = FileHashUtil::md5File(filePath);
+            m_downloadedBytes += scanningFile.size();
+          }
+        }
+
+        if(existingFileMap.contains(filePath))
+        {
+          QFile scanningFile(filePath);
           m_downloadedBytes += scanningFile.size();
+
+          bool hashMatches = existingFileMap[filePath] == file.hash;
+          existingFileMap.remove(filePath);
+
+          if(hashMatches)
+            continue;
+        }
+
+        hashMap[filePath] = cdnUri;
+      }
+
+      for (auto it = existingFileMap.begin(); it != existingFileMap.end(); ++it)
+      {
+        const QString &staleFilePath = it.key();
+
+        QFile file(staleFilePath);
+        if (file.exists())
+        {
+          file.remove();
         }
       }
 
-      if(existingFileMap.contains(filePath))
-      {
-        QFile scanningFile(filePath);
-        m_downloadedBytes += scanningFile.size();
-
-        bool hashMatches = existingFileMap[filePath] == file.hash;
-        existingFileMap.remove(filePath);
-
-        if(hashMatches)
-          continue;
-      }
-
-      hashMap[filePath] = cdnUri;
     }
-
-    for (auto it = existingFileMap.begin(); it != existingFileMap.end(); ++it)
-    {
-      const QString &staleFilePath = it.key();
-
-      QFile file(staleFilePath);
-      if (file.exists())
-      {
-        file.remove();
-      }
-    }
-
   }
 
-  int progress = static_cast<int>((double)m_downloadedBytes / (double)m_currentCollection.sizeBytes * 100.0);
+
+  int progress = static_cast<int>((double)m_downloadedBytes / m_totalDownloadBytes * 100.0);
   m_progressBar->setValue(progress);
 
   ProcessLinks(hashMap, m_contentName, m_repository, m_isRepo);

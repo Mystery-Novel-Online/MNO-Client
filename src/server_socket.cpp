@@ -1,3 +1,4 @@
+#include "engine/system/user_database.h"
 #include "pch.h"
 #include "aoconfig.h"
 
@@ -149,6 +150,23 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
                            QByteArray responseData = reply->readAll();
                            JSONReader response;
                            response.ReadFromString(responseData);
+
+                           QStringList guidToDownload;
+
+
+                           for(const QJsonValue &workshop_value : response.getArrayValue("workshop_content"))
+                           {
+                             QString guid = workshop_value.toObject().value("guid").toString();
+                             int version = workshop_value.toObject().value("last_updated").toInt();
+                             bool uptodate = version <= GetDB().contentVersionFromGuid(guid.toStdString());
+                             if(!uptodate)
+                               guidToDownload.append(guid);
+                           }
+
+                           if(DownloaderPrompt::StartDownload(guidToDownload, DOWNLOAD_ServerContent)){
+                             return;
+                           }
+
 
                            send_server_packet(DRPacket("HI", {get_hdid(), response.getStringValue("access_code")}));
                            qDebug() << "[JOIN SUCCESS]" << responseData;
