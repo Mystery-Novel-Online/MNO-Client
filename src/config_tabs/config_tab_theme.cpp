@@ -201,6 +201,7 @@ void ConfigTabTheme::on_current_time_dropdown_currentTextChanged(const QString &
 void ConfigTabTheme::on_resize_spinbox_valueChanged(double arg1)
 {
   config::ConfigUserSettings::setValue("resize", (float)arg1);
+  theme::ThemeManager::Instance().SetResizeFactor(arg1);
   LegacyThemeManager::get().setResize(arg1);
 }
 

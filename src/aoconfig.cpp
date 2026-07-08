@@ -205,6 +205,7 @@ void AOConfigPrivate::load_file()
   blip_ignore_suppression = cfg.value("blip_ignore_suppression", false).toBool();
   punctuation_delay = cfg.value("punctuation_delay", 110).toInt();
   LegacyThemeManager::get().setResize(config::ConfigUserSettings::floatValue("resize", 1.0f));
+  theme::ThemeManager::Instance().SetResizeFactor(config::ConfigUserSettings::floatValue("resize", 1.0f));
   fade_duration = cfg.value("fade_duration", 200).toInt();
   SceneManager::get().setFadeDuration(fade_duration);
 
