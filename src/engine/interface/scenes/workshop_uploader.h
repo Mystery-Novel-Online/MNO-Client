@@ -2,6 +2,8 @@
 #include <QTableWidget>
 
 #include <engine/interface/widgets/uploadertagtable.h>
+
+#include <engine/network/workshop/workshop_models.h>
 #ifndef WORKSHOP_UPLOADER_H
 #define WORKSHOP_UPLOADER_H
 
@@ -9,9 +11,9 @@ class WorkshopUploader : public QDialog
 {
   Q_OBJECT
 public:
-  explicit WorkshopUploader(QWidget *parent = nullptr, bool edit = false, int edit_id = -1, QVector<QPair<QString, QString>> tagMap = {});
+  explicit WorkshopUploader(QWidget *parent = nullptr, bool edit = false, int edit_id = -1, const WorkshopContentEntry = {});
   static void StartUpload();
-  static void StartEdit(int id, QVector<QPair<QString, QString>> tagMap = {});
+  static void StartEdit(int id, const WorkshopContentEntry entry = {});
 
 private slots:
   void chooseFile();
@@ -40,6 +42,7 @@ private:
   QCheckBox *m_private;
 
   QNetworkReply *m_currentReply;
+  WorkshopContentEntry m_workshopEntry;
 };
 
 #endif // WORKSHOP_UPLOADER_H

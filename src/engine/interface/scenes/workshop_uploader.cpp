@@ -11,8 +11,9 @@
 #include <QDialogButtonBox>
 #include <QHeaderView>
 
-WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, QVector<QPair<QString, QString>> tagMap) : QDialog{parent}, m_currentReply(nullptr), m_isEdit(edit), m_editTarget(editTarget)
+WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, const WorkshopContentEntry entry) : QDialog{parent}, m_currentReply(nullptr), m_isEdit(edit), m_editTarget(editTarget)
 {
+  m_workshopEntry = entry;
 
   setWindowTitle(m_isEdit ? "Edit Character" : "Upload Character");
   setModal(true);
@@ -58,18 +59,46 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
   if(edit)
   {
     m_filePath->setText("<No Change>");
-    m_description->setText("<No Change>");
+    m_description->setText(entry.description);
     m_previewPath->setText("<No Change>");
   }
 
   m_chooseButton->setMinimumWidth(100);
   m_imageButton->setMinimumWidth(100);
   QFormLayout *layout = new QFormLayout();
-  layout->addRow(m_chooseButton, m_filePath);
+
+  if(entry.content_type != "collection")
+  {
+    layout->addRow(m_chooseButton, m_filePath);
+  }
+  else
+  {
+    m_chooseButton->hide();
+    m_filePath->hide();
+  }
   layout->addRow(m_imageButton, m_previewPath);
-  layout->addRow("Collection:", m_collectionList);
+
+  if(entry.content_type != "collection")
+  {
+    layout->addRow("Collection:", m_collectionList);
+  }
+  else
+  {
+    m_collectionList->hide();
+  }
+
   layout->addRow("Description:", m_description);
-  layout->addRow("", m_private);
+
+
+  if(entry.content_type != "collection")
+  {
+    layout->addRow("", m_private);
+  }
+  else
+  {
+    m_private->hide();
+  }
+
   layout->addRow(m_submitButton, m_progress);
 
   QFormLayout *tagLayout = new QFormLayout();
@@ -90,7 +119,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
 
   bool allowSystem = ApiManager::instance().userPermission() > APIPerms_Auto;
 
-  if(tagMap.isEmpty() && !m_isEdit)
+  if(entry.tagMap.isEmpty() && !m_isEdit)
   {
     m_tagTable->addTag("Artist", "Unknown", true);
     m_tagTable->addTag("Franchise", "Unknown", true);
@@ -101,7 +130,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, Q
     bool franchiseAdded = false;
 
 
-    for (const QPair<QString, QString>& pair : tagMap)
+    for (const QPair<QString, QString>& pair : entry.tagMap)
     {
       QString key = pair.first;
       QString value = pair.second;
@@ -142,7 +171,7 @@ void WorkshopUploader::StartUpload()
   prompt->show();
 }
 
-void WorkshopUploader::StartEdit(int id, QVector<QPair<QString, QString>> tagMap)
+void WorkshopUploader::StartEdit(int id, const WorkshopContentEntry entry)
 {
   bool loginStatus = ApiManager::loggedIn();
   if(!loginStatus)
@@ -151,7 +180,7 @@ void WorkshopUploader::StartEdit(int id, QVector<QPair<QString, QString>> tagMap
     return;
   }
 
-  WorkshopUploader *prompt = new WorkshopUploader(nullptr, true, id, tagMap);
+  WorkshopUploader *prompt = new WorkshopUploader(nullptr, true, id, entry);
   prompt->show();
 }
 
