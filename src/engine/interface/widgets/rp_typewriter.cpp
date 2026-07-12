@@ -28,7 +28,11 @@ void RPTypewriter::setInput(QString inputText, const QString& character)
   if(!messageContinuation)
     m_character = character;
 
-  if(inputText.trimmed().isEmpty()) return;
+  if(inputText.trimmed().isEmpty())
+  {
+    setText("");
+    return;
+  }
 
 
   if(messageContinuation)
