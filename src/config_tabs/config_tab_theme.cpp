@@ -152,6 +152,7 @@ void ConfigTabTheme::on_theme_switch_button_clicked()
 
 void ConfigTabTheme::on_current_theme_dropdown_currentTextChanged(const QString &arg1)
 {
+  refreshTimeofDayList();
   updateControls();
 }
 
@@ -181,6 +182,7 @@ void ConfigTabTheme::on_current_gamemode_dropdown_currentTextChanged(const QStri
     return;
 
   config::ConfigUserSettings::setString("gamemode", qProcessedArgument.toStdString());
+  refreshTimeofDayList();
   triggerReload();
 }
 
