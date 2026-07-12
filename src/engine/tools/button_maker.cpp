@@ -176,6 +176,9 @@ void ButtonMaker::onGenerateClicked()
   QRect cropRect(m_Overlay->m_rectPos, QSize(m_Overlay->m_rectSize, m_Overlay->m_rectSize));
   QSize outputSize = cropRect.size();
 
+  if(outputSize.width() > 82)
+    outputSize = {82, 82};
+
   if(!m_UnderlayImage.isNull()) outputSize = m_UnderlayImage.size();
   QImage finalOutput(outputSize, QImage::Format_ARGB32_Premultiplied);
   finalOutput.fill(Qt::transparent);
