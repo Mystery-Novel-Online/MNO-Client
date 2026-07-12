@@ -102,8 +102,6 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, c
   layout->addRow(m_submitButton, m_progress);
 
   QFormLayout *tagLayout = new QFormLayout();
-  tagLayout->addRow("", m_addTag);
-  tagLayout->addRow("Tags:", m_tagTable);
 
   QHBoxLayout *overallLayout = new QHBoxLayout();
   overallLayout->addLayout(layout);
@@ -119,43 +117,54 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, c
 
   bool allowSystem = ApiManager::instance().userPermission() > APIPerms_Auto;
 
-  if(entry.tagMap.isEmpty() && !m_isEdit)
+  if(entry.content_type != "collection")
   {
-    m_tagTable->addTag("Artist", "Unknown", true);
-    m_tagTable->addTag("Franchise", "Unknown", true);
+
+    tagLayout->addRow("", m_addTag);
+    tagLayout->addRow("Tags:", m_tagTable);
+
+    if(entry.tagMap.isEmpty() && !m_isEdit)
+    {
+      m_tagTable->addTag("Artist", "Unknown", true);
+      m_tagTable->addTag("Franchise", "Unknown", true);
+    }
+    else
+    {
+      bool artistAdded = false;
+      bool franchiseAdded = false;
+
+
+      for (const QPair<QString, QString>& pair : entry.tagMap)
+      {
+        QString key = pair.first;
+        QString value = pair.second;
+        bool notOptionalTag = false;
+        if(key == "Artist" && !artistAdded)
+        {
+          artistAdded = true;
+          notOptionalTag = true;
+        }
+        if(key == "Franchise" && !franchiseAdded)
+        {
+          franchiseAdded = true;
+          notOptionalTag = true;
+        }
+
+        if(key == "System" && !allowSystem)
+          notOptionalTag = true;
+
+        if(key == "Gender" && !allowSystem)
+          notOptionalTag = true;
+
+        m_tagTable->addTag(key, value, notOptionalTag);
+      }
+    }
   }
   else
   {
-    bool artistAdded = false;
-    bool franchiseAdded = false;
-
-
-    for (const QPair<QString, QString>& pair : entry.tagMap)
-    {
-      QString key = pair.first;
-      QString value = pair.second;
-      bool notOptionalTag = false;
-      if(key == "Artist" && !artistAdded)
-      {
-        artistAdded = true;
-        notOptionalTag = true;
-      }
-      if(key == "Franchise" && !franchiseAdded)
-      {
-        franchiseAdded = true;
-        notOptionalTag = true;
-      }
-
-      if(key == "System" && !allowSystem)
-        notOptionalTag = true;
-
-      if(key == "Gender" && !allowSystem)
-        notOptionalTag = true;
-
-      m_tagTable->addTag(key, value, notOptionalTag);
-    }
+    m_addTag->hide();
+    m_tagTable->hide();
   }
-
 }
 
 void WorkshopUploader::StartUpload()

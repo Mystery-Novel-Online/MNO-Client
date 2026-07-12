@@ -247,8 +247,34 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
     ui_workshop_tags->clearAllTags();
 
-    for (const QPair<QString, QString>& tag : workshop_list->getEntry(id).tagMap)
-      ui_workshop_tags->addTag(tag.second);
+
+    auto tags = workshop_list->getEntry(id).tagMap;
+
+    std::stable_sort(tags.begin(), tags.end(), [](const QPair<QString, QString>& a, const QPair<QString, QString>& b)
+    {
+      auto priority = [](const QString& category)
+      {
+        if (category == "Artist")
+          return 0;
+        if (category == "Franchise")
+          return 1;
+        return 2;
+      };
+
+      return priority(a.first) < priority(b.first);
+    });
+
+    for (const QPair<QString, QString>& tag : tags)
+    {
+      if(tag.first == "Artist")
+      {
+        ui_workshop_tags->addTag("🎨 " + tag.second);
+      }
+      else
+      {
+        ui_workshop_tags->addTag(tag.second);
+      }
+    }
 
     m_currentBrowserUrl = workshop_list->getEntry(id).downloadLink;
     m_currentWorkshopCharacter = workshop_list->getEntry(id).folder;
