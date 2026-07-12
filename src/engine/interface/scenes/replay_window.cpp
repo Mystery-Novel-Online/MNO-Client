@@ -59,6 +59,7 @@ void ReplayWindow::setState(ReplayState state)
 void ReplayWindow::constructLayout()
 {
   m_viewport = createWidget<LegacyViewport>("replay_window");
+  this->resize(m_viewport->width(), m_viewport->height());
   m_viewport->constructViewport();
   m_playbackHover = createWidget<RPHoverWidget>("playback_hover_field");
   m_scrubberHover = createWidget<RPHoverWidget>("controller");
