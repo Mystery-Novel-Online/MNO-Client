@@ -342,7 +342,7 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
         auto workshopSearch = GetDB().searchContentGuid(repo.guid.toStdString());
         if(!workshopSearch.folder.empty())
         {
-          QString existingPath = QString::fromStdString(rolechat::fs::RCDir("characters/" + repo.folderName.toStdString()).findFirst());
+          QString existingPath = QString::fromStdString(rolechat::fs::RCDir("characters/" + workshopSearch.folder).findFirst());
 
           if (!QDir(scanDirectory).exists())
           {
