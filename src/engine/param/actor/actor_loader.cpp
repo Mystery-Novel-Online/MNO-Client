@@ -143,7 +143,7 @@ std::vector<ActorEmote> LegacyActorReader::emotes()
 
 std::string LegacyActorReader::buttonImage(const ActorEmote& t_emote, bool t_enabled) const
 {
-  return t_enabled ? QString("emotions/button%1_on.png").arg(QString::fromStdString(t_emote.key)).toStdString() : QString("emotions/button%1_off.png").arg(QString::fromStdString(t_emote.key)).toStdString();
+  return t_enabled ? QString("emotions/button%1_on").arg(QString::fromStdString(t_emote.key)).toStdString() : QString("emotions/button%1_off").arg(QString::fromStdString(t_emote.key)).toStdString();
 }
 
 std::string LegacyActorReader::selectedImage(const ActorEmote& t_emote) const
