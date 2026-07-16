@@ -7,6 +7,8 @@
 #include "utils/file_hash_util.h"
 #include <rolechat/util/FileSystem.h>
 #include <rolechat/filesystem/RCDir.h>
+#include <engine/network/workshop/ContentDownloader.h>
+#include <engine/network/workshop/WorkshopPackage.h>
 
 DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
@@ -183,80 +185,41 @@ bool DownloaderPrompt::StartDownload(const QStringList &guids, DownloadType type
 
 void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const QString &contentName, const QString& repositoryUrl, bool createContext)
 {
-  m_cdnFiles.clear();
   m_cdnFiles = links;
+
   m_progressBar->setValue(0);
 
-  if (m_cdnFiles.isEmpty())
+  if(m_cdnFiles.isEmpty())
   {
     QMessageBox::information(this, "Download Complete", "All files are already up-to-date!");
-    this->deleteLater();
+    deleteLater();
     return;
   }
 
-  m_filesDownloaded = 0;
-  m_totalFiles = m_cdnFiles.size();
-  m_contentName = contentName;
+  auto downloader = new ContentDownloader(this);
 
-  QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-
-  for (auto it = m_cdnFiles.constBegin(); it != m_cdnFiles.constEnd(); ++it)
+  connect(downloader, &ContentDownloader::progressChanged, this, [this](int value)
   {
-    QString hash = it.value();
-    QString filePath = it.key();
-    QUrl url(hash);
+    m_progressBar->setValue(value);
+  });
 
 
-    QNetworkReply *reply = manager->get(QNetworkRequest(url));
-
-    connect(reply, &QNetworkReply::downloadProgress, this,
-            [this, reply](qint64 bytesReceived, qint64 bytesTotal)
-            {
-              qint64 &prev = m_replyProgress[reply];
-
-              qint64 delta = bytesReceived - prev;
-              prev = bytesReceived;
-
-              m_downloadedBytes += delta;
-
-              updateUi();
-            });
+  connect( downloader, &ContentDownloader::downloadFinished,this,[this](QByteArray data)
+  {
+    WorkshopPackage::extract(data, m_cdnFiles);
+    rolechat::fs::PackageManager::scanPackages();
+    QMessageBox::information(this, "Download Complete", "All files downloaded successfully!");
+    deleteLater();
+  });
 
 
-    connect(reply, &QNetworkReply::finished, this, [this, reply, filePath, repositoryUrl, createContext]() {
-              reply->deleteLater();
+  connect(downloader, &ContentDownloader::downloadFailed, this, [](QString error)
+  {
+    qDebug() << "Download failed:" << error;
+  });
 
-              if (reply->error() != QNetworkReply::NoError) {
-                QMessageBox::warning(this, "Download Error", reply->errorString());
-                return;
-              }
 
-              QByteArray data = reply->readAll();
-
-              QFileInfo info(filePath);
-              QDir().mkpath(info.absolutePath());
-
-              QFile file(filePath);
-              if (file.open(QIODevice::WriteOnly)) {
-                file.write(data);
-                file.close();
-              }
-
-              m_filesDownloaded++;
-
-              if (m_filesDownloaded == m_totalFiles) {
-
-                rolechat::fs::PackageManager::scanPackages();
-
-                QMessageBox::information(this, "Download Complete", "All files downloaded successfully!");
-                this->deleteLater();
-                if(m_downloadType == DOWNLOAD_ServerBackground)
-                {
-                  AOApplication::getInstance()->m_courtroom->update_background_scene();
-                }
-              }
-            });
-  }
+  downloader->download(m_cdnFiles, m_totalDownloadBytes);
 }
 
 void DownloaderPrompt::updateUi()
