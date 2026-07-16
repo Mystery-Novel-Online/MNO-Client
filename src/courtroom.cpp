@@ -828,12 +828,13 @@ void Courtroom::append_server_chatmessage(QString p_name, QString p_message)
   if(!LuaBridge::LuaEventCall("OOCMessageEvent", p_name.toStdString(), p_message.toStdString()))
   {
     ui_ooc_chatlog->append_chatmessage(p_name, p_message);
-    if (ao_config->log_is_recording_enabled())
-      save_textlog("(OOC)" + p_name + ": " + p_message);
-
-    replays::recording::messageSystem(p_name, p_message);
     LuaBridge::LuaEventCall("OnOOCMessage", p_name.toStdString(), p_message.toStdString());
   }
+
+  if (ao_config->log_is_recording_enabled())
+    save_textlog("(OOC)" + p_name + ": " + p_message);
+
+  replays::recording::messageSystem(p_name, p_message);
 }
 
 void Courtroom::ignore_next_showname()
