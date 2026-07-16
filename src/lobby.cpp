@@ -300,12 +300,20 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
       QAction *approveAction = modMenu->addAction("Approve");
       connect(approveAction, &QAction::triggered, this, [this, id]()
       {
-        QJsonObject json{{"key", ApiManager::authorizationKey()}};
+        QJsonObject json{{"key", ApiManager::authorizationKey()}, {"silent", false}};
         QJsonDocument doc(json);
 
         ApiManager::instance().post("api/workshop/approve/" + QString::number(id), doc.toJson());
       });
 
+      QAction *approveSilent = modMenu->addAction("Silent Approval");
+      connect(approveSilent, &QAction::triggered, this, [this, id]()
+      {
+        QJsonObject json{{"key", ApiManager::authorizationKey()}, {"silent", true}};
+        QJsonDocument doc(json);
+
+        ApiManager::instance().post("api/workshop/approve/" + QString::number(id), doc.toJson());
+      });
 
       QAction *deleteAction= modMenu->addAction("Delete");
       connect(deleteAction, &QAction::triggered, this, [this, id]()
