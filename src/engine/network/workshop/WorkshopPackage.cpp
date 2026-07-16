@@ -3,6 +3,13 @@
 
 bool WorkshopPackage::extract(const QByteArray &data, const QMap<QString, QString> &files)
 {
+  QHash<QString, QStringList> hashToPaths;
+
+  for(auto it = files.constBegin(); it != files.constEnd(); ++it)
+  {
+    QString hash = it.value().section('/', -1);
+    hashToPaths[hash].append(it.key());
+  }
 
   QDataStream stream(data);
   stream.setByteOrder(QDataStream::LittleEndian);
@@ -28,36 +35,35 @@ bool WorkshopPackage::extract(const QByteArray &data, const QMap<QString, QStrin
 
     stream.readRawData(fileData.data(), fileSize);
 
-    QString filePath;
+    auto pathIt = hashToPaths.find(hash);
 
-
-    for(auto it = files.constBegin(); it != files.constEnd(); ++it)
+    if(pathIt == hashToPaths.end())
     {
-      if(it.value().section('/', -1) == hash)
+      qWarning() << "Unknown hash:" << hash;
+      continue;
+    }
+
+    for(const QString& filePath : pathIt.value())
+    {
+      QFileInfo info(filePath);
+
+      QDir().mkpath(info.absolutePath());
+
+      QFile file(filePath);
+
+      if(!file.open(QIODevice::WriteOnly))
       {
-        filePath = it.key();
-        break;
+        qWarning() << "Failed writing:" << filePath;
+        continue;
       }
+
+      file.write(fileData);
+      file.close();
+
+      qDebug() << "Extracted:" << filePath;
     }
 
-    if(filePath.isEmpty())
-      continue;
-
-
-    QFileInfo info(filePath);
-
-    QDir().mkpath(info.absolutePath());
-
-    QFile file(filePath);
-
-    if(!file.open(QIODevice::WriteOnly))
-    {
-      qWarning() << "Failed writing:" << filePath;
-      continue;
-    }
-
-    file.write(fileData);
-    file.close();
+    hashToPaths.erase(pathIt);
   }
 
 
