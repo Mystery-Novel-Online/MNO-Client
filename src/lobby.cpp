@@ -29,6 +29,7 @@
 #include <rolechat/userdata/RolechatDatabase.h>
 
 #include "engine/system/audio/loop_detection.h"
+#include "engine/interface/menus/WorkshopContextMenu.h"
 
 using namespace engine::system;
 
@@ -288,72 +289,9 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   QObject::connect(workshop_list, &WorkshopListWidget::entryRightClicked, [this](int id)
   {
-    QMenu menu;
-
-    QAction *editAction = menu.addAction("Edit");
-    QAction *copyGuid = menu.addAction("Copy GUID");
-
-    if(ApiManager::instance().userPermission() > APIPerms_Auto)
-    {
-
-      QMenu* modMenu = menu.addMenu("Moderation");
-      QAction *approveAction = modMenu->addAction("Approve");
-      connect(approveAction, &QAction::triggered, this, [this, id]()
-      {
-        QJsonObject json{{"key", ApiManager::authorizationKey()}, {"silent", false}};
-        QJsonDocument doc(json);
-
-        ApiManager::instance().post("api/workshop/approve/" + QString::number(id), doc.toJson());
-      });
-
-      QAction *approveSilent = modMenu->addAction("Silent Approval");
-      connect(approveSilent, &QAction::triggered, this, [this, id]()
-      {
-        QJsonObject json{{"key", ApiManager::authorizationKey()}, {"silent", true}};
-        QJsonDocument doc(json);
-
-        ApiManager::instance().post("api/workshop/approve/" + QString::number(id), doc.toJson());
-      });
-
-      QAction *deleteAction= modMenu->addAction("Delete");
-      connect(deleteAction, &QAction::triggered, this, [this, id]()
-              {
-                QJsonObject json{{"key", ApiManager::authorizationKey()}};
-                QJsonDocument doc(json);
-
-                ApiManager::instance().post("api/workshop/delete/" + QString::number(id), doc.toJson());
-              });
-
-      QAction *unapproveAction= modMenu->addAction("Un-approve");
-      connect(unapproveAction, &QAction::triggered, this, [this, id]()
-      {
-        QJsonObject json{{"key", ApiManager::authorizationKey()}};
-        QJsonDocument doc(json);
-
-        ApiManager::instance().post("api/workshop/unapprove/" + QString::number(id), doc.toJson());
-      });
-
-
-
-      QAction *renameAction = modMenu->addAction("Rename");
-      connect(renameAction, &QAction::triggered, this, [this, id]()
-              {
-                RenameContentDialog dlg(id, workshop_list->getEntry(id).name);
-                dlg.exec();
-              });
-
-    }
-
-    connect(editAction, &QAction::triggered, this, [this, id]() { WorkshopUploader::StartEdit(id,  workshop_list->getEntry(id)); });
-    connect(copyGuid, &QAction::triggered, this, [this, id]() { QClipboard *clipboard = QGuiApplication::clipboard(); clipboard->setText(workshop_list->getEntry(id).guid); });
-
-
-    QAction *openFolderAction = menu.addAction("Open Content Folder");
-    connect(openFolderAction, &QAction::triggered, this, [this, id]() {   QUrl folderUrl = QUrl::fromLocalFile(engine::fs::characters::getDirectoryPath(workshop_list->getEntry(id).folder)); QDesktopServices::openUrl(folderUrl); });
-
-
+    WorkshopMenu menu;
+    menu.setContent(workshop_list->getEntry(id));
     menu.exec(QCursor::pos());
-
   });
 
   ui_gallery_packages = createWidget<QComboBox>("replay_packages");

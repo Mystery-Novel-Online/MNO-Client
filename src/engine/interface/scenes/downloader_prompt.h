@@ -66,6 +66,8 @@ private:
 
   double m_totalDownloadBytes = 0;
 
+  QLabel *m_currentActionText = nullptr;
+
 
 public slots:
   void repoDownloaded(QNetworkReply *reply);

@@ -18,12 +18,12 @@ DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 
   auto *layout = new QVBoxLayout(this);
 
-  QLabel *label = new QLabel("Downloading, please wait...", this);
+  m_currentActionText = new QLabel("Downloading, please wait...", this);
   m_progressBar = new QProgressBar(this);
   m_progressBar->setRange(0, 100);
   m_progressBar->setValue(0);
 
-  layout->addWidget(label);
+  layout->addWidget(m_currentActionText);
   layout->addWidget(m_progressBar);
 
   setLayout(layout);
@@ -206,6 +206,7 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
 
   connect( downloader, &ContentDownloader::downloadFinished,this,[this](QByteArray data)
   {
+    m_currentActionText->setText("Unpacking downloaded content, please wait...");
     WorkshopPackage::extract(data, m_cdnFiles);
     rolechat::fs::PackageManager::scanPackages();
     QMessageBox::information(this, "Download Complete", "All files downloaded successfully!");

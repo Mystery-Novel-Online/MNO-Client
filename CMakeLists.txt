@@ -337,6 +337,7 @@ add_executable(rp-engine
   src/dialogs/RenameContentDialog.h src/dialogs/RenameContentDialog.cpp
   src/engine/network/workshop/WorkshopPackage.h src/engine/network/workshop/WorkshopPackage.cpp
   src/engine/network/workshop/ContentDownloader.h src/engine/network/workshop/ContentDownloader.cpp
+  src/engine/interface/menus/WorkshopContextMenu.h src/engine/interface/menus/WorkshopContextMenu.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
