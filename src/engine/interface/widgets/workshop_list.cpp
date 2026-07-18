@@ -42,6 +42,7 @@ void WorkshopListWidget::addEntry(const WorkshopContentEntry &entryData)
   {
     auto childWidget = entry->createChild(childEntry, nullptr);
     connect(childWidget, &WorkshopEntry::clicked, this, &WorkshopListWidget::entryClicked);
+    connect(childWidget, &WorkshopEntry::rightClicked, this, &WorkshopListWidget::entryRightClicked);
     m_EntryData[childEntry.id] = childEntry;
   }
 }
