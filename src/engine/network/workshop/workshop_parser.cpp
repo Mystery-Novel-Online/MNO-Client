@@ -188,3 +188,42 @@ WorkshopContentEntry WorkshopParser::parseEntry(const QJsonObject &obj)
 
   return entry;
 }
+
+WorkshopContentEntry WorkshopParser::requestDetails(const QString& guid, WorkshopContentEntry& target)
+{
+  WorkshopContentEntry entry;
+  QString path = QString("api/workshop/%1/details?key=%2").arg(guid).arg(ApiManager::authorizationKey());
+
+  QNetworkAccessManager manager;
+  QNetworkRequest request(QUrl(ApiManager::baseUri() + path));
+
+  QNetworkReply *reply = manager.get(request);
+
+  QEventLoop loop;
+  QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+
+  loop.exec();
+
+  if (reply->error() != QNetworkReply::NoError)
+  {
+    qWarning() << "Failed to retrieve workshop details:" << reply->errorString();
+
+    reply->deleteLater();
+    return entry;
+  }
+
+  QByteArray responseData = reply->readAll();
+  reply->deleteLater();
+  QJsonDocument doc = QJsonDocument::fromJson(responseData);
+
+  if (!doc.isObject())
+  {
+    qWarning() << "Invalid JSON returned.";
+    return entry;
+  }
+
+  WorkshopContentEntry temp = parseEntry(doc.object());
+  target.description = temp.description;
+  target.tagMap = temp.tagMap;
+  return temp;
+}

@@ -72,10 +72,11 @@ void WorkshopListWidget::updateFromApi(const QString &category)
   m_netManager->get(QNetworkRequest(url));
 }
 
-const WorkshopContentEntry WorkshopListWidget::getEntry(int id)
+WorkshopContentEntry& WorkshopListWidget::getEntry(int id)
 {
+  static WorkshopContentEntry fallback;
   if(m_EntryData.contains(id)) return m_EntryData[id];
-  return {};
+  return fallback;
 }
 
 void WorkshopListWidget::nextPage()

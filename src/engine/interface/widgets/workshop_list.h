@@ -15,7 +15,7 @@ public:
   void addEntry(const WorkshopContentEntry& entryData);
 
   void updateFromApi(const QString& category = "browse");
-  const WorkshopContentEntry getEntry(int id);
+  WorkshopContentEntry& getEntry(int id);
 
   void setPageNumber(int page) { m_pageCurrent = page; }
   void nextPage();
