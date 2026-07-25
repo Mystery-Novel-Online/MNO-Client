@@ -16,10 +16,22 @@ public:
   void refreshPosition();
   void refreshCSS();
 
+  void setWheelEnabled(bool enabled) { m_wheelEnabled = enabled; }
+
+protected:
+  void wheelEvent(QWheelEvent *event) override
+  {
+    if (m_wheelEnabled)
+      QComboBox::wheelEvent(event);
+    else
+      event->ignore();
+  }
+
 private:
   QString mLegacyCSSHeader = "[N/A]";
   QString mWidgetName = "FALLBACK";
   QString mScene = "courtroom";
+  bool m_wheelEnabled = true;
 
   AOApplication *ao_app = nullptr;
 };

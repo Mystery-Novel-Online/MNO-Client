@@ -344,6 +344,7 @@ void Courtroom::create_widgets()
   };
 
   ui_chat_type_dropdown = setupComboBoxWidget(l_chatTypes, "chat_type", "[CHAT TYPE]");
+  ui_chat_type_dropdown->setWheelEnabled(false);
   wOutfitDropdown = setupComboBoxWidget({}, "outfit_selector", "[OUTFIT SELECTION]");
 
   ui_timers.resize(1);
@@ -361,7 +362,7 @@ void Courtroom::create_widgets()
   TimeDebugger::get().EndTimer("Theme Widgets");
 }
 
-QComboBox *Courtroom::setupComboBoxWidget(const QStringList& items, QString name, QString cssHeader)
+RPComboBox *Courtroom::setupComboBoxWidget(const QStringList& items, QString name, QString cssHeader)
 {
   RPComboBox *comboBox = new RPComboBox(this, ao_app);
   comboBox->addItems(items);

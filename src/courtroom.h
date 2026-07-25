@@ -591,7 +591,7 @@ private:
 
   QComboBox *ui_iniswap_dropdown = nullptr;
 
-  QComboBox *ui_chat_type_dropdown = nullptr;
+  RPComboBox *ui_chat_type_dropdown = nullptr;
 
   enum PositionIndex
   {
@@ -716,7 +716,7 @@ private:
 
   void create_widgets();
 
-  QComboBox* setupComboBoxWidget(const QStringList& items, QString name, QString cssHeader);
+  RPComboBox* setupComboBoxWidget(const QStringList& items, QString name, QString cssHeader);
 
   void connect_widgets();
   void set_widget_names();
