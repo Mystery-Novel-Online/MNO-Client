@@ -2807,7 +2807,7 @@ void Courtroom::set_character_position(QString p_pos)
   ui_pos_dropdown->setCurrentIndex(l_pos_index);
 
   // enable judge mechanics if appropriate
-  set_judge_enabled(p_pos == "jud");
+  set_judge_enabled(true);
 }
 
 /**
