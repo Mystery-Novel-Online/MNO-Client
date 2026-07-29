@@ -322,7 +322,7 @@ QString AOApplication::get_shout_sprite_path(QString p_character, QString p_shou
 
   if (l_filename.isEmpty())
   {
-    l_filename = find_asset_path(FS::Paths::FindDirectory("shouts/default/") + p_shout, FS::Formats::AnimatedImages());
+    l_filename = find_asset_path(FS::Paths::FindDirectory("animations/shouts/default/") + p_shout, FS::Formats::AnimatedImages());
   }
 
   if (l_filename.isEmpty())
@@ -398,7 +398,7 @@ QString AOApplication::get_wtce_anim_path(QString file_name)
 
   if (l_file_path.isEmpty())
   {
-    l_file_path = find_asset_path(FS::Paths::BasePath() + "shouts/default/" + file_name, FS::Formats::AnimatedImages());
+    l_file_path = find_asset_path(FS::Paths::BasePath() + "animations/wtce/default/" + file_name, FS::Formats::AnimatedImages());
   }
 
   if (l_file_path.isEmpty())

@@ -126,7 +126,7 @@ void DRTheme::LoadEffects()
 
 void DRTheme::LoadWtce()
 {
-  const QString l_wtce_json_path = FS::Paths::BasePath() + "shouts/default/wtce.json";
+  const QString l_wtce_json_path = FS::Paths::BasePath() + "animations/wtce/default/contents.json";
 
   wtce = {};
   wtce_count = 0;
@@ -154,7 +154,7 @@ void DRTheme::LoadWtce()
 
 void DRTheme::LoadShouts()
 {
-  const QString l_shouts_json_path = FS::Paths::BasePath() + "shouts/default/shouts.json";
+  const QString l_shouts_json_path = FS::Paths::BasePath() + "animations/shouts/default/contents.json";
 
   shouts = {};
   shouts_count = 0;
