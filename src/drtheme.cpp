@@ -102,7 +102,7 @@ QString DRTheme::LoadFileString(QString p_path)
 
 void DRTheme::LoadEffects()
 {
-  const QString l_effects_json_path = FS::Paths::BasePath() + "effects/default/effects.json";
+  const QString l_effects_json_path = FS::Paths::BasePath() + "animations/effects/default/contents.json";
 
   effects = {};
   effect_count = 0;
