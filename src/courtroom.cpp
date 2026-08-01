@@ -2547,6 +2547,7 @@ void Courtroom::next_chat_letter()
 
 
   bool useBlip = true;
+  bool isUnicode = false;
   if (f_character == Qt::Key_Space)
   {
     useBlip = m_configBlips->useBlanks() ? true : false;
@@ -2554,6 +2555,15 @@ void Courtroom::next_chat_letter()
   }
   else if(f_character.isHighSurrogate() && m_tick_step + 1 < f_message.size() && f_message.at(m_tick_step + 1).isLowSurrogate())
   {
+
+    if(overrides.tagColourOveride.has_value())
+      vp_message_format.setForeground(overrides.tagColourOveride.value());
+    else
+    {
+      QColor text_color = m_message_color_name.isEmpty() ? m_message_color : QColor(m_message_color_name);
+      vp_message_format.setForeground(text_color);
+    }
+
     insertChar(f_character, vp_message_format);
     insertChar(f_message.at(m_tick_step + 1), vp_message_format);
 
