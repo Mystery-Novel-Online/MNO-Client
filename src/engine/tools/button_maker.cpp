@@ -71,7 +71,19 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 
 }
 
-void ButtonMaker::forceEmote(const ActorEmote& emote)
+int ButtonMaker::findEmote(const ActorEmote &emote) const
+{
+  for (int i = 0; i < m_Emotes.size(); ++i)
+  {
+    if (m_Emotes[i].comment == emote.comment &&
+        m_Emotes[i].outfitName == emote.outfitName)
+      return i;
+  }
+
+  return -1;
+}
+
+void ButtonMaker::displayEmote(const ActorEmote &emote)
 {
   m_CharacterSprite->play_idle(QString::fromStdString(emote.character), QString::fromStdString(emote.dialog));
   m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
@@ -85,59 +97,33 @@ void ButtonMaker::forceEmote(const ActorEmote& emote)
 
   m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(emote.character), QString::fromStdString(emote.dialog), QString::fromStdString(emote.outfitName));
   m_CharacterSprite->start(engine::actor::user::retrieve()->scalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
-  return;
 }
+
+void ButtonMaker::nextEmote()
+{
+  m_EmoteIndex = (m_EmoteIndex + 1) % m_Emotes.size();
+  displayEmote(m_Emotes[m_EmoteIndex]);
+}
+
 
 void ButtonMaker::SetEmote(const ActorEmote& emote)
 {
-  if(m_Emotes.count() == 0) return;
+  if(m_Emotes.empty())
+    return;
 
   if(emote.character != m_Emotes.at(0).character)
   {
     hide();
     return;
   }
-  ActorEmote currentEmote = m_Emotes.at(m_EmoteIndex);
-  if(emote.comment == currentEmote.comment && emote.outfitName == currentEmote.outfitName)
-  {
-    m_CharacterSprite->play_idle(QString::fromStdString(currentEmote.character), QString::fromStdString(currentEmote.dialog));
-    m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
 
-    QStringList layers;
-    for(const ActorLayer &layer : currentEmote.emoteOverlays)
-    {
-      if(engine::actor::user::layerState(layer.toggleName))
-        layers.append(engine::system::encoding::text::EncodePacketContents({QString::fromStdString(layer.spriteName), QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
-    }
+  int index = findEmote(emote);
 
-    m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(currentEmote.character), QString::fromStdString(currentEmote.dialog), QString::fromStdString(currentEmote.outfitName));
-    m_CharacterSprite->start(engine::actor::user::retrieve()->scalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
+  if (index == -1)
     return;
-  }
 
-  for(int i = 0; i < m_Emotes.count(); i++)
-  {
-    ActorEmote checkEmote = m_Emotes.at(i);
-
-    if(emote.comment == checkEmote.comment && emote.outfitName == checkEmote.outfitName)
-    {
-      m_EmoteIndex = i;
-      m_CharacterSprite->play_idle(QString::fromStdString(checkEmote.character), QString::fromStdString(checkEmote.dialog));
-      m_CharacterSprite->setVerticalOffset(courtroom::sliders::getValue("vertical_offset"));
-
-      QStringList layers;
-      for(const ActorLayer &layer : checkEmote.emoteOverlays)
-      {
-        if(engine::actor::user::layerState(layer.toggleName))
-          layers.append(engine::system::encoding::text::EncodePacketContents({QString::fromStdString(layer.spriteName), QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
-      }
-
-      m_CharacterSprite->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(checkEmote.character), QString::fromStdString(checkEmote.dialog), QString::fromStdString(checkEmote.outfitName));
-      m_CharacterSprite->start(engine::actor::user::retrieve()->scalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
-      return;
-    }
-  }
-
+  m_EmoteIndex = index;
+  displayEmote(m_Emotes[index]);
 }
 
 void ButtonMaker::SetCharacter(QString character)
@@ -146,25 +132,27 @@ void ButtonMaker::SetCharacter(QString character)
   m_Emotes.clear();
 
   m_Path = engine::fs::characters::getFilePath(character, "char.json");
+  std::vector<ActorEmote> emotes;
+
   if(FS::Checks::FileExists(m_Path))
   {
     m_IsJson = true;
     rolechat::actor::JsonActorData jsonActor = rolechat::actor::JsonActorData();
     jsonActor.load(character.toStdString(), engine::fs::characters::getDirectoryPath(character).toStdString());
     jsonActor.switchOutfit("<All>");
-    const std::vector<ActorEmote>& outfits = jsonActor.emotes();
-    m_Emotes.clear();
-    for (const ActorEmote& emote : outfits) { m_Emotes << emote; }
+    emotes = jsonActor.emotes();
   }
   else
   {
     m_IsJson = false;
     LegacyActorReader legacyActor = LegacyActorReader();
     legacyActor.load(character.toStdString(), engine::fs::characters::getDirectoryPath(character).toStdString());
-    const std::vector<ActorEmote>& outfits = legacyActor.emotes();
-    m_Emotes.clear();
-    for (const ActorEmote& emote : outfits) { m_Emotes << emote; }
+    emotes = legacyActor.emotes();
   }
+
+  m_Emotes.clear();
+  for (const ActorEmote& emote : emotes)
+    m_Emotes << emote;
 
   SetEmote(m_Emotes.at(m_EmoteIndex));
 }
@@ -189,11 +177,7 @@ void ButtonMaker::onGenerateClicked()
     finalPainter.drawImage(0, 0, underlayScaled);
   }
 
-  QImage fullImage(m_GraphicsView->viewport()->size(), QImage::Format_ARGB32_Premultiplied);
-  fullImage.fill(Qt::transparent);
-  QPainter viewportPainter(&fullImage);
-  m_GraphicsView->render(&viewportPainter);
-  viewportPainter.end();
+  QImage fullImage = captureViewport();
 
   QImage cropppedSprite = fullImage.copy(cropRect);
   cropppedSprite = cropppedSprite.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
@@ -214,33 +198,13 @@ void ButtonMaker::onGenerateClicked()
 
   finalPainter.end();
 
-  QString buttonDirectory = "/emotions/button" + QString::number(m_EmoteIndex + 1) + "_off.png";
+  QString buttonDirectory = m_IsJson ? QString::fromStdString("/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".png")
+                                     : "/emotions/button" + QString::number(m_EmoteIndex + 1) + "_off.png";
 
-  if(m_IsJson)
-    buttonDirectory = QString::fromStdString("/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".png");
+  if(!saveImage(finalOutput, buttonDirectory, "button"))
+    return;
 
-  QString filePath = engine::fs::characters::getFilePath(QString::fromStdString(m_Emotes.at(m_EmoteIndex).character), buttonDirectory);
-  if(FS::Checks::FileExists(filePath))
-  {
-    QMessageBox::StandardButton replaceResult;
-    replaceResult = QMessageBox::question(nullptr, "Button Maker", "You are about to replace a button that already exists, continue?", QMessageBox::Yes|QMessageBox::No);
-
-    if(replaceResult == QMessageBox::No)
-      return;
-  }
-
-  if(!FS::Checks::DirectoryExists(QFileInfo(filePath).absolutePath()))
-    QDir().mkdir(QFileInfo(filePath).absolutePath());
-
-  finalOutput.save(filePath);
-
-  if(m_EmoteIndex < (m_Emotes.count() - 1))
-    m_EmoteIndex++;
-  else
-    m_EmoteIndex = 0;
-
-
-  forceEmote(m_Emotes.at(m_EmoteIndex));
+  nextEmote();
 }
 
 void ButtonMaker::onPreviewGenClicked()
@@ -248,52 +212,31 @@ void ButtonMaker::onPreviewGenClicked()
 
   m_Overlay->setFocus();
 
-  QImage fullImage(m_GraphicsView->viewport()->size(), QImage::Format_ARGB32_Premultiplied);
-  fullImage.fill(Qt::transparent);
-  QPainter viewportPainter(&fullImage);
-  m_GraphicsView->render(&viewportPainter);
-  viewportPainter.end();
+  QImage fullImage = captureViewport();
+  if(!saveImage(fullImage, "/previews/" + QString::fromStdString(m_Emotes.at(m_EmoteIndex).emoteName) + ".png", "preview"))
+    return;
 
-  QString buttonDirectory = "/previews/" + QString::fromStdString(m_Emotes.at(m_EmoteIndex).emoteName) + ".png";
-  QString filePath = engine::fs::characters::getFilePath(QString::fromStdString(m_Emotes.at(m_EmoteIndex).character), buttonDirectory);
-
-  if(FS::Checks::FileExists(filePath))
-  {
-    QMessageBox::StandardButton replaceResult;
-    replaceResult = QMessageBox::question(nullptr, "Button Maker", "You are about to replace a preview that already exists, continue?", QMessageBox::Yes|QMessageBox::No);
-
-    if(replaceResult == QMessageBox::No)
-      return;
-  }
-
-  if(!FS::Checks::DirectoryExists(QFileInfo(filePath).absolutePath()))
-    QDir().mkdir(QFileInfo(filePath).absolutePath());
-
-  fullImage.save(filePath);
-
-  if(m_EmoteIndex < (m_Emotes.count() - 1))
-    m_EmoteIndex++;
-  else
-    m_EmoteIndex = 0;
-
-  forceEmote(m_Emotes.at(m_EmoteIndex));
+  nextEmote();
 }
 
 void ButtonMaker::onAddUnderlayClicked()
 {
-  m_UnderlayImage = LoadImageDialog();
-  m_Overlay->setFocus();
+  loadImage(m_UnderlayImage);
 }
 
 void ButtonMaker::onAddOverlayClicked()
 {
-  m_Overlay->m_OverlayImage = LoadImageDialog();
-  m_Overlay->setFocus();
+  loadImage(m_Overlay->m_OverlayImage);
 }
 
 void ButtonMaker::onAlphaClicked()
 {
-  m_AlphaMaskImage = LoadImageDialog();
+  loadImage(m_AlphaMaskImage);
+}
+
+QImage ButtonMaker::loadImage(QImage &target)
+{
+  target = LoadImageDialog();
   m_Overlay->setFocus();
 }
 
@@ -305,6 +248,37 @@ QImage ButtonMaker::LoadImageDialog()
     return QImage(filePath);
   }
   return QImage();
+}
+
+QImage ButtonMaker::captureViewport() const
+{
+  QImage image(m_GraphicsView->viewport()->size(), QImage::Format_ARGB32_Premultiplied);
+  image.fill(Qt::transparent);
+
+  QPainter painter(&image);
+  m_GraphicsView->render(&painter);
+
+  return image;
+}
+
+bool ButtonMaker::saveImage(const QImage &image, const QString &path, const QString& imageType)
+{
+  QString filePath = engine::fs::characters::getFilePath(QString::fromStdString(m_Emotes.at(m_EmoteIndex).character), path);
+
+  if(FS::Checks::FileExists(filePath))
+  {
+    QMessageBox::StandardButton replaceResult;
+    replaceResult = QMessageBox::question(nullptr, "Button Maker", "You are about to replace a " + imageType + " that already exists, continue?", QMessageBox::Yes|QMessageBox::No);
+
+    if(replaceResult == QMessageBox::No)
+      return false;
+  }
+
+  if(!FS::Checks::DirectoryExists(QFileInfo(filePath).absolutePath()))
+    QDir().mkdir(QFileInfo(filePath).absolutePath());
+
+  image.save(filePath);
+  return true;
 }
 
 ButtonMakerOverlay::ButtonMakerOverlay(QWidget *parent) : QWidget(parent)

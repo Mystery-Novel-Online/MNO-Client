@@ -35,7 +35,10 @@ class ButtonMaker : public QWidget
   Q_OBJECT
 public:
   ButtonMaker(QWidget *parent = nullptr);
-  void forceEmote(const ActorEmote& emote);
+  int findEmote(const ActorEmote &emote) const;
+  void displayEmote(const ActorEmote& emote);
+  void nextEmote();
+
   void SetEmote(const ActorEmote& emote);
   void SetCharacter(QString character);
 
@@ -46,7 +49,13 @@ private slots:
   void onAddOverlayClicked();
   void onAlphaClicked();
 private:
+  QImage loadImage(QImage &target);
   QImage LoadImageDialog();
+  QImage captureViewport() const;
+
+  bool saveImage(const QImage& image, const QString& path, const QString& imageType);
+
+
 private:
 
   QVector<ActorEmote> m_Emotes = {};
