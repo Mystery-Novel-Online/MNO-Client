@@ -277,6 +277,12 @@ void Courtroom::char_clicked(int n_char)
     int filtered_char = n_real_char;
     n_real_char = CharacterRepository::findAvailablePersona();
     if(n_real_char == -1) return;
+    if(ao_config->character_ini(CharacterRepository::characterNameServer(n_real_char)) == CharacterRepository::characterNameFiltered(filtered_char))
+    {
+      enter_courtroom(user::GetCharacterId());
+      return;
+    }
+
     ao_config->set_character_ini(CharacterRepository::characterNameServer(n_real_char), CharacterRepository::characterNameFiltered(filtered_char));
   }
   else
