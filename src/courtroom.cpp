@@ -2544,9 +2544,20 @@ void Courtroom::next_chat_letter()
     }
   }
 
+
+
+  bool useBlip = true;
   if (f_character == Qt::Key_Space)
   {
+    useBlip = m_configBlips->useBlanks() ? true : false;
     insertChar(' ', vp_message_format);
+  }
+  else if(f_character.isHighSurrogate() && m_tick_step + 1 < f_message.size() && f_message.at(m_tick_step + 1).isLowSurrogate())
+  {
+    insertChar(f_character, vp_message_format);
+    insertChar(f_message.at(m_tick_step + 1), vp_message_format);
+
+    m_tick_step += 1;
   }
   else if (m_chatmessage[CMTextColor].toInt() == DR::CRainbow)
   {
@@ -2619,7 +2630,7 @@ void Courtroom::next_chat_letter()
   QScrollBar *scroll = ui_vp_message->verticalScrollBar();
   scroll->setValue(scroll->maximum());
 
-  if ((f_message.at(m_tick_step) != ' ' || m_configBlips->useBlanks()))
+  if (useBlip)
   {
 
     int overideBlipRate = audio::blip::getBlipRate();
