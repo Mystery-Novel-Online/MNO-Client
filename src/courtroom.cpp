@@ -1244,6 +1244,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
     cursor2.movePosition(QTextCursor::End);
     ui_ic_chatlog->setTextCursor(cursor2);
     m_iclog_cursor_position = cursor2.position();
+    m_iclog_cursor_offset = 0;
 
     l_scrollbar->setValue(l_scroll_limt ? l_scrollbar->maximum() : l_scroll_pos);
 
@@ -2072,6 +2073,11 @@ void Courtroom::update_ic_log(bool p_reset_log)
 
       if(!hideMessage || !l_topdown_orientation)
         l_cursor.insertText(l_record.get_message(), l_message_format);
+
+      if(hideMessage)
+      {
+        m_iclog_cursor_position = l_cursor.position();
+      }
     }
   }
 
@@ -2086,6 +2092,7 @@ void Courtroom::update_ic_log(bool p_reset_log)
       l_cursor.movePosition(l_orientation);
       for (int i = 0; i < l_remove_block_count; ++i)
         l_cursor.movePosition(l_block_orientation, QTextCursor::KeepAnchor);
+      m_iclog_cursor_position -= l_cursor.selectedText().count();
       l_cursor.removeSelectedText();
     }
   }
@@ -2439,7 +2446,7 @@ void Courtroom::next_chat_letter()
 
     if(ao_config->log_is_topdown_enabled() && !is_system_speaking)
     {
-      cursor2.setPosition(m_iclog_cursor_position);
+      cursor2.setPosition(m_iclog_cursor_position + m_iclog_cursor_offset);
       ui_ic_chatlog->setTextCursor(cursor2);
 
 
@@ -2456,7 +2463,7 @@ void Courtroom::next_chat_letter()
       }
 
       cursor2.insertText(ch, logFormat);
-      m_iclog_cursor_position += 1;
+      m_iclog_cursor_offset += 1;
 
 
       if(l_scroll_limt)

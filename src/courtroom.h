@@ -345,6 +345,7 @@ private:
 
   // maintains a timer for how fast messages tick onto screen
   int m_iclog_cursor_position = 0;
+  int m_iclog_cursor_offset = 0;
   QTimer *m_tick_timer = nullptr;
   std::optional<int> m_server_tick_rate;
   int m_tick_speed = 0;
