@@ -198,8 +198,8 @@ void ButtonMaker::onGenerateClicked()
 
   finalPainter.end();
 
-  QString buttonDirectory = m_IsJson ? QString::fromStdString("/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".png")
-                                     : "/emotions/button" + QString::number(m_EmoteIndex + 1) + "_off.png";
+  QString buttonDirectory = m_IsJson ? QString::fromStdString("/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".webp")
+                                     : "/emotions/button" + QString::number(m_EmoteIndex + 1) + "_off.webp";
 
   if(!saveImage(finalOutput, buttonDirectory, "button"))
     return;
@@ -234,7 +234,7 @@ void ButtonMaker::onAlphaClicked()
   loadImage(m_AlphaMaskImage);
 }
 
-QImage ButtonMaker::loadImage(QImage &target)
+void ButtonMaker::loadImage(QImage &target)
 {
   target = LoadImageDialog();
   m_Overlay->setFocus();
@@ -277,7 +277,10 @@ bool ButtonMaker::saveImage(const QImage &image, const QString &path, const QStr
   if(!FS::Checks::DirectoryExists(QFileInfo(filePath).absolutePath()))
     QDir().mkdir(QFileInfo(filePath).absolutePath());
 
-  image.save(filePath);
+  if(imageType == "button")
+    image.save(filePath, "WEBP", 100);
+  else
+    image.save(filePath);
   return true;
 }
 

@@ -49,7 +49,7 @@ private slots:
   void onAddOverlayClicked();
   void onAlphaClicked();
 private:
-  QImage loadImage(QImage &target);
+  void loadImage(QImage &target);
   QImage LoadImageDialog();
   QImage captureViewport() const;
 
