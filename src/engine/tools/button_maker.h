@@ -18,6 +18,9 @@ public:
   bool m_renderGuides = false;
   QImage m_OverlayImage;
 
+
+  QImage m_buttonPreview;
+
   QMap<int, QPoint> m_presetPositions = {};
   QMap<int, int> m_presetScales = {};
 
@@ -52,6 +55,7 @@ private:
   void loadImage(QImage &target);
   QImage LoadImageDialog();
   QImage captureViewport() const;
+  QImage drawButton() const;
 
   bool saveImage(const QImage& image, const QString& path, const QString& imageType);
 

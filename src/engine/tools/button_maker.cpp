@@ -168,35 +168,9 @@ void ButtonMaker::onGenerateClicked()
     outputSize = {82, 82};
 
   if(!m_UnderlayImage.isNull()) outputSize = m_UnderlayImage.size();
-  QImage finalOutput(outputSize, QImage::Format_ARGB32_Premultiplied);
-  finalOutput.fill(Qt::transparent);
-  QPainter finalPainter(&finalOutput);
 
-  if (!m_UnderlayImage.isNull()) {
-    QImage underlayScaled = m_UnderlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    finalPainter.drawImage(0, 0, underlayScaled);
-  }
-
-  QImage fullImage = captureViewport();
-
-  QImage cropppedSprite = fullImage.copy(cropRect);
-  cropppedSprite = cropppedSprite.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-
-  if (!m_AlphaMaskImage.isNull())
-  {
-    QImage maskScaled = m_AlphaMaskImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    cropppedSprite.setAlphaChannel(maskScaled);
-  }
-
-  finalPainter.drawImage(0, 0, cropppedSprite);
-
-  if (!m_Overlay->m_OverlayImage.isNull())
-  {
-    QImage overlayScaled = m_Overlay->m_OverlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    finalPainter.drawImage(0, 0, overlayScaled);
-  }
-
-  finalPainter.end();
+  QImage finalOutput = drawButton();
+  m_Overlay->m_buttonPreview = finalOutput;
 
   QString buttonDirectory = m_IsJson ? QString::fromStdString("/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".webp")
                                      : "/emotions/button" + QString::number(m_EmoteIndex + 1) + "_off.webp";
@@ -259,6 +233,46 @@ QImage ButtonMaker::captureViewport() const
   m_GraphicsView->render(&painter);
 
   return image;
+}
+
+QImage ButtonMaker::drawButton() const
+{
+  QRect cropRect(m_Overlay->m_rectPos, QSize(m_Overlay->m_rectSize, m_Overlay->m_rectSize));
+  QSize outputSize = cropRect.size();
+
+  if(outputSize.width() > 82)
+    outputSize = {82, 82};
+
+  if(!m_UnderlayImage.isNull()) outputSize = m_UnderlayImage.size();
+  QImage finalOutput(outputSize, QImage::Format_ARGB32_Premultiplied);
+  finalOutput.fill(Qt::transparent);
+  QPainter finalPainter(&finalOutput);
+
+  if (!m_UnderlayImage.isNull()) {
+    QImage underlayScaled = m_UnderlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    finalPainter.drawImage(0, 0, underlayScaled);
+  }
+
+  QImage fullImage = captureViewport();
+
+  QImage cropppedSprite = fullImage.copy(cropRect);
+  cropppedSprite = cropppedSprite.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+
+  if (!m_AlphaMaskImage.isNull())
+  {
+    QImage maskScaled = m_AlphaMaskImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    cropppedSprite.setAlphaChannel(maskScaled);
+  }
+
+  finalPainter.drawImage(0, 0, cropppedSprite);
+
+  if (!m_Overlay->m_OverlayImage.isNull())
+  {
+    QImage overlayScaled = m_Overlay->m_OverlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    finalPainter.drawImage(0, 0, overlayScaled);
+  }
+
+  return finalOutput;
 }
 
 bool ButtonMaker::saveImage(const QImage &image, const QString &path, const QString& imageType)
@@ -360,8 +374,10 @@ void ButtonMakerOverlay::paintEvent(QPaintEvent *)
     painter.drawLine(QPoint(rect.left(), center.y()), QPoint(rect.right(), center.y()));
     painter.drawLine(QPoint(center.x(), rect.top()), QPoint(center.x(), rect.bottom()));
   }
-  if(m_OverlayImage.isNull()) return;
-  painter.drawImage(rect, m_OverlayImage);
+  if(!m_OverlayImage.isNull())
+    painter.drawImage(rect, m_OverlayImage);
+  if(!m_buttonPreview.isNull())
+    painter.drawImage(QRect(0, 0, 82, 82), m_buttonPreview);
 
 }
 
