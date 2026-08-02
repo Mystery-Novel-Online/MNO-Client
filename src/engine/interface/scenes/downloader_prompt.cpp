@@ -78,36 +78,42 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
       break;
   }
 
-  auto reply = QMessageBox::question(
-      nullptr,
+  auto *box = new QMessageBox(
+      QMessageBox::Question,
       "Start Download",
       downloadText,
       QMessageBox::Yes | QMessageBox::No);
 
-  if (reply == QMessageBox::Yes)
+  box->setAttribute(Qt::WA_DeleteOnClose);
+
+  connect(box, &QMessageBox::finished, [=](int result)
   {
-    DownloaderPrompt *prompt = new DownloaderPrompt(nullptr);
-    prompt->setDownloadType(type);
-    prompt->show();
+      if (result != QMessageBox::Yes)
+        return;
+
+      DownloaderPrompt *prompt = new DownloaderPrompt(nullptr);
+      prompt->setDownloadType(type);
+      prompt->show();
 
 
 
-    QString baseUrl = QString("%1://%2").arg(url.scheme(), url.host());
-    if (url.port() != -1) baseUrl += QString(":%1").arg(url.port());
+      QString baseUrl = QString("%1://%2").arg(url.scheme(), url.host());
+      if (url.port() != -1) baseUrl += QString(":%1").arg(url.port());
 
-    prompt->setDirectory(directory);
-    prompt->setBaseUrl(baseUrl);
-    prompt->setIsCollection(isCollection);
-    prompt->setContentName(contentName);
-    prompt->setRepository(repository);
-    prompt->setIsRepo(isRepo);
+      prompt->setDirectory(directory);
+      prompt->setBaseUrl(baseUrl);
+      prompt->setIsCollection(isCollection);
+      prompt->setContentName(contentName);
+      prompt->setRepository(repository);
+      prompt->setIsRepo(isRepo);
 
-    QNetworkAccessManager *manager = new QNetworkAccessManager(prompt);
+      QNetworkAccessManager *manager = new QNetworkAccessManager(prompt);
 
-    connect(manager, &QNetworkAccessManager::finished, prompt, &DownloaderPrompt::repoDownloaded);
+      connect(manager, &QNetworkAccessManager::finished, prompt, &DownloaderPrompt::repoDownloaded);
 
-    manager->get(QNetworkRequest(url));
-  }
+      manager->get(QNetworkRequest(url));
+  });
+  box->show();
 
 }
 
