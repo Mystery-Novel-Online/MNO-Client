@@ -210,6 +210,12 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
     WorkshopPackage::extract(data, m_cdnFiles);
     rolechat::fs::PackageManager::scanPackages();
     QMessageBox::information(this, "Download Complete", "All files downloaded successfully!");
+
+    if(m_downloadType == DOWNLOAD_ServerBackground)
+    {
+      AOApplication::getInstance()->m_courtroom->update_background_scene();
+    }
+
     deleteLater();
   });
 
