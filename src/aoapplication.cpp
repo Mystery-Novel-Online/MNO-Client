@@ -377,7 +377,7 @@ QString AOApplication::get_effect_anim_path(QString file_name)
 
   if (l_file_path.isEmpty())
   {
-    l_file_path = find_asset_path(FS::Paths::BasePath() + "effects/default/" + file_name, FS::Formats::AnimatedImages());
+    l_file_path = find_asset_path(FS::Paths::BasePath() + "animations/effects/default/" + file_name, FS::Formats::AnimatedImages());
   }
 
   if (l_file_path.isEmpty())

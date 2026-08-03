@@ -1318,7 +1318,7 @@ void Courtroom::check_effects()
       path = ao_app->find_theme_asset_path(effect_names.at(i), FS::Formats::AnimatedImages());
 
     if (path.isEmpty())
-      path = ao_app->find_asset_path(FS::Paths::BasePath() + "effects/default/" + effect_names.at(i), FS::Formats::AnimatedImages());
+      path = ao_app->find_asset_path(FS::Paths::BasePath() + "animations/effects/default/" + effect_names.at(i), FS::Formats::AnimatedImages());
 
     effects_enabled[i] = (!path.isEmpty());
   }

@@ -12,7 +12,7 @@ namespace engine::system::effects
   void reload()
   {
     JSONReader effectsReader = JSONReader();
-    rolechat::fs::RCFile effectsFile("effects/default/effects.json", false);
+    rolechat::fs::RCFile effectsFile("animations/effects/default/effects.json", false);
     effectsReader.ReadFromFile(effectsFile.findFirst());
     s_viewportEffects = {};
 
