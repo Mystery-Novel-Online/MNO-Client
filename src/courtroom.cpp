@@ -1796,8 +1796,10 @@ void Courtroom::handle_chatmessage_3()
         ui_vp_effect->setPos(0, offset.at(1).toInt());
 
 
-        int selfOffset = effectData.ignorePair ? 0 :  message::horizontalOffset();
+        int selfOffset = effectData.ignorePair ? (int)(ui_viewport->width() / 2) :  message::horizontalOffset();
         if(ao_app->current_theme->getEffectPairOffset(l_effect_index)) ui_vp_effect->setHorizontalOffset(selfOffset);
+        else
+          ui_vp_effect->setHorizontalOffset((int)(ui_viewport->width() / 2));
 
         //ui_vp_effect->clearImageLayers();
         //ui_vp_effect->setKeyframeAnimation("effects/" + l_effect_name, "anim");
