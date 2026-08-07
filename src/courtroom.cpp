@@ -418,8 +418,6 @@ void Courtroom::enter_courtroom(int p_cid)
 
   ui_char_select_background->hide();
   on_pos_dropdown_changed();
-  ui_fennec->show();
-  ui_fennec->raise();
 }
 
 void Courtroom::done_received()
@@ -3011,6 +3009,20 @@ void Courtroom::on_ooc_message_return_pressed()
       ao_app->send_server_packet(DRPacket("YAML_AREA", {fileName}));
     });
 
+    return;
+  }
+  if (l_message.startsWith("/debug_mode"))
+  {
+    if(ui_fennec->isHidden())
+    {
+      ui_fennec->show();
+      ui_fennec->raise();
+    }
+    else
+    {
+      ui_fennec->hide();
+    }
+    ui_ooc_chat_message->clear();
     return;
   }
   if (l_message.startsWith("/loop_file"))
