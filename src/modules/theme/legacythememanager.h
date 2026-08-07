@@ -45,6 +45,7 @@ public:
   //Widgets
   void SetWidgetNames(QHash<QString, QWidget *> t_WidgetNames);
   void addWidgetName(QString t_widgetName, QWidget *t_widget);
+  QHash<QString, QWidget *>& widgetsList() { return m_WidgetNames; };
 
   //Tabs
 

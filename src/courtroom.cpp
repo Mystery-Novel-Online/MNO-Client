@@ -326,6 +326,7 @@ void Courtroom::assign_readers_for_viewers(int p_category, bool p_caching)
 
 void Courtroom::enter_courtroom(int p_cid)
 {
+  ui_fennec->hide();
   qDebug() << "enter_courtroom";
 
   // unmute audio

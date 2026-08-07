@@ -7,23 +7,29 @@
 #include "imgui/SampleWindow.h"
 #include "imgui/ImGuiScene.h"
 
+#include <fennec/windows/ThemeWindow.h>
+
 FennecWidget::FennecWidget(QWidget* parent)
     : QOpenGLWidget(parent), m_defaultImGuiScene()
 {
-  m_defaultImGuiScene.createWindow<SampleWindow>();
+  m_defaultImGuiScene.createWindow<ThemeWindow>();
   startTimer(16);
 }
 
 void FennecWidget::initializeGL()
 {
   gladLoadGL();
+
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   ImguiSetup::initQt();
   renderer.init();
 }
 
 void FennecWidget::paintGL()
 {
-  renderer.clear(0.2f, 0.3f, 0.4f);
+  renderer.clear(0.2f, 0.3f, 0.4f, 0.0f);
 
   QPoint global = QCursor::pos();
   QPoint local = mapFromGlobal(global);

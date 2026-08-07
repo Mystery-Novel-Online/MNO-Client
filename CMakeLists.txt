@@ -339,6 +339,7 @@ add_executable(rp-engine
   src/engine/network/workshop/ContentDownloader.h src/engine/network/workshop/ContentDownloader.cpp
   src/engine/interface/menus/WorkshopContextMenu.h src/engine/interface/menus/WorkshopContextMenu.cpp
   src/engine/interface/widgets/fennec_widget.h src/engine/interface/widgets/fennec_widget.cpp
+  src/fennec/windows/ThemeWindow.h src/fennec/windows/ThemeWindow.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
