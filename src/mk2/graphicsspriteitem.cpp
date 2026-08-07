@@ -699,13 +699,19 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
   const QRectF sceneRect = scene()->sceneRect();
   QPointF drawPos = computeDrawPosition(animationOffset);
-  const QPointF pivot(sceneRect.center().x() + drawPos.x(), sceneRect.bottom());
 
+  const float horizontalOffset = (m_HorizontalOffset / 1000.0f) * sceneRect.width();
 
-  painter->translate(pivot);
+  const QPointF viewportPivot(sceneRect.center().x() + horizontalOffset, sceneRect.bottom());
+
+  const QRectF spriteRect(drawPos, m_player->get_scaled_bounding_rect().size());
+
+  const QPointF spritePivot(spriteRect.center().x(), spriteRect.bottom());
+
+  painter->translate(viewportPivot);
   painter->scale(animScale, animScale);
   painter->rotate(rotation);
-  painter->translate(-pivot);
+  painter->translate(-viewportPivot);
   painter->setOpacity(alpha);
 
   if(m_LayersExist)
@@ -723,10 +729,10 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
     if(renderPixmap && !get_file_name().isEmpty())
     {
       combiner.save();
-      combiner.translate(pivot);
+      combiner.translate(spritePivot);
       combiner.scale(isolatedScale, isolatedScale);
       combiner.rotate(isolatedRotation);
-      combiner.translate(-pivot);
+      combiner.translate(-spritePivot);
       combiner.setOpacity(isolatedAlpha);
 
       combiner.drawPixmap(drawPos, pixmap);
