@@ -46,6 +46,7 @@ void Courtroom::create_widgets()
 
   LegacyThemeManager::get().setCourtroomBackground(ui_background);
 
+  ui_fennec = new FennecWidget(this);
   ui_viewport = new DRGraphicsView(this);
   if(ao_config->opengl_enabled())
   {
@@ -921,6 +922,7 @@ void Courtroom::set_widgets()
 
   setupWidgetElement(ui_viewport, "viewport");
   setupWidgetElement(SceneManager::get().GetTransition(), "viewport");
+  setupWidgetElement(ui_fennec, "viewport");
   SceneManager::get().GetTransition()->move(0,0);
   setupWidgetElement(ui_vp_showname, "showname");
   setupWidgetElement(ui_vp_showname_image, "showname_image");

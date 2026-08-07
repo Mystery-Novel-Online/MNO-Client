@@ -418,6 +418,8 @@ void Courtroom::enter_courtroom(int p_cid)
 
   ui_char_select_background->hide();
   on_pos_dropdown_changed();
+  ui_fennec->show();
+  ui_fennec->raise();
 }
 
 void Courtroom::done_received()

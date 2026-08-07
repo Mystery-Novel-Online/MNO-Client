@@ -59,6 +59,7 @@ class QLabel;
 #include <mk2/drplayer.h>
 #include "engine/interface/widgets/scene_widget.h"
 
+#include <engine/interface/widgets/fennec_widget.h>
 #include <engine/interface/widgets/layer_selection_panel.h>
 
 #include <config_tabs/config_tab_blips.h>
@@ -472,6 +473,7 @@ private:
 
   AOImageDisplay *ui_background = nullptr;
 
+  FennecWidget *ui_fennec = nullptr;
   DRGraphicsView *ui_viewport = nullptr;
   QPropertyAnimation *background_anim = nullptr;
 
