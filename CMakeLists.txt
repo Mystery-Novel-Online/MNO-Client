@@ -338,6 +338,7 @@ add_executable(rp-engine
   src/engine/network/workshop/WorkshopPackage.h src/engine/network/workshop/WorkshopPackage.cpp
   src/engine/network/workshop/ContentDownloader.h src/engine/network/workshop/ContentDownloader.cpp
   src/engine/interface/menus/WorkshopContextMenu.h src/engine/interface/menus/WorkshopContextMenu.cpp
+  src/engine/interface/widgets/fennec_widget.h src/engine/interface/widgets/fennec_widget.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
@@ -366,6 +367,8 @@ target_link_directories(rp-engine PRIVATE
 )
 
 add_subdirectory(3rd/rolechat-lib)
+add_subdirectory(3rd/FennEngine)
+
 target_link_libraries(rp-engine
   Qt5::Core
   Qt5::Gui
@@ -380,6 +383,8 @@ target_link_libraries(rp-engine
   discord_partner_sdk
   lua54
   rolechat-lib
+  FennEngine
+  imgui
 )
 
 if(WIN32)
