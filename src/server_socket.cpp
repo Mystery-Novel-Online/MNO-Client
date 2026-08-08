@@ -23,6 +23,8 @@
 
 #include <engine/network/api_manager.h>
 
+#include <networking/NetworkTraffic.h>
+
 using namespace engine::system;
 
 static int s_lastMessageId = -1;
@@ -40,6 +42,8 @@ void AOApplication::send_server_packet(DRPacket p_packet)
     return;
   }
   qDebug().noquote() << "S/S:" << p_packet.to_string();
+
+  NetworkTrafficLog::instance().add({QDateTime::currentDateTime(), NetworkDirection::Outgoing, p_packet.get_header(), p_packet.get_content(), p_packet.to_string() });
   m_server_socket->send_packet(p_packet);
 }
 
@@ -101,6 +105,8 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
 {
   const QString l_header = p_packet.get_header();
   const QStringList l_content = p_packet.get_content();
+
+  NetworkTrafficLog::instance().add({QDateTime::currentDateTime(), NetworkDirection::Incoming, l_header, p_packet.get_content(), p_packet.to_string() });
 
   if (l_header != "checkconnection")
     qDebug().noquote() << "S/R:" << p_packet.to_string();
