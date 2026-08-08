@@ -16,6 +16,16 @@ FennecWidget::FennecWidget(QWidget* parent)
   startTimer(16);
 }
 
+FennecWidget::~FennecWidget()
+{
+  makeCurrent();
+
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui::DestroyContext();
+
+  doneCurrent();
+}
+
 void FennecWidget::initializeGL()
 {
   gladLoadGL();

@@ -10,6 +10,7 @@ class FennecWidget : public QOpenGLWidget
 
 public:
   explicit FennecWidget(QWidget* parent = nullptr);
+  ~FennecWidget();
 
 protected:
   void initializeGL() override;
