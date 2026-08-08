@@ -30,7 +30,7 @@ void NetworkWindow::draw()
 
   ImGui::Separator();
 
-  ImGui::BeginChild("PacketList", ImVec2(300, 0), true);
+  ImGui::BeginChild("PacketList", ImVec2(320, 0), true);
   {
     if (ImGui::BeginTable("Packets", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingStretchProp, ImVec2(0, 0)))
     {

@@ -7,6 +7,7 @@
 #include "imgui/SampleWindow.h"
 #include "imgui/ImGuiScene.h"
 
+#include <fennec/windows/DebugWindow.h>
 #include <fennec/windows/NetworkWindow.h>
 #include <fennec/windows/ThemeWindow.h>
 
@@ -41,8 +42,7 @@ static ImGuiKey qtToImguiKey(int key)
 FennecWidget::FennecWidget(QWidget* parent)
     : QOpenGLWidget(parent), m_defaultImGuiScene()
 {
-  m_defaultImGuiScene.createWindow<ThemeWindow>();
-  m_defaultImGuiScene.createWindow<NetworkWindow>();
+  m_defaultImGuiScene.createWindow<DebugWindow>();
   startTimer(16);
 }
 
