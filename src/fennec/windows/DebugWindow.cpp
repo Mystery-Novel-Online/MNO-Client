@@ -3,6 +3,8 @@
 static bool WINDOW_VISIBLE_NETWORK = false;
 static bool WINDOW_VISIBLE_THEME = false;
 
+static int DEBUG_SIMULATED_PLAYER_COUNT = 12;
+
 DebugWindow::DebugWindow()
 {
 
@@ -12,6 +14,11 @@ void DebugWindow::draw()
 {
 
   ImGui::Begin("Debug Tools");
+
+  if(ImGui::Button("Populate Player List"))
+  {
+    populatePlayerList();
+  }
 
   ImGui::Checkbox("Theme", &WINDOW_VISIBLE_THEME);
   ImGui::SameLine();
@@ -24,4 +31,20 @@ void DebugWindow::draw()
 
   if(WINDOW_VISIBLE_THEME)
     m_windowTheme.draw();
+}
+
+void DebugWindow::populatePlayerList()
+{
+  SceneManager::get().clearPlayerDataList();
+  for(int i = 0; i < DEBUG_SIMULATED_PLAYER_COUNT; i++)
+  {
+    DrPlayer* drp = new DrPlayer(i, "Sim Player " + QString::number(i), "Persona" + QString::number(i), "", "", "Default");
+    drp->setMod("", "");
+    drp->setAfk(false);
+    drp->setDiscord("");
+    drp->data.contentVersion = -1;
+    SceneManager::get().mPlayerDataList.append(*drp);
+  }
+  if(AOApplication::getInstance()->m_courtroom != nullptr)
+    AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();
 }

@@ -11,6 +11,7 @@ public:
   void draw() override;
 
 private:
+  void populatePlayerList();
   ThemeWindow m_windowTheme;
   NetworkWindow m_windowNetwork;
 };
