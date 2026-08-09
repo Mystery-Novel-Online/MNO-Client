@@ -202,6 +202,19 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_workshop_tags = new WorkshopTags();
   layout->addWidget(ui_workshop_tags);
 
+  connect(ui_workshop_tags, &WorkshopTags::tagClicked, this, [this](const QString& tag)
+  {
+    QString current = w_WorkshopSearchBar->text();
+
+    if (!current.isEmpty() && !current.endsWith(' '))
+      current += ' ';
+
+    current += "[" + tag + "]";
+
+    w_WorkshopSearchBar->setText(current);
+    w_WorkshopSearchBar->setFocus();
+  });
+
   ui_chatbox = createWidget<DRChatLog>("chatbox");
   ui_chatbox->hide();
   ui_chatbox->setOpenExternalLinks(true);

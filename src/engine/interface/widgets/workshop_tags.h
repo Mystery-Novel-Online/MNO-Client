@@ -14,6 +14,8 @@ public:
   void setMaxColumns(int cols) { m_maxCols = cols; };
   void clearAllTags();
 
+signals:
+  void tagClicked(const QString& tagName);
 
 private:
   QScrollArea* m_scrollArea = nullptr;

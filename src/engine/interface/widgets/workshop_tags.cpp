@@ -1,3 +1,4 @@
+#include "WorkshopTagLabel.h"
 #include "workshop_tags.h"
 
 WorkshopTags::WorkshopTags(QWidget *parent) : QWidget(parent)
@@ -58,7 +59,7 @@ WorkshopTags::~WorkshopTags()
 
 void WorkshopTags::addTag(const QString &text)
 {
-  QLabel* label = new QLabel(text);
+  WorkshopTagLabel* label = new WorkshopTagLabel(text);
 
   label->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 
@@ -79,6 +80,12 @@ void WorkshopTags::addTag(const QString &text)
   font.setBold(true);
   font.setPointSize(9);
   label->setFont(font);
+
+  connect(label, &WorkshopTagLabel::clicked,
+  this, [this, text](bool ctrlHeld)
+  {
+    emit tagClicked(ctrlHeld ? "!" + text : text);
+  });
 
   m_layout->addWidget(label);
 }
