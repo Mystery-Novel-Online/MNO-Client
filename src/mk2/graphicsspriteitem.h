@@ -257,6 +257,7 @@ public slots:
   void setFlipped(bool state);
   void setMirrored(bool state);
   bool mirroredState();
+  bool flippedState();
 
   bool keyAnimLoaded();
 

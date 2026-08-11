@@ -293,6 +293,7 @@ void RPMessageInput::handleTextChanged()
       CueType tagType;
 
       if (tagTypeStr == "flip" && parts.isEmpty()) tagType = CueType::Flip;
+      else if (tagTypeStr == "flipv" && parts.isEmpty()) tagType = CueType::FlipV;
       else if (tagTypeStr == "hide" && parts.isEmpty()) tagType = CueType::Hide;
       else if (tagTypeStr == "nl" && parts.isEmpty()) tagType = CueType::NewLine;
       else if (tagTypeStr == "wait" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = CueType::Wait; }

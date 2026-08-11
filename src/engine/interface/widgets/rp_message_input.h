@@ -71,6 +71,10 @@ protected:
               output += "<flip>";
               break;
 
+          case CueType::FlipV:
+            output += "<flip>";
+            break;
+
           case CueType::Hide:
               output += "<hide>";
               break;

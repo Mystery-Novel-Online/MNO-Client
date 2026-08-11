@@ -263,6 +263,11 @@ bool GraphicsSpriteItem::mirroredState()
   return m_isMirrored;
 }
 
+bool GraphicsSpriteItem::flippedState()
+{
+  return m_isFlipped;
+}
+
 bool GraphicsSpriteItem::keyAnimLoaded()
 {
   return m_KeyframeSequence.loaded();
@@ -306,7 +311,8 @@ void GraphicsSpriteItem::setLayerState(ViewportSprite viewportState)
 void GraphicsSpriteItem::setTint(QColor col)
 {
   tintColour = col;
-  tintColour.setAlpha(100);
+  if(col != Qt::transparent)
+    tintColour.setAlpha(100);
 }
 
 void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName)
@@ -755,20 +761,20 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
     combiner.end();
 
-    if(m_isMirrored)
+    if(m_isMirrored || m_isFlipped)
     {
       painter->translate(sceneRect.center());
-      painter->scale(-1.0f, 1.0f);
+      painter->scale(m_isMirrored ? -1.0 : 1.0, m_isFlipped  ? -1.0 : 1.0);
       painter->translate(-sceneRect.center());
     }
     painter->drawPixmap(QPoint(0, 0), pixmapCombined);
   }
   else
   {
-    if(m_isMirrored)
+    if(m_isMirrored || m_isFlipped)
     {
       painter->translate(sceneRect.center());
-      painter->scale(-1.0f, 1.0f);
+      painter->scale(m_isMirrored ? -1.0 : 1.0, m_isFlipped  ? -1.0 : 1.0);
       painter->translate(-sceneRect.center());
     }
 

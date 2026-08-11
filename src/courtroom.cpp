@@ -1649,6 +1649,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
   else
     ui_vp_player_char->setMirrored(false);
 
+  ui_vp_player_char->setFlipped(false);
   SceneManager::get().AnimateTransition();
 
   if (m_play_pre)
@@ -2361,6 +2362,10 @@ void Courtroom::next_chat_letter()
       case CueType::Flip:
         ui_vp_player_char->setMirrored(ui_vp_player_char->mirroredState() == false);
         break;
+      case CueType::FlipV:
+        ui_vp_player_char->setFlipped(ui_vp_player_char->flippedState() == false);
+        break;
+
 
       case CueType::Hide:
         ui_vp_player_char->setVisible(ui_vp_player_char->isVisible() == false);
