@@ -374,6 +374,10 @@ target_link_directories(rp-engine PRIVATE
 add_subdirectory(3rd/rolechat-lib)
 add_subdirectory(3rd/FennEngine)
 
+target_compile_definitions(FennEngine PRIVATE
+    FENN_QT
+)
+
 target_link_libraries(rp-engine
   Qt5::Core
   Qt5::Gui
@@ -391,6 +395,7 @@ target_link_libraries(rp-engine
   FennEngine
   imgui
 )
+
 
 if(WIN32)
     set_target_properties(rp-engine PROPERTIES WIN32_EXECUTABLE TRUE)
