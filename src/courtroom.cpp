@@ -1393,6 +1393,7 @@ void Courtroom::start_chatmessage()
 
 void Courtroom::handle_chatmessage()
 {
+  ui_vp_player_char->setTint(Qt::transparent);
   qDebug() << "handle_chatmessage";
   LuaBridge::OnCharacterMessage(m_chatmessage[CMShowName].toStdString(), m_chatmessage[CMChrName].toStdString(), m_chatmessage[CMEmote].toStdString(), m_chatmessage[CMMessage].toStdString(), m_chatmessage[CMMessage].trimmed().isEmpty());
   m_hide_character = m_chatmessage[CMHideCharacter].toInt();
@@ -2336,6 +2337,10 @@ void Courtroom::next_chat_letter()
     {
       switch(tag.type)
       {
+      case CueType::Tint:
+        ui_vp_player_char->setTint(QColor((tag.arguments.at(1).toString())));
+        break;
+
       case CueType::Blip:
         m_configBlips->setTagBlip(tag.arguments.at(1).toString().toStdString());
         m_blip_step = 0;

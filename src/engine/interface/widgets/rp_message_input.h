@@ -123,6 +123,10 @@ protected:
               output += "<blip:"+ tagArguments.at(1).toString() +">";
               break;
 
+            case CueType::Tint:
+              output += "<tint:"+ tagArguments.at(1).toString() +">";
+              break;
+
           default:
             break;
           }

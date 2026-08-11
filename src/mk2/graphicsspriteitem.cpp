@@ -303,6 +303,12 @@ void GraphicsSpriteItem::setLayerState(ViewportSprite viewportState)
 
 }
 
+void GraphicsSpriteItem::setTint(QColor col)
+{
+  tintColour = col;
+  tintColour.setAlpha(100);
+}
+
 void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName)
 {
   clearImageLayers();
@@ -737,6 +743,11 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
       combiner.drawPixmap(drawPos, pixmap);
 
+      if(tintColour != Qt::transparent)
+      {
+        combiner.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+        combiner.fillRect(QRect(drawPos.x(), drawPos.y(), pixmap.size().width(), pixmap.size().height()), tintColour);
+      }
       combiner.restore();
     }
 
@@ -760,7 +771,27 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
       painter->scale(-1.0f, 1.0f);
       painter->translate(-sceneRect.center());
     }
-    painter->drawPixmap(drawPos, pixmap);
+
+    if(tintColour != Qt::transparent)
+    {
+      QPixmap tinted(pixmap.size());
+      tinted.fill(Qt::transparent);
+
+      QPainter p(&tinted);
+      p.drawPixmap(0, 0, pixmap);
+
+      p.setCompositionMode(QPainter::CompositionMode_SourceAtop);
+      p.fillRect(tinted.rect(), tintColour);
+      p.end();
+
+      painter->drawPixmap(drawPos, tinted);
+    }
+    else
+    {
+      painter->drawPixmap(drawPos, pixmap);
+    }
+
+
   }
   painter->restore();
 }

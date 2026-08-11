@@ -23,6 +23,7 @@ enum class CueType
   SizeEnd,
   ColorEnd,
   Blip,
+  Tint
 };
 
 struct CueData

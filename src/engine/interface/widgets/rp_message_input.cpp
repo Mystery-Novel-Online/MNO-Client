@@ -306,6 +306,7 @@ void RPMessageInput::handleTextChanged()
       else if ((tagTypeStr == "/highlight" || tagTypeStr == "/hl")&& parts.isEmpty()) { tagType = CueType::ColorEnd; }
       else if (tagTypeStr == "layer" && parts.count() == 2) { args.append(parts[0]); args.append(parts[1]); tagType = CueType::Layer; }
       else if ((tagTypeStr == "blip"  || tagTypeStr == "bl") && parts.count() == 1) { args.append(parts[0]); tagType = CueType::Blip; }
+      else if ((tagTypeStr == "tint") && parts.count() == 1) { args.append(parts[0]); tagType = CueType::Tint; }
       else removeData = false;
 
       if (removeData) {

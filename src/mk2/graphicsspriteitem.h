@@ -212,6 +212,8 @@ public:
 
   void setLayerState(ViewportSprite viewportState);
 
+  void setTint(QColor col);
+
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
   void processOverlays(const QVector<ActorLayer>& ActorLayers, const QString& character, const QString& emotePath, const QString& outfitName);
   SpriteLayer *createOverlay(const QString &characterName, const QString &emoteName, const QString &outfitName, const QStringList &layerStrings);
@@ -283,6 +285,8 @@ private:
   bool m_isFlipped = false;
 
   bool m_layersUseHorizontalOffset = false;
+
+  QColor tintColour = Qt::transparent;
 
 private slots:
   void notify_size();
