@@ -2,6 +2,7 @@
 
 static bool WINDOW_VISIBLE_NETWORK = false;
 static bool WINDOW_VISIBLE_THEME = false;
+static bool WINDOW_VISIBLE_DOWNLOAD = false;
 
 static int DEBUG_SIMULATED_PLAYER_COUNT = 12;
 
@@ -23,6 +24,7 @@ void DebugWindow::draw()
   ImGui::Checkbox("Theme", &WINDOW_VISIBLE_THEME);
   ImGui::SameLine();
   ImGui::Checkbox("Network", &WINDOW_VISIBLE_NETWORK);
+  ImGui::Checkbox("Downloads", &WINDOW_VISIBLE_DOWNLOAD);
 
   ImGui::End();
 
@@ -31,6 +33,9 @@ void DebugWindow::draw()
 
   if(WINDOW_VISIBLE_THEME)
     m_windowTheme.draw();
+
+  if(WINDOW_VISIBLE_DOWNLOAD)
+    m_downloadWindow.draw();
 }
 
 void DebugWindow::populatePlayerList()

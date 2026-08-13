@@ -17,8 +17,7 @@ public:
   void download(const QMap<QString, QString>& files, int fileSize = 0);
 
 signals:
-  void progressChanged(int percent);
-
+  void progressChanged(int percent, qint64 recieved, qint64 total);
   void downloadFinished(QByteArray data);
 
   void downloadFailed(QString error);

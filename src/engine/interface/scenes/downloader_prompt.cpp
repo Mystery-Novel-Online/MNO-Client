@@ -203,9 +203,16 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
   }
 
   auto downloader = new ContentDownloader(this);
+  m_task = WorkshopDownloadManager::instance().addTask(repositoryUrl, contentName, QString::number(QRandomGenerator::global()->bounded(10000)));
 
-  connect(downloader, &ContentDownloader::progressChanged, this, [this](int value)
+  connect(downloader, &ContentDownloader::progressChanged, this, [this](int value, qint64 recieved, qint64 total)
   {
+    if(m_task)
+    {
+      m_task->progressPercentage = (float)value / 100.0f;
+      m_task->downloadedBytes = recieved;
+      m_task->totalBytes = total;
+    }
     m_progressBar->setValue(value);
   });
 

@@ -31,7 +31,7 @@ void ContentDownloader::download(const QMap<QString, QString> &files, int fileSi
   {
     if(fileSize > 0)
     {
-      emit progressChanged( (received * 100) / fileSize);
+      emit progressChanged( (received * 100) / fileSize, received, total);
     }
   });
 

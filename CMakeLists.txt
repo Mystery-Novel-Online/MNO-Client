@@ -345,6 +345,8 @@ add_executable(rp-engine
   src/fennec/windows/DebugWindow.h src/fennec/windows/DebugWindow.cpp
   src/engine/interface/widgets/WorkshopTagLabel.h src/engine/interface/widgets/WorkshopTagLabel.cpp
   src/networking/HubUploadManager.h src/networking/HubUploadManager.cpp
+  src/networking/WorkshopDownloadManager.h src/networking/WorkshopDownloadManager.cpp
+  src/fennec/windows/DownloadWindow.h src/fennec/windows/DownloadWindow.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "engine/network/workshop/workshop_parser.h"
+#include <networking/WorkshopDownloadManager.h>
 
 enum DownloadType
 {
@@ -67,6 +68,8 @@ private:
   double m_totalDownloadBytes = 0;
 
   QLabel *m_currentActionText = nullptr;
+
+  std::shared_ptr<DownloadTask> m_task = nullptr;
 
 
 public slots:

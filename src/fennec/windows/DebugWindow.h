@@ -2,6 +2,7 @@
 #define DEBUGWINDOW_H
 #include "FennEngine/engine/include/imgui/ImGuiWindow.h"
 
+#include "DownloadWindow.h"
 #include "NetworkWindow.h"
 #include "ThemeWindow.h"
 
@@ -14,6 +15,7 @@ private:
   void populatePlayerList();
   ThemeWindow m_windowTheme;
   NetworkWindow m_windowNetwork;
+  DownloadWindow m_downloadWindow;
 };
 
 
