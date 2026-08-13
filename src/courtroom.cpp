@@ -2921,13 +2921,50 @@ void Courtroom::on_ooc_message_return_pressed()
 
   LuaBridge::LuaEventCall("OnOOCMessageSend");
 
-  if (l_message.startsWith("/rainbow") && !is_rainbow_enabled)
+  QStringList parts = l_message.split(' ', Qt::SkipEmptyParts);
+
+  QString command = parts.value(0).toLower();
+  QStringList args = parts.mid(1);
+
+  const QHash<QString, std::function<void()>> commands =
+      {
+          {"/loop_file", [this, &args] {
+            LoopDetection::FindLoop(args.join(" "));
+          }},
+
+          {"/rainbow", [this, &l_message] {
+            ui_text_color->addItem(localization::getText("COLOR_RAINBOW"));
+            is_rainbow_enabled = true;
+          }},
+
+          {"/afk", [this]{
+            m_lastActivityTimestamp = 1;
+            m_isAfk = true;
+            ao_app->send_server_packet(DRPacket("STATUS", {QString::number(UserState_AFK), QString::number(true)}));
+          }},
+
+          {"/debug_mode", [this, &l_message] {
+            if(ui_fennec->isHidden())
+            {
+              ui_fennec->show();
+              ui_fennec->raise();
+            }
+            else
+            {
+              ui_fennec->hide();
+            }
+          }}
+      };
+
+  auto it = commands.find(command);
+
+  if (it != commands.end())
   {
-    ui_text_color->addItem(localization::getText("COLOR_RAINBOW"));
+    it.value()();
     ui_ooc_chat_message->clear();
-    is_rainbow_enabled = true;
     return;
   }
+
   if (l_message == "/music_list" && !l_message.contains(" "))
   {
     ui_ooc_chat_message->clear();
@@ -2959,7 +2996,7 @@ void Courtroom::on_ooc_message_return_pressed()
 
     return;
   }
-  if (l_message == "/char_list" && !l_message.contains(" "))
+  else if (l_message == "/char_list" && !l_message.contains(" "))
   {
     ui_ooc_chat_message->clear();
     QString file = QFileDialog::getOpenFileName(this, "Select YAML File", "", "YAML Files (*.yaml)");
@@ -2990,7 +3027,7 @@ void Courtroom::on_ooc_message_return_pressed()
 
     return;
   }
-  if (l_message == "/area_list" && !l_message.contains(" "))
+  else if (l_message == "/area_list" && !l_message.contains(" "))
   {
     ui_ooc_chat_message->clear();
     QString file = QFileDialog::getOpenFileName(this, "Select YAML File", "", "YAML Files (*.yaml)");
@@ -3021,45 +3058,11 @@ void Courtroom::on_ooc_message_return_pressed()
 
     return;
   }
-  if (l_message.startsWith("/debug_mode"))
+  else if (l_message.startsWith("/afk") && !m_isAfk)
   {
-    if(ui_fennec->isHidden())
-    {
-      ui_fennec->show();
-      ui_fennec->raise();
-    }
-    else
-    {
-      ui_fennec->hide();
-    }
+
     ui_ooc_chat_message->clear();
     return;
-  }
-  if (l_message.startsWith("/loop_file"))
-  {
-    LoopDetection::FindLoop(l_message.mid(11));
-    ui_ooc_chat_message->clear();
-    return;
-  }
-  if (l_message.startsWith("/afk") && !m_isAfk)
-  {
-    m_lastActivityTimestamp = 1;
-    m_isAfk = true;
-    ao_app->send_server_packet(DRPacket("STATUS", {QString::number(UserState_AFK), QString::number(true)}));
-    ui_ooc_chat_message->clear();
-    return;
-  }
-  else if (l_message.startsWith("/rollp"))
-  {
-    audio::effect::Play(ao_app->get_sfx("dice").toStdString());
-  }
-  else if (l_message.startsWith("/roll"))
-  {
-    audio::effect::Play(ao_app->get_sfx("dice").toStdString());
-  }
-  else if (l_message.startsWith("/coinflip"))
-  {
-    audio::effect::Play(ao_app->get_sfx("coinflip").toStdString());
   }
   else if (l_message.startsWith("/tr "))
   {
