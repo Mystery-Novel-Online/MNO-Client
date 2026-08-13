@@ -344,6 +344,7 @@ add_executable(rp-engine
   src/networking/NetworkTraffic.h src/networking/NetworkTraffic.cpp
   src/fennec/windows/DebugWindow.h src/fennec/windows/DebugWindow.cpp
   src/engine/interface/widgets/WorkshopTagLabel.h src/engine/interface/widgets/WorkshopTagLabel.cpp
+  src/networking/HubUploadManager.h src/networking/HubUploadManager.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)

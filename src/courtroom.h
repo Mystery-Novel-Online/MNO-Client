@@ -66,6 +66,8 @@ class QLabel;
 #include <config_tabs/config_tab_callwords.h>
 #include <config_tabs/config_tab_discord.h>
 
+#include <networking/HubUploadManager.h>
+
 using namespace engine;
 using namespace engine::network::metadata;
 
@@ -186,6 +188,7 @@ public:
 private:
   QTimer* iniswapTimer;
   TagOverrides overrides = {};
+  HubUploadManager yamlUploader;
 
 private slots:
   void OnIniswapTimerTimeout();

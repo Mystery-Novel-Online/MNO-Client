@@ -55,7 +55,7 @@ using namespace engine::system;
 using namespace engine;
 
 Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
-    : SceneWidget(ThemeSceneType::SceneType_Courtroom, parent)
+    : SceneWidget(ThemeSceneType::SceneType_Courtroom, parent), yamlUploader(this)
 {
   ao_app = p_ao_app;
   ao_config = new AOConfig(this);
@@ -2926,6 +2926,8 @@ void Courtroom::on_ooc_message_return_pressed()
   QString command = parts.value(0).toLower();
   QStringList args = parts.mid(1);
 
+  bool commandSuccess = true;
+
   const QHash<QString, std::function<void()>> commands =
       {
           {"/loop_file", [this, &args] {
@@ -2953,7 +2955,34 @@ void Courtroom::on_ooc_message_return_pressed()
             {
               ui_fennec->hide();
             }
-          }}
+          }},
+
+          {"/music_list", [this, &args, &commandSuccess] {
+            if(!args.empty())
+              commandSuccess = false;
+            else
+            {
+              yamlUploader.prompt("YAML_MUSIC");
+            }
+          }},
+
+          {"/char_list", [this, &args, &commandSuccess] {
+             if(!args.empty())
+               commandSuccess = false;
+             else
+             {
+               yamlUploader.prompt("YAML_CHAR");
+             }
+           }},
+
+          {"/area_list", [this, &args, &commandSuccess] {
+             if(!args.empty())
+               commandSuccess = false;
+             else
+             {
+               yamlUploader.prompt("YAML_AREA");
+             }
+           }}
       };
 
   auto it = commands.find(command);
@@ -2961,110 +2990,14 @@ void Courtroom::on_ooc_message_return_pressed()
   if (it != commands.end())
   {
     it.value()();
-    ui_ooc_chat_message->clear();
-    return;
-  }
-
-  if (l_message == "/music_list" && !l_message.contains(" "))
-  {
-    ui_ooc_chat_message->clear();
-    QString file = QFileDialog::getOpenFileName(this, "Select YAML File", "", "YAML Files (*.yaml)");
-    if (file.trimmed().isEmpty()) return;
-
-    QHttpMultiPart *yamlMultiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-    if (!ApiManager::appendFile(yamlMultiPart, "zipfile", file)) {
-      QMessageBox::warning(this, "Error", "Unable to open file.");
-      delete yamlMultiPart;
-      return;
-    }
-    ApiManager::appendField(yamlMultiPart, "key", ApiManager::authorizationKey());
-    QNetworkReply* yamlReply = ApiManager::instance().post("api/hubs/areas/upload", yamlMultiPart);
-    connect(yamlReply, &QNetworkReply::finished, this, [this, yamlReply]()
-            {
-              yamlReply->deleteLater();
-              if (yamlReply->error() != QNetworkReply::NoError) {
-                qWarning() << "YAML Upload Failed";
-                return;
-              }
-              QByteArray responseData = yamlReply->readAll();
-              JSONReader response;
-              response.ReadFromString(responseData);
-              const QString fileName = response.getStringValue("cdn_file");
-              if(fileName.trimmed().isEmpty()) return;
-              ao_app->send_server_packet(DRPacket("YAML_MUSIC", {fileName}));
-            });
-
-    return;
-  }
-  else if (l_message == "/char_list" && !l_message.contains(" "))
-  {
-    ui_ooc_chat_message->clear();
-    QString file = QFileDialog::getOpenFileName(this, "Select YAML File", "", "YAML Files (*.yaml)");
-    if (file.trimmed().isEmpty()) return;
-
-    QHttpMultiPart *yamlMultiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-    if (!ApiManager::appendFile(yamlMultiPart, "zipfile", file)) {
-      QMessageBox::warning(this, "Error", "Unable to open file.");
-      delete yamlMultiPart;
-      return;
-    }
-    ApiManager::appendField(yamlMultiPart, "key", ApiManager::authorizationKey());
-    QNetworkReply* yamlReply = ApiManager::instance().post("api/hubs/areas/upload", yamlMultiPart);
-    connect(yamlReply, &QNetworkReply::finished, this, [this, yamlReply]()
-            {
-              yamlReply->deleteLater();
-              if (yamlReply->error() != QNetworkReply::NoError) {
-                qWarning() << "YAML Upload Failed";
-                return;
-              }
-              QByteArray responseData = yamlReply->readAll();
-              JSONReader response;
-              response.ReadFromString(responseData);
-              const QString fileName = response.getStringValue("cdn_file");
-              if(fileName.trimmed().isEmpty()) return;
-              ao_app->send_server_packet(DRPacket("YAML_CHAR", {fileName}));
-            });
-
-    return;
-  }
-  else if (l_message == "/area_list" && !l_message.contains(" "))
-  {
-    ui_ooc_chat_message->clear();
-    QString file = QFileDialog::getOpenFileName(this, "Select YAML File", "", "YAML Files (*.yaml)");
-    if (file.trimmed().isEmpty()) return;
-
-    QHttpMultiPart *yamlMultiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
-    if (!ApiManager::appendFile(yamlMultiPart, "zipfile", file)) {
-      QMessageBox::warning(this, "Error", "Unable to open file.");
-      delete yamlMultiPart;
-      return;
-    }
-    ApiManager::appendField(yamlMultiPart, "key", ApiManager::authorizationKey());
-    QNetworkReply* yamlReply = ApiManager::instance().post("api/hubs/areas/upload", yamlMultiPart);
-    connect(yamlReply, &QNetworkReply::finished, this, [this, yamlReply]()
+    if(commandSuccess)
     {
-      yamlReply->deleteLater();
-      if (yamlReply->error() != QNetworkReply::NoError) {
-        qWarning() << "YAML Upload Failed";
-        return;
-      }
-      QByteArray responseData = yamlReply->readAll();
-      JSONReader response;
-      response.ReadFromString(responseData);
-      const QString fileName = response.getStringValue("cdn_file");
-      if(fileName.trimmed().isEmpty()) return;
-      ao_app->send_server_packet(DRPacket("YAML_AREA", {fileName}));
-    });
-
-    return;
+      ui_ooc_chat_message->clear();
+      return;
+    }
   }
-  else if (l_message.startsWith("/afk") && !m_isAfk)
-  {
 
-    ui_ooc_chat_message->clear();
-    return;
-  }
-  else if (l_message.startsWith("/tr "))
+  if (l_message.startsWith("/tr "))
   {
     // Timer resume
     int space_location = l_message.indexOf(" ");
