@@ -3049,12 +3049,6 @@ void Courtroom::on_ooc_message_return_pressed()
     ui_ooc_chat_message->clear();
     return;
   }
-  else if (l_message.startsWith("/switch_am"))
-  {
-    on_switch_area_music_clicked();
-    ui_ooc_chat_message->clear();
-    return;
-  }
   else if (l_message.startsWith("/rollp"))
   {
     audio::effect::Play(ao_app->get_sfx("dice").toStdString());
