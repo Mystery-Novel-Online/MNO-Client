@@ -13,6 +13,7 @@ void DownloadWindow::draw()
                 task->downloadedBytes / (1024 * 1024),
                 task->totalBytes / (1024 * 1024),
                 task->progressPercentage * 100.0f);
+
     ImGui::Separator();
   }
   ImGui::End();

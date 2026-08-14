@@ -10,6 +10,8 @@
 #include <engine/network/workshop/ContentDownloader.h>
 #include <engine/network/workshop/WorkshopPackage.h>
 
+bool HIDE_PROGRESS_BAR = false;
+
 DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 {
   setWindowTitle("Downloading...");
@@ -93,7 +95,10 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
 
       DownloaderPrompt *prompt = new DownloaderPrompt(nullptr);
       prompt->setDownloadType(type);
-      prompt->show();
+      if (HIDE_PROGRESS_BAR)
+        prompt->hide();
+      else
+        prompt->show();
 
 
 
