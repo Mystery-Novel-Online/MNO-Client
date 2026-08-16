@@ -696,8 +696,8 @@ void AOConfigPanel::updateTabsVisibility(const QModelIndex &current)
       {"Audio", {2}},
       {"Content", {3}},
       {"Message", {4, 5, 6}},
-      {"Advanced", {7, 8}},
-      {"About", {9}}
+      {"Advanced", {7}},
+      {"About", {8}}
   };
 
   for (int i = 0; i < tab_widget->count(); ++i) {
