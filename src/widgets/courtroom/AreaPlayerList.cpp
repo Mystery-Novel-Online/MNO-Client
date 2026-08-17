@@ -14,38 +14,53 @@ AreaPlayerList::~AreaPlayerList()
 
 void AreaPlayerList::deconstruct()
 {
-  // Continue to loop through the current PlayerEntries, taking the last
-  // so that it can be removed from the list, then deleted.
   while (!m_playerEntries.isEmpty())
     delete m_playerEntries.takeLast();
 }
 
 void AreaPlayerList::constructLayout()
 {
+  //TODO: We shouldn't delete every player entry, see if it's more performant to add checks if
+  //      a user present in the latest network update before deleting.
   deconstruct();
+
   if(!m_navigationLeft && !m_navigationRight)
     return;
 
-  // TODO: This is using the *old* theme management code, so make sure to update rolechat
-  //       so that spacing settings can be retrieved that way.
-  QPoint f_spacing = AOApplication::getInstance()->current_theme->get_widget_settings_spacing("player_list", "courtroom", "player_list_spacing");
-
   engine::system::theme::applyDimensions(this, "player_list", ThemeSceneType::SceneType_Courtroom);
 
-  // TODO: Like above, this resize value should probably be moved to use the NEW theme manager.
-  float resize = LegacyThemeManager::get().getResize();
+  m_playerSpacing = AOApplication::getInstance()->current_theme->get_widget_settings_spacing("player_list", "courtroom", "player_list_spacing").y();
 
-  int player_height = engine::system::theme::getDimensions("player_list_slot", ThemeSceneType::SceneType_Courtroom).height;
-  if(player_height == 0) player_height = (int)((float)50 * resize);
+  m_playerRows = calculateEntryCount();
+  updatePageNavigation();
+  populatePlayers();
+}
 
-  int y_spacing = f_spacing.y();
+void AreaPlayerList::startClientTyping(int clientId, bool active)
+{
+  for(DrPlayerListEntry* player : m_playerEntries)
+  {
+    if(player->clientId() == clientId)
+    {
+      player->toggleTyping(active);
+      return;
+    }
+  }
+}
+
+void AreaPlayerList::assignNavigationButtons(RPButton *left, RPButton *right)
+{
+  m_navigationLeft = left;
+  m_navigationRight = right;
+  connect(m_navigationLeft, &RPButton::clicked, this, &AreaPlayerList::navigationClickedLeft);
+  connect(m_navigationRight, &RPButton::clicked, this, &AreaPlayerList::navigationClickedRight);
+}
+
+void AreaPlayerList::updatePageNavigation()
+{
   int max_pages = ceil((SceneManager::get().mPlayerDataList.count() - 1) / m_pageMax);
-
-  m_playerRows = (( (int)((float)this->height() * resize) - player_height) / (y_spacing + player_height)) + 1;
-
   m_pageMax = qMax(1, m_playerRows);
 
-  //Manage Arrows (Right)
   m_navigationRight->hide();
   if(m_pageCurrent < max_pages)
   {
@@ -56,21 +71,24 @@ void AreaPlayerList::constructLayout()
     m_pageCurrent = max_pages;
   }
 
-  //Manage Arrows (Left)
   if(m_pageCurrent <= 0)
   {
     m_pageCurrent = 0;
     m_navigationLeft->hide();
   }
   else m_navigationLeft->show();
+}
 
-
+void AreaPlayerList::populatePlayers()
+{
   int starting_index = (m_pageCurrent * m_pageMax);
 
   int last_entry_height = 0;
   for (int n = starting_index; n < SceneManager::get().mPlayerDataList.count(); ++n)
   {
-    int y_pos = (last_entry_height + y_spacing) * (n - starting_index);
+    int y_pos = (last_entry_height + m_playerSpacing) * (n - starting_index);
+
+    // TODO: This is terrible, a reference to the DrPlayer class should be passed instead of all these individual function calls.
     DrPlayerListEntry* ui_playername = new DrPlayerListEntry(this, AOApplication::getInstance(), 1, y_pos);
     last_entry_height = ui_playername->height();
 
@@ -93,25 +111,21 @@ void AreaPlayerList::constructLayout()
   }
 }
 
-void AreaPlayerList::startClientTyping(int clientId, bool active)
+int AreaPlayerList::calculateEntryCount()
 {
-  for(DrPlayerListEntry* player : m_playerEntries)
-  {
-    if(player->clientId() == clientId)
-    {
-      player->toggleTyping(active);
-      return;
-    }
-  }
+
+  float resize = LegacyThemeManager::get().getResize();
+
+  int player_height = engine::system::theme::getDimensions("player_list_slot", ThemeSceneType::SceneType_Courtroom).height;
+
+  // We default to a size of 50 here if the theme creator has not defined a custom size.
+  if(player_height == 0)
+    player_height = (int)((float)50 * resize);
+
+  // Calculate how many entries will be able to fit vertically within this widgets dimensions.
+  return (( (int)((float)this->height() * resize) - player_height) / (m_playerSpacing + player_height)) + 1;
 }
 
-void AreaPlayerList::assignNavigationButtons(RPButton *left, RPButton *right)
-{
-  m_navigationLeft = left;
-  m_navigationRight = right;
-  connect(m_navigationLeft, &RPButton::clicked, this, &AreaPlayerList::navigationClickedLeft);
-  connect(m_navigationRight, &RPButton::clicked, this, &AreaPlayerList::navigationClickedRight);
-}
 
 void AreaPlayerList::navigationClickedLeft()
 {

@@ -17,6 +17,11 @@ public:
 
   void assignNavigationButtons(RPButton* left, RPButton* right);
 
+private:
+  void updatePageNavigation();
+  void populatePlayers();
+  int calculateEntryCount();
+
 public slots:
   void navigationClickedLeft();
   void navigationClickedRight();
@@ -30,6 +35,8 @@ private:
   int m_pageCurrent = 0;
 
   int m_playerRows = 0;
+
+  int m_playerSpacing = 0;
 
   RPButton* m_navigationLeft = nullptr;
   RPButton* m_navigationRight = nullptr;
