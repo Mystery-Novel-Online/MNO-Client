@@ -10,7 +10,8 @@
 #include <rolechat/actor/JsonActorData.h>
 
 QMap<QString, bool> s_layersEnabled = {};
-rolechat::actor::IActorData* s_currentActor = nullptr;
+std::unique_ptr<rolechat::actor::IActorData> s_currentActor = nullptr;
+
 std::unordered_map<std::string, std::unordered_map<QString, QDateTime>> s_fileTimes;
 static QString s_currentFolder = "<NOCHAR>";
 
@@ -34,7 +35,7 @@ rolechat::actor::IActorData *engine::actor::user::load(QString folder)
   if(folder == s_currentFolder)
   {
     if(s_currentActor != nullptr) s_currentActor->reload();
-    return s_currentActor;
+    return s_currentActor.get();
   }
 
   GetDB().incrementCharacterUsage(folder.toStdString());
@@ -44,7 +45,7 @@ rolechat::actor::IActorData *engine::actor::user::load(QString folder)
 
   if(FS::Checks::FileExists(l_jsonPath))
   {
-    s_currentActor = new rolechat::actor::JsonActorData();
+    s_currentActor = std::make_unique<rolechat::actor::JsonActorData>();
     s_currentActor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
 
     auto outfitNames = s_currentActor->outfitNames();
@@ -61,16 +62,16 @@ rolechat::actor::IActorData *engine::actor::user::load(QString folder)
   }
   else
   {
-    s_currentActor = new LegacyActorReader();
+    s_currentActor = std::make_unique<LegacyActorReader>();
     s_currentActor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
   }
 
-  return s_currentActor;
+  return s_currentActor.get();
 }
 
 rolechat::actor::IActorData *engine::actor::user::retrieve()
 {
-  return s_currentActor;
+  return s_currentActor.get();
 }
 
 QString engine::actor::user::name()

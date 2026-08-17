@@ -814,15 +814,13 @@ private slots:
 
   void on_area_list_clicked();
   void on_area_list_double_clicked(QModelIndex p_model);
-  void on_area_search_edited(QString);
-  void on_area_search_edited();
+  void on_area_search_edited(const QString& = "");
 
   void on_music_list_clicked();
   void on_music_list_double_clicked(QModelIndex p_model);
   void on_music_menu_play_triggered();
   void on_music_menu_insert_ooc_triggered();
-  void on_music_search_edited(QString);
-  void on_music_search_edited();
+  void on_music_search_edited(const QString& = "");
 
   void on_emote_preview_toggled(bool);
 
@@ -922,8 +920,7 @@ public:
   void update_all_sfx_item_color();
 
 public slots:
-  void filter_sfx_list(QString);
-  void filter_sfx_list();
+  void filter_sfx_list(const QString & = "");
 
 private:
   void set_sfx_item_color(QListWidgetItem *item);

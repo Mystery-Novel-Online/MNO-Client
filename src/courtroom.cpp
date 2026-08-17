@@ -3086,15 +3086,14 @@ void Courtroom::on_area_list_double_clicked(QModelIndex p_model)
   ui_ic_chat_message_field->setFocus();
 }
 
-void Courtroom::on_area_search_edited(QString p_filter)
+void Courtroom::on_area_search_edited(const QString& p_filter)
 {
-  ui_area_list->filterList(p_filter);
+  if(p_filter.isEmpty())
+    ui_area_list->filterList(ui_area_search->text());
+  else
+    ui_area_list->filterList(p_filter);
 }
 
-void Courtroom::on_area_search_edited()
-{
-  on_area_search_edited(ui_area_search->text());
-}
 
 void Courtroom::on_music_list_clicked()
 {
@@ -3130,14 +3129,12 @@ void Courtroom::on_music_menu_insert_ooc_triggered()
   ui_ooc_chat_message->setFocus();
 }
 
-void Courtroom::on_music_search_edited(QString p_filter)
+void Courtroom::on_music_search_edited(const QString& p_filter)
 {
-  ui_music_list->filterList(p_filter);
-}
-
-void Courtroom::on_music_search_edited()
-{
-  on_music_search_edited(ui_music_search->text());
+  if(p_filter.isEmpty())
+    ui_music_list->filterList(ui_music_search->text());
+  else
+    ui_music_list->filterList(p_filter);
 }
 
 void Courtroom::send_mc_packet(QString p_song, BGMPlayback playbackType)

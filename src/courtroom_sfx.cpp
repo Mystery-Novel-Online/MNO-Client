@@ -82,14 +82,12 @@ void Courtroom::load_current_character_sfx_list()
   filter_sfx_list();
 }
 
-void Courtroom::filter_sfx_list(QString p_filter)
+void Courtroom::filter_sfx_list(const QString &p_filter)
 {
-  ui_sfx_list->filterList(p_filter);
-}
-
-void Courtroom::filter_sfx_list()
-{
-  filter_sfx_list(ui_sfx_search->text());
+  if(p_filter.isEmpty())
+    ui_sfx_list->filterList(ui_sfx_search->text());
+  else
+    ui_sfx_list->filterList(p_filter);
 }
 
 void Courtroom::set_sfx_item_color(QListWidgetItem *p_item)

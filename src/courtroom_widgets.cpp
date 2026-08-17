@@ -452,40 +452,40 @@ void Courtroom::connect_widgets()
   connect(ao_config, SIGNAL(log_display_music_switch_changed(bool)), this, SLOT(on_chat_config_changed()));
   connect(ao_config, SIGNAL(log_is_topdown_changed(bool)), this, SLOT(on_chat_config_changed()));
 
-  connect(ui_area_search, SIGNAL(textChanged(QString)), this, SLOT(on_area_search_edited(QString)));
-  connect(ui_music_search, SIGNAL(textChanged(QString)), this, SLOT(on_music_search_edited(QString)));
-  connect(ui_sfx_search, SIGNAL(textChanged(QString)), this, SLOT(filter_sfx_list(QString)));
+  connect(ui_area_search, &QLineEdit::textChanged, this, &Courtroom::on_area_search_edited);
+  connect(ui_music_search, &QLineEdit::textChanged, this, &Courtroom::on_music_search_edited);
+  connect(ui_sfx_search, &QLineEdit::textChanged, this, &Courtroom::filter_sfx_list);
 
-  connect(ui_change_character, SIGNAL(clicked()), this, SLOT(on_change_character_clicked()));
-  connect(pCharaSelectSearch, SIGNAL(textChanged(QString)), this, SLOT(CharacterSearchUpdated()));
-
-
-  connect(ui_call_mod, SIGNAL(clicked()), this, SLOT(on_call_mod_clicked()));
+  connect(ui_change_character, &QAbstractButton::clicked, this, &Courtroom::on_change_character_clicked);
+  connect(pCharaSelectSearch, &QLineEdit::textChanged, this, &Courtroom::CharacterSearchUpdated);
 
 
+  connect(ui_call_mod, &QAbstractButton::clicked, this, &Courtroom::on_call_mod_clicked);
 
-  connect(ui_switch_area_music, SIGNAL(clicked()), this, SLOT(on_switch_area_music_clicked()));
 
-  connect(ui_config_panel, SIGNAL(clicked()), this, SLOT(on_config_panel_clicked()));
 
-  connect(ui_pre, SIGNAL(clicked()), this, SLOT(on_pre_clicked()));
-  connect(ui_flip, SIGNAL(clicked()), this, SLOT(on_flip_clicked()));
-  connect(ui_hide_character, SIGNAL(clicked()), this, SLOT(on_hidden_clicked()));
+  connect(ui_switch_area_music, &QAbstractButton::clicked, this, &Courtroom::on_switch_area_music_clicked);
+
+  connect(ui_config_panel, &QAbstractButton::clicked, this, &Courtroom::on_config_panel_clicked);
+
+  connect(ui_pre, &QAbstractButton::clicked, this, &Courtroom::on_pre_clicked);
+  connect(ui_flip, &QAbstractButton::clicked, this, &Courtroom::on_flip_clicked);
+  connect(ui_hide_character, &QAbstractButton::clicked, this, &Courtroom::on_hidden_clicked);
 
   connect(ui_sfx_list, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)), this, SLOT(on_sfx_list_current_item_changed(QListWidgetItem *, QListWidgetItem *)));
   connect(ui_sfx_list, SIGNAL(customContextMenuRequested(QPoint)), this, SLOT(on_sfx_list_context_menu_requested(QPoint)));
   connect(ui_anim_list, &QListWidget::currentItemChanged, this, &Courtroom::onAnimListItemChanged);
 
-  connect(ui_sfx_menu_preview, SIGNAL(triggered()), this, SLOT(on_sfx_menu_preview_triggered()));
-  connect(ui_sfx_menu_insert_file_name, SIGNAL(triggered()), this, SLOT(on_sfx_menu_insert_file_name_triggered()));
-  connect(ui_sfx_menu_insert_caption, SIGNAL(triggered()), this, SLOT(on_sfx_menu_insert_caption_triggered()));
+  connect(ui_sfx_menu_preview, &QAction::triggered, this, &Courtroom::on_sfx_menu_preview_triggered);
+  connect(ui_sfx_menu_insert_file_name, &QAction::triggered, this, &Courtroom::on_sfx_menu_insert_file_name_triggered);
+  connect(ui_sfx_menu_insert_caption, &QAction::triggered, this, &Courtroom::on_sfx_menu_insert_caption_triggered);
 
 
 
-  connect(ui_slider_horizontal_axis, SIGNAL(sliderReleased()), this, SLOT(on_pair_offset_changed()));
-  connect(ui_slider_horizontal_axis, SIGNAL(valueChanged(int)), this, SLOT(OnPlayerOffsetsChanged(int)));
-  connect(ui_slider_vertical_axis, SIGNAL(valueChanged(int)), this, SLOT(OnPlayerOffsetsChanged(int)));
-  connect(ui_slider_scale, SIGNAL(valueChanged(int)), this, SLOT(OnPlayerOffsetsChanged(int)));
+  connect(ui_slider_horizontal_axis, &QAbstractSlider::sliderReleased, this, &Courtroom::on_pair_offset_changed);
+  connect(ui_slider_horizontal_axis, &QAbstractSlider::valueChanged, this, &Courtroom::OnPlayerOffsetsChanged);
+  connect(ui_slider_vertical_axis, &QAbstractSlider::valueChanged, this, &Courtroom::OnPlayerOffsetsChanged);
+  connect(ui_slider_scale, &QAbstractSlider::valueChanged, this, &Courtroom::OnPlayerOffsetsChanged);
 
   // performance
   connect(ao_config, SIGNAL(sprite_caching_toggled(int, bool)), this, SLOT(assign_readers_for_viewers(int, bool)));
