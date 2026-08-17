@@ -34,7 +34,6 @@ set(HEADERS
   src/engine/interface/widgets/image_display.h
 
 
-  src/engine/interface/widgets/player_list_slot.h
   src/engine/interface/widgets/rp_button.h
   src/engine/interface/widgets/rp_combo_box.h
   src/engine/interface/widgets/rp_hover_widget.h
@@ -166,7 +165,6 @@ set(SOURCES
   src/engine/interface/widgets/image_display.cpp
 
 
-  src/engine/interface/widgets/player_list_slot.cpp
   src/engine/interface/widgets/rp_button.cpp
   src/engine/interface/widgets/rp_combo_box.cpp
   src/engine/interface/widgets/rp_hover_widget.cpp

@@ -1,7 +1,8 @@
 #include "AreaPlayerList.h"
 #include "drtheme.h"
-
 #include <modules/theme/legacythememanager.h>
+
+#include "AreaPlayerEntry.h"
 
 AreaPlayerList::AreaPlayerList(QWidget *parent) : QWidget{parent}
 {
@@ -38,7 +39,7 @@ void AreaPlayerList::constructLayout()
 
 void AreaPlayerList::startClientTyping(int clientId, bool active)
 {
-  for(DrPlayerListEntry* player : m_playerEntries)
+  for(AreaPlayerEntry* player : m_playerEntries)
   {
     if(player->clientId() == clientId)
     {
@@ -89,7 +90,7 @@ void AreaPlayerList::populatePlayers()
     int y_pos = (last_entry_height + m_playerSpacing) * (n - starting_index);
 
     // TODO: This is terrible, a reference to the DrPlayer class should be passed instead of all these individual function calls.
-    DrPlayerListEntry* ui_playername = new DrPlayerListEntry(this, AOApplication::getInstance(), 1, y_pos);
+    AreaPlayerEntry* ui_playername = new AreaPlayerEntry(this, AOApplication::getInstance(), 1, y_pos);
     last_entry_height = ui_playername->height();
 
     DrPlayer playerData = SceneManager::get().mPlayerDataList.at(n);

@@ -121,7 +121,7 @@ using ThemeHighlight = rolechat::theme::ThemeHighlight;
 #include "engine/interface/widgets/chat_log.h"
 #include "engine/interface/widgets/image_display.h"
 #include "engine/interface/widgets/rp_button.h"
-#include "engine/interface/widgets/player_list_slot.h"
+#include "widgets/courtroom/AreaPlayerEntry.h"
 #include "engine/interface/widgets/rp_combo_box.h"
 #include "engine/interface/widgets/rp_line_edit.h"
 #include "engine/interface/widgets/rp_hover_widget.h"
