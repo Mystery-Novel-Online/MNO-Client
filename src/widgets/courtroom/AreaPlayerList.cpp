@@ -93,6 +93,18 @@ void AreaPlayerList::constructLayout()
   }
 }
 
+void AreaPlayerList::startClientTyping(int clientId, bool active)
+{
+  for(DrPlayerListEntry* player : m_playerEntries)
+  {
+    if(player->clientId() == clientId)
+    {
+      player->toggleTyping(active);
+      return;
+    }
+  }
+}
+
 void AreaPlayerList::assignNavigationButtons(RPButton *left, RPButton *right)
 {
   m_navigationLeft = left;

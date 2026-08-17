@@ -1869,7 +1869,7 @@ void Courtroom::handle_chatmessage_3()
   if(isLocalClient) m_lastTypingPacket = 0;
   else
   {
-    setPlayerTyping(clientId, false);
+    ui_player_list->startClientTyping(clientId, false);
   }
 
   bool animLoop = ui_vp_player_char->setCharacterAnimation(m_chatmessage[CMAnimSequence], m_chatmessage[CMChrName]);
@@ -3944,14 +3944,7 @@ void Courtroom::construct_playerlist_layout()
 
 void Courtroom::setPlayerTyping(int client, bool active)
 {
-  for(DrPlayerListEntry* player : m_player_list)
-  {
-    if(player->clientId() == client)
-    {
-      player->toggleTyping(active);
-      return;
-    }
-  }
+  ui_player_list->startClientTyping(client, active);
 }
 
 void Courtroom::focusICInput()

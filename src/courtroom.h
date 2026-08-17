@@ -713,8 +713,6 @@ private:
 
   RPTextEdit *ui_area_desc = nullptr;
 
-
-  QVector<DrPlayerListEntry *> m_player_list;
   int m_player_id = 0;
   int m_current_player_page = 0;
   int player_columns = 5;

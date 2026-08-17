@@ -13,6 +13,8 @@ public:
   void deconstruct();
   void constructLayout();
 
+  void startClientTyping(int clientId, bool active);
+
   void assignNavigationButtons(RPButton* left, RPButton* right);
 
 public slots:
