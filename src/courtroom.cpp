@@ -3932,78 +3932,14 @@ void Courtroom::pause_timer(int p_id)
 
 void Courtroom::construct_playerlist()
 {
-  ui_player_list = new QWidget(this);
-  construct_playerlist_layout();
+  ui_player_list = new AreaPlayerList(this);
+  ui_player_list->assignNavigationButtons(ui_player_list_left, ui_player_list_right);
+  ui_player_list->constructLayout();
 }
 
 void Courtroom::construct_playerlist_layout()
 {
-  //Clear Player List Entries
-  while (!m_player_list.isEmpty())
-    delete m_player_list.takeLast();
-
-  //Setup Player list
-  QPoint f_spacing = ao_app->current_theme->get_widget_settings_spacing("player_list", "courtroom", "player_list_spacing");
-
-  engine::system::theme::applyDimensions(ui_player_list, "player_list", ThemeSceneType::SceneType_Courtroom);
-  float resize = LegacyThemeManager::get().getResize();
-
-  int player_height = engine::system::theme::getDimensions("player_list_slot", ThemeSceneType::SceneType_Courtroom).height;
-  if(player_height == 0) player_height = (int)((float)50 * resize);
-
-  int y_spacing = f_spacing.y();
-  int max_pages = ceil((SceneManager::get().mPlayerDataList.count() - 1) / m_page_max_player_count);
-
-  player_columns = (( (int)((float)ui_player_list->height() * resize) - player_height) / (y_spacing + player_height)) + 1;
-
-  m_page_max_player_count = qMax(1, player_columns);
-
-  //Manage Arrows (Right)
-  ui_player_list_right->hide();
-  if(m_page_player_list < max_pages)
-  {
-    ui_player_list_right->show();
-  }
-  else if(m_page_player_list > max_pages)
-  {
-    m_page_player_list = max_pages;
-  }
-
-  //Manage Arrows (Left)
-  if(m_page_player_list <= 0)
-  {
-    m_page_player_list = 0;
-    ui_player_list_left->hide();
-  }
-  else ui_player_list_left->show();
-
-
-  int starting_index = (m_page_player_list * m_page_max_player_count);
-
-  int last_entry_height = 0;
-  for (int n = starting_index; n < SceneManager::get().mPlayerDataList.count(); ++n)
-  {
-    int y_pos = (last_entry_height + y_spacing) * (n - starting_index);
-    DrPlayerListEntry* ui_playername = new DrPlayerListEntry(ui_player_list, ao_app, 1, y_pos);
-    last_entry_height = ui_playername->height();
-
-    DrPlayer playerData = SceneManager::get().mPlayerDataList.at(n);
-    ui_playername->set_character(playerData.m_character, playerData.data.afk);
-    ui_playername->set_name(playerData.m_showname);
-    ui_playername->setURL(playerData.mURL);
-    ui_playername->setID(playerData.m_id);
-    ui_playername->setStatus(playerData.mPlayerStatus);
-    ui_playername->setOutfit(playerData.m_CharacterOutfit);
-    ui_playername->setDiscord(playerData.data.discordSnowflake);
-    ui_playername->setContentVersion(playerData.data.contentVersion);
-
-    ui_playername->setMod(playerData.mIPID, playerData.mHDID);
-
-    m_player_list.append(ui_playername);
-    ui_playername->show();
-
-    if(n == (starting_index + m_page_max_player_count)) break;
-  }
+  ui_player_list->constructLayout();
 }
 
 void Courtroom::setPlayerTyping(int client, bool active)
@@ -4018,21 +3954,8 @@ void Courtroom::setPlayerTyping(int client, bool active)
   }
 }
 
-void Courtroom::on_player_list_left_clicked()
+void Courtroom::focusICInput()
 {
-    --m_page_player_list;
-
-    construct_playerlist_layout();
-
-    ui_ic_chat_message_field->setFocus();
-}
-
-void Courtroom::on_player_list_right_clicked()
-{
-    ++m_page_player_list;
-
-    construct_playerlist_layout();
-
     ui_ic_chat_message_field->setFocus();
 }
 

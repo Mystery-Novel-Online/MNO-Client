@@ -581,7 +581,7 @@ private:
   EmotionSelector *ui_emotes = nullptr;
 
 
-  QWidget * ui_player_list = nullptr;
+  AreaPlayerList* ui_player_list = nullptr;
 
 
   RPButton *ui_emote_left = nullptr;
@@ -896,9 +896,7 @@ private slots:
   void OnCharRandomClicked();
 
   //Player List
-
-  void on_player_list_left_clicked();
-  void on_player_list_right_clicked();
+  void focusICInput();
   void on_area_look_clicked();
 
   void ping_server();

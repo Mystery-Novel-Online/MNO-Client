@@ -496,8 +496,7 @@ void Courtroom::connect_widgets()
 
 
   //Player List
-  connect(ui_player_list_left, SIGNAL(clicked()), this, SLOT(on_player_list_left_clicked()));
-  connect(ui_player_list_right, SIGNAL(clicked()), this, SLOT(on_player_list_right_clicked()));
+  connect(ui_player_list, &AreaPlayerList::navigationComplete, this, &Courtroom::focusICInput);
 
 }
 
