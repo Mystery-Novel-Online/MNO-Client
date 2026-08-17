@@ -36,6 +36,7 @@
 #include "engine/param/actor_repository.h"
 #include "engine/param/actor/actor_loader.h"
 #include <QHttpMultiPart>
+#include <QShortcut>
 #include <config_tabs/config_tab_blips.h>
 #include <dialogue/CueParser.h>
 #include <engine/discord/workshop_discord.h>
@@ -106,6 +107,9 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   if (!network::metadata::VNServerInformation::featureSupported("sequence")) return;
   connect(&m_checkTimer, &QTimer::timeout, this, &Courtroom::checkAFKStatus);
   m_checkTimer.start(1000);
+
+  auto shortcut = new QShortcut(QKeySequence("Ctrl+/"), this);
+  connect(shortcut, &QShortcut::activated, this, [this] { ui_ooc_chat_message->setFocus(Qt::ShortcutFocusReason); if(ui_ooc_chat_message->text().isEmpty()) ui_ooc_chat_message->setText("/"); });
 }
 
 Courtroom::~Courtroom()
