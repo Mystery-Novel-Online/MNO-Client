@@ -45,11 +45,13 @@ rolechat::actor::IActorData *engine::actor::user::load(QString folder)
 
   if(FS::Checks::FileExists(l_jsonPath))
   {
-    s_currentActor = std::make_unique<rolechat::actor::JsonActorData>();
-    s_currentActor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
+    auto actor = std::make_unique<rolechat::actor::JsonActorData>();
 
-    auto outfitNames = s_currentActor->outfitNames();
-    auto outfits = s_currentActor->outfits();
+    actor = std::make_unique<rolechat::actor::JsonActorData>();
+    actor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
+
+    auto outfitNames = actor->outfitNames();
+    auto outfits = actor->outfits();
 
     for(auto outfit : outfitNames)
     {
@@ -59,11 +61,13 @@ rolechat::actor::IActorData *engine::actor::user::load(QString folder)
       }
     }
 
+    s_currentActor = std::move(actor);
   }
   else
   {
-    s_currentActor = std::make_unique<LegacyActorReader>();
-    s_currentActor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
+    auto actor = std::make_unique<LegacyActorReader>();
+    actor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
+    s_currentActor = std::move(actor);
   }
 
   return s_currentActor.get();
