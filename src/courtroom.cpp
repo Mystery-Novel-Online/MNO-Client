@@ -1939,7 +1939,7 @@ void Courtroom::on_chat_config_changed()
   update_ic_log(true);
 }
 
-void Courtroom::OnBgmFilterChanged()
+void Courtroom::OnBgmFilterChanged(int i)
 {
   m_music_list = ui_bgm_filter->GetMusicList();
   list_music();

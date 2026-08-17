@@ -147,7 +147,7 @@ void Courtroom::create_widgets()
   m_loading_timer->setInterval(ao_config->loading_bar_delay());
 
   ui_bgm_filter = new BGMFilter(this);
-  connect(ui_bgm_filter, SIGNAL(activated(int)), this, SLOT(OnBgmFilterChanged()));
+  connect(ui_bgm_filter, qOverload<int>(&QComboBox::activated), this, &Courtroom::OnBgmFilterChanged);
 
   ui_iniswap_dropdown = new QComboBox(this);
   ui_iniswap_dropdown->setInsertPolicy(QComboBox::NoInsert);
@@ -383,9 +383,9 @@ void Courtroom::connect_widgets()
 
   connect(m_sound_timer, SIGNAL(timeout()), this, SLOT(play_sfx()));
 
-  connect(m_tick_timer, SIGNAL(timeout()), this, SLOT(next_chat_letter()));
+  connect(m_tick_timer, &QTimer::timeout, this, &Courtroom::next_chat_letter);
 
-  connect(m_flash_timer, SIGNAL(timeout()), this, SLOT(realization_done()));
+  connect(m_flash_timer, &QTimer::timeout, this, &Courtroom::realization_done);
 
   connect(ao_config, SIGNAL(searchable_iniswap_changed(bool)), this, SLOT(update_iniswap_dropdown_searchable()));
   connect(ao_config, SIGNAL(emote_preview_changed(bool)), this, SLOT(on_emote_preview_toggled(bool)));
@@ -397,12 +397,12 @@ void Courtroom::connect_widgets()
   connect(ui_pos_dropdown, SIGNAL(activated(int)), this, SLOT(on_pos_dropdown_changed()));
 
 
-  connect(pCharaSelectSeries, SIGNAL(activated(int)), this, SLOT(onCharacterSelectPackageChanged(int)));
+  connect(pCharaSelectSeries, qOverload<int>(&QComboBox::activated), this, &Courtroom::onCharacterSelectPackageChanged);
 
   connect(ao_config, SIGNAL(showname_changed(QString)), this, SLOT(on_showname_changed(QString)));
   connect(ao_config, SIGNAL(showname_placeholder_changed(QString)), this, SLOT(on_showname_placeholder_changed(QString)));
   connect(ao_config, SIGNAL(character_ini_changed(QString)), this, SLOT(on_character_ini_changed()));
-  connect(ui_ic_chat_showname, SIGNAL(editingFinished()), this, SLOT(on_ic_showname_editing_finished()));
+  connect(ui_ic_chat_showname, &QLineEdit::editingFinished, this, &Courtroom::on_ic_showname_editing_finished);
   connect(ao_config, SIGNAL(message_length_threshold_changed(int)), this, SLOT(handle_ic_message_length()));
   connect(ui_ic_chat_message_field, &QTextEdit::textChanged, this, &Courtroom::handle_ic_message_length);
   connect(ui_ic_chat_message_field, &RPMessageInput::returnPressed, this, &Courtroom::on_ic_message_return_pressed);

@@ -7,7 +7,7 @@ DRChatLog::DRChatLog(QWidget *parent)
     , dr_config(new AOConfig(this))
 {
   setMouseTracking(true);
-  connect(this, SIGNAL(message_queued()), this, SLOT(_p_write_message_queue()));
+  connect(this, &DRChatLog::message_queued, this, &DRChatLog::_p_write_message_queue);
 }
 
 void DRChatLog::append_chatmessage(QString p_name, QString p_text)

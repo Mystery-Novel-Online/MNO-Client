@@ -10,7 +10,7 @@ ScreenshotButton::ScreenshotButton(QWidget *parent, AOApplication *p_ao_app) : R
   setContextMenuPolicy(Qt::CustomContextMenu);
 
   connect(this, &QWidget::customContextMenuRequested, menu, &ScreenshotMenu::OnMenuRequested);
-  connect(this, SIGNAL(clicked()), this, SLOT(OnButtonClicked()));
+  connect(this, &QAbstractButton::clicked, this, &ScreenshotButton::OnButtonClicked);
   UpdateDimensions();
   show();
 }

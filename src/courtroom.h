@@ -759,6 +759,7 @@ public slots:
   void preanim_done();
 
   void realization_done();
+  void show_emote_tooltip(int id, QPoint global_pos);
 
   void mod_called(QString p_ip);
 
@@ -796,7 +797,7 @@ private slots:
   void on_ic_message_return_pressed();
   void handle_ic_message_length();
   void on_chat_config_changed();
-  void OnBgmFilterChanged();
+  void OnBgmFilterChanged(int);
 
 
   void onFlipTagActivated();
@@ -823,7 +824,6 @@ private slots:
   void on_music_search_edited(QString);
   void on_music_search_edited();
 
-  void show_emote_tooltip(int id, QPoint global_pos);
   void on_emote_preview_toggled(bool);
 
 

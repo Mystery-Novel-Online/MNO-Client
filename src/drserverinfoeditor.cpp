@@ -16,9 +16,9 @@ DRServerInfoEditor::DRServerInfoEditor(QWidget *parent)
   ui_port = AO_GUI_WIDGET(QSpinBox, "port");
   ui_button_box = AO_GUI_WIDGET(QDialogButtonBox, "button_box");
 
-  connect(ui_button_box->button(QDialogButtonBox::Reset), SIGNAL(clicked()), this, SLOT(clear_server_info()));
-  connect(ui_button_box, SIGNAL(accepted()), this, SLOT(accept()));
-  connect(ui_button_box, SIGNAL(rejected()), this, SLOT(reject()));
+  connect(ui_button_box->button(QDialogButtonBox::Reset), &QAbstractButton::clicked, this, &DRServerInfoEditor::clear_server_info);
+  connect(ui_button_box, &QDialogButtonBox::accepted, this, &QDialog::accept);
+  connect(ui_button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
 DRServerInfoEditor::~DRServerInfoEditor()

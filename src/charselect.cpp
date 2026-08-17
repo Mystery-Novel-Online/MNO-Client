@@ -37,18 +37,18 @@ void Courtroom::construct_char_select()
   pCharaSelectSearch = new RPLineEdit("character_search", engine::system::localization::getText("CSS_SEARCH"), "[CHARA SEARCH]", ui_char_select_background);
   pCharaSelectSeries = setupComboBoxWidget(CharacterRepository::filterList(), "character_packages", "[PACKAGE FILTER]");
 
-  connect(char_button_mapper, SIGNAL(mapped(int)), this, SLOT(char_clicked(int)));
-  connect(ui_back_to_lobby, SIGNAL(clicked()), this, SLOT(on_back_to_lobby_clicked()));
+  connect(char_button_mapper, &QSignalMapper::mappedInt, this, &Courtroom::char_clicked);
+  connect(ui_back_to_lobby, &QAbstractButton::clicked, this, &Courtroom::on_back_to_lobby_clicked);
 
-  connect(ui_chr_select_left, SIGNAL(clicked()), this, SLOT(on_char_select_left_clicked()));
-  connect(ui_chr_select_right, SIGNAL(clicked()), this, SLOT(on_char_select_right_clicked()));
+  connect(ui_chr_select_left, &QAbstractButton::clicked, this, &Courtroom::on_char_select_left_clicked);
+  connect(ui_chr_select_right, &QAbstractButton::clicked, this, &Courtroom::on_char_select_right_clicked);
 
-  connect(ao_config, SIGNAL(character_ini_changed(QString)), this, SLOT(update_character_icon(QString)));
+  connect(ao_config, &AOConfig::character_ini_changed, this, &Courtroom::update_character_icon);
 
-  connect(ui_spectator, SIGNAL(clicked()), this, SLOT(on_spectator_clicked()));
+  connect(ui_spectator, &QAbstractButton::clicked, this, &Courtroom::on_spectator_clicked);
 
-  connect(pBtnCharSelectRefresh, SIGNAL(clicked()), this, SLOT(OnCharRefreshClicked()));
-  connect(pBtnCharSelectRandom, SIGNAL(clicked()), this, SLOT(OnCharRandomClicked()));
+  connect(pBtnCharSelectRefresh, &QAbstractButton::clicked, this, &Courtroom::OnCharRefreshClicked);
+  connect(pBtnCharSelectRandom, &QAbstractButton::clicked, this, &Courtroom::OnCharRandomClicked);
 
   reconstruct_char_select();
 }
@@ -91,12 +91,12 @@ void Courtroom::reconstruct_char_select()
     AOCharButton *l_button = new AOCharButton(ui_char_buttons, ao_app, x_pos, y_pos);
     ui_char_button_list.append(l_button);
 
-    connect(l_button, SIGNAL(clicked()), char_button_mapper, SLOT(map()));
+    connect(l_button, &QAbstractButton::clicked, char_button_mapper, QOverload<>::of(&QSignalMapper::map));
     char_button_mapper->setMapping(l_button, n);
 
     // mouse events
-    connect(l_button, SIGNAL(mouse_entered(AOCharButton *)), this, SLOT(char_mouse_entered(AOCharButton *)));
-    connect(l_button, SIGNAL(mouse_left()), this, SLOT(char_mouse_left()));
+    connect(l_button, &AOCharButton::mouse_entered, this, &Courtroom::char_mouse_entered);
+    connect(l_button, &AOCharButton::mouse_left, this, &Courtroom::char_mouse_left);
 
     ++x_mod_count;
 

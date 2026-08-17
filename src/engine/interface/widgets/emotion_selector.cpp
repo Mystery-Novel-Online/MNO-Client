@@ -92,8 +92,8 @@ void EmotionSelector::constructEmotes()
     connect(f_emote, &AOEmoteButton::emote_clicked, this, &EmotionSelector::emoteClicked);
     if(courtroom != nullptr)
     {
-      connect(f_emote, SIGNAL(tooltip_requested(int, QPoint)), courtroom, SLOT(show_emote_tooltip(int, QPoint)));
-      connect(f_emote, SIGNAL(mouse_left(int)), courtroom, SLOT(hide_emote_tooltip(int)));
+      connect(f_emote, &AOEmoteButton::tooltip_requested, courtroom, &Courtroom::show_emote_tooltip);
+      connect(f_emote, &AOEmoteButton::mouse_left, courtroom, &Courtroom::hide_emote_tooltip);
     }
 
     ++x_mod_count;

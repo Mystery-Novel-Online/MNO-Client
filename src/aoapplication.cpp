@@ -201,8 +201,8 @@ void AOApplication::construct_courtroom()
   }
 
   m_courtroom = new Courtroom(this);
-  connect(m_courtroom, SIGNAL(closing()), this, SLOT(on_courtroom_closing()));
-  connect(m_courtroom, SIGNAL(destroyed()), this, SLOT(on_courtroom_destroyed()));
+  connect(m_courtroom, &Courtroom::closing, this, &AOApplication::on_courtroom_closing);
+  connect(m_courtroom, &QObject::destroyed, this, &AOApplication::on_courtroom_destroyed);
   is_courtroom_constructed = true;
   center_widget_to_screen(m_courtroom);
 }

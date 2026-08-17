@@ -312,8 +312,8 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   ui_gallery_packages->setParent(ui_gallery_background);
   ui_gallery_categories->setParent(ui_gallery_background);
 
-  connect(ui_gallery_categories, SIGNAL(currentIndexChanged(int)), this, SLOT(onGalleryCategoryChanged(int)));
-  connect(ui_gallery_packages, SIGNAL(currentIndexChanged(int)), this, SLOT(onGalleryPackageChanged(int)));
+  connect(ui_gallery_categories, qOverload<int>(&QComboBox::currentIndexChanged), this, &Lobby::onGalleryCategoryChanged);
+  connect(ui_gallery_packages, qOverload<int>(&QComboBox::currentIndexChanged), this, &Lobby::onGalleryPackageChanged);
 
   connect(ui_replay_list, &QListWidget::currentRowChanged, this, &Lobby::onReplayRowChanged);
   connect(w_WorkshopSearchBar, &QLineEdit::returnPressed, this, &Lobby::onWorkshopSearch);
