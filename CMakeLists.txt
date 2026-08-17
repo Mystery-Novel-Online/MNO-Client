@@ -347,6 +347,8 @@ add_executable(rp-engine
   src/networking/HubUploadManager.h src/networking/HubUploadManager.cpp
   src/networking/WorkshopDownloadManager.h src/networking/WorkshopDownloadManager.cpp
   src/fennec/windows/DownloadWindow.h src/fennec/windows/DownloadWindow.cpp
+  src/widgets/courtroom/AreaPlayerList.h src/widgets/courtroom/AreaPlayerList.cpp
+  src/widgets/courtroom/AreaPlayerEntry.h src/widgets/courtroom/AreaPlayerEntry.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
