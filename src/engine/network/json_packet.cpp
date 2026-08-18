@@ -40,8 +40,8 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
   for(QJsonValueRef ref : playerArray)
   {
     jsonReader.SetTargetObject(ref.toObject());
-    DrPlayer* drp = new DrPlayer(jsonReader);
-    SceneManager::get().mPlayerDataList.append(*drp);
+    DrPlayer drp(jsonReader);
+    SceneManager::get().mPlayerDataList.append(drp);
   }
   if(AOApplication::getInstance()->m_courtroom != nullptr)
     AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();
