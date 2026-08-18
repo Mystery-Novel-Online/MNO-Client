@@ -26,8 +26,8 @@ constexpr int NAME_Y_OFFSET = 7;
 constexpr int TYPING_Y_OFFSET = 27;
 }
 
-AreaPlayerEntry::AreaPlayerEntry(QWidget *parent, AOApplication *p_ao_app, int p_x, int p_y)
-    : RPWidget("player_list_slot", parent)
+AreaPlayerEntry::AreaPlayerEntry(QWidget *parent, AOApplication *p_ao_app, int p_x, int p_y, const DrPlayer& player)
+    : RPWidget("player_list_slot", parent), m_playerData(player)
 {
   resetTransform();
 
@@ -85,7 +85,23 @@ AreaPlayerEntry::AreaPlayerEntry(QWidget *parent, AOApplication *p_ao_app, int p
   m_typingTimer->setInterval(6000);
 
   connect(m_typingTimer, &QTimer::timeout, this, &AreaPlayerEntry::handleTypingTimeout);
+  updateData(player, p_y);
 
+}
+
+void AreaPlayerEntry::updateData(const DrPlayer &player, int y)
+{
+  this->move(1, y);
+  m_playerData = player;
+  if(player.data.showname != m_showname)
+    set_name(player.data.showname);
+  if(player.data.character != m_character || player.data.outfit != m_CharacterOutfit || player.data.afk != m_afk)
+  {
+    m_character = player.data.character;
+    setOutfit(player.data.outfit);
+    setContentVersion(player.data.contentVersion);
+  }
+  setStatus(player.data.status);
 }
 
 void AreaPlayerEntry::refreshManual(int width)
@@ -234,7 +250,7 @@ void AreaPlayerEntry::set_character(QString p_character, bool afkState)
 void AreaPlayerEntry::setOutfit(QString outfitName)
 {
   m_CharacterOutfit = outfitName;
-  set_character(m_character, m_afk);
+  set_character(m_playerData.data.character, m_playerData.data.afk);
 }
 
 void AreaPlayerEntry::set_name(QString showname)
@@ -257,16 +273,6 @@ void AreaPlayerEntry::set_reason(QString p_reason)
   m_prompt->setText(p_reason);
 }
 
-void AreaPlayerEntry::setURL(QString url)
-{
-  mURL = url;
-}
-
-void AreaPlayerEntry::setID(int id)
-{
-  m_clientId = id;
-}
-
 void AreaPlayerEntry::setStatus(QString status)
 {
   if(!status.isEmpty())
@@ -286,20 +292,14 @@ void AreaPlayerEntry::setContentVersion(int versionNumber)
   }
 }
 
-void AreaPlayerEntry::setMod(QString ipid, QString hdid)
-{
-  mIPID = ipid;
-  mHDID = hdid;
-}
-
 int AreaPlayerEntry::clientId()
 {
-  return m_clientId;
+  return m_playerData.data.id;
 }
 
 void AreaPlayerEntry::addDiscordFriend()
 {
-  WorkshopDiscord::getInstance().sendFriendRequest(m_discord);
+  WorkshopDiscord::getInstance().sendFriendRequest(m_playerData.data.discordSnowflake);
 }
 
 void AreaPlayerEntry::messageDiscordFriend()
@@ -313,7 +313,7 @@ void AreaPlayerEntry::messageDiscordFriend()
                                        &ok);
 
   if (ok && !text.isEmpty()) {
-    WorkshopDiscord::getInstance().sendPrivateMessage(m_discord, text);
+    WorkshopDiscord::getInstance().sendPrivateMessage(m_playerData.data.discordSnowflake, text);
   }
 }
 
@@ -325,17 +325,17 @@ void AreaPlayerEntry::openCharacterFolder()
 
 void AreaPlayerEntry::openBrowserURL()
 {
-  DownloaderPrompt::StartDownload(mURL, "packages/Workshop Downloads", m_character, DOWNLOAD_PlayerList);
+  DownloaderPrompt::StartDownload(m_playerData.data.contentUrl, "packages/Workshop Downloads", m_character, DOWNLOAD_PlayerList);
 }
 
 void AreaPlayerEntry::sendPairRequest()
 {
-  ao_app->send_server_packet(DRPacket("PR", {QString::number(m_clientId)}));
+  ao_app->send_server_packet(DRPacket("PR", {QString::number(m_playerData.data.id)}));
 }
 
 void AreaPlayerEntry::sendUnpairRequest()
 {
-  ao_app->send_server_packet(DRPacket("UPR", {QString::number(m_clientId)}));
+  ao_app->send_server_packet(DRPacket("UPR", {QString::number(m_playerData.data.id)}));
 }
 
 void AreaPlayerEntry::sendLayerFront()
@@ -352,26 +352,26 @@ void AreaPlayerEntry::copyID()
 {
   QClipboard *clipboard = QGuiApplication::clipboard();
 
-  clipboard->setText(QString::number(m_clientId));
+  clipboard->setText(QString::number(m_playerData.data.id));
 }
 
 void AreaPlayerEntry::copyHDID()
 {
   QClipboard *clipboard = QGuiApplication::clipboard();
 
-  clipboard->setText(mHDID);
+  clipboard->setText(m_playerData.data.modHDID);
 }
 
 void AreaPlayerEntry::copyIPID()
 {
   QClipboard *clipboard = QGuiApplication::clipboard();
 
-  clipboard->setText(mIPID);
+  clipboard->setText(m_playerData.data.modIPID);
 }
 
 void AreaPlayerEntry::followPlayer()
 {
-  AOApplication::getInstance()->get_courtroom()->send_ooc_packet("/follow " + QString::number(m_clientId));
+  AOApplication::getInstance()->get_courtroom()->send_ooc_packet("/follow " + QString::number(m_playerData.data.id));
 }
 
 void AreaPlayerEntry::handleTypingTimeout()
@@ -382,7 +382,7 @@ void AreaPlayerEntry::handleTypingTimeout()
 void AreaPlayerEntry::showContextMenu(QPoint pos)
 {
   QMenu *menu = new QMenu(this);
-  QMenu *playerMenu = menu->addMenu("[" + QString::number(m_clientId) + "] " + m_showname);
+  QMenu *playerMenu = menu->addMenu("[" + QString::number(m_playerData.data.id) + "] " + m_showname);
   menu->addSeparator();
 
   QMenu *pairMenu = menu->addMenu("Pair Options");
@@ -410,10 +410,10 @@ void AreaPlayerEntry::showContextMenu(QPoint pos)
 
   menu->addSeparator();
 
-  if(!mURL.isEmpty())
+  if(!m_playerData.data.contentUrl.isEmpty())
   {
-    QUrl url(mURL);
-    QString label = mURL.endsWith("/repo") || mURL.endsWith("/collection") || mURL.endsWith("/content")? "Download Character" : "Open " + url.host() + " in Browser";
+    QUrl url(m_playerData.data.contentUrl);
+    QString label = m_playerData.data.contentUrl.endsWith("/repo") || m_playerData.data.contentUrl.endsWith("/collection") || m_playerData.data.contentUrl.endsWith("/content")? "Download Character" : "Open " + url.host() + " in Browser";
     QAction *browserAction = menu->addAction(label);
     connect(browserAction, &QAction::triggered, this, &AreaPlayerEntry::openBrowserURL);
   }
@@ -429,20 +429,20 @@ void AreaPlayerEntry::showContextMenu(QPoint pos)
   QAction *copyIDAction = playerMenu->addAction(localization::getText("PLAYER_LIST_ID"));
   connect(copyIDAction, &QAction::triggered, this, &AreaPlayerEntry::copyID);
 
-  if (!mHDID.isEmpty())
+  if (!m_playerData.data.modHDID.isEmpty())
   {
-    QString label = localization::getText("MOD_COPY_HDID") + " [" + mHDID + "]";
+    QString label = localization::getText("MOD_COPY_HDID") + " [" + m_playerData.data.modHDID + "]";
     QAction *copyHDID = playerMenu->addAction(label);
     connect(copyHDID, &QAction::triggered, this, &AreaPlayerEntry::copyHDID);
   }
 
-  if (!mIPID.isEmpty())
+  if (!m_playerData.data.modIPID.isEmpty())
   {
-    QString label = localization::getText("MOD_COPY_IPID") + " [" + mIPID + "]";
+    QString label = localization::getText("MOD_COPY_IPID") + " [" + m_playerData.data.modIPID + "]";
     QAction *copyIPID = playerMenu->addAction(label);
     connect(copyIPID, &QAction::triggered, this, &AreaPlayerEntry::copyIPID);
 
-    if(!m_discord.isEmpty())
+    if(!m_playerData.data.discordSnowflake.isEmpty())
     {
       QMenu *pairMenu = menu->addMenu("Discord (Debug)");
 

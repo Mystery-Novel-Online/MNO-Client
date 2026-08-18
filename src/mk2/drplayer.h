@@ -27,21 +27,6 @@ class DrPlayer
 public:
     DrPlayer(int id, QString showname, QString character, QString url, QString status, QString outfit);
     DrPlayer(JSONReader& jsonReader);
-
-    void setMod(QString ipid, QString hdid);
-    void setAfk(bool afkState) { data.afk = afkState; };
-    void setDiscord(QString discord) { data.discordSnowflake = discord; };
-
-    int m_id;
-    QString m_showname;
-    QString m_character;
-    QString m_CharacterOutfit = "";
-    QString mURL;
-    QString mPlayerStatus;
-    QString mHDID;
-    QString mIPID;
-    int m_contentVersion = 0;
-
     AreaPlayerData data;
 };
 

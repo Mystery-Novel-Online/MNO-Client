@@ -15,8 +15,23 @@ AreaPlayerList::~AreaPlayerList()
 
 void AreaPlayerList::deconstruct()
 {
-  while (!m_playerEntries.isEmpty())
-    delete m_playerEntries.takeLast();
+  QSet<int> currentPlayerIds;
+
+  for(const DrPlayer &player : SceneManager::get().mPlayerDataList)
+    currentPlayerIds.insert(player.data.id);
+
+  for(auto it = m_playerEntries.begin(); it != m_playerEntries.end();)
+  {
+    if(!currentPlayerIds.contains(it.key()))
+    {
+      delete it.value();
+      it = m_playerEntries.erase(it);
+    }
+    else
+    {
+      ++it;
+    }
+  }
 }
 
 void AreaPlayerList::constructLayout()
@@ -88,25 +103,25 @@ void AreaPlayerList::populatePlayers()
   for (int n = starting_index; n < SceneManager::get().mPlayerDataList.count(); ++n)
   {
     int y_pos = (last_entry_height + m_playerSpacing) * (n - starting_index);
-
-    // TODO: This is terrible, a reference to the DrPlayer class should be passed instead of all these individual function calls.
-    AreaPlayerEntry* ui_playername = new AreaPlayerEntry(this, AOApplication::getInstance(), 1, y_pos);
-    last_entry_height = ui_playername->height();
-
     DrPlayer playerData = SceneManager::get().mPlayerDataList.at(n);
-    ui_playername->set_character(playerData.m_character, playerData.data.afk);
-    ui_playername->set_name(playerData.m_showname);
-    ui_playername->setURL(playerData.mURL);
-    ui_playername->setID(playerData.m_id);
-    ui_playername->setStatus(playerData.mPlayerStatus);
-    ui_playername->setOutfit(playerData.m_CharacterOutfit);
-    ui_playername->setDiscord(playerData.data.discordSnowflake);
-    ui_playername->setContentVersion(playerData.data.contentVersion);
 
-    ui_playername->setMod(playerData.mIPID, playerData.mHDID);
+    auto it = m_playerEntries.find(playerData.data.id);
+    if(it != m_playerEntries.end())
+    {
+      AreaPlayerEntry *entry = it.value();
+      entry->updateData(playerData, y_pos);
+      entry->show();
+      last_entry_height = entry->height();
+    }
+    else
+    {
 
-    m_playerEntries.append(ui_playername);
-    ui_playername->show();
+      AreaPlayerEntry* ui_playername = new AreaPlayerEntry(this, AOApplication::getInstance(), 1, y_pos, playerData);
+      last_entry_height = ui_playername->height();
+      m_playerEntries.insert(playerData.data.id, ui_playername);
+      ui_playername->show();
+    }
+
 
     if(n == (starting_index + m_pageMax)) break;
   }

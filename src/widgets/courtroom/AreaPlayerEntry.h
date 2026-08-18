@@ -4,27 +4,27 @@ class AOApplication;
 
 #include <QWidget>
 
+#include <mk2/drplayer.h>
+
 class AreaPlayerEntry : public RPWidget
 {
 public:
-  AreaPlayerEntry(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y);
+  AreaPlayerEntry(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y, const DrPlayer& player);
+
+  void updateData(const DrPlayer& player, int y);
 
   void refreshManual(int width);
   void refreshAutomatic(int width);
 
   void toggleTyping(bool status);
 
-  void setDiscord(const QString& discord) {m_discord = discord;};
-
   void set_character(QString p_character, bool afkState);
   void setOutfit(QString outfitName);
   void set_name(QString showname);
   void set_reason(QString p_reason);
-  void setURL(QString url);
   void setID(int id);
   void setStatus(QString status);
   void setContentVersion(int versionNumber);
-  void setMod(QString ipid, QString hdid);
   AOImageDisplay *pCharacterBorderDisplay = nullptr;
   AOImageDisplay *ui_user_image = nullptr;
   RPLabel *ui_showname = nullptr;
@@ -60,19 +60,18 @@ private:
   AOApplication *ao_app = nullptr;
 
   int m_index = 0;
-  QImage m_texture;
   QString m_showname;
   QString m_character;
-  bool m_afk = false;
   QString m_CharacterOutfit = "";
+
+  QImage m_texture;
+
+  bool m_afk = false;
   QString mStatus = "";
-  QString mURL = "";
-  QString mHDID = "";
-  QString mIPID = "";
-  int m_clientId = -1;
-  QString m_discord = "";
 
   QTimer* m_typingTimer = nullptr;
+
+  DrPlayer m_playerData;
 
   void showContextMenu(QPoint pos);
 

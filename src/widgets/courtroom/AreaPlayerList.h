@@ -30,7 +30,7 @@ signals:
   void navigationComplete();
 
 private:
-  QVector<AreaPlayerEntry *> m_playerEntries = {};
+  QMap<int, AreaPlayerEntry *> m_playerEntries = {};
   int m_pageMax = 10;
   int m_pageCurrent = 0;
 
