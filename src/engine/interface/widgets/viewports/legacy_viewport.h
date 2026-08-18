@@ -65,8 +65,8 @@ private:
   QString m_backgroundName = "Blackout_HD";
   QString m_variantName = "";
 
-  rolechat::actor::IActorData *m_currentActor = nullptr;
-  rolechat::actor::IActorData *m_pairActor = nullptr;
+  rolechat::actor::IActorData *m_currentActor;
+  rolechat::actor::IActorData *m_pairActor;
 
 };
 

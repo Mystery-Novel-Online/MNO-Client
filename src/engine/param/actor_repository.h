@@ -7,9 +7,15 @@ class ActorData;
 
 #include <rolechat/actor/IActorData.h>
 
+struct CachedActor
+{
+  QDateTime lastModified;
+  std::shared_ptr<rolechat::actor::IActorData> data;
+};
+
 namespace engine::actor::repository
 {
-  rolechat::actor::IActorData *retrieve(QString t_folder);
+  rolechat::actor::IActorData* retrieve(const QString& folder);
 }
 
 

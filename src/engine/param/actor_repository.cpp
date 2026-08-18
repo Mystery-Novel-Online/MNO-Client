@@ -83,38 +83,38 @@ QString engine::actor::user::name()
   return s_currentFolder;
 }
 
-rolechat::actor::IActorData *engine::actor::repository::retrieve(QString t_folder)
+rolechat::actor::IActorData* engine::actor::repository::retrieve(const QString& folder)
 {
-  static QMap<QString, QPair<QDateTime, rolechat::actor::IActorData*>> s_cache;
+  static QMap<QString, CachedActor> actorCache;
 
-  QString l_jsonPath = fs::characters::getFilePath(t_folder, "char.json");
+  const QString jsonPath = fs::characters::getFilePath(folder, "char.json");
 
-  if(FS::Checks::FileExists(l_jsonPath))
+  if(FS::Checks::FileExists(jsonPath))
   {
-    QFileInfo fileInfo(l_jsonPath);
+    QFileInfo fileInfo(jsonPath);
     QDateTime lastModified = fileInfo.lastModified();
 
-    if (s_cache.contains(t_folder)) {
-      const auto& cached = s_cache[t_folder];
-      if (cached.first == lastModified)
-      {
-        cached.second->reload();
-        return cached.second;
-      } else
-      {
-        delete cached.second;
-      }
+    auto it = actorCache.find(folder);
+
+    if(it != actorCache.end())
+    {
+      if(it->lastModified == lastModified)
+        return it->data.get();
+
+      it->data.reset();
+      actorCache.erase(it);
     }
 
-    rolechat::actor::IActorData* l_returnData = new rolechat::actor::JsonActorData();
-    l_returnData->load(t_folder.toStdString(), fs::characters::getDirectoryPath(t_folder).toStdString());
-    s_cache[t_folder] = qMakePair(lastModified, l_returnData);
-    return l_returnData;
+    auto actor = std::make_shared<rolechat::actor::JsonActorData>();
+    actor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
+    actorCache[folder] = { lastModified, std::move(actor) };
+    return actorCache[folder].data.get();
   }
 
-  rolechat::actor::IActorData *l_returnData = new LegacyActorReader();
-  l_returnData->load(t_folder.toStdString(), fs::characters::getDirectoryPath(t_folder).toStdString());
-  return l_returnData;
+  auto actor = std::make_shared<LegacyActorReader>();
+  actor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
+  actorCache[folder] = { {}, std::move(actor) };
+  return actorCache[folder].data.get();
 }
 
 rolechat::actor::IActorData *engine::actor::user::switchCharacter(QString folder)
