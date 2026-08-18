@@ -38,6 +38,12 @@ void CharacterRepository::removeFavorite(const QString &folder)
   }
 }
 
+bool CharacterRepository::isFavorite(const QString &folder)
+{
+  const auto name = folder.toStdString();
+  return std::any_of(favoriteCharacters.begin(), favoriteCharacters.end(),[&](const ActorSelectEntry& c) { return c.name == name; });
+}
+
 void CharacterRepository::loadFavorites()
 {
   favoriteCharacters.clear();

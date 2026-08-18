@@ -142,7 +142,16 @@ void Courtroom::set_char_select_page()
 
   int l_item_count = 0;
 
-  for (ActorSelectEntry charaType : CharacterRepository::filteredList(pCharaSelectSeries->currentText()))
+  QVector<ActorSelectEntry> filteredResult = CharacterRepository::filteredList(pCharaSelectSeries->currentText());
+  if(pCharaSelectSeries->currentText() != "Recently Used")
+  {
+    std::stable_sort(filteredResult.begin(), filteredResult.end(), [](const ActorSelectEntry &a, const ActorSelectEntry &b)
+    {
+      return CharacterRepository::isFavorite(QString::fromStdString(a.name)) > CharacterRepository::isFavorite(QString::fromStdString(b.name));
+    });
+  }
+
+  for (ActorSelectEntry charaType : filteredResult)
   {
     if(QString::fromStdString(charaType.name).toLower().contains(pCharaSelectSearch->text().toLower()))
     {

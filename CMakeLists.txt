@@ -347,6 +347,7 @@ add_executable(rp-engine
   src/fennec/windows/DownloadWindow.h src/fennec/windows/DownloadWindow.cpp
   src/widgets/courtroom/AreaPlayerList.h src/widgets/courtroom/AreaPlayerList.cpp
   src/widgets/courtroom/AreaPlayerEntry.h src/widgets/courtroom/AreaPlayerEntry.cpp
+  src/widgets/courtroom/ActorSelection.h src/widgets/courtroom/ActorSelection.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)

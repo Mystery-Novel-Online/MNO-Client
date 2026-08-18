@@ -22,6 +22,7 @@ namespace engine::network::metadata
 
     static void addFavorite(const QString& folder);
     static void removeFavorite(const QString& folder);
+    static bool isFavorite(const QString& folder);
 
     static void loadFavorites();
     static void saveFavorites();
