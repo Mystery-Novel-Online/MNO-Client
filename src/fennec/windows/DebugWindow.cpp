@@ -44,6 +44,7 @@ void DebugWindow::populatePlayerList()
   for(int i = 0; i < DEBUG_SIMULATED_PLAYER_COUNT; i++)
   {
     DrPlayer drp(i, "Sim Player " + QString::number(i), "Persona" + QString::number(i), "", "", "Default");
+    drp.data.id = i;
     drp.data.showname = "Sim Player " + QString::number(i);
     drp.data.character = "Persona" + QString::number(i + 1);
     drp.data.afk = i % 3 == 1;

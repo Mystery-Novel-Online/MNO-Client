@@ -100,6 +100,10 @@ void AreaPlayerList::populatePlayers()
   int starting_index = (m_pageCurrent * m_pageMax);
 
   int last_entry_height = 0;
+
+  for(auto *entry : m_playerEntries)
+    entry->hide();
+
   for (int n = starting_index; n < SceneManager::get().mPlayerDataList.count(); ++n)
   {
     int y_pos = (last_entry_height + m_playerSpacing) * (n - starting_index);
