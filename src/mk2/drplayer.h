@@ -3,7 +3,9 @@
 
 #include <qstring.h>
 
-struct NovelPlayerData
+#include <engine/param/json_reader.h>
+
+struct AreaPlayerData
 {
   int id;
   bool afk;
@@ -24,6 +26,7 @@ class DrPlayer
 {
 public:
     DrPlayer(int id, QString showname, QString character, QString url, QString status, QString outfit);
+    DrPlayer(JSONReader& jsonReader);
 
     void setMod(QString ipid, QString hdid);
     void setAfk(bool afkState) { data.afk = afkState; };
@@ -39,7 +42,7 @@ public:
     QString mIPID;
     int m_contentVersion = 0;
 
-    NovelPlayerData data;
+    AreaPlayerData data;
 };
 
 #endif // DRPLAYER_H

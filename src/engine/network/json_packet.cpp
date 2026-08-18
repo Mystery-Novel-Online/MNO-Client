@@ -40,24 +40,7 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
   for(QJsonValueRef ref : playerArray)
   {
     jsonReader.SetTargetObject(ref.toObject());
-    int playerId = jsonReader.getStringValue("id").toInt();
-    QString showname = jsonReader.getStringValue("showname");
-    QString discord = jsonReader.getStringValue("discord");
-    QString characterName = jsonReader.getStringValue("character");
-    QString charaURL = jsonReader.getStringValue("url");
-    QString statusPlayer = jsonReader.getStringValue("status");
-    QString characterOutfit = jsonReader.getStringValue("outfit");
-    bool isAfk = jsonReader.getStringValue("afk") == "True";
-    if(characterOutfit == "<All>") characterOutfit = "";
-
-    QString charaIPID = jsonReader.getStringValue("IPID");
-    QString charaHDID = jsonReader.getStringValue("HDID");
-
-    DrPlayer* drp = new DrPlayer(playerId, showname, characterName, charaURL, statusPlayer, characterOutfit);
-    drp->setMod(charaIPID, charaHDID);
-    drp->setAfk(isAfk);
-    drp->setDiscord(discord);
-    drp->data.contentVersion = jsonReader.getStringValue("content_version").toInt();
+    DrPlayer* drp = new DrPlayer(jsonReader);
     SceneManager::get().mPlayerDataList.append(*drp);
   }
   if(AOApplication::getInstance()->m_courtroom != nullptr)
@@ -84,21 +67,7 @@ void JsonPacket::ProcessNotifyRequestPacket(JSONReader& jsonReader)
 void JsonPacket::ProcessPairDataPacket(JSONReader& jsonReader)
 {
   jsonReader.SetTargetObject("data");
-
-  const PairMetadata metadata =
-  {
-    jsonReader.getStringValue("character"),
-    jsonReader.getStringValue("outfit"),
-    jsonReader.getStringValue("last_sprite"),
-    jsonReader.getStringValue("sequence"),
-    jsonReader.getStringValue("layers"),
-    jsonReader.getIntValue("pair_scale"),
-    jsonReader.getIntValue("offset_pair"),
-    jsonReader.getIntValue("pair_vertical"),
-    jsonReader.getBoolValue("is_leader"),
-    jsonReader.getBoolValue("flipped"),
-    true
-  };
+  const PairMetadata metadata(jsonReader);
   int offsetSelf = jsonReader.getIntValue("self_offset");
   message::setPairMetadata(metadata, offsetSelf);
 }

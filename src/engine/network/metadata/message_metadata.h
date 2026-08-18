@@ -1,3 +1,5 @@
+
+#include <engine/param/json_reader.h>
 #ifndef MESSAGE_METADATA_H
 #define MESSAGE_METADATA_H
 
@@ -16,6 +18,22 @@ struct MessageModifiers
 
 struct PairMetadata
 {
+  PairMetadata() {};
+  PairMetadata(JSONReader& json)
+  {
+    characterFolder = json.getStringValue("character");
+    characterOutfit = json.getStringValue("outfit");
+    characterEmote = json.getStringValue("last_sprite");
+    characterSequence = json.getStringValue("sequence");
+    characterLayers = json.getStringValue("layers");
+    offsetScale = json.getIntValue("pair_scale");
+    offsetHorizontal = json.getIntValue("offset_pair");
+    offsetVertical = json.getIntValue("pair_vertical");
+    isLeader = json.getBoolValue("is_leader");
+    spriteFlipped = json.getBoolValue("flipped");
+    spriteVisible = true;
+  };
+
   QString characterFolder = "";
   QString characterOutfit = "";
   QString characterEmote = "";
