@@ -4,6 +4,7 @@
 #include <QFont>
 #include <QLabel>
 #include <QMouseEvent>
+#include "engine/system/user_database.h"
 #include "engine/workshop/workshop_cache.h"
 #include <engine/network/api_manager.h>
 #include "engine/fs/fs_reading.h"
@@ -19,6 +20,8 @@ constexpr int GRID_TEXT_SPACING  = 4;
 WorkshopEntry::WorkshopEntry(const WorkshopContentEntry &contentData, QWidget *parent) : QWidget(parent), m_id(contentData.id), m_title(contentData.name), m_isGridView(false)
 {
   m_isGridView = (contentData.content_type == "background" || contentData.content_type == "theme");
+  contentVersion = contentData.contentVersion;
+  folder = contentData.folder;
   setCursor(Qt::PointingHandCursor);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
@@ -29,6 +32,8 @@ WorkshopEntry::WorkshopEntry(const WorkshopContentEntry &contentData, QWidget *p
 
   setupIconDownload();
   createShadow();
+
+  content = contentData;
 }
 
 WorkshopEntry* WorkshopEntry::createChild(const WorkshopContentEntry &contentData, QWidget *parent)
@@ -113,7 +118,18 @@ void WorkshopEntry::setupUi(const QString &title, const QString &subtitle)
   m_rootLayout->addLayout(m_childrenLayout);
 
   m_iconLabel->setStyleSheet("border: none;");
+  int installedVersion = GetDB().workshopUpdateTime(folder.toStdString());
   set_stylesheet(this, "[WORKSHOP ENTRY]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
+
+  bool overrideExists = false;
+  if(contentVersion != installedVersion && installedVersion != 0)
+    overrideExists = set_stylesheet(this, "[WORKSHOP ENTRY UPDATE]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
+  else if(contentVersion == installedVersion)
+    overrideExists = set_stylesheet(this, "[WORKSHOP ENTRY INSTALLED]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
+
+  if(!overrideExists)
+    set_stylesheet(this, "[WORKSHOP ENTRY]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
+
   set_stylesheet(titleLabel, "[WORKSHOP NAME]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
   set_stylesheet(subtitleLabel, "[WORKSHOP SUBMITTER]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 

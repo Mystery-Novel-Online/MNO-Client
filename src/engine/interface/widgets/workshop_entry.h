@@ -48,15 +48,19 @@ private:
 
 private:
   int m_id;
+  int contentVersion = -1;
   bool m_isGridView = false;
   QString m_title;
   QString m_IconUrl = "";
+  QString folder;
 
   QLabel *m_iconLabel = nullptr;
 
   QVBoxLayout *m_rootLayout = nullptr;
   QHBoxLayout *mainLayout = nullptr;
   QVBoxLayout *m_childrenLayout = nullptr;
+
+  WorkshopContentEntry content;
 };
 
 #endif // WORKSHOP_ENTRY_H

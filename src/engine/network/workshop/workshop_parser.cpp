@@ -147,6 +147,8 @@ WorkshopContentEntry WorkshopParser::parseEntry(const QJsonObject &obj)
   entry.submitter = obj.value("submitter").toString();
   entry.submitterText = entry.submitter;
 
+  entry.contentVersion = obj.value("last_updated").toInt();
+
   for(auto collab : obj.value("collaborators").toArray())
   {
     QJsonObject collabObj = collab.toObject();

@@ -70,4 +70,5 @@ struct WorkshopContentEntry
   QVector<WorkshopCollaborator> collaborators;
   QString guid;
   QVector<WorkshopContentEntry> children;
+  int contentVersion;
 };
