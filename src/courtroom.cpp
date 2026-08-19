@@ -179,6 +179,8 @@ void Courtroom::setup_courtroom()
     i_timer->redraw();
   }
 
+
+  ui_player_list->deconstruct(true);
   construct_playerlist_layout();
   TimeDebugger::get().EndTimer("Courtroom Setup");
   engine::system::theme::reloadMetadata();
@@ -3484,6 +3486,7 @@ void Courtroom::reload_theme()
     return;
   }
   load_theme();
+  ui_player_list->deconstruct(true);
   construct_playerlist_layout();
 }
 

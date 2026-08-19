@@ -53,18 +53,7 @@ AreaPlayerEntry::AreaPlayerEntry(QWidget *parent, AOApplication *p_ao_app, int p
     refreshManual(parent->size().width());
   }
 
-  const QString lStatusImagePath = ao_app->find_theme_asset_path("player_list_status.png");
-  if (FS::Checks::FileExists(lStatusImagePath)) pStatusDisplay->set_image(lStatusImagePath);
-
-
-  const QString qContentUpdateImage = ao_app->find_theme_asset_path("player_content_update.png");
-  if (FS::Checks::FileExists(qContentUpdateImage)) w_UpdateDisplay->set_image(qContentUpdateImage);
-
-
-  const QString l_selected_texture = ao_app->find_theme_asset_path("char_border.png");
-  if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
-
-  set_stylesheet(m_prompt, "[PLAYER LIST PROMPT]", COURTROOM_STYLESHEETS_CSS, ao_app);
+  themeReload();
 
   ui_typing->setText("Typing...");
 
@@ -87,6 +76,22 @@ AreaPlayerEntry::AreaPlayerEntry(QWidget *parent, AOApplication *p_ao_app, int p
   connect(m_typingTimer, &QTimer::timeout, this, &AreaPlayerEntry::handleTypingTimeout);
   updateData(player, p_y);
 
+}
+
+void AreaPlayerEntry::themeReload()
+{
+  const QString lStatusImagePath = ao_app->find_theme_asset_path("player_list_status.png");
+  if (FS::Checks::FileExists(lStatusImagePath)) pStatusDisplay->set_image(lStatusImagePath);
+
+
+  const QString qContentUpdateImage = ao_app->find_theme_asset_path("player_content_update.png");
+  if (FS::Checks::FileExists(qContentUpdateImage)) w_UpdateDisplay->set_image(qContentUpdateImage);
+
+
+  const QString l_selected_texture = ao_app->find_theme_asset_path("char_border.png");
+  if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
+
+  set_stylesheet(m_prompt, "[PLAYER LIST PROMPT]", COURTROOM_STYLESHEETS_CSS, ao_app);
 }
 
 void AreaPlayerEntry::updateData(const DrPlayer &player, int y)

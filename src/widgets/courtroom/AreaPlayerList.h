@@ -10,7 +10,8 @@ class AreaPlayerList : public QWidget
 public:
   explicit AreaPlayerList(QWidget *parent = nullptr);
   ~AreaPlayerList();
-  void deconstruct();
+
+  void deconstruct(bool force = false);
   void constructLayout();
 
   void startClientTyping(int clientId, bool active);

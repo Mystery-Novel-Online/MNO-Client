@@ -13,12 +13,13 @@ AreaPlayerList::~AreaPlayerList()
   deconstruct();
 }
 
-void AreaPlayerList::deconstruct()
+void AreaPlayerList::deconstruct(bool force)
 {
   QSet<int> currentPlayerIds;
 
-  for(const DrPlayer &player : SceneManager::get().mPlayerDataList)
-    currentPlayerIds.insert(player.data.id);
+  if(!force)
+    for(const DrPlayer &player : SceneManager::get().mPlayerDataList)
+      currentPlayerIds.insert(player.data.id);
 
   for(auto it = m_playerEntries.begin(); it != m_playerEntries.end();)
   {

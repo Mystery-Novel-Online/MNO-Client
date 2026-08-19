@@ -11,6 +11,7 @@ class AreaPlayerEntry : public RPWidget
 public:
   AreaPlayerEntry(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y, const DrPlayer& player);
 
+  void themeReload();
   void updateData(const DrPlayer& player, int y);
 
   void refreshManual(int width);
