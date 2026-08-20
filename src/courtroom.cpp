@@ -109,7 +109,13 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   m_checkTimer.start(1000);
 
   auto shortcut = new QShortcut(QKeySequence("Ctrl+/"), this);
+  auto icShortcut = new QShortcut(QKeySequence("Ctrl+I"), this);
+  auto oocShortcut = new QShortcut(QKeySequence("Ctrl+O"), this);
   connect(shortcut, &QShortcut::activated, this, [this] { ui_ooc_chat_message->setFocus(Qt::ShortcutFocusReason); if(ui_ooc_chat_message->text().isEmpty()) ui_ooc_chat_message->setText("/"); });
+  connect(icShortcut, &QShortcut::activated, this, [this] { ui_ic_chat_message_field->setFocus(Qt::ShortcutFocusReason);});
+  connect(oocShortcut, &QShortcut::activated, this, [this] { ui_ooc_chat_message->setFocus(Qt::ShortcutFocusReason); });
+
+
 }
 
 Courtroom::~Courtroom()
