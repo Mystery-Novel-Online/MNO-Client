@@ -50,6 +50,10 @@ void LayerSelectionPanel::clearGlobals()
 
 void LayerSelectionPanel::addButtonToGrid(QWidget *button)
 {
+
+  if(width() <= 0)
+    return;
+
   QPoint f_spacing = AOApplication::getInstance()->current_theme->get_widget_settings_spacing("layers_panel", "courtroom", "layers_panel_spacing");
   m_layout->setHorizontalSpacing(f_spacing.x());
   m_layout->setVerticalSpacing(f_spacing.y());
