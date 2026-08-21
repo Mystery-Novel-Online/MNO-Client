@@ -2,6 +2,9 @@
 #include "engine/system/user_database.h"
 #include "pch.h"
 
+#include <algorithm>
+#include <random>
+
 #include "modules/theme/legacythememanager.h"
 #include "engine/system/debug/time_debugger.h"
 #include "aoconfig.h"
@@ -594,7 +597,8 @@ void Courtroom::update_background_scene()
 
   ui_pos_dropdown->clear();
   ui_pos_dropdown->addItem(system::localization::getText("DEFAULT"));
-  for(std::string& position : m_viewportScene.positions())
+  auto bgPositions = m_viewportScene.positions();
+  for(std::string& position : bgPositions)
   {
     if(position == "Default")
       continue;
@@ -605,6 +609,14 @@ void Courtroom::update_background_scene()
 
     //Add a list for legacy position names
     //ui_pos_dropdown->addItem(system::localization::getText("POS_WIT"), "wit");
+  }
+
+  if(!bgPositions.empty() && m_viewportScene.positionRandomized())
+  {
+    static std::mt19937 indexGenerator(std::random_device{}());
+    std::uniform_int_distribution<size_t> dist(0, bgPositions.size() - 1);
+
+    set_character_position(QString::fromStdString(bgPositions[dist(indexGenerator)]));
   }
 
   if (l_prev_background_name.isEmpty() || l_prev_background_name != m_background_name)
