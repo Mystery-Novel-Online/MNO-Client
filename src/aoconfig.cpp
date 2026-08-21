@@ -157,7 +157,7 @@ void AOConfigPrivate::load_file()
 
   searchable_iniswap = cfg.value("searchable_iniswap", true).toBool();
   always_pre = cfg.value("always_pre", true).toBool();
-  chat_tick_interval = cfg.value("chat_tick_interval", 60).toInt();
+  chat_tick_interval = cfg.value("chat_tick_interval", 30).toInt();
   emote_preview = cfg.value("emote_preview", true).toBool();
   sticky_sfx = cfg.value("sticky_sfx", false).toBool();
   message_length_threshold = cfg.value("message_length_threshold", 70).toInt();
