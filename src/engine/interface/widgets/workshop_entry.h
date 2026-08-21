@@ -48,11 +48,11 @@ private:
 
 private:
   int m_id;
-  int contentVersion = -1;
+  int m_contentVersion = -1;
   bool m_isGridView = false;
   QString m_title;
   QString m_IconUrl = "";
-  QString folder;
+  QString m_folder;
 
   QLabel *m_iconLabel = nullptr;
 

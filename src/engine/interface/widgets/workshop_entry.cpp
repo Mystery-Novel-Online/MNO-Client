@@ -20,8 +20,8 @@ constexpr int GRID_TEXT_SPACING  = 4;
 WorkshopEntry::WorkshopEntry(const WorkshopContentEntry &contentData, QWidget *parent) : QWidget(parent), m_id(contentData.id), m_title(contentData.name), m_isGridView(false)
 {
   m_isGridView = (contentData.content_type == "background" || contentData.content_type == "theme");
-  contentVersion = contentData.contentVersion;
-  folder = contentData.folder;
+  m_contentVersion = contentData.contentVersion;
+  m_folder = contentData.folder;
   setCursor(Qt::PointingHandCursor);
   setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 
@@ -118,13 +118,13 @@ void WorkshopEntry::setupUi(const QString &title, const QString &subtitle)
   m_rootLayout->addLayout(m_childrenLayout);
 
   m_iconLabel->setStyleSheet("border: none;");
-  int installedVersion = GetDB().workshopUpdateTime(folder.toStdString());
+  int installedVersion = GetDB().workshopUpdateTime(m_folder.toStdString());
   set_stylesheet(this, "[WORKSHOP ENTRY]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 
   bool overrideExists = false;
-  if(contentVersion != installedVersion && installedVersion != 0)
+  if(m_contentVersion != installedVersion && installedVersion != 0)
     overrideExists = set_stylesheet(this, "[WORKSHOP ENTRY UPDATE]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
-  else if(contentVersion == installedVersion)
+  else if(m_contentVersion == installedVersion)
     overrideExists = set_stylesheet(this, "[WORKSHOP ENTRY INSTALLED]", LOBBY_STYLESHEETS_CSS, AOApplication::getInstance());
 
   if(!overrideExists)
