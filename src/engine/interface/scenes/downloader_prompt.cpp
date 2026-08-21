@@ -229,9 +229,19 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
     rolechat::fs::PackageManager::scanPackages();
     QMessageBox::information(this, "Download Complete", "All files downloaded successfully!");
 
-    if(m_downloadType == DOWNLOAD_ServerBackground)
+    if(AOApplication::getInstance()->m_courtroom)
     {
-      AOApplication::getInstance()->m_courtroom->update_background_scene();
+      switch(m_downloadType)
+      {
+      case DOWNLOAD_ServerBackground:
+        AOApplication::getInstance()->m_courtroom->update_background_scene();
+        break;
+      case DOWNLOAD_PlayerList:
+        AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();
+        break;
+      default:
+        break;
+      }
     }
 
     deleteLater();
