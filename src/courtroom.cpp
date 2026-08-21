@@ -1314,8 +1314,8 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
 
   { // backgrounds
     DRPosition l_position = m_position_map.get_position(l_position_id);
-    l_file_list.insert(ViewportStageBack, QString::fromStdString(m_viewportScene.backgroundFile(l_position_id.toStdString())));
-    l_file_list.insert(ViewportStageFront, QString::fromStdString(m_viewportScene.foregroundFile(l_position_id.toStdString())));
+    l_file_list.insert(ViewportStageBack, QString::fromStdString(m_viewportScene.backgroundFile(l_position_id.toStdString(), ConfigManager::timeOfDay().toStdString())));
+    l_file_list.insert(ViewportStageFront, QString::fromStdString(m_viewportScene.foregroundFile(l_position_id.toStdString(), ConfigManager::timeOfDay().toStdString())));
   }
 
   // characters
