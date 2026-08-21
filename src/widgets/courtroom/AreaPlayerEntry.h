@@ -74,6 +74,8 @@ private:
 
   DrPlayer m_playerData;
 
+  bool m_charIconMissing = false;
+
   void showContextMenu(QPoint pos);
 
 };

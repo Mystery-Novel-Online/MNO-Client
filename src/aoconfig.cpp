@@ -161,7 +161,7 @@ void AOConfigPrivate::load_file()
   emote_preview = cfg.value("emote_preview", true).toBool();
   sticky_sfx = cfg.value("sticky_sfx", false).toBool();
   message_length_threshold = cfg.value("message_length_threshold", 70).toInt();
-  log_max_lines = cfg.value("chatlog_limit", 100).toInt();
+  log_max_lines = cfg.value("chatlog_limit", 2000).toInt();
   log_is_topdown = cfg.value("chatlog_scrolldown", true).toBool();
   log_display_timestamp = cfg.value("chatlog_display_timestamp", true).toBool();
   log_display_client_id = cfg.value("chatlog_display_client_id", false).toBool();

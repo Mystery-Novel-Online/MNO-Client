@@ -100,7 +100,7 @@ void AreaPlayerEntry::updateData(const DrPlayer &player, int y)
   m_playerData = player;
   if(player.data.showname != m_showname)
     set_name(player.data.showname);
-  if(player.data.character != m_character || player.data.outfit != m_CharacterOutfit || player.data.afk != m_afk)
+  if(player.data.character != m_character || player.data.outfit != m_CharacterOutfit || player.data.afk != m_afk || m_charIconMissing)
   {
     m_character = player.data.character;
     setOutfit(player.data.outfit);
@@ -240,7 +240,8 @@ void AreaPlayerEntry::set_character(QString p_character, bool afkState)
       QString l_missing_char_image = ao_app->find_theme_asset_path("missing_char.png");
       if (!l_missing_char_image.isEmpty())
       {
-          ui_user_image->set_theme_image("missing_char.png");
+        ui_user_image->set_theme_image("missing_char.png");
+        m_charIconMissing = true;
       }
 
   }
@@ -294,6 +295,10 @@ void AreaPlayerEntry::setContentVersion(int versionNumber)
   {
     w_UpdateDisplay->show();
     pStatusDisplay->hide();
+  }
+  else
+  {
+    w_UpdateDisplay->hide();
   }
 }
 
