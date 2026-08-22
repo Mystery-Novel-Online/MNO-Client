@@ -142,6 +142,8 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
     QString accessId = l_content.at(2);
     if(accessId != "-1")
     {
+      if(!ApiManager::apiUseAllowed())
+        return;
       QNetworkAccessManager *manager = new QNetworkAccessManager(this);
 
       QString apiKey = ApiManager::authorizationKey();
@@ -172,12 +174,7 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
                            if(DownloaderPrompt::StartDownload(guidToDownload, DOWNLOAD_ServerContent)){
                              return;
                            }
-
-
                            send_server_packet(DRPacket("HI", {get_hdid(), response.getStringValue("access_code")}));
-                           qDebug() << "[JOIN SUCCESS]" << responseData;
-                         } else {
-                           qWarning() << "[JOIN ERROR]" << reply->errorString();
                          }
                          reply->deleteLater();
                        });

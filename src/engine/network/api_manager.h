@@ -24,6 +24,7 @@ public:
 
   void login();
 
+  static bool apiUseAllowed();
   static QString repoUrl(QString guid);
   static QString baseUri();
   static QString authorizationKey();

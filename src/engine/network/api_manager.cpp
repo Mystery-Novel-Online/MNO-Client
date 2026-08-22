@@ -40,6 +40,9 @@ QNetworkReply* ApiManager::post(const QString& url, QHttpMultiPart* multiPart)
 
 void ApiManager::login()
 {
+  if(!apiUseAllowed())
+    return;
+
   nlohmann::json verifyBody;
   verifyBody["user_key"] = ApiManager::authorizationKey().toStdString();
   verifyBody["last_notify"] = config::ConfigUserSettings::intergerValue("last_notification", 0);
@@ -90,6 +93,11 @@ void ApiManager::login()
 
     emit loginStatus(isValid, accessToken);
   });
+}
+
+bool ApiManager::apiUseAllowed()
+{
+  return !config::ConfigUserSettings::booleanValue("authentication_disabled", false);
 }
 
 QString ApiManager::repoUrl(QString guid)
