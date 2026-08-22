@@ -1,4 +1,5 @@
 #include "tracklist_metadata.h"
+#include "engine/system/user_database.h"
 
 QMap<QString, QStringList> s_musicList = {};
 QStringList s_musicCategories = {};
@@ -54,7 +55,15 @@ QStringList TracklistMetadata::GetEverything()
 
 QStringList TracklistMetadata::GetCategory(QString categoryName)
 {
-  if(categoryName == "Pinned") return s_pinnedMusic;
+  if(categoryName == "Pinned")
+  {
+    s_pinnedMusic.clear();
+    for(const std::string& track : GetDB().getPinnedTracks())
+    {
+      s_pinnedMusic.append(QString::fromStdString(track));
+    }
+    return s_pinnedMusic;
+  }
   QStringList l_List = {};
   l_List.append(categoryName);
   if(s_musicList.contains(categoryName))
@@ -74,7 +83,9 @@ void TracklistMetadata::PinTrack(QString musicPath)
   if(s_pinnedMusic.contains(musicPath))
   {
     s_pinnedMusic.removeAll(musicPath);
+    GetDB().unpinTrack(musicPath.toStdString());
     return;
   }
+  GetDB().pinTrack(musicPath.toStdString());
   s_pinnedMusic.append(musicPath);
 }
