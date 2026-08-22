@@ -169,7 +169,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, c
 
 void WorkshopUploader::StartUpload()
 {
-  bool loginStatus = ApiManager::loggedIn();
+  bool loginStatus = ApiManager::loggedIn() && ApiManager::apiUseAllowed();
   if(!loginStatus)
   {
     QMessageBox::information(nullptr, "Warning", "You currently are not authenticated to upload");

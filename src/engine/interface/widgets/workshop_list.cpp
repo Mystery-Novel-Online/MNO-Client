@@ -49,6 +49,8 @@ void WorkshopListWidget::addEntry(const WorkshopContentEntry &entryData)
 
 void WorkshopListWidget::updateFromApi(const QString &category)
 {
+  if(!(ApiManager::loggedIn() && ApiManager::apiUseAllowed()))
+    return;
   clearEntries();
 
   m_currentCategory = category;

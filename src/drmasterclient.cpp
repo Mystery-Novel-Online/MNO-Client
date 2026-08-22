@@ -39,6 +39,8 @@ DRServerInfoList DRMasterClient::server_list() const
 
 void DRMasterClient::request_server_list()
 {
+  if(!ApiManager::apiUseAllowed())
+    return;
   send_get_request("/api/servers/browse", &DRMasterClient::process_server_list);
 }
 
