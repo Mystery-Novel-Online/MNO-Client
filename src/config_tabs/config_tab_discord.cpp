@@ -8,12 +8,15 @@ ConfigTabDiscord::ConfigTabDiscord(QWidget *parent) : QWidget(parent), ui(new Ui
   m_discordActive = config::ConfigUserSettings::booleanValue("discord_rich_presence", true);
   m_hideCharacter = config::ConfigUserSettings::booleanValue("discord_hide_character", false);
   m_hideServer = config::ConfigUserSettings::booleanValue("discord_hide_server", false);
+  m_workshopAuthentication = config::ConfigUserSettings::booleanValue("authentication_disabled", false);
 
   ui->setupUi(this);
 
   ui->discordPresence->setChecked(m_discordActive);
   ui->hideCharacter->setChecked(m_hideCharacter);
   ui->hideServer->setChecked(m_hideServer);
+  ui->disableIntergration->setChecked(m_workshopAuthentication);
+  ui->warningAuthentication->setVisible(m_workshopAuthentication);
 }
 
 ConfigTabDiscord::~ConfigTabDiscord()
@@ -113,5 +116,13 @@ QString ConfigTabDiscord::characterText()
     return "Spectating";
 
   return "Playing as " + m_stateText;
+}
+
+
+void ConfigTabDiscord::on_disableIntergration_stateChanged(int arg1)
+{
+  m_workshopAuthentication = ui->disableIntergration->isChecked();
+  config::ConfigUserSettings::setValue("authentication_disabled", m_workshopAuthentication);
+  ui->warningAuthentication->setVisible(m_workshopAuthentication);
 }
 

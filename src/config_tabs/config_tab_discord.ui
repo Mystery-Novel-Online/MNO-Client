@@ -44,6 +44,20 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="disableIntergration">
+     <property name="text">
+      <string>Disable Discord Authentication</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="warningAuthentication">
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;Warning: Disabling &lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#aa0000;&quot;&gt;authentication &lt;/span&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;will prevent you from connecting to&lt;br/&gt;servers that are advertised on the public server list, and workshop&lt;br/&gt;functionality will be limited. &lt;br/&gt;&lt;br/&gt;If you are concerned about connecting your client to discord, you can &lt;br/&gt;use the &lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#aa0000;&quot;&gt;/authorize &lt;/span&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;command with the bot in the official discord server&lt;br/&gt;to manually authenticate without connecting accounts. &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; color:#aa0000;&quot;&gt;&lt;br/&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>

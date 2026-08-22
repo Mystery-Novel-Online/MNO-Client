@@ -40,12 +40,15 @@ private slots:
   QString serverText();
   QString characterText();
 
+  void on_disableIntergration_stateChanged(int arg1);
+
 private:
   Ui::ConfigTabDiscord *ui;
 
   bool m_discordActive = false;
   bool m_hideCharacter = false;
   bool m_hideServer = false;
+  bool m_workshopAuthentication = false;
 
   DiscordState m_currentState = PresenceStateServerSelect;
   QString m_stateText = "";
