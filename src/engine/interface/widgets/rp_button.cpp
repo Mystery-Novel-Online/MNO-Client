@@ -40,11 +40,11 @@ void RPButton::set_image(QString p_image)
   QString path = m_app->find_theme_asset_path(p_image);
   if(m_image == path) return;
   m_image_stem = p_image;
-  m_image = path;
+  m_image = path.replace('\\', '/');
 
   // Get the path of the found image without the extension
   const QString l_image_name = p_image.left(p_image.lastIndexOf(QChar('.')));
-  QString l_hover_image = m_app->find_theme_asset_path(l_image_name + "_hover.png");
+  QString l_hover_image = m_app->find_theme_asset_path(l_image_name + "_hover.png").replace('\\', '/');
   if (l_hover_image.isEmpty())
   {
     l_hover_image = m_image;
