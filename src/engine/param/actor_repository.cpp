@@ -111,9 +111,13 @@ rolechat::actor::IActorData* engine::actor::repository::retrieve(const QString& 
     return actorCache[folder].data.get();
   }
 
-  auto actor = std::make_shared<LegacyActorReader>();
-  actor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
-  actorCache[folder] = { {}, std::move(actor) };
+  auto it = actorCache.find(folder);
+  if(it == actorCache.end())
+  {
+    auto actor = std::make_shared<LegacyActorReader>();
+    actor->load(folder.toStdString(), fs::characters::getDirectoryPath(folder).toStdString());
+    actorCache[folder] = { {}, std::move(actor) };
+  }
   return actorCache[folder].data.get();
 }
 
