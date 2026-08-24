@@ -462,7 +462,7 @@ void AreaPlayerEntry::showContextMenu(QPoint pos)
       QAction *discMessageAction = pairMenu->addAction("Send Message");
       connect(discMessageAction, &QAction::triggered, this, &AreaPlayerEntry::messageDiscordFriend);
 
-      QAction *discFriendWhitelist = pairMenu->addAction("Add to Current Whitelist");
+      QAction *discFriendAllowList = pairMenu->addAction("Add to Current Allow List");
     }
   }
 

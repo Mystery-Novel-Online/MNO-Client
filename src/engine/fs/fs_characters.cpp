@@ -4,14 +4,14 @@
 #include <rolechat-lib/src/rolechat/userdata/TemporaryDB.h>
 
 namespace{
-const QStringList SPRITE_PATH_BLACKLIST = { "char_icon.png", "showname.png", "emotions" };
+const QStringList SPRITE_PATH_DENYLIST = { "char_icon.png", "showname.png", "emotions" };
 }
 
 QString engine::fs::characters::getSpritePath(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder)
 {
   bool l_valid = true;
 
-  for (const QString &i_black : SPRITE_PATH_BLACKLIST)
+  for (const QString &i_black : SPRITE_PATH_DENYLIST)
   {
     if (p_emote.startsWith(i_black, Qt::CaseInsensitive))
     {
