@@ -1,6 +1,5 @@
-#include "layer_selection_panel.h"
+#include "LayerSelectionPanel.h"
 #include "drtheme.h"
-#include "server_select_entry.h"
 #include "engine/param/actor_repository.h"
 #include "engine/interface/courtroom_layout.h"
 
@@ -8,8 +7,7 @@ constexpr int ButtonSize   = 40;
 constexpr int LayoutMargin = 22;
 
 LayerSelectionPanel::LayerSelectionPanel(QWidget *parent)
-    : RPWidget{"layers_panel", parent}
-{
+    : RPWidget{"layers_panel", parent} {
   resetTransform();
   setBackgroundImage("layers_panel");
 
@@ -29,30 +27,27 @@ LayerSelectionPanel::LayerSelectionPanel(QWidget *parent)
   setLayout(rootLayout);
 }
 
-void LayerSelectionPanel::clear()
-{
+void LayerSelectionPanel::clear() {
   m_layers.clear();
   m_VariantSwitches.clear();
-  baseImage.clear();
+  m_baseImageOverride.clear();
   while (QLayoutItem* item = m_layout->takeAt(0))
   {
-    if (QWidget* w = item->widget())
+    if (QWidget* w = item->widget()) {
       w->deleteLater();
-
+    }
     delete item;
   }
 }
 
-void LayerSelectionPanel::clearGlobals()
-{
+void LayerSelectionPanel::clearGlobals() {
   m_GlobalVariants.clear();
 }
 
-void LayerSelectionPanel::addButtonToGrid(QWidget *button)
-{
-
-  if(width() <= 0)
+void LayerSelectionPanel::addButtonToGrid(QWidget *button) {
+  if(width() <= 0) {
     return;
+  }
 
   QPoint f_spacing = AOApplication::getInstance()->current_theme->get_widget_settings_spacing("layers_panel", "courtroom", "layers_panel_spacing");
   m_layout->setHorizontalSpacing(f_spacing.x());
@@ -67,20 +62,18 @@ void LayerSelectionPanel::addButtonToGrid(QWidget *button)
   m_layout->addWidget(button, row, col);
 }
 
-void LayerSelectionPanel::disableLayerVariants(const QString &layerName)
-{
-  for (LayerSelectionData& layer : m_layers)
-  {
-    if (layer.layerName != layerName)
+void LayerSelectionPanel::disableLayerVariants(const QString &layerName) {
+  for (LayerSelectionData& layer : m_layers) {
+    if (layer.layerName != layerName) {
       continue;
+    }
 
     const QString name = layer.layerName + "_" + layer.variation;
     layer.button->setLayerImage(name, name, name, false);
   }
 }
 
-void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, LayerSelectionType type)
-{
+void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, LayerSelectionType type) {
   AOEmoteButton *emote = new AOEmoteButton(m_container, m_app, 0, 0);
   emote->setLayerImage(toggle, toggle, toggle, type == LayerSelection_Toggle);
   emote->set_emote_number(m_layers.count());
@@ -92,8 +85,7 @@ void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, 
   addButtonToGrid(emote);
 }
 
-void LayerSelectionPanel::addLayer(const QString &layer, const QString &variation, bool state, LayerSelectionType type)
-{
+void LayerSelectionPanel::addLayer(const QString &layer, const QString &variation, bool state, LayerSelectionType type) {
   AOEmoteButton *emote = new AOEmoteButton(m_container, m_app, 0, 0);
   emote->set_emote_number(m_layers.count());
 
@@ -111,10 +103,30 @@ void LayerSelectionPanel::addLayer(const QString &layer, const QString &variatio
   addButtonToGrid(emote);
 }
 
-void LayerSelectionPanel::layerClicked(int layerId)
-{
-  if(layerId > m_layers.count()) return;
+QString LayerSelectionPanel::getVariant(const QString &layerName, const QString &fallback) {
+  if(m_GlobalVariants.contains(layerName)) {
+    return m_GlobalVariants[layerName];
+  }
+  if(m_VariantSwitches.contains(layerName)) {
+    return m_VariantSwitches[layerName];
+  }
+  return fallback;
+}
 
+QString LayerSelectionPanel::getBaseVariant(const QString &fallback) {
+  if(m_GlobalVariants.contains("base_image")) {
+    return m_GlobalVariants["base_image"];
+  }
+  if(m_baseImageOverride.trimmed().isEmpty()) {
+    return fallback;
+  }
+  return m_baseImageOverride;
+}
+
+void LayerSelectionPanel::layerClicked(int layerId) {
+  if(layerId > m_layers.count()) {
+    return;
+  }
 
   LayerSelectionData& data = m_layers[layerId];
   QString VariantName = data.layerName + "_" + data.variation;
@@ -125,8 +137,7 @@ void LayerSelectionPanel::layerClicked(int layerId)
     return;
   }
 
-  switch(data.type)
-  {
+  switch(data.type) {
   case LayerSelection_Toggle:
     data.type = LayerSelection_ToggleDisabled;
     data.button->setLayerImage(data.toggleName, data.toggleName, data.toggleName, false);
@@ -154,7 +165,7 @@ void LayerSelectionPanel::layerClicked(int layerId)
 
   case LayerSelectionType_VariationBase:
     disableLayerVariants(data.layerName);
-    baseImage = data.variation;
+    m_baseImageOverride = data.variation;
     data.button->setLayerImage(VariantName, VariantName, VariantName, true);
     break;
 

@@ -7,7 +7,7 @@ NotifyManager NotifyManager::s_Instance;
 
 void NotifyManager::ThemeSetupPopup(ChoiceDialog *notify)
 {
-  pNotificationPopup = notify;
+  u_choiceDialog = notify;
   HideNotification();
 }
 
@@ -32,15 +32,15 @@ void NotifyManager::SetPairNotifcation()
 
 void NotifyManager::ShowNotification()
 {
-  pNotificationPopup->setEventType(mCurrentNotification);
-  pNotificationPopup->setKey(mRequestKey);
-  pNotificationPopup->setSenderId(mSenderId);
-  pNotificationPopup->show();
+  u_choiceDialog->setEventType(mCurrentNotification);
+  u_choiceDialog->setKey(mRequestKey);
+  u_choiceDialog->setSenderId(mSenderId);
+  u_choiceDialog->show();
 }
 
 void NotifyManager::HideNotification()
 {
-  pNotificationPopup->hide();
+  u_choiceDialog->hide();
 }
 
 void NotifyManager::SetSenderId(int id)
@@ -60,8 +60,8 @@ void NotifyManager::SetRequestKey(QString sender)
 
 void NotifyManager::SetText(QString text, bool show)
 {
-  if(pNotificationPopup == nullptr) return;
+  if(u_choiceDialog == nullptr) return;
   mCurrentNotificationMessage = text;
-  pNotificationPopup->setText(text);
+  u_choiceDialog->setText(text);
   if(show) ShowNotification();
 }

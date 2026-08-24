@@ -1,5 +1,5 @@
-#ifndef LAYER_SELECTION_PANEL_H
-#define LAYER_SELECTION_PANEL_H
+#ifndef LAYERSELECTIONPANEL_H
+#define LAYERSELECTIONPANEL_H
 
 enum LayerSelectionType
 {
@@ -29,14 +29,16 @@ public:
   void clear();
   void clearGlobals();
 
-  void addButtonToGrid(QWidget* button);
   void disableLayerVariants(const QString& layerName);
 
   void addLayer(const QString& layer, const QString& toggle, LayerSelectionType type);
   void addLayer(const QString& layer, const QString& variation, bool state, LayerSelectionType type);
 
-  QString getVariant(const QString& layerName, const QString& fallback) { if(m_GlobalVariants.contains(layerName)) return m_GlobalVariants[layerName]; if(m_VariantSwitches.contains(layerName)) return m_VariantSwitches[layerName]; return fallback; };
-  QString getBaseVariant(const QString& fallback) { if(m_GlobalVariants.contains("base_image")) return m_GlobalVariants["base_image"]; if(baseImage.trimmed().isEmpty()) return fallback; return baseImage;};
+  QString getVariant(const QString& layerName, const QString& fallback);;
+  QString getBaseVariant(const QString& fallback);;
+
+private:
+  void addButtonToGrid(QWidget* button);
 
 public slots:
   void layerClicked(int layerId);
@@ -46,9 +48,10 @@ private:
   QGridLayout *m_layout;
 
   QList<LayerSelectionData> m_layers = {};
-  QString baseImage = "";
   QMap<QString, QString> m_VariantSwitches = {};
   QMap<QString, QString> m_GlobalVariants = {};
+
+  QString m_baseImageOverride = "";
 };
 
-#endif // LAYER_SELECTION_PANEL_H
+#endif // LAYERSELECTIONPANEL_H

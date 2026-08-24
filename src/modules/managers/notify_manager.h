@@ -33,7 +33,7 @@ private:
   QString mCurrentNotificationMessage = "";
   int mSenderId = -1;
   ChoiceEvent mCurrentNotification = ChoiceEvent_Invalid;
-  ChoiceDialog *pNotificationPopup;
+  ChoiceDialog *u_choiceDialog;
 
 
 };

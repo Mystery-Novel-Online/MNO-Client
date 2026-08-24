@@ -16,13 +16,14 @@ public:
     return instance;
   }
 
+  WorkshopDiscord();
+
   void sendPrivateMessage(const QString& discordId, const QString& message);
   void sendFriendRequest(const QString& discordId);
 
   void setRichPresenceState(bool state);
   void setRichPresenceStateText(std::string sstate);
   void setRichPresenceDetailsText(std::string sdetails);
-  WorkshopDiscord();
   void processOAuth();
   void runCallbacks();
   void sendUserMessage(std::string message, uint64_t recipientId);

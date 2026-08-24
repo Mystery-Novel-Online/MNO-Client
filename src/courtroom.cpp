@@ -2851,8 +2851,8 @@ void Courtroom::handle_wtce(QString p_wtce)
 void Courtroom::set_hp_bar(int p_bar, int p_state)
 {
   if (p_state < 0 || p_state > 10) return;
-  if (p_bar == 1) ui_defense_bar->SetValue(p_state);
-  else if (p_bar == 2) ui_prosecution_bar->SetValue(p_state);
+  if (p_bar == 1) ui_defense_bar->setValue(p_state);
+  else if (p_bar == 2) ui_prosecution_bar->setValue(p_state);
 }
 
 void Courtroom::set_character_position(QString p_pos)

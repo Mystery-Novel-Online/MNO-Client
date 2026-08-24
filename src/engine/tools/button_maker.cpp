@@ -37,8 +37,8 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
   m_GraphicsView->scene()->addItem(m_CharacterSprite);
   m_CharacterSprite->show();
 
-  m_Overlay = new ButtonMakerOverlay(this);
-  m_Overlay->show();
+  u_overlayDisplay = new ButtonMakerOverlay(this);
+  u_overlayDisplay->show();
 
   QHBoxLayout *mainLayout = new QHBoxLayout(this);
   QVBoxLayout *leftLayout = new QVBoxLayout();
@@ -160,8 +160,8 @@ void ButtonMaker::SetCharacter(QString character)
 void ButtonMaker::onGenerateClicked()
 {
 
-  m_Overlay->setFocus();
-  QRect cropRect(m_Overlay->m_rectPos, QSize(m_Overlay->m_rectSize, m_Overlay->m_rectSize));
+  u_overlayDisplay->setFocus();
+  QRect cropRect(u_overlayDisplay->m_rectPos, QSize(u_overlayDisplay->m_rectSize, u_overlayDisplay->m_rectSize));
   QSize outputSize = cropRect.size();
 
   if(outputSize.width() > 82)
@@ -170,7 +170,7 @@ void ButtonMaker::onGenerateClicked()
   if(!m_UnderlayImage.isNull()) outputSize = m_UnderlayImage.size();
 
   QImage finalOutput = drawButton();
-  m_Overlay->m_buttonPreview = finalOutput;
+  u_overlayDisplay->m_buttonPreview = finalOutput;
 
   QString buttonDirectory = m_IsJson ? QString::fromStdString("/outfits/" + m_Emotes.at(m_EmoteIndex).outfitName + "/emotions/" + m_Emotes.at(m_EmoteIndex).emoteName + ".webp")
                                      : "/emotions/button" + QString::number(m_EmoteIndex + 1) + "_off.webp";
@@ -184,7 +184,7 @@ void ButtonMaker::onGenerateClicked()
 void ButtonMaker::onPreviewGenClicked()
 {
 
-  m_Overlay->setFocus();
+  u_overlayDisplay->setFocus();
 
   QImage fullImage = captureViewport();
   if(!saveImage(fullImage, "/previews/" + QString::fromStdString(m_Emotes.at(m_EmoteIndex).emoteName) + ".png", "preview"))
@@ -200,7 +200,7 @@ void ButtonMaker::onAddUnderlayClicked()
 
 void ButtonMaker::onAddOverlayClicked()
 {
-  loadImage(m_Overlay->m_OverlayImage);
+  loadImage(u_overlayDisplay->m_OverlayImage);
 }
 
 void ButtonMaker::onAlphaClicked()
@@ -211,7 +211,7 @@ void ButtonMaker::onAlphaClicked()
 void ButtonMaker::loadImage(QImage &target)
 {
   target = LoadImageDialog();
-  m_Overlay->setFocus();
+  u_overlayDisplay->setFocus();
 }
 
 QImage ButtonMaker::LoadImageDialog()
@@ -237,7 +237,7 @@ QImage ButtonMaker::captureViewport() const
 
 QImage ButtonMaker::drawButton() const
 {
-  QRect cropRect(m_Overlay->m_rectPos, QSize(m_Overlay->m_rectSize, m_Overlay->m_rectSize));
+  QRect cropRect(u_overlayDisplay->m_rectPos, QSize(u_overlayDisplay->m_rectSize, u_overlayDisplay->m_rectSize));
   QSize outputSize = cropRect.size();
 
   if(outputSize.width() > 82)
@@ -266,9 +266,9 @@ QImage ButtonMaker::drawButton() const
 
   finalPainter.drawImage(0, 0, cropppedSprite);
 
-  if (!m_Overlay->m_OverlayImage.isNull())
+  if (!u_overlayDisplay->m_OverlayImage.isNull())
   {
-    QImage overlayScaled = m_Overlay->m_OverlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    QImage overlayScaled = u_overlayDisplay->m_OverlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     finalPainter.drawImage(0, 0, overlayScaled);
   }
 

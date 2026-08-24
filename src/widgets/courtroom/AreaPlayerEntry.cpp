@@ -353,9 +353,9 @@ void AreaPlayerEntry::handleTypingTimeout() {
 void AreaPlayerEntry::showContextMenu(QPoint pos) {
   QMenu *menu = new QMenu(this);
   QMenu *playerMenu = menu->addMenu("[" + QString::number(m_playerData.data.id) + "] " + m_showname);
-  menu->addSeparator();
-
   QMenu *pairMenu = menu->addMenu("Pair Options");
+
+  menu->addSeparator();
 
   if(user::partner::isUnpaired()) {
     QAction *pairRequest = pairMenu->addAction(localization::getText("PLAYER_LIST_PAIR"));

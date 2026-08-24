@@ -314,7 +314,7 @@ add_executable(rp-engine
   src/engine/interface/widgets/icon_grid_widget.h src/engine/interface/widgets/icon_grid_widget.cpp
   src/engine/interface/menus/screenshot_menu.h src/engine/interface/menus/screenshot_menu.cpp
   src/engine/system/user_database.h src/engine/system/user_database.cpp
-  src/engine/interface/widgets/layer_selection_panel.h src/engine/interface/widgets/layer_selection_panel.cpp
+  src/widgets/courtroom/LayerSelectionPanel.h src/widgets/courtroom/LayerSelectionPanel.cpp
   src/engine/network/api_manager.h src/engine/network/api_manager.cpp
   src/engine/system/audio/loop_detection.h src/engine/system/audio/loop_detection.cpp
   src/engine/system/client_worker.h src/engine/system/client_worker.cpp

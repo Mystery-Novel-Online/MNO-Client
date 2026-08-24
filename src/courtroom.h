@@ -60,7 +60,7 @@ class QLabel;
 #include "engine/interface/widgets/scene_widget.h"
 
 #include <engine/interface/widgets/fennec_widget.h>
-#include <engine/interface/widgets/layer_selection_panel.h>
+#include "widgets/courtroom/LayerSelectionPanel.h"
 #include "widgets/courtroom/AreaPlayerList.h"
 
 #include <config_tabs/config_tab_blips.h>

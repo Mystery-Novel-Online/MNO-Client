@@ -70,7 +70,7 @@ private:
 
   DRCharacterMovie *m_CharacterSprite = nullptr;
   DRGraphicsView *m_GraphicsView = nullptr;
-  ButtonMakerOverlay *m_Overlay = nullptr;
+  ButtonMakerOverlay *u_overlayDisplay = nullptr;
 
   QImage m_UnderlayImage;
   QImage m_AlphaMaskImage;

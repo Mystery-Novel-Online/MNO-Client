@@ -422,19 +422,19 @@ void Courtroom::connect_widgets()
 
   // connect events for shout/effect/wtce buttons happen in load_shouts(),
   // load_effects(), load_wtce()
-  connect(ui_shout_up, SIGNAL(clicked(bool)), this, SLOT(on_cycle_clicked()));
-  connect(ui_shout_down, SIGNAL(clicked(bool)), this, SLOT(on_cycle_clicked()));
+  connect(ui_shout_up, &QAbstractButton::clicked, this, &Courtroom::on_cycle_clicked);
+  connect(ui_shout_down, &QAbstractButton::clicked, this, &Courtroom::on_cycle_clicked);
 
-  connect(ui_effect_up, SIGNAL(clicked(bool)), this, SLOT(on_cycle_clicked()));
-  connect(ui_effect_down, SIGNAL(clicked(bool)), this, SLOT(on_cycle_clicked()));
+  connect(ui_effect_up, &QAbstractButton::clicked, this, &Courtroom::on_cycle_clicked);
+  connect(ui_effect_down, &QAbstractButton::clicked, this, &Courtroom::on_cycle_clicked);
 
-  connect(ui_wtce_up, SIGNAL(clicked(bool)), this, SLOT(on_cycle_clicked()));
-  connect(ui_wtce_down, SIGNAL(clicked(bool)), this, SLOT(on_cycle_clicked()));
+  connect(ui_wtce_up, &QAbstractButton::clicked, this, &Courtroom::on_cycle_clicked);
+  connect(ui_wtce_down, &QAbstractButton::clicked, this, &Courtroom::on_cycle_clicked);
 
-  connect(ui_defense_minus, SIGNAL(clicked()), ui_defense_bar, SLOT(OnSubtractClicked()));
-  connect(ui_defense_plus, SIGNAL(clicked()), ui_defense_bar, SLOT(OnAddClicked()));
-  connect(ui_prosecution_minus, SIGNAL(clicked()), ui_prosecution_bar, SLOT(OnSubtractClicked()));
-  connect(ui_prosecution_plus, SIGNAL(clicked()), ui_prosecution_bar, SLOT(OnAddClicked()));
+  connect(ui_defense_minus, &QAbstractButton::clicked, ui_defense_bar, &HealthBar::decreaseClicked);
+  connect(ui_defense_plus, &QAbstractButton::clicked, ui_defense_bar, &HealthBar::increaseClicked);
+  connect(ui_prosecution_minus, &QAbstractButton::clicked, ui_prosecution_bar, &HealthBar::decreaseClicked);
+  connect(ui_prosecution_plus, &QAbstractButton::clicked, ui_prosecution_bar, &HealthBar::increaseClicked);
 
   connect(ui_text_color, SIGNAL(currentIndexChanged(int)), this, SLOT(on_text_color_changed(int)));
 
@@ -1074,8 +1074,8 @@ void Courtroom::set_widgets()
   set_stylesheet(ui_bgm_filter, "[CATEGORY DROPDOWN]", COURTROOM_STYLESHEETS_CSS, ao_app);
   set_stylesheet(ui_pos_dropdown, "[POS DROPDOWN]", COURTROOM_STYLESHEETS_CSS, ao_app);
 
-  setupWidgetElement(ui_defense_bar, "defense_bar", "defensebar" + QString::number(ui_defense_bar->GetValue()) + ".png", true);
-  setupWidgetElement(ui_prosecution_bar, "prosecution_bar", "prosecutionbar" + QString::number(ui_prosecution_bar->GetValue()) + ".png", true);
+  setupWidgetElement(ui_defense_bar, "defense_bar", "defensebar" + QString::number(ui_defense_bar->value()) + ".png", true);
+  setupWidgetElement(ui_prosecution_bar, "prosecution_bar", "prosecutionbar" + QString::number(ui_prosecution_bar->value()) + ".png", true);
 
   for (int i = 0; i < shout_names.size(); ++i)
   {

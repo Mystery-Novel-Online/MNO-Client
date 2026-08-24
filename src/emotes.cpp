@@ -63,10 +63,10 @@ void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
 
 
   QStringList layers;
-  for(const ActorLayer &layer : l_emote.emoteOverlays)
-  {
-    if(engine::actor::user::layerState(layer.toggleName))
+  for(const ActorLayer &layer : l_emote.emoteOverlays) {
+    if(engine::actor::user::layerState(layer.toggleName)) {
       layers.append(engine::system::encoding::text::EncodePacketContents({QString::fromStdString(layer.spriteName), QString::fromStdString(layer.spriteOrder), QString::number(layer.layerOffset.x), QString::number(layer.layerOffset.y), QString::number(layer.layerOffset.width), QString::number(layer.layerOffset.height), QString::fromStdString(layer.offsetName)}));
+    }
   }
 
   ui_emote_preview_character->processOverlays(engine::system::encoding::text::EncodeBase64(layers), QString::fromStdString(l_emote.character), QString::fromStdString(l_emote.dialog), QString::fromStdString(l_emote.outfitName));
