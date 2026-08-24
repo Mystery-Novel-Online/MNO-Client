@@ -19,6 +19,7 @@ enum class LuaTarget
 
 namespace ThemeScripting
 {
+  QString fileContents(const QString& filePath);
   void InitializeLua(QString themePath, LuaTarget target = LuaTarget::Theme);
 };
 

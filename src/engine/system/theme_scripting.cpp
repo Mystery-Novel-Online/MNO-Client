@@ -74,7 +74,7 @@ void InitializeLua(QString themePath, LuaTarget target)
     });
 
 
-    QString filePath = themePath + "/script.lua";
+    QString filePath = themePath + "script.lua";
     if(FS::Checks::FileExists(filePath))
     {
 
@@ -220,9 +220,26 @@ void InitializeLua(QString themePath, LuaTarget target)
       sol::table areaTable = targetScript.create_named_table("Area");
       areaTable.set_function("SetDescription", &AreaMetadata::SetDescription);
 
-      targetScript.safe_script_file(filePath.toUtf8().constData());
+      QString scriptContents = fileContents(filePath);
+      if(!scriptContents.isEmpty())
+        targetScript.safe_script(scriptContents.toStdString().c_str());
     }
   }
+
+  QString fileContents(const QString &filePath)
+  {
+    QFile file(filePath);
+
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+      qDebug() << "Failed to open:" << filePath;
+      return "";
+    }
+
+    QString source = QString::fromUtf8(file.readAll());
+    return source;
+  }
+
 }
 
 namespace LuaBridge

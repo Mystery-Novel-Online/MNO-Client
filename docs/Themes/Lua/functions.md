@@ -2,60 +2,60 @@
 
 This is an outline of functions that you can call from within a lua script in a theme.
 
-## 📑 Table of Contents
+## Table of Contents
 
-- 🔊 Music Audio
+- Music Audio
     - [Audio.BGM.Play](#audiobgmplay)
     - [Audio.BGM.Stop](#audiobgmstop)
     - [Audio.BGM.SetSpeed](#audiobgmsetspeed)
     - [Audio.BGM.SetPitch](#audiobgmsetpitch)
     - [Audio.BGM.ToggleReverb](#audiobgmtogglereverb)
-- 🔔 SFX Audio
+- SFX Audio
     - [Audio.SFX.Play](#audiosfxplay)
-- 💬 Blip Audio
+- Blip Audio
     - [Audio.Blip.Tick](#audiobliptick)
     - [Audio.Blip.SetRate](#audioblipsetrate)
     - [Audio.Blip.SetSound](#audioblipsetsound)
     - [Audio.Blip.SetGender](#audioblipsetgender)
-- ⚙ System Audio
+- System Audio
     - [Audio.System.Play](#audiosystemplay)
-- 📦 Widgets
+- Widgets
 	- [Widget.Move](#widgetmove)
 	- [Widget.Raise](#widgetraise)
 	- [Widget.SetVisible](#widgetsetvisible)
 	- [Widget.SetParent](#widgetsetparent)
-- 🔖 Stickers
+- Stickers
 	- [Sticker.Create](#stickercreate)
-- 🕹 Buttons
+- Buttons
 	- [Button.Create](#buttoncreate)
-- 🎚 Sliders
+- Sliders
 	- [Slider.Create](#slidercreate)
 	- [Slider.CreateVertical](#slidercreatevertical)
 	- [Slider.GetValue](#slidergetvalue)
 	- [Slider.SetValue](#slidersetvalue)
-- 📁 Tabs
+- Tabs
 	- [Tabs.Change](#tabschange)
-- 💬 ChoiceDialog
+- ChoiceDialog
 	- [ChoiceDialog.TriggerCustom](#choicedialogtriggercustom)
 	- [ChoiceDialog.SetText](#choicedialogsettext)
-- 📝 In Character
+- In Character
 	- [IC.InputField.Focus](#icinputfieldfocus)
 	- [IC.InputField.GetText](#icinputfieldgettext)
 	- [IC.InputField.SetText](#icinputfieldsettext)
 	- [IC.InputField.Append](#icinputfieldappend)
-- 💭 Out of Character
+- Out of Character
 	- [OOC.Log.Append](#ooclogappend)
 	- [OOC.Name.Get](#oocnameget)
 	- [OOC.Name.Set](#oocnameset)
 	- [OOC.InputField.GetText](#oocinputfieldgettext)
 	- [OOC.InputField.SetText](#oocinputfieldsettext)
-- 🚨 System
+- System
 	- [System.Alert](#systemalert)
-- 🌐 Server
+- Server
 	- [Server.GetClientId](#servergetclientid)
 	- [Server.GetCharacterId](#servergetcharacterid)
 	- [Server.GetCurrentCharacter](#servergetcurrentcharacter)
-- 👤 Character
+- Character
 	- [Character.GetShowname](#charactergetshowname)
 	- [Character.GetIniswap](#charactergetiniswap)
 	- [Character.Exists](#characterexists)
@@ -66,7 +66,7 @@ This is an outline of functions that you can call from within a lua script in a 
 
 ---
 
-# 🔊 Music Audio
+# Music Audio
 ## Audio.BGM.Play
 Plays an audio file located in the `sounds/music/` directory on the `Music` track.
 
@@ -143,7 +143,7 @@ Toggles the reverb on the audio currently being played on the music track.
   Audio.BGM.ToggleReverb(true)
   ```
 
-# 🔔 SFX Audio
+# SFX Audio
 
 ## Audio.SFX.Play
 Plays an audio file located in the `sounds/general/` directory on the `Effects` track.
@@ -160,7 +160,7 @@ Plays an audio file located in the `sounds/general/` directory on the `Effects` 
   Audio.SFX.Play("DRding")
   ```
 
-# 💬 Blip Audio
+# Blip Audio
 
 ## Audio.Blip.Tick
 Plays the currently set blip file once. 
@@ -217,7 +217,7 @@ Sets the current blip to a file based on the specified gender similarly to the d
   Audio.Blip.SetGender("female")
   ```
 
-# ⚙ System Audio
+# System Audio
 
 ## Audio.System.Play 
 Plays an audio file located in `sounds/general/` on the `System` audio track. 
@@ -234,7 +234,7 @@ Plays an audio file located in `sounds/general/` on the `System` audio track.
   ```
 
   
-# 📦 Widgets
+# Widgets
 
 ## Widget.Move
 Moves a widget to the specified coordinates.
@@ -300,7 +300,7 @@ Raises the specified widget to the top of the render stack.
   Widget.Raise("char_select")
   ```
 
-# 🔖 Stickers
+# Stickers
 
 ## Sticker.Create
 Create a sticker widget that will be rendered on the client. 
@@ -322,7 +322,7 @@ Create a sticker widget that will be rendered on the client.
   ```
 
 
-# ⚙ Buttons
+# Buttons
 
 ## Button.Create
 Creates a button that can call an event when clicked. 
@@ -347,7 +347,7 @@ Creates a button that can call an event when clicked.
   end
   ```
 
-# 🎚 Sliders
+# Sliders
 
 ## Slider.Create
 Creates a slider that can call an event when the value is changed. 
@@ -429,7 +429,7 @@ Creates a vertical slider that can call an event when the value is changed.
   Slider.SetValue("slider_MusicSpeed", 30)
   ```
 
-# 📁 Tabs
+# Tabs
 ## Tabs.Change
 Triggers a tab change without clicking on the tab itself. 
 
@@ -446,7 +446,7 @@ Triggers a tab change without clicking on the tab itself.
   ```
 
 
-# 💬 ChoiceDialog
+# ChoiceDialog
 ## ChoiceDialog.TriggerCustom
 Triggers the choice pop up with a custom event attached to it. 
 
@@ -485,7 +485,7 @@ Sets the text that is displayed on the choice pop up.
   ChoiceDialog.SetText("You have received a pair request.", true)
   ```
 
-# 📝 In Character
+# In Character
 ## IC.InputField.Focus
 Sets the window focus to the IC text field. 
 
@@ -533,7 +533,7 @@ Appends the text to the end of the current contents in the IC text field.
   IC.InputField.Append("\\s")
   ```
 
-# 💭 Out of Character
+# Out of Character
 ## OOC.Log.Append
 Adds a message to the OOC chat log.
 
@@ -595,7 +595,7 @@ Sets your OOC message.
   OOC.InputField.SetText("/help")
   ```
 
-# 🚨 System
+# System
 ## System.Alert
 Causes the application icon in your task bar to behave similarly to a call word.
 
@@ -604,7 +604,7 @@ Causes the application icon in your task bar to behave similarly to a call word.
   System.Alert()
   ```
 
-# 🌐 Server
+# Server
 ## Server.GetClientId
 Returns your current client id that was set by the server.
 
@@ -632,7 +632,7 @@ Returns the name of your current character folder as recognized by the server.
   local serverCharacterName = Server.GetCurrentCharacter();
   ```
 
-# 👤 Character
+# Character
 ## Character.GetShowname
 Returns your current showname.
 
