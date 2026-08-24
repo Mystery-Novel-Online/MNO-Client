@@ -41,7 +41,7 @@ void JsonPacket::ProcessPlayerListPacket(JSONReader& jsonReader)
   {
     jsonReader.SetTargetObject(ref.toObject());
     DrPlayer drp(jsonReader);
-    SceneManager::get().mPlayerDataList.append(drp);
+    SceneManager::get().m_areaPlayers.append(drp);
   }
   if(AOApplication::getInstance()->m_courtroom != nullptr)
     AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();

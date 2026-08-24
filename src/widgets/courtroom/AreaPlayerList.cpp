@@ -4,27 +4,28 @@
 
 #include "AreaPlayerEntry.h"
 
-AreaPlayerList::AreaPlayerList(QWidget *parent) : QWidget{parent} {
+AreaPlayerList::AreaPlayerList(QWidget *a_parent)
+  : QWidget(a_parent) {
 }
 
 AreaPlayerList::~AreaPlayerList() {
   deconstruct();
 }
 
-void AreaPlayerList::deconstruct(bool a_DestroyAll) {
+void AreaPlayerList::deconstruct(bool a_destroyAll) {
   QSet<int> currentPlayerIds;
 
-  if(!a_DestroyAll) {
-    for(const DrPlayer &player : SceneManager::get().mPlayerDataList) {
+  if(!a_destroyAll) {
+    for(const DrPlayer &player : SceneManager::get().m_areaPlayers) {
       currentPlayerIds.insert(player.data.id);
     }
   }
 
-  for(auto it = m_playerEntries.begin(); it != m_playerEntries.end();)
+  for(auto it = u_playerEntries.begin(); it != u_playerEntries.end();)
   {
     if(!currentPlayerIds.contains(it.key())) {
       delete it.value();
-      it = m_playerEntries.erase(it);
+      it = u_playerEntries.erase(it);
     }
     else {
       ++it;
@@ -37,7 +38,7 @@ void AreaPlayerList::constructLayout() {
   //      a user present in the latest network update before deleting.
   deconstruct();
 
-  if(!m_navigationLeft && !m_navigationRight) {
+  if(!u_navigationLeft && !u_navigationRight) {
     return;
   }
 
@@ -50,29 +51,29 @@ void AreaPlayerList::constructLayout() {
   populatePlayers();
 }
 
-void AreaPlayerList::startClientTyping(int a_TargetClient, bool a_ActiveState) {
-  for(AreaPlayerEntry* player : m_playerEntries) {
-    if(player->clientId() == a_TargetClient) {
-      player->toggleTyping(a_ActiveState);
+void AreaPlayerList::startClientTyping(int a_targetClient, bool a_activeState) {
+  for(AreaPlayerEntry* player : u_playerEntries) {
+    if(player->clientId() == a_targetClient) {
+      player->toggleTyping(a_activeState);
       return;
     }
   }
 }
 
-void AreaPlayerList::assignNavigationButtons(RPButton *left, RPButton *right) {
-  m_navigationLeft = left;
-  m_navigationRight = right;
-  connect(m_navigationLeft, &RPButton::clicked, this, &AreaPlayerList::navigationClickedLeft);
-  connect(m_navigationRight, &RPButton::clicked, this, &AreaPlayerList::navigationClickedRight);
+void AreaPlayerList::assignNavigationButtons(RPButton *a_leftButton, RPButton *a_rightButton) {
+  u_navigationLeft = a_leftButton;
+  u_navigationRight = a_rightButton;
+  connect(u_navigationLeft, &RPButton::clicked, this, &AreaPlayerList::navigationClickedLeft);
+  connect(u_navigationRight, &RPButton::clicked, this, &AreaPlayerList::navigationClickedRight);
 }
 
 void AreaPlayerList::updatePageNavigation() {
-  int max_pages = ceil((SceneManager::get().mPlayerDataList.count() - 1) / m_pageMax);
+  int max_pages = ceil((SceneManager::get().m_areaPlayers.count() - 1) / m_pageMax);
   m_pageMax = qMax(1, m_playerRows);
 
-  m_navigationRight->hide();
+  u_navigationRight->hide();
   if(m_pageCurrent < max_pages) {
-    m_navigationRight->show();
+    u_navigationRight->show();
   }
   else if(m_pageCurrent > max_pages) {
     m_pageCurrent = max_pages;
@@ -80,10 +81,10 @@ void AreaPlayerList::updatePageNavigation() {
 
   if(m_pageCurrent <= 0) {
     m_pageCurrent = 0;
-    m_navigationLeft->hide();
+    u_navigationLeft->hide();
   }
   else {
-    m_navigationLeft->show();
+    u_navigationLeft->show();
   }
 }
 
@@ -92,16 +93,16 @@ void AreaPlayerList::populatePlayers() {
 
   int last_entry_height = 0;
 
-  for(auto *entry : m_playerEntries) {
+  for(auto *entry : u_playerEntries) {
     entry->hide();
   }
 
-  for (int n = starting_index; n < SceneManager::get().mPlayerDataList.count(); ++n) {
+  for (int n = starting_index; n < SceneManager::get().m_areaPlayers.count(); ++n) {
     int y_pos = (last_entry_height + m_playerSpacing) * (n - starting_index);
-    DrPlayer playerData = SceneManager::get().mPlayerDataList.at(n);
+    DrPlayer playerData = SceneManager::get().m_areaPlayers.at(n);
 
-    auto it = m_playerEntries.find(playerData.data.id);
-    if(it != m_playerEntries.end()) {
+    auto it = u_playerEntries.find(playerData.data.id);
+    if(it != u_playerEntries.end()) {
       AreaPlayerEntry *entry = it.value();
       entry->updateData(playerData, y_pos);
       entry->show();
@@ -110,7 +111,7 @@ void AreaPlayerList::populatePlayers() {
     else {
       AreaPlayerEntry* ui_playername = new AreaPlayerEntry(this, AOApplication::getInstance(), 1, y_pos, playerData);
       last_entry_height = ui_playername->height();
-      m_playerEntries.insert(playerData.data.id, ui_playername);
+      u_playerEntries.insert(playerData.data.id, ui_playername);
       ui_playername->show();
     }
 

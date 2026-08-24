@@ -50,5 +50,5 @@ void SceneManager::setFadeDuration(int duration)
 
 void SceneManager::clearPlayerDataList()
 {
-  mPlayerDataList.clear();
+  m_areaPlayers.clear();
 }

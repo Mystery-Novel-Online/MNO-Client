@@ -311,12 +311,12 @@ void LegacyViewport::constructInterface()
   m_userInterface->setBackgroundBrush(Qt::transparent);
 
   QStringList viewporWidgets = LegacyThemeManager::get().mCurrentThemeReader.GetSceneWidgetNames(ThemeSceneType::SceneType_Viewport);
-  QStringList blacklistedWidgets = { "showname" };
+  QStringList ignoredWidgets = { "showname" };
   std::reverse(viewporWidgets.begin(), viewporWidgets.end());
 
   for(QString widgetName : viewporWidgets)
   {
-    if(blacklistedWidgets.contains(widgetName)) continue;
+    if(ignoredWidgets.contains(widgetName)) continue;
 
     DRSceneMovie* interfaceOverlay = new DRSceneMovie(aoApp);
     m_userInterface->scene()->addItem(interfaceOverlay);

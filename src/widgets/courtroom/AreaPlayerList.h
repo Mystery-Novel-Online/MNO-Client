@@ -8,15 +8,15 @@ class AreaPlayerList : public QWidget
 {
   Q_OBJECT
 public:
-  explicit AreaPlayerList(QWidget *parent = nullptr);
+  explicit AreaPlayerList(QWidget *a_parent = nullptr);
   ~AreaPlayerList();
 
-  void deconstruct(bool a_DestroyAll = false);
+  void deconstruct(bool a_destroyAll = false);
   void constructLayout();
 
-  void startClientTyping(int a_TargetClient, bool a_ActiveState);
+  void startClientTyping(int a_targetClient, bool a_activeState);
 
-  void assignNavigationButtons(RPButton* left, RPButton* right);
+  void assignNavigationButtons(RPButton* a_leftButton, RPButton* a_rightButton);
 
 private:
   void updatePageNavigation();
@@ -31,16 +31,15 @@ signals:
   void navigationComplete();
 
 private:
-  QMap<int, AreaPlayerEntry *> m_playerEntries = {};
+  QMap<int, AreaPlayerEntry *> u_playerEntries = {};
+
   int m_pageMax = 10;
   int m_pageCurrent = 0;
-
   int m_playerRows = 0;
-
   int m_playerSpacing = 0;
 
-  RPButton* m_navigationLeft = nullptr;
-  RPButton* m_navigationRight = nullptr;
+  RPButton* u_navigationLeft = nullptr;
+  RPButton* u_navigationRight = nullptr;
 };
 
 #endif // AREAPLAYERLIST_H

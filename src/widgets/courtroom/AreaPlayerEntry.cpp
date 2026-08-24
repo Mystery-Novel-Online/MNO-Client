@@ -27,43 +27,41 @@ constexpr int TYPING_Y_OFFSET = 27;
 }
 
 AreaPlayerEntry::AreaPlayerEntry(QWidget *parent, AOApplication *p_ao_app, int p_x, int p_y, const DrPlayer& player)
-    : RPWidget("player_list_slot", parent), m_playerData(player)
-{
+  : RPWidget("player_list_slot", parent)
+  , m_playerData(player) {
   resetTransform();
 
   ao_app = p_ao_app;
 
-  ui_showname = new RPLabel("player_list_showname", this);
-  ui_typing = new RPLabel("player_list_typing", this);
-  ui_user_image = new AOImageDisplay(this, ao_app);
-  pCharacterBorderDisplay = new AOImageDisplay(this, ao_app);
-  pStatusDisplay = new AOImageDisplay(this, ao_app);
-  w_UpdateDisplay = new AOImageDisplay(this, ao_app);
-  m_prompt = new RPLabel(this, ao_app);
+  u_shownameDisplay = new RPLabel("player_list_showname", this);
+  u_typingIndicator = new RPLabel("player_list_typing", this);
+  u_playerIcon = new AOImageDisplay(this, ao_app);
+  u_playerIconBorder = new AOImageDisplay(this, ao_app);
+  u_statusDisplay = new AOImageDisplay(this, ao_app);
+  u_updateDisplay = new AOImageDisplay(this, ao_app);
+  u_areaPrompt = new RPLabel(this, ao_app);
 
   bool automaticScaling = height() == 0;
 
   this->move(p_x, p_y);
-  if(automaticScaling)
-  {
+  if(automaticScaling) {
     refreshAutomatic(parent->size().width());
   }
-  else
-  {
+  else {
     refreshManual(parent->size().width());
   }
 
   themeReload();
 
-  ui_typing->setText("Typing...");
+  u_typingIndicator->setText("Typing...");
 
-  ui_typing->hide();
-  w_UpdateDisplay->hide();
-  ui_showname->hide();
-  ui_user_image->hide();
-  pCharacterBorderDisplay->hide();
-  pStatusDisplay->hide();
-  m_prompt->hide();
+  u_typingIndicator->hide();
+  u_updateDisplay->hide();
+  u_shownameDisplay->hide();
+  u_playerIcon->hide();
+  u_playerIconBorder->hide();
+  u_statusDisplay->hide();
+  u_areaPrompt->hide();
 
   this->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this ,&QWidget::customContextMenuRequested, this, &AreaPlayerEntry::showContextMenu);
@@ -80,29 +78,36 @@ AreaPlayerEntry::AreaPlayerEntry(QWidget *parent, AOApplication *p_ao_app, int p
 
 void AreaPlayerEntry::themeReload()
 {
-  const QString lStatusImagePath = ao_app->find_theme_asset_path("player_list_status.png");
-  if (FS::Checks::FileExists(lStatusImagePath)) pStatusDisplay->set_image(lStatusImagePath);
+  const QString imagePathStatus = ao_app->find_theme_asset_path("player_list_status.png");
+  const QString imagePathUpdate = ao_app->find_theme_asset_path("player_content_update.png");
+  const QString imagePathBorder = ao_app->find_theme_asset_path("char_border.png");
 
+  if (FS::Checks::FileExists(imagePathStatus)) {
+    u_statusDisplay->set_image(imagePathStatus);
+  }
 
-  const QString qContentUpdateImage = ao_app->find_theme_asset_path("player_content_update.png");
-  if (FS::Checks::FileExists(qContentUpdateImage)) w_UpdateDisplay->set_image(qContentUpdateImage);
+  if (FS::Checks::FileExists(imagePathUpdate)) {
+    u_updateDisplay->set_image(imagePathUpdate);
+  }
 
+  if (FS::Checks::FileExists(imagePathBorder)) {
+    u_playerIconBorder->set_image(imagePathBorder);
+  }
 
-  const QString l_selected_texture = ao_app->find_theme_asset_path("char_border.png");
-  if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
-
-  set_stylesheet(m_prompt, "[PLAYER LIST PROMPT]", COURTROOM_STYLESHEETS_CSS, ao_app);
+  set_stylesheet(u_areaPrompt, "[PLAYER LIST PROMPT]", COURTROOM_STYLESHEETS_CSS, ao_app);
 }
 
 void AreaPlayerEntry::updateData(const DrPlayer &player, int y)
 {
   this->move(1, y);
   m_playerData = player;
-  if(player.data.showname != m_showname)
-    set_name(player.data.showname);
-  if(player.data.character != m_character || player.data.outfit != m_CharacterOutfit || player.data.afk != m_afk || m_charIconMissing)
-  {
-    m_character = player.data.character;
+
+  if(player.data.showname != m_showname) {
+    setShowname(player.data.showname);
+  }
+
+  if(player.data.character != m_playerCharacter || player.data.outfit != m_playerOutfit || player.data.afk != m_afk || m_missingPlayerIcon) {
+    m_playerCharacter = player.data.character;
     setOutfit(player.data.outfit);
     setContentVersion(player.data.contentVersion);
   }
@@ -111,27 +116,25 @@ void AreaPlayerEntry::updateData(const DrPlayer &player, int y)
 
 void AreaPlayerEntry::refreshManual(int width)
 {
-  ui_showname->themeRefresh();
-  set_stylesheet(ui_showname, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
+  u_shownameDisplay->themeRefresh();
+  set_stylesheet(u_shownameDisplay, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
 
-  ui_typing->themeRefresh();
-  set_stylesheet(ui_typing, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
+  u_typingIndicator->themeRefresh();
+  set_stylesheet(u_typingIndicator, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
 
-  engine::system::theme::applyDimensions(ui_user_image, "player_list_icon", ThemeSceneType::SceneType_Courtroom);
-  engine::system::theme::applyDimensions(pCharacterBorderDisplay, "player_list_border", ThemeSceneType::SceneType_Courtroom);
-  engine::system::theme::applyDimensions(pStatusDisplay, "player_list_status", ThemeSceneType::SceneType_Courtroom);
-  engine::system::theme::applyDimensions(w_UpdateDisplay, "player_list_update", ThemeSceneType::SceneType_Courtroom);
+  engine::system::theme::applyDimensions(u_playerIcon, "player_list_icon", ThemeSceneType::SceneType_Courtroom);
+  engine::system::theme::applyDimensions(u_playerIconBorder, "player_list_border", ThemeSceneType::SceneType_Courtroom);
+  engine::system::theme::applyDimensions(u_statusDisplay, "player_list_status", ThemeSceneType::SceneType_Courtroom);
+  engine::system::theme::applyDimensions(u_updateDisplay, "player_list_update", ThemeSceneType::SceneType_Courtroom);
 
 
   //Prompt (For Blackouts / Look)
-  engine::system::theme::applyDimensions(m_prompt, "player_list_prompt", ThemeSceneType::SceneType_Courtroom);
-  m_prompt->setWordWrap(true);
+  engine::system::theme::applyDimensions(u_areaPrompt, "player_list_prompt", ThemeSceneType::SceneType_Courtroom);
+  u_areaPrompt->setWordWrap(true);
 }
 
 
-void AreaPlayerEntry::refreshAutomatic(int width)
-{
-
+void AreaPlayerEntry::refreshAutomatic(int width) {
   const double themeResize = LegacyThemeManager::get().getResize();
 
   const int widgetHeight = static_cast<int>(DEFAULT_HEIGHT * themeResize);
@@ -140,171 +143,146 @@ void AreaPlayerEntry::refreshAutomatic(int width)
 
   this->resize(widgetWidth, widgetHeight);
 
-  ui_showname->move(widgetHeight, 7);
-  ui_showname->resize(widgetWidth-widgetHeight, 18);
+  u_shownameDisplay->move(widgetHeight, 7);
+  u_shownameDisplay->resize(widgetWidth-widgetHeight, 18);
 
-  set_stylesheet(ui_showname, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
+  set_stylesheet(u_shownameDisplay, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
 
-  ui_typing->move(widgetHeight + (widgetWidth-widgetHeight) / 2, 27);
-  ui_typing->resize((widgetWidth-widgetHeight) / 2, 18);
+  u_typingIndicator->move(widgetHeight + (widgetWidth-widgetHeight) / 2, 27);
+  u_typingIndicator->resize((widgetWidth-widgetHeight) / 2, 18);
 
-  set_stylesheet(ui_typing, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
+  set_stylesheet(u_typingIndicator, "[PLAYER NAME]", COURTROOM_STYLESHEETS_CSS, ao_app);
 
   int iconDimensionsoffset = (int)((float)5 * themeResize);
   int iconScale = (int)((float)40 * themeResize);
-  ui_user_image->move(iconDimensionsoffset, iconDimensionsoffset);
-  ui_user_image->resize(iconScale, iconScale);
+  u_playerIcon->move(iconDimensionsoffset, iconDimensionsoffset);
+  u_playerIcon->resize(iconScale, iconScale);
 
-  pCharacterBorderDisplay->move(0, 0);
-  pCharacterBorderDisplay->resize(widgetHeight, widgetHeight);
+  u_playerIconBorder->move(0, 0);
+  u_playerIconBorder->resize(widgetHeight, widgetHeight);
 
 
-  w_UpdateDisplay->move((int)((float)30 * themeResize),(int)((float)23 * themeResize));
-  w_UpdateDisplay->resize(statusIconSize, statusIconSize);
+  u_updateDisplay->move((int)((float)30 * themeResize),(int)((float)23 * themeResize));
+  u_updateDisplay->resize(statusIconSize, statusIconSize);
 
-  pStatusDisplay->move((int)((float)30 * themeResize),(int)((float)23 * themeResize));
-  pStatusDisplay->resize(statusIconSize, statusIconSize);
+  u_statusDisplay->move((int)((float)30 * themeResize),(int)((float)23 * themeResize));
+  u_statusDisplay->resize(statusIconSize, statusIconSize);
 
-  m_prompt->move(5, 5);
-  m_prompt->resize(widgetWidth, widgetHeight);
-  m_prompt->setWordWrap(true);
+  u_areaPrompt->move(5, 5);
+  u_areaPrompt->resize(widgetWidth, widgetHeight);
+  u_areaPrompt->setWordWrap(true);
 
 }
 
 void AreaPlayerEntry::toggleTyping(bool status)
 {
-  if (status)
-  {
-    ui_typing->show();
+  if (status) {
+    u_typingIndicator->show();
     m_typingTimer->start();
   }
-  else
-  {
-    ui_typing->hide();
+  else {
+    u_typingIndicator->hide();
   }
 }
 
 
-void AreaPlayerEntry::set_character(QString p_character, bool afkState)
-{
-
-  m_character = p_character;
+void AreaPlayerEntry::setCharacter(const QString& a_character, bool afkState) {
+  m_playerCharacter = a_character;
   m_afk = afkState;
   QString characterIconPath = "";
   const QString afkBoarderImagePath = ao_app->find_theme_asset_path("char_border_afk.png");
   const QString nonAfkBoarderPath = ao_app->find_theme_asset_path("char_border.png");
 
+  u_playerIcon->setAlpha("playerlist_alpha");
 
-  ui_user_image->setAlpha("playerlist_alpha");
-
-  if(m_afk && FS::Checks::FileExists(afkBoarderImagePath))
-  {
-    pCharacterBorderDisplay->set_image(afkBoarderImagePath);
+  if(m_afk && FS::Checks::FileExists(afkBoarderImagePath)) {
+    u_playerIconBorder->set_image(afkBoarderImagePath);
   }
-  else
-  {
-    if (FS::Checks::FileExists(nonAfkBoarderPath))
-      pCharacterBorderDisplay->set_image(nonAfkBoarderPath);
+  else {
+    if (FS::Checks::FileExists(nonAfkBoarderPath)) {
+      u_playerIconBorder->set_image(nonAfkBoarderPath);
+    }
   }
 
-  if(!m_CharacterOutfit.isEmpty())
-  {
-    characterIconPath = engine::fs::characters::getFilePath(m_character, "outfits/" + m_CharacterOutfit + "/char_icon.png");
-    if(!FS::Checks::FileExists(characterIconPath))
-    {
+  if(!m_playerOutfit.isEmpty()) {
+    characterIconPath = engine::fs::characters::getFilePath(m_playerCharacter, "outfits/" + m_playerOutfit + "/char_icon.png");
+    if(!FS::Checks::FileExists(characterIconPath)) {
       characterIconPath = "";
     }
   }
 
-  if(characterIconPath.isEmpty())
-  {
-    characterIconPath = engine::fs::characters::getFilePath(m_character, "char_icon.png");
+  if(characterIconPath.isEmpty()) {
+    characterIconPath = engine::fs::characters::getFilePath(m_playerCharacter, "char_icon.png");
   }
 
-  if(FS::Checks::FileExists(characterIconPath))
-  {
-      ui_user_image->set_image(characterIconPath);
-      if(m_afk && FS::Checks::FileExists(afkBoarderImagePath))
-      {
-        pCharacterBorderDisplay->set_image(afkBoarderImagePath);
+  if(FS::Checks::FileExists(characterIconPath)) {
+    u_playerIcon->set_image(characterIconPath);
+    if(m_afk && FS::Checks::FileExists(afkBoarderImagePath)) {
+      u_playerIconBorder->set_image(afkBoarderImagePath);
+    }
+    else {
+      const QString l_selected_texture = engine::fs::characters::getFilePath(a_character, "char_border.png");
+      if (FS::Checks::FileExists(l_selected_texture)) {
+        u_playerIconBorder->set_image(l_selected_texture);
       }
-      else
-      {
-        const QString l_selected_texture = engine::fs::characters::getFilePath(p_character, "char_border.png");
-        if (FS::Checks::FileExists(l_selected_texture)) pCharacterBorderDisplay->set_image(l_selected_texture);
-      }
-
+    }
   }
-  else
-  {
-      QString l_missing_char_image = ao_app->find_theme_asset_path("missing_char.png");
-      if (!l_missing_char_image.isEmpty())
-      {
-        ui_user_image->set_theme_image("missing_char.png");
-        m_charIconMissing = true;
-      }
-
+  else {
+    QString l_missing_char_image = ao_app->find_theme_asset_path("missing_char.png");
+    if (!l_missing_char_image.isEmpty()) {
+      u_playerIcon->set_theme_image("missing_char.png");
+      m_missingPlayerIcon = true;
+    }
   }
 
-  ui_user_image->show();
-  pCharacterBorderDisplay->show();
-
-  m_prompt->hide();
-
+  u_playerIcon->show();
+  u_playerIconBorder->show();
+  u_areaPrompt->hide();
 }
 
-void AreaPlayerEntry::setOutfit(QString outfitName)
+void AreaPlayerEntry::setOutfit(const QString& outfitName)
 {
-  m_CharacterOutfit = outfitName;
-  set_character(m_playerData.data.character, m_playerData.data.afk);
+  m_playerOutfit = outfitName;
+  setCharacter(m_playerData.data.character, m_playerData.data.afk);
 }
 
-void AreaPlayerEntry::set_name(QString showname)
+void AreaPlayerEntry::setShowname(const QString& showname)
 {
-  ui_showname->show();
-  m_prompt->hide();
+  u_shownameDisplay->show();
+  u_areaPrompt->hide();
   m_showname = showname;
-  ui_showname->setText(showname);
+  u_shownameDisplay->setText(showname);
 
 }
 
-void AreaPlayerEntry::set_reason(QString p_reason)
+void AreaPlayerEntry::setReason(const QString& a_reasonText)
 {
-  ui_showname->hide();
-  ui_typing->hide();
-  ui_user_image->hide();
-  pCharacterBorderDisplay->hide();
-  m_prompt->show();
+  u_shownameDisplay->hide();
+  u_typingIndicator->hide();
+  u_playerIcon->hide();
+  u_playerIconBorder->hide();
+  u_areaPrompt->show();
 
-  m_prompt->setText(p_reason);
+  u_areaPrompt->setText(a_reasonText);
 }
 
-void AreaPlayerEntry::setStatus(QString status)
+void AreaPlayerEntry::setStatus(const QString& a_statusText)
 {
-  if(!status.isEmpty())
-  {
-      mStatus = status;
-      setToolTip(status);
-      pStatusDisplay->show();
+  if(!a_statusText.isEmpty()) {
+    setToolTip(a_statusText);
+    u_statusDisplay->show();
   }
 }
 
 void AreaPlayerEntry::setContentVersion(int versionNumber)
 {
-  if(versionNumber > GetDB().workshopUpdateTime(m_character.toStdString()))
-  {
-    w_UpdateDisplay->show();
-    pStatusDisplay->hide();
+  if(versionNumber > GetDB().workshopUpdateTime(m_playerCharacter.toStdString())) {
+    u_updateDisplay->show();
+    u_statusDisplay->hide();
   }
-  else
-  {
-    w_UpdateDisplay->hide();
+  else {
+    u_updateDisplay->hide();
   }
-}
-
-int AreaPlayerEntry::clientId()
-{
-  return m_playerData.data.id;
 }
 
 void AreaPlayerEntry::addDiscordFriend()
@@ -327,109 +305,85 @@ void AreaPlayerEntry::messageDiscordFriend()
   }
 }
 
-void AreaPlayerEntry::openCharacterFolder()
-{
-  QUrl folderUrl = QUrl::fromLocalFile(engine::fs::characters::getDirectoryPath(m_character));
+void AreaPlayerEntry::openCharacterFolder() {
+  QUrl folderUrl = QUrl::fromLocalFile(engine::fs::characters::getDirectoryPath(m_playerCharacter));
   QDesktopServices::openUrl(folderUrl);
 }
 
-void AreaPlayerEntry::openBrowserURL()
-{
-  DownloaderPrompt::StartDownload(m_playerData.data.contentUrl, "packages/Workshop Downloads", m_character, DOWNLOAD_PlayerList);
+void AreaPlayerEntry::openBrowserURL() {
+  DownloaderPrompt::StartDownload(m_playerData.data.contentUrl, "packages/Workshop Downloads", m_playerCharacter, DOWNLOAD_PlayerList);
 }
 
-void AreaPlayerEntry::sendPairRequest()
-{
+void AreaPlayerEntry::sendPairRequest() {
   ao_app->send_server_packet(DRPacket("PR", {QString::number(m_playerData.data.id)}));
 }
 
-void AreaPlayerEntry::sendUnpairRequest()
-{
+void AreaPlayerEntry::sendUnpairRequest() {
   ao_app->send_server_packet(DRPacket("UPR", {QString::number(m_playerData.data.id)}));
 }
 
-void AreaPlayerEntry::sendLayerFront()
-{
+void AreaPlayerEntry::sendLayerFront() {
   ao_app->send_server_packet(DRPacket("PAIRL", {QString::number(1)}));
 }
 
-void AreaPlayerEntry::sendLayerBack()
-{
+void AreaPlayerEntry::sendLayerBack() {
   ao_app->send_server_packet(DRPacket("PAIRL", {QString::number(0)}));
 }
 
-void AreaPlayerEntry::copyID()
-{
-  QClipboard *clipboard = QGuiApplication::clipboard();
-
-  clipboard->setText(QString::number(m_playerData.data.id));
+void AreaPlayerEntry::copyID() {
+  QGuiApplication::clipboard()->setText(QString::number(m_playerData.data.id));
 }
 
-void AreaPlayerEntry::copyHDID()
-{
-  QClipboard *clipboard = QGuiApplication::clipboard();
-
-  clipboard->setText(m_playerData.data.modHDID);
+void AreaPlayerEntry::copyHDID() {
+  QGuiApplication::clipboard()->setText(m_playerData.data.modHDID);
 }
 
-void AreaPlayerEntry::copyIPID()
-{
-  QClipboard *clipboard = QGuiApplication::clipboard();
-
-  clipboard->setText(m_playerData.data.modIPID);
+void AreaPlayerEntry::copyIPID() {
+  QGuiApplication::clipboard()->setText(m_playerData.data.modIPID);
 }
 
-void AreaPlayerEntry::followPlayer()
-{
+void AreaPlayerEntry::followPlayer() {
   AOApplication::getInstance()->get_courtroom()->send_ooc_packet("/follow " + QString::number(m_playerData.data.id));
 }
 
-void AreaPlayerEntry::handleTypingTimeout()
-{
+void AreaPlayerEntry::handleTypingTimeout() {
   toggleTyping(false);
 }
 
-void AreaPlayerEntry::showContextMenu(QPoint pos)
-{
+void AreaPlayerEntry::showContextMenu(QPoint pos) {
   QMenu *menu = new QMenu(this);
   QMenu *playerMenu = menu->addMenu("[" + QString::number(m_playerData.data.id) + "] " + m_showname);
   menu->addSeparator();
 
   QMenu *pairMenu = menu->addMenu("Pair Options");
 
-  if(user::partner::isUnpaired())
-  {
+  if(user::partner::isUnpaired()) {
     QAction *pairRequest = pairMenu->addAction(localization::getText("PLAYER_LIST_PAIR"));
     connect(pairRequest, &QAction::triggered, this, &AreaPlayerEntry::sendPairRequest);
   }
-  else
-  {
+  else {
     QAction *frontAction = pairMenu->addAction("Move Front");
-    connect(frontAction, &QAction::triggered, this, &AreaPlayerEntry::sendLayerFront);
-
     QAction *backAction = pairMenu->addAction("Move Back");
-    connect(backAction, &QAction::triggered, this, &AreaPlayerEntry::sendLayerBack);
-
     QAction *unpairAction = pairMenu->addAction(localization::getText("PLAYER_LIST_UNPAIR"));
+
+    connect(frontAction, &QAction::triggered, this, &AreaPlayerEntry::sendLayerFront);
+    connect(backAction, &QAction::triggered, this, &AreaPlayerEntry::sendLayerBack);
     connect(unpairAction, &QAction::triggered, this, &AreaPlayerEntry::sendUnpairRequest);
   }
 
   QAction *followUserAction = menu->addAction("Follow Player");
   connect(followUserAction, &QAction::triggered, this, &AreaPlayerEntry::followPlayer);
 
-
   menu->addSeparator();
 
-  if(!m_playerData.data.contentUrl.isEmpty())
-  {
+  if(!m_playerData.data.contentUrl.isEmpty()) {
     QUrl url(m_playerData.data.contentUrl);
     QString label = m_playerData.data.contentUrl.endsWith("/repo") || m_playerData.data.contentUrl.endsWith("/collection") || m_playerData.data.contentUrl.endsWith("/content")? "Download Character" : "Open " + url.host() + " in Browser";
     QAction *browserAction = menu->addAction(label);
     connect(browserAction, &QAction::triggered, this, &AreaPlayerEntry::openBrowserURL);
   }
 
-  if(rolechat::fs::RCDir("characters/" + m_character.toStdString()).exists())
-  {
+  if(rolechat::fs::RCDir("characters/" + m_playerCharacter.toStdString()).exists()) {
     QAction *openFolderAction = menu->addAction(localization::getText("OPEN_CHAR_FOLDER"));
     connect(openFolderAction, &QAction::triggered, this, &AreaPlayerEntry::openCharacterFolder);
   }
@@ -439,30 +393,26 @@ void AreaPlayerEntry::showContextMenu(QPoint pos)
   QAction *copyIDAction = playerMenu->addAction(localization::getText("PLAYER_LIST_ID"));
   connect(copyIDAction, &QAction::triggered, this, &AreaPlayerEntry::copyID);
 
-  if (!m_playerData.data.modHDID.isEmpty())
-  {
+  if (!m_playerData.data.modHDID.isEmpty()) {
     QString label = localization::getText("MOD_COPY_HDID") + " [" + m_playerData.data.modHDID + "]";
     QAction *copyHDID = playerMenu->addAction(label);
     connect(copyHDID, &QAction::triggered, this, &AreaPlayerEntry::copyHDID);
   }
 
-  if (!m_playerData.data.modIPID.isEmpty())
-  {
+  if (!m_playerData.data.modIPID.isEmpty()) {
     QString label = localization::getText("MOD_COPY_IPID") + " [" + m_playerData.data.modIPID + "]";
     QAction *copyIPID = playerMenu->addAction(label);
     connect(copyIPID, &QAction::triggered, this, &AreaPlayerEntry::copyIPID);
 
-    if(!m_playerData.data.discordSnowflake.isEmpty())
-    {
+    if(!m_playerData.data.discordSnowflake.isEmpty()) {
       QMenu *pairMenu = menu->addMenu("Discord (Debug)");
 
       QAction *discFriendAction = pairMenu->addAction("Add Friend");
-      connect(discFriendAction, &QAction::triggered, this, &AreaPlayerEntry::addDiscordFriend);
-
       QAction *discMessageAction = pairMenu->addAction("Send Message");
-      connect(discMessageAction, &QAction::triggered, this, &AreaPlayerEntry::messageDiscordFriend);
-
       QAction *discFriendAllowList = pairMenu->addAction("Add to Current Allow List");
+
+      connect(discFriendAction, &QAction::triggered, this, &AreaPlayerEntry::addDiscordFriend);
+      connect(discMessageAction, &QAction::triggered, this, &AreaPlayerEntry::messageDiscordFriend);
     }
   }
 

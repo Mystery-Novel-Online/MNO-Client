@@ -248,7 +248,7 @@ void InteractionObject::mouseReleaseEvent(QMouseEvent *event)
     LuaBridge::LuaEventCall("OnInteractionClick", m_name.toStdString(), m_description.toStdString());
     audio::system::Play("cursor_click");
 
-    if(SceneManager::get().mPlayerDataList.count() == 0)
+    if(SceneManager::get().m_areaPlayers.count() == 0)
     {
 
       QStringList messagePacket =

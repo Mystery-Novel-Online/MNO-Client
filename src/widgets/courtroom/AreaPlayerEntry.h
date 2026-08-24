@@ -19,27 +19,14 @@ public:
 
   void toggleTyping(bool status);
 
-  void set_character(QString p_character, bool afkState);
-  void setOutfit(QString outfitName);
-  void set_name(QString showname);
-  void set_reason(QString p_reason);
-  void setID(int id);
-  void setStatus(QString status);
+  void setCharacter(const QString& p_character, bool afkState);
+  void setOutfit(const QString& outfitName);
+  void setShowname(const QString& showname);
+  void setReason(const QString& a_reasonText);
+  void setStatus(const QString& a_statusText);
   void setContentVersion(int versionNumber);
-  AOImageDisplay *pCharacterBorderDisplay = nullptr;
-  AOImageDisplay *ui_user_image = nullptr;
-  RPLabel *ui_showname = nullptr;
-  RPLabel *ui_typing = nullptr;
-  RPLabel *m_prompt = nullptr;
 
-  AOImageDisplay *pStatusDisplay = nullptr;
-  AOImageDisplay *w_UpdateDisplay = nullptr;
-
-  void setQUrl(const QUrl &newQUrl);
-
-public:
-  int clientId();
-
+  inline int clientId() const { return m_playerData.data.id; }
 
 private slots:
   void addDiscordFriend();
@@ -60,23 +47,28 @@ private slots:
 private:
   AOApplication *ao_app = nullptr;
 
-  int m_index = 0;
   QString m_showname;
-  QString m_character;
-  QString m_CharacterOutfit = "";
-
-  QImage m_texture;
+  QString m_playerCharacter;
+  QString m_playerOutfit;
+  DrPlayer m_playerData;
 
   bool m_afk = false;
-  QString mStatus = "";
+  bool m_missingPlayerIcon = false;
+
+  void showContextMenu(QPoint pos);
 
   QTimer* m_typingTimer = nullptr;
 
-  DrPlayer m_playerData;
+  RPLabel *u_shownameDisplay = nullptr;
+  RPLabel *u_typingIndicator = nullptr;
+  RPLabel *u_areaPrompt = nullptr;
 
-  bool m_charIconMissing = false;
+  AOImageDisplay *u_playerIconBorder = nullptr;
+  AOImageDisplay *u_playerIcon = nullptr;
+  AOImageDisplay *u_statusDisplay = nullptr;
+  AOImageDisplay *u_updateDisplay = nullptr;
 
-  void showContextMenu(QPoint pos);
+  QImage m_texture;
 
 };
 

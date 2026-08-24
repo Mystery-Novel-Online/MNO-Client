@@ -26,7 +26,7 @@ public:
 
   void clearPlayerDataList();
 
-  QVector<DrPlayer> mPlayerDataList;
+  QVector<DrPlayer> m_areaPlayers;
 
   AOConfig *pConfigAO = nullptr;
 private:

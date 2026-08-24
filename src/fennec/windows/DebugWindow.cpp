@@ -49,7 +49,7 @@ void DebugWindow::populatePlayerList()
     drp.data.character = "Persona" + QString::number(i + 1);
     drp.data.afk = i % 3 == 1;
     drp.data.contentVersion = -1;
-    SceneManager::get().mPlayerDataList.append(drp);
+    SceneManager::get().m_areaPlayers.append(drp);
   }
   if(AOApplication::getInstance()->m_courtroom != nullptr)
     AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();
