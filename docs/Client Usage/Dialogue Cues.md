@@ -77,6 +77,16 @@ Toggles the "flip" state of the character sprite.
 
 ---
 
+## Flip Vertical - `<flipv>`
+
+```text
+Let's <flipv>flip <flip>vertically!<flipv>
+```
+
+Toggles the vertical "flip" state of the character sprite. 
+
+---
+
 ## Hide - `<hide>`
 
 ```text
@@ -84,17 +94,6 @@ Now you see me: <hide>now you don't.
 ```
 
 Toggles the "visibility" state of the character on screen.
-
-
----
-
-## Layer Swap - `<layer:name:asset>`
-
-```text
-<layer:eyes:closed>
-```
-
-Changes the asset that is loaded for a specified layer.
 
 ---
 
@@ -120,3 +119,16 @@ Changes the blip set that is used for the rest of the message.
 
 
 ---
+
+## Tint Sprite - `<tint:color>`
+
+```text
+<tint:green>I am now green.
+```
+
+Hex values can also be specified:
+
+```text
+<tint:#FFAA00>I am now orange
+```
+
