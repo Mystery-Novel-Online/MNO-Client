@@ -114,9 +114,20 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
   auto shortcut = new QShortcut(QKeySequence("Ctrl+/"), this);
   auto icShortcut = new QShortcut(QKeySequence("Ctrl+I"), this);
   auto oocShortcut = new QShortcut(QKeySequence("Ctrl+O"), this);
+  auto layersShortcut = new QShortcut(QKeySequence("Ctrl+E"), this);
   connect(shortcut, &QShortcut::activated, this, [this] { ui_ooc_chat_message->setFocus(Qt::ShortcutFocusReason); if(ui_ooc_chat_message->text().isEmpty()) ui_ooc_chat_message->setText("/"); });
   connect(icShortcut, &QShortcut::activated, this, [this] { ui_ic_chat_message_field->setFocus(Qt::ShortcutFocusReason);});
   connect(oocShortcut, &QShortcut::activated, this, [this] { ui_ooc_chat_message->setFocus(Qt::ShortcutFocusReason); });
+  connect(layersShortcut, &QShortcut::activated, this, [this] {
+            if(pLayersPanel->width() == 0){
+              pLayersPanel->resize(247, 150);
+              ui_emotes->getContextMenu()->reloadLayers();
+            }
+            if(!pLayersPanel->shortcutModeEnabled())
+              return;
+            pLayersPanel->setParent(this);
+            pLayersPanel->moveToCursor(mapFromGlobal(QCursor::pos()));
+          });
 
 
 }
@@ -819,8 +830,7 @@ void Courtroom::list_areas()
 
   const QBrush l_area_brush = ao_app->current_theme->get_widget_settings_color("area_list", "courtroom", "area_free", "area_free_color");
   ui_area_list->clear();
-  for (const QString &i_item_name : qAsConst(m_area_list))
-  {
+  for (const QString &i_item_name : qAsConst(m_area_list)) {
     QListWidgetItem *l_item = new QListWidgetItem(i_item_name, ui_area_list);
     l_item->setBackground(l_area_brush);
   }

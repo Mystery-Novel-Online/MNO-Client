@@ -1168,10 +1168,13 @@ void Courtroom::set_widgets()
     LegacyThemeManager::get().addWidgetName(label_images[i].toLower() + "_image", ui_label_images[i]);
   }
 
-  for (auto [widget, identifier] : reloadList.toStdMap())
-  {
+  for (auto [widget, identifier] : reloadList.toStdMap()) {
     engine::system::theme::applyDimensions(widget, identifier, ThemeSceneType::SceneType_Courtroom);
   }
+
+  pLayersPanel->clear();
+  pLayersPanel->toggleShortcutMode(pLayersPanel->width() == 0);
+
 
   if (ao_app->current_theme->read_config_bool("enable_label_images"))
   {

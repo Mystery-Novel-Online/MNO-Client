@@ -11,19 +11,19 @@ LayerSelectionPanel::LayerSelectionPanel(QWidget *parent)
   resetTransform();
   setBackgroundImage("layers_panel");
 
-  QScrollArea *scrollArea = new QScrollArea(this);
-  scrollArea->setWidgetResizable(true);
-  scrollArea->setStyleSheet("background-color: transparent; border: none; color: yellow;");
+  m_iconScrollArea = new QScrollArea(this);
+  m_iconScrollArea->setWidgetResizable(true);
+  m_iconScrollArea->setStyleSheet("background-color: transparent; border: none; color: yellow;");
 
-  m_container = new QWidget(scrollArea);
+  m_container = new QWidget(m_iconScrollArea);
   m_layout = new QGridLayout(m_container);
   m_layout->setAlignment(Qt::AlignTop);
   m_layout->setMargin(0);
 
-  scrollArea->setWidget(m_container);
+  m_iconScrollArea->setWidget(m_container);
 
   QGridLayout *rootLayout = new QGridLayout(this);
-  rootLayout->addWidget(scrollArea);
+  rootLayout->addWidget(m_iconScrollArea);
   setLayout(rootLayout);
 }
 
@@ -123,6 +123,30 @@ QString LayerSelectionPanel::getBaseVariant(const QString &fallback) {
   return m_baseImageOverride;
 }
 
+void LayerSelectionPanel::moveToCursor(const QPoint& position) {
+  QPoint calculatedPosition(position.x() - (width() / 2), position.y() - (height() / 2));
+  if(calculatedPosition.x() < 0) {
+    calculatedPosition.setX(0);
+  }
+  if(calculatedPosition.y() < 0) {
+    calculatedPosition.setY(0);
+  }
+  move(calculatedPosition.x(), calculatedPosition.y());
+  raise();
+  show();
+}
+
+void LayerSelectionPanel::toggleShortcutMode(bool state) {
+  m_shortcutMode = state;
+  if(state) {
+    // TODO: Create a little border around the window so it looks nice when called up
+    m_iconScrollArea->setStyleSheet("background-color: transparent; border: none; color: yellow;");
+  }
+  else {
+    m_iconScrollArea->setStyleSheet("background-color: transparent; border: none; color: yellow;");
+  }
+}
+
 void LayerSelectionPanel::layerClicked(int layerId) {
   if(layerId > m_layers.count()) {
     return;
@@ -173,5 +197,21 @@ void LayerSelectionPanel::layerClicked(int layerId) {
     break;
   }
   courtroom::ic::focusMessageBox();
+}
+
+
+bool LayerSelectionPanel::event(QEvent *event)
+{
+  switch (event->type()) {
+  case QEvent::Leave:
+    if(m_shortcutMode)
+      hide();
+    break;
+
+  default:
+    break;
+  }
+
+  return RPWidget::event(event);
 }
 

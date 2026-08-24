@@ -34,6 +34,8 @@ public:
   void switchPagePrevious();
   void selectEmote(int emoteTarget);
 
+  inline EmoteMenu* getContextMenu() { return m_ContextMenu; }
+
 private:
   EmoteMenu* m_ContextMenu = nullptr;
   QVector<AOEmoteButton *> m_EmotionButtons;

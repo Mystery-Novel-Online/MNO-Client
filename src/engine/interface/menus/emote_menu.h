@@ -18,6 +18,8 @@ public:
   static bool isRealtime() { return s_renderSprites; };
   static bool isDoubleSize() { return s_sizeDoubled; };
 
+  void reloadLayers();
+
   void ClearPresets();
   void AddPreset(const QString& name);
 

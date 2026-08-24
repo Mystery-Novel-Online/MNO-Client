@@ -35,13 +35,20 @@ public:
   void addLayer(const QString& layer, const QString& variation, bool state, LayerSelectionType type);
 
   QString getVariant(const QString& layerName, const QString& fallback);;
-  QString getBaseVariant(const QString& fallback);;
+  QString getBaseVariant(const QString& fallback);
+
+  void moveToCursor(const QPoint& position);
+  inline bool shortcutModeEnabled() { return m_shortcutMode; }
+  void toggleShortcutMode(bool state);
 
 private:
   void addButtonToGrid(QWidget* button);
 
 public slots:
   void layerClicked(int layerId);
+
+protected:
+  bool event(QEvent *event) override;
 
 private:
   QWidget *m_container;
@@ -52,6 +59,8 @@ private:
   QMap<QString, QString> m_GlobalVariants = {};
 
   QString m_baseImageOverride = "";
+  bool m_shortcutMode = false;
+  QScrollArea* m_iconScrollArea = nullptr;
 };
 
 #endif // LAYERSELECTIONPANEL_H

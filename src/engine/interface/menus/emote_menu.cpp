@@ -37,16 +37,15 @@ EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent), m_EmotionSelector
 
 void EmoteMenu::EmoteChange(ActorEmote emote)
 {
-  if(m_buttonMaker->isVisible()) m_buttonMaker->SetEmote(emote);
+  if(m_buttonMaker->isVisible()) {
+    m_buttonMaker->SetEmote(emote);
+  }
   m_currentEmote = emote;
-
-
 
   LayerSelectionPanel *selectionPanel = static_cast<LayerSelectionPanel*>(LegacyThemeManager::get().getWidget("layers_panel"));
   if(selectionPanel) selectionPanel->clear();
 
-  for(const ActorLayer &layer : emote.emoteOverlays)
-  {
+  for(const ActorLayer &layer : emote.emoteOverlays) {
     QString qLayerName = QString::fromStdString(layer.offsetName);
     if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty() && layer.offsetName != "base_image")
     {
@@ -68,6 +67,11 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
       }
     }
   }
+}
+
+void EmoteMenu::reloadLayers()
+{
+  EmoteChange(m_currentEmote);
 }
 
 void EmoteMenu::ClearPresets()
