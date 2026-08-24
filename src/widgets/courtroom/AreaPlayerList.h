@@ -11,10 +11,10 @@ public:
   explicit AreaPlayerList(QWidget *parent = nullptr);
   ~AreaPlayerList();
 
-  void deconstruct(bool force = false);
+  void deconstruct(bool a_DestroyAll = false);
   void constructLayout();
 
-  void startClientTyping(int clientId, bool active);
+  void startClientTyping(int a_TargetClient, bool a_ActiveState);
 
   void assignNavigationButtons(RPButton* left, RPButton* right);
 
