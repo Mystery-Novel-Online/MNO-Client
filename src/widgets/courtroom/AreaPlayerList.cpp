@@ -4,17 +4,14 @@
 
 #include "AreaPlayerEntry.h"
 
-AreaPlayerList::AreaPlayerList(QWidget *parent) : QWidget{parent}
-{
+AreaPlayerList::AreaPlayerList(QWidget *parent) : QWidget{parent} {
 }
 
-AreaPlayerList::~AreaPlayerList()
-{
+AreaPlayerList::~AreaPlayerList() {
   deconstruct();
 }
 
-void AreaPlayerList::deconstruct(bool a_DestroyAll)
-{
+void AreaPlayerList::deconstruct(bool a_DestroyAll) {
   QSet<int> currentPlayerIds;
 
   if(!a_DestroyAll) {
@@ -35,8 +32,7 @@ void AreaPlayerList::deconstruct(bool a_DestroyAll)
   }
 }
 
-void AreaPlayerList::constructLayout()
-{
+void AreaPlayerList::constructLayout() {
   //TODO: We shouldn't delete every player entry, see if it's more performant to add checks if
   //      a user present in the latest network update before deleting.
   deconstruct();
@@ -54,8 +50,7 @@ void AreaPlayerList::constructLayout()
   populatePlayers();
 }
 
-void AreaPlayerList::startClientTyping(int a_TargetClient, bool a_ActiveState)
-{
+void AreaPlayerList::startClientTyping(int a_TargetClient, bool a_ActiveState) {
   for(AreaPlayerEntry* player : m_playerEntries) {
     if(player->clientId() == a_TargetClient) {
       player->toggleTyping(a_ActiveState);
@@ -64,16 +59,14 @@ void AreaPlayerList::startClientTyping(int a_TargetClient, bool a_ActiveState)
   }
 }
 
-void AreaPlayerList::assignNavigationButtons(RPButton *left, RPButton *right)
-{
+void AreaPlayerList::assignNavigationButtons(RPButton *left, RPButton *right) {
   m_navigationLeft = left;
   m_navigationRight = right;
   connect(m_navigationLeft, &RPButton::clicked, this, &AreaPlayerList::navigationClickedLeft);
   connect(m_navigationRight, &RPButton::clicked, this, &AreaPlayerList::navigationClickedRight);
 }
 
-void AreaPlayerList::updatePageNavigation()
-{
+void AreaPlayerList::updatePageNavigation() {
   int max_pages = ceil((SceneManager::get().mPlayerDataList.count() - 1) / m_pageMax);
   m_pageMax = qMax(1, m_playerRows);
 
@@ -94,8 +87,7 @@ void AreaPlayerList::updatePageNavigation()
   }
 }
 
-void AreaPlayerList::populatePlayers()
-{
+void AreaPlayerList::populatePlayers() {
   int starting_index = (m_pageCurrent * m_pageMax);
 
   int last_entry_height = 0;
@@ -128,9 +120,7 @@ void AreaPlayerList::populatePlayers()
   }
 }
 
-int AreaPlayerList::calculateEntryCount()
-{
-
+int AreaPlayerList::calculateEntryCount() {
   float resize = LegacyThemeManager::get().getResize();
 
   int player_height = engine::system::theme::getDimensions("player_list_slot", ThemeSceneType::SceneType_Courtroom).height;
@@ -144,15 +134,13 @@ int AreaPlayerList::calculateEntryCount()
 }
 
 
-void AreaPlayerList::navigationClickedLeft()
-{
+void AreaPlayerList::navigationClickedLeft() {
   --m_pageCurrent;
   constructLayout();
   emit(navigationComplete());
 }
 
-void AreaPlayerList::navigationClickedRight()
-{
+void AreaPlayerList::navigationClickedRight() {
   ++m_pageCurrent;
   constructLayout();
   emit(navigationComplete());
