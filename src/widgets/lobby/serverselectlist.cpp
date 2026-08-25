@@ -1,5 +1,5 @@
-#include "server_select_entry.h"
-#include "serverselectlist.h"
+#include "ServerSelectEntry.h"
+#include "ServerSelectList.h"
 
 ServerSelectList::ServerSelectList(QWidget *parent) : QWidget{parent}
 {

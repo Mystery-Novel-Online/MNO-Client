@@ -22,11 +22,11 @@
 #include <engine/system/config_manager.h>
 #include "config_tabs/config_tab_theme.h"
 #include <dialogs/RenameContentDialog.h>
-#include <engine/discord/workshop_discord.h>
-#include <engine/interface/scenes/collection_creation.h>
-#include <engine/interface/widgets/workshop_tags.h>
-#include <engine/network/api_manager.h>
-#include <rolechat/userdata/RolechatDatabase.h>
+#include "engine/discord/workshop_discord.h"
+#include "engine/interface/scenes/collection_creation.h"
+#include "widgets/workshop/WorkshopTags.h"
+#include "engine/network/api_manager.h"
+#include "rolechat/userdata/RolechatDatabase.h"
 
 #include "engine/system/audio/loop_detection.h"
 #include "engine/interface/menus/WorkshopContextMenu.h"

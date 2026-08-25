@@ -1,4 +1,4 @@
-#include "server_select_entry.h"
+#include "ServerSelectEntry.h"
 #include <QGraphicsDropShadowEffect>
 
 ServerSelectEntry::ServerSelectEntry(const QString& title, QWidget *parent) : QWidget{parent}, m_title(title)

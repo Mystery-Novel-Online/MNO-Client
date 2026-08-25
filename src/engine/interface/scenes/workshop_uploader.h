@@ -1,11 +1,10 @@
+#ifndef WORKSHOP_UPLOADER_H
+#define WORKSHOP_UPLOADER_H
 
 #include <QTableWidget>
 
-#include <engine/interface/widgets/uploadertagtable.h>
-
-#include <engine/network/workshop/workshop_models.h>
-#ifndef WORKSHOP_UPLOADER_H
-#define WORKSHOP_UPLOADER_H
+#include "widgets/workshop/UploaderTagTable.h"
+#include "engine/network/workshop/workshop_models.h"
 
 class WorkshopUploader : public QDialog
 {

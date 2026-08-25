@@ -1,4 +1,4 @@
-#include "workshop_entry.h"
+#include "WorkshopEntry.h"
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QFont>

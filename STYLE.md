@@ -28,3 +28,14 @@ This document will outline the preferred coding style and conventions to be foll
 
 ## Functions
 - Basic accessor functions can be defined as inline in the header. 
+
+---
+
+## Qt Signals
+- When using connect with a lambda function, it must be split across 3 lines. Anything above this should be split into a slot. 
+
+--
+
+## Includes
+- When including from an external library, use **< >**.
+- When including from within the project itself, use **" "**.

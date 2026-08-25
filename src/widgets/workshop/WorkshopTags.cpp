@@ -1,5 +1,5 @@
 #include "WorkshopTagLabel.h"
-#include "workshop_tags.h"
+#include "WorkshopTags.h"
 
 WorkshopTags::WorkshopTags(QWidget *parent) : QWidget(parent)
 {
@@ -81,21 +81,16 @@ void WorkshopTags::addTag(const QString &text)
   font.setPointSize(9);
   label->setFont(font);
 
-  connect(label, &WorkshopTagLabel::clicked,
-  this, [this, text](bool ctrlHeld)
-  {
+  connect(label, &WorkshopTagLabel::clicked, this, [this, text](bool ctrlHeld) {
     emit tagClicked(ctrlHeld ? "!" + text : text);
   });
 
   m_layout->addWidget(label);
 }
 
-void WorkshopTags::clearAllTags()
-{
-  while (QLayoutItem* item = m_layout->takeAt(0))
-  {
-    if (QWidget* widget = item->widget())
-    {
+void WorkshopTags::clearAllTags() {
+  while (QLayoutItem* item = m_layout->takeAt(0)) {
+    if (QWidget* widget = item->widget()) {
       widget->deleteLater();
     }
     delete item;

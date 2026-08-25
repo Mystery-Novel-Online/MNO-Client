@@ -54,29 +54,25 @@ QVariantList BinaryEncoder::decodeBase64(const QString &base64)
 
     switch (typeInt)
     {
-    case QVariant::Int:
-    {
+    case QVariant::Int: {
       int i;
       payloadStream >> i;
       value = i;
       break;
     }
-    case QVariant::Double:
-    {
+    case QVariant::Double: {
       double d;
       payloadStream >> d;
       value = d;
       break;
     }
-    case QVariant::Bool:
-    {
+    case QVariant::Bool: {
       bool b;
       payloadStream >> b;
       value = b;
       break;
     }
-    case QVariant::String:
-    {
+    case QVariant::String: {
       QString str;
       payloadStream >> str;
       value = str;

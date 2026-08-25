@@ -1,9 +1,8 @@
-#include "uploadertagtable.h"
+#include "UploaderTagTable.h"
 
 #include <QHeaderView>
 
-UploaderTagTable::UploaderTagTable(QWidget *parent) : QTableWidget(parent)
-{
+UploaderTagTable::UploaderTagTable(QWidget *parent) : QTableWidget(parent) {
   setSelectionBehavior(QAbstractItemView::SelectRows);
   setSelectionMode(QAbstractItemView::ExtendedSelection);
 
@@ -40,8 +39,7 @@ void UploaderTagTable::addTag(const QString &category, const QString &value, boo
   dummyItem->setFlags(Qt::NoItemFlags);
   setItem(row, 2, dummyItem);
 
-  if (!disableRemove)
-  {
+  if (!disableRemove) {
     QPushButton* removeBtn = new QPushButton("Remove", this);
 
     connect(removeBtn, &QPushButton::clicked, this, [this, removeBtn]() {
@@ -62,14 +60,12 @@ void UploaderTagTable::addTag(const QString &category, const QString &value, boo
 
 void UploaderTagTable::keyPressEvent(QKeyEvent *event)
 {
-  if (event->matches(QKeySequence::Copy))
-  {
+  if (event->matches(QKeySequence::Copy)) {
     copySelection();
     return;
   }
 
-  if (event->matches(QKeySequence::Paste))
-  {
+  if (event->matches(QKeySequence::Paste)) {
     pasteSelection();
     return;
   }
@@ -95,17 +91,13 @@ void UploaderTagTable::copySelection()
   QString text;
   int previousRow = indexes.first().row();
 
-  for (const QModelIndex& index : indexes)
-  {
-    if (text.length() > 0)
-    {
-      if (index.row() != previousRow)
-      {
+  for (const QModelIndex& index : indexes) {
+    if (text.length() > 0) {
+      if (index.row() != previousRow) {
         text += '\n';
         previousRow = index.row();
       }
-      else
-      {
+      else {
         text += '\t';
       }
     }
@@ -122,17 +114,13 @@ void UploaderTagTable::pasteSelection()
 
   QStringList lines = text.split('\n', Qt::SkipEmptyParts);
 
-  for (QString line : lines)
-  {
+  for (QString line : lines) {
     line = line.trimmed();
-
-    if (line.isEmpty())
-      continue;
-
     QStringList parts = line.split('\t');
 
-    if (parts.size() < 2)
+    if (parts.size() < 2) {
       continue;
+    }
 
     QString categoryName = parts[0].trimmed();
     QString tagName = parts[1].trimmed();

@@ -1,5 +1,5 @@
-#ifndef WORKSHOP_TAGS_H
-#define WORKSHOP_TAGS_H
+#ifndef WORKSHOPTAGS_H
+#define WORKSHOPTAGS_H
 
 #include <QObject>
 
@@ -28,4 +28,4 @@ signals:
 };
 
 
-#endif // WORKSHOP_TAGS_H
+#endif // WORKSHOPTAGS_H

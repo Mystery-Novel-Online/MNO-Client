@@ -16,10 +16,11 @@ private:
   void saveDatabase();
   void updateAccessTime(const QString &hash);
 
-  void cleanup();
-
 signals:
   void fileCached(const QString &filePath, const QString &hash);
+
+private slots:
+  void networkReplyFinished(QNetworkReply *reply);
 
 private:
   QString m_cacheDirectory;

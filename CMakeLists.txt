@@ -302,15 +302,15 @@ add_executable(rp-engine
   src/rolechat_config.h src/rolechat_config.cpp src/rolechat_config.ui
   src/config_tabs/config_tab_theme.h src/config_tabs/config_tab_theme.cpp src/config_tabs/config_tab_theme.ui
   src/engine/system/config_manager.h src/engine/system/config_manager.cpp
-  src/engine/interface/widgets/workshop_list.h src/engine/interface/widgets/workshop_list.cpp
-  src/engine/interface/widgets/workshop_entry.h src/engine/interface/widgets/workshop_entry.cpp
+  src/widgets/workshop/WorkshopListWidget.h src/widgets/workshop/WorkshopListWidget.cpp
+  src/widgets/workshop/WorkshopEntry.h src/widgets/workshop/WorkshopEntry.cpp
   src/engine/interface/scenes/downloader_prompt.h src/engine/interface/scenes/downloader_prompt.cpp
   src/engine/interface/scenes/workshop_uploader.h src/engine/interface/scenes/workshop_uploader.cpp
   src/engine/workshop/workshop_cache.h src/engine/workshop/workshop_cache.cpp
   src/engine/discord/workshop_discord.h src/engine/discord/workshop_discord.cpp
   src/engine/animation/widget_animator.h src/engine/animation/widget_animator.cpp
-  src/engine/interface/widgets/serverselectlist.h src/engine/interface/widgets/serverselectlist.cpp
-  src/engine/interface/widgets/server_select_entry.h src/engine/interface/widgets/server_select_entry.cpp
+  src/widgets/lobby/ServerSelectList.h src/widgets/lobby/ServerSelectList.cpp
+  src/widgets/lobby/ServerSelectEntry.h src/widgets/lobby/ServerSelectEntry.cpp
   src/engine/interface/widgets/icon_grid_widget.h src/engine/interface/widgets/icon_grid_widget.cpp
   src/engine/interface/menus/screenshot_menu.h src/engine/interface/menus/screenshot_menu.cpp
   src/engine/system/user_database.h src/engine/system/user_database.cpp
@@ -320,8 +320,8 @@ add_executable(rp-engine
   src/engine/system/client_worker.h src/engine/system/client_worker.cpp
   src/engine/interface/scenes/collection_creation.h src/engine/interface/scenes/collection_creation.cpp
   src/config_tabs/config_tab_mounting.h src/config_tabs/config_tab_mounting.cpp src/config_tabs/config_tab_mounting.ui
-  src/engine/interface/widgets/workshop_tags.h src/engine/interface/widgets/workshop_tags.cpp
-  src/engine/interface/widgets/uploadertagtable.h src/engine/interface/widgets/uploadertagtable.cpp
+  src/widgets/workshop/WorkshopTags.h src/widgets/workshop/WorkshopTags.cpp
+  src/widgets/workshop/UploaderTagTable.h src/widgets/workshop/UploaderTagTable.cpp
   src/config_tabs/config_tab_blips.h src/config_tabs/config_tab_blips.cpp src/config_tabs/config_tab_blips.ui
   src/config_tabs/config_tab_callwords.h src/config_tabs/config_tab_callwords.cpp src/config_tabs/config_tab_callwords.ui
   src/utils/file_hash_util.h src/utils/file_hash_util.cpp
@@ -341,7 +341,7 @@ add_executable(rp-engine
   src/fennec/windows/NetworkWindow.h src/fennec/windows/NetworkWindow.cpp
   src/networking/NetworkTraffic.h src/networking/NetworkTraffic.cpp
   src/fennec/windows/DebugWindow.h src/fennec/windows/DebugWindow.cpp
-  src/engine/interface/widgets/WorkshopTagLabel.h src/engine/interface/widgets/WorkshopTagLabel.cpp
+  src/widgets/workshop/WorkshopTagLabel.h src/widgets/workshop/WorkshopTagLabel.cpp
   src/networking/HubUploadManager.h src/networking/HubUploadManager.cpp
   src/networking/WorkshopDownloadManager.h src/networking/WorkshopDownloadManager.cpp
   src/fennec/windows/DownloadWindow.h src/fennec/windows/DownloadWindow.cpp

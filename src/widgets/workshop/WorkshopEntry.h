@@ -1,5 +1,5 @@
-#ifndef WORKSHOP_ENTRY_H
-#define WORKSHOP_ENTRY_H
+#ifndef WORKSHOPENTRY_H
+#define WORKSHOPENTRY_H
 
 #include <QObject>
 #include <QWidget>
@@ -63,4 +63,4 @@ private:
   WorkshopContentEntry content;
 };
 
-#endif // WORKSHOP_ENTRY_H
+#endif // WORKSHOPENTRY_H

@@ -5,7 +5,6 @@ class UploaderTagTable : public QTableWidget
 {
 public:
   UploaderTagTable(QWidget* parent);
-
   void addTag(const QString& category, const QString& value, bool disableRemove = false);
 
 protected:

@@ -1,5 +1,5 @@
-#ifndef SERVER_SELECT_ENTRY_H
-#define SERVER_SELECT_ENTRY_H
+#ifndef SERVERSELECTENTRY_H
+#define SERVERSELECTENTRY_H
 
 #include <QObject>
 #include <QWidget>
@@ -64,4 +64,4 @@ private:
 };
 
 
-#endif // SERVER_SELECT_ENTRY_H
+#endif // SERVERSELECTENTRY_H

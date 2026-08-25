@@ -1,9 +1,9 @@
-#ifndef WORKSHOP_LIST_H
-#define WORKSHOP_LIST_H
+#ifndef WORKSHOPLISTWIDGET_H
+#define WORKSHOPLISTWIDGET_H
 
 #include <QObject>
 #include <QWidget>
-#include "workshop_entry.h"
+#include "WorkshopEntry.h"
 #include "engine/network/workshop/workshop_models.h"
 
 
@@ -49,4 +49,4 @@ private:
 
 };
 
-#endif // WORKSHOP_LIST_H
+#endif // WORKSHOPLISTWIDGET_H
