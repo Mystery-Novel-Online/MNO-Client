@@ -25,11 +25,11 @@ void RPTextEdit::hideScrollbars()
 
 void RPTextEdit::set_outline(bool p_enabled, int outlineWidth, QColor outlineColor)
 {
-  if (has_outline == p_enabled)
+  if(has_outline == p_enabled)
     return;
   has_outline = p_enabled;
   QTextCharFormat widget_format = currentCharFormat();
-  if (p_enabled)
+  if(p_enabled)
     widget_format.setTextOutline(QPen(outlineColor, outlineWidth));
   else
     widget_format.setTextOutline(Qt::NoPen);
@@ -38,14 +38,14 @@ void RPTextEdit::set_outline(bool p_enabled, int outlineWidth, QColor outlineCol
 
 void RPTextEdit::set_auto_align(bool p_enabled)
 {
-  if (is_auto_align == p_enabled)
+  if(is_auto_align == p_enabled)
     return;
   is_auto_align = p_enabled;
 }
 
 void RPTextEdit::set_text_alignment(Qt::Alignment p_align)
 {
-  if (m_text_align == p_align)
+  if(m_text_align == p_align)
     return;
   m_text_align = p_align;
   Q_EMIT text_alignment_changed(m_text_align);
@@ -53,7 +53,7 @@ void RPTextEdit::set_text_alignment(Qt::Alignment p_align)
 
 void RPTextEdit::realign_text()
 {
-  if (m_status == Status::InProgress)
+  if(m_status == Status::InProgress)
     return;
   m_status = Status::InProgress;
   setAlignment(m_text_align);
@@ -69,7 +69,7 @@ Qt::Alignment RPTextEdit::get_text_alignment() const
 
 void RPTextEdit::on_text_changed()
 {
-  if (!is_auto_align)
+  if(!is_auto_align)
     return;
   realign_text();
 }
@@ -79,7 +79,7 @@ void RPTextEdit::refresh_horizontal_alignment()
   // This stores the number of blocks. We use blocks here as Qt makes its horizontal
   // alignment based on blocks (rather than apparent line breaks/places where words wrap).
   int new_document_blocks = document()->blockCount();
-  if (document()->toPlainText().isEmpty())
+  if(document()->toPlainText().isEmpty())
   {
     // Qt is very special and does not set this to 0 for empty documents.
     m_current_document_blocks = 0;
@@ -88,7 +88,7 @@ void RPTextEdit::refresh_horizontal_alignment()
   }
   // If we have not changed the number of blocks in the document with this new incoming text change,
   // We do not need to update anything, so we exit early.
-  if (new_document_blocks == m_current_document_blocks)
+  if(new_document_blocks == m_current_document_blocks)
     return;
 
   // Otherwise, we have changed the number of blocks. By induction only the current block needs to be
@@ -101,7 +101,7 @@ void RPTextEdit::refresh_vertical_alignment()
 {
   // This stores the total height of the totality of the text saved.
   int new_document_height = document()->size().height();
-  if (document()->toPlainText().isEmpty())
+  if(document()->toPlainText().isEmpty())
   {
     // Qt is very special and does not set this to 0 for empty documents.
     m_current_document_height = 0;
@@ -110,7 +110,7 @@ void RPTextEdit::refresh_vertical_alignment()
   }
   // If we have not changed the document height with this new incoming text change,
   // We do not need to update anything, so we exit early.
-  if (new_document_height == m_current_document_height)
+  if(new_document_height == m_current_document_height)
     return;
 
   m_current_document_height = new_document_height;

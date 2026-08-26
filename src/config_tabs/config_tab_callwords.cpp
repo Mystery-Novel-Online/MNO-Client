@@ -60,9 +60,9 @@ void ConfigTabCallwords::addWord(const QString &word, WordMatchMode mode)
   connect(removeButton, &QPushButton::clicked, this,
           [this, removeButton]()
           {
-            for (int row = 0; row < ui->callwordTable->rowCount(); ++row)
+            for(int row = 0; row < ui->callwordTable->rowCount(); ++row)
             {
-              if (ui->callwordTable->cellWidget(row, 2) == removeButton)
+              if(ui->callwordTable->cellWidget(row, 2) == removeButton)
               {
                 ui->callwordTable->removeRow(row);
                 save();
@@ -105,26 +105,26 @@ bool ConfigTabCallwords::messageCheck(const QString &message, QString& matchedWo
 {
   QTableWidget* table = ui->callwordTable;
 
-  for (int row = 0; row < table->rowCount(); ++row)
+  for(int row = 0; row < table->rowCount(); ++row)
   {
     QTableWidgetItem* wordItem = table->item(row, 0);
 
-    if (!wordItem)
+    if(!wordItem)
       continue;
 
     const QString word = wordItem->text().trimmed();
 
-    if (word.isEmpty())
+    if(word.isEmpty())
       continue;
 
     QComboBox* combo = qobject_cast<QComboBox*>(table->cellWidget(row, 1));
 
-    if (!combo)
+    if(!combo)
       continue;
 
     WordMatchMode mode = static_cast<WordMatchMode>(combo->currentData().toInt());
 
-    if (matchWord(message, word, mode))
+    if(matchWord(message, word, mode))
     {
       matchedWord = word;
       return true;
@@ -147,21 +147,21 @@ void ConfigTabCallwords::save()
   QTableWidget* table = ui->callwordTable;
   std::vector<UserCallword> data = {};
 
-  for (int row = 0; row < table->rowCount(); ++row)
+  for(int row = 0; row < table->rowCount(); ++row)
   {
     QTableWidgetItem* wordItem = table->item(row, 0);
 
-    if (!wordItem)
+    if(!wordItem)
       continue;
 
     const QString word = wordItem->text().trimmed();
 
-    if (word.isEmpty())
+    if(word.isEmpty())
       continue;
 
     QComboBox* combo = qobject_cast<QComboBox*>(table->cellWidget(row, 1));
 
-    if (!combo)
+    if(!combo)
       continue;
 
     WordMatchMode mode = static_cast<WordMatchMode>(combo->currentData().toInt());

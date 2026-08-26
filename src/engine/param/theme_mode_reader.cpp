@@ -85,9 +85,9 @@ void ThemeModeReader::LoadTimeMode()
 {
   m_TimeModules = {};
   QString gameModesPath = m_FilePath + "/times/";
-  for (const QString &i_folder : QDir(AOApplication::getInstance()->get_case_sensitive_path(gameModesPath)).entryList(QDir::Dirs))
+  for(const QString &i_folder : QDir(AOApplication::getInstance()->get_case_sensitive_path(gameModesPath)).entryList(QDir::Dirs))
   {
-    if (i_folder == "." || i_folder == "..")
+    if(i_folder == "." || i_folder == "..")
       continue;
     m_TimeOfDayReaders[i_folder] = new ThemeModeReader(m_FilePath + "/times/" + i_folder);
     m_TimeModules[i_folder] = new ThemeModuleReader(m_FilePath + "/times/" + i_folder, "theme.json");
@@ -102,14 +102,14 @@ void ThemeModeReader::LoadModules()
   QDir modulesDirectory(m_FilePath + "/modules");
   QStringList moduleSubDirectories = modulesDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
 
-  for (const QString &moduleDirectory : moduleSubDirectories)
+  for(const QString &moduleDirectory : moduleSubDirectories)
   {
     m_ModuleNames.append(moduleDirectory);
     qDebug() << "[Theme][Modules] Found module directory:" + moduleDirectory;
     QDir fullModulePath(modulesDirectory.filePath(moduleDirectory));
 
     QStringList moduleFiles = fullModulePath.entryList(QStringList() << "*.json", QDir::Files);
-    for (const QString &module : moduleFiles)
+    for(const QString &module : moduleFiles)
     {
       if(!m_ThemeModules[moduleDirectory].contains(module))
       {
@@ -227,7 +227,7 @@ QHash<QString, ThemeHighlight> ThemeModeReader::GetFontColorsHighlights()
   if(m_TimeOfDayCurrent != nullptr)
   {
     QHashIterator<QString, ThemeHighlight> i(m_TimeOfDayCurrent->m_CourtroomFontColorsHighlights);
-    while (i.hasNext())
+    while(i.hasNext())
     {
       i.next();
       returnValue[i.key()].chars = i.value().chars;
@@ -245,7 +245,7 @@ QMap<QString, DR::ColorInfo> ThemeModeReader::GetFontColorsDefault()
   if(m_TimeOfDayCurrent != nullptr)
   {
     QMapIterator<QString, DR::ColorInfo> i(m_TimeOfDayCurrent->m_CourtroomFontColorsDefault);
-    while (i.hasNext())
+    while(i.hasNext())
     {
       i.next();
       returnValue[i.key()].code = i.value().code;
@@ -258,7 +258,7 @@ QVector2D ThemeModeReader::getWidgetSpacing(QString t_name)
 {
   QVector<ThemeScene*> readOrder = getSceneLoadOrder(ThemeSceneType::SceneType_Courtroom);
 
-  for (ThemeScene *scene : readOrder)
+  for(ThemeScene *scene : readOrder)
   {
     if(scene == nullptr) continue;
     WidgetThemeData* widgetData = scene->getWidgetData(t_name);
@@ -341,7 +341,7 @@ bool ThemeModeReader::containsWidgetFont(ThemeSceneType t_sceneType, QString wid
 {
   QVector<ThemeScene*> readOrder = getSceneLoadOrder(t_sceneType);
 
-  for (ThemeScene *scene : readOrder)
+  for(ThemeScene *scene : readOrder)
   {
     if(scene == nullptr) continue;
     widgetFontStruct* widgetData = scene->getWidgetFont(widget_name);
@@ -357,7 +357,7 @@ widgetFontStruct ThemeModeReader::getWidgetFont(ThemeSceneType t_sceneType, QStr
 {
   QVector<ThemeScene*> readOrder = getSceneLoadOrder(t_sceneType);
 
-  for (ThemeScene *scene : readOrder)
+  for(ThemeScene *scene : readOrder)
   {
     if(scene == nullptr) continue;
     widgetFontStruct* widgetData = scene->getWidgetFont(t_name);
@@ -370,7 +370,7 @@ widgetFontStruct ThemeModeReader::getWidgetFont(ThemeSceneType t_sceneType, QStr
 
 RPRect ThemeModeReader::getWidgetDimensions(QVector<ThemeScene *> t_readOrder, QString t_name)
 {
-  for (ThemeScene *r_SceneToRead : t_readOrder)
+  for(ThemeScene *r_SceneToRead : t_readOrder)
   {
     if(r_SceneToRead == nullptr) continue;
 

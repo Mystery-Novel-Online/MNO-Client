@@ -5,7 +5,7 @@ WorkshopCache::WorkshopCache(const QString &a_directory, const QString &a_dbFile
     , m_cacheDirectory(a_directory)
     , m_dbFile(a_dbFile)
 {
-  if (!QDir(m_cacheDirectory).exists()) {
+  if(!QDir(m_cacheDirectory).exists()) {
     QDir().mkpath(m_cacheDirectory);
   }
   loadDatabase();
@@ -15,11 +15,11 @@ WorkshopCache::WorkshopCache(const QString &a_directory, const QString &a_dbFile
 void WorkshopCache::downloadFile(const QUrl& a_url)
 {
   QString qUrlString = a_url.toString();
-  if (m_urlToHash.contains(qUrlString))
+  if(m_urlToHash.contains(qUrlString))
   {
     QString qHashCache = m_urlToHash.value(qUrlString);
     QString qFileCache = QDir(m_cacheDirectory).filePath(qHashCache);
-    if (QFile::exists(qFileCache)) {
+    if(QFile::exists(qFileCache)) {
       updateAccessTime(qHashCache);
       emit fileCached(qFileCache, qHashCache);
       return;
@@ -37,17 +37,17 @@ void WorkshopCache::downloadFile(const QUrl& a_url)
 void WorkshopCache::loadDatabase()
 {
   QFile file(m_dbFile);
-  if (!file.exists()) {
+  if(!file.exists()) {
     return;
   }
 
-  if (file.open(QIODevice::ReadOnly))
+  if(file.open(QIODevice::ReadOnly))
   {
     QByteArray content = file.readAll();
     QJsonDocument doc = QJsonDocument::fromJson(content);
-    if (doc.isObject()) {
+    if(doc.isObject()) {
       m_db = doc.object();
-      for (auto it = m_db.constBegin(); it != m_db.constEnd(); ++it) {
+      for(auto it = m_db.constBegin(); it != m_db.constEnd(); ++it) {
         auto entry = it.value().toObject();
         m_urlToHash[entry.value("url").toString()] = it.key();
       }
@@ -58,7 +58,7 @@ void WorkshopCache::loadDatabase()
 void WorkshopCache::saveDatabase()
 {
   QFile file(m_dbFile);
-  if (!file.open(QIODevice::WriteOnly)) {
+  if(!file.open(QIODevice::WriteOnly)) {
     qWarning() << "Failed to write database file:" << m_dbFile;
     return;
   }
@@ -68,7 +68,7 @@ void WorkshopCache::saveDatabase()
 
 void WorkshopCache::updateAccessTime(const QString &hash)
 {
-  if (m_db.contains(hash)) {
+  if(m_db.contains(hash)) {
     auto entry = m_db.value(hash).toObject();
     entry["lastAccess"] = QDateTime::currentSecsSinceEpoch();
     m_db[hash] = entry;
@@ -78,14 +78,14 @@ void WorkshopCache::updateAccessTime(const QString &hash)
 
 void WorkshopCache::networkReplyFinished(QNetworkReply *reply)
 {
-  if (!reply) {
+  if(!reply) {
     return;
   }
 
   const QString qUrlString = reply->url().toString();
 
   reply->deleteLater();
-  if (reply->error() != QNetworkReply::NoError) {
+  if(reply->error() != QNetworkReply::NoError) {
     qWarning() << "Download failed:" << reply->errorString();
     return;
   }
@@ -96,7 +96,7 @@ void WorkshopCache::networkReplyFinished(QNetworkReply *reply)
   QString filePath = QDir(m_cacheDirectory).filePath(hashHex);
 
   QFile file(filePath);
-  if (!file.open(QIODevice::WriteOnly)) {
+  if(!file.open(QIODevice::WriteOnly)) {
     qWarning() << "Failed to write file:" << filePath;
     return;
   }

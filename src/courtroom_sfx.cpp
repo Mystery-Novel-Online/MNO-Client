@@ -7,7 +7,7 @@
 std::optional<DRSfx> Courtroom::current_sfx()
 {
   QListWidgetItem *l_item = ui_sfx_list->currentItem();
-  if (l_item == nullptr)
+  if(l_item == nullptr)
     return std::nullopt;
   return m_sfx_list.at(l_item->data(Qt::UserRole).toInt());
 }
@@ -19,7 +19,7 @@ QString Courtroom::current_sfx_file()
   const QString qSoundFile = QString::fromStdString(ui_emotes->getSelectedEmote().sound_file);
   if(qSoundFile.trimmed().isEmpty() && qOptionalSfx.has_value()) return qOptionalSfx->file;
 
-  if (!qOptionalSfx.has_value())
+  if(!qOptionalSfx.has_value())
     return qSoundFile;
   const QString l_file = qOptionalSfx->file;
   return l_file == m_sfx_default_file ? qSoundFile : l_file;
@@ -52,7 +52,7 @@ void Courtroom::load_current_character_sfx_list()
   m_sfx_list.append(DRSfx(engine::system::localization::getText("SFX_SILENCE"), nullptr));
 
   const QStringList l_sfx_list = ao_app->get_sfx_list();
-  for (const QString &i_sfx_line : l_sfx_list)
+  for(const QString &i_sfx_line : l_sfx_list)
   {
     const QStringList l_sfx_entry = i_sfx_line.split("=", DR::SplitBehavior::SkipEmptyParts);
 
@@ -69,7 +69,7 @@ void Courtroom::load_current_character_sfx_list()
 
   // create items
   QList<QListWidgetItem *> l_item_list;
-  for (int i = 0; i < m_sfx_list.length(); ++i)
+  for(int i = 0; i < m_sfx_list.length(); ++i)
   {
     const DRSfx &i_sfx = m_sfx_list.at(i);
     QListWidgetItem *l_item = new QListWidgetItem(ui_sfx_list);
@@ -92,12 +92,12 @@ void Courtroom::filter_sfx_list(const QString &p_filter)
 
 void Courtroom::set_sfx_item_color(QListWidgetItem *p_item)
 {
-  if (p_item == nullptr)
+  if(p_item == nullptr)
     return;
   const bool l_is_found = m_sfx_list.at(p_item->data(Qt::UserRole).toInt()).is_found;
   QColor l_color = l_is_found ? m_sfx_color_found : m_sfx_color_missing;
 
-  if (p_item == ui_sfx_list->currentItem())
+  if(p_item == ui_sfx_list->currentItem())
   {
     // Calculate the amount of lightness it would take to light up the row. We
     // also limit it to 1.0, as giving lightness values above 1.0 to QColor does
@@ -114,7 +114,7 @@ void Courtroom::set_sfx_item_color(QListWidgetItem *p_item)
 
 void Courtroom::onAnimListItemChanged(QListWidgetItem *current_item, QListWidgetItem *previous_item)
 {
-  for (int i = 0; i < ui_anim_list->count(); ++i)
+  for(int i = 0; i < ui_anim_list->count(); ++i)
   {
     ui_anim_list->setItemColor(ui_anim_list->item(i));
   }
@@ -123,7 +123,7 @@ void Courtroom::onAnimListItemChanged(QListWidgetItem *current_item, QListWidget
 
 void Courtroom::update_all_sfx_item_color()
 {
-  for (int i = 0; i < m_sfx_list.length(); ++i)
+  for(int i = 0; i < m_sfx_list.length(); ++i)
     set_sfx_item_color(ui_sfx_list->item(i));
 }
 
@@ -137,7 +137,7 @@ void Courtroom::on_sfx_list_current_item_changed(QListWidgetItem *p_current_item
 
 void Courtroom::on_sfx_list_context_menu_requested(QPoint p_point)
 {
-  if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
+  if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
     ui_ic_chat_message_field->addTag(CueType::SoundEffect, { current_sfx_file() });
     ui_sfx_list->clearSelection();
     return;
@@ -161,11 +161,11 @@ void Courtroom::on_sfx_menu_insert_file_name_triggered()
 void Courtroom::on_sfx_menu_insert_caption_triggered()
 {
   const std::optional<DRSfx> l_sfx = current_sfx();
-  if (l_sfx.has_value())
+  if(l_sfx.has_value())
   {
     QString l_caption = l_sfx->name;
     static const QRegularExpression l_regex("\"(.+)\"");
-    if (const auto l_match = l_regex.match(l_caption); l_match.hasMatch())
+    if(const auto l_match = l_regex.match(l_caption); l_match.hasMatch())
     {
       l_caption = l_match.captured(1);
     }

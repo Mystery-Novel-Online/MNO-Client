@@ -41,9 +41,9 @@ void RPLineEdit::refreshPosition()
 
 void RPLineEdit::refreshCSS()
 {
-  if (!set_stylesheet(this, "[" + m_friendlyName + "]", COURTROOM_STYLESHEETS_CSS, m_app))
+  if(!set_stylesheet(this, "[" + m_friendlyName + "]", COURTROOM_STYLESHEETS_CSS, m_app))
   {
-    if (!set_stylesheet(this, m_cssHeader, COURTROOM_STYLESHEETS_CSS, m_app))
+    if(!set_stylesheet(this, m_cssHeader, COURTROOM_STYLESHEETS_CSS, m_app))
     {
       if(!m_fallbackCSS.isEmpty()) this->setStyleSheet(m_fallbackCSS);
     }

@@ -9,7 +9,7 @@
 void AOApplication::append_note(QString p_line, QString p_file)
 {
   QFile f_log(p_file);
-  if (f_log.open(QIODevice::WriteOnly | QIODevice::Append))
+  if(f_log.open(QIODevice::WriteOnly | QIODevice::Append))
   {
     QTextStream out(&f_log);
 
@@ -32,23 +32,23 @@ QString AOApplication::read_ini(QString p_identifier, QString p_path)
 {
   QFile ini;
   ini.setFileName(p_path);
-  if (!ini.open(QIODevice::ReadOnly))
+  if(!ini.open(QIODevice::ReadOnly))
     return "";
 
   QTextStream in(&ini);
   QString result = "";
-  while (!in.atEnd())
+  while(!in.atEnd())
   {
     QString f_line = in.readLine().trimmed();
 
-    if (!f_line.startsWith(p_identifier))
+    if(!f_line.startsWith(p_identifier))
       continue;
 
     QStringList line_elements = f_line.split("=");
 
-    if (line_elements.at(0).trimmed() != p_identifier)
+    if(line_elements.at(0).trimmed() != p_identifier)
       continue;
-    if (line_elements.size() < 2)
+    if(line_elements.size() < 2)
       continue;
     result = line_elements.at(1).trimmed();
     break;
@@ -65,11 +65,11 @@ QPoint AOApplication::get_button_spacing(QString p_identifier, QString p_file)
   return_value.setY(0);
 
   QString f_result = read_theme_ini(p_identifier, p_file);
-  if (f_result.isEmpty())
+  if(f_result.isEmpty())
     return return_value;
 
   QStringList sub_line_elements = f_result.split(",");
-  if (sub_line_elements.size() < 2)
+  if(sub_line_elements.size() < 2)
     return return_value;
 
   return_value.setX(sub_line_elements.at(0).toInt());
@@ -82,7 +82,7 @@ int AOApplication::get_font_property(QString p_identifier, QString p_file)
 {
   QString f_result = read_theme_ini(p_identifier, p_file);
 
-  if (f_result.isEmpty())
+  if(f_result.isEmpty())
     return 0;
   return f_result.toInt();
 }
@@ -90,20 +90,20 @@ int AOApplication::get_font_property(QString p_identifier, QString p_file)
 std::optional<QColor> AOApplication::maybe_color(QString p_identifier, QString p_file)
 {
   const QString l_raw_color = read_theme_ini(p_identifier, p_file);
-  if (l_raw_color.isEmpty())
+  if(l_raw_color.isEmpty())
     return std::nullopt;
 
   const QStringList l_raw_light_list = l_raw_color.split(",");
-  if (l_raw_light_list.length() < 3)
+  if(l_raw_light_list.length() < 3)
     return std::nullopt;
 
   QColor r_color;
   r_color.setRed(l_raw_light_list.at(0).toInt());
   r_color.setGreen(l_raw_light_list.at(1).toInt());
   r_color.setBlue(l_raw_light_list.at(2).toInt());
-  if (l_raw_light_list.length() == 4)
+  if(l_raw_light_list.length() == 4)
     r_color.setAlpha(l_raw_light_list.at(3).toInt());
-  if (!r_color.isValid())
+  if(!r_color.isValid())
     return std::nullopt;
   return r_color;
 }
@@ -117,7 +117,7 @@ QString AOApplication::get_font_name(QString p_identifier, QString p_file)
 {
   QString f_result = read_theme_ini(p_identifier, p_file);
 
-  if (f_result.isEmpty())
+  if(f_result.isEmpty())
     qDebug() << "Failure retrieving font name";
 
   return f_result;
@@ -135,29 +135,29 @@ QString AOApplication::get_stylesheet(QString target_tag, QString p_file)
   // `p_file`.
 
   QString path = find_theme_asset_path(p_file);
-  if (path.isEmpty())
+  if(path.isEmpty())
     return "";
 
   QFile design_ini(path);
-  if (!design_ini.open(QIODevice::ReadOnly))
+  if(!design_ini.open(QIODevice::ReadOnly))
     return "";
 
   QTextStream in(&design_ini);
   QString f_text;
   bool tag_found = false;
 
-  while (!in.atEnd())
+  while(!in.atEnd())
   {
     QString line = in.readLine();
-    if (line.startsWith(target_tag, Qt::CaseInsensitive))
+    if(line.startsWith(target_tag, Qt::CaseInsensitive))
     {
       tag_found = true;
       continue;
     }
 
-    if (tag_found)
+    if(tag_found)
     {
-      if ((line.startsWith("[") && line.endsWith("]")))
+      if((line.startsWith("[") && line.endsWith("]")))
         break;
       f_text.append(line);
     }
@@ -180,7 +180,7 @@ QMap<DR::Color, DR::ColorInfo> AOApplication::get_chatmessage_colors()
   }
 
   QString path = find_theme_asset_path(COURTROOM_TEXT_COLOR_INI);
-  if (path.isEmpty())
+  if(path.isEmpty())
   {
     qInfo().noquote() << QString("[color] theme %1 is missing file: %2, using default colors instead")
                              .arg(QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")))
@@ -192,33 +192,33 @@ QMap<DR::Color, DR::ColorInfo> AOApplication::get_chatmessage_colors()
   QSettings color_settings(path, QSettings::IniFormat);
 
   QMap<QString, DR::ColorInfo> color_replacement_map;
-  for (QString &i_group : color_settings.childGroups())
+  for(QString &i_group : color_settings.childGroups())
   {
     const QString lower_name = i_group.toLower();
 
     color_settings.beginGroup(i_group);
-    if (!color_settings.contains("code"))
+    if(!color_settings.contains("code"))
       continue;
     const QString code = color_settings.value("code").toString().toLower();
 
-    if (!QColor::isValidColor(code))
+    if(!QColor::isValidColor(code))
     {
       qWarning().noquote() << QString("[color] for color %1: color code is invalid: %2").arg(lower_name).arg(code);
       continue;
     }
 
-    if (color_replacement_map.contains(lower_name))
+    if(color_replacement_map.contains(lower_name))
       qWarning().noquote() << QString("[color] color %1 is already defined, replacing anyway").arg(lower_name);
     color_replacement_map[lower_name].code = code.toLower();
     color_settings.endGroup();
   }
 
   // replace the data in the map we will return
-  for (DR::Color &i_color : color_map.keys())
+  for(DR::Color &i_color : color_map.keys())
   {
     DR::ColorInfo &color_info = color_map[i_color];
     const QString lower_name = color_info.name.toLower();
-    if (!color_replacement_map.contains(lower_name))
+    if(!color_replacement_map.contains(lower_name))
       continue;
     color_info.code = color_replacement_map[lower_name].code;
   }
@@ -238,30 +238,30 @@ QVector<QStringList> AOApplication::get_highlight_colors()
   }
 
   QString path = find_theme_asset_path(COURTROOM_CONFIG_INI);
-  if (path.isEmpty())
+  if(path.isEmpty())
     return QVector<QStringList>();
 
   QFile design_ini(path);
-  if (!design_ini.open(QIODevice::ReadOnly))
+  if(!design_ini.open(QIODevice::ReadOnly))
     return QVector<QStringList>();
 
   QTextStream in(&design_ini);
   bool tag_found = false;
   QVector<QStringList> f_vec;
 
-  while (!in.atEnd())
+  while(!in.atEnd())
   {
     QString line = in.readLine();
 
-    if (line.startsWith("[HIGHLIGHTS]", Qt::CaseInsensitive))
+    if(line.startsWith("[HIGHLIGHTS]", Qt::CaseInsensitive))
     {
       tag_found = true;
       continue;
     }
 
-    if (tag_found)
+    if(tag_found)
     {
-      if ((line.startsWith("[") && line.endsWith("]")))
+      if((line.startsWith("[") && line.endsWith("]")))
         break;
       // Syntax
       // OpenercharCloserchar = Color, Shown
@@ -270,9 +270,9 @@ QVector<QStringList> AOApplication::get_highlight_colors()
       QString chars = line.split("=")[0].trimmed();
       QString chars_parameters = line.mid(line.indexOf("=") + 1);
       QStringList parameters = chars_parameters.split(",");
-      for (int i = 0; i < parameters.size(); i++)
+      for(int i = 0; i < parameters.size(); i++)
         parameters[i] = parameters[i].trimmed();
-      if (parameters.size() == 1)
+      if(parameters.size() == 1)
         parameters.append("1");
       f_vec.append({chars, parameters[0], parameters[1]});
     }
@@ -289,34 +289,34 @@ QString AOApplication::get_spbutton(QString p_tag, int index)
   // COURTROOM_INI_CONFIG.
 
   QString path = find_theme_asset_path(COURTROOM_CONFIG_INI);
-  if (path.isEmpty())
+  if(path.isEmpty())
     return "";
 
   QFile design_ini(path);
-  if (!design_ini.open(QIODevice::ReadOnly))
+  if(!design_ini.open(QIODevice::ReadOnly))
     return "";
 
   QTextStream in(&design_ini);
   bool tag_found = false;
   QString res;
 
-  while (!in.atEnd())
+  while(!in.atEnd())
   {
     QString line = in.readLine();
 
-    if (line.startsWith(p_tag, Qt::CaseInsensitive))
+    if(line.startsWith(p_tag, Qt::CaseInsensitive))
     {
       tag_found = true;
       continue;
     }
 
-    if (tag_found)
+    if(tag_found)
     {
-      if ((line.startsWith("[") && line.endsWith("]")))
+      if((line.startsWith("[") && line.endsWith("]")))
         break;
 
       QStringList line_contents = line.split("=");
-      if (line_contents.at(0).trimmed() == QString::number(index))
+      if(line_contents.at(0).trimmed() == QString::number(index))
         res = line_contents.at(1);
     }
   }
@@ -335,27 +335,27 @@ QStringList AOApplication::get_sfx_list()
   QStringList r_sfx_list;
 
   QStringList l_file_list;
-  for (const QString &i_chr : get_char_include_tree(get_current_char()))
+  for(const QString &i_chr : get_char_include_tree(get_current_char()))
     l_file_list.append(engine::fs::characters::getFilePath(i_chr, CHARACTER_SOUNDS_INI));
 
   l_file_list.append(FS::Paths::FindFiles(CONFIG_SOUNDS_INI));
 
-  for (const QString &i_file_path : qAsConst(l_file_list))
+  for(const QString &i_file_path : qAsConst(l_file_list))
   {
     QFile l_file(i_file_path);
-    if (l_file.open(QIODevice::ReadOnly))
+    if(l_file.open(QIODevice::ReadOnly))
     {
       QTextStream l_in(&l_file);
-      while (!l_in.atEnd())
+      while(!l_in.atEnd())
         r_sfx_list.append(l_in.readLine());
     }
   }
 
   // remove blanks
-  for (int i = 0; i < r_sfx_list.length(); ++i)
+  for(int i = 0; i < r_sfx_list.length(); ++i)
   {
     const QString &l_line = r_sfx_list.at(i);
-    if (!l_line.trimmed().isEmpty())
+    if(!l_line.trimmed().isEmpty())
       continue;
     r_sfx_list.removeAt(i--);
   }
@@ -394,10 +394,10 @@ QStringList AOApplication::get_char_include(QString p_chr)
   QStringList r_list;
 
   QStringList l_queue{p_chr};
-  while (!l_queue.isEmpty())
+  while(!l_queue.isEmpty())
   {
     const QString l_target_chr = l_queue.takeFirst().trimmed();
-    if (r_list.contains(l_target_chr) || l_target_chr.isEmpty())
+    if(r_list.contains(l_target_chr) || l_target_chr.isEmpty())
       continue;
     r_list.append(l_target_chr);
     l_queue.append(read_char_ini(l_target_chr, "options", "include").toStringList());
@@ -432,8 +432,8 @@ QString AOApplication::get_chat(QString p_chr)
 QString drLookupKey(const QStringList &keyList, const QString &targetKey)
 {
   const QString finalTargetKey = targetKey.toLower();
-  for (const QString &i_key : qAsConst(keyList))
-    if (i_key.toLower() == finalTargetKey)
+  for(const QString &i_key : qAsConst(keyList))
+    if(i_key.toLower() == finalTargetKey)
       return i_key;
   return targetKey;
 }
@@ -446,7 +446,7 @@ QVector<ActorEmote> AOApplication::get_emote_list(QString p_chr)
 QStringList AOApplication::get_effect_offset(QString p_chr, int p_effect)
 {
   QStringList r_offset = read_char_ini(p_chr, "offsets", QString::number(p_effect)).toString().split(",");
-  while (r_offset.length() < 2)
+  while(r_offset.length() < 2)
     r_offset.append(nullptr);
   return r_offset;
 }
@@ -454,7 +454,7 @@ QStringList AOApplication::get_effect_offset(QString p_chr, int p_effect)
 QStringList AOApplication::get_overlay(QString p_chr, int p_overlay)
 {
   QStringList r_overlay = read_char_ini(p_chr, "overlay", QString::number(p_overlay)).toString().split("#");
-  while (r_overlay.length() < 2)
+  while(r_overlay.length() < 2)
     r_overlay.append(nullptr);
   return r_overlay;
 }
@@ -481,7 +481,7 @@ QString AOApplication::read_theme_ini(QString p_identifier, QString p_file)
   // 1. In the theme folder (gamemode-timeofday/main/default), look for
   // `p_identifier`.
   QString path = find_theme_asset_path(p_file);
-  if (path.isEmpty())
+  if(path.isEmpty())
     return "";
 
   return read_ini(p_identifier, path); // may be an empty string

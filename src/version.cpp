@@ -49,7 +49,7 @@ QString get_resource_file_text(QString filename)
   QString data;
 
   QFile file(filename);
-  if (!file.open(QIODevice::ReadOnly))
+  if(!file.open(QIODevice::ReadOnly))
   {
     return "";
   }
@@ -84,12 +84,12 @@ QString build_about_message()
                     .arg(QLatin1String(__DATE__))
                     .arg(QLatin1String(__TIME__));
 
-  if (git_branch.isEmpty())
+  if(git_branch.isEmpty())
     msg += QString("No git branch information available.<br>");
   else
     msg += QString("Built from git branch %1<br>").arg(git_branch);
 
-  if (git_hash.isEmpty())
+  if(git_hash.isEmpty())
     msg += QString("No git hash information available.");
   else
     msg += QString("Hash of the latest commit: %1").arg(git_hash);

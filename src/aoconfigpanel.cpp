@@ -269,7 +269,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(ui_device, SIGNAL(currentIndexChanged(int)), this, SLOT(on_device_current_index_changed(int)));
 
 
-  for (auto it = volumeSliderMap.constBegin(); it != volumeSliderMap.constEnd(); ++it)
+  for(auto it = volumeSliderMap.constBegin(); it != volumeSliderMap.constEnd(); ++it)
   {
     connect(it.key(), &QAbstractSlider::valueChanged, this, &AOConfigPanel::on_volume_value_changed);
   }
@@ -315,7 +315,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   // log
   ui_log_max_lines->setValue(m_config->log_max_lines());
 
-  if (m_config->log_is_topdown_enabled())
+  if(m_config->log_is_topdown_enabled())
   {
     ui_log_orientation_top_down->setChecked(true);
   }
@@ -345,7 +345,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
 
   connect(m_config, SIGNAL(sprite_caching_toggled(int, bool)), this, SLOT(set_sprite_caching_toggled(int, bool)));
   connect(this, SIGNAL(emit_sprite_caching_toggled(int, bool)), m_config, SLOT(set_sprite_caching(int, bool)));
-  for (auto it = m_cache_checkbox_map.cbegin(); it != m_cache_checkbox_map.cend(); ++it)
+  for(auto it = m_cache_checkbox_map.cbegin(); it != m_cache_checkbox_map.cend(); ++it)
   {
     QCheckBox *l_checkbox = it.value();
     connect(l_checkbox, SIGNAL(toggled(bool)), this, SLOT(handle_sprite_caching_toggled(bool)));
@@ -391,7 +391,7 @@ void AOConfigPanel::showEvent(QShowEvent *event)
 {
   QWidget::showEvent(event);
 
-  if (isVisible())
+  if(isVisible())
   {
     refresh_theme_list();
     refresh_packages_list();
@@ -401,7 +401,7 @@ void AOConfigPanel::showEvent(QShowEvent *event)
 void AOConfigPanel::refreshLanguageList()
 {
   wSettingsLanguage->clear();
-  for (const QString &r_langauge : localization::getAvailableLanguages())
+  for(const QString &r_langauge : localization::getAvailableLanguages())
   {
     wSettingsLanguage->addItem(r_langauge);
   }
@@ -415,7 +415,7 @@ void AOConfigPanel::refresh_packages_list()
   std::vector<std::string> packageNames = rolechat::fs::PackageManager::packageNames();
   std::vector<std::string> disabledPackages = rolechat::fs::PackageManager::disabledList();
 
-  for (const std::string &package : packageNames)
+  for(const std::string &package : packageNames)
   {
     QListWidgetItem* item = new QListWidgetItem(QString::fromStdString(package), ui_packages_list);
     item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
@@ -450,30 +450,30 @@ void AOConfigPanel::update_audio_device_list()
 
   std::optional<QString> l_prev_driver;
   std::optional<int> l_prev_driver_index;
-  if (ui_device->currentIndex() != -1)
+  if(ui_device->currentIndex() != -1)
     l_prev_driver = ui_device->currentData().toString();
   QSignalBlocker l_blocker(ui_device);
   ui_device->clear();
 
   std::optional<int> l_current_driver_index;
-  for (const DRAudioDevice &i_device : m_engine->get_device_list())
+  for(const DRAudioDevice &i_device : m_engine->get_device_list())
   {
-    if (!i_device.is_enabled())
+    if(!i_device.is_enabled())
       continue;
     ui_device->addItem(i_device.get_name(), i_device.get_driver());
     int l_item_index = ui_device->count() - 1;
 
     const QString l_device_driver = i_device.get_driver();
-    if (l_prev_driver.has_value() && l_prev_driver == l_device_driver)
+    if(l_prev_driver.has_value() && l_prev_driver == l_device_driver)
       l_prev_driver_index = l_item_index;
 
-    if (l_current_device.has_value() && l_current_device->get_driver() == l_device_driver)
+    if(l_current_device.has_value() && l_current_device->get_driver() == l_device_driver)
     {
       ui_device->setItemData(l_item_index, QColor(Qt::lightGray), Qt::BackgroundRole);
       l_current_driver_index = l_item_index;
     }
 
-    if (l_favorite_device.has_value() && l_favorite_device->get_driver() == l_device_driver)
+    if(l_favorite_device.has_value() && l_favorite_device->get_driver() == l_device_driver)
       ui_device->setItemData(l_item_index, QColor(Qt::green), Qt::BackgroundRole);
   }
   ui_device->setCurrentIndex(l_prev_driver_index.value_or(l_current_driver_index.value_or(0)));
@@ -597,13 +597,13 @@ void AOConfigPanel::on_log_is_topdown_changed(bool p_enabled)
 
 void AOConfigPanel::on_device_current_index_changed(int p_index)
 {
-  if (p_index == -1 || p_index >= ui_device->count())
+  if(p_index == -1 || p_index >= ui_device->count())
     return;
 
   const QString target_device_driver = ui_device->itemData(p_index).toString();
-  for (DRAudioDevice &i_device : m_engine->get_device_list())
+  for(DRAudioDevice &i_device : m_engine->get_device_list())
   {
-    if (target_device_driver == i_device.get_driver())
+    if(target_device_driver == i_device.get_driver())
     {
       m_config->set_favorite_device_driver(i_device.get_driver());
       break;
@@ -632,7 +632,7 @@ void AOConfigPanel::on_audio_device_list_changed(QVector<DRAudioDevice> p_device
 void AOConfigPanel::on_volume_value_changed(int p_num)
 {
   QSlider* slider = qobject_cast<QSlider*>(sender());
-  if (slider && volumeSliderMap.contains(slider)) {
+  if(slider && volumeSliderMap.contains(slider)) {
     QLabel* label = volumeSliderMap.value(slider);
     label->setText(QString::number(p_num) + "%");
   }
@@ -652,9 +652,9 @@ void AOConfigPanel::set_sprite_caching_toggled(int p_category, bool p_enabled)
 void AOConfigPanel::handle_sprite_caching_toggled(bool p_enabled)
 {
   QObject *l_sender = sender();
-  for (auto it = m_cache_checkbox_map.cbegin(); it != m_cache_checkbox_map.cend(); ++it)
+  for(auto it = m_cache_checkbox_map.cbegin(); it != m_cache_checkbox_map.cend(); ++it)
   {
-    if (l_sender == it.value())
+    if(l_sender == it.value())
     {
       emit emit_sprite_caching_toggled(it.key(), p_enabled);
       break;
@@ -700,7 +700,7 @@ void AOConfigPanel::updateTabsVisibility(const QModelIndex &current)
       {"About", {8}}
   };
 
-  for (int i = 0; i < tab_widget->count(); ++i) {
+  for(int i = 0; i < tab_widget->count(); ++i) {
     tab_widget->setTabVisible(i, false);
     tab_widget->setTabEnabled(i, false);
   }
@@ -708,21 +708,21 @@ void AOConfigPanel::updateTabsVisibility(const QModelIndex &current)
   tab_widget->setCurrentIndex(0);
 
   auto tabIt = tabInfoMap.find(selected);
-  if (tabIt == tabInfoMap.end())
+  if(tabIt == tabInfoMap.end())
     return;
 
-  if (tabInfoMap.find(selected) != tabInfoMap.end()) {
+  if(tabInfoMap.find(selected) != tabInfoMap.end()) {
     const QVector<int> info = tabInfoMap[selected];
-    for (int index : info)
+    for(int index : info)
     {
       tab_widget->setTabVisible(index, true);
       tab_widget->setTabEnabled(index, true);
     }
   }
 
-  if (dynamicTabs.contains(selected)) {
-    for (const QString& tabName : dynamicTabs[selected]) {
-      if (QWidget* tab = ConfigManager::retrieveTab<QWidget>(tabName)) {
+  if(dynamicTabs.contains(selected)) {
+    for(const QString& tabName : dynamicTabs[selected]) {
+      if(QWidget* tab = ConfigManager::retrieveTab<QWidget>(tabName)) {
         int index = tab_widget->addTab(tab, tabName);
         tab_widget->setTabVisible(index, true);
         tab_widget->setTabEnabled(index, true);

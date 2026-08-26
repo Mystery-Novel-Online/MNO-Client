@@ -21,11 +21,11 @@ QString DRServerInfo::to_info() const
 {
   QString r_info = "Unnamed Server";
 
-  if (!name.isEmpty())
+  if(!name.isEmpty())
   {
     r_info = name;
   }
-  else if (!address.isEmpty())
+  else if(!address.isEmpty())
   {
     r_info = to_address();
   }

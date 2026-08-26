@@ -29,7 +29,7 @@ namespace engine::system::theme
 
     RPRect dimensions = element.position;
 
-    if (dimensions.width < 0 || dimensions.height < 0)
+    if(dimensions.width < 0 || dimensions.height < 0)
     {
       qDebug() << "W: could not find" << identifier << "in " << (int)scene;
       dimensions = {0, 0, 0, 0};
@@ -54,11 +54,11 @@ namespace engine::system::theme
 
     QString f_result = AOApplication::getInstance()->read_theme_ini(identifier, LEGACY_DESIGN_INIS[scene]);
 
-    if (f_result.isEmpty()) return FALLBACK_DIMENSIONS;
+    if(f_result.isEmpty()) return FALLBACK_DIMENSIONS;
 
     QStringList sub_line_elements = f_result.split(",");
 
-    if (sub_line_elements.size() < 4) return FALLBACK_DIMENSIONS;
+    if(sub_line_elements.size() < 4) return FALLBACK_DIMENSIONS;
 
     RPRect return_value;
     return_value.x = sub_line_elements.at(0).toInt();
@@ -99,10 +99,10 @@ namespace engine::system::theme
 
   void setChatlogColour(const QString &f_identifier, QTextCharFormat &f_format)
   {
-    if (const std::optional<QColor> l_color = LegacyThemeManager::get().mCurrentThemeReader.getChatlogColor(f_identifier); l_color.has_value())
+    if(const std::optional<QColor> l_color = LegacyThemeManager::get().mCurrentThemeReader.getChatlogColor(f_identifier); l_color.has_value())
       f_format.setForeground(*l_color);
 
-    if (LegacyThemeManager::get().mCurrentThemeReader.getChatlogBool(f_identifier))
+    if(LegacyThemeManager::get().mCurrentThemeReader.getChatlogBool(f_identifier))
       f_format.setFontWeight(QFont::Bold);
   }
 

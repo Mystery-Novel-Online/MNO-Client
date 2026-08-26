@@ -26,10 +26,10 @@ QVector<QString> &FS::Packages::Scan()
   //Check for disabled packages configuration
   const QString iniPath = Paths::BasePath() + "packages.ini";
   QFile iniFile(iniPath);
-  if (!iniFile.open(QFile::ReadOnly)) return s_foundPackages;
+  if(!iniFile.open(QFile::ReadOnly)) return s_foundPackages;
 
   QTextStream in(&iniFile);
-  while (!in.atEnd())
+  while(!in.atEnd())
   {
     QString l_line = in.readLine().trimmed();
     if(s_foundPackages.contains(l_line)) s_disabledPackages.append(l_line);
@@ -54,7 +54,7 @@ void FS::Packages::SaveDisabled()
 
   iniFile.resize(0);
 
-  for (int i=0; i< s_disabledPackages.size(); i++)
+  for(int i=0; i< s_disabledPackages.size(); i++)
   {
     out << s_disabledPackages[i] << "\r\n";
   }

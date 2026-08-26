@@ -3,7 +3,7 @@
 AOPixmap::AOPixmap(QPixmap p_pixmap)
     : m_pixmap(p_pixmap)
 {
-  if (m_pixmap.isNull())
+  if(m_pixmap.isNull())
   {
     clear();
   }

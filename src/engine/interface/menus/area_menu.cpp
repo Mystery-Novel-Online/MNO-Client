@@ -16,7 +16,7 @@ void AreaMenu::OnMenuRequested(QPoint p_point)
 
   QListWidgetItem *l_item = areaList->currentItem();
 
-  if (l_item)
+  if(l_item)
   {
     const QString l_Area = l_item->text();
     if(l_Area.contains('-'))

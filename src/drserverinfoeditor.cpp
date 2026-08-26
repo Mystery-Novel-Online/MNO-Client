@@ -29,7 +29,7 @@ DRServerInfo DRServerInfoEditor::get_server_info()
   DRServerInfo l_server_info;
 
   l_server_info.name = ui_name->text();
-  if (l_server_info.name.isEmpty())
+  if(l_server_info.name.isEmpty())
     l_server_info.name = ui_name->placeholderText();
   l_server_info.description = ui_description->toPlainText();
   l_server_info.address = ui_address->text();

@@ -9,7 +9,7 @@ public:
   QStringList getWidgetNames()
   {
     QStringList l_returnValue = {};
-    for (auto it = m_Widgets.begin(); it != m_Widgets.end(); ++it) l_returnValue << it.key();
+    for(auto it = m_Widgets.begin(); it != m_Widgets.end(); ++it) l_returnValue << it.key();
 
     return l_returnValue;
   }

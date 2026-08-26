@@ -21,7 +21,7 @@ std::shared_ptr<DownloadTask> WorkshopDownloadManager::addTask(const QString &ur
 std::shared_ptr<DownloadTask> WorkshopDownloadManager::getTask(const QString &guid)
 {
   auto it = m_tasksMap.find(guid);
-  if (it != m_tasksMap.end()) {
+  if(it != m_tasksMap.end()) {
     return it->second;
   }
   return nullptr;
@@ -32,7 +32,7 @@ std::vector<std::shared_ptr<DownloadTask> > WorkshopDownloadManager::getAllTasks
   std::vector<std::shared_ptr<DownloadTask>> task_list;
   task_list.reserve(m_tasksMap.size());
 
-  for (const auto& [id, task_ptr] : m_tasksMap) {
+  for(const auto& [id, task_ptr] : m_tasksMap) {
     task_list.push_back(task_ptr);
   }
   return task_list;

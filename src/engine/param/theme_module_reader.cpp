@@ -165,7 +165,7 @@ ThemeScene *ThemeModuleReader::ParseScene(QString t_scene)
 
   ThemeScene *newScene = new ThemeScene();
 
-  for (const QString &key : mTargetObject.keys())
+  for(const QString &key : mTargetObject.keys())
   {
     QJsonObject obj = mTargetObject[key].toObject();
 

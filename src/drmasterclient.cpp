@@ -46,7 +46,7 @@ void DRMasterClient::request_server_list()
 
 void DRMasterClient::send_get_request(QString request, Delegate delegate)
 {
-  if (m_address.isEmpty())
+  if(m_address.isEmpty())
   {
     qWarning() << "error: address is undefined";
     return;
@@ -62,7 +62,7 @@ void DRMasterClient::send_get_request(QString request, Delegate delegate)
 void DRMasterClient::process_request()
 {
   QNetworkReply *l_reply = dynamic_cast<QNetworkReply *>(sender());
-  if (!l_reply)
+  if(!l_reply)
   {
     qCritical() << "error: sender is not expected object" << sender();
     return;
@@ -70,7 +70,7 @@ void DRMasterClient::process_request()
 
   QVariant l_data = l_reply->readAll();
   const QJsonDocument l_doc = QJsonDocument::fromJson(l_data.toByteArray());
-  if (!l_doc.isNull())
+  if(!l_doc.isNull())
     l_data = l_doc.toVariant();
 
   const Delegate l_delegate = m_pending_delegates.take(l_reply);
@@ -88,7 +88,7 @@ void DRMasterClient::process_server_list(QVariant p_data)
 {
   DRServerInfoList l_server_list;
   const QJsonArray l_json_array = p_data.toJsonArray();
-  for (const QJsonValue &i_value : l_json_array)
+  for(const QJsonValue &i_value : l_json_array)
   {
     const QJsonObject i_object = i_value.toObject();
     DRServerInfo l_server;

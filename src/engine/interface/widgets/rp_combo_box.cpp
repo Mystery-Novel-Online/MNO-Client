@@ -22,9 +22,9 @@ void RPComboBox::refreshPosition()
 
 void RPComboBox::refreshCSS()
 {
-  if (!set_stylesheet(this, "[" + mWidgetName + "]", COURTROOM_STYLESHEETS_CSS, ao_app))
+  if(!set_stylesheet(this, "[" + mWidgetName + "]", COURTROOM_STYLESHEETS_CSS, ao_app))
   {
-    if (!set_stylesheet(this, mLegacyCSSHeader, COURTROOM_STYLESHEETS_CSS, ao_app))
+    if(!set_stylesheet(this, mLegacyCSSHeader, COURTROOM_STYLESHEETS_CSS, ao_app))
     {
       this->setStyleSheet("");
     }

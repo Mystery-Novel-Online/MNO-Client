@@ -53,7 +53,7 @@ void ApiManager::login()
     bool isValid = false;
     std::string accessToken = "";
 
-    if (verifyReply->error() == QNetworkReply::NoError) {
+    if(verifyReply->error() == QNetworkReply::NoError) {
       QString dataString = verifyReply->readAll();
       qDebug() << dataString;
       nlohmann::json verifyResponse = nlohmann::json::parse(dataString.toStdString());
@@ -70,20 +70,20 @@ void ApiManager::login()
       {
         const auto& categories = verifyResponse["content_categories"];
 
-        for (auto it = categories.begin(); it != categories.end(); ++it)
+        for(auto it = categories.begin(); it != categories.end(); ++it)
         {
           int id = std::stoi(it.key());
           std::string name = it.value();
 
-          if (!name.empty())
+          if(!name.empty())
             m_categoryMap[id] = name;
         }
       }
 
-      if (verifyResponse.contains("collections") &&
+      if(verifyResponse.contains("collections") &&
           verifyResponse["collections"].is_array())
       {
-        for (const auto& item : verifyResponse["collections"]) {
+        for(const auto& item : verifyResponse["collections"]) {
           std::string colName = item.value("name", "");
           if(!colName.empty())
             m_collections.push_back(QString::fromStdString(colName));
@@ -133,7 +133,7 @@ bool ApiManager::loggedIn()
 bool ApiManager::appendFile(QHttpMultiPart *multipart, const QString &fieldName, const QString &filePath)
 {
   QFile* file = new QFile(filePath);
-  if (!file->open(QIODevice::ReadOnly))
+  if(!file->open(QIODevice::ReadOnly))
     return false;
 
   QHttpPart filePart;

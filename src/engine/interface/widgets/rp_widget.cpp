@@ -27,7 +27,7 @@ void RPWidget::setBackgroundImage(QString imageName)
   m_backgroundImage->move(0, 0);
   m_backgroundImage->resize(width(), height());
 
-  if (m_app->find_theme_asset_path(imageName, FS::Formats::SupportedImages()).isEmpty())
+  if(m_app->find_theme_asset_path(imageName, FS::Formats::SupportedImages()).isEmpty())
   {
     m_backgroundImage->stop();
     m_backgroundImage->hide();
@@ -48,14 +48,14 @@ void RPWidget::resetTransform()
 void RPWidget::mousePressEvent(QMouseEvent *event)
 {
   if(!m_dragEnabled) return;
-  if (event->button() == Qt::LeftButton)
+  if(event->button() == Qt::LeftButton)
     m_dragStartPosition = event->globalPos() - frameGeometry().topLeft();
 }
 
 void RPWidget::mouseMoveEvent(QMouseEvent *event)
 {
   if(!m_dragEnabled) return;
-  if (event->buttons() & Qt::LeftButton) {
+  if(event->buttons() & Qt::LeftButton) {
     move(event->globalPos() - m_dragStartPosition);
   }
 }

@@ -32,7 +32,7 @@ void DRTheme::InitTheme()
   {
     QString themePath = FS::Paths::FindDirectory("themes/" + currentThemeName, true, false);
 
-    if (FS::Checks::FileExists(themePath + "/" + gamemode + "/script.lua"))
+    if(FS::Checks::FileExists(themePath + "/" + gamemode + "/script.lua"))
       themePath += "/" + gamemode;
 
     ThemeScripting::InitializeLua(themePath);
@@ -389,11 +389,11 @@ QMap<DR::Color, DR::ColorInfo> DRTheme::get_chat_colors()
 
   QMap<QString, DR::ColorInfo> color_replacement_map = LegacyThemeManager::get().mCurrentThemeReader.GetColorsDefault();
 
-  for (DR::Color &i_color : color_map.keys())
+  for(DR::Color &i_color : color_map.keys())
   {
     DR::ColorInfo &color_info = color_map[i_color];
     const QString lower_name = color_info.name.toLower();
-    if (!color_replacement_map.contains(lower_name))
+    if(!color_replacement_map.contains(lower_name))
       continue;
     color_info.code = color_replacement_map[lower_name].code;
   }

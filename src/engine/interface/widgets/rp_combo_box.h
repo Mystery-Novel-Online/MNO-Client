@@ -21,7 +21,7 @@ public:
 protected:
   void wheelEvent(QWheelEvent *event) override
   {
-    if (m_wheelEnabled)
+    if(m_wheelEnabled)
       QComboBox::wheelEvent(event);
     else
       event->ignore();

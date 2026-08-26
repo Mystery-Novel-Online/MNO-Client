@@ -11,9 +11,9 @@ QString engine::fs::characters::getSpritePath(QString p_character, QString p_emo
 {
   bool l_valid = true;
 
-  for (const QString &i_black : SPRITE_PATH_DENYLIST)
+  for(const QString &i_black : SPRITE_PATH_DENYLIST)
   {
-    if (p_emote.startsWith(i_black, Qt::CaseInsensitive))
+    if(p_emote.startsWith(i_black, Qt::CaseInsensitive))
     {
       l_valid = false;
       break;
@@ -21,11 +21,11 @@ QString engine::fs::characters::getSpritePath(QString p_character, QString p_emo
   }
 
   QStringList l_file_name_list;
-  for (const QString &i_extension : FS::Formats::SupportedImages())
+  for(const QString &i_extension : FS::Formats::SupportedImages())
   {
-    if (!p_prefix.isEmpty())
+    if(!p_prefix.isEmpty())
     {
-      if (p_emote.contains("outfits/"))
+      if(p_emote.contains("outfits/"))
       {
         int lastSlashIndex = p_emote.lastIndexOf('/');
         l_file_name_list.append(p_emote.left(lastSlashIndex + 1) + p_prefix + p_emote.mid(lastSlashIndex + 1) + i_extension);
@@ -40,21 +40,21 @@ QString engine::fs::characters::getSpritePath(QString p_character, QString p_emo
   }
 
   QString l_file_path;
-  if (l_valid)
+  if(l_valid)
   {
     QStringList l_file_path_list;
-    for (const QString &i_chr_name : AOApplication::getInstance()->get_char_include_tree(p_character))
+    for(const QString &i_chr_name : AOApplication::getInstance()->get_char_include_tree(p_character))
     {
-      for (const QString &i_file_name : qAsConst(l_file_name_list))
+      for(const QString &i_file_name : qAsConst(l_file_name_list))
       {
         l_file_path_list.append(getFilePath(i_chr_name, i_file_name));
       }
     }
 
-    for (const QString &i_file_path : qAsConst(l_file_path_list))
+    for(const QString &i_file_path : qAsConst(l_file_path_list))
     {
       const QString l_resolved_file_path = AOApplication::getInstance()->find_asset_path(i_file_path);
-      if (!l_resolved_file_path.isEmpty())
+      if(!l_resolved_file_path.isEmpty())
       {
         l_file_path = l_resolved_file_path;
         break;
@@ -62,12 +62,12 @@ QString engine::fs::characters::getSpritePath(QString p_character, QString p_emo
     }
   }
 
-  if (l_file_path.isEmpty() && p_use_placeholder)
+  if(l_file_path.isEmpty() && p_use_placeholder)
   {
     l_file_path = AOApplication::getInstance()->find_theme_asset_path("placeholder", FS::Formats::AnimatedImages());
   }
 
-  if (l_file_path.isEmpty())
+  if(l_file_path.isEmpty())
   {
     qWarning() << "error: character animation not found"
                << "character:" << p_character << "emote:" << p_emote << "prefix:" << p_prefix;

@@ -96,7 +96,7 @@ bool DRPositionMap::load_file(QString p_filename)
 {
   QSettings l_settings(p_filename, QSettings::IniFormat);
   l_settings.setIniCodec("UTF-8");
-  if (l_settings.status() != QSettings::NoError)
+  if(l_settings.status() != QSettings::NoError)
   {
     qWarning() << "[Position Map]"
                << "warning:"
@@ -106,7 +106,7 @@ bool DRPositionMap::load_file(QString p_filename)
 
   QMap<QString, DRPosition> l_position_map;
   const QStringList l_group_list = l_settings.childGroups();
-  for (const QString &i_group : l_group_list)
+  for(const QString &i_group : l_group_list)
   {
     const QString l_lower_group = i_group.toLower();
     l_settings.beginGroup(i_group);

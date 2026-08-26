@@ -55,13 +55,13 @@ bool SpriteReaderSynchronizer::is_finished() const
 void SpriteReaderSynchronizer::set_threshold(int p_threshold)
 {
   p_threshold = qBound(0, p_threshold, 100);
-  if (m_threshold == p_threshold)
+  if(m_threshold == p_threshold)
   {
     return;
   }
   const int l_prev_threshold = m_threshold;
   m_threshold = p_threshold;
-  if (m_threshold < l_prev_threshold)
+  if(m_threshold < l_prev_threshold)
   {
     _p_check_progress();
   }
@@ -69,7 +69,7 @@ void SpriteReaderSynchronizer::set_threshold(int p_threshold)
 
 void SpriteReaderSynchronizer::add(mk2::SpriteReader::ptr p_reader)
 {
-  if (m_reader_list.contains(p_reader))
+  if(m_reader_list.contains(p_reader))
   {
     return;
   }
@@ -83,7 +83,7 @@ void SpriteReaderSynchronizer::clear()
 {
   m_waiting = false;
   m_finished = false;
-  for (const mk2::SpriteReader::ptr &i_reader : qAsConst(m_reader_list))
+  for(const mk2::SpriteReader::ptr &i_reader : qAsConst(m_reader_list))
   {
     i_reader->disconnect(this);
   }
@@ -93,7 +93,7 @@ void SpriteReaderSynchronizer::clear()
 void SpriteReaderSynchronizer::start()
 {
   m_waiting = true;
-  if (m_finished)
+  if(m_finished)
   {
     emit finished();
   }
@@ -105,22 +105,22 @@ void SpriteReaderSynchronizer::start()
 
 void SpriteReaderSynchronizer::_p_check_progress()
 {
-  if (m_finished || m_reader_list.isEmpty())
+  if(m_finished || m_reader_list.isEmpty())
   {
     return;
   }
 
-  for (const mk2::SpriteReader::ptr &i_reader : qAsConst(m_reader_list))
+  for(const mk2::SpriteReader::ptr &i_reader : qAsConst(m_reader_list))
   {
     // if the reader is invalid, it's the same as being fully loaded
-    if (i_reader->is_valid() && i_reader->get_loading_progress() < m_threshold)
+    if(i_reader->is_valid() && i_reader->get_loading_progress() < m_threshold)
     {
       return;
     }
   }
 
   m_finished = true;
-  if (m_waiting)
+  if(m_waiting)
   {
     emit finished();
   }

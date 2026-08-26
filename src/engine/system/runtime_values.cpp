@@ -22,7 +22,7 @@ std::string engine::runtime::values::resolveVariables(const std::string& input)
   QRegularExpression re(R"(\{([^}]+)\})");
   QRegularExpressionMatchIterator i = re.globalMatch(qInput);
 
-  while (i.hasNext())
+  while(i.hasNext())
   {
     QRegularExpressionMatch match = i.next();
     QString varName = match.captured(1);

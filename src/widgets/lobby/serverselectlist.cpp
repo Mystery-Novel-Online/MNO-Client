@@ -37,16 +37,16 @@ void ServerSelectList::addEntry(QString title)
 
 void ServerSelectList::setHidden(int id, bool state)
 {
-  for (int i = 0; i < m_layout->count(); ++i)
+  for(int i = 0; i < m_layout->count(); ++i)
   {
     QLayoutItem *child = m_layout->itemAt(i);
-    if (!child) continue;
+    if(!child) continue;
 
-    if (QWidget *w = child->widget())
+    if(QWidget *w = child->widget())
     {
-      if (ServerSelectEntry *entry = dynamic_cast<ServerSelectEntry *>(w))
+      if(ServerSelectEntry *entry = dynamic_cast<ServerSelectEntry *>(w))
       {
-        if (entry->id() == id)
+        if(entry->id() == id)
         {
           entry->setHidden(state);
           m_layout->update();
@@ -59,16 +59,16 @@ void ServerSelectList::setHidden(int id, bool state)
 
 void ServerSelectList::setIcon(int id, QString path)
 {
-  for (int i = 0; i < m_layout->count(); ++i)
+  for(int i = 0; i < m_layout->count(); ++i)
   {
     QLayoutItem *child = m_layout->itemAt(i);
-    if (!child) continue;
+    if(!child) continue;
 
-    if (QWidget *w = child->widget())
+    if(QWidget *w = child->widget())
     {
-      if (ServerSelectEntry *entry = dynamic_cast<ServerSelectEntry *>(w))
+      if(ServerSelectEntry *entry = dynamic_cast<ServerSelectEntry *>(w))
       {
-        if (entry->id() == id)
+        if(entry->id() == id)
         {
           entry->setIcon(path);
           return;
@@ -81,8 +81,8 @@ void ServerSelectList::setIcon(int id, QString path)
 void ServerSelectList::clearEntries()
 {
   QLayoutItem *child;
-  while ((child = m_layout->takeAt(0)) != nullptr) {
-    if (QWidget *w = child->widget())
+  while((child = m_layout->takeAt(0)) != nullptr) {
+    if(QWidget *w = child->widget())
       w->deleteLater();
     delete child;
   }

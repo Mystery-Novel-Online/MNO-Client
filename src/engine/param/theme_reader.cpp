@@ -12,9 +12,9 @@ void ThemeReader::LoadTheme(QString themeName)
   m_GameModeCollection["default"] = new ThemeModeReader(m_ThemeDirectory);
 
   QString gameModesPath = m_ThemeDirectory + "/gamemodes/";
-  for (const QString &i_folder : QDir(AOApplication::getInstance()->get_case_sensitive_path(gameModesPath)).entryList(QDir::Dirs))
+  for(const QString &i_folder : QDir(AOApplication::getInstance()->get_case_sensitive_path(gameModesPath)).entryList(QDir::Dirs))
   {
-    if (i_folder == "." || i_folder == "..")
+    if(i_folder == "." || i_folder == "..")
       continue;
     m_GameModeCollection[i_folder] = new ThemeModeReader(m_ThemeDirectory + "/gamemodes/" + i_folder);
   }
@@ -286,7 +286,7 @@ QVector<QStringList> ThemeReader::GetColorsHighlights()
   if(m_GameModeCurrent != nullptr && m_GameModeCurrent != m_GameModeCollection["default"])
   {
     QHashIterator<QString, ThemeHighlight> i(m_GameModeCurrent->GetFontColorsHighlights());
-    while (i.hasNext())
+    while(i.hasNext())
     {
       i.next();
       returnValue[i.key()].chars = i.value().chars;
@@ -311,7 +311,7 @@ QMap<QString, DR::ColorInfo> ThemeReader::GetColorsDefault()
   if(m_GameModeCurrent != nullptr && m_GameModeCurrent != m_GameModeCollection["default"])
   {
     QMapIterator<QString, DR::ColorInfo> i(m_GameModeCurrent->GetFontColorsDefault());
-    while (i.hasNext())
+    while(i.hasNext())
     {
       i.next();
       returnValue[i.key()].code = i.value().code;

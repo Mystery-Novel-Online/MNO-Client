@@ -102,7 +102,7 @@ void WorkshopListWidget::previousPage()
 
 void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
 {
-  if (reply->error() != QNetworkReply::NoError)
+  if(reply->error() != QNetworkReply::NoError)
   {
     qWarning() << "API request failed:" << reply->errorString();
     reply->deleteLater();
@@ -113,7 +113,7 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
   reply->deleteLater();
 
   QJsonDocument doc = QJsonDocument::fromJson(responseData);
-  if (!doc.object().value("contents").isArray())
+  if(!doc.object().value("contents").isArray())
   {
     qWarning() << "Invalid JSON received!";
     return;
@@ -128,9 +128,9 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
   m_pageCurrent = doc.object().value("page_current").toInt();
   m_pageTotal = doc.object().value("page_total").toInt();
   QJsonArray arr = doc.object().value("contents").toArray();
-  for (const QJsonValue &val : arr)
+  for(const QJsonValue &val : arr)
   {
-    if (!val.isObject()) continue;
+    if(!val.isObject()) continue;
 
     QJsonObject obj = val.toObject();
     WorkshopContentEntry newEntry = WorkshopParser::parseEntry(obj);
@@ -145,8 +145,8 @@ void WorkshopListWidget::handleApiReply(QNetworkReply *reply)
 void WorkshopListWidget::clearEntries()
 {
   QLayoutItem *child;
-  while ((child = m_layout->takeAt(0)) != nullptr) {
-    if (QWidget *w = child->widget())
+  while((child = m_layout->takeAt(0)) != nullptr) {
+    if(QWidget *w = child->widget())
       w->deleteLater();
     delete child;
   }

@@ -124,7 +124,7 @@ void ReplayWindow::onScrubberValue()
 
 void ReplayWindow::keyPressEvent(QKeyEvent *event)
 {
-  if (event->key() == Qt::Key_Space)
+  if(event->key() == Qt::Key_Space)
   {
     replays::playback::progress();
   }

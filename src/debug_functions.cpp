@@ -13,7 +13,7 @@ enum class MessageType
 bool drMessageBox(QString p_message, MessageType p_message_type)
 {
   AOConfig config;
-  if (!config.display_notification(p_message))
+  if(!config.display_notification(p_message))
     return QMessageBox::Accepted;
 
   QMessageBox message;
@@ -21,7 +21,7 @@ bool drMessageBox(QString p_message, MessageType p_message_type)
   message.setWindowTitle(l_is_notice ? "Notice" : "Warning");
   message.setIcon(l_is_notice ? QMessageBox::Information : QMessageBox::Warning);
   message.setText(p_message);
-  if (p_message_type == MessageType::Prompt)
+  if(p_message_type == MessageType::Prompt)
   {
     message.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
   }
@@ -31,7 +31,7 @@ bool drMessageBox(QString p_message, MessageType p_message_type)
   message.setCheckBox(show_again);
   message.exec();
 
-  if (!show_again->isChecked())
+  if(!show_again->isChecked())
     config.filter_notification(p_message);
   return message.result() == QMessageBox::Ok;
 }

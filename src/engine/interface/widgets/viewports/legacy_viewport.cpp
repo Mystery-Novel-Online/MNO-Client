@@ -113,7 +113,7 @@ void LegacyViewport::loadCurrentMessage()
   crossfadeRender();
 
   refreshBackground(message.backgroundPosition);
-  if (!m_videoScreen->isVisible()) m_videoScreen->show();
+  if(!m_videoScreen->isVisible()) m_videoScreen->show();
 
   crossfadeStart();
 
@@ -231,14 +231,14 @@ void LegacyViewport::onTypingDone()
 void LegacyViewport::onVideoDone()
 {
   emit videoDone();
-  if (m_videoScreen->isVisible()) m_videoScreen->hide();
+  if(m_videoScreen->isVisible()) m_videoScreen->hide();
 
   MessageMetadata &message = message::recentMessage();
   m_characterSprite->setHorizontalOffset(message.offsetHorizontal);
   m_characterSprite->setVerticalOffset(message.offsetVertical);
   m_characterSprite->processOverlays(message.characterLayers, message.characterFolder, message.characterEmote, message.characterOutfit);
 
-  if (message.characterShout.isEmpty())
+  if(message.characterShout.isEmpty())
   {
     onObjectionDone();
     return;

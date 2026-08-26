@@ -17,7 +17,7 @@ struct SpectralFrame { std::array<float, FINGERPRINT_BINS> bins{}; };
 double streamLength(HSTREAM& stream)
 {
   QWORD lengthBytes = BASS_ChannelGetLength(stream, BASS_POS_BYTE);
-  if (lengthBytes == (QWORD)-1) {
+  if(lengthBytes == (QWORD)-1) {
     return -1;
   }
   return BASS_ChannelBytes2Seconds(stream, lengthBytes);
@@ -42,11 +42,11 @@ void LoopDetection::FindLoop(QString fileName)
   progress.show();
 
   HSTREAM stream;
-  if (isUrl(fileName))
+  if(isUrl(fileName))
   {
     stream = BASS_StreamCreateURL(fileName.toUtf8().constData(), 0, BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT, nullptr, nullptr);
   }
-  else if (filePath.endsWith("opus", Qt::CaseInsensitive))
+  else if(filePath.endsWith("opus", Qt::CaseInsensitive))
   {
     stream = BASS_OPUS_StreamCreateFile(FALSE, filePath.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
   }
@@ -55,7 +55,7 @@ void LoopDetection::FindLoop(QString fileName)
     stream = BASS_StreamCreateFile(FALSE, filePath.utf16(), 0, 0, BASS_UNICODE | BASS_ASYNCFILE | BASS_STREAM_DECODE | BASS_STREAM_PRESCAN | BASS_SAMPLE_FLOAT);
   }
 
-  if (!stream) return;
+  if(!stream) return;
 
   double lengthSeconds = streamLength(stream);
 
@@ -66,7 +66,7 @@ void LoopDetection::FindLoop(QString fileName)
   }
 
   int numFrames = int(lengthSeconds * PIXELS_PER_SECOND);
-  if (numFrames <= 0) {
+  if(numFrames <= 0) {
     BASS_StreamFree(stream);
     return;
   }
@@ -75,7 +75,7 @@ void LoopDetection::FindLoop(QString fileName)
   std::vector<SpectralFrame> frames; frames.reserve(numFrames);
   std::vector<float> energies; energies.reserve(numFrames);
 
-  for (int frameIdx = 0; frameIdx < numFrames; ++frameIdx)
+  for(int frameIdx = 0; frameIdx < numFrames; ++frameIdx)
   {
     double timeSec = double(frameIdx) / double(numFrames) * lengthSeconds;
 
@@ -83,12 +83,12 @@ void LoopDetection::FindLoop(QString fileName)
     BASS_ChannelSetPosition(stream, pos, BASS_POS_BYTE);
 
     int read = BASS_ChannelGetData(stream, fft.data(), BASS_DATA_FFT2048);
-    if (read <= 0) continue;
+    if(read <= 0) continue;
 
     SpectralFrame frame{};
     float frameEnergy = 0.0f;
 
-    for (int y = 5; y < FFT_SIZE / 2; ++y)
+    for(int y = 5; y < FFT_SIZE / 2; ++y)
     {
       float mag = fft[y];
       frameEnergy += mag;
@@ -101,24 +101,24 @@ void LoopDetection::FindLoop(QString fileName)
     energies.push_back(frameEnergy);
 
     float sum = 0.0f;
-    for (float v : frame.bins) sum += v;
-    if (sum > 0.0f)
-      for (float& v : frame.bins) v /= sum;
+    for(float v : frame.bins) sum += v;
+    if(sum > 0.0f)
+      for(float& v : frame.bins) v /= sum;
 
-    if (!frames.empty()) {
-      for (int i = 0; i < FINGERPRINT_BINS; ++i)
+    if(!frames.empty()) {
+      for(int i = 0; i < FINGERPRINT_BINS; ++i)
         frame.bins[i] = SMOOTH_ALPHA * frame.bins[i] + (1.0f - SMOOTH_ALPHA) * frames.back().bins[i];
     }
 
     frames.push_back(frame);
 
-    if ((frameIdx & 7) == 0)
+    if((frameIdx & 7) == 0)
     {
       int percent = int(30.0f * frameIdx / float(numFrames));
       progress.setValue(percent);
       QCoreApplication::processEvents();
 
-      if (progress.wasCanceled())
+      if(progress.wasCanceled())
       {
         BASS_StreamFree(stream);
         return;
@@ -127,7 +127,7 @@ void LoopDetection::FindLoop(QString fileName)
   }
 
   int lastAudioFrame = frames.size() - 1;
-  while (lastAudioFrame > 0 && energies[lastAudioFrame] < SILENCE_THRESHOLD)
+  while(lastAudioFrame > 0 && energies[lastAudioFrame] < SILENCE_THRESHOLD)
     --lastAudioFrame;
 
   int minLoopFrames = MIN_LOOP_SECONDS * PIXELS_PER_SECOND;
@@ -135,39 +135,39 @@ void LoopDetection::FindLoop(QString fileName)
   float bestScore = std::numeric_limits<float>::max();
   int bestStart = 0, bestEnd = 0;
 
-  for (int start = 0; start < lastAudioFrame - minLoopFrames; ++start)
+  for(int start = 0; start < lastAudioFrame - minLoopFrames; ++start)
   {
-    if ((start & 15) == 0)
+    if((start & 15) == 0)
     {
       int percent = 30 + int(70.0f * start / float(lastAudioFrame - minLoopFrames));
       progress.setValue(percent);
       QCoreApplication::processEvents();
 
-      if (progress.wasCanceled())
+      if(progress.wasCanceled())
       {
         BASS_StreamFree(stream);
         return;
       }
     }
 
-    for (int end = start + minLoopFrames; end <= lastAudioFrame; ++end)
+    for(int end = start + minLoopFrames; end <= lastAudioFrame; ++end)
     {
       float dist = 0.0f;
 
-      for (int w = -LOOP_WINDOW; w <= LOOP_WINDOW; ++w)
+      for(int w = -LOOP_WINDOW; w <= LOOP_WINDOW; ++w)
       {
         int s = start + w;
         int e = end   + w;
 
-        if (s < 0 || e < 0 || s >= frames.size() || e >= frames.size())
+        if(s < 0 || e < 0 || s >= frames.size() || e >= frames.size())
           continue;
 
-        for (int i = 0; i < FINGERPRINT_BINS; ++i)
+        for(int i = 0; i < FINGERPRINT_BINS; ++i)
         {
           float d = frames[s].bins[i] - frames[e].bins[i];
           dist += d * d;
 
-          if (dist >= bestScore)
+          if(dist >= bestScore)
             goto next_candidate;
         }
 
@@ -178,7 +178,7 @@ void LoopDetection::FindLoop(QString fileName)
 
       dist *= 1.0f - 0.3f * float(end) / lastAudioFrame;
 
-      if (dist < bestScore)
+      if(dist < bestScore)
       {
         bestScore = dist;
         bestStart = start;

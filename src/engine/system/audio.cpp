@@ -45,7 +45,7 @@ namespace audio
   {
     s_AudioMuted = enabled;
 
-    for (auto &family : DRAudioEngine::get_family_list())
+    for(auto &family : DRAudioEngine::get_family_list())
     {
       family->set_suppressed(s_AudioMuted);
     }
@@ -53,8 +53,8 @@ namespace audio
 
   void StopAll()
   {
-    for (auto &family : DRAudioEngine::get_family_list())
-      for (auto &stream : family->get_stream_list())
+    for(auto &family : DRAudioEngine::get_family_list())
+      for(auto &stream : family->get_stream_list())
         stream->stop();
   }
 

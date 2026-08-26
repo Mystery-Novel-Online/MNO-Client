@@ -129,12 +129,12 @@ rolechat::actor::IActorData *engine::actor::user::switchCharacter(QString folder
   QString characterPath = engine::fs::characters::getDirectoryPath(folder);
 
   QFile characterAnimations(characterPath + "/animations.ini");
-  if (characterAnimations.open(QIODevice::ReadOnly | QIODevice::Text)) {
+  if(characterAnimations.open(QIODevice::ReadOnly | QIODevice::Text)) {
     QTextStream in(&characterAnimations);
-    while (!in.atEnd())
+    while(!in.atEnd())
     {
       QString line = in.readLine().trimmed();
-      if (!line.isEmpty()) animations.append(line);
+      if(!line.isEmpty()) animations.append(line);
     }
     characterAnimations.close();
   }
@@ -146,12 +146,12 @@ rolechat::actor::IActorData *engine::actor::user::switchCharacter(QString folder
   for(const QString &animationIniPath : FS::Paths::FindFiles("configs/animations.ini"))
   {
     QFile file(animationIniPath);
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if(file.open(QIODevice::ReadOnly | QIODevice::Text)) {
       QTextStream in(&file);
-      while (!in.atEnd())
+      while(!in.atEnd())
       {
         QString line = in.readLine().trimmed();
-        if (!line.isEmpty()) animations.append(line);
+        if(!line.isEmpty()) animations.append(line);
       }
       file.close();
     }
@@ -167,7 +167,7 @@ rolechat::actor::IActorData *engine::actor::user::switchCharacter(QString folder
   {
     const std::vector<std::string>& outfits = actor->outfitNames();
     QStringList l_charaOutfits;
-    for (const std::string& outfit : outfits)
+    for(const std::string& outfit : outfits)
     {
       l_charaOutfits << QString::fromStdString(outfit);
     }
@@ -182,7 +182,7 @@ void engine::actor::user::setOutfitList(QStringList outfits)
 {
   QWidget *l_outfitSelectorWidget = LegacyThemeManager::get().getWidget("outfit_selector");
 
-  if (dynamic_cast<QComboBox*>(l_outfitSelectorWidget) != nullptr)
+  if(dynamic_cast<QComboBox*>(l_outfitSelectorWidget) != nullptr)
   {
     QComboBox* l_outfitSelectorCombo = dynamic_cast<QComboBox*>(l_outfitSelectorWidget);
     l_outfitSelectorCombo->clear();
@@ -195,18 +195,18 @@ bool engine::actor::user::isModified(const std::string &name)
 {
   const QString folderPath = engine::fs::characters::getDirectoryPath(QString::fromStdString(name));
 
-  if (folderPath.isEmpty())
+  if(folderPath.isEmpty())
     return false;
 
   QDir root(folderPath);
-  if (!root.exists())
+  if(!root.exists())
     return false;
 
   std::vector<QFileInfo> jsonFiles;
   QList<QDir> stack;
   stack.append(root);
 
-  while (!stack.isEmpty())
+  while(!stack.isEmpty())
   {
     QDir dir = stack.takeLast();
 
@@ -215,14 +215,14 @@ bool engine::actor::user::isModified(const std::string &name)
         QDir::Files | QDir::Readable
         );
 
-    for (const QFileInfo &info : files)
+    for(const QFileInfo &info : files)
       jsonFiles.push_back(info);
 
     QFileInfoList subdirs = dir.entryInfoList(
         QDir::Dirs | QDir::NoDotAndDotDot
         );
 
-    for (const QFileInfo &sd : subdirs)
+    for(const QFileInfo &sd : subdirs)
       stack.append(QDir(sd.absoluteFilePath()));
   }
 
@@ -231,7 +231,7 @@ bool engine::actor::user::isModified(const std::string &name)
 
   std::unordered_map<QString, QDateTime> newState;
 
-  for (const QFileInfo &info : jsonFiles)
+  for(const QFileInfo &info : jsonFiles)
   {
     QString path = info.absoluteFilePath();
     QDateTime lastMod = info.lastModified();
@@ -239,20 +239,20 @@ bool engine::actor::user::isModified(const std::string &name)
 
     auto it = prevState.find(path);
 
-    if (it == prevState.end())
+    if(it == prevState.end())
     {
       modified = true;
     }
     else
     {
-      if (lastMod > it->second)
+      if(lastMod > it->second)
         modified = true;
     }
   }
 
-  for (const auto &prev : prevState)
+  for(const auto &prev : prevState)
   {
-    if (newState.find(prev.first) == newState.end())
+    if(newState.find(prev.first) == newState.end())
     {
       modified = true;
       break;

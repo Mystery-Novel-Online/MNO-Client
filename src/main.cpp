@@ -21,17 +21,17 @@ int main(int argc, char *argv[])
   qInfo() << "Starting Mystery Novel Network...";
 
   bool l_dpi_scaling = false;
-  for (int i = 0; i < argc; ++i)
+  for(int i = 0; i < argc; ++i)
   {
     const QString l_arg(argv[i]);
 
-    if (l_arg == "-dpiscaling")
+    if(l_arg == "-dpiscaling")
     {
       l_dpi_scaling = true;
     }
   }
 
-  if (l_dpi_scaling)
+  if(l_dpi_scaling)
   {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   }
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
     //logger::shutdown();
 
-    if (l_config.autosave())
+    if(l_config.autosave())
     {
       l_config.save_file();
     }

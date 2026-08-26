@@ -18,12 +18,12 @@ DRStickerViewer::~DRStickerViewer()
 
 void DRStickerViewer::set_hide_when_done(bool p_enabled)
 {
-  if (m_hide_when_done == p_enabled)
+  if(m_hide_when_done == p_enabled)
   {
     return;
   }
   m_hide_when_done = p_enabled;
-  if (!is_running())
+  if(!is_running())
   {
     maybe_hide();
   }
@@ -36,7 +36,7 @@ void DRStickerViewer::set_theme_image(QString p_file_name)
 
 void DRStickerViewer::maybe_hide()
 {
-  if (m_hide_when_done)
+  if(m_hide_when_done)
   {
     hide();
   }
@@ -69,13 +69,13 @@ void DRStickerViewer::set_chatbox_image(QString p_chatbox_name, bool p_is_self, 
 
 
   QString l_target_file = ao_app->find_asset_path(FS::Paths::BasePath() + "misc/" + p_chatbox_name + ".png");
-  if (l_target_file.isEmpty())
+  if(l_target_file.isEmpty())
   {
 
     for(QString chatbox_type : targetChatboxes)
     {
       l_target_file = ao_app->find_theme_asset_path(chatbox_type, FS::Formats::SupportedImages());
-      if (!l_target_file.isEmpty())
+      if(!l_target_file.isEmpty())
       {
         break;
       }
@@ -83,7 +83,7 @@ void DRStickerViewer::set_chatbox_image(QString p_chatbox_name, bool p_is_self, 
 
   }
 
-  if (l_target_file.isEmpty())
+  if(l_target_file.isEmpty())
   {
     qWarning() << "warning: could not retrieve any chatbox image, will display blank";
   }

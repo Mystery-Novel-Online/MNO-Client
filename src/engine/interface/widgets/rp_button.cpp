@@ -45,7 +45,7 @@ void RPButton::set_image(QString p_image)
   // Get the path of the found image without the extension
   const QString l_image_name = p_image.left(p_image.lastIndexOf(QChar('.')));
   QString l_hover_image = m_app->find_theme_asset_path(l_image_name + "_hover.png").replace('\\', '/');
-  if (l_hover_image.isEmpty())
+  if(l_hover_image.isEmpty())
   {
     l_hover_image = m_image;
   }
@@ -63,7 +63,7 @@ void RPButton::set_theme_image(QString widgetName, QString p_image, QString scen
   m_friendlyName = widgetName;
   m_targetScene = scene;
   set_image(m_app->current_theme->get_widget_image(widgetName, p_image, scene));
-  if (get_image().isEmpty()) setText(fallbackText);
+  if(get_image().isEmpty()) setText(fallbackText);
   else setText("");
   m_fallbackText = fallbackText;
 }
@@ -71,7 +71,7 @@ void RPButton::set_theme_image(QString widgetName, QString p_image, QString scen
 void RPButton::set_theme_image()
 {
   set_image(m_app->current_theme->get_widget_image(m_friendlyName, m_fallbackImage, m_targetScene));
-  if (get_image().isEmpty()) setText(m_fallbackText);
+  if(get_image().isEmpty()) setText(m_fallbackText);
   else setText("");
 }
 

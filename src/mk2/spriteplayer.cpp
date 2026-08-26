@@ -103,7 +103,7 @@ double SpritePlayer::getScaledAmount() const
 
 void SpritePlayer::set_file_name(QString p_file_name)
 {
-  if (!p_file_name.isEmpty() && p_file_name == get_file_name())
+  if(!p_file_name.isEmpty() && p_file_name == get_file_name())
   {
     return;
   }
@@ -121,7 +121,7 @@ void SpritePlayer::set_device(QIODevice *p_device)
   m_reader->set_device(p_device);
   m_frame_count = m_reader->get_frame_count();
   const QString l_file_name = get_file_name();
-  if (l_file_name != l_prev_file_name)
+  if(l_file_name != l_prev_file_name)
   {
     emit file_name_changed(l_file_name);
   }
@@ -139,7 +139,7 @@ void SpritePlayer::set_mirror(bool p_enabled)
 
 void SpritePlayer::set_scaling_mode(rolechat::actor::ActorScalingMode scaling_mode)
 {
-  if (m_scaling_mode == scaling_mode)
+  if(m_scaling_mode == scaling_mode)
   {
     return;
   }
@@ -150,7 +150,7 @@ void SpritePlayer::set_scaling_mode(rolechat::actor::ActorScalingMode scaling_mo
 
 void SpritePlayer::set_size(QSize p_size)
 {
-  if (m_size == p_size)
+  if(m_size == p_size)
   {
     return;
   }
@@ -169,14 +169,14 @@ void SpritePlayer::set_reader(SpriteReader::ptr p_reader)
 {
   const QString l_prev_file_name = get_file_name();
   stop();
-  if (p_reader == nullptr)
+  if(p_reader == nullptr)
   {
     p_reader = SpriteReader::ptr(new SpriteDynamicReader);
   }
   m_reader = p_reader;
   m_frame_count = m_reader->get_frame_count();
   const QString l_file_name = get_file_name();
-  if (l_file_name != l_prev_file_name)
+  if(l_file_name != l_prev_file_name)
   {
     emit file_name_changed(l_file_name);
   }
@@ -292,11 +292,11 @@ void SpritePlayer::resolve_scaling_mode(rolechat::actor::ActorScalingMode scalin
   m_resolved_scaling_mode = m_scaling_mode;
 
   const QSize l_image_size = m_reader->get_sprite_size();
-  if (m_size == l_image_size || !l_image_size.isValid())
+  if(m_size == l_image_size || !l_image_size.isValid())
   {
     m_resolved_scaling_mode = rolechat::actor::ActorScalingMode::NoScaling;
   }
-  else if (m_resolved_scaling_mode == rolechat::actor::ActorScalingMode::DynamicScaling)
+  else if(m_resolved_scaling_mode == rolechat::actor::ActorScalingMode::DynamicScaling)
   {
     const qreal l_width_factor = (qreal)qMax(l_image_size.width(), 1) / qMax(m_size.width(), 1);
     const qreal l_height_factor = (qreal)qMax(l_image_size.height(), 1) / qMax(m_size.height(), 1);
@@ -310,11 +310,11 @@ void SpritePlayer::resolve_scaling_mode(rolechat::actor::ActorScalingMode scalin
         int((qreal)l_image_size.height() / l_height_factor),
     };
 
-    if (l_by_width_size.height() >= m_size.height())
+    if(l_by_width_size.height() >= m_size.height())
     {
       m_resolved_scaling_mode = rolechat::actor::ActorScalingMode::WidthScaling;
     }
-    else if (l_by_height_size.width() >= m_size.width())
+    else if(l_by_height_size.width() >= m_size.width())
     {
       m_resolved_scaling_mode = rolechat::actor::ActorScalingMode::HeightScaling;
     }
@@ -325,7 +325,7 @@ void SpritePlayer::resolve_scaling_mode(rolechat::actor::ActorScalingMode scalin
   }
 
   m_transform = Qt::SmoothTransformation;
-  if (l_image_size.width() < m_size.width() || l_image_size.height() < m_size.height())
+  if(l_image_size.width() < m_size.width() || l_image_size.height() < m_size.height())
   {
     m_transform = Qt::FastTransformation;
   }
@@ -336,9 +336,9 @@ void SpritePlayer::fetch_next_frame()
   QElapsedTimer l_timer;
   l_timer.start();
 
-  if (!is_valid())
+  if(!is_valid())
   {
-    if (m_running && m_play_once)
+    if(m_running && m_play_once)
     {
       m_running = false;
       emit finished();
@@ -347,21 +347,21 @@ void SpritePlayer::fetch_next_frame()
     return;
   }
 
-  if (!m_running)
+  if(!m_running)
   {
     return;
   }
 
-  if (m_frame_number >= m_frame_count)
+  if(m_frame_number >= m_frame_count)
   {
-    if (m_play_once)
+    if(m_play_once)
     {
       m_running = false;
       emit finished();
       return;
     }
 
-    if (m_frame_count > 1)
+    if(m_frame_count > 1)
     {
       m_frame_number = 0;
     }
@@ -378,11 +378,11 @@ void SpritePlayer::fetch_next_frame()
   scale_current_frame();
 
   const int l_next_delay = qMax(0, int(m_current_frame.delay - l_timer.elapsed()));
-  if (l_next_delay == 0 && m_frame_count == 1)
+  if(l_next_delay == 0 && m_frame_count == 1)
   {
     m_running = false;
 
-    if (m_play_once)
+    if(m_play_once)
     {
       emit finished();
     }
@@ -398,7 +398,7 @@ void SpritePlayer::scale_current_frame()
   QImage l_image = m_current_frame.image;
   QSizeF originalSize = l_image.size();
 
-  if (l_image.isNull())
+  if(l_image.isNull())
     return;
 
   QImage composed(l_image.size(), QImage::Format_ARGB32_Premultiplied);
@@ -409,9 +409,9 @@ void SpritePlayer::scale_current_frame()
 
   QList<SpriteLayer*> overlayQueue = {};
 
-  for (SpriteLayer* layer : m_layerPlayers)
+  for(SpriteLayer* layer : m_layerPlayers)
   {
-    if (!layer) continue;
+    if(!layer) continue;
     if(layer->layerPosition() != "below" && layer->layerPosition() != "behind" && layer->layerPosition() != "beneath")
     {
       overlayQueue.append(layer);
@@ -419,7 +419,7 @@ void SpritePlayer::scale_current_frame()
     }
 
     QImage layerImg = layer->spritePlayerReference()->get_current_native_frame();
-    if (!layerImg.isNull())
+    if(!layerImg.isNull())
     {
       combiner.drawImage(layer->targetRect.x(), layer->targetRect.y(), layerImg);
     }
@@ -435,10 +435,10 @@ void SpritePlayer::scale_current_frame()
     combiner.restore();
   }
 
-  for (SpriteLayer* layer : overlayQueue)
+  for(SpriteLayer* layer : overlayQueue)
   {
     QImage layerImg = layer->spritePlayerReference()->get_current_native_frame();
-    if (!layerImg.isNull())
+    if(!layerImg.isNull())
     {
       combiner.drawImage(layer->targetRect, layerImg);
     }
@@ -465,7 +465,7 @@ void SpritePlayer::scale_current_frame()
     case rolechat::actor::ActorScalingMode::WidthPixelScaling:
     {
       const int originalWidth = composed.width();
-      if (originalWidth > 0)
+      if(originalWidth > 0)
       {
         int idealWidth = int(m_size.width() * m_scale);
 
@@ -480,7 +480,7 @@ void SpritePlayer::scale_current_frame()
 
   m_overallScale = static_cast<double>(composed.width()) / originalSize.width();
 
-  if (m_mirror)
+  if(m_mirror)
     composed = composed.mirrored(true, false);
 
   m_scaled_current_frame = composed;

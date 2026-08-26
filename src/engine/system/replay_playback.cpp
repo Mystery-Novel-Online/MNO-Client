@@ -79,7 +79,7 @@ namespace engine::system::replays
         rNewOperations["time"] = operation.timestamp;
 
         QMap<QString, QString>::const_iterator i;
-        for (i = operation.variables.constBegin(); i != operation.variables.constEnd(); ++i)
+        for(i = operation.variables.constBegin(); i != operation.variables.constEnd(); ++i)
           rNewOperations[i.key()] = i.value();
 
         replayOperations.append(rNewOperations);
@@ -92,7 +92,7 @@ namespace engine::system::replays
 
       QFile file(s_outputPath);
 
-      if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+      if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
       {
         qDebug() << "Failed to open file for writing.";
         return;

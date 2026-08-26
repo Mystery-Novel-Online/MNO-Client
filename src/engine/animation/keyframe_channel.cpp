@@ -16,16 +16,16 @@ void KeyframeChannel<T>::Cache(int frameRate) const
 template<typename T>
 void KeyframeChannel<T>::Evaluate(float time, QVariant &outValue) const
 {
-  if (m_Keyframes.empty()) return;
+  if(m_Keyframes.empty()) return;
 
   auto next = m_Keyframes.lower_bound(time);
 
-  if (next == m_Keyframes.begin()) {
+  if(next == m_Keyframes.begin()) {
     outValue = QVariant::fromValue(next->second.value);
     return;
   }
 
-  if (next == m_Keyframes.end()) {
+  if(next == m_Keyframes.end()) {
     outValue = QVariant::fromValue(std::prev(next)->second.value);
     return;
   }
@@ -56,14 +56,14 @@ const float KeyframeChannel<T>::GetLength() const
 template<typename T>
 float KeyframeChannel<T>::ApplyCurve(float t, KeyframeCurve curve)
 {
-  if (curve == CurveLinear) return t;
-  if (curve == CurveEase) {
+  if(curve == CurveLinear) return t;
+  if(curve == CurveEase) {
     return t < 0.5f ? 2.0f * t * t : 1.0f - 2.0f * (1.0f - t) * (1.0f - t);
   }
-  if (curve == CurveBezier) {
+  if(curve == CurveBezier) {
     return t * t * (3.0f - 2.0f * t);
   }
-  if (curve == CurveParametric) {
+  if(curve == CurveParametric) {
     return (t * t) / (2.0f * (t * t - t) + 1.0f);
   }
   return t;

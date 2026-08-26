@@ -34,7 +34,7 @@ const QStringList &DRPacket::get_content() const
 QString DRPacket::to_string(const bool p_encode) const
 {
   QString r_data;
-  for (const QString &i_value : qAsConst(m_content))
+  for(const QString &i_value : qAsConst(m_content))
     r_data += (p_encode ? encode(i_value) : i_value) + "#";
   return m_header + "#" + r_data + "%";
 }

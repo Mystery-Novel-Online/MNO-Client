@@ -61,7 +61,7 @@ QString ApplicationPath()
 {
 #ifdef Q_OS_MACOS
   QDir l_mac_path(QCoreApplication::applicationDirPath());
-  for (int i = 0; i < 3; ++i) // equivalent of "/../../.."
+  for(int i = 0; i < 3; ++i) // equivalent of "/../../.."
     l_mac_path.cdUp();
   return l_mac_path.canonicalPath();
 #else
@@ -96,7 +96,7 @@ QString FindFile(const QString &filePath, bool allowPackages, const QStringList 
   for(std::string &packageName : packageNames)
   {
     auto it = std::find(disabledList.begin(), disabledList.end(), packageName);
-    if (it == disabledList.end())
+    if(it == disabledList.end())
     {
       for(const QString& path : appendedFileList)
       {
@@ -131,7 +131,7 @@ QString FindDirectory(const QString &directoryPath, bool allowPackages, bool abs
   //QVector<QString> packageNames = Packages::CachedNames();
   //QVector<QString> disabledList = Packages::DisabledList();
 
-  //for (int i=0; i< packageNames.size(); i++)
+  //for(int i=0; i< packageNames.size(); i++)
   //{
   //  if(!disabledList.contains(packageNames.at(i)))
   //  {
@@ -154,9 +154,9 @@ QStringList GetFileList(const QString &directoryPath, bool includePackages, cons
   QDir targetDirectory("base/" + directoryPath);
   QStringList fileList = targetDirectory.entryList(QStringList() << "*." + extensionFilter, QDir::Files);
 
-  for (const QString &fileName : fileList)
+  for(const QString &fileName : fileList)
   {
-    if (includeExtension)
+    if(includeExtension)
       returnValues.append(fileName);
     else
       returnValues.append(fileName.left(fileName.lastIndexOf('.')));
@@ -171,9 +171,9 @@ QStringList GetFileList(const QString &directoryPath, bool includePackages, cons
     {
       QDir targetDirectory("packages/" + QString::fromStdString(packageName) + "/" + directoryPath);
       QStringList fileList = targetDirectory.entryList(QStringList() << "*." + extensionFilter, QDir::Files);
-      for (const QString &fileName : fileList)
+      for(const QString &fileName : fileList)
       {
-        if (includeExtension)
+        if(includeExtension)
           returnValues.append(fileName);
         else
           returnValues.append(fileName.left(fileName.lastIndexOf('.')));
@@ -190,7 +190,7 @@ QStringList GetDirectoryList(const QString &directoryPath, bool includePackages)
 
   QDir targetDirectory("base/" + directoryPath);
   QStringList subDirectories = targetDirectory.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-  for (const QString &directoryName : subDirectories)
+  for(const QString &directoryName : subDirectories)
   {
     returnValues.append(directoryName);
   }
@@ -212,9 +212,9 @@ QStringList GetFileList(const QString &directoryPath, const QString &packageName
   QDir targetDirectory("packages/" + packageName + "/" + directoryPath);
   QStringList fileList = targetDirectory.entryList(QStringList() << "*." + extensionFilter, QDir::Files);
 
-  for (const QString &fileName : fileList)
+  for(const QString &fileName : fileList)
   {
-    if (includeExtension)
+    if(includeExtension)
       returnValues.append(fileName);
     else
       returnValues.append(fileName.left(fileName.lastIndexOf('.')));
@@ -227,30 +227,30 @@ QString FindFile(const QStringList &filePaths, bool allowPackages, const QString
 {
   QStringList allCandidatePaths;
 
-  for (const QString &filePath : filePaths)
+  for(const QString &filePath : filePaths)
   {
     allCandidatePaths.append(filePath);
-    for (const QString &extension : extensions)
+    for(const QString &extension : extensions)
     {
       allCandidatePaths.append(filePath + extension);
     }
   }
 
-  if (allowPackages)
+  if(allowPackages)
   {
     std::vector<std::string> packageNames = rolechat::fs::PackageManager::packageNames();
     std::vector<std::string> disabledList = rolechat::fs::PackageManager::disabledList();
 
-    for (const std::string &packageName : packageNames)
+    for(const std::string &packageName : packageNames)
     {
 
       auto it = std::find(disabledList.begin(), disabledList.end(), packageName);
-      if (it == disabledList.end())
+      if(it == disabledList.end())
       {
-        for (const QString &path : allCandidatePaths)
+        for(const QString &path : allCandidatePaths)
         {
           std::string packagePath = rolechat::fs::RCDir::packagePath(packageName) + path.toStdString();
-          if (rolechat::fs::RCFile::exists(packagePath))
+          if(rolechat::fs::RCFile::exists(packagePath))
             return QString::fromStdString(packagePath);
 
         }
@@ -258,10 +258,10 @@ QString FindFile(const QStringList &filePaths, bool allowPackages, const QString
     }
   }
 
-  for (const QString &path : allCandidatePaths)
+  for(const QString &path : allCandidatePaths)
   {
     QString basePath = BasePath() + path;
-    if (Checks::FileExists(basePath))
+    if(Checks::FileExists(basePath))
     {
       return basePath;
     }

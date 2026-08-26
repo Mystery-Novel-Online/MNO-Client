@@ -31,11 +31,11 @@ void AOApplication::reload_packages()
   QString packagesPath = FS::Paths::ApplicationPath() + "/packages/";
 
   QDir baseCharactersDir (FS::Paths::BasePath() + "/characters");
-  if (baseCharactersDir.exists())
+  if(baseCharactersDir.exists())
   {
     QVector<ActorSelectEntry> baseCharacters;
     QStringList character_folders = baseCharactersDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-    for (const QString &character_folder : character_folders)
+    for(const QString &character_folder : character_folders)
     {
       ActorSelectEntry packageChar;
       packageChar.name = character_folder.toStdString();
@@ -48,11 +48,11 @@ void AOApplication::reload_packages()
   {
     QString qPackageName = QString::fromStdString(packageName);
     QDir charactersPath (packagesPath + qPackageName + "/characters");
-    if (charactersPath.exists())
+    if(charactersPath.exists())
     {
       QVector<ActorSelectEntry> packageCharacters;
       QStringList character_folders = charactersPath.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
-      for (const QString &character_folder : character_folders)
+      for(const QString &character_folder : character_folders)
       {
         ActorSelectEntry packageChar;
         packageChar.name = character_folder.toStdString();
@@ -62,7 +62,7 @@ void AOApplication::reload_packages()
     }
 
     const QDir replaysDir(packagesPath + qPackageName + "/replays");
-    if (replaysDir.exists())
+    if(replaysDir.exists())
     {
       const QStringList replayFolders = replaysDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
       engine::system::replays::io::cachePackage(qPackageName, replayFolders);
@@ -78,10 +78,10 @@ QVector<QString> AOApplication::get_all_package_and_base_paths(QString p_path)
   std::vector<std::string> packageNames = rolechat::fs::PackageManager::packageNames();
   std::vector<std::string> disabledList = rolechat::fs::PackageManager::disabledList();
 
-  for (int i=0; i< packageNames.size(); i++)
+  for(int i=0; i< packageNames.size(); i++)
   {
     auto it = std::find(disabledList.begin(), disabledList.end(), packageNames.at(i));
-    if (it == disabledList.end())
+    if(it == disabledList.end())
     {
       QString package_path = FS::Paths::Package(QString::fromStdString(packageNames.at(i)))  + p_path;
       if(FS::Checks::DirectoryExists(package_path))
@@ -143,13 +143,13 @@ QString AOApplication::get_case_sensitive_path(QString p_file)
 }
 #else
 {
-  if (QFile::exists(p_file) || p_file.isEmpty())
+  if(QFile::exists(p_file) || p_file.isEmpty())
   {
     return p_file;
   }
 
   const auto l_dir_path = get_case_sensitive_path(QFileInfo(p_file).absolutePath());
-  if (l_dir_path.isEmpty())
+  if(l_dir_path.isEmpty())
   {
     return p_file;
   }
@@ -157,10 +157,10 @@ QString AOApplication::get_case_sensitive_path(QString p_file)
   const QDir l_dir(l_dir_path);
   const auto l_file_list = l_dir.entryList(QDir::Files);
   const auto l_regex = QRegExp(p_file, Qt::CaseInsensitive, QRegExp::FixedString);
-  for (auto &i_file : l_file_list)
+  for(auto &i_file : l_file_list)
   {
     const QString l_file_path = l_dir.absoluteFilePath(i_file);
-    if (l_regex.exactMatch(l_file_path))
+    if(l_regex.exactMatch(l_file_path))
     {
       p_file = l_file_path;
       break;
@@ -188,11 +188,11 @@ QString AOApplication::get_case_sensitive_path(QString p_file)
 QString AOApplication::find_asset_path(QStringList p_file_list, QStringList p_extension_list)
 {
   std::vector<std::string> fileList;
-  for (const QString &i_file : qAsConst(p_file_list))
+  for(const QString &i_file : qAsConst(p_file_list))
     fileList.emplace_back(i_file.toStdString());
 
   std::vector<std::string> extensionList;
-  for (const QString &iExtension : qAsConst(p_extension_list))
+  for(const QString &iExtension : qAsConst(p_extension_list))
     extensionList.emplace_back(iExtension.toStdString());
 
 
@@ -253,14 +253,14 @@ QString AOApplication::find_theme_asset_path(QString p_file, QStringList p_exten
   const QString l_timeofday = system::ConfigManager::timeOfDay();
   const QString l_theme_root = FS::Paths::FindDirectory("themes/" + QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")));
 
-  if (!l_gamemode.isEmpty())
+  if(!l_gamemode.isEmpty())
   {
-    if (!l_timeofday.isEmpty())
+    if(!l_timeofday.isEmpty())
       l_path_list.append(l_theme_root + "/gamemodes/" + l_gamemode + "/times/" + l_timeofday + "/" + p_file);
     l_path_list.append(l_theme_root + "/gamemodes/" + l_gamemode + "/" + p_file);
   }
 
-  if (!l_timeofday.isEmpty())
+  if(!l_timeofday.isEmpty())
     l_path_list.append(l_theme_root + "/times/" + l_timeofday + "/" + p_file);
 
   l_path_list.append(l_theme_root + "/" + p_file);
@@ -269,15 +269,15 @@ QString AOApplication::find_theme_asset_path(QString p_file, QStringList p_exten
   // (as we know there should not be capitalization or folder jumping shenanigans here.
 
 
-  if (!l_gamemode.isEmpty())
+  if(!l_gamemode.isEmpty())
   {
     const QString l_minigame_root = FS::Paths::FindDirectory("minigames/" + l_gamemode);
-    if (FS::Checks::DirectoryExists(l_minigame_root))
+    if(FS::Checks::DirectoryExists(l_minigame_root))
       l_path_list.append(l_minigame_root + "/" + p_file);
   }
 
   const QString l_default_theme_path = FS::Paths::BasePath() + "themes/default/";
-  if (FS::Checks::DirectoryExists(l_default_theme_path))
+  if(FS::Checks::DirectoryExists(l_default_theme_path))
     l_path_list.append(l_default_theme_path + p_file);
 
   return find_asset_path(l_path_list, p_extension_list);

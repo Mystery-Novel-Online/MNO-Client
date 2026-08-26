@@ -21,7 +21,7 @@ void RuntimeLoop::Update()
 {
   static bool firstCall = true;
 
-  if (firstCall) {
+  if(firstCall) {
     timer.start();
     firstCall = false;
     return;
@@ -47,7 +47,7 @@ void RuntimeLoop::Update()
 
   engine::system::animation::runAll(elapsedMillis);
 
-  if (s_accumulatedTime < targetDelta)
+  if(s_accumulatedTime < targetDelta)
     return;
 
   s_accumulatedTime -= targetDelta;

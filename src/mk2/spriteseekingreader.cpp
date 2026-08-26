@@ -44,19 +44,19 @@ int SpriteSeekingReader::get_frame_count() const
 
 mk2::SpriteFrame SpriteSeekingReader::get_frame(int p_number)
 {
-  if (!is_valid() || p_number < 0 || p_number >= m_frame_count)
+  if(!is_valid() || p_number < 0 || p_number >= m_frame_count)
   {
     return SpriteFrame{};
   }
 
-  if (p_number == m_frame_number)
+  if(p_number == m_frame_number)
   {
     return m_current_frame;
   }
 
   { // check whatever we need to rewind the device or not
     const int l_next_frame_number = m_frame_number + 1;
-    if (p_number < l_next_frame_number)
+    if(p_number < l_next_frame_number)
     {
       _p_reset_buffer_device();
     }
@@ -64,7 +64,7 @@ mk2::SpriteFrame SpriteSeekingReader::get_frame(int p_number)
 
   // seek frame
   QImage l_image(m_reader.size(), QImage::Format_ARGB32);
-  for (; m_frame_number < p_number; ++m_frame_number)
+  for(; m_frame_number < p_number; ++m_frame_number)
   {
     m_reader.read(&l_image);
     m_current_frame.delay = m_reader.nextImageDelay();
@@ -78,13 +78,13 @@ QVector<mk2::SpriteFrame> SpriteSeekingReader::get_frame_list()
 {
   QVector<SpriteFrame> l_frame_list;
 
-  if (is_valid())
+  if(is_valid())
   {
     l_frame_list.resize(m_reader.imageCount());
 
     // always seek the frame after the current one
     int l_next_frame_number = m_frame_number + 1;
-    for (int i = 0; i < m_frame_count; ++i)
+    for(int i = 0; i < m_frame_count; ++i)
     {
       l_next_frame_number %= m_frame_count;
       l_frame_list.replace(l_next_frame_number, get_frame(l_next_frame_number));
@@ -103,7 +103,7 @@ void SpriteSeekingReader::load()
 
   QIODevice *l_device = get_device();
   const int l_prev_pos = l_device->pos();
-  if (!l_device->isOpen() && !l_device->open(QIODevice::ReadOnly))
+  if(!l_device->isOpen() && !l_device->open(QIODevice::ReadOnly))
   {
     set_error(Error::DeviceError);
     return;
@@ -112,7 +112,7 @@ void SpriteSeekingReader::load()
   m_raw_data = l_device->readAll();
   l_device->seek(l_prev_pos);
   _p_reset_buffer_device();
-  if (!m_reader.canRead())
+  if(!m_reader.canRead())
   {
     set_error(Error::InvalidDataError);
     return;
@@ -128,7 +128,7 @@ void SpriteSeekingReader::_p_reset_buffer_device()
 {
   m_data_buffer.reset(new QBuffer(&m_raw_data));
 
-  if (m_data_buffer->open(QIODevice::ReadOnly))
+  if(m_data_buffer->open(QIODevice::ReadOnly))
   {
     m_reader.setDevice(m_data_buffer.data());
     m_frame_number = -1;

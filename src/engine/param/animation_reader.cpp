@@ -82,7 +82,7 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
     QString blendMode = getStringValue("blend_mode");
     bool detach = getBoolValue("detach");
 
-    if (detach)
+    if(detach)
     {
       const float xNorm = qRectangle.x() / float(targetResolution.width()) * 1000.0f;
       const float yNorm = qRectangle.y() / float(targetResolution.height()) * 1000.0f;

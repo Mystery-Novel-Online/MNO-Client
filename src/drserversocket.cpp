@@ -50,7 +50,7 @@ void DRServerSocket::disconnect_from_server()
 
 void DRServerSocket::send_packet(DRPacket p_packet)
 {
-  if (!is_connected())
+  if(!is_connected())
   {
     qWarning().noquote() << QString("Failed to send packet; not connected to server%1").arg(drFormatServerInfo(m_server));
     return;
@@ -83,7 +83,7 @@ void DRServerSocket::_p_update_state(QAbstractSocket::SocketState p_state)
     break;
   }
 
-  if (l_state_changed)
+  if(l_state_changed)
   {
     emit connection_state_changed(m_state);
   }
@@ -101,11 +101,11 @@ void DRServerSocket::_p_read_socket()
   m_buffer += QString::fromUtf8(m_socket->readAll());
   QStringList l_raw_packet_list = m_buffer.split("#%", DR::SplitBehavior::KeepEmptyParts);
   m_buffer = l_raw_packet_list.takeLast();
-  for (const QString &i_raw_packet : l_raw_packet_list)
+  for(const QString &i_raw_packet : l_raw_packet_list)
   {
     QStringList l_raw_data_list = i_raw_packet.split("#");
     const QString l_header = l_raw_data_list.takeFirst();
-    for (QString &i_raw_data : l_raw_data_list)
+    for(QString &i_raw_data : l_raw_data_list)
       i_raw_data = DRPacket::decode(i_raw_data);
     Q_EMIT packet_received(DRPacket(l_header, l_raw_data_list));
   }

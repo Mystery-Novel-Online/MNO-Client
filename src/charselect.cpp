@@ -83,7 +83,7 @@ void Courtroom::reconstruct_char_select()
 
   ui_char_button_list.clear();
 
-  for (int n = 0; n < m_page_max_chr_count; ++n)
+  for(int n = 0; n < m_page_max_chr_count; ++n)
   {
     int x_pos = (button_width + x_spacing) * x_mod_count;
     int y_pos = (button_height + y_spacing) * y_mod_count;
@@ -100,7 +100,7 @@ void Courtroom::reconstruct_char_select()
 
     ++x_mod_count;
 
-    if (x_mod_count == char_columns)
+    if(x_mod_count == char_columns)
     {
       ++y_mod_count;
       x_mod_count = 0;
@@ -121,7 +121,7 @@ void Courtroom::reset_char_select()
 void Courtroom::set_char_select()
 {
   RPRect f_charselect = engine::system::theme::getDimensions("char_select", ThemeSceneType::SceneType_Courtroom);
-  if (f_charselect.width < 0 || f_charselect.height < 0)
+  if(f_charselect.width < 0 || f_charselect.height < 0)
     qWarning() << "warning: char_select not found or invalid within courtroom_design.ini";
 
   ui_char_select_background->resize(f_charselect.width, f_charselect.height);
@@ -137,7 +137,7 @@ void Courtroom::set_char_select_page()
 
   CharacterRepository::clearFiltered();
 
-  for (AOCharButton *button : qAsConst(ui_char_button_list))
+  for(AOCharButton *button : qAsConst(ui_char_button_list))
     button->hide();
 
   int l_item_count = 0;
@@ -151,7 +151,7 @@ void Courtroom::set_char_select_page()
     });
   }
 
-  for (ActorSelectEntry charaType : filteredResult)
+  for(ActorSelectEntry charaType : filteredResult)
   {
     if(QString::fromStdString(charaType.name).toLower().contains(pCharaSelectSearch->text().toLower()))
     {
@@ -165,10 +165,10 @@ void Courtroom::set_char_select_page()
   const int l_current_page_emote_count =
       qBound(0, l_item_count - m_current_chr_page * m_page_max_chr_count, m_page_max_chr_count);
 
-  if (m_current_chr_page + 1 < l_page_count)
+  if(m_current_chr_page + 1 < l_page_count)
     ui_chr_select_right->show();
 
-  if (m_current_chr_page > 0)
+  if(m_current_chr_page > 0)
     ui_chr_select_left->show();
 
   int yOffset = 0;
@@ -177,7 +177,7 @@ void Courtroom::set_char_select_page()
   UIFilteredCharButton = {};
 
   // show all buttons for this page
-  for (int i = 0; i < l_current_page_emote_count; ++i)
+  for(int i = 0; i < l_current_page_emote_count; ++i)
   {
 
     int l_real_i = i + m_current_chr_page * m_page_max_chr_count;
@@ -213,9 +213,9 @@ void Courtroom::on_char_select_right_clicked()
 
 void Courtroom::update_character_icon(QString p_character)
 {
-  for (AOCharButton *i_button : qAsConst(ui_char_button_list))
+  for(AOCharButton *i_button : qAsConst(ui_char_button_list))
   {
-    if (i_button->character() != p_character)
+    if(i_button->character() != p_character)
       continue;
     i_button->set_character(p_character, ao_config->character_ini(p_character));
     break;
@@ -229,13 +229,13 @@ void Courtroom::SwitchCharacterByName(std::string characterName)
   QString characterPathIni = engine::fs::characters::getFilePath(qCharacterName, CHARACTER_CHAR_INI);
   QString characterPathJson = engine::fs::characters::getFilePath(qCharacterName, CHARACTER_CHAR_JSON);
 
-  if (user::GetCharacterName() == qCharacterName)
+  if(user::GetCharacterName() == qCharacterName)
   {
     enter_courtroom(user::GetCharacterId());
     return;
   }
 
-  if (!FS::Checks::FileExists(characterPathIni) && !FS::Checks::FileExists(characterPathJson))
+  if(!FS::Checks::FileExists(characterPathIni) && !FS::Checks::FileExists(characterPathJson))
   {
     qDebug() << "did not find " << characterPathIni;
     call_notice("Could not find " + characterPathIni);
@@ -261,7 +261,7 @@ void Courtroom::SwitchCharacterByName(std::string characterName)
 void Courtroom::char_clicked(int n_char)
 {
   using namespace engine::network::metadata;
-  if (user::GetCharacterName() == UIFilteredCharButton.at(n_char)->character())
+  if(user::GetCharacterName() == UIFilteredCharButton.at(n_char)->character())
   {
     enter_courtroom(user::GetCharacterId());
     return;
@@ -274,7 +274,7 @@ void Courtroom::char_clicked(int n_char)
 
   qDebug() << "char_ini_path" << l_pathCharIni;
 
-  if (!FS::Checks::FileExists(l_pathCharIni) && !FS::Checks::FileExists(l_pathCharJson) )
+  if(!FS::Checks::FileExists(l_pathCharIni) && !FS::Checks::FileExists(l_pathCharJson) )
   {
     qDebug() << "did not find " << l_pathCharIni;
     call_notice("Could not find " + l_pathCharIni);
@@ -305,7 +305,7 @@ void Courtroom::char_clicked(int n_char)
 
 void Courtroom::char_mouse_entered(AOCharButton *p_caller)
 {
-  if (p_caller == nullptr)
+  if(p_caller == nullptr)
     return;
   ui_char_button_selector->move(p_caller->x() - 1, p_caller->y() - 1);
   ui_char_button_selector->raise();

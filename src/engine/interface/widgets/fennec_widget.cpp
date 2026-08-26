@@ -14,10 +14,10 @@
 
 static ImGuiKey qtToImguiKey(int key)
 {
-  if (key >= Qt::Key_A && key <= Qt::Key_Z)
+  if(key >= Qt::Key_A && key <= Qt::Key_Z)
     return static_cast<ImGuiKey>(ImGuiKey_A + (key - Qt::Key_A));
 
-  if (key >= Qt::Key_0 && key <= Qt::Key_9)
+  if(key >= Qt::Key_0 && key <= Qt::Key_9)
     return static_cast<ImGuiKey>(ImGuiKey_0 + (key - Qt::Key_0));
 
   switch (key)
@@ -88,14 +88,14 @@ void FennecWidget::keyPressEvent(QKeyEvent *event)
 
   ImGuiKey key = qtToImguiKey(event->key());
 
-  if (key != ImGuiKey_None)
+  if(key != ImGuiKey_None)
     io.AddKeyEvent(key, true);
 
   const QString text = event->text();
 
-  for (const QChar& character : text)
+  for(const QChar& character : text)
   {
-    if (!character.isNull())
+    if(!character.isNull())
       io.AddInputCharacter(character.unicode());
   }
 
@@ -108,7 +108,7 @@ void FennecWidget::keyReleaseEvent(QKeyEvent *event)
 
   ImGuiKey key = qtToImguiKey(event->key());
 
-  if (key != ImGuiKey_None)
+  if(key != ImGuiKey_None)
     io.AddKeyEvent(key, false);
 
   event->accept();
@@ -119,7 +119,7 @@ void FennecWidget::mousePressEvent(QMouseEvent* e)
   this->setFocus();
   ImGuiIO& io = ImGui::GetIO();
 
-  if (e->button() == Qt::LeftButton)
+  if(e->button() == Qt::LeftButton)
     io.MouseDown[0] = true;
 }
 
@@ -127,7 +127,7 @@ void FennecWidget::mouseReleaseEvent(QMouseEvent* e)
 {
   ImGuiIO& io = ImGui::GetIO();
 
-  if (e->button() == Qt::LeftButton)
+  if(e->button() == Qt::LeftButton)
     io.MouseDown[0] = false;
 }
 

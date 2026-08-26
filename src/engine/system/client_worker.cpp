@@ -8,7 +8,7 @@ void ClientWorker::process()
 {
   m_running = true;
 
-  for (int i = 0; i < 100 && m_running; ++i)
+  for(int i = 0; i < 100 && m_running; ++i)
   {
     QThread::msleep(50);
     //Currently this worker runs 100 times every, pausing for 50ms.

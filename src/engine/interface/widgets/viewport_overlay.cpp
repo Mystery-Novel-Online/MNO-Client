@@ -104,7 +104,7 @@ void ViewportOverlay::resizeWidgetAndChildren(QString t_widget, int t_width, int
   l_widget->resize(l_scaledWidth, l_scaledHeight);
   l_widget->move(l_scaledX, l_scaledY);
 
-  if (dynamic_cast<AOImageDisplay*>(l_widget) != nullptr)
+  if(dynamic_cast<AOImageDisplay*>(l_widget) != nullptr)
   {
     AOImageDisplay* l_imageDisplay = dynamic_cast<AOImageDisplay*>(l_widget);
     l_imageDisplay->refreshImage();
@@ -243,7 +243,7 @@ void InteractionObject::paintEvent(QPaintEvent *event)
 }
 void InteractionObject::mouseReleaseEvent(QMouseEvent *event)
 {
-  if (event->button() == Qt::LeftButton)
+  if(event->button() == Qt::LeftButton)
   {
     LuaBridge::LuaEventCall("OnInteractionClick", m_name.toStdString(), m_description.toStdString());
     audio::system::Play("cursor_click");
@@ -271,7 +271,7 @@ void InteractionObject::mouseReleaseEvent(QMouseEvent *event)
 
     courtroom::ooc::appendMessage(("[" + m_name + "]").toStdString(), ("\nDescription: " + m_description).toStdString());
   }
-  else if (event->button() == Qt::RightButton)
+  else if(event->button() == Qt::RightButton)
   {
     //Preview Mode
   }
@@ -280,6 +280,6 @@ void InteractionObject::mouseReleaseEvent(QMouseEvent *event)
 void InteractionObject::mouseMoveEvent(QMouseEvent *event)
 {
   ViewportOverlay* overlay = qobject_cast<ViewportOverlay*>(parentWidget());
-  if (overlay)
+  if(overlay)
     overlay->moveCursor(event->x() + pos().x(), event->y() + pos().y());
 }

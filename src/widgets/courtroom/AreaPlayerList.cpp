@@ -97,7 +97,7 @@ void AreaPlayerList::populatePlayers() {
     entry->hide();
   }
 
-  for (int n = starting_index; n < SceneManager::get().m_areaPlayers.count(); ++n) {
+  for(int n = starting_index; n < SceneManager::get().m_areaPlayers.count(); ++n) {
     int y_pos = (last_entry_height + m_playerSpacing) * (n - starting_index);
     DrPlayer playerData = SceneManager::get().m_areaPlayers.at(n);
 

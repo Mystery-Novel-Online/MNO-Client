@@ -7,6 +7,6 @@ RPSlider::RPSlider(Qt::Orientation orientation, QWidget *parent) : QSlider(orien
   {
     bool ok;
     int val = QInputDialog::getInt(parent, "Set Value", "Value:", value(), minimum(), maximum(), 1, &ok);
-    if (ok) setValue(val);
+    if(ok) setValue(val);
   });
 }

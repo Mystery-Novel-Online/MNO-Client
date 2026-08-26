@@ -15,7 +15,7 @@
 
 void Courtroom::set_character_id(const int p_chr_id)
 {
-  if (!user::SetCharacterId(p_chr_id)) return;
+  if(!user::SetCharacterId(p_chr_id)) return;
   load_character();
   Q_EMIT character_id_changed(p_chr_id);
 }
@@ -32,11 +32,11 @@ QString Courtroom::get_character_content_url()
     return ApiManager::baseUri() + "api/workshop/"+ QString::fromStdString(characterGuid) +"/content";
 
   QFile l_contentFile(engine::fs::characters::getFilePath(get_character_ini(), "CONTENT.txt"));
-  if (!l_contentFile.open(QIODevice::ReadOnly))
+  if(!l_contentFile.open(QIODevice::ReadOnly))
     return nullptr;
 
   const QUrl l_url(QString(l_contentFile.readAll()).simplified());
-  if (l_url.isRelative() || l_url.isLocalFile())
+  if(l_url.isRelative() || l_url.isLocalFile())
     return nullptr;
 
   return l_url.toString(QUrl::FullyEncoded);
@@ -101,7 +101,7 @@ void Courtroom::UpdateIniswapIcons(bool reset, int batch_count, int starting_ind
 
   if(reset)
   {
-    if (iniswapTimer && iniswapTimer->isActive())
+    if(iniswapTimer && iniswapTimer->isActive())
     {
       iniswapTimer->stop();
     }
@@ -112,15 +112,15 @@ void Courtroom::UpdateIniswapIcons(bool reset, int batch_count, int starting_ind
   }
 
 
-  for (int i = 0; i < batch_count && currentIniswapIconIndex < currentIniswapList.length(); ++i, ++currentIniswapIconIndex)
+  for(int i = 0; i < batch_count && currentIniswapIconIndex < currentIniswapList.length(); ++i, ++currentIniswapIconIndex)
   {
     const QString &i_name = currentIniswapList.at(currentIniswapIconIndex);
     drSetItemIcon(ui_iniswap_dropdown, currentIniswapIconIndex, i_name, ao_app);
   }
 
-  if (currentIniswapIconIndex < currentIniswapList.length())
+  if(currentIniswapIconIndex < currentIniswapList.length())
   {
-    if (iniswapTimer && iniswapTimer->isActive())
+    if(iniswapTimer && iniswapTimer->isActive())
     {
       iniswapTimer->stop();
     }
@@ -131,7 +131,7 @@ void Courtroom::UpdateIniswapIcons(bool reset, int batch_count, int starting_ind
   }
   else
   {
-    if (iniswapTimer && iniswapTimer->isActive())
+    if(iniswapTimer && iniswapTimer->isActive())
     {
       iniswapTimer->stop();
     }
@@ -160,7 +160,7 @@ void Courtroom::update_default_iniswap_item()
 void Courtroom::select_base_character_iniswap()
 {
   const QString l_current_chr = get_character_ini();
-  if (user::GetCharacterName() == l_current_chr)
+  if(user::GetCharacterName() == l_current_chr)
   {
     ui_iniswap_dropdown->setCurrentIndex(0);
     return;
@@ -171,7 +171,7 @@ void Courtroom::select_base_character_iniswap()
 void Courtroom::refresh_character_content_url()
 {
   const QString l_new_content_url = get_character_content_url();
-  if (m_character_content_url == l_new_content_url)
+  if(m_character_content_url == l_new_content_url)
     return;
   m_character_content_url = l_new_content_url;
   ao_app->send_server_packet(DRPacket("FS", {m_character_content_url}));
@@ -182,7 +182,7 @@ void Courtroom::update_character_content_url(QString url)
   QString contentFilePath = engine::fs::characters::getFilePath(get_character_ini(), "CONTENT.txt");
 
   QFile contentFile(contentFilePath);
-  if (contentFile.open(QIODevice::WriteOnly | QIODevice::Text))
+  if(contentFile.open(QIODevice::WriteOnly | QIODevice::Text))
   {
     QTextStream out(&contentFile);
     out << url;
@@ -208,7 +208,7 @@ void Courtroom::update_iniswap_dropdown_searchable()
 {
   const bool l_enabled = ao_config->searchable_iniswap_enabled();
   ui_iniswap_dropdown->setEditable(l_enabled);
-  if (l_enabled)
+  if(l_enabled)
   {
     QCompleter *l_completer = ui_iniswap_dropdown->completer();
     l_completer->setCompletionMode(QCompleter::PopupCompletion);

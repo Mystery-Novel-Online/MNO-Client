@@ -14,7 +14,7 @@ DRSceneMovie::~DRSceneMovie()
 void DRSceneMovie::set_background_image(QString p_background_name, QString p_image)
 {
   const QString l_filename = ao_app->get_background_sprite_path(p_background_name, p_image);
-  if (l_filename == file_name())
+  if(l_filename == file_name())
   {
     return;
   }

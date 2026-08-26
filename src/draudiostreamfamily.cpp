@@ -33,7 +33,7 @@ bool DRAudioStreamFamily::is_ignore_suppression() const
 
 void DRAudioStreamFamily::toggle_reverb(bool reverb)
 {
-  for (auto &stream : m_stream_list)
+  for(auto &stream : m_stream_list)
     stream->toggle_reverb(reverb);
 }
 
@@ -55,7 +55,7 @@ void DRAudioStreamFamily::set_capacity(int32_t p_capacity)
 {
   p_capacity = qMax(0, p_capacity);
 
-  if (m_capacity == p_capacity)
+  if(m_capacity == p_capacity)
     return;
 
   m_capacity = p_capacity;
@@ -65,7 +65,7 @@ void DRAudioStreamFamily::set_capacity(int32_t p_capacity)
 
 void DRAudioStreamFamily::set_options(DRAudio::Options p_options)
 {
-  if (m_options == p_options)
+  if(m_options == p_options)
     return;
 
   m_options = p_options;
@@ -77,7 +77,7 @@ void DRAudioStreamFamily::set_volume(int32_t p_volume)
 {
   p_volume = std::clamp(p_volume, 0, 100);
 
-  if (m_volume == p_volume)
+  if(m_volume == p_volume)
     return;
 
   m_volume = p_volume;
@@ -102,7 +102,7 @@ void DRAudioStreamFamily::set_ignore_suppression(bool p_enabled)
 DRAudioStream::ptr DRAudioStreamFamily::create_stream(QString p_filename)
 {
   DRAudioStream::ptr l_stream(new DRAudioStream(m_family));
-  if (auto err = l_stream->set_file_name(p_filename); err)
+  if(auto err = l_stream->set_file_name(p_filename); err)
   {
     qWarning() << err->what();
     return nullptr;
@@ -122,7 +122,7 @@ DRAudioStream::ptr DRAudioStreamFamily::create_stream(QString p_filename)
 DRAudioStream::ptr DRAudioStreamFamily::create_url_stream(QString t_url)
 {
   DRAudioStream::ptr l_stream(new DRAudioStream(m_family));
-  if (auto err = l_stream->SetWebAddress(t_url); err)
+  if(auto err = l_stream->SetWebAddress(t_url); err)
   {
     qWarning() << err->what();
     return nullptr;
@@ -142,7 +142,7 @@ DRAudioStream::ptr DRAudioStreamFamily::create_url_stream(QString t_url)
 DRAudioStream::ptr DRAudioStreamFamily::play_stream(QString p_filename)
 {
   DRAudioStream::ptr l_stream = create_stream(p_filename);
-  if (!l_stream.isNull())
+  if(!l_stream.isNull())
   {
     qInfo() << "Playing" << l_stream->get_file_name();
     l_stream->play();
@@ -165,7 +165,7 @@ float DRAudioStreamFamily::calculate_volume()
 {
   float volume = float(m_volume) * 0.01f;
 
-  if (!is_ignore_suppression() && (is_suppressed() || DRAudioEngine::is_suppressed()))
+  if(!is_ignore_suppression() && (is_suppressed() || DRAudioEngine::is_suppressed()))
   {
     volume = 0;
   }
@@ -180,9 +180,9 @@ float DRAudioStreamFamily::calculate_volume()
 
 void DRAudioStreamFamily::update_capacity()
 {
-  if (m_capacity == 0)
+  if(m_capacity == 0)
     return;
-  while (m_capacity < m_stream_list.length())
+  while(m_capacity < m_stream_list.length())
     m_stream_list.removeFirst();
 }
 
@@ -195,37 +195,37 @@ void DRAudioStreamFamily::update_options()
 void DRAudioStreamFamily::update_volume()
 {
   const float volume = calculate_volume();
-  for (auto &stream : m_stream_list)
+  for(auto &stream : m_stream_list)
     stream->set_volume(volume);
 }
 
 void DRAudioStreamFamily::update_pitch()
 {
-  for (auto &stream : m_stream_list)
+  for(auto &stream : m_stream_list)
     stream->set_pitch(m_pitch);
 }
 
 void DRAudioStreamFamily::update_speed()
 {
-  for (auto &stream : m_stream_list)
+  for(auto &stream : m_stream_list)
     stream->set_speed(m_speed);
 }
 
 void DRAudioStreamFamily::on_stream_finished()
 {
   DRAudioStream *invoker = dynamic_cast<DRAudioStream *>(sender());
-  if (invoker == nullptr)
+  if(invoker == nullptr)
     return;
 
-  if (const QString l_file = invoker->get_file_name(); !l_file.isEmpty())
+  if(const QString l_file = invoker->get_file_name(); !l_file.isEmpty())
     qInfo() << "removing" << l_file;
   else
     qWarning() << "removing unspecified stream";
 
   stream_list new_stream_list;
-  for (auto &i_stream : m_stream_list)
+  for(auto &i_stream : m_stream_list)
   {
-    if (i_stream.get() == invoker)
+    if(i_stream.get() == invoker)
       continue;
     new_stream_list.append(std::move(i_stream));
   }

@@ -13,7 +13,7 @@ AOBlipPlayer::AOBlipPlayer(QObject *p_parent)
 
 void AOBlipPlayer::set_blips(QString p_blip)
 {
-  if (m_name.has_value() && m_name.value() == p_blip)
+  if(m_name.has_value() && m_name.value() == p_blip)
     return;
 
   m_name = p_blip;
@@ -22,7 +22,7 @@ void AOBlipPlayer::set_blips(QString p_blip)
 
 void AOBlipPlayer::blip_tick()
 {
-  if (!m_file.has_value())
+  if(!m_file.has_value())
     return;
   m_family->play_stream(m_file.value());
 }

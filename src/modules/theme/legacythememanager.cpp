@@ -31,14 +31,14 @@ void LegacyThemeManager::deleteTabPanels()
 
     currentTab->show();
 
-    if (courtroom && currentTab)
+    if(courtroom && currentTab)
     {
       const auto& children = currentTab->template findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);
-      for (QWidget* child : children)
+      for(QWidget* child : children)
       {
         bool wasVisible = child->isVisible();
         child->setParent(courtroom);
-        if (wasVisible)
+        if(wasVisible)
           child->show();
       }
     }
@@ -160,42 +160,42 @@ void LegacyThemeManager::toggleTab(const QString& name, const QString& group)
   QVector<ThemeTabInfo> tabsInfo = LegacyThemeManager::get().getTabsInfo();
   const ThemeTabInfo* selectedTab = nullptr;
 
-  for (const ThemeTabInfo& tabInfo : tabsInfo)
+  for(const ThemeTabInfo& tabInfo : tabsInfo)
   {
-    if (tabInfo.m_Name == name && tabInfo.m_Group == group)
+    if(tabInfo.m_Name == name && tabInfo.m_Group == group)
     {
       selectedTab = &tabInfo;
       break;
     }
   }
 
-  if (!selectedTab) return;
+  if(!selectedTab) return;
 
   const bool isToggle = selectedTab->m_ToggleEnabled;
 
-  for (const ThemeTabInfo& tabInfo : tabsInfo)
+  for(const ThemeTabInfo& tabInfo : tabsInfo)
   {
-    if (tabInfo.m_Group != group) continue;
+    if(tabInfo.m_Group != group) continue;
 
     const QString buttonName = tabInfo.m_Name + "_toggle";
     const QString panelName = tabInfo.m_Name + "_panel";
 
     bool isCurrent = (tabInfo.m_Name == name);
 
-    if (!m_WidgetNames.contains(panelName)) continue;
+    if(!m_WidgetNames.contains(panelName)) continue;
 
-    if (m_WidgetNames.contains(buttonName))
+    if(m_WidgetNames.contains(buttonName))
     {
-      if (auto* tabButton = dynamic_cast<TabToggleButton*>(getWidget(buttonName))) tabButton->setActiveStatus(isCurrent);
+      if(auto* tabButton = dynamic_cast<TabToggleButton*>(getWidget(buttonName))) tabButton->setActiveStatus(isCurrent);
     }
 
-    if (isCurrent)
+    if(isCurrent)
       getWidget(panelName)->show();
-    else if (!isToggle)
+    else if(!isToggle)
     {
       if(!tabInfo.m_ToggleEnabled)
       {
-        if (m_DetatchedTabList.contains(panelName)) continue;
+        if(m_DetatchedTabList.contains(panelName)) continue;
         getWidget(panelName)->hide();
       }
     }

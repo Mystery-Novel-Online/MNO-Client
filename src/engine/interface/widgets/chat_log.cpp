@@ -62,11 +62,11 @@ void DRChatLog::_p_write_message_queue()
   l_cursor.movePosition(QTextCursor::End);
   l_cursor.setCharFormat(l_normal_format);
 
-  while (!m_message_queue.isEmpty())
-  {
+  while(!m_message_queue.isEmpty()) {
 
-    if (!m_message_list.isEmpty())
+    if(!m_message_list.isEmpty()) {
       l_cursor.insertText(QString(QChar::LineFeed));
+    }
     const Message l_message = m_message_queue.dequeue();
     l_normal_format.setToolTip(l_message.timestamp.toString("hh:mm:ss"));
     l_name_format.setToolTip(l_message.timestamp.toString("hh:mm:ss"));
@@ -84,13 +84,13 @@ void DRChatLog::_p_write_message_queue()
     }
 
 
-    if (!l_message.name.isEmpty() && !isClient)
+    if(!l_message.name.isEmpty() && !isClient)
     {
       l_cursor.insertText(l_message.name, l_name_format);
       l_cursor.insertText(": ", l_normal_format);
     }
 
-    if (l_message.is_html)
+    if(l_message.is_html)
     {
       insertHtml(l_message.text);
     }
@@ -118,13 +118,13 @@ void DRChatLog::_p_write_message_queue()
       { // capture all text pieces
         int l_index = 0;
 
-        while (l_iterator.hasNext())
-        {
+        while(l_iterator.hasNext()) {
           QRegularExpressionMatch l_match = l_iterator.next();
 
           const int l_captureIndex = l_match.capturedStart();
-          if (l_index < l_captureIndex)
+          if(l_index < l_captureIndex) {
             l_piece_list.append(l_text.mid(l_index, l_captureIndex - l_index));
+          }
           l_piece_list.append(TextPiece(l_match.captured(), true));
           l_index = l_match.capturedEnd();
         }
@@ -132,15 +132,15 @@ void DRChatLog::_p_write_message_queue()
         l_piece_list.append(l_text.mid(l_index));
       }
 
-      for (const TextPiece &i_piece : qAsConst(l_piece_list))
+      for(const TextPiece &i_piece : qAsConst(l_piece_list))
       {
-        if (i_piece.text.isEmpty())
+        if(i_piece.text.isEmpty())
           continue;
 
         QTextCharFormat l_piece_format = l_normal_format;
 
 
-        if (i_piece.is_href)
+        if(i_piece.is_href)
         {
           l_piece_format = l_href_format;
           l_piece_format.setAnchorHref(i_piece.text);
@@ -155,7 +155,7 @@ void DRChatLog::_p_write_message_queue()
     }
   }
 
-  if (l_is_end_scroll_pos)
+  if(l_is_end_scroll_pos)
     l_scrollbar->setValue(l_scrollbar->maximum());
 }
 

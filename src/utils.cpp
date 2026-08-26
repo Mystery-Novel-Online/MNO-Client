@@ -6,8 +6,8 @@ using namespace utils;
 static QString lookupKey(const QStringList &p_key_list, const QString &p_target_key)
 {
   const QString l_lower_target_key = p_target_key.toLower();
-  for (const QString &i_key : qAsConst(p_key_list))
-    if (i_key.toLower() == l_lower_target_key)
+  for(const QString &i_key : qAsConst(p_key_list))
+    if(i_key.toLower() == l_lower_target_key)
       return i_key;
   return p_target_key;
 }

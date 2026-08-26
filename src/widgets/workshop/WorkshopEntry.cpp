@@ -46,14 +46,14 @@ WorkshopEntry* WorkshopEntry::createChild(const WorkshopContentEntry &contentDat
 
 void WorkshopEntry::fileDownloaded(const QString &filePath, const QString &hash)
 {
-  if (filePath.isEmpty())
+  if(filePath.isEmpty())
     return;
 
-  if (hash != WorkshopEntry::iconCache().getHashForUrl(m_IconUrl))
+  if(hash != WorkshopEntry::iconCache().getHashForUrl(m_IconUrl))
     return;
 
   QPixmap pixmap;
-  if (!pixmap.load(filePath))
+  if(!pixmap.load(filePath))
     return;
 
   applyAlphaMask(pixmap);
@@ -69,13 +69,13 @@ void WorkshopEntry::fileDownloaded(const QString &filePath, const QString &hash)
 
 void WorkshopEntry::mousePressEvent(QMouseEvent *event)
 {
-  if (event->button() == Qt::RightButton)
+  if(event->button() == Qt::RightButton)
   {
     emit rightClicked(m_id);
     return;
   }
 
-  if (event->button() == Qt::LeftButton)
+  if(event->button() == Qt::LeftButton)
   {
     emit clicked(m_id);
     toggleChildrenVisibility(!anyChildrenVisible());
@@ -181,14 +181,14 @@ void WorkshopEntry::applyAlphaMask(QPixmap &pixmap) const
 {
   const QString maskPath = AOApplication::getInstance()->find_theme_asset_path("workshop_alpha.png");
 
-  if (!FS::Checks::FileExists(maskPath))
+  if(!FS::Checks::FileExists(maskPath))
     return;
 
   QImage base = pixmap.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
 
   QImage mask(maskPath);
 
-  if (mask.isNull())
+  if(mask.isNull())
     return;
 
   mask = mask
@@ -205,9 +205,9 @@ void WorkshopEntry::applyAlphaMask(QPixmap &pixmap) const
 bool WorkshopEntry::anyChildrenVisible() const
 {
   if(!m_childrenLayout) return false;
-  for (int i = 0; i < m_childrenLayout->count(); ++i)
+  for(int i = 0; i < m_childrenLayout->count(); ++i)
   {
-    if (auto* w = m_childrenLayout->itemAt(i)->widget();
+    if(auto* w = m_childrenLayout->itemAt(i)->widget();
         w && w->isVisible())
     {
       return true;
@@ -219,9 +219,9 @@ bool WorkshopEntry::anyChildrenVisible() const
 void WorkshopEntry::toggleChildrenVisibility(bool visible)
 {
   if(!m_childrenLayout) return;
-  for (int i = 0; i < m_childrenLayout->count(); ++i)
+  for(int i = 0; i < m_childrenLayout->count(); ++i)
   {
-    if (auto* w = m_childrenLayout->itemAt(i)->widget())
+    if(auto* w = m_childrenLayout->itemAt(i)->widget())
       w->setVisible(visible);
   }
 }

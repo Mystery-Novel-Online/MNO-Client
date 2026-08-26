@@ -14,7 +14,7 @@ void set_text_alignment_or_default(QWidget *p_widget, QString p_identifier, QStr
 
   const QStringList l_values =
       ao_app->current_theme->get_widget_font_string_setting(p_identifier, "align", p_ini_file, p_identifier + "_align").split(",", DR::SplitBehavior::SkipEmptyParts);
-  if (!p_widget->property(p_property.c_str()).isValid())
+  if(!p_widget->property(p_property.c_str()).isValid())
     return;
   p_widget->setProperty(p_property.c_str(),
                         QVariant(QHash<QString, Qt::Alignment>{
@@ -30,7 +30,7 @@ void set_text_alignment_or_default(QWidget *p_widget, widgetFontStruct font_data
                                    Qt::Alignment p_default_vertical)
 {
   const QStringList l_values = font_data.align.split(",", DR::SplitBehavior::SkipEmptyParts);
-  if (!p_widget->property(p_property.c_str()).isValid())
+  if(!p_widget->property(p_property.c_str()).isValid())
     return;
   p_widget->setProperty(p_property.c_str(),
                         QVariant(QHash<QString, Qt::Alignment>{
@@ -89,11 +89,11 @@ void set_font(QWidget *p_widget, QString p_identifier, QString ini_file, AOAppli
     l_font_color = ao_app->get_color(p_identifier + "_color", ini_file);
   }
 
-  if (!font_database.families().contains(font_name))
+  if(!font_database.families().contains(font_name))
   {
     font_name = ao_app->get_font_name("font_default", ini_file);
   }
-  if (!font_name.isEmpty())
+  if(!font_name.isEmpty())
   {
     l_font.setFamily(font_name);
   }
@@ -163,11 +163,11 @@ bool set_stylesheet(QWidget *p_widget, QString p_identifier, QString p_ini_file,
  */
 void center_widget_to_screen(QWidget *p_widget)
 {
-  if (!p_widget || p_widget->parentWidget())
+  if(!p_widget || p_widget->parentWidget())
     return;
 
   QScreen *screen = QApplication::screenAt(p_widget->pos());
-  if (screen == nullptr)
+  if(screen == nullptr)
     return;
   QRect screen_geometry = screen->geometry();
   int x = (screen_geometry.width() - p_widget->width()) / 2;
@@ -179,7 +179,7 @@ void set_sticker_play_once(DRStickerViewer *p_sticker, QString p_identifier, QSt
 {
   const bool l_play_once = ao_app->read_theme_ini_bool(p_identifier + "_play_once", p_ini_file);
   p_sticker->set_play_once(l_play_once);
-  if (!p_sticker->is_running())
+  if(!p_sticker->is_running())
   {
     p_sticker->start();
   }
@@ -212,7 +212,7 @@ void setThemeFont(QWidget *widget, const widgetFontStruct& font_data)
 
   bool is_antialias = font_data.sharp;
 
-  if (!font_data.font.isEmpty())
+  if(!font_data.font.isEmpty())
   {
     l_font.setFamily(font_data.font);
   }

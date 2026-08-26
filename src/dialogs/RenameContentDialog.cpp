@@ -25,14 +25,14 @@ RenameContentDialog::RenameContentDialog(int contentId, const QString &contentNa
 
 void RenameContentDialog::submit()
 {
-  if (m_currentReply)
+  if(m_currentReply)
     return;
 
   m_submitButton->setEnabled(false);
 
   QString newName = m_nameEdit->text().trimmed();
 
-  if (newName.isEmpty())
+  if(newName.isEmpty())
   {
     QMessageBox::warning(this, "Error", "Please enter a name.");
     return;
@@ -54,7 +54,7 @@ void RenameContentDialog::submit()
 void RenameContentDialog::handleReply()
 {
   JSONReader reader;
-  if (m_currentReply->error() == QNetworkReply::NoError)
+  if(m_currentReply->error() == QNetworkReply::NoError)
   {
     QMessageBox::information(this, "Success", "Name changed successfully.");
     accept();

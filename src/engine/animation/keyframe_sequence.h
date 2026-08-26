@@ -26,7 +26,7 @@ public:
   KeyframeChannel<T>* GetChannel(const std::string &name)
   {
     auto it = m_Channels.find(name);
-    if (it != m_Channels.end())
+    if(it != m_Channels.end())
       return dynamic_cast<KeyframeChannel<T>*>(it->second.get());
     return nullptr;
   }

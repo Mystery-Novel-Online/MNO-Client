@@ -13,7 +13,7 @@ public:
 
   ptr &operator->()
   {
-    if (d == nullptr)
+    if(d == nullptr)
     {
       d = ptr(new DRAudioEnginePrivate);
 
@@ -126,7 +126,7 @@ void DRAudioEngine::set_favorite_device_driver(QString p_driver)
 void DRAudioEngine::set_volume(int32_t p_volume)
 {
   p_volume = std::clamp(p_volume, 0, 100);
-  if (d->volume == p_volume)
+  if(d->volume == p_volume)
     return;
   d->volume = p_volume;
   d->update_volume();
@@ -135,7 +135,7 @@ void DRAudioEngine::set_volume(int32_t p_volume)
 
 void DRAudioEngine::set_options(DRAudio::Options p_options)
 {
-  if (d->options == p_options)
+  if(d->options == p_options)
     return;
   d->options = p_options;
   d->update_options();

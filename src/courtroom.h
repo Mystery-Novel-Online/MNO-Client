@@ -289,7 +289,7 @@ public:
   // prints who played the song to IC chat and plays said song(if found on
   // local filesystem) takes in a list where the first element is the song
   // name and the second is the char id of who played it
-  void handle_song(QStringList p_contents);
+  void handle_song(const QStringList& p_contents);
 
   // animates music text
   void set_music_text(QString p_text);
@@ -974,7 +974,7 @@ void Courtroom::insert_widget_names(QVector<QString> &p_widget_names, QVector<T 
 {
   QVector<QWidget *> widgets;
 
-  for (QWidget *widget : p_widgets)
+  for(QWidget *widget : p_widgets)
     widgets.append(widget);
 
   insert_widget_names(p_widget_names, widgets);

@@ -85,32 +85,32 @@ void KeyframeSequence::RunSequence(float deltaTime)
 
   float newTimestamp = m_Timestamp + deltaTime;
 
-  if (newTimestamp > m_SequenceLength && m_Loop)
+  if(newTimestamp > m_SequenceLength && m_Loop)
   {
     newTimestamp -= m_SequenceLength;
     m_TriggeredThisLoop.clear();
   }
 
-  for (const auto& soundEvent : m_TimedSounds) {
+  for(const auto& soundEvent : m_TimedSounds) {
     float triggerTime = soundEvent.timestamp;
     bool wrapped = (newTimestamp < m_Timestamp);
 
-    if ((wrapped && (triggerTime >= m_Timestamp || triggerTime <= newTimestamp)) ||
+    if((wrapped && (triggerTime >= m_Timestamp || triggerTime <= newTimestamp)) ||
         (!wrapped && triggerTime >= m_Timestamp && triggerTime <= newTimestamp)) {
-      if (m_TriggeredThisLoop.find(soundEvent.sound) == m_TriggeredThisLoop.end()) {
+      if(m_TriggeredThisLoop.find(soundEvent.sound) == m_TriggeredThisLoop.end()) {
         audio::effect::Play(soundEvent.sound);
         m_TriggeredThisLoop.insert(soundEvent.sound);
       }
     }
   }
 
-  for (const auto& signalEvent : m_TimedSignals) {
+  for(const auto& signalEvent : m_TimedSignals) {
     float triggerTime = signalEvent.timestamp;
     bool wrapped = (newTimestamp < m_Timestamp);
 
-    if ((wrapped && (triggerTime >= m_Timestamp || triggerTime <= newTimestamp)) ||
+    if((wrapped && (triggerTime >= m_Timestamp || triggerTime <= newTimestamp)) ||
         (!wrapped && triggerTime >= m_Timestamp && triggerTime <= newTimestamp)) {
-      if (m_TriggeredSignalsThisLoop.find(signalEvent.signal) == m_TriggeredSignalsThisLoop.end())
+      if(m_TriggeredSignalsThisLoop.find(signalEvent.signal) == m_TriggeredSignalsThisLoop.end())
       {
         if(signalEvent.signal == "hide_desk")
           courtroom::layout::setVisibility("ui_vp_desk", false);
@@ -130,7 +130,7 @@ void KeyframeSequence::RunSequence(float deltaTime)
 
 void KeyframeSequence::Evaluate(std::unordered_map<std::string, QVariant> &outValues) const
 {
-  for (const auto& pair : m_Channels)
+  for(const auto& pair : m_Channels)
   {
     QVariant value;
     pair.second->Evaluate(m_Timestamp, value);

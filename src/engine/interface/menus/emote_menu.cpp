@@ -145,7 +145,7 @@ void EmoteMenu::ApplyPreset(const QString &presetName)
 
   for(const auto& preset : user->scalingPresets())
   {
-    if (preset.name != presetName.toStdString())
+    if(preset.name != presetName.toStdString())
       continue;
 
     courtroom::sliders::setScale(preset.scale);

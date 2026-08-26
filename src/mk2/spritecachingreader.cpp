@@ -54,7 +54,7 @@ int SpriteCachingReader::get_frame_count() const
 
 SpriteFrame SpriteCachingReader::get_frame(int p_number)
 {
-  if (!is_valid())
+  if(!is_valid())
   {
     return SpriteFrame{};
   }
@@ -84,7 +84,7 @@ void SpriteCachingReader::load()
   QByteArray l_raw_data;
   QIODevice *l_device = get_device();
   const int l_prev_pos = l_device->pos();
-  if (!l_device->isOpen() && !l_device->open(QIODevice::ReadOnly))
+  if(!l_device->isOpen() && !l_device->open(QIODevice::ReadOnly))
   {
     set_error(Error::DeviceError);
     return;
@@ -96,7 +96,7 @@ void SpriteCachingReader::load()
   {
     QBuffer l_buffer(&l_raw_data);
     QImageReader l_reader(&l_buffer);
-    if (!l_reader.canRead())
+    if(!l_reader.canRead())
     {
       set_error(Error::InvalidDataError);
       return;
@@ -124,21 +124,21 @@ void SpriteCachingReader::_p_preload(QByteArray p_raw_data)
   QImageReader l_reader(&l_buffer);
   const QSize l_size = l_reader.size();
   const int l_frame_count = l_reader.imageCount();
-  if (l_frame_count > 0)
+  if(l_frame_count > 0)
   {
     QElapsedTimer l_elapsed_timer;
     l_elapsed_timer.start();
 
     // create a buffer for images
     QVector<QImage> l_image_buffer_list;
-    for (int i = 0; i < l_frame_count; ++i)
+    for(int i = 0; i < l_frame_count; ++i)
     {
       l_image_buffer_list.append(QImage(l_size, QImage::Format_ARGB32));
     }
 
     int l_frame_number = 0;
     int l_percent_progress = 0;
-    while (!m_exit_task && l_frame_number < l_frame_count && l_reader.canRead())
+    while(!m_exit_task && l_frame_number < l_frame_count && l_reader.canRead())
     {
       SpriteFrame l_frame;
       QImage l_image_buffer = l_image_buffer_list.takeFirst();
@@ -156,7 +156,7 @@ void SpriteCachingReader::_p_preload(QByteArray p_raw_data)
       set_loading_progress(l_percent_progress);
     }
 
-    if (!m_exit_task)
+    if(!m_exit_task)
     {
       set_loading_progress(100);
       set_state(State::FullyLoaded);

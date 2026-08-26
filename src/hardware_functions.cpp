@@ -11,7 +11,7 @@ QString get_hdid()
 {
   bIsRetrieved = GetVolumeInformation(TEXT("C:\\"), NULL, 0, &dwVolSerial, NULL, NULL, NULL, 0);
 
-  if (bIsRetrieved)
+  if(bIsRetrieved)
     return QString::number(dwVolSerial, 16);
   else
     // a totally random string
@@ -25,21 +25,21 @@ QString get_hdid()
 QString get_hdid()
 {
   QFile fstab_file("/etc/fstab");
-  if (!fstab_file.open(QIODevice::ReadOnly))
+  if(!fstab_file.open(QIODevice::ReadOnly))
     return "gxcps32sa9fnwic92mfbs0";
 
   QTextStream in(&fstab_file);
 
-  while (!in.atEnd())
+  while(!in.atEnd())
   {
     QString line = in.readLine();
     int i = line.indexOf(QRegExp("UUID|uuid"), 0);
-    if (i >= 0)
+    if(i >= 0)
     {
       line = line.chopped(i);
       QStringList line_elements = line.split("=");
 
-      if (line_elements.size() > 1)
+      if(line_elements.size() > 1)
         return line_elements.at(1).left(23).trimmed();
     }
   }
@@ -58,15 +58,15 @@ QString get_hdid()
   QString hdid;
   io_service_t platformExpert =
       IOServiceGetMatchingService(kIOMasterPortDefault, IOServiceMatching("IOPlatformExpertDevice"));
-  if (platformExpert)
+  if(platformExpert)
   {
     CFTypeRef serialNumberAsCFString =
         IORegistryEntryCreateCFProperty(platformExpert, CFSTR(kIOPlatformSerialNumberKey), kCFAllocatorDefault, 0);
-    if (serialNumberAsCFString)
+    if(serialNumberAsCFString)
     {
       serial = (CFStringRef)serialNumberAsCFString;
     }
-    if (CFStringGetCString(serial, buffer, 64, kCFStringEncodingUTF8))
+    if(CFStringGetCString(serial, buffer, 64, kCFStringEncodingUTF8))
     {
       hdid = buffer;
     }

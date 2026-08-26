@@ -52,7 +52,7 @@ bool config_tab_blips::useBlanks()
     return m_useBlanks;
 
   auto blip = activeBlip();
-  if (blip)
+  if(blip)
     return blip->get().blanksAllowed();
 
   return false;
@@ -64,7 +64,7 @@ int config_tab_blips::blipRate()
     return m_blipRate;
 
   auto blip = activeBlip();
-  if (blip)
+  if(blip)
     return blip->get().blipRate();
 
   return 99999;
@@ -83,13 +83,13 @@ void config_tab_blips::reloadBlipList()
   for(const auto& subDir : blipDirectory.subDirectories())
   {
     const QString qBlipName = QString::fromStdString(subDir);
-    if (qBlipName == qCurrentBlipSet)
+    if(qBlipName == qCurrentBlipSet)
       lBlipIndex = ui->blipSet->count();
 
     ui->blipSet->addItem(qBlipName);
   }
   ui->blipSet->blockSignals(false);
-  if (lBlipIndex.has_value())
+  if(lBlipIndex.has_value())
     ui->blipSet->setCurrentIndex(*lBlipIndex);
 }
 
@@ -159,7 +159,7 @@ void config_tab_blips::setThemeBlip(const std::string &set)
 void config_tab_blips::playStartingSfx()
 {
   auto blip = activeBlip();
-  if (!blip)
+  if(!blip)
     return;
 
   auto startingSound = blip->get().startingSfx();
@@ -172,7 +172,7 @@ void config_tab_blips::playStartingSfx()
 void config_tab_blips::playEndingSfx()
 {
   auto blip = activeBlip();
-  if (!blip)
+  if(!blip)
     return;
 
   auto endingSound = blip->get().endingSfx();
@@ -235,13 +235,13 @@ std::optional<std::reference_wrapper<const BlipConfig> > config_tab_blips::activ
   if(m_tagBlip)
     return *m_tagBlip;
 
-  if (m_allowCharacters && m_characterBlip.has_value())
+  if(m_allowCharacters && m_characterBlip.has_value())
     return *m_characterBlip;
 
-  if (m_allowTheme && m_themeBlip.has_value())
+  if(m_allowTheme && m_themeBlip.has_value())
     return *m_themeBlip;
 
-  if (m_currentBlip.has_value())
+  if(m_currentBlip.has_value())
     return *m_currentBlip;
 
   return std::nullopt;

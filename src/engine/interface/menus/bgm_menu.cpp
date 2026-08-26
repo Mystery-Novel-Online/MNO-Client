@@ -40,7 +40,7 @@ void BGMMenu::OnMenuRequested(QPoint p_point)
 
   QListWidgetItem *l_item = musicList->currentItem();
 
-  if (!l_item) { m_TargetTrack = "";  return; }
+  if(!l_item) { m_TargetTrack = "";  return; }
 
   m_TargetTrack = l_item->data(Qt::UserRole).toString();
   const QPoint l_global_point = musicList->viewport()->mapToGlobal(p_point);

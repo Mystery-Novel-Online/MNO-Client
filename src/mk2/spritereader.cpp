@@ -37,7 +37,7 @@ SpriteFrame::~SpriteFrame()
 void SpriteReader::registerMetatypes()
 {
   static bool s_registerRequired = true;
-  if (s_registerRequired)
+  if(s_registerRequired)
   {
     s_registerRequired = false;
     qRegisterMetaType<mk2::SpriteReader::State>();
@@ -146,7 +146,7 @@ void SpriteReader::load()
 
 void SpriteReader::set_state(State p_state)
 {
-  if (m_state == p_state)
+  if(m_state == p_state)
   {
     return;
   }
@@ -157,7 +157,7 @@ void SpriteReader::set_state(State p_state)
 void SpriteReader::set_loading_progress(int p_progress)
 {
   p_progress = qBound(0, p_progress, 100);
-  if (m_loading_progress == p_progress)
+  if(m_loading_progress == p_progress)
   {
     return;
   }
@@ -168,7 +168,7 @@ void SpriteReader::set_loading_progress(int p_progress)
 void SpriteReader::set_error(Error p_error)
 {
   m_last_error = p_error;
-  if (m_last_error != Error::NoError)
+  if(m_last_error != Error::NoError)
   {
     emit error(m_last_error);
   }
@@ -176,7 +176,7 @@ void SpriteReader::set_error(Error p_error)
 
 void SpriteReader::_p_delete_device()
 {
-  if (m_own_device)
+  if(m_own_device)
   {
     delete m_device;
     m_device = nullptr;

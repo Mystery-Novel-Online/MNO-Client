@@ -134,7 +134,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, c
       bool franchiseAdded = false;
 
 
-      for (const QPair<QString, QString>& pair : entry.tagMap)
+      for(const QPair<QString, QString>& pair : entry.tagMap)
       {
         QString key = pair.first;
         QString value = pair.second;
@@ -196,7 +196,7 @@ void WorkshopUploader::StartEdit(int id, const WorkshopContentEntry entry)
 void WorkshopUploader::chooseFile()
 {
   QString file = QFileDialog::getOpenFileName(this, "Select Zip File", "", "Zip Files (*.zip)");
-  if (!file.isEmpty()) {
+  if(!file.isEmpty()) {
     m_filePath->setText(file);
   }
 }
@@ -219,7 +219,7 @@ void WorkshopUploader::addTagClicked()
   {
     if(cat != "System" && cat != "Gender")
       categoryCombo->addItem(QString::fromStdString(cat), i);
-    else if (allowSystem)
+    else if(allowSystem)
       categoryCombo->addItem(QString::fromStdString(cat), i);
     i++;
   };
@@ -243,13 +243,13 @@ void WorkshopUploader::addTagClicked()
   QObject::connect(buttons, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
   QObject::connect(buttons, &QDialogButtonBox::rejected, &dialog, &QDialog::reject);
 
-  if (dialog.exec() == QDialog::Accepted)
+  if(dialog.exec() == QDialog::Accepted)
   {
     int categoryId = categoryCombo->currentData().toInt();
     QString categoryName = categoryCombo->currentText();
     QString tagName = tagEdit->text().trimmed();
 
-    if (tagName.isEmpty())
+    if(tagName.isEmpty())
       return;
 
     m_tagTable->addTag(categoryName, tagName);
@@ -259,19 +259,19 @@ void WorkshopUploader::addTagClicked()
 void WorkshopUploader::choosePreviewFile()
 {
   QString file = QFileDialog::getOpenFileName(this, "Select PNG File", "", "Image Files (*.png)");
-  if (!file.isEmpty()) {
+  if(!file.isEmpty()) {
     m_previewPath->setText(file);
   }
 }
 
 void WorkshopUploader::submitForm()
 {
-  if (m_filePath->text().isEmpty() && !m_isEdit) {
+  if(m_filePath->text().isEmpty() && !m_isEdit) {
     QMessageBox::warning(this, "Error", "Please select a zip file.");
     return;
   }
 
-  if (m_previewPath->text().isEmpty() && !m_isEdit) {
+  if(m_previewPath->text().isEmpty() && !m_isEdit) {
     QMessageBox::warning(this, "Error", "Please select a preview file.");
     return;
   }
@@ -281,7 +281,7 @@ void WorkshopUploader::submitForm()
 
   if(!m_filePath->text().trimmed().isEmpty() && m_filePath->text() != "<No Change>")
   {
-    if (!ApiManager::appendFile(multiPart, "zipfile", m_filePath->text())) {
+    if(!ApiManager::appendFile(multiPart, "zipfile", m_filePath->text())) {
       QMessageBox::warning(this, "Error", "Unable to open file.");
       delete multiPart;
       return;
@@ -290,7 +290,7 @@ void WorkshopUploader::submitForm()
 
   if(!m_previewPath->text().trimmed().isEmpty() && m_previewPath->text() != "<No Change>")
   {
-    if (!ApiManager::appendFile(multiPart, "preview", m_previewPath->text())) {
+    if(!ApiManager::appendFile(multiPart, "preview", m_previewPath->text())) {
       QMessageBox::warning(this, "Error", "Unable to open file.");
       delete multiPart;
       return;
@@ -313,18 +313,18 @@ void WorkshopUploader::submitForm()
 
   QJsonArray arr;
 
-  for (int row = 0; row < m_tagTable->rowCount(); ++row)
+  for(int row = 0; row < m_tagTable->rowCount(); ++row)
   {
     auto categoryItem = m_tagTable->item(row, 0);
     auto tagItem      = m_tagTable->item(row, 1);
 
-    if (!categoryItem || !tagItem)
+    if(!categoryItem || !tagItem)
       continue;
 
     QString category = categoryItem->text().trimmed();
     QString tag      = tagItem->text().trimmed();
 
-    if (category.isEmpty() || tag.isEmpty())
+    if(category.isEmpty() || tag.isEmpty())
       continue;
 
 
@@ -353,7 +353,7 @@ void WorkshopUploader::handleReply()
   m_progress->setVisible(false);
 
   JSONReader reader;
-  if (m_currentReply->error() == QNetworkReply::NoError) {
+  if(m_currentReply->error() == QNetworkReply::NoError) {
     QMessageBox::information(this, "Success", "Upload completed! It should be approved soon.");
 
     reader.ReadFromString(m_currentReply->readAll());
@@ -378,7 +378,7 @@ void WorkshopUploader::handleReply()
 
 void WorkshopUploader::updateProgress(qint64 bytesSent, qint64 bytesTotal)
 {
-  if (bytesTotal > 0) {
+  if(bytesTotal > 0) {
     int percent = static_cast<int>((bytesSent * 100) / bytesTotal);
     m_progress->setValue(percent);
   }

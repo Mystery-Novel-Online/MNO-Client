@@ -54,18 +54,18 @@ void CollectionCreation::init()
 void CollectionCreation::iconSelection()
 {
   QString file = QFileDialog::getOpenFileName(this, "Select Collection Icon", "", "PNG Files (*.png)");
-  if (!file.isEmpty()) w_IconLineEdit->setText(file);
+  if(!file.isEmpty()) w_IconLineEdit->setText(file);
 }
 
 void CollectionCreation::previewSelection()
 {
   QString file = QFileDialog::getOpenFileName(this, "Select Collection Preview", "", "PNG Files (*.png)");
-  if (!file.isEmpty()) w_PreviewLineEdit->setText(file);
+  if(!file.isEmpty()) w_PreviewLineEdit->setText(file);
 }
 
 void CollectionCreation::submitForm()
 {
-  if (w_IconLineEdit->text().isEmpty()) {
+  if(w_IconLineEdit->text().isEmpty()) {
     QMessageBox::warning(this, "Error", "Please select a preview file.");
     return;
   }
@@ -74,7 +74,7 @@ void CollectionCreation::submitForm()
 
   if(!w_IconLineEdit->text().trimmed().isEmpty() && w_IconLineEdit->text() != "<No Change>")
   {
-    if (!ApiManager::appendFile(multiPart, "icon", w_IconLineEdit->text())) {
+    if(!ApiManager::appendFile(multiPart, "icon", w_IconLineEdit->text())) {
       QMessageBox::warning(this, "Error", "Unable to open file.");
       delete multiPart;
       return;
@@ -84,7 +84,7 @@ void CollectionCreation::submitForm()
 
   if(!w_PreviewLineEdit->text().trimmed().isEmpty() && w_PreviewLineEdit->text() != "<No Change>")
   {
-    if (!ApiManager::appendFile(multiPart, "preview", w_PreviewLineEdit->text())) {
+    if(!ApiManager::appendFile(multiPart, "preview", w_PreviewLineEdit->text())) {
       QMessageBox::warning(this, "Error", "Unable to open file.");
       delete multiPart;
       return;
@@ -105,7 +105,7 @@ void CollectionCreation::submitForm()
 void CollectionCreation::handleReply()
 {
   JSONReader reader;
-  if (m_currentReply->error() == QNetworkReply::NoError) {
+  if(m_currentReply->error() == QNetworkReply::NoError) {
     QMessageBox::information(this, "Success", "Collection created!");
     reader.ReadFromString(m_currentReply->readAll());
   } else {

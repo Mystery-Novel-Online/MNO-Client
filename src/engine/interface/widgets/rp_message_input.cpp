@@ -28,9 +28,9 @@ void RPMessageInput::reloadHighlights()
   m_openingCharacters.clear();
 
   QVector<QStringList> rawHighlights = AOApplication::getInstance()->get_highlight_colors();
-  for (const QStringList& h : rawHighlights)
+  for(const QStringList& h : rawHighlights)
   {
-    if (h.size() >= 3)
+    if(h.size() >= 3)
     {
       m_highlights.append({ h[2] == "0", h[0][0], h[0][1], h[1] });
       m_openingCharacters.append(h[0][0]);
@@ -66,13 +66,13 @@ QString RPMessageInput::text() const
   QString result;
   QTextBlock block = document()->begin();
 
-  while (block.isValid())
+  while(block.isValid())
   {
     QTextBlock::iterator it;
-    for (it = block.begin(); !(it.atEnd()); ++it)
+    for(it = block.begin(); !(it.atEnd()); ++it)
     {
       QTextFragment frag = it.fragment();
-      if (frag.isValid() && !frag.charFormat().isImageFormat())
+      if(frag.isValid() && !frag.charFormat().isImageFormat())
       {
         result += frag.text();
       }
@@ -88,20 +88,20 @@ QVector<MessageTag> RPMessageInput::getTags()
   QVector<MessageTag> tags;
 
   QTextBlock block = document()->begin();
-  while (block.isValid())
+  while(block.isValid())
   {
     QTextBlock::iterator it = block.begin();
-    while (!it.atEnd())
+    while(!it.atEnd())
     {
       QTextFragment frag = it.fragment();
-      if (!frag.isValid()) {
+      if(!frag.isValid()) {
         ++it;
         continue;
       }
 
       const QTextCharFormat format = frag.charFormat();
 
-      if (format.isImageFormat())
+      if(format.isImageFormat())
       {
         QTextImageFormat imageFormat = format.toImageFormat();
 
@@ -177,24 +177,24 @@ void RPMessageInput::applyHighlighting(const QString &text)
   m_highlightQueue.clear();
   bool ignoreNext = false;
 
-  for (int i = 0; i < text.length(); ++i) {
+  for(int i = 0; i < text.length(); ++i) {
     QChar c = text[i];
     QTextCursor charCursor(document());
     charCursor.setPosition(i);
     charCursor.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 1);
 
-    if (charCursor.charFormat().isImageFormat())
+    if(charCursor.charFormat().isImageFormat())
       continue;
 
-    if (!ignoreNext && c == '\\') {
+    if(!ignoreNext && c == '\\') {
       ignoreNext = true;
       charCursor.setCharFormat(normalFormat);
       continue;
     }
 
-    if (!ignoreNext) {
-      if (closeHighlight(c, charCursor, formatStack)) continue;
-      if (openHighlight(c, charCursor, formatStack)) continue;
+    if(!ignoreNext) {
+      if(closeHighlight(c, charCursor, formatStack)) continue;
+      if(openHighlight(c, charCursor, formatStack)) continue;
     }
 
     QTextCharFormat formatToApply = formatStack.isEmpty() ? normalFormat : formatStack.last();
@@ -205,10 +205,10 @@ void RPMessageInput::applyHighlighting(const QString &text)
 
 bool RPMessageInput::closeHighlight(QChar c, QTextCursor &cursor, QList<QTextCharFormat> &formatStack)
 {
-  if (m_highlightQueue.isEmpty()) return false;
+  if(m_highlightQueue.isEmpty()) return false;
 
   const ThemeMessageHighlight& last = m_highlightQueue.last();
-  if (last.closingCharacter != c) return false;
+  if(last.closingCharacter != c) return false;
 
   QTextCharFormat format;
   format.setForeground(last.hideCharacter ? QColor(last.colourValue + "80") : QColor(last.colourValue));
@@ -221,9 +221,9 @@ bool RPMessageInput::closeHighlight(QChar c, QTextCursor &cursor, QList<QTextCha
 
 bool RPMessageInput::openHighlight(QChar c, QTextCursor &cursor, QList<QTextCharFormat> &formatStack)
 {
-  for (const auto& h : m_highlights)
+  for(const auto& h : m_highlights)
   {
-    if (h.openingCharacter == c)
+    if(h.openingCharacter == c)
     {
       m_highlightQueue.append(h);
 
@@ -249,12 +249,12 @@ void RPMessageInput::handleTextChanged()
   QTextCursor cursor = textCursor();
   int savedPos = cursor.position();
 
-  if (plain.length() > m_maxLength) {
+  if(plain.length() > m_maxLength) {
     plain = plain.left(m_maxLength);
 
     setPlainText(plain);
 
-    if (savedPos > plain.length())
+    if(savedPos > plain.length())
       savedPos = plain.length();
     cursor.setPosition(savedPos);
     setTextCursor(cursor);
@@ -267,7 +267,7 @@ void RPMessageInput::handleTextChanged()
   cursor.beginEditBlock();
 
   int i = 0;
-  while (i < plain.length()) {
+  while(i < plain.length()) {
     if(plain[i] == '\n')
     {
       QTextCursor removeCursor(document());
@@ -278,9 +278,9 @@ void RPMessageInput::handleTextChanged()
       i++;
       continue;
     }
-    if (plain[i] == '<') {
+    if(plain[i] == '<') {
       int end = plain.indexOf('>', i);
-      if (end == -1)
+      if(end == -1)
         break;
 
       QString tagText = plain.mid(i + 1, end - i - 1);
@@ -292,25 +292,25 @@ void RPMessageInput::handleTextChanged()
       bool removeData = true;
       CueType tagType;
 
-      if (tagTypeStr == "flip" && parts.isEmpty()) tagType = CueType::Flip;
-      else if (tagTypeStr == "flipv" && parts.isEmpty()) tagType = CueType::FlipV;
-      else if (tagTypeStr == "hide" && parts.isEmpty()) tagType = CueType::Hide;
-      else if (tagTypeStr == "nl" && parts.isEmpty()) tagType = CueType::NewLine;
-      else if (tagTypeStr == "wait" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = CueType::Wait; }
-      else if (tagTypeStr == "speed" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = CueType::Speed; }
-      else if (tagTypeStr == "music" && parts.count() == 1) { args.append(parts[0]); tagType = CueType::MusicChange; }
-      else if (tagTypeStr == "sfx" && parts.count() == 1) { args.append(parts[0]); tagType = CueType::SoundEffect; }
-      else if (tagTypeStr == "anim" && parts.count() == 1) { args.append(parts[0]); tagType = CueType::PlaySequence; }
-      else if ((tagTypeStr == "highlight" || tagTypeStr == "hl") && parts.count() == 1) { args.append(parts[0]); tagType = CueType::Color; }
-      else if ((tagTypeStr == "scale"  || tagTypeStr == "sc") && parts.count() == 1) { args.append(parts[0].toDouble()); tagType = CueType::Size; }
-      else if ((tagTypeStr == "/scale" || tagTypeStr == "/sc") && parts.isEmpty()) { tagType = CueType::SizeEnd; }
-      else if ((tagTypeStr == "/highlight" || tagTypeStr == "/hl")&& parts.isEmpty()) { tagType = CueType::ColorEnd; }
-      else if (tagTypeStr == "layer" && parts.count() == 2) { args.append(parts[0]); args.append(parts[1]); tagType = CueType::Layer; }
-      else if ((tagTypeStr == "blip"  || tagTypeStr == "bl") && parts.count() == 1) { args.append(parts[0]); tagType = CueType::Blip; }
-      else if ((tagTypeStr == "tint") && parts.count() == 1) { args.append(parts[0]); tagType = CueType::Tint; }
+      if(tagTypeStr == "flip" && parts.isEmpty()) tagType = CueType::Flip;
+      else if(tagTypeStr == "flipv" && parts.isEmpty()) tagType = CueType::FlipV;
+      else if(tagTypeStr == "hide" && parts.isEmpty()) tagType = CueType::Hide;
+      else if(tagTypeStr == "nl" && parts.isEmpty()) tagType = CueType::NewLine;
+      else if(tagTypeStr == "wait" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = CueType::Wait; }
+      else if(tagTypeStr == "speed" && parts.count() == 1) { args.append(parts[0].toInt()); tagType = CueType::Speed; }
+      else if(tagTypeStr == "music" && parts.count() == 1) { args.append(parts[0]); tagType = CueType::MusicChange; }
+      else if(tagTypeStr == "sfx" && parts.count() == 1) { args.append(parts[0]); tagType = CueType::SoundEffect; }
+      else if(tagTypeStr == "anim" && parts.count() == 1) { args.append(parts[0]); tagType = CueType::PlaySequence; }
+      else if((tagTypeStr == "highlight" || tagTypeStr == "hl") && parts.count() == 1) { args.append(parts[0]); tagType = CueType::Color; }
+      else if((tagTypeStr == "scale"  || tagTypeStr == "sc") && parts.count() == 1) { args.append(parts[0].toDouble()); tagType = CueType::Size; }
+      else if((tagTypeStr == "/scale" || tagTypeStr == "/sc") && parts.isEmpty()) { tagType = CueType::SizeEnd; }
+      else if((tagTypeStr == "/highlight" || tagTypeStr == "/hl")&& parts.isEmpty()) { tagType = CueType::ColorEnd; }
+      else if(tagTypeStr == "layer" && parts.count() == 2) { args.append(parts[0]); args.append(parts[1]); tagType = CueType::Layer; }
+      else if((tagTypeStr == "blip"  || tagTypeStr == "bl") && parts.count() == 1) { args.append(parts[0]); tagType = CueType::Blip; }
+      else if((tagTypeStr == "tint") && parts.count() == 1) { args.append(parts[0]); tagType = CueType::Tint; }
       else removeData = false;
 
-      if (removeData) {
+      if(removeData) {
         QTextCursor insertCursor(document());
         insertCursor.setPosition(i);
         QTextImageFormat format = createTagFormat(tagType);
@@ -351,12 +351,12 @@ void RPMessageInput::handleTextChanged()
 
 void RPMessageInput::keyPressEvent(QKeyEvent *e)
 {
-  if (e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter)
+  if(e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter)
   {
     emit returnPressed();
     e->accept();
   }
-  else if (e->key() == Qt::Key_Tab)
+  else if(e->key() == Qt::Key_Tab)
   {
     e->ignore();
     return;

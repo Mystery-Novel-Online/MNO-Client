@@ -30,7 +30,7 @@ namespace Layout::ServerSelect
     QObject::connect(rpButton, &QPushButton::released, [rpButton, image, releasedFunction]()
     {
       rpButton->set_image(image + ".png");
-      if (releasedFunction) {  releasedFunction(); }
+      if(releasedFunction) {  releasedFunction(); }
     });
 
     return rpButton;

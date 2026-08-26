@@ -12,7 +12,7 @@ void SceneWidget::reload()
 {
   const QString& sceneFontFile = m_currentScene == ThemeSceneType::SceneType_Courtroom ? COURTROOM_FONTS_INI : LOBBY_FONTS_INI;
 
-  for (auto [widget, identifier] : m_widgetThemeMap.toStdMap())
+  for(auto [widget, identifier] : m_widgetThemeMap.toStdMap())
   {
     engine::system::theme::applyDimensions(widget, identifier, m_currentScene);
 
@@ -56,7 +56,7 @@ RPButton *SceneWidget::createButton(QString name, QString image, std::function<v
   QObject::connect(newButton, &QPushButton::released, [newButton, image, releasedFunction]()
   {
     newButton->set_image(image + ".png");
-    if (releasedFunction) {  releasedFunction(); }
+    if(releasedFunction) {  releasedFunction(); }
   });
 
   return newButton;

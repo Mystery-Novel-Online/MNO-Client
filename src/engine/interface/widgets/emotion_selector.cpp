@@ -58,7 +58,7 @@ int EmotionSelector::calculateTrueIndex(int id)
 
 void EmotionSelector::constructEmotes()
 {
-  while (!m_EmotionButtons.isEmpty())
+  while(!m_EmotionButtons.isEmpty())
     delete m_EmotionButtons.takeLast();
 
   QPoint f_spacing = m_app->current_theme->get_widget_settings_spacing("emotes", "courtroom", "emote_button_spacing");
@@ -78,7 +78,7 @@ void EmotionSelector::constructEmotes()
   m_EmoteRows = ((height() - button_height) / (y_spacing + button_height)) + 1;
 
   m_PageLimit = qMax(1, m_EmoteColumns * m_EmoteRows);
-  for (int n = 0; n < m_PageLimit; ++n)
+  for(int n = 0; n < m_PageLimit; ++n)
   {
     int x_pos = (button_width + x_spacing) * x_mod_count;
     int y_pos = (button_height + y_spacing) * y_mod_count;
@@ -98,7 +98,7 @@ void EmotionSelector::constructEmotes()
 
     ++x_mod_count;
 
-    if (x_mod_count == m_EmoteColumns)
+    if(x_mod_count == m_EmoteColumns)
     {
       ++y_mod_count;
       x_mod_count = 0;
@@ -116,26 +116,26 @@ void EmotionSelector::refreshEmotes(bool scrollToCurrent)
   l_emotesLeft->hide();
   l_emotesRight->hide();
 
-  for (AOEmoteButton *i_button : qAsConst(m_EmotionButtons)) i_button->hide();
+  for(AOEmoteButton *i_button : qAsConst(m_EmotionButtons)) i_button->hide();
 
 
   const int l_emote_count = m_ActorEmotions.length();
   const int l_page_count = qFloor(l_emote_count / m_PageLimit) + bool(l_emote_count % m_PageLimit);
 
-  if (scrollToCurrent)
+  if(scrollToCurrent)
     m_PageIndex = m_SelectedIndex / m_PageLimit;
 
   m_PageIndex = qBound(0, m_PageIndex, l_page_count - 1);
 
   const int l_current_page_emote_count = qBound(0, l_emote_count - m_PageIndex * m_PageLimit, m_PageLimit);
 
-  if (m_PageIndex + 1 < l_page_count)
+  if(m_PageIndex + 1 < l_page_count)
     l_emotesRight->show();
 
-  if (m_PageIndex > 0)
+  if(m_PageIndex > 0)
     l_emotesLeft->show();
 
-  for (int i = 0; i < l_current_page_emote_count; ++i)
+  for(int i = 0; i < l_current_page_emote_count; ++i)
   {
     const int l_real_i = i + m_PageIndex * m_PageLimit;
     AOEmoteButton *l_button = m_EmotionButtons.at(i);
@@ -164,11 +164,11 @@ void EmotionSelector::refreshSelection(bool changedActor)
   l_emoteCombobox->clear();
 
   QStringList l_emote_list;
-  for (const ActorEmote &i_emote : qAsConst(m_ActorEmotions))
+  for(const ActorEmote &i_emote : qAsConst(m_ActorEmotions))
     l_emote_list.append(QString::fromStdString(i_emote.comment));
   l_emoteCombobox->addItems(l_emote_list);
 
-  if (changedActor || l_prev_emote_count != m_ActorEmotions.count())
+  if(changedActor || l_prev_emote_count != m_ActorEmotions.count())
   {
     m_SelectedIndex = 0;
     m_PageIndex = 0;
@@ -187,9 +187,9 @@ void EmotionSelector::resetPage()
 
   QComboBox* emoteCombobox = dynamic_cast<QComboBox*>(LegacyThemeManager::get().getWidget("emote_dropdown"));
 
-  if (emoteCombobox != nullptr)
+  if(emoteCombobox != nullptr)
   {
-    if (emoteCombobox->count())
+    if(emoteCombobox->count())
       emoteCombobox->setCurrentIndex(m_SelectedIndex);
   }
 
@@ -198,14 +198,14 @@ void EmotionSelector::resetPage()
 
 ActorEmote EmotionSelector::getEmote(int emoteId)
 {
-  if (emoteId < 0 || emoteId >= m_ActorEmotions.length())
+  if(emoteId < 0 || emoteId >= m_ActorEmotions.length())
     return ActorEmote();
   return m_ActorEmotions.at(emoteId);
 }
 
 ActorEmote EmotionSelector::getSelectedEmote()
 {
-  if (m_SelectedIndex < 0 || m_SelectedIndex >= m_ActorEmotions.length())
+  if(m_SelectedIndex < 0 || m_SelectedIndex >= m_ActorEmotions.length())
     return ActorEmote();
   return m_ActorEmotions.at(m_SelectedIndex);
 }
@@ -228,7 +228,7 @@ void EmotionSelector::selectEmote(int emoteTarget)
   const int l_max = (m_PageLimit - 1) + m_PageIndex * m_PageLimit;
 
   const ActorEmote &l_prev_emote = getSelectedEmote();
-  if (m_SelectedIndex >= l_min && m_SelectedIndex <= l_max)
+  if(m_SelectedIndex >= l_min && m_SelectedIndex <= l_max)
   {
     AOEmoteButton *l_prev_button = m_EmotionButtons.at(m_SelectedIndex % m_PageLimit);
     l_prev_button->set_image(l_prev_emote, false);
@@ -239,7 +239,7 @@ void EmotionSelector::selectEmote(int emoteTarget)
   m_SelectedIndex = calculateTrueIndex(emoteTarget);
   const ActorEmote &l_emote = getSelectedEmote();
 
-  if (m_SelectedIndex >= l_min && m_SelectedIndex <= l_max)
+  if(m_SelectedIndex >= l_min && m_SelectedIndex <= l_max)
   {
     AOEmoteButton *l_new_button = m_EmotionButtons.at(m_SelectedIndex % m_PageLimit);
     l_new_button->set_image(l_emote, true);
@@ -249,7 +249,7 @@ void EmotionSelector::selectEmote(int emoteTarget)
   const int emote_mod = l_emote.modifier;
 
   QCheckBox* l_preCheckbox = dynamic_cast<QCheckBox*>(LegacyThemeManager::get().getWidget("pre"));
-  if (l_prev_emote_id == m_SelectedIndex) // toggle
+  if(l_prev_emote_id == m_SelectedIndex) // toggle
     l_preCheckbox->setChecked(!l_preCheckbox->isChecked());
   else
     l_preCheckbox->setChecked(emote_mod == 1 || SceneManager::get().pConfigAO->always_pre_enabled());
@@ -266,10 +266,10 @@ void EmotionSelector::dropdownChanged(int id)
   RPListWidget* sfxList = dynamic_cast<RPListWidget*>(LegacyThemeManager::get().getWidget("sfx_list"));
   RPListWidget* animList = dynamic_cast<RPListWidget*>(LegacyThemeManager::get().getWidget("chara_animations"));
 
-  if (sfxList != nullptr)
+  if(sfxList != nullptr)
     sfxList->selectDefault();
 
-  if (animList != nullptr)
+  if(animList != nullptr)
     animList->selectText(QString::fromStdString(getSelectedEmote().sequence));
 
   emotionChange(getSelectedEmote());
@@ -287,10 +287,10 @@ void EmotionSelector::emoteClicked(int id)
   RPListWidget* sfxList = dynamic_cast<RPListWidget*>(LegacyThemeManager::get().getWidget("sfx_list"));
   RPListWidget* animList = dynamic_cast<RPListWidget*>(LegacyThemeManager::get().getWidget("chara_animations"));
 
-  if (sfxList != nullptr)
+  if(sfxList != nullptr)
     sfxList->selectText(QString::fromStdString(getSelectedEmote().sound_file));
 
-  if (animList != nullptr)
+  if(animList != nullptr)
     animList->selectText(QString::fromStdString(getSelectedEmote().sequence));
 
 
@@ -314,8 +314,8 @@ void EmotionSelector::wheelEvent(QWheelEvent *event)
 {
   int delta = event->angleDelta().y();
 
-  if (delta > 0) { switchPagePrevious();}
-  else if (delta < 0) { switchPageNext();}
+  if(delta > 0) { switchPagePrevious();}
+  else if(delta < 0) { switchPageNext();}
 
   QWidget::wheelEvent(event);
 

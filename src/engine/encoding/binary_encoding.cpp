@@ -8,7 +8,7 @@ QString BinaryEncoder::encodeBase64(const QVariantList &values)
   QDataStream payloadStream(&payload, QIODevice::WriteOnly);
   payloadStream.setByteOrder(QDataStream::LittleEndian);
 
-  for (const QVariant& v : values)
+  for(const QVariant& v : values)
   {
     payloadStream << static_cast<qint32>(v.type());
 
@@ -46,7 +46,7 @@ QVariantList BinaryEncoder::decodeBase64(const QString &base64)
   QDataStream payloadStream(payload);
   payloadStream.setByteOrder(QDataStream::LittleEndian);
 
-  while (!payloadStream.atEnd())
+  while(!payloadStream.atEnd())
   {
     qint32 typeInt;
     payloadStream >> typeInt;

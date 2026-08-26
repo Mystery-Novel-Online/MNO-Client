@@ -44,7 +44,7 @@ void CharMenu::OnUpdateCharacterFilesTriggered()
                                        QLineEdit::Normal,
                                        "", &userEnteredInput);
 
-  if (userEnteredInput)
+  if(userEnteredInput)
   {
     parentCourtroom->update_character_content_url(filesLink);
   }

@@ -69,7 +69,7 @@ void AOCharButton::set_character(QString p_character, QString p_character_ini)
   setText(l_file_exist ? nullptr : l_final_character);
 
   const bool l_is_different_chr = m_character != p_character_ini;
-  if (l_is_different_chr)
+  if(l_is_different_chr)
     ui_character->setStyleSheet(
         QString("border-image: url(\"%1\");").arg(engine::fs::characters::getFilePath(p_character_ini, "char_icon.png").replace('\\', '/')));
   ui_character->setVisible(l_is_different_chr);

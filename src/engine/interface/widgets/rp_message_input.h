@@ -38,7 +38,7 @@ protected:
   QMimeData * createMimeDataFromSelection() const override {
     QTextCursor cursor = textCursor();
 
-    if (!cursor.hasSelection())
+    if(!cursor.hasSelection())
       return nullptr;
 
     QString output;
@@ -49,12 +49,12 @@ protected:
     QTextCursor walker(document());
     walker.setPosition(start);
 
-    while (walker.position() < end)
+    while(walker.position() < end)
     {
       walker.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
       QTextCharFormat fmt = walker.charFormat();
 
-      if (fmt.isImageFormat())
+      if(fmt.isImageFormat())
       {
         QTextImageFormat imgFmt = fmt.toImageFormat();
 

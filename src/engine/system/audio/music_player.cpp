@@ -70,7 +70,7 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
         break;
 
       default:
-        if (mCurrentSong)
+        if(mCurrentSong)
           mCurrentSong->fadeOut(3000);
         break;
     }
@@ -78,7 +78,7 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
   }
 
   DRAudiotrackMetadata metadata(p_song);
-  if (!metadata.play_once())
+  if(!metadata.play_once())
   {
     newSong->set_repeatable(true);
     newSong->set_loop(metadata.loop_start(), metadata.loop_end());
@@ -92,7 +92,7 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
       break;
 
     case BGMPlayback_Continue:
-      if (mCurrentSong)
+      if(mCurrentSong)
         mCurrentSong->fadeOut(300);
       newSong->fadeIn(250);
       newSong->playSynced(mCurrentSong.data());
@@ -100,14 +100,14 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
 
     case BGMPlayback_Standard:
     default:
-      if (mCurrentSong)
+      if(mCurrentSong)
         mCurrentSong->fadeOut(3000);
       newSong->fadeIn(3000);
       newSong->play();
       break;
   }
 
-    if (newSong->is_playing())
+    if(newSong->is_playing())
       qDebug() << "playing" << newSong->get_file_name();
 
     newSong->set_speed(0.0f);
@@ -120,7 +120,7 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
 void AOMusicPlayer::setSpeed(float speed)
 {
   if(mCurrentSong == nullptr) return;
-  if (mCurrentSong->is_playing())
+  if(mCurrentSong->is_playing())
   {
     mCurrentSong->set_speed(speed);
   }
@@ -129,7 +129,7 @@ void AOMusicPlayer::setSpeed(float speed)
 void AOMusicPlayer::toggleReverb(bool reverb)
 {
   if(mCurrentSong == nullptr) return;
-  if (mCurrentSong->is_playing())
+  if(mCurrentSong->is_playing())
   {
     mCurrentSong->toggle_reverb(true);
   }
@@ -138,7 +138,7 @@ void AOMusicPlayer::toggleReverb(bool reverb)
 void AOMusicPlayer::setPitch(float pitch)
 {
   if(mCurrentSong == nullptr) return;
-  if (mCurrentSong->is_playing())
+  if(mCurrentSong->is_playing())
   {
     mCurrentSong->set_pitch(pitch);
   }

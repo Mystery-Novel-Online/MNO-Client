@@ -9,7 +9,7 @@ WorkshopCollection WorkshopParser::parseCollection(const QByteArray &json)
   QJsonParseError error;
   QJsonDocument doc = QJsonDocument::fromJson(json, &error);
 
-  if (error.error != QJsonParseError::NoError || !doc.isObject())
+  if(error.error != QJsonParseError::NoError || !doc.isObject())
   {
     qWarning() << "Failed to parse workshop collection:" << error.errorString();
     return collection;
@@ -20,19 +20,19 @@ WorkshopCollection WorkshopParser::parseCollection(const QByteArray &json)
   collection.name = root["collection_name"].toString();
   collection.sizeBytes = root["file_size"].toInt();
 
-  if (root.contains("contents"))
+  if(root.contains("contents"))
   {
     collection.repositories.append(parseRepository(root));
     return collection;
   }
 
-  if (root.contains("repos") && root["repos"].isArray())
+  if(root.contains("repos") && root["repos"].isArray())
   {
     QJsonArray repos = root["repos"].toArray();
 
-    for (const QJsonValue& value : repos)
+    for(const QJsonValue& value : repos)
     {
-      if (!value.isObject())
+      if(!value.isObject())
         continue;
 
       collection.repositories.append(parseRepository(value.toObject()));
@@ -49,7 +49,7 @@ QList<WorkshopCollection> WorkshopParser::parseCollections(const QByteArray &jso
   QJsonParseError error;
   QJsonDocument doc = QJsonDocument::fromJson(json, &error);
 
-  if (error.error != QJsonParseError::NoError || !doc.isArray())
+  if(error.error != QJsonParseError::NoError || !doc.isArray())
   {
     qWarning() << "Failed to parse workshop collections:" << error.errorString();
     return collections;
@@ -57,9 +57,9 @@ QList<WorkshopCollection> WorkshopParser::parseCollections(const QByteArray &jso
 
   QJsonArray root = doc.array();
 
-  for (const QJsonValue &value : root)
+  for(const QJsonValue &value : root)
   {
-    if (!value.isObject())
+    if(!value.isObject())
       continue;
 
     QJsonObject object = value.toObject();
@@ -69,17 +69,17 @@ QList<WorkshopCollection> WorkshopParser::parseCollections(const QByteArray &jso
     collection.name = object["collection_name"].toString();
     collection.sizeBytes = object["file_size"].toInt();
 
-    if (object.contains("contents"))
+    if(object.contains("contents"))
     {
       collection.repositories.append(parseRepository(object));
     }
-    else if (object.contains("repos") && object["repos"].isArray())
+    else if(object.contains("repos") && object["repos"].isArray())
     {
       QJsonArray repos = object["repos"].toArray();
 
-      for (const QJsonValue &repo : repos)
+      for(const QJsonValue &repo : repos)
       {
-        if (!repo.isObject())
+        if(!repo.isObject())
           continue;
 
         collection.repositories.append(parseRepository(repo.toObject()));
@@ -103,13 +103,13 @@ WorkshopRepository WorkshopParser::parseRepository(const QJsonObject &object)
   repo.contentId = object["id"].toInt();
   repo.lastUpdated = object["last_updated"].toInt();
 
-  if (object.contains("contents") && object["contents"].isArray())
+  if(object.contains("contents") && object["contents"].isArray())
   {
     QJsonArray files = object["contents"].toArray();
 
-    for (const QJsonValue& value : files)
+    for(const QJsonValue& value : files)
     {
-      if (!value.isObject())
+      if(!value.isObject())
         continue;
 
       repo.files.append(parseFile(value.toObject()));
@@ -206,7 +206,7 @@ WorkshopContentEntry WorkshopParser::requestDetails(const QString& guid, Worksho
 
   loop.exec();
 
-  if (reply->error() != QNetworkReply::NoError)
+  if(reply->error() != QNetworkReply::NoError)
   {
     qWarning() << "Failed to retrieve workshop details:" << reply->errorString();
 
@@ -218,7 +218,7 @@ WorkshopContentEntry WorkshopParser::requestDetails(const QString& guid, Worksho
   reply->deleteLater();
   QJsonDocument doc = QJsonDocument::fromJson(responseData);
 
-  if (!doc.isObject())
+  if(!doc.isObject())
   {
     qWarning() << "Invalid JSON returned.";
     return entry;

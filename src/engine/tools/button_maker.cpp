@@ -73,9 +73,9 @@ ButtonMaker::ButtonMaker(QWidget *parent) : QWidget(parent)
 
 int ButtonMaker::findEmote(const ActorEmote &emote) const
 {
-  for (int i = 0; i < m_Emotes.size(); ++i)
+  for(int i = 0; i < m_Emotes.size(); ++i)
   {
-    if (m_Emotes[i].comment == emote.comment &&
+    if(m_Emotes[i].comment == emote.comment &&
         m_Emotes[i].outfitName == emote.outfitName)
       return i;
   }
@@ -119,7 +119,7 @@ void ButtonMaker::SetEmote(const ActorEmote& emote)
 
   int index = findEmote(emote);
 
-  if (index == -1)
+  if(index == -1)
     return;
 
   m_EmoteIndex = index;
@@ -151,7 +151,7 @@ void ButtonMaker::SetCharacter(QString character)
   }
 
   m_Emotes.clear();
-  for (const ActorEmote& emote : emotes)
+  for(const ActorEmote& emote : emotes)
     m_Emotes << emote;
 
   SetEmote(m_Emotes.at(m_EmoteIndex));
@@ -217,7 +217,7 @@ void ButtonMaker::loadImage(QImage &target)
 QImage ButtonMaker::LoadImageDialog()
 {
   QString filePath = QFileDialog::getOpenFileName(this, "Select Image", "", "Images (*.png *.jpg *.bmp)");
-  if (!filePath.isEmpty())
+  if(!filePath.isEmpty())
   {
     return QImage(filePath);
   }
@@ -248,7 +248,7 @@ QImage ButtonMaker::drawButton() const
   finalOutput.fill(Qt::transparent);
   QPainter finalPainter(&finalOutput);
 
-  if (!m_UnderlayImage.isNull()) {
+  if(!m_UnderlayImage.isNull()) {
     QImage underlayScaled = m_UnderlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     finalPainter.drawImage(0, 0, underlayScaled);
   }
@@ -258,7 +258,7 @@ QImage ButtonMaker::drawButton() const
   QImage cropppedSprite = fullImage.copy(cropRect);
   cropppedSprite = cropppedSprite.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
 
-  if (!m_AlphaMaskImage.isNull())
+  if(!m_AlphaMaskImage.isNull())
   {
     QImage maskScaled = m_AlphaMaskImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     cropppedSprite.setAlphaChannel(maskScaled);
@@ -266,7 +266,7 @@ QImage ButtonMaker::drawButton() const
 
   finalPainter.drawImage(0, 0, cropppedSprite);
 
-  if (!u_overlayDisplay->m_OverlayImage.isNull())
+  if(!u_overlayDisplay->m_OverlayImage.isNull())
   {
     QImage overlayScaled = u_overlayDisplay->m_OverlayImage.scaled(outputSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     finalPainter.drawImage(0, 0, overlayScaled);
@@ -348,7 +348,7 @@ void ButtonMakerOverlay::keyPressEvent(QKeyEvent *event)
       m_renderGuides = m_renderGuides == false;
       break;
     case Qt::Key_R:
-      if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
+      if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
         m_rectPos = QPoint((width() / 2) - (m_rectSize / 2), 80);
         m_rectSize = 120;
       }
@@ -385,7 +385,7 @@ void ButtonMakerOverlay::mousePressEvent(QMouseEvent *event)
 {
   setFocus();
   QRect rect(m_rectPos, QSize(m_rectSize, m_rectSize));
-  if (rect.contains(event->pos())) {
+  if(rect.contains(event->pos())) {
     m_dragging = true;
     m_dragOffset = event->pos() - m_rectPos;
   }
@@ -393,7 +393,7 @@ void ButtonMakerOverlay::mousePressEvent(QMouseEvent *event)
 
 void ButtonMakerOverlay::mouseMoveEvent(QMouseEvent *event)
 {
-  if (!m_dragging) return;
+  if(!m_dragging) return;
 
   m_rectPos = event->pos() - m_dragOffset;
   update();

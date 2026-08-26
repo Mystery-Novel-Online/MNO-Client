@@ -16,14 +16,14 @@ void RPAmbiencePlayer::play(QString ambienceName)
 
   if(!newAmbience)
   {
-    if (m_currentAmbience)
+    if(m_currentAmbience)
       m_currentAmbience->fadeOut(600);
     return;
   }
 
   newAmbience->set_repeatable(true);
 
-  if (m_currentAmbience)
+  if(m_currentAmbience)
     m_currentAmbience->fadeOut(600);
   newAmbience->fadeIn(600);
   newAmbience->play();
@@ -38,7 +38,7 @@ void RPAmbiencePlayer::play(QString ambienceName)
 void RPAmbiencePlayer::toggleReverb(bool reverb)
 {
   if(m_currentAmbience == nullptr) return;
-  if (m_currentAmbience->is_playing())
+  if(m_currentAmbience->is_playing())
   {
     m_currentAmbience->toggle_reverb(true);
   }

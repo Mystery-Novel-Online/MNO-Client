@@ -10,7 +10,7 @@ HubUploadManager::HubUploadManager(QObject *parent) : QObject(parent) { }
 void HubUploadManager::prompt(const QString &packetName)
 {
   QString file = QFileDialog::getOpenFileName(nullptr, "Select YAML File", "", "YAML Files (*.yaml)");
-  if (file.trimmed().isEmpty())
+  if(file.trimmed().isEmpty())
     return;
   upload(file, packetName);
 }
@@ -33,7 +33,7 @@ void HubUploadManager::upload(const QString &filePath, const QString &packetName
   {
     reply->deleteLater();
 
-    if (reply->error())
+    if(reply->error())
     {
       emit uploadError(reply->errorString());
       return;

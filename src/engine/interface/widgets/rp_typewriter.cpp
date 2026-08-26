@@ -53,7 +53,7 @@ void RPTypewriter::setInput(QString inputText, const QString& character)
 
   for(const QChar& letter : inputText)
   {
-    if (!ignoreNextCharacter && letter == Qt::Key_Backslash)
+    if(!ignoreNextCharacter && letter == Qt::Key_Backslash)
     {
       ignoreNextCharacter = true;
       continue;

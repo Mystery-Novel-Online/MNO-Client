@@ -43,10 +43,10 @@ DRGraphicsView::~DRGraphicsView()
 void DRGraphicsView::resizeEvent(QResizeEvent *event)
 {
   QGraphicsView::resizeEvent(event);
-  for (QGraphicsItem *i_item : scene()->items())
+  for(QGraphicsItem *i_item : scene()->items())
   {
     auto l_object = dynamic_cast<QObject *>(i_item);
-    if (l_object)
+    if(l_object)
     {
       l_object->setProperty("size", event->size());
     }

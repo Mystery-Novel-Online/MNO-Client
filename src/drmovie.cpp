@@ -30,11 +30,11 @@ void DRMovie::set_mirrored(bool p_enabled)
 
 void DRMovie::update_visibility()
 {
-  if (is_running())
+  if(is_running())
   {
     show();
   }
-  else if (m_hide_when_done)
+  else if(m_hide_when_done)
   {
     hide();
   }

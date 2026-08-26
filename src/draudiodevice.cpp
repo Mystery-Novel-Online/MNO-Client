@@ -6,7 +6,7 @@ QVector<DRAudioDevice> DRAudioDevice::get_device_list()
   QVector<DRAudioDevice> r_device_list;
 
   BASS_DEVICEINFO l_device_info;
-  for (int i = 0; BASS_GetDeviceInfo(i, &l_device_info); ++i)
+  for(int i = 0; BASS_GetDeviceInfo(i, &l_device_info); ++i)
   {
     DRAudioDevice l_device;
     l_device.m_id = i;

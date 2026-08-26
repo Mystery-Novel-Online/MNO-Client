@@ -12,7 +12,7 @@ void NetworkWindow::draw()
   static int selected = -1;
   static bool paused = false;
 
-  if (ImGui::Button("Clear"))
+  if(ImGui::Button("Clear"))
   {
     NetworkTrafficLog::instance().clear();
     selected = -1;
@@ -32,7 +32,7 @@ void NetworkWindow::draw()
 
   ImGui::BeginChild("PacketList", ImVec2(320, 0), true);
   {
-    if (ImGui::BeginTable("Packets", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingStretchProp, ImVec2(0, 0)))
+    if(ImGui::BeginTable("Packets", 4, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Resizable | ImGuiTableFlags_SizingStretchProp, ImVec2(0, 0)))
     {
       ImGui::TableSetupColumn("Time");
       ImGui::TableSetupColumn("Direction");
@@ -40,18 +40,18 @@ void NetworkWindow::draw()
       ImGui::TableSetupColumn("Size");
       ImGui::TableHeadersRow();
 
-      for (int i = 0; i < events.size(); ++i)
+      for(int i = 0; i < events.size(); ++i)
       {
         const auto& event = events[i];
 
-        if (paused)
+        if(paused)
           continue;
 
-        if (filter[0] != '\0')
+        if(filter[0] != '\0')
         {
           const QString filterText = QString::fromUtf8(filter);
 
-          if (!event.header.contains(filterText, Qt::CaseInsensitive))
+          if(!event.header.contains(filterText, Qt::CaseInsensitive))
             continue;
         }
 
@@ -81,7 +81,7 @@ void NetworkWindow::drawPacketInspector(int selected)
 {
   const auto& events = NetworkTrafficLog::instance().events();
 
-  if (selected < 0 || selected >= events.size())
+  if(selected < 0 || selected >= events.size())
   {
     ImGui::TextDisabled("Select a packet.");
     return;
@@ -101,7 +101,7 @@ void NetworkWindow::drawPacketInspector(int selected)
 
   ImGui::Text("Content");
 
-  for (int i = 0; i < event.content.size(); ++i)
+  for(int i = 0; i < event.content.size(); ++i)
   {
     ImGui::PushID(i);
 
@@ -130,7 +130,7 @@ bool NetworkWindow::drawTableEntry(const NetworkEvent &entry, bool selected, int
   ImGui::TableNextColumn();
 
 
-  if (entry.direction == NetworkDirection::Incoming)
+  if(entry.direction == NetworkDirection::Incoming)
     ImGui::TextUnformatted("IN");
   else
     ImGui::TextUnformatted("OUT");
@@ -139,7 +139,7 @@ bool NetworkWindow::drawTableEntry(const NetworkEvent &entry, bool selected, int
 
   ImGui::PushID(id);
 
-  if (ImGui::Selectable(entry.header.toUtf8().constData(), selected, ImGuiSelectableFlags_SpanAllColumns))
+  if(ImGui::Selectable(entry.header.toUtf8().constData(), selected, ImGuiSelectableFlags_SpanAllColumns))
     selectedState = true;
 
   ImGui::PopID();

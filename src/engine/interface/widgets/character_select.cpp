@@ -11,11 +11,11 @@ void CharacterSelectWidget::wheelEvent(QWheelEvent *event)
 {
   int delta = event->angleDelta().y();
 
-  if (delta > 0)
+  if(delta > 0)
   {
     ao_app->get_courtroom()->on_char_select_left_clicked();
   }
-  else if (delta < 0)
+  else if(delta < 0)
   {
     ao_app->get_courtroom()->on_char_select_right_clicked();
   }

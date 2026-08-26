@@ -61,7 +61,7 @@ struct CharaSpriteMetadata
   QString emotePath()
   {
     QString path = QFileInfo(emote).path();
-    if (!path.isEmpty()) path += "/";
+    if(!path.isEmpty()) path += "/";
     return path;
   }
 

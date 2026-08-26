@@ -90,12 +90,12 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
 
   connect(box, &QMessageBox::finished, [=](int result)
   {
-      if (result != QMessageBox::Yes)
+      if(result != QMessageBox::Yes)
         return;
 
       DownloaderPrompt *prompt = new DownloaderPrompt(nullptr);
       prompt->setDownloadType(type);
-      if (HIDE_PROGRESS_BAR)
+      if(HIDE_PROGRESS_BAR)
         prompt->hide();
       else
         prompt->show();
@@ -103,7 +103,7 @@ void DownloaderPrompt::StartDownload(QString repository, QString directory, cons
 
 
       QString baseUrl = QString("%1://%2").arg(url.scheme(), url.host());
-      if (url.port() != -1) baseUrl += QString(":%1").arg(url.port());
+      if(url.port() != -1) baseUrl += QString(":%1").arg(url.port());
 
       prompt->setDirectory(directory);
       prompt->setBaseUrl(baseUrl);
@@ -164,14 +164,14 @@ bool DownloaderPrompt::StartDownload(const QStringList &guids, DownloadType type
       downloadText,
       QMessageBox::Yes | QMessageBox::No);
 
-  if (reply == QMessageBox::Yes)
+  if(reply == QMessageBox::Yes)
   {
     DownloaderPrompt *prompt = new DownloaderPrompt(nullptr);
     prompt->setDownloadType(type);
     prompt->show();
 
     QString baseUrl = QString("%1://%2").arg(url.scheme(), url.host());
-    if (url.port() != -1) baseUrl += QString(":%1").arg(url.port());
+    if(url.port() != -1) baseUrl += QString(":%1").arg(url.port());
 
     prompt->setBaseUrl(baseUrl);
 
@@ -259,16 +259,16 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
 
 void DownloaderPrompt::updateUi()
 {
-  if (m_downloadedBytes <= 0) return;
+  if(m_downloadedBytes <= 0) return;
 
   int progress = static_cast<int>((double)m_downloadedBytes / m_totalDownloadBytes * 100.0);
   m_progressBar->setValue(progress);
 
-  if (!m_speedTimer.isValid())
+  if(!m_speedTimer.isValid())
     m_speedTimer.start();
 
   qint64 elapsedMs = m_speedTimer.elapsed();
-  if (elapsedMs > 0)
+  if(elapsedMs > 0)
   {
     m_currentSpeed = (double)(m_downloadedBytes - m_lastBytes) / (elapsedMs / 1000.0);
     m_lastBytes = m_downloadedBytes;
@@ -288,7 +288,7 @@ QString DownloaderPrompt::formatBytes(double bytes)
   const char* units[] = {"B", "KB", "MB", "GB", "TB"};
 
   int i = 0;
-  while (bytes >= 1024.0 && i < 4)
+  while(bytes >= 1024.0 && i < 4)
   {
     bytes /= 1024.0;
     ++i;
@@ -301,7 +301,7 @@ QString DownloaderPrompt::formatBytes(double bytes)
 
 void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
 {
-  if (reply->error() != QNetworkReply::NoError)
+  if(reply->error() != QNetworkReply::NoError)
   {
     QMessageBox::warning(this, "Error", reply->errorString());
     reply->deleteLater();
@@ -328,7 +328,7 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
     m_totalDownloadBytes += (double)collection.sizeBytes;
 
 
-    for (const WorkshopRepository& repo : collection.repositories)
+    for(const WorkshopRepository& repo : collection.repositories)
     {
       QString scanDirectory = "";
       QMap<QString, QString> existingFileMap = {};
@@ -342,9 +342,9 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
         {
           QString existingPath = QString::fromStdString(rolechat::fs::RCDir("characters/" + workshopSearch.folder).findFirst());
 
-          if (!QDir(scanDirectory).exists())
+          if(!QDir(scanDirectory).exists())
           {
-            if (QDir().rename(existingPath, scanDirectory))
+            if(QDir().rename(existingPath, scanDirectory))
             {
               qDebug() << "Moved successfully";
             }
@@ -356,7 +356,7 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
 
       GetDB().cacheContentData(repo.guid.toStdString(), repo.folderName.toStdString(), repo.lastUpdated, repo.contentId);
 
-      for (const WorkshopFile& file : repo.files)
+      for(const WorkshopFile& file : repo.files)
       {
         QString cdnUri = m_baseUrl + "/api/workshop/file/" + file.hash;
         QString filePath = "";
@@ -369,7 +369,7 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
         if(!filePath.startsWith(scanDirectory))
         {
           QFile scanningFile(filePath);
-          if (scanningFile.exists())
+          if(scanningFile.exists())
           {
             existingFileMap[filePath] = FileHashUtil::md5File(filePath);
             m_downloadedBytes += scanningFile.size();
@@ -391,12 +391,12 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
         hashMap[filePath] = cdnUri;
       }
 
-      for (auto it = existingFileMap.begin(); it != existingFileMap.end(); ++it)
+      for(auto it = existingFileMap.begin(); it != existingFileMap.end(); ++it)
       {
         const QString &staleFilePath = it.key();
 
         QFile file(staleFilePath);
-        if (file.exists())
+        if(file.exists())
         {
           file.remove();
         }

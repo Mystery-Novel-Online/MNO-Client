@@ -28,11 +28,11 @@ static std::atomic_bool s_continue = false;
 void check_file_size_and_rename()
 {
   QFile l_log(C_FILE_NAME);
-  if (l_log.exists() && l_log.size() >= C_MAX_FILE_SIZE)
+  if(l_log.exists() && l_log.size() >= C_MAX_FILE_SIZE)
   {
-    if (l_log.exists(C_FILE_NAME_BACKUP))
+    if(l_log.exists(C_FILE_NAME_BACKUP))
     {
-      if (!l_log.remove(C_FILE_NAME_BACKUP))
+      if(!l_log.remove(C_FILE_NAME_BACKUP))
       {
         s_continue = false;
         qInstallMessageHandler(0);
@@ -41,7 +41,7 @@ void check_file_size_and_rename()
       }
     }
 
-    if (!l_log.rename(C_FILE_NAME_BACKUP))
+    if(!l_log.rename(C_FILE_NAME_BACKUP))
     {
       s_continue = false;
       qInstallMessageHandler(0);
@@ -55,22 +55,22 @@ void task()
   s_continue = true;
   QSystemSemaphore l_system_lock("dro-logger-lock", 1);
   QStringList l_msg_list;
-  while (s_continue)
+  while(s_continue)
   {
-    if (s_msg_list_lock.tryLock())
+    if(s_msg_list_lock.tryLock())
     {
       QStringList l_msg_list(std::move(s_msg_list));
       s_msg_list_lock.unlock();
 
-      if (!l_msg_list.isEmpty())
+      if(!l_msg_list.isEmpty())
       {
         l_system_lock.acquire();
         check_file_size_and_rename();
         QFile l_log(C_FILE_NAME);
-        if (l_log.open(QFile::WriteOnly | QFile::Append))
+        if(l_log.open(QFile::WriteOnly | QFile::Append))
         {
           QTextStream in(&l_log);
-          for (const QString &i_msg : l_msg_list)
+          for(const QString &i_msg : l_msg_list)
           {
             in << i_msg
 #if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
@@ -116,15 +116,15 @@ QString generate_message(QtMsgType p_type, const QMessageLogContext &p_context, 
 
   QString l_final_message = p_message;
   // Censor HDID
-  if (p_message.startsWith("S/S: HI#"))
+  if(p_message.startsWith("S/S: HI#"))
     l_final_message = "S/S: HI#HDID#%";
-  else if (p_message.startsWith("M/S: HI#"))
+  else if(p_message.startsWith("M/S: HI#"))
     l_final_message = "M/S: HI#HDID#%";
   else
     l_final_message = p_message;
 
   l_output = QString("[%1][%2][%3] %4").arg(l_timestamp, l_pid, l_output, l_final_message);
-  if (s_verbose_logging)
+  if(s_verbose_logging)
     l_output.append(QString(" (%1:%2, %3)").arg(p_context.file).arg(p_context.line).arg(p_context.function));
 
   return l_output;
@@ -139,7 +139,7 @@ void save_log_line(QString p_log_line)
 
 void logger::log(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-  if (!s_initialized)
+  if(!s_initialized)
   {
     s_initialized = true;
     s_logger = std::thread(task);
@@ -156,7 +156,7 @@ void logger::shutdown()
   s_continue = false;
   try
   {
-    if (s_logger.joinable())
+    if(s_logger.joinable())
       s_logger.join();
   }
   catch (const std::exception &e)

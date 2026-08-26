@@ -206,7 +206,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   {
     QString current = w_WorkshopSearchBar->text();
 
-    if (!current.isEmpty() && !current.endsWith(' '))
+    if(!current.isEmpty() && !current.endsWith(' '))
       current += ' ';
 
     current += "[" + tag + "]";
@@ -268,9 +268,9 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
     {
       auto priority = [](const QString& category)
       {
-        if (category == "Artist")
+        if(category == "Artist")
           return 0;
-        if (category == "Franchise")
+        if(category == "Franchise")
           return 1;
         return 2;
       };
@@ -278,7 +278,7 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
       return priority(a.first) < priority(b.first);
     });
 
-    for (const QPair<QString, QString>& tag : tags)
+    for(const QPair<QString, QString>& tag : tags)
     {
       if(tag.first == "Artist")
       {
@@ -380,7 +380,7 @@ void Lobby::update_widgets()
 {
   ao_app->current_theme->InitTheme();
   RPRect f_lobby = engine::system::theme::getDimensions("lobby", ThemeSceneType::SceneType_ServerSelect);
-  if (f_lobby.width < 0 || f_lobby.height < 0)
+  if(f_lobby.width < 0 || f_lobby.height < 0)
   {
     qWarning() << "W: did not find lobby width or height in " << LOBBY_DESIGN_INI;
     f_lobby.width = 517;
@@ -423,7 +423,7 @@ void Lobby::update_widgets()
   ui_version->setText("Version: " + get_version_string());
 
   ui_config_panel->set_image_and_text("lobby_config_panel.png", "Config");
-  if (ui_config_panel->isHidden() || ui_config_panel->size().isEmpty())
+  if(ui_config_panel->isHidden() || ui_config_panel->size().isEmpty())
   {
     ui_config_panel->resize(64, 64);
     ui_config_panel->move(0, 0);
@@ -504,7 +504,7 @@ void Lobby::set_stylesheet(QWidget *widget, QString target_tag)
 {
   QString f_file = "lobby_stylesheets.css";
   QString style_sheet_string = ao_app->get_stylesheet(target_tag, f_file);
-  if (style_sheet_string != "")
+  if(style_sheet_string != "")
     widget->setStyleSheet(style_sheet_string);
 }
 
@@ -583,7 +583,7 @@ void Lobby::save_settings()
 void Lobby::load_favorite_server_list()
 {
   const QString l_file_path = FS::Paths::FindFile(BASE_FAVORITE_SERVERS_INI, false);
-  if (l_file_path.isEmpty())
+  if(l_file_path.isEmpty())
   {
     load_legacy_favorite_server_list();
     return;
@@ -601,7 +601,7 @@ void Lobby::load_favorite_server_list()
     std::sort(l_group_list.begin(), l_group_list.end(), l_sorter);
   }
 
-  for (const QString &i_group : qAsConst(l_group_list))
+  for(const QString &i_group : qAsConst(l_group_list))
   {
     l_ini.beginGroup(i_group);
     DRServerInfo l_server;
@@ -619,13 +619,13 @@ void Lobby::load_legacy_favorite_server_list()
 {
   DRServerInfoList l_server_list;
   QFile l_file(FS::Paths::FindFile(BASE_SERVERLIST_TXT, false));
-  if (l_file.open(QIODevice::ReadOnly))
+  if(l_file.open(QIODevice::ReadOnly))
   {
     QTextStream in(&l_file);
-    while (!in.atEnd())
+    while(!in.atEnd())
     {
       const QStringList l_contents = in.readLine().split(":");
-      if (l_contents.length() < 3)
+      if(l_contents.length() < 3)
         continue;
       DRServerInfo f_server;
       f_server.address = l_contents.at(0);
@@ -644,7 +644,7 @@ void Lobby::save_favorite_server_list()
   l_ini.setIniCodec("UTF-8");
 
   l_ini.clear();
-  for (int i = 0; i < m_favorite_server_list.length(); ++i)
+  for(int i = 0; i < m_favorite_server_list.length(); ++i)
   {
     const DRServerInfo &i_server = m_favorite_server_list.at(i);
     l_ini.beginGroup(QString::number(i));
@@ -659,14 +659,14 @@ void Lobby::save_favorite_server_list()
 
 void Lobby::previewDownloaded(const QString &filePath, const QString &hash)
 {
-  if (filePath.isEmpty())
+  if(filePath.isEmpty())
     return;
 
   QString expectedHash = Lobby::previewCache().getHashForUrl(m_URLWorkshopPreview);
-  if (hash == expectedHash)
+  if(hash == expectedHash)
   {
     QPixmap pix;
-    if (pix.load(filePath))
+    if(pix.load(filePath))
     {
       ui_workshop_preview->show();
       ui_workshop_preview->setPixmap(pix.scaled(ui_workshop_preview->width(), ui_workshop_preview->height(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -713,7 +713,7 @@ void Lobby::update_server_listing()
   ui_server_list->clear();
   const QIcon l_favorite_icon = QPixmap(ao_app->find_theme_asset_path("favorite_server.png"));
   const QBrush l_favorite_color = ao_app->get_color("favorite_server_color", LOBBY_DESIGN_INI);
-  for (int i = 0; i < m_combined_server_list.length(); ++i)
+  for(int i = 0; i < m_combined_server_list.length(); ++i)
   {
     const DRServerInfo &l_server = m_combined_server_list.at(i);
     QListWidgetItem *l_server_item = new QListWidgetItem;
@@ -746,7 +746,7 @@ void Lobby::update_server_listing()
 
 void Lobby::filter_server_listing()
 {
-  for (int i = 0; i < ui_server_list->count(); ++i)
+  for(int i = 0; i < ui_server_list->count(); ++i)
   {
     QListWidgetItem *l_server_item = ui_server_list->item(i);
     bool hiddenState = m_server_filter == (l_server_item->data(Qt::UserRole).toBool() ? PublicOnly : FavoriteOnly);
@@ -758,15 +758,15 @@ void Lobby::filter_server_listing()
 
 void Lobby::select_current_server()
 {
-  if (m_current_server.name.isEmpty())
+  if(m_current_server.name.isEmpty())
   {
     return;
   }
 
-  for (int i = 0; i < ui_server_list->count(); ++i)
+  for(int i = 0; i < ui_server_list->count(); ++i)
   {
     QListWidgetItem *l_item = ui_server_list->item(i);
-    if (l_item->text() == m_current_server.name)
+    if(l_item->text() == m_current_server.name)
     {
       ui_server_list->scrollToItem(l_item);
       ui_server_list->setCurrentItem(l_item);
@@ -788,7 +788,7 @@ void Lobby::onWorkshopSearch()
 
 void Lobby::onReplayRowChanged(int row)
 {
-  if (row == -1) return;
+  if(row == -1) return;
 
   //QString lImagePath = ReplayManager::get().getReplayImagePath(mCurrentPackage, mCurrentCategory, pUiReplayList->item(row)->text());
   //
@@ -944,14 +944,14 @@ void Lobby::on_refresh_released()
 
 void Lobby::favorite_toggle(int id)
 {
-  if (id >= m_combined_server_list.length())
+  if(id >= m_combined_server_list.length())
     return;
 
   const DRServerInfo& l_selected_server = m_combined_server_list.at(id);
 
   DRServerInfoList l_server_list = m_favorite_server_list;
 
-  if (m_favorite_server_list.contains(l_selected_server))
+  if(m_favorite_server_list.contains(l_selected_server))
   {
 
     QMessageBox::StandardButton reply = QMessageBox::question(
@@ -961,7 +961,7 @@ void Lobby::favorite_toggle(int id)
         QMessageBox::Yes | QMessageBox::No
         );
 
-    if (reply == QMessageBox::Yes)
+    if(reply == QMessageBox::Yes)
     {
       l_server_list.removeAll(l_selected_server);
     }
@@ -978,7 +978,7 @@ void Lobby::on_connect_released()
 {
   SceneManager::get().clearPlayerDataList();
   const VersionStatus l_status = ao_app->get_server_client_version_status();
-  if (l_status != VersionStatus::Ok)
+  if(l_status != VersionStatus::Ok)
   {
     QString l_reason;
     switch (l_status)
@@ -1017,12 +1017,12 @@ void Lobby::on_config_released()
 void Lobby::connect_to_server(int p_row)
 {
   ui_server_list->setCurrentRow(p_row);
-  if (p_row == -1)
+  if(p_row == -1)
     return;
 
   const DRServerInfo l_prev_server = std::move(m_current_server);
   m_current_server = m_combined_server_list.at(p_row);
-  if (l_prev_server != m_current_server)
+  if(l_prev_server != m_current_server)
   {
     ui_player_count->setText(nullptr);
     ao_app->connect_to_server(m_current_server);
@@ -1050,11 +1050,11 @@ void Lobby::show_server_context_menu(QPoint p_point)
   ui_delete_server->setDisabled(true);
   ui_move_up_server->setDisabled(true);
   ui_move_down_server->setDisabled(true);
-  if (l_item.isValid())
+  if(l_item.isValid())
   {
     const int l_item_row = l_item.row();
     m_server_index = l_item_row;
-    if (l_item_row < m_favorite_server_list.length())
+    if(l_item_row < m_favorite_server_list.length())
     {
       m_server_index_type = FavoriteServer;
       ui_modify_server->setEnabled(true);
@@ -1070,15 +1070,15 @@ void Lobby::prompt_server_info_editor()
 {
   DRServerInfoEditor l_editor(this);
   l_editor.setWindowTitle(tr("Server Info Editor"));
-  if (m_server_index.has_value())
+  if(m_server_index.has_value())
   {
     l_editor.set_server_info(m_combined_server_list.at(m_server_index.value()));
   }
-  if (l_editor.exec())
+  if(l_editor.exec())
   {
     auto l_server_info = l_editor.get_server_info();
     auto l_server_info_list = m_favorite_server_list;
-    if (m_server_index.has_value() && m_server_index.value() < l_server_info_list.length())
+    if(m_server_index.has_value() && m_server_index.value() < l_server_info_list.length())
     {
       l_server_info_list.replace(m_server_index.value(), l_server_info);
     }
@@ -1092,7 +1092,7 @@ void Lobby::prompt_server_info_editor()
 
 void Lobby::create_server_info()
 {
-  if (m_server_index_type == FavoriteServer)
+  if(m_server_index_type == FavoriteServer)
   {
     m_server_index.reset();
   }
@@ -1108,7 +1108,7 @@ void Lobby::prompt_delete_server()
 {
   const auto l_server_index = m_server_index.value();
   const auto l_server = m_combined_server_list.at(l_server_index);
-  if (prompt_warning(tr("Are you sure you wish to remove the server %1?").arg(l_server.name)))
+  if(prompt_warning(tr("Are you sure you wish to remove the server %1?").arg(l_server.name)))
   {
     auto l_server_list = m_favorite_server_list;
     l_server_list.remove(l_server_index);
@@ -1145,7 +1145,7 @@ void Lobby::_p_update_description()
 
   QString l_message = l_report_map[ao_app->last_server_status()];
 
-  if (!m_current_server.name.isEmpty())
+  if(!m_current_server.name.isEmpty())
   {
     l_message = QString("%1\n\n"
                         "==== STATUS ====\n"
@@ -1154,11 +1154,11 @@ void Lobby::_p_update_description()
                     .arg(l_message);
   }
 
-  if (!m_current_server.description.isEmpty())
+  if(!m_current_server.description.isEmpty())
   {
     QString l_description = m_current_server.description.toHtmlEscaped();
     const QRegExp l_regex("(https?://[^\\s/$.?#].[^\\s]*)");
-    if (l_description.contains(l_regex))
+    if(l_description.contains(l_regex))
     {
       l_description.replace(l_regex, "<a href=\"\\1\">\\1</a>");
     }

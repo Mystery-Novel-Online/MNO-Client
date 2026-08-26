@@ -45,7 +45,7 @@ namespace engine::network::metadata::user
 
   bool SetCharacterId(int id)
   {
-    if (id != SpectatorId && s_UserCharId == id) return false;
+    if(id != SpectatorId && s_UserCharId == id) return false;
     s_UserCharId = id;
     return true;
   }

@@ -117,7 +117,7 @@ AOApplication::AOApplication(int &argc, char **argv)
   connect(timer, &QTimer::timeout, this, [=]() { RuntimeLoop::Update(); });
   timer->start(16);
 
-  for (int i = 0; i < argc; ++i)
+  for(int i = 0; i < argc; ++i)
   {
     const QString l_arg(argv[i]);
 
@@ -127,12 +127,12 @@ AOApplication::AOApplication(int &argc, char **argv)
       QString path = pendingMnvlUrl.mid(QString("mnvl://").length());
       QStringList parts = path.split('/');
 
-      if (parts.size() >= 3) {
+      if(parts.size() >= 3) {
         QString action = parts[0];
         QString id = parts[1];
         QString folder = parts[2];
 
-        if (action == "download")
+        if(action == "download")
         {
           QString url = ApiManager::baseUri() + "api/workshop/" + id + "/content";
           DownloaderPrompt::StartDownload(url, "packages/Workshop Downloads/", folder, DOWNLOAD_Discord);
@@ -163,7 +163,7 @@ Lobby *AOApplication::get_lobby() const
 
 void AOApplication::construct_lobby()
 {
-  if (is_lobby_constructed)
+  if(is_lobby_constructed)
   {
     qDebug() << "W: lobby was attempted constructed when it already exists";
     return;
@@ -177,7 +177,7 @@ void AOApplication::construct_lobby()
 
 void AOApplication::destruct_lobby()
 {
-  if (!is_lobby_constructed)
+  if(!is_lobby_constructed)
   {
     qDebug() << "W: lobby was attempted destructed when it did not exist";
     return;
@@ -194,7 +194,7 @@ Courtroom *AOApplication::get_courtroom() const
 
 void AOApplication::construct_courtroom()
 {
-  if (is_courtroom_constructed)
+  if(is_courtroom_constructed)
   {
     qDebug() << "W: courtroom was attempted constructed when it already exists";
     return;
@@ -210,7 +210,7 @@ void AOApplication::construct_courtroom()
 void AOApplication::destruct_courtroom()
 {
   // destruct courtroom
-  if (is_courtroom_constructed)
+  if(is_courtroom_constructed)
   {
     delete m_courtroom;
     m_courtroom = nullptr;
@@ -315,17 +315,17 @@ QString AOApplication::get_shout_sprite_path(QString p_character, QString p_shou
   };
 
   QString l_filename = find_asset_path(l_filepath_list, FS::Formats::AnimatedImages());
-  if (l_filename.isEmpty())
+  if(l_filename.isEmpty())
   {
     l_filename = find_theme_asset_path(p_shout, FS::Formats::AnimatedImages());
   }
 
-  if (l_filename.isEmpty())
+  if(l_filename.isEmpty())
   {
     l_filename = find_asset_path(FS::Paths::FindDirectory("animations/shouts/default/") + p_shout, FS::Formats::AnimatedImages());
   }
 
-  if (l_filename.isEmpty())
+  if(l_filename.isEmpty())
   {
     qWarning() << "error: shout not found"
                << "character:" << p_character << "shout:" << p_shout;
@@ -337,10 +337,10 @@ QString AOApplication::get_shout_sprite_path(QString p_character, QString p_shou
 QString AOApplication::get_theme_sprite_path(QString p_file_name, QString p_character)
 {
   QString l_file_path;
-  if (!p_character.isEmpty())
+  if(!p_character.isEmpty())
   {
     QString l_character_file_name = p_file_name;
-    if (l_character_file_name == "custom")
+    if(l_character_file_name == "custom")
     {
       l_character_file_name.append("_bubble");
     }
@@ -352,10 +352,10 @@ QString AOApplication::get_theme_sprite_path(QString p_file_name, QString p_char
     l_file_path = find_asset_path(l_path_list, FS::Formats::SupportedImages());
   }
 
-  if (l_file_path.isEmpty())
+  if(l_file_path.isEmpty())
   {
     l_file_path = find_theme_asset_path(p_file_name, FS::Formats::SupportedImages());
-    if (l_file_path.isEmpty())
+    if(l_file_path.isEmpty())
     {
       l_file_path = find_theme_asset_path("placeholder", FS::Formats::SupportedImages());
     }
@@ -375,12 +375,12 @@ QString AOApplication::get_effect_anim_path(QString file_name)
 
   l_file_path = find_theme_asset_path(file_name, FS::Formats::AnimatedImages());
 
-  if (l_file_path.isEmpty())
+  if(l_file_path.isEmpty())
   {
     l_file_path = find_asset_path(FS::Paths::BasePath() + "animations/effects/default/" + file_name, FS::Formats::AnimatedImages());
   }
 
-  if (l_file_path.isEmpty())
+  if(l_file_path.isEmpty())
   {
     l_file_path = find_theme_asset_path("placeholder", FS::Formats::AnimatedImages());
   }
@@ -396,12 +396,12 @@ QString AOApplication::get_wtce_anim_path(QString file_name)
 
   l_file_path = find_theme_asset_path(file_name, FS::Formats::AnimatedImages());
 
-  if (l_file_path.isEmpty())
+  if(l_file_path.isEmpty())
   {
     l_file_path = find_asset_path(FS::Paths::BasePath() + "animations/wtce/default/" + file_name, FS::Formats::AnimatedImages());
   }
 
-  if (l_file_path.isEmpty())
+  if(l_file_path.isEmpty())
   {
     l_file_path = find_theme_asset_path("placeholder", FS::Formats::AnimatedImages());
   }
@@ -413,7 +413,7 @@ QString AOApplication::get_wtce_anim_path(QString file_name)
 
 QString AOApplication::get_current_char()
 {
-  if (!is_courtroom_constructed)
+  if(!is_courtroom_constructed)
     return nullptr;
   return m_courtroom->get_character_ini();
 }
@@ -429,11 +429,11 @@ QString AOApplication::get_current_char()
  */
 bool AOApplication::is_safe_path(QString p_file)
 {
-  if (!p_file.contains(".."))
+  if(!p_file.contains(".."))
     return true;
   const QStringList l_item_list = p_file.split(QRegularExpression("[\\/]"));
-  for (auto it = l_item_list.crbegin(); it != l_item_list.crend(); ++it)
-    if (*it == "..")
+  for(auto it = l_item_list.crbegin(); it != l_item_list.crend(); ++it)
+    if(*it == "..")
       return false;
   return true;
 }
@@ -441,7 +441,7 @@ bool AOApplication::is_safe_path(QString p_file)
 void AOApplication::toggle_config_panel()
 {
   ao_config_panel->setVisible(!ao_config_panel->isVisible());
-  if (ao_config_panel->isVisible())
+  if(ao_config_panel->isVisible())
   {
     ao_config_panel->setFocus();
     ao_config_panel->raise();
@@ -459,9 +459,9 @@ void AOApplication::load_fonts()
   QFontDatabase l_database;
   QVector<QString> l_font_paths = get_all_package_and_base_paths("fonts");
 
-  for (QString &l_font_path : l_font_paths)
+  for(QString &l_font_path : l_font_paths)
   {
-    for (const QFileInfo &fileInfo : QDir(get_case_sensitive_path(l_font_path)).entryInfoList())
+    for(const QFileInfo &fileInfo : QDir(get_case_sensitive_path(l_font_path)).entryInfoList())
       l_database.addApplicationFont(fileInfo.absoluteFilePath());
   }
 }
@@ -504,7 +504,7 @@ void AOApplication::resolve_current_theme()
   const QString l_current_theme = QString::fromStdString(currentTheme);
   std::optional<QString> l_target_theme;
 
-  if (std::find(l_theme_directories.begin(), l_theme_directories.end(), currentTheme) == l_theme_directories.end())
+  if(std::find(l_theme_directories.begin(), l_theme_directories.end(), currentTheme) == l_theme_directories.end())
   {
     if(!l_theme_directories.empty())
       l_target_theme = QString::fromStdString(l_theme_directories[0]);
@@ -512,9 +512,9 @@ void AOApplication::resolve_current_theme()
       l_target_theme = QString::fromStdString("default");
   }
 
-  if (l_target_theme.has_value())
+  if(l_target_theme.has_value())
   {
-    if (!ao_config->first_launch())
+    if(!ao_config->first_launch())
     {
       call_warning(tr("Your previous theme [%1] is missing; the current theme has been reset.\n\nTo select a different theme, go to the config panel.").arg(l_current_theme));
     }

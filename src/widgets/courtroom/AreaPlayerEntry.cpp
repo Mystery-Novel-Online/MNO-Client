@@ -82,15 +82,15 @@ void AreaPlayerEntry::themeReload()
   const QString imagePathUpdate = ao_app->find_theme_asset_path("player_content_update.png");
   const QString imagePathBorder = ao_app->find_theme_asset_path("char_border.png");
 
-  if (FS::Checks::FileExists(imagePathStatus)) {
+  if(FS::Checks::FileExists(imagePathStatus)) {
     u_statusDisplay->set_image(imagePathStatus);
   }
 
-  if (FS::Checks::FileExists(imagePathUpdate)) {
+  if(FS::Checks::FileExists(imagePathUpdate)) {
     u_updateDisplay->set_image(imagePathUpdate);
   }
 
-  if (FS::Checks::FileExists(imagePathBorder)) {
+  if(FS::Checks::FileExists(imagePathBorder)) {
     u_playerIconBorder->set_image(imagePathBorder);
   }
 
@@ -176,7 +176,7 @@ void AreaPlayerEntry::refreshAutomatic(int width) {
 
 void AreaPlayerEntry::toggleTyping(bool status)
 {
-  if (status) {
+  if(status) {
     u_typingIndicator->show();
     m_typingTimer->start();
   }
@@ -199,7 +199,7 @@ void AreaPlayerEntry::setCharacter(const QString& a_character, bool afkState) {
     u_playerIconBorder->set_image(afkBoarderImagePath);
   }
   else {
-    if (FS::Checks::FileExists(nonAfkBoarderPath)) {
+    if(FS::Checks::FileExists(nonAfkBoarderPath)) {
       u_playerIconBorder->set_image(nonAfkBoarderPath);
     }
   }
@@ -222,14 +222,14 @@ void AreaPlayerEntry::setCharacter(const QString& a_character, bool afkState) {
     }
     else {
       const QString l_selected_texture = engine::fs::characters::getFilePath(a_character, "char_border.png");
-      if (FS::Checks::FileExists(l_selected_texture)) {
+      if(FS::Checks::FileExists(l_selected_texture)) {
         u_playerIconBorder->set_image(l_selected_texture);
       }
     }
   }
   else {
     QString l_missing_char_image = ao_app->find_theme_asset_path("missing_char.png");
-    if (!l_missing_char_image.isEmpty()) {
+    if(!l_missing_char_image.isEmpty()) {
       u_playerIcon->set_theme_image("missing_char.png");
       m_missingPlayerIcon = true;
     }
@@ -300,7 +300,7 @@ void AreaPlayerEntry::messageDiscordFriend()
                                        "",
                                        &ok);
 
-  if (ok && !text.isEmpty()) {
+  if(ok && !text.isEmpty()) {
     WorkshopDiscord::getInstance().sendPrivateMessage(m_playerData.data.discordSnowflake, text);
   }
 }
@@ -393,13 +393,13 @@ void AreaPlayerEntry::showContextMenu(QPoint pos) {
   QAction *copyIDAction = playerMenu->addAction(localization::getText("PLAYER_LIST_ID"));
   connect(copyIDAction, &QAction::triggered, this, &AreaPlayerEntry::copyID);
 
-  if (!m_playerData.data.modHDID.isEmpty()) {
+  if(!m_playerData.data.modHDID.isEmpty()) {
     QString label = localization::getText("MOD_COPY_HDID") + " [" + m_playerData.data.modHDID + "]";
     QAction *copyHDID = playerMenu->addAction(label);
     connect(copyHDID, &QAction::triggered, this, &AreaPlayerEntry::copyHDID);
   }
 
-  if (!m_playerData.data.modIPID.isEmpty()) {
+  if(!m_playerData.data.modIPID.isEmpty()) {
     QString label = localization::getText("MOD_COPY_IPID") + " [" + m_playerData.data.modIPID + "]";
     QAction *copyIPID = playerMenu->addAction(label);
     connect(copyIPID, &QAction::triggered, this, &AreaPlayerEntry::copyIPID);

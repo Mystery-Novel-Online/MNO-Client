@@ -89,8 +89,8 @@ void WorkshopTags::addTag(const QString &text)
 }
 
 void WorkshopTags::clearAllTags() {
-  while (QLayoutItem* item = m_layout->takeAt(0)) {
-    if (QWidget* widget = item->widget()) {
+  while(QLayoutItem* item = m_layout->takeAt(0)) {
+    if(QWidget* widget = item->widget()) {
       widget->deleteLater();
     }
     delete item;

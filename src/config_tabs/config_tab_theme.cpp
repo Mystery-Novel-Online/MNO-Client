@@ -27,17 +27,17 @@ void ConfigTabTheme::refreshThemeList()
   ui->current_theme_dropdown->clear();
   std::optional<int> l_theme_index;
 
-  for (std::string &themeName : rolechat::fs::RCDir("themes").subDirectories())
+  for(std::string &themeName : rolechat::fs::RCDir("themes").subDirectories())
   {
     const QString qThemeName = QString::fromStdString(themeName);
 
-    if (qThemeName == qCurrentTheme)
+    if(qThemeName == qCurrentTheme)
       l_theme_index = ui->current_theme_dropdown->count();
 
     ui->current_theme_dropdown->addItem(qThemeName);
   }
 
-  if (l_theme_index.has_value())
+  if(l_theme_index.has_value())
   {
     ui->current_theme_dropdown->setCurrentIndex(*l_theme_index);
   }
@@ -63,10 +63,10 @@ void ConfigTabTheme::refreshGamemodeList()
     rolechat::fs::RCDir dirGamemodes = rolechat::fs::RCDir(qGamemodePath.toStdString());
 
 
-    for (const std::string &folder : dirGamemodes.subDirectories())
+    for(const std::string &folder : dirGamemodes.subDirectories())
     {
       QString qFolder = QString::fromStdString(folder);
-      if (qFolder == "." || qFolder == "..")
+      if(qFolder == "." || qFolder == "..")
         continue;
       if(qFolder == qCurrentGamemode)
         optionalGamemodeIndex = ui->current_gamemode_dropdown->count();
@@ -75,7 +75,7 @@ void ConfigTabTheme::refreshGamemodeList()
     }
 
 
-    if (optionalGamemodeIndex.has_value())
+    if(optionalGamemodeIndex.has_value())
       ui->current_gamemode_dropdown->setCurrentIndex(*optionalGamemodeIndex);
   }
   refreshTimeofDayList();
@@ -104,10 +104,10 @@ void ConfigTabTheme::refreshTimeofDayList()
     QString qTimeOfDayPath = qCurrentGamemode.isEmpty() ? "themes/" + qCurrentTheme + "/times/" : "themes/" + qCurrentTheme + "/gamemodes/" + qCurrentGamemode + "/times/";
     rolechat::fs::RCDir dirTime = rolechat::fs::RCDir(qTimeOfDayPath.toStdString());
 
-    for (const std::string &folder : dirTime.subDirectories())
+    for(const std::string &folder : dirTime.subDirectories())
     {
       QString qFolder = QString::fromStdString(folder);
-      if (qFolder == "." || qFolder == "..")
+      if(qFolder == "." || qFolder == "..")
         continue;
       if(qFolder == qConfigTimeofday)
         optionalGamemodeIndex = ui->current_time_dropdown->count();
@@ -115,7 +115,7 @@ void ConfigTabTheme::refreshTimeofDayList()
       ui->current_time_dropdown->addItem(qFolder, qFolder);
     }
 
-    if (optionalGamemodeIndex.has_value())
+    if(optionalGamemodeIndex.has_value())
       ui->current_time_dropdown->setCurrentIndex(*optionalGamemodeIndex);
   }
   ui->current_time_dropdown->blockSignals(false);

@@ -51,10 +51,10 @@ void Courtroom::construct_emotes()
 
 void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
 {
-  if (!ao_config->emote_preview_enabled())
+  if(!ao_config->emote_preview_enabled())
     return;
 
-  if (s_emotePreviewIndex != -1 || s_emotePreviewIndex == p_id)
+  if(s_emotePreviewIndex != -1 || s_emotePreviewIndex == p_id)
     return;
   s_emotePreviewIndex = p_id;
   const int l_real_id = ui_emotes->calculateTrueIndex(p_id);
@@ -75,7 +75,7 @@ void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
   ui_emote_preview_character->start(engine::actor::user::retrieve()->scalingMode(), (double)courtroom::sliders::getValue("scale_offset") / 1000.0f);
 
   QScreen *screen = QApplication::screenAt(p_global_pos);
-  if (screen == nullptr)
+  if(screen == nullptr)
   {
     return;
   }
@@ -85,12 +85,12 @@ void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
   const int l_vertical_spacing = 8;
   QPoint l_final_global_pos(p_global_pos.x(), p_global_pos.y() + l_vertical_spacing);
 
-  if (l_screen_geometry.width() < ui_emote_preview->width() + l_final_global_pos.x())
+  if(l_screen_geometry.width() < ui_emote_preview->width() + l_final_global_pos.x())
   {
     l_final_global_pos.setX(p_global_pos.x() - ui_emote_preview->width());
   }
 
-  if (l_screen_geometry.height() < ui_emote_preview->height() + l_final_global_pos.y())
+  if(l_screen_geometry.height() < ui_emote_preview->height() + l_final_global_pos.y())
   {
     l_final_global_pos.setY(p_global_pos.y() - ui_emote_preview->height() - l_vertical_spacing);
   }
@@ -101,7 +101,7 @@ void Courtroom::show_emote_tooltip(int p_id, QPoint p_global_pos)
 
 void Courtroom::hide_emote_tooltip(int p_id)
 {
-  if (s_emotePreviewIndex == -1 || s_emotePreviewIndex != p_id)
+  if(s_emotePreviewIndex == -1 || s_emotePreviewIndex != p_id)
     return;
   s_emotePreviewIndex = -1;
   ui_emote_preview->hide();
@@ -111,7 +111,7 @@ void Courtroom::hide_emote_tooltip(int p_id)
 
 void Courtroom::on_emote_preview_toggled(bool p_enabled)
 {
-  if (!p_enabled)
+  if(!p_enabled)
     hide_emote_tooltip(s_emotePreviewIndex);
 }
 

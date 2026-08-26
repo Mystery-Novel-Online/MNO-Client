@@ -42,11 +42,11 @@ void AOEmoteButton::setLayerImage(const QString &character, const QString &layer
 
   ui_selected->hide();
 
-  if (enabled)
+  if(enabled)
   {
     const QString l_selected_texture = engine::fs::characters::getFilePath(QString::fromStdString(actor->folder()), "layer_icons/selected.png");
 
-    if (FS::Checks::FileExists(l_selected_texture))
+    if(FS::Checks::FileExists(l_selected_texture))
     {
       ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(l_selected_texture));
       ui_selected->show();
@@ -90,11 +90,11 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
   ui_selected->hide();
 
   // nested ifs are okay
-  if (p_enabled)
+  if(p_enabled)
   {
     const QString l_selected_texture = engine::fs::characters::getFilePath(qCharacterFolder, QString::fromStdString(actor->selectedImage(p_emote)));
 
-    if (FS::Checks::FileExists(l_selected_texture))
+    if(FS::Checks::FileExists(l_selected_texture))
     {
       ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(l_selected_texture));
       ui_selected->show();
@@ -108,7 +108,7 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
         l_enabled_texture = engine::fs::characters::getFilePath(qCharacterFolder, qEnabledImage + ".png");
 
 
-      if (FS::Checks::FileExists(l_enabled_texture))
+      if(FS::Checks::FileExists(l_enabled_texture))
       {
         l_texture = l_enabled_texture;
       }
@@ -130,10 +130,10 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
     int highestPixel = findHighestPixel();
 
     int cropY = 0;
-    if (highestPixel != -1) cropY = highestPixel + 30;
+    if(highestPixel != -1) cropY = highestPixel + 30;
 
-    if (cropY + DOUBLE_SIZE > m_texture.height()) cropY = m_texture.height() - DOUBLE_SIZE;
-    if (cropY < 0) cropY = 0;
+    if(cropY + DOUBLE_SIZE > m_texture.height()) cropY = m_texture.height() - DOUBLE_SIZE;
+    if(cropY < 0) cropY = 0;
 
     int cropX = (m_texture.width() - DOUBLE_SIZE) / 2;
 
@@ -149,12 +149,12 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
 
 int AOEmoteButton::findHighestPixel()
 {
-  for (int y = 0; y < m_texture.height(); ++y)
+  for(int y = 0; y < m_texture.height(); ++y)
   {
     const QRgb* scanLine = reinterpret_cast<const QRgb*>(m_texture.scanLine(y));
-    for (int x = 0; x < m_texture.width(); ++x)
+    for(int x = 0; x < m_texture.width(); ++x)
     {
-      if (qAlpha(scanLine[x]) > 0) return y;
+      if(qAlpha(scanLine[x]) > 0) return y;
     }
   }
 
@@ -169,7 +169,7 @@ void AOEmoteButton::on_clicked()
 
 void AOEmoteButton::paintEvent(QPaintEvent *event)
 {
-  if (m_texture.isNull())
+  if(m_texture.isNull())
   {
     QPushButton::paintEvent(event);
     return;

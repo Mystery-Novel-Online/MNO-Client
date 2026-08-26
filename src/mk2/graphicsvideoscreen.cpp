@@ -65,7 +65,7 @@ QString DRVideoScreen::get_file_name() const
 
 void DRVideoScreen::set_file_name(QString p_file_name)
 {
-  if (m_file_name == p_file_name)
+  if(m_file_name == p_file_name)
   {
     return;
   }
@@ -74,7 +74,7 @@ void DRVideoScreen::set_file_name(QString p_file_name)
   m_scanned = false;
   m_video_available = false;
   m_file_name = p_file_name;
-  if (m_file_name.isEmpty())
+  if(m_file_name.isEmpty())
   {
     m_scanned = true;
   }
@@ -85,13 +85,13 @@ void DRVideoScreen::play_character_video(QString p_character, QString p_video)
 {
   QStringList l_filepath_list;
   const QString l_video_path = QString("videos/%1").arg(p_video);
-  for (const QString &i_character_name : ao_app->get_char_include_tree(p_character))
+  for(const QString &i_character_name : ao_app->get_char_include_tree(p_character))
   {
     l_filepath_list.append(engine::fs::characters::getFilePath(i_character_name, l_video_path));
   }
 
   const QString l_filepath = ao_app->find_asset_path(l_filepath_list);
-  if (l_filepath.isEmpty())
+  if(l_filepath.isEmpty())
   {
     qWarning() << "error: no character media file" << p_character << p_video;
     finish_playback();
@@ -105,11 +105,11 @@ void DRVideoScreen::play()
 {
   stop();
   m_running = true;
-  if (!m_scanned)
+  if(!m_scanned)
   {
     return;
   }
-  if (!m_video_available)
+  if(!m_video_available)
   {
     finish_playback();
     return;
@@ -120,7 +120,7 @@ void DRVideoScreen::play()
 void DRVideoScreen::stop()
 {
   m_running = false;
-  if (m_player->state() != QMediaPlayer::StoppedState)
+  if(m_player->state() != QMediaPlayer::StoppedState)
   {
     m_player->stop();
   }
@@ -133,7 +133,7 @@ void DRVideoScreen::update_video_availability(bool p_video_available)
 
 void DRVideoScreen::check_status(QMediaPlayer::MediaStatus p_status)
 {
-  if (m_running)
+  if(m_running)
   {
     switch (p_status)
     {
@@ -149,7 +149,7 @@ void DRVideoScreen::check_status(QMediaPlayer::MediaStatus p_status)
 
     case QMediaPlayer::LoadedMedia:
       m_scanned = true;
-      if (m_video_available)
+      if(m_video_available)
       {
         start_playback();
       }
@@ -174,7 +174,7 @@ void DRVideoScreen::check_state(QMediaPlayer::State p_state)
     break;
 
   case QMediaPlayer::StoppedState:
-    if (m_running)
+    if(m_running)
     {
       finish_playback();
     }
@@ -187,7 +187,7 @@ void DRVideoScreen::check_state(QMediaPlayer::State p_state)
 
 void DRVideoScreen::start_playback()
 {
-  if (m_player->state() == QMediaPlayer::StoppedState)
+  if(m_player->state() == QMediaPlayer::StoppedState)
   {
     update_audio_output();
 
@@ -204,31 +204,31 @@ void DRVideoScreen::finish_playback()
 void DRVideoScreen::update_audio_output()
 {
   const auto l_target_device = m_engine->get_current_device();
-  if (!l_target_device.has_value())
+  if(!l_target_device.has_value())
   {
     qWarning() << "error: no device to switch to";
     return;
   }
 
   QMediaService *l_service = m_player->service();
-  if (!l_service)
+  if(!l_service)
   {
     qWarning() << "error: missing media service, device unchanged";
     return;
   }
 
   QAudioOutputSelectorControl *l_control = l_service->requestControl<QAudioOutputSelectorControl *>();
-  if (!l_control)
+  if(!l_control)
   {
     qWarning() << "error: missing audio output control, device unchanged";
   }
   else
   {
     const QStringList l_device_name_list = l_control->availableOutputs();
-    for (const QString &i_device_name : l_device_name_list)
+    for(const QString &i_device_name : l_device_name_list)
     {
       const QString l_device_description = l_control->outputDescription(i_device_name);
-      if (i_device_name == l_target_device->get_name() || i_device_name == l_target_device->get_driver() || l_device_description == l_target_device->get_name() || l_device_description == l_target_device->get_driver())
+      if(i_device_name == l_target_device->get_name() || i_device_name == l_target_device->get_driver() || l_device_description == l_target_device->get_name() || l_device_description == l_target_device->get_driver())
       {
         qDebug() << "Media player changed audio device to" << l_target_device->get_name();
         l_control->setActiveOutput(i_device_name);
@@ -246,12 +246,12 @@ void DRVideoScreen::update_volume()
 {
   int l_volume = (m_family->get_volume() * m_engine->get_volume()) / 100;
 
-  if (!m_family->is_ignore_suppression() && (m_family->is_suppressed() || m_engine->is_suppressed()))
+  if(!m_family->is_ignore_suppression() && (m_family->is_suppressed() || m_engine->is_suppressed()))
   {
     l_volume = 0;
   }
 
-  if (m_player->volume() == l_volume)
+  if(m_player->volume() == l_volume)
   {
     return;
   }

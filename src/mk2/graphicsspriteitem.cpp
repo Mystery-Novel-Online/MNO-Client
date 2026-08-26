@@ -335,7 +335,7 @@ void GraphicsSpriteItem::processOverlays(const QVector<ActorLayer> &ActorLayers,
   clearImageLayers();
 
   QString path = QFileInfo(emotePath).path();
-  if (!path.isEmpty()) path += "/";
+  if(!path.isEmpty()) path += "/";
 
   for(const ActorLayer &layer : ActorLayers)
   {
@@ -390,7 +390,7 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &characterName, con
   {
     m_spriteLayersBelow.append(layer);
   }
-  else if (imageOrder == "detach")
+  else if(imageOrder == "detach")
   {
     m_spriteLayers.append(layer);
   }
@@ -554,7 +554,7 @@ void GraphicsSpriteItem::clearImageLayers()
 
 QPointF GraphicsSpriteItem::computeDrawPosition(const QVector3D &animationOffset) const
 {
-  if (!scene())
+  if(!scene())
     return QPointF();
 
   const QRectF sceneRect = scene()->sceneRect();
@@ -576,13 +576,13 @@ QPointF GraphicsSpriteItem::computeDrawPosition(const QVector3D &animationOffset
 
 void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer*> &layers, const QPointF &basePos, double scale, const std::unordered_map<std::string, QVariant>& evaluatedFrames, double alpha)
 {
-  for (SpriteLayer *layer : layers)
+  for(SpriteLayer *layer : layers)
   {
     QPixmap pixmap = layer->name() == "viewport"
                          ? layer->getPixmap(m_KeyframeSequence.canRenderViewport())
                          : layer->spritePlayer.getCurrentPixmap();
 
-    if (pixmap.isNull())
+    if(pixmap.isNull())
       continue;
 
     //layer->start(scale);
@@ -612,20 +612,20 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
     double r = 0.0;
 
 
-    if (auto it = evaluatedFrames.find(posKey); it != evaluatedFrames.end())
+    if(auto it = evaluatedFrames.find(posKey); it != evaluatedFrames.end())
       pos = it->second.value<QVector3D>();
 
-    if (auto it = evaluatedFrames.find(alphaKey); it != evaluatedFrames.end())
+    if(auto it = evaluatedFrames.find(alphaKey); it != evaluatedFrames.end())
     {
       a = it->second.toFloat();
-      if (a == 0.0f)
+      if(a == 0.0f)
         continue;
     }
 
-    if (auto it = evaluatedFrames.find(scaleKey); it != evaluatedFrames.end())
+    if(auto it = evaluatedFrames.find(scaleKey); it != evaluatedFrames.end())
       s = it->second.toFloat();
 
-    if (auto it = evaluatedFrames.find(rotKey); it != evaluatedFrames.end())
+    if(auto it = evaluatedFrames.find(rotKey); it != evaluatedFrames.end())
       r = it->second.toFloat();
 
 
@@ -652,7 +652,7 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
     painter->translate(-pivot);
 
     QPainter::CompositionMode mode = layer->compositionMode();
-    if (mode != QPainter::CompositionMode_SourceOver)
+    if(mode != QPainter::CompositionMode_SourceOver)
       painter->setCompositionMode(mode);
 
     painter->drawPixmap(QPointF(0, 0), pixmap);
@@ -668,7 +668,7 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
   bool renderPixmap = true;
   QPixmap pixmap = m_player->getCurrentPixmap();
-  if (pixmap.isNull())
+  if(pixmap.isNull())
   {
     if(!m_LayersExist) return;
     renderPixmap = false;
@@ -687,26 +687,26 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   std::unordered_map<std::string, QVariant> evaluatedValues;
   m_KeyframeSequence.Evaluate(evaluatedValues);
 
-  if (auto it = evaluatedValues.find("alpha"); it != evaluatedValues.end())
+  if(auto it = evaluatedValues.find("alpha"); it != evaluatedValues.end())
     alpha = it->second.toFloat();
-  if (alpha == 0.0f) return;
+  if(alpha == 0.0f) return;
 
   painter->save();
   painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
 
-  if (auto it = evaluatedValues.find("position"); it != evaluatedValues.end())
+  if(auto it = evaluatedValues.find("position"); it != evaluatedValues.end())
     animationOffset = it->second.value<QVector3D>();
-  if (auto it = evaluatedValues.find("scale"); it != evaluatedValues.end())
+  if(auto it = evaluatedValues.find("scale"); it != evaluatedValues.end())
     animScale = it->second.toFloat();
 
-  if (auto it = evaluatedValues.find("character_scale"); it != evaluatedValues.end())
+  if(auto it = evaluatedValues.find("character_scale"); it != evaluatedValues.end())
     isolatedScale = it->second.toFloat();
-  if (auto it = evaluatedValues.find("character_alpha"); it != evaluatedValues.end())
+  if(auto it = evaluatedValues.find("character_alpha"); it != evaluatedValues.end())
     isolatedAlpha = it->second.toFloat();
-  if (auto it = evaluatedValues.find("character_rotation"); it != evaluatedValues.end())
+  if(auto it = evaluatedValues.find("character_rotation"); it != evaluatedValues.end())
     isolatedRotation = it->second.toFloat();
 
-  if (auto it = evaluatedValues.find("rotation"); it != evaluatedValues.end())
+  if(auto it = evaluatedValues.find("rotation"); it != evaluatedValues.end())
     rotation = it->second.toFloat();
 
   const QRectF sceneRect = scene()->sceneRect();

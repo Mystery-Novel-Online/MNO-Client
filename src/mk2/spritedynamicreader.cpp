@@ -36,10 +36,10 @@ double get_mem_usage_percent(quint64 p_requested_mem_size)
 {
   MEMORYSTATUSEX l_mem_status;
   l_mem_status.dwLength = sizeof(MEMORYSTATUSEX);
-  if (GlobalMemoryStatusEx(&l_mem_status))
+  if(GlobalMemoryStatusEx(&l_mem_status))
   {
     const quint64 l_used_ram = (l_mem_status.ullTotalPhys - l_mem_status.ullAvailPhys) + p_requested_mem_size;
-    if (l_used_ram < l_mem_status.ullTotalPhys)
+    if(l_used_ram < l_mem_status.ullTotalPhys)
     {
       const double l_percent = std::abs(((double)l_used_ram / l_mem_status.ullTotalPhys) * 100);
       return l_percent;
@@ -60,10 +60,10 @@ double get_mem_usage_percent(quint64 p_requested_mem_size)
 double get_mem_usage_percent(quint64 p_needed_ram)
 {
   struct sysinfo l_sys_info;
-  if (sysinfo(&l_sys_info) != -1)
+  if(sysinfo(&l_sys_info) != -1)
   {
     const quint64 l_used_ram = (l_sys_info.totalram - l_sys_info.freeram) + p_needed_ram;
-    if (l_used_ram < l_sys_info.totalram)
+    if(l_used_ram < l_sys_info.totalram)
     {
       const double l_percent = std::abs(((double)l_used_ram / l_sys_info.totalram) * 100);
       return l_percent;
@@ -88,13 +88,13 @@ double get_mem_usage_percent(quint64 p_requested_mem_size)
 
   vm_size_t l_page_size;
   mach_msg_type_number_t count = sizeof(vm_statistics64_data_t) / sizeof(natural_t);
-  if (host_page_size(l_mach_port, &l_page_size) != KERN_SUCCESS)
+  if(host_page_size(l_mach_port, &l_page_size) != KERN_SUCCESS)
   {
     return 100;
   }
 
   vm_statistics64_data_t vm_stats;
-  if (host_statistics64(l_mach_port, HOST_VM_INFO,
+  if(host_statistics64(l_mach_port, HOST_VM_INFO,
                         (host_info64_t)&vm_stats, &count) != KERN_SUCCESS)
   {
     return 100;
@@ -104,7 +104,7 @@ double get_mem_usage_percent(quint64 p_requested_mem_size)
   const quint64 l_total_ram = ((quint64)vm_stats.free_count + vm_stats.active_count + vm_stats.inactive_count + vm_stats.wire_count + vm_stats.zero_fill_count) * l_page_size;
 
   const quint64 l_used_ram = (l_total_ram - l_free_ram) + p_requested_mem_size;
-  if (l_used_ram < l_total_ram)
+  if(l_used_ram < l_total_ram)
   {
     const double l_percent = std::abs(((double)l_used_ram / l_total_ram) * 100);
     return l_percent;
@@ -173,11 +173,11 @@ void SpriteDynamicReader::load()
 
   bool l_caching = true;
   qint64 l_projected_memory = 0;
-  if (l_size.isValid() && l_image_reader.imageCount() > 0)
+  if(l_size.isValid() && l_image_reader.imageCount() > 0)
   {
     l_projected_memory = qint64(((qint64)l_image_reader.size().width() * l_image_reader.size().height()) * l_image_reader.imageCount() * 4);
 
-    if (get_mem_usage_percent(s_total_memory_used + l_projected_memory) > s_system_memory_threshold)
+    if(get_mem_usage_percent(s_total_memory_used + l_projected_memory) > s_system_memory_threshold)
     {
       l_caching = false;
       l_projected_memory = 0;
@@ -193,7 +193,7 @@ void SpriteDynamicReader::load()
 void SpriteDynamicReader::_p_create_reader(bool p_caching)
 {
   mk2::SpriteReader *l_reader = nullptr;
-  if (p_caching)
+  if(p_caching)
   {
     l_reader = new SpriteCachingReader;
   }

@@ -80,16 +80,16 @@ void ServerSelectEntry::createShadow()
 void ServerSelectEntry::setIcon(QString path)
 {
   QPixmap pix;
-  if (pix.load(path))
+  if(pix.load(path))
     m_iconLabel->setPixmap(pix.scaled(48, 48, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 void ServerSelectEntry::mousePressEvent(QMouseEvent *event)
 {
-  if (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
+  if(event->button() == Qt::LeftButton || event->button() == Qt::RightButton) {
     QWidget* child = childAt(event->pos());
 
-    if (child == m_iconLabel)
+    if(child == m_iconLabel)
       return;
 
     emit clicked(m_id);

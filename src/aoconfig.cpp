@@ -120,7 +120,7 @@ void AOConfigPrivate::load_file()
 {
   first_launch = cfg.value("first_launch", true).toBool();
 
-  if (first_launch)
+  if(first_launch)
   {
     cfg.setValue("first_launch", false);
     cfg.sync();
@@ -131,10 +131,10 @@ void AOConfigPrivate::load_file()
   { // notifications
     notification_filter.clear();
     cfg.beginGroup("notifications");
-    for (const QString &i_key : cfg.childKeys())
+    for(const QString &i_key : cfg.childKeys())
     {
       const QString l_message = cfg.value(i_key).toString();
-      if (l_message.isEmpty())
+      if(l_message.isEmpty())
         continue;
       notification_filter.append(l_message);
     }
@@ -150,7 +150,7 @@ void AOConfigPrivate::load_file()
   focus_performance_mode = cfg.value("focus_performance_mode", true).toBool();
 
   language = cfg.value("language").toString();
-  if (language.trimmed().isEmpty())
+  if(language.trimmed().isEmpty())
     language = "English";
 
   engine::system::localization::switchLanguage(language);
@@ -176,7 +176,7 @@ void AOConfigPrivate::load_file()
     sprite_caching.clear();
     cfg.beginGroup("sprite_caching");
     const QStringList l_key_list = sprite_category_string_list();
-    for (const QString &i_key : l_key_list)
+    for(const QString &i_key : l_key_list)
     {
       const SpriteCategory l_category = string_to_sprite_category(i_key);
       sprite_caching.insert(l_category, cfg.value(i_key, true).toBool());
@@ -189,7 +189,7 @@ void AOConfigPrivate::load_file()
   mk2::SpriteDynamicReader::set_system_memory_threshold(system_memory_threshold);
 
   // audio
-  if (cfg.contains("favorite_device_driver"))
+  if(cfg.contains("favorite_device_driver"))
     favorite_device_driver = cfg.value("favorite_device_driver").toString();
 
   suppress_background_audio = cfg.value("suppress_background_audio").toBool();
@@ -225,10 +225,10 @@ void AOConfigPrivate::load_file()
     cfg.beginGroup("character_ini");
 
     ini_map.clear();
-    for (const QString &i_key : cfg.childKeys())
+    for(const QString &i_key : cfg.childKeys())
     {
       const QString i_value = cfg.value(i_key).toString();
-      if (i_key == i_value || i_value.trimmed().isEmpty())
+      if(i_key == i_value || i_value.trimmed().isEmpty())
         continue;
       ini_map.insert(i_key, i_value);
     }
@@ -247,7 +247,7 @@ void AOConfigPrivate::save_file()
   { // notifications
     cfg.remove("notifications");
     cfg.beginGroup("notifications");
-    for (int i = 0; i < notification_filter.length(); ++i)
+    for(int i = 0; i < notification_filter.length(); ++i)
       cfg.setValue(QString::number(i), notification_filter[i]);
     cfg.endGroup();
   }
@@ -286,7 +286,7 @@ void AOConfigPrivate::save_file()
   {
     cfg.remove("sprite_caching");
     cfg.beginGroup("sprite_caching");
-    for (auto it = sprite_caching.cbegin(); it != sprite_caching.cend(); ++it)
+    for(auto it = sprite_caching.cbegin(); it != sprite_caching.cend(); ++it)
     {
       const QString l_category_str = sprite_category_to_string(SpriteCategory(it.key()));
       cfg.setValue(l_category_str, it.value());
@@ -298,7 +298,7 @@ void AOConfigPrivate::save_file()
   cfg.setValue("caching_threshold", caching_threshold);
 
   // audio
-  if (favorite_device_driver.has_value())
+  if(favorite_device_driver.has_value())
     cfg.setValue("favorite_device_driver", favorite_device_driver.value());
 
   cfg.setValue("suppress_background_audio", suppress_background_audio);
@@ -320,7 +320,7 @@ void AOConfigPrivate::save_file()
   { // ini swap
     cfg.beginGroup("character_ini");
 
-    for (auto it = ini_map.cbegin(); it != ini_map.cend(); ++it)
+    for(auto it = ini_map.cbegin(); it != ini_map.cend(); ++it)
       cfg.setValue(it.key(), it.value());
 
     cfg.endGroup();
@@ -332,7 +332,7 @@ void AOConfigPrivate::save_file()
 
 void AOConfigPrivate::invoke_signal(QString p_method_name, QGenericArgument p_arg1, QGenericArgument p_arg2)
 {
-  for (QObject *i_child : qAsConst(children))
+  for(QObject *i_child : qAsConst(children))
   {
     QMetaObject::invokeMethod(i_child, p_method_name.toStdString().c_str(), p_arg1, p_arg2);
   }
@@ -340,7 +340,7 @@ void AOConfigPrivate::invoke_signal(QString p_method_name, QGenericArgument p_ar
 
 void AOConfigPrivate::update_favorite_device()
 {
-  if (!favorite_device_driver.has_value())
+  if(!favorite_device_driver.has_value())
     return;
   audio_engine->set_favorite_device_driver(favorite_device_driver.value());
 }
@@ -364,7 +364,7 @@ AOConfig::AOConfig(QObject *p_parent)
     : QObject(p_parent)
 {
   // init if not created yet
-  if (d == nullptr)
+  if(d == nullptr)
   {
     Q_ASSERT_X(qApp, "initialization", "QGuiApplication is required");
     d = QSharedPointer<AOConfigPrivate>(new AOConfigPrivate);
@@ -427,7 +427,7 @@ QString AOConfig::showname_placeholder() const
 
 QString AOConfig::character_ini(QString p_base_chr) const
 {
-  if (d->ini_map.contains(p_base_chr))
+  if(d->ini_map.contains(p_base_chr))
     return d->ini_map[p_base_chr];
   return p_base_chr;
 }
@@ -632,7 +632,7 @@ void AOConfig::save_file()
 
 void AOConfig::set_autosave(bool p_enabled)
 {
-  if (d->autosave == p_enabled)
+  if(d->autosave == p_enabled)
     return;
   d->autosave = p_enabled;
   d->invoke_signal("autosave_changed", Q_ARG(bool, p_enabled));
@@ -651,7 +651,7 @@ void AOConfig::filter_notification(QString p_message)
 void AOConfig::set_username(QString p_value)
 {
   const QString l_simplified_value = p_value.simplified();
-  if (d->username == l_simplified_value)
+  if(d->username == l_simplified_value)
     return;
   d->username = l_simplified_value;
   d->invoke_signal("username_changed", Q_ARG(QString, d->username));
@@ -660,7 +660,7 @@ void AOConfig::set_username(QString p_value)
 void AOConfig::set_showname(QString p_value)
 {
   const QString l_simplified_value = p_value.simplified();
-  if (d->showname == l_simplified_value && !l_simplified_value.isEmpty())
+  if(d->showname == l_simplified_value && !l_simplified_value.isEmpty())
     return;
   d->showname = l_simplified_value;
   engine::network::metadata::user::setShowname(p_value);
@@ -669,7 +669,7 @@ void AOConfig::set_showname(QString p_value)
 
 void AOConfig::set_showname_placeholder(QString p_string)
 {
-  if (d->showname_placeholder == p_string)
+  if(d->showname_placeholder == p_string)
     return;
   d->showname_placeholder = p_string;
   d->invoke_signal("showname_placeholder_changed", Q_ARG(QString, p_string));
@@ -682,14 +682,14 @@ void AOConfig::clear_showname_placeholder()
 
 void AOConfig::set_character_ini(QString p_base_chr, QString p_target_chr)
 {
-  if (d->ini_map.contains(p_base_chr))
+  if(d->ini_map.contains(p_base_chr))
   {
-    if (d->ini_map[p_base_chr] == p_target_chr)
+    if(d->ini_map[p_base_chr] == p_target_chr)
       return;
   }
-  else if (p_base_chr == p_target_chr)
+  else if(p_base_chr == p_target_chr)
     return;
-  if (p_base_chr == p_target_chr)
+  if(p_base_chr == p_target_chr)
     d->ini_map.remove(p_base_chr);
   else
     d->ini_map.insert(p_base_chr, p_target_chr);
@@ -698,14 +698,14 @@ void AOConfig::set_character_ini(QString p_base_chr, QString p_target_chr)
 
 void AOConfig::set_character_ini_remote(QString p_base_chr, QString p_target_chr)
 {
-  if (d->ini_map.contains(p_base_chr))
+  if(d->ini_map.contains(p_base_chr))
   {
-    if (d->ini_map[p_base_chr] == p_target_chr)
+    if(d->ini_map[p_base_chr] == p_target_chr)
       return;
   }
-  else if (p_base_chr == p_target_chr)
+  else if(p_base_chr == p_target_chr)
     return;
-  if (p_base_chr == p_target_chr)
+  if(p_base_chr == p_target_chr)
     d->ini_map.remove(p_base_chr);
   else
     d->ini_map.insert(p_base_chr, p_target_chr);
@@ -713,7 +713,7 @@ void AOConfig::set_character_ini_remote(QString p_base_chr, QString p_target_chr
 
 void AOConfig::set_server_advertiser(QString p_address)
 {
-  if (d->server_advertiser == p_address)
+  if(d->server_advertiser == p_address)
     return;
   d->server_advertiser = p_address;
   d->invoke_signal("server_advertiser_changed", Q_ARG(QString, p_address));
@@ -721,7 +721,7 @@ void AOConfig::set_server_advertiser(QString p_address)
 
 void AOConfig::set_server_alerts(bool p_enabled)
 {
-  if (d->server_alerts == p_enabled)
+  if(d->server_alerts == p_enabled)
     return;
   d->server_alerts = p_enabled;
   d->invoke_signal("server_alerts_changed", Q_ARG(bool, p_enabled));
@@ -729,7 +729,7 @@ void AOConfig::set_server_alerts(bool p_enabled)
 
 void AOConfig::set_opengl_enabled(bool p_enabled)
 {
-  if (d->enable_opengl == p_enabled)
+  if(d->enable_opengl == p_enabled)
     return;
   d->enable_opengl = p_enabled;
   d->invoke_signal("enable_opengl_changed", Q_ARG(bool, p_enabled));
@@ -737,7 +737,7 @@ void AOConfig::set_opengl_enabled(bool p_enabled)
 
 void AOConfig::set_focus_performance_mode(bool p_enabled)
 {
-  if (d->focus_performance_mode == p_enabled)
+  if(d->focus_performance_mode == p_enabled)
     return;
   d->focus_performance_mode = p_enabled;
   d->invoke_signal("focus_performance_mode_changed", Q_ARG(bool, p_enabled));
@@ -752,7 +752,7 @@ void AOConfig::setLanguage(QString t_language)
 
 void AOConfig::set_theme(QString p_string)
 {
-  if (QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")) == p_string)
+  if(QString::fromStdString(config::ConfigUserSettings::stringValue("theme", "default")) == p_string)
     return;
 
   config::ConfigUserSettings::setString("theme", p_string.toStdString());
@@ -761,7 +761,7 @@ void AOConfig::set_theme(QString p_string)
 
 void AOConfig::set_searchable_iniswap(bool p_enabled)
 {
-  if (d->searchable_iniswap == p_enabled)
+  if(d->searchable_iniswap == p_enabled)
     return;
   d->searchable_iniswap = p_enabled;
   d->invoke_signal("searchable_iniswap_changed", Q_ARG(bool, p_enabled));
@@ -769,7 +769,7 @@ void AOConfig::set_searchable_iniswap(bool p_enabled)
 
 void AOConfig::set_always_pre(bool p_enabled)
 {
-  if (d->always_pre == p_enabled)
+  if(d->always_pre == p_enabled)
     return;
   d->always_pre = p_enabled;
   d->invoke_signal("always_pre_changed", Q_ARG(bool, p_enabled));
@@ -777,7 +777,7 @@ void AOConfig::set_always_pre(bool p_enabled)
 
 void AOConfig::set_chat_tick_interval(int p_number)
 {
-  if (d->chat_tick_interval == p_number)
+  if(d->chat_tick_interval == p_number)
     return;
   d->chat_tick_interval = p_number;
   d->invoke_signal("chat_tick_interval_changed", Q_ARG(int, p_number));
@@ -785,7 +785,7 @@ void AOConfig::set_chat_tick_interval(int p_number)
 
 void AOConfig::set_emote_preview(bool p_enabled)
 {
-  if (d->emote_preview == p_enabled)
+  if(d->emote_preview == p_enabled)
     return;
   d->emote_preview = p_enabled;
   d->invoke_signal("emote_preview_changed", Q_ARG(bool, p_enabled));
@@ -793,7 +793,7 @@ void AOConfig::set_emote_preview(bool p_enabled)
 
 void AOConfig::set_sticky_sfx(bool p_enabled)
 {
-  if (d->sticky_sfx == p_enabled)
+  if(d->sticky_sfx == p_enabled)
     return;
   d->sticky_sfx = p_enabled;
   d->invoke_signal("sticky_sfx_changed", Q_ARG(bool, p_enabled));
@@ -801,7 +801,7 @@ void AOConfig::set_sticky_sfx(bool p_enabled)
 
 void AOConfig::set_message_length_threshold(int p_number)
 {
-  if (d->message_length_threshold == p_number)
+  if(d->message_length_threshold == p_number)
     return;
   d->message_length_threshold = p_number;
   d->invoke_signal("message_length_threshold_changed", Q_ARG(int, p_number));
@@ -809,7 +809,7 @@ void AOConfig::set_message_length_threshold(int p_number)
 
 void AOConfig::set_log_max_lines(int p_number)
 {
-  if (d->log_max_lines == p_number)
+  if(d->log_max_lines == p_number)
     return;
   d->log_max_lines = p_number;
   d->invoke_signal("log_max_lines_changed", Q_ARG(int, p_number));
@@ -817,7 +817,7 @@ void AOConfig::set_log_max_lines(int p_number)
 
 void AOConfig::set_log_display_timestamp(bool p_enabled)
 {
-  if (d->log_display_timestamp == p_enabled)
+  if(d->log_display_timestamp == p_enabled)
     return;
   d->log_display_timestamp = p_enabled;
   d->invoke_signal("log_display_timestamp_changed", Q_ARG(bool, p_enabled));
@@ -825,7 +825,7 @@ void AOConfig::set_log_display_timestamp(bool p_enabled)
 
 void AOConfig::set_log_display_client_id(bool p_enabled)
 {
-  if (d->log_display_client_id == p_enabled)
+  if(d->log_display_client_id == p_enabled)
     return;
   d->log_display_client_id = p_enabled;
   d->invoke_signal("log_display_client_id_changed", Q_ARG(bool, p_enabled));
@@ -833,7 +833,7 @@ void AOConfig::set_log_display_client_id(bool p_enabled)
 
 void AOConfig::set_log_display_self_highlight(bool p_enabled)
 {
-  if (d->log_display_self_highlight == p_enabled)
+  if(d->log_display_self_highlight == p_enabled)
     return;
   d->log_display_self_highlight = p_enabled;
   d->invoke_signal("log_display_self_highlight_changed", Q_ARG(bool, p_enabled));
@@ -841,7 +841,7 @@ void AOConfig::set_log_display_self_highlight(bool p_enabled)
 
 void AOConfig::set_log_display_empty_messages(bool p_enabled)
 {
-  if (d->log_display_empty_messages == p_enabled)
+  if(d->log_display_empty_messages == p_enabled)
     return;
   d->log_display_empty_messages = p_enabled;
   d->invoke_signal("log_display_empty_messages_changed", Q_ARG(bool, p_enabled));
@@ -849,7 +849,7 @@ void AOConfig::set_log_display_empty_messages(bool p_enabled)
 
 void AOConfig::set_log_format_use_newline(bool p_enabled)
 {
-  if (d->log_format_use_newline == p_enabled)
+  if(d->log_format_use_newline == p_enabled)
     return;
   d->log_format_use_newline = p_enabled;
   d->invoke_signal("log_format_use_newline_changed", Q_ARG(bool, p_enabled));
@@ -857,7 +857,7 @@ void AOConfig::set_log_format_use_newline(bool p_enabled)
 
 void AOConfig::set_log_is_topdown(bool p_enabled)
 {
-  if (d->log_is_topdown == p_enabled)
+  if(d->log_is_topdown == p_enabled)
     return;
   d->log_is_topdown = p_enabled;
   d->invoke_signal("log_is_topdown_changed", Q_ARG(bool, p_enabled));
@@ -865,7 +865,7 @@ void AOConfig::set_log_is_topdown(bool p_enabled)
 
 void AOConfig::set_log_display_music_switch(bool p_enabled)
 {
-  if (d->log_display_music_switch == p_enabled)
+  if(d->log_display_music_switch == p_enabled)
     return;
   d->log_display_music_switch = p_enabled;
   d->invoke_signal("log_display_music_switch_changed", Q_ARG(bool, p_enabled));
@@ -873,7 +873,7 @@ void AOConfig::set_log_display_music_switch(bool p_enabled)
 
 void AOConfig::set_log_is_recording(bool p_enabled)
 {
-  if (d->log_is_recording == p_enabled)
+  if(d->log_is_recording == p_enabled)
     return;
   d->log_is_recording = p_enabled;
   d->invoke_signal("log_is_recording_changed", Q_ARG(bool, p_enabled));
@@ -881,7 +881,7 @@ void AOConfig::set_log_is_recording(bool p_enabled)
 
 void AOConfig::set_master_volume(int p_number)
 {
-  if (d->master_volume == p_number)
+  if(d->master_volume == p_number)
     return;
   d->master_volume = p_number;
   d->audio_engine->set_volume(p_number);
@@ -890,7 +890,7 @@ void AOConfig::set_master_volume(int p_number)
 
 void AOConfig::set_suppress_background_audio(bool p_enabled)
 {
-  if (d->suppress_background_audio == p_enabled)
+  if(d->suppress_background_audio == p_enabled)
     return;
   d->suppress_background_audio = p_enabled;
   d->invoke_signal("suppress_background_audio_changed", Q_ARG(bool, p_enabled));
@@ -899,7 +899,7 @@ void AOConfig::set_suppress_background_audio(bool p_enabled)
 void AOConfig::set_system_memory_threshold(int p_percent)
 {
   p_percent = qBound(10, p_percent, 80);
-  if (d->system_memory_threshold == p_percent)
+  if(d->system_memory_threshold == p_percent)
     return;
   d->system_memory_threshold = p_percent;
   mk2::SpriteDynamicReader::set_system_memory_threshold(p_percent);
@@ -908,7 +908,7 @@ void AOConfig::set_system_memory_threshold(int p_percent)
 
 void AOConfig::set_sprite_caching(int p_type, bool p_enabled)
 {
-  if (d->sprite_caching[p_type] == p_enabled)
+  if(d->sprite_caching[p_type] == p_enabled)
     return;
   d->sprite_caching[p_type] = p_enabled;
   d->invoke_signal("sprite_caching_toggled", Q_ARG(int, p_type), Q_ARG(bool, p_enabled));
@@ -917,7 +917,7 @@ void AOConfig::set_sprite_caching(int p_type, bool p_enabled)
 void AOConfig::set_loading_bar_delay(int p_delay)
 {
   p_delay = qBound(0, p_delay, 2000);
-  if (d->loading_bar_delay == p_delay)
+  if(d->loading_bar_delay == p_delay)
     return;
   d->loading_bar_delay = p_delay;
   d->invoke_signal("loading_bar_delay_changed", Q_ARG(int, p_delay));
@@ -926,7 +926,7 @@ void AOConfig::set_loading_bar_delay(int p_delay)
 void AOConfig::set_caching_threshold(int p_percent)
 {
   p_percent = qBound(0, p_percent, 100);
-  if (d->caching_threshold == p_percent)
+  if(d->caching_threshold == p_percent)
     return;
   d->caching_threshold = p_percent;
   d->invoke_signal("caching_threshold_changed", Q_ARG(int, p_percent));
@@ -934,7 +934,7 @@ void AOConfig::set_caching_threshold(int p_percent)
 
 void AOConfig::set_favorite_device_driver(QString p_device_driver)
 {
-  if (d->favorite_device_driver.has_value() && d->favorite_device_driver.value() == p_device_driver)
+  if(d->favorite_device_driver.has_value() && d->favorite_device_driver.value() == p_device_driver)
     return;
   d->favorite_device_driver = p_device_driver;
   d->update_favorite_device();
@@ -943,7 +943,7 @@ void AOConfig::set_favorite_device_driver(QString p_device_driver)
 
 void AOConfig::set_system_volume(int p_number)
 {
-  if (d->system_volume == p_number)
+  if(d->system_volume == p_number)
     return;
   d->system_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FSystem)->set_volume(p_number);
@@ -952,7 +952,7 @@ void AOConfig::set_system_volume(int p_number)
 
 void AOConfig::set_effect_volume(int p_number)
 {
-  if (d->effect_volume == p_number)
+  if(d->effect_volume == p_number)
     return;
   d->effect_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FEffect)->set_volume(p_number);
@@ -961,7 +961,7 @@ void AOConfig::set_effect_volume(int p_number)
 
 void AOConfig::set_effect_ignore_suppression(bool p_enabled)
 {
-  if (d->effect_ignore_suppression == p_enabled)
+  if(d->effect_ignore_suppression == p_enabled)
     return;
   d->effect_ignore_suppression = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FEffect)->set_ignore_suppression(p_enabled);
@@ -970,7 +970,7 @@ void AOConfig::set_effect_ignore_suppression(bool p_enabled)
 
 void AOConfig::set_music_volume(int p_number)
 {
-  if (d->music_volume == p_number)
+  if(d->music_volume == p_number)
     return;
   d->music_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FMusic)->set_volume(p_number);
@@ -979,7 +979,7 @@ void AOConfig::set_music_volume(int p_number)
 
 void AOConfig::set_music_ignore_suppression(bool p_enabled)
 {
-  if (d->music_ignore_suppression == p_enabled)
+  if(d->music_ignore_suppression == p_enabled)
     return;
   d->music_ignore_suppression = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FMusic)->set_ignore_suppression(p_enabled);
@@ -988,7 +988,7 @@ void AOConfig::set_music_ignore_suppression(bool p_enabled)
 
 void AOConfig::set_video_volume(int p_number)
 {
-  if (d->video_volume == p_number)
+  if(d->video_volume == p_number)
     return;
   d->video_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FVideo)->set_volume(p_number);
@@ -997,7 +997,7 @@ void AOConfig::set_video_volume(int p_number)
 
 void AOConfig::set_video_ignore_suppression(bool p_enabled)
 {
-  if (d->video_ignore_suppression == p_enabled)
+  if(d->video_ignore_suppression == p_enabled)
     return;
   d->video_ignore_suppression = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FVideo)->set_ignore_suppression(p_enabled);
@@ -1006,7 +1006,7 @@ void AOConfig::set_video_ignore_suppression(bool p_enabled)
 
 void AOConfig::set_blip_volume(int p_number)
 {
-  if (d->blip_volume == p_number)
+  if(d->blip_volume == p_number)
     return;
   d->blip_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FBlip)->set_volume(p_number);
@@ -1015,7 +1015,7 @@ void AOConfig::set_blip_volume(int p_number)
 
 void AOConfig::set_blip_ignore_suppression(bool p_enabled)
 {
-  if (d->blip_ignore_suppression == p_enabled)
+  if(d->blip_ignore_suppression == p_enabled)
     return;
   d->blip_ignore_suppression = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FBlip)->set_ignore_suppression(p_enabled);
@@ -1024,7 +1024,7 @@ void AOConfig::set_blip_ignore_suppression(bool p_enabled)
 
 void AOConfig::set_punctuation_delay(int p_number)
 {
-  if (d->punctuation_delay == p_number)
+  if(d->punctuation_delay == p_number)
     return;
   d->punctuation_delay = p_number;
   d->invoke_signal("punctuation_delay_changed", Q_ARG(int, p_number));
@@ -1037,7 +1037,7 @@ void AOConfig::setThemeResize(double resize)
 
 void AOConfig::setFadeDuration(int duration)
 {
-  if (d->fade_duration == duration)
+  if(d->fade_duration == duration)
     return;
   d->fade_duration = duration;
   SceneManager::get().setFadeDuration(duration);

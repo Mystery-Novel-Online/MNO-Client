@@ -34,9 +34,9 @@ void AOTimer::update_time()
   // This one checks overflows, as the updated manual timer would appear to have
   // a past time compared to the manual timer a step ago (represented by
   // old_manual_timer)
-  if (manual_timer.get_timestep_length() > 0)
+  if(manual_timer.get_timestep_length() > 0)
   {
-    if (manual_timer.get_time().operator<(old_manual_timer.get_time()))
+    if(manual_timer.get_time().operator<(old_manual_timer.get_time()))
     {
       set_time(QTime(0, 0));
       firing_timer->stop();
@@ -47,9 +47,9 @@ void AOTimer::update_time()
   // This one checks underflows, as the updated manual timer would appear to
   // have a future time compared to the manual timer a step ago (represented by
   // old_manual_timer)
-  else if (manual_timer.get_timestep_length() < 0)
+  else if(manual_timer.get_timestep_length() < 0)
   {
-    if (manual_timer.get_time().operator>(old_manual_timer.get_time()))
+    if(manual_timer.get_time().operator>(old_manual_timer.get_time()))
     {
       set_time(QTime(0, 0));
       firing_timer->stop();
@@ -71,7 +71,7 @@ void AOTimer::update_time()
   // operation, while QT's built-in automatic restart is very efficient.
   // Therefore, we only restart firing_timer if its length was not
   // firing_timer_length already (see example above).
-  if (firing_timer->interval() != firing_timer_length)
+  if(firing_timer->interval() != firing_timer_length)
     firing_timer->start(firing_timer_length);
 }
 
@@ -131,14 +131,14 @@ void AOTimer::set_firing_interval(int new_firing_interval)
   // firing_timer_length to account for the fact the timer may have already been
   // running a bit in this timestep
   int this_step_firing_interval;
-  if (new_firing_interval < time_spent_in_timestep)
+  if(new_firing_interval < time_spent_in_timestep)
     this_step_firing_interval = 0;
   else
     this_step_firing_interval = new_firing_interval - time_spent_in_timestep;
 
   firing_timer->setInterval(this_step_firing_interval);
 
-  if (!paused)
+  if(!paused)
     firing_timer->start();
 }
 

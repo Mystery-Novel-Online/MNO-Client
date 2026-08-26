@@ -18,8 +18,8 @@ void LegacyActorReader::load(const std::string& folder, const std::string& path)
 QString LegacyActorReader::DRLookupKey(const QStringList &keys, const QString &target)
 {
   const QString targetLower = target.toLower();
-  for (const QString& key : keys)
-    if (key.toLower() == targetLower)
+  for(const QString& key : keys)
+    if(key.toLower() == targetLower)
       return key;
   return target;
 }
@@ -35,9 +35,9 @@ std::vector<ActorEmote> LegacyActorReader::emotes()
   qDebug().noquote() << QString("Compiling char.ini for character <%1>").arg(QString::fromStdString(folder()));
 #endif
 
-  for (const QString &i_chr : l_chr_list)
+  for(const QString &i_chr : l_chr_list)
   {
-    if (!FS::Checks::DirectoryExists(engine::fs::characters::getDirectoryPath(i_chr)))
+    if(!FS::Checks::DirectoryExists(engine::fs::characters::getDirectoryPath(i_chr)))
     {
       qWarning().noquote()
       << QString("Parent character <%1> not found, character <%2> cannot use it.").arg(i_chr, QString::fromStdString(folder()));
@@ -62,31 +62,31 @@ std::vector<ActorEmote> LegacyActorReader::emotes()
       l_keys.removeAll(DRLookupKey(l_keys, "number"));
 
              // remove all negative and non-numbers
-      for (int i = 0; i < l_keys.length(); ++i)
+      for(int i = 0; i < l_keys.length(); ++i)
       {
         const QString &i_key = l_keys.at(i);
         bool ok = false;
         const int l_num = i_key.toInt(&ok);
-        if (ok && l_num >= 0)
+        if(ok && l_num >= 0)
           continue;
         l_keys.removeAt(i--);
       }
 
       std::stable_sort(l_keys.begin(), l_keys.end(), [](const QString &a, const QString &b) -> bool {
                          // if 0s are added at the beginning of the key, consider a whole number
-                         if (a.length() < b.length())
+                         if(a.length() < b.length())
                            return true;
                          return a.toInt() < b.toInt();
                        });
     }
 
-    for (const QString &i_key : qAsConst(l_keys))
+    for(const QString &i_key : qAsConst(l_keys))
     {
       l_chrini.beginGroup(l_fetcher.lookup_group("emotions"));
       const QStringList l_emotions = l_chrini.value(i_key).toString().split("#", DR::SplitBehavior::KeepEmptyParts);
       l_chrini.endGroup();
 
-      if (l_emotions.length() < 4)
+      if(l_emotions.length() < 4)
       {
         qWarning().noquote() << QString("Emote <%2> of <%1>; emote is malformed.").arg(i_chr, i_key);
         continue;
@@ -108,7 +108,7 @@ std::vector<ActorEmote> LegacyActorReader::emotes()
       l_emote.dialog = l_emotions.at(Dialog).toStdString();
       l_emote.emoteName = l_emotions.at(Dialog).toStdString();
       l_emote.modifier = qMax(l_emotions.at(Modifier).toInt(), 0);
-      if (DeskModifier < l_emotions.length())
+      if(DeskModifier < l_emotions.length())
         l_emote.desk_modifier = l_emotions.at(DeskModifier).toInt();
 
       l_chrini.beginGroup(l_fetcher.lookup_group("soundn"));
@@ -116,7 +116,7 @@ std::vector<ActorEmote> LegacyActorReader::emotes()
       l_chrini.endGroup();
 
       l_chrini.beginGroup(l_fetcher.lookup_group("soundd"));
-      if (l_chrini.contains(i_key))
+      if(l_chrini.contains(i_key))
       {
         l_emote.sound_delay = l_chrini.value(i_key).toInt();
       }

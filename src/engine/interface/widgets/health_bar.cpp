@@ -10,7 +10,7 @@ HealthBar::HealthBar(QString name, AOApplication *app, QWidget *parent)
 }
 
 void HealthBar::setValue(int value) {
-  if (value < 0 || value > 10) {
+  if(value < 0 || value > 10) {
     return;
   }
   m_currentValue = value;
@@ -19,14 +19,14 @@ void HealthBar::setValue(int value) {
 
 void HealthBar::increaseClicked() {
   int newValue = m_currentValue + 1;
-  if (newValue <= 10) {
+  if(newValue <= 10) {
     m_App->send_server_packet(DRPacket("HP", {QString::number(m_variableIndex), QString::number(newValue)}));
   }
 }
 
 void HealthBar::decreaseClicked() {
   int newValue = m_currentValue - 1;
-  if (newValue >= 0) {
+  if(newValue >= 0) {
     m_App->send_server_packet(DRPacket("HP", {QString::number(m_variableIndex), QString::number(newValue)}));
   }
 }

@@ -73,7 +73,7 @@ public:
   T* GetWidgetType(QString t_name)
   {
     QWidget *mReturnWidget = LegacyThemeManager::get().getWidget(t_name);
-    if (dynamic_cast<T*>(mReturnWidget) != nullptr)
+    if(dynamic_cast<T*>(mReturnWidget) != nullptr)
     {
       T* l_return = dynamic_cast<T*>(mReturnWidget);
       return l_return;

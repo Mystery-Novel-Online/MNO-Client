@@ -32,7 +32,7 @@ void ConfigTabMounting::addMountClicked()
       QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
       );
 
-  if (dir.isEmpty())
+  if(dir.isEmpty())
     return;
 
   GetDB().toggleMount(dir.toStdString(), true);
@@ -45,7 +45,7 @@ void ConfigTabMounting::removeMountClicked()
 {
   QListWidgetItem* item = ui->mountedDriveList->currentItem();
 
-  if (item)
+  if(item)
     GetDB().removeMount(item->text().toStdString());
 
   updateList();

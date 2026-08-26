@@ -28,11 +28,11 @@ void refreshFriendsList()
   const auto onlineInGame = client->GetRelationships();
   s_Friends.clear();
 
-  for (const auto& relationship : onlineInGame)
+  for(const auto& relationship : onlineInGame)
   {
     auto user = relationship.User();
-    if (user) {
-      if (relationship.GameRelationshipType() == discordpp::RelationshipType::Friend || relationship.DiscordRelationshipType() == discordpp::RelationshipType::Friend) {
+    if(user) {
+      if(relationship.GameRelationshipType() == discordpp::RelationshipType::Friend || relationship.DiscordRelationshipType() == discordpp::RelationshipType::Friend) {
         s_Friends.append({user->Id(), QString::fromStdString(user->Username()), QString::fromStdString(user->GlobalName().value_or(user->Username()))});
       }
 
@@ -110,7 +110,7 @@ void clientStatusChangedCallback(discordpp::Client::Status status, discordpp::Cl
   }
 
   default:
-    if (error != discordpp::Client::Error::None)
+    if(error != discordpp::Client::Error::None)
     {
       std::cerr << "[Client] Got Error: " << discordpp::Client::ErrorToString(error) << " (" << errorDetail << ")" << std::endl;
       running.store(false);
@@ -128,7 +128,7 @@ void authorizeClient()
 void WorkshopDiscord::sendPrivateMessage(const QString &discordId, const QString &message)
 {
   client->SendUserMessage(discordId.toLongLong(), message.toStdString(), [](auto result, uint64_t messageId) {
-                            if (result.Successful()) {
+                            if(result.Successful()) {
                               std::cout << "✅ Message sent successfully\n";
                             } else {
                               std::cout << "❌ Failed to send message: " << result.Error() << "\n";
@@ -139,7 +139,7 @@ void WorkshopDiscord::sendPrivateMessage(const QString &discordId, const QString
 void WorkshopDiscord::sendFriendRequest(const QString &discordId)
 {
   client->SendGameFriendRequestById(discordId.toLongLong(), [](discordpp::ClientResult result) {
-                                      if (result.Successful()) {
+                                      if(result.Successful()) {
                                         std::cout << "🎮 Game friend request sent successfully!\n";
                                       }
                                     });
@@ -198,7 +198,7 @@ void WorkshopDiscord::processOAuth()
   //args.SetScopes(discordpp::Client::GetDefaultCommunicationScopes());
   args.SetCodeChallenge(codeVerifier.Challenge());
   m_currentClient->Authorize(args, [this, codeVerifier](auto result, auto code, auto redirectUri) {
-                               if (!result.Successful()) {
+                               if(!result.Successful()) {
                                  std::cerr << "❌ Authentication Error: " << result.Error() << std::endl;
                                  return;
                                } else {
@@ -212,7 +212,7 @@ void WorkshopDiscord::processOAuth()
                                  QNetworkReply* reply = ApiManager::instance().post("api/users/discord/token", QByteArray::fromStdString(body.dump()));
 
                                  connect(reply, &QNetworkReply::finished, this, [reply, result]() {
-                                           if (reply->error() != QNetworkReply::NoError) {
+                                           if(reply->error() != QNetworkReply::NoError) {
                                              std::cerr << "❌ Server request failed: " << reply->errorString().toStdString() << std::endl;
                                            } else {
                                              QString dataString = reply->readAll();
@@ -238,7 +238,7 @@ void WorkshopDiscord::runCallbacks()
 
 void userMessageStatus(discordpp::ClientResult result, uint64_t messageId)
 {
-  if (result.Successful()) {
+  if(result.Successful()) {
     std::cout << "✅ Message sent successfully\n";
   } else {
     std::cout << "❌ Failed to send message: " << result.Error() << "\n";
@@ -262,7 +262,7 @@ QVector<DiscordUser> WorkshopDiscord::getFriends()
 
 void WorkshopDiscord::loginResult(bool staus, std::string token)
 {
-  if (staus) {
+  if(staus) {
     std::cout << "✅ Workshop key valid. Skipping OAuth and using server tokens.\n";
     tokenRecieved(token);
   } else {

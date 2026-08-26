@@ -39,13 +39,13 @@ void UploaderTagTable::addTag(const QString &category, const QString &value, boo
   dummyItem->setFlags(Qt::NoItemFlags);
   setItem(row, 2, dummyItem);
 
-  if (!disableRemove) {
+  if(!disableRemove) {
     QPushButton* removeBtn = new QPushButton("Remove", this);
 
     connect(removeBtn, &QPushButton::clicked, this, [this, removeBtn]() {
-              for (int i = 0; i < rowCount(); i++)
+              for(int i = 0; i < rowCount(); i++)
               {
-                if (cellWidget(i, 2) == removeBtn)
+                if(cellWidget(i, 2) == removeBtn)
                 {
                   removeRow(i);
                   break;
@@ -60,12 +60,12 @@ void UploaderTagTable::addTag(const QString &category, const QString &value, boo
 
 void UploaderTagTable::keyPressEvent(QKeyEvent *event)
 {
-  if (event->matches(QKeySequence::Copy)) {
+  if(event->matches(QKeySequence::Copy)) {
     copySelection();
     return;
   }
 
-  if (event->matches(QKeySequence::Paste)) {
+  if(event->matches(QKeySequence::Paste)) {
     pasteSelection();
     return;
   }
@@ -75,7 +75,7 @@ void UploaderTagTable::keyPressEvent(QKeyEvent *event)
 
 void UploaderTagTable::itemChangeEvent(QTableWidgetItem *item)
 {
-  if (item->column() != 1) return;
+  if(item->column() != 1) return;
   item->setText(item->text().trimmed());
 }
 
@@ -83,7 +83,7 @@ void UploaderTagTable::copySelection()
 {
   QModelIndexList indexes = selectedIndexes();
 
-  if (indexes.isEmpty())
+  if(indexes.isEmpty())
     return;
 
   std::sort(indexes.begin(), indexes.end());
@@ -91,9 +91,9 @@ void UploaderTagTable::copySelection()
   QString text;
   int previousRow = indexes.first().row();
 
-  for (const QModelIndex& index : indexes) {
-    if (text.length() > 0) {
-      if (index.row() != previousRow) {
+  for(const QModelIndex& index : indexes) {
+    if(text.length() > 0) {
+      if(index.row() != previousRow) {
         text += '\n';
         previousRow = index.row();
       }
@@ -114,11 +114,11 @@ void UploaderTagTable::pasteSelection()
 
   QStringList lines = text.split('\n', Qt::SkipEmptyParts);
 
-  for (QString line : lines) {
+  for(QString line : lines) {
     line = line.trimmed();
     QStringList parts = line.split('\t');
 
-    if (parts.size() < 2) {
+    if(parts.size() < 2) {
       continue;
     }
 

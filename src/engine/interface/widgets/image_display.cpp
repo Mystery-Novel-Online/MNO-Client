@@ -35,12 +35,12 @@ void AOImageDisplay::refreshImage()
     AOPixmap l_pixmap(m_image);
 
     const QString alphaMaskPath = AOApplication::getInstance()->find_theme_asset_path(m_alphaName + ".png");
-    if (FS::Checks::FileExists(alphaMaskPath))
+    if(FS::Checks::FileExists(alphaMaskPath))
     {
       QImage base = l_pixmap.m_pixmap.toImage().convertToFormat(QImage::Format_ARGB32_Premultiplied);
       QImage mask(alphaMaskPath);
 
-      if (!mask.isNull())
+      if(!mask.isNull())
       {
         mask = mask.scaled(base.size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation).convertToFormat(QImage::Format_ARGB32_Premultiplied);
 
@@ -70,21 +70,21 @@ void AOImageDisplay::set_theme_image(QString p_image)
 void AOImageDisplay::set_chatbox_image(QString p_chatbox_name, bool p_is_self)
 {
   QString l_target_file = ao_app->find_asset_path(FS::Paths::BasePath() + "misc/" + p_chatbox_name + ".png");
-  if (l_target_file.isEmpty())
+  if(l_target_file.isEmpty())
   {
     l_target_file = ao_app->find_theme_asset_path("chatmed.png");
 
-    if (p_is_self)
+    if(p_is_self)
     {
       const QString l_self_file = ao_app->find_theme_asset_path("chatmed_self.png");
-      if (!l_self_file.isEmpty())
+      if(!l_self_file.isEmpty())
       {
         l_target_file = l_self_file;
       }
     }
   }
 
-  if (l_target_file.isEmpty())
+  if(l_target_file.isEmpty())
   {
     qWarning() << "warning: could not retrieve any chatbox image, will display blank";
   }

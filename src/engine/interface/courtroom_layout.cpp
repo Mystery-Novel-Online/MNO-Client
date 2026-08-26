@@ -23,21 +23,21 @@ void cleanupWidgets(QVector<T*> &list)
 {
   QWidget* courtroomWidget = s_CourtroomWidgets.value("courtroom", nullptr);
 
-  for (T *item : list)
+  for(T *item : list)
   {
     auto it = s_CourtroomWidgets.begin();
-    while (it != s_CourtroomWidgets.end())
+    while(it != s_CourtroomWidgets.end())
     {
-      if (it.value() == item)
+      if(it.value() == item)
         it = s_CourtroomWidgets.erase(it);
       else
         ++it;
     }
 
-    if (courtroomWidget && item)
+    if(courtroomWidget && item)
     {
       const auto& children = item->template findChildren<QWidget*>(QString(), Qt::FindDirectChildrenOnly);
-      for (QWidget* child : children)
+      for(QWidget* child : children)
       {
         child->setParent(courtroomWidget);
       }
@@ -67,7 +67,7 @@ namespace courtroom
   void reload()
   {
     auto it = s_CourtroomWidgets.begin();
-    while (it != s_CourtroomWidgets.end())
+    while(it != s_CourtroomWidgets.end())
     {
       RPWidget *widget = dynamic_cast<RPWidget*>(it.value());
       RPLineEdit *lineEdit = dynamic_cast<RPLineEdit*>(it.value());
@@ -158,14 +158,14 @@ namespace courtroom
 
     int getValue(const std::string &name)
     {
-      if (auto *slider = qobject_cast<QSlider *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+      if(auto *slider = qobject_cast<QSlider *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
         return slider->value();
       return 0;
     }
 
     void setValue(const std::string &name, int value)
     {
-      if (auto *slider = qobject_cast<QSlider *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+      if(auto *slider = qobject_cast<QSlider *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
         slider->setValue(value);
     }
 
@@ -210,7 +210,7 @@ namespace courtroom
   {
     void setAnimations(const QStringList &animations)
     {
-      if (auto *list = qobject_cast<QListWidget *>(s_CourtroomWidgets.value("chara_animations")))
+      if(auto *list = qobject_cast<QListWidget *>(s_CourtroomWidgets.value("chara_animations")))
       {
         list->clear();
         list->addItems(animations);
@@ -219,7 +219,7 @@ namespace courtroom
 
     std::string getAnimation()
     {
-      if (auto *list = qobject_cast<QListWidget *>(s_CourtroomWidgets.value("chara_animations")))
+      if(auto *list = qobject_cast<QListWidget *>(s_CourtroomWidgets.value("chara_animations")))
       {
         if(list->currentItem() != nullptr)
         {
@@ -282,9 +282,9 @@ namespace courtroom
     void create(const std::string& name, const std::string& css, int x, int y, int width, int height)
     {
       const QString qName = QString::fromStdString(name);
-      if (!s_CourtroomWidgets.contains("courtroom")) return;
+      if(!s_CourtroomWidgets.contains("courtroom")) return;
 
-      if (!s_CourtroomWidgets.contains(qName))
+      if(!s_CourtroomWidgets.contains(qName))
       {
         RPLineEdit* lineEdit = new RPLineEdit(QString::fromStdString(name), "[" + QString::fromStdString(css) + "]", s_CourtroomWidgets["courtroom"]);
         lineEdit->refreshCSS();
@@ -315,14 +315,14 @@ namespace courtroom
 
     std::string getValue(const std::string &name)
     {
-      if (auto *box = qobject_cast<RPLineEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+      if(auto *box = qobject_cast<RPLineEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
         return box->text().toStdString();
       return "";
     }
 
     void setValue(const std::string &name, const std::string &value)
     {
-      if (auto *box = qobject_cast<RPLineEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+      if(auto *box = qobject_cast<RPLineEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
         box->setText(QString::fromStdString(value));
     }
 
@@ -333,9 +333,9 @@ namespace courtroom
     void create(const std::string& name, int x, int y, int width, int height)
     {
       const QString qName = QString::fromStdString(name);
-      if (!s_CourtroomWidgets.contains("courtroom")) return;
+      if(!s_CourtroomWidgets.contains("courtroom")) return;
 
-      if (!s_CourtroomWidgets.contains(qName))
+      if(!s_CourtroomWidgets.contains(qName))
       {
         RPTextEdit* textEdit = new RPTextEdit(QString::fromStdString(name), s_CourtroomWidgets["courtroom"]);
         s_CourtroomTextEdits.append(textEdit);
@@ -356,13 +356,13 @@ namespace courtroom
 
     void setText(const std::string &name, const std::string &text)
     {
-      if (auto *box = qobject_cast<RPTextEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+      if(auto *box = qobject_cast<RPTextEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
         box->setText(QString::fromStdString(text));
     }
 
     void setFrame(const std::string &name, const bool state)
     {
-      if (auto *box = qobject_cast<RPTextEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+      if(auto *box = qobject_cast<RPTextEdit *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
         box->setFrameStyle(state ? QFrame::Box : QFrame::NoFrame);
     }
 
@@ -373,9 +373,9 @@ namespace courtroom
   void create(const std::string& name, const std::string &css, int x, int y, int width, int height)
     {
       const QString qName = QString::fromStdString(name);
-      if (!s_CourtroomWidgets.contains("courtroom")) return;
+      if(!s_CourtroomWidgets.contains("courtroom")) return;
 
-      if (!s_CourtroomWidgets.contains(qName))
+      if(!s_CourtroomWidgets.contains(qName))
       {
 
         RPComboBox* comboBox = new RPComboBox(s_CourtroomWidgets["courtroom"], AOApplication::getInstance());
@@ -404,19 +404,19 @@ namespace courtroom
 
     void addItem(const std::string &name, const std::string &value)
     {
-      if (auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+      if(auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
         combobox->addItem(QString::fromStdString(value));
     }
 
     void removeItem(const std::string &name, const std::string &value)
     {
-      //if (auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+      //if(auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
       //  combobox->addItem(QString::fromStdString(value));
     }
 
     void clearItems(const std::string &name)
     {
-      if (auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+      if(auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
         combobox->clear();
     }
 
@@ -535,27 +535,27 @@ namespace courtroom
 
     std::string getInputFieldContents()
     {
-      if (auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_message")))
+      if(auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_message")))
         return box->text().toStdString();
       return "";
     }
 
     void setInputFieldContents(const std::string &text)
     {
-      if (auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_message")))
+      if(auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_message")))
         box->setText(QString::fromStdString(text));
     }
 
     std::string getDisplayName()
     {
-      if (auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_name")))
+      if(auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_name")))
         return box->text().toStdString();
       return "";
     }
 
     void setDisplayName(const std::string &text)
     {
-      if (auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_name")))
+      if(auto *box = qobject_cast<QLineEdit *>(s_CourtroomWidgets.value("ooc_chat_name")))
         box->setText(QString::fromStdString(text));
     }
 
@@ -653,13 +653,13 @@ namespace courtroom
 
     void clearInteractions()
     {
-      if (auto *overlay = qobject_cast<ViewportOverlay *>(s_CourtroomWidgets.value("viewport_overlay")))
+      if(auto *overlay = qobject_cast<ViewportOverlay *>(s_CourtroomWidgets.value("viewport_overlay")))
         overlay->clearInteractions();
     }
 
     void addInteraction(const std::string &name, const std::string &description, int x, int y, int width, int height)
     {
-      if (auto *overlay = qobject_cast<ViewportOverlay *>(s_CourtroomWidgets.value("viewport_overlay")))
+      if(auto *overlay = qobject_cast<ViewportOverlay *>(s_CourtroomWidgets.value("viewport_overlay")))
         overlay->addInteraction({x, y, width, height}, QString::fromStdString(name), QString::fromStdString(description));
     }
 
@@ -697,7 +697,7 @@ namespace courtroom
         QString outputFilename = QDateTime::currentDateTime().toString("yyyy-MM-dd (hh.mm.ss.z)'.png'");
         QString outputPath = "base/screenshots/" + outputFilename;
 
-        if (!viewportCrop.save(outputPath, "PNG"))
+        if(!viewportCrop.save(outputPath, "PNG"))
           qWarning("Failed to save the screenshot.");
       }
     }
@@ -707,9 +707,9 @@ namespace courtroom
   void hovercontroller::create(const std::string &name, int x, int y, int width, int height)
   {
     const QString qName = QString::fromStdString(name);
-    if (!s_CourtroomWidgets.contains("courtroom")) return;
+    if(!s_CourtroomWidgets.contains("courtroom")) return;
 
-    if (!s_CourtroomWidgets.contains(qName))
+    if(!s_CourtroomWidgets.contains(qName))
     {
       RPHoverWidget* hoverWidget = new RPHoverWidget(s_CourtroomWidgets["courtroom"]);
       s_CourtroomHoverWidgets.append(hoverWidget);
@@ -726,9 +726,9 @@ namespace courtroom
 
   void hovercontroller::addWidget(const std::string &name, const std::string &child)
   {
-    if (auto *hoverWidget = qobject_cast<RPHoverWidget *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
+    if(auto *hoverWidget = qobject_cast<RPHoverWidget *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
     {
-      if (auto *childWidget = qobject_cast<QWidget *>(s_CourtroomWidgets.value(QString::fromStdString(child))))
+      if(auto *childWidget = qobject_cast<QWidget *>(s_CourtroomWidgets.value(QString::fromStdString(child))))
       {
         hoverWidget->addWidget(childWidget);
       }
@@ -737,7 +737,7 @@ namespace courtroom
 
   void areas::switchName(const std::string &name)
   {
-    if (auto *areaList = qobject_cast<RPListWidget *>(s_CourtroomWidgets.value("area_list")))
+    if(auto *areaList = qobject_cast<RPListWidget *>(s_CourtroomWidgets.value("area_list")))
     {
       for(int i = 0; i < areaList->count(); i++)
       {
@@ -756,7 +756,7 @@ namespace courtroom
   {
     QString qTarget = QString::fromStdString(target);
     QString qName = QString::fromStdString(name);
-    if (auto *targetWidget = qobject_cast<QWidget *>(s_CourtroomWidgets.value(qTarget)))
+    if(auto *targetWidget = qobject_cast<QWidget *>(s_CourtroomWidgets.value(qTarget)))
     {
       if(s_WidgetAnimators.contains(qName)) delete s_WidgetAnimators[qName];
       s_WidgetAnimators[qName] = new WidgetAnimator(targetWidget);
@@ -770,7 +770,7 @@ namespace courtroom
   {
     QString qAnimName = QString::fromStdString(name);
 
-    if (!s_WidgetAnimators.contains(qAnimName)) {
+    if(!s_WidgetAnimators.contains(qAnimName)) {
       qWarning() << "Animation" << qAnimName << "not found!";
       return;
     }
@@ -778,7 +778,7 @@ namespace courtroom
     auto *animator = s_WidgetAnimators[qAnimName];
     auto channel = animator->GetChannel<QVector3D>("position");
 
-    if (!channel)
+    if(!channel)
     {
       auto newChannel = std::make_unique<KeyframeChannel<QVector3D>>();
       newChannel->AddKeyframe(timeMs, QVector3D(x, y, z),
@@ -798,7 +798,7 @@ namespace courtroom
   void animations::reset(const std::string &name)
   {
     QString qAnimName = QString::fromStdString(name);
-    if (!s_WidgetAnimators.contains(qAnimName)) {
+    if(!s_WidgetAnimators.contains(qAnimName)) {
       qWarning() << "Animation" << qAnimName << "not found!";
       return;
     }
@@ -809,7 +809,7 @@ namespace courtroom
   void animations::playAnimation(const std::string &name)
   {
     QString qAnimName = QString::fromStdString(name);
-    if (!s_WidgetAnimators.contains(qAnimName)) {
+    if(!s_WidgetAnimators.contains(qAnimName)) {
       qWarning() << "Animation" << qAnimName << "not found!";
       return;
     }
@@ -820,7 +820,7 @@ namespace courtroom
   void animations::stopAnimation(const std::string &name)
   {
     QString qAnimName = QString::fromStdString(name);
-    if (!s_WidgetAnimators.contains(qAnimName)) {
+    if(!s_WidgetAnimators.contains(qAnimName)) {
       qWarning() << "Animation" << qAnimName << "not found!";
       return;
     }

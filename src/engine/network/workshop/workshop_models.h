@@ -39,10 +39,10 @@ struct WorkshopCollection
 
     inputName = inputName.replace(QRegularExpression(R"([<>:"/\\|?*\x00-\x1F])"), " ");
 
-    while (inputName.endsWith(' ') || inputName.endsWith('.'))
+    while(inputName.endsWith(' ') || inputName.endsWith('.'))
       inputName.chop(1);
 
-    if (inputName.isEmpty())
+    if(inputName.isEmpty())
       inputName = "Workshop Downloads";
 
     return "packages/" + name + "/";

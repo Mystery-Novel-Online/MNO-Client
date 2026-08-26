@@ -31,9 +31,9 @@ void LayerSelectionPanel::clear() {
   m_layers.clear();
   m_VariantSwitches.clear();
   m_baseImageOverride.clear();
-  while (QLayoutItem* item = m_layout->takeAt(0))
+  while(QLayoutItem* item = m_layout->takeAt(0))
   {
-    if (QWidget* w = item->widget()) {
+    if(QWidget* w = item->widget()) {
       w->deleteLater();
     }
     delete item;
@@ -63,8 +63,8 @@ void LayerSelectionPanel::addButtonToGrid(QWidget *button) {
 }
 
 void LayerSelectionPanel::disableLayerVariants(const QString &layerName) {
-  for (LayerSelectionData& layer : m_layers) {
-    if (layer.layerName != layerName) {
+  for(LayerSelectionData& layer : m_layers) {
+    if(layer.layerName != layerName) {
       continue;
     }
 
@@ -155,7 +155,7 @@ void LayerSelectionPanel::layerClicked(int layerId) {
   LayerSelectionData& data = m_layers[layerId];
   QString VariantName = data.layerName + "_" + data.variation;
 
-  if (QApplication::keyboardModifiers() & Qt::ControlModifier) {
+  if(QApplication::keyboardModifiers() & Qt::ControlModifier) {
     AOApplication::getInstance()->m_courtroom->ui_ic_chat_message_field->addTag(CueType::Layer, { data.layerName, data.variation });
     courtroom::ic::focusMessageBox();
     return;
