@@ -274,8 +274,10 @@ void EmotionSelector::dropdownChanged(int id)
 
   emotionChange(getSelectedEmote());
 
-  if(emoteCombobox != nullptr) emoteCombobox->setCurrentIndex(getSelectedIndex());
-  courtroom::ic::focusMessageBox();
+  if(emoteCombobox != nullptr) {
+    emoteCombobox->setCurrentIndex(getSelectedIndex());
+  }
+  emit interactionFinished();
   refreshEmotes(true);
 }
 
@@ -287,17 +289,20 @@ void EmotionSelector::emoteClicked(int id)
   RPListWidget* sfxList = dynamic_cast<RPListWidget*>(LegacyThemeManager::get().getWidget("sfx_list"));
   RPListWidget* animList = dynamic_cast<RPListWidget*>(LegacyThemeManager::get().getWidget("chara_animations"));
 
-  if(sfxList != nullptr)
+  if(sfxList != nullptr) {
     sfxList->selectText(QString::fromStdString(getSelectedEmote().sound_file));
+  }
 
-  if(animList != nullptr)
+  if(animList != nullptr) {
     animList->selectText(QString::fromStdString(getSelectedEmote().sequence));
-
+  }
 
   emotionChange(getSelectedEmote());
 
-  if(emoteCombobox != nullptr) emoteCombobox->setCurrentIndex(getSelectedIndex());
-  courtroom::ic::focusMessageBox();
+  if(emoteCombobox != nullptr) {
+    emoteCombobox->setCurrentIndex(getSelectedIndex());
+  }
+  emit interactionFinished();
 }
 
 void EmotionSelector::showEmoteTooltip(int id, QPoint pos)

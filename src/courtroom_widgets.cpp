@@ -495,8 +495,10 @@ void Courtroom::connect_widgets()
   connect(m_loading_timer, SIGNAL(timeout()), ui_vp_loading, SLOT(show()));
 
 
-  //Player List
+  //Widget Focus Transfer
   connect(ui_player_list, &AreaPlayerList::navigationComplete, this, &Courtroom::focusICInput);
+  connect(pLayersPanel, &RPWidget::interactionFinished, this, &Courtroom::focusICInput);
+  connect(ui_emotes, &RPWidget::interactionFinished, this, &Courtroom::focusICInput);
 
 }
 

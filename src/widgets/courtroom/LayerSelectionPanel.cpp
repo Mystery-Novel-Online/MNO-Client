@@ -157,7 +157,7 @@ void LayerSelectionPanel::layerClicked(int layerId) {
 
   if(QApplication::keyboardModifiers() & Qt::AltModifier) {
     AOApplication::getInstance()->m_courtroom->ui_ic_chat_message_field->addTag(CueType::Layer, { data.layerName, data.variation });
-    courtroom::ic::focusMessageBox();
+    emit interactionFinished();
     return;
   }
 
@@ -196,7 +196,7 @@ void LayerSelectionPanel::layerClicked(int layerId) {
   default:
     break;
   }
-  courtroom::ic::focusMessageBox();
+  emit interactionFinished();
 }
 
 

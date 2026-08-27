@@ -87,22 +87,20 @@ void DRAudiotrackMetadata::update_cache()
 DRAudiotrackMetadata::DRAudiotrackMetadata()
 {}
 
-DRAudiotrackMetadata::DRAudiotrackMetadata(QString p_file_name)
+DRAudiotrackMetadata::DRAudiotrackMetadata(const QString& p_file_name)
     : m_filename(p_file_name)
 {
   QRegularExpression urlRegex("(http|https|ftp)://[^\\s/$.?#].[^\\s]*");
   QRegularExpressionMatch match = urlRegex.match(p_file_name);
 
-  if(match.hasMatch())
-  {
+  if(match.hasMatch()) {
     QUrl l_url = QUrl(p_file_name);
     m_filename = l_url.fileName();
     return;
   }
 
   const QString l_lower_file_name = p_file_name.toLower();
-  if(s_audiotrack_cache.contains(l_lower_file_name))
-  {
+  if(s_audiotrack_cache.contains(l_lower_file_name)) {
     *this = s_audiotrack_cache[l_lower_file_name];
   }
 }

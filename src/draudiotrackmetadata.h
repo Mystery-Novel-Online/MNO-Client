@@ -8,7 +8,7 @@ public:
   static void update_cache();
 
   DRAudiotrackMetadata();
-  DRAudiotrackMetadata(QString file_name);
+  DRAudiotrackMetadata(const QString& file_name);
   ~DRAudiotrackMetadata();
 
   QString filename();

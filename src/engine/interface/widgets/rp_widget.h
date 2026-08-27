@@ -16,6 +16,9 @@ public:
 public:
   AOApplication *m_app = nullptr;
 
+signals:
+  void interactionFinished();
+
 protected:
   void mousePressEvent(QMouseEvent *event) override;
   void mouseMoveEvent(QMouseEvent *event) override;
