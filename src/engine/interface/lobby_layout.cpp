@@ -17,7 +17,7 @@ namespace Layout::ServerSelect
     s_AOApplication = application;
   }
 
-  RPButton *CreateButton(QString name, QString image, std::function<void()> releasedFunction)
+  RPButton *CreateButton(const QString& name, const QString& image, std::function<void()> releasedFunction)
   {
     RPButton* rpButton = new RPButton(s_ConstructedLobby);
     rpButton->setName(name);

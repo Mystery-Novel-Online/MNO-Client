@@ -52,7 +52,7 @@ namespace engine::system::replays
 
     void start()
     {
-      QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd (hh.mm.ss.z)'.json'");
+      const QString fileName = QDateTime::currentDateTime().toString("yyyy-MM-dd (hh.mm.ss.z)'.json'");
       s_outputPath =  FS::Paths::BasePath() + "replays/" + fileName;
       s_recordingStartTime = RuntimeLoop::uptime();
       s_recordingActive = true;
@@ -163,7 +163,7 @@ namespace engine::system::replays
       save();
     }
 
-    void messageSystem(QString name, QString message)
+    void messageSystem(const QString& name, const QString& message)
     {
       const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
       ReplayOperation lNewOperation = {"ooc", timestampElapsed, {}};
@@ -174,7 +174,7 @@ namespace engine::system::replays
       save();
     }
 
-    void musicChange(QString music)
+    void musicChange(const QString &music)
     {
       const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
       ReplayOperation lNewOperation = {"bgm", timestampElapsed, {}};
@@ -184,7 +184,7 @@ namespace engine::system::replays
       save();
     }
 
-    void backgroundChange(QString background, const QString &variant)
+    void backgroundChange(const QString& background, const QString &variant)
     {
       const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
       ReplayOperation lNewOperation = {"bg", timestampElapsed, {}};
@@ -195,7 +195,7 @@ namespace engine::system::replays
       save();
     }
 
-    void weatherChange(QString name, QString environment)
+    void weatherChange(const QString& name, const QString& environment)
     {
       const int timestampElapsed = RuntimeLoop::uptime() - s_recordingStartTime;
       ReplayOperation weatherOperation = {"weather", timestampElapsed, {}};
@@ -251,7 +251,7 @@ namespace engine::system::replays
   namespace playback
   {
     using namespace engine::network::metadata;
-    void loadFile(QString name)
+    void loadFile(const QString& name)
     {
       s_playbackTimestamp = 0;
       ReplayReader(name, s_playbackOperations);
@@ -411,12 +411,12 @@ namespace engine::system::replays
       return s_replayPackages;
     }
 
-    QStringList packageCategories(QString package)
+    QStringList packageCategories(const QString& package)
     {
       return s_packageCategories[package];
     }
 
-    void cachePackage(QString package, QStringList categories)
+    void cachePackage(const QString& package, QStringList categories)
     {
       if(!s_replayPackages.contains(package))
       {
@@ -425,7 +425,7 @@ namespace engine::system::replays
       }
     }
 
-    QStringList packageContents(QString package, QString category)
+    QStringList packageContents(const QString& package, const QString& category)
     {
       QString path = "replays/";
       if(package.isEmpty())

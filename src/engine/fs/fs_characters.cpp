@@ -7,7 +7,7 @@ namespace{
 const QStringList SPRITE_PATH_DENYLIST = { "char_icon.png", "showname.png", "emotions" };
 }
 
-QString engine::fs::characters::getSpritePath(QString p_character, QString p_emote, QString p_prefix, bool p_use_placeholder)
+QString engine::fs::characters::getSpritePath(const QString& p_character, const QString& p_emote, const QString& p_prefix, bool p_use_placeholder)
 {
   bool l_valid = true;
 
@@ -76,17 +76,17 @@ QString engine::fs::characters::getSpritePath(QString p_character, QString p_emo
   return l_file_path;
 }
 
-QString engine::fs::characters::getSpritePathPre(QString character, QString emote)
+QString engine::fs::characters::getSpritePathPre(const QString& character, const QString& emote)
 {
   return getSpritePath(character, emote, QString{}, false);
 }
 
-QString engine::fs::characters::getSpritePathTalk(QString character, QString emote)
+QString engine::fs::characters::getSpritePathTalk(const QString& character, const QString& emote)
 {
   return getSpritePath(character, emote, "(b)", true);
 }
 
-QString engine::fs::characters::getSpritePathIdle(QString character, QString emote)
+QString engine::fs::characters::getSpritePathIdle(const QString& character, const QString& emote)
 {
   return getSpritePath(character, emote, "(a)", true);
 }

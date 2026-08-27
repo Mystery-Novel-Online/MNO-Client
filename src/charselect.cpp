@@ -137,8 +137,9 @@ void Courtroom::set_char_select_page()
 
   CharacterRepository::clearFiltered();
 
-  for(AOCharButton *button : qAsConst(ui_char_button_list))
+  for(AOCharButton *button : qAsConst(ui_char_button_list)) {
     button->hide();
+  }
 
   int l_item_count = 0;
 
@@ -151,10 +152,8 @@ void Courtroom::set_char_select_page()
     });
   }
 
-  for(ActorSelectEntry charaType : filteredResult)
-  {
-    if(QString::fromStdString(charaType.name).toLower().contains(pCharaSelectSearch->text().toLower()))
-    {
+  for(ActorSelectEntry charaType : filteredResult) {
+    if(QString::fromStdString(charaType.name).toLower().contains(pCharaSelectSearch->text().toLower())) {
       l_item_count += 1;
       CharacterRepository::addFiltered(charaType);
     }
@@ -165,8 +164,9 @@ void Courtroom::set_char_select_page()
   const int l_current_page_emote_count =
       qBound(0, l_item_count - m_current_chr_page * m_page_max_chr_count, m_page_max_chr_count);
 
-  if(m_current_chr_page + 1 < l_page_count)
+  if(m_current_chr_page + 1 < l_page_count) {
     ui_chr_select_right->show();
+  }
 
   if(m_current_chr_page > 0)
     ui_chr_select_left->show();
@@ -177,8 +177,7 @@ void Courtroom::set_char_select_page()
   UIFilteredCharButton = {};
 
   // show all buttons for this page
-  for(int i = 0; i < l_current_page_emote_count; ++i)
-  {
+  for(int i = 0; i < l_current_page_emote_count; ++i) {
 
     int l_real_i = i + m_current_chr_page * m_page_max_chr_count;
     AOCharButton *l_button = ui_char_button_list.at(i);

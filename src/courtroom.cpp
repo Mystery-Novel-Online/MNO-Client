@@ -61,6 +61,8 @@ using namespace engine;
 Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
     : SceneWidget(ThemeSceneType::SceneType_Courtroom, parent)
     , yamlUploader(this)
+    , m_benchmarkSetup("Courtroom Setup")
+    ,m_benchmarkIncomingMessage("IC Message")
 {
   ao_app = p_ao_app;
   ao_config = new AOConfig(this);
@@ -166,7 +168,7 @@ void Courtroom::set_music_list(QStringList p_music_list)
 
 void Courtroom::setup_courtroom()
 {
-  TimeDebugger::get().StartTimer("Courtroom Setup");
+  m_benchmarkSetup.restart();
   courtroom::cleanup();
   load_shouts();
   load_free_blocks();
@@ -208,7 +210,7 @@ void Courtroom::setup_courtroom()
 
   ui_player_list->deconstruct(true);
   construct_playerlist_layout();
-  TimeDebugger::get().EndTimer("Courtroom Setup");
+  m_benchmarkSetup.stop();
   engine::system::theme::reloadMetadata();
   LuaBridge::LuaEventCall("OnCourtroomSetup");
 
@@ -250,8 +252,7 @@ void Courtroom::map_viewers()
   m_mapped_viewer_list[SpriteEffect].append(ui_vp_effect->get_player());
 
   // stickers
-  for(DRStickerViewer *i_sticker : qAsConst(ui_free_blocks))
-  {
+  for(DRStickerViewer *i_sticker : qAsConst(ui_free_blocks)) {
     m_mapped_viewer_list[SpriteSticker].append(i_sticker->get_player());
   }
 }
@@ -272,8 +273,7 @@ void Courtroom::map_viewport_viewers()
 void Courtroom::map_viewport_readers()
 {
   const QList<ViewportSprite> l_type_list = m_viewport_viewer_map.keys();
-  for(const ViewportSprite i_type : qAsConst(l_type_list))
-  {
+  for(const ViewportSprite i_type : qAsConst(l_type_list)) {
     m_reader_cache.insert(i_type, m_viewport_viewer_map[i_type]->get_reader());
   }
 }
@@ -287,8 +287,7 @@ mk2::SpriteReader::ptr Courtroom::get_viewport_reader(ViewportSprite p_type) con
 
 void Courtroom::assign_readers_for_all_viewers()
 {
-  for(auto it = m_mapped_viewer_list.cbegin(); it != m_mapped_viewer_list.cend(); ++it)
-  {
+  for(auto it = m_mapped_viewer_list.cbegin(); it != m_mapped_viewer_list.cend(); ++it) {
     const SpriteCategory l_category = it.key();
     const bool l_caching = ao_config->sprite_caching_enabled(l_category);
     assign_readers_for_viewers(l_category, l_caching);
@@ -317,8 +316,7 @@ void Courtroom::assign_readers_for_viewers(int p_category, bool p_caching)
 
   // viewport readers
   const auto &l_viewer_list = m_mapped_viewer_list[l_category];
-  for(auto i_viewer : qAsConst(l_viewer_list))
-  {
+  for(auto i_viewer : qAsConst(l_viewer_list)) {
     mk2::SpriteReader::ptr l_new_reader;
     if(p_caching) {
       l_new_reader = mk2::SpriteReader::ptr(new mk2::SpriteDynamicReader);
@@ -334,8 +332,7 @@ void Courtroom::assign_readers_for_viewers(int p_category, bool p_caching)
 
     { // update reader cache
       const QList<ViewportSprite> l_type_list = m_reader_cache.keys();
-      for(const ViewportSprite i_type : qAsConst(l_type_list))
-      {
+      for(const ViewportSprite i_type : qAsConst(l_type_list)) {
         const mk2::SpriteReader::ptr l_current_reader = m_reader_cache.value(i_type);
         if(l_prev_reader == l_current_reader) {
           m_reader_cache.insert(i_type, l_new_reader);
@@ -791,8 +788,7 @@ void Courtroom::list_music()
   const QBrush l_missing_song_brush = ao_app->current_theme->get_widget_settings_color("music_list", "courtroom", "missing_song", "missing_song_color");
 
   ui_music_list->clear();
-  for(const QString &i_song : qAsConst(m_music_list))
-  {
+  for(const QString &i_song : qAsConst(m_music_list)) {
     DRAudiotrackMetadata l_track(i_song);
     QListWidgetItem *l_item = new QListWidgetItem(l_track.title(), ui_music_list);
     l_item->setData(Qt::UserRole, l_track.filename());
@@ -1174,6 +1170,7 @@ void Courtroom::handle_acknowledged_ms()
 
 void Courtroom::next_chatmessage(QStringList p_chatmessage)
 {
+  m_benchmarkIncomingMessage.restart();
   if(p_chatmessage.length() < MINIMUM_MESSAGE_SIZE) {
     return;
   }
@@ -1182,7 +1179,19 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
     p_chatmessage.append(QString{});
   }
 
-  if(!m_chatmessage[CMMessage].trimmed().isEmpty()) {
+  m_incomingMessage.speakerClient = p_chatmessage[CMClientId].toInt();
+  m_incomingMessage.speakerCharacter = p_chatmessage[CMChrId].toInt();
+  m_incomingMessage.color = (dialogue::DialogueColor)p_chatmessage[CMTextColor].toInt();
+
+  m_incomingMessage.message = m_chatmessage[CMMessage].toStdString();
+  m_incomingMessage.emptyMessage = m_incomingMessage.message.empty();
+  m_incomingMessage.showname = m_chatmessage[CMShowName].toStdString();
+
+  m_incomingMessage.speaker.character = m_chatmessage[CMChrName].toStdString();
+  m_incomingMessage.speaker.emote = m_chatmessage[CMEmote].toStdString();
+  m_incomingMessage.speaker.isVisible = m_chatmessage[CMHideCharacter].toInt() != 1;
+
+  if(!m_incomingMessage.emptyMessage) {
     while(m_tick_step <= m_chatmessage[CMMessage].length() - 1) {
       next_chat_letter();
     }
@@ -1285,7 +1294,7 @@ void Courtroom::reset_viewport()
   next_chatmessage(l_chatmessage);
 }
 
-void Courtroom::preload_chatmessage(QStringList p_contents)
+void Courtroom::preload_chatmessage(const QStringList& p_contents)
 {
   cleanup_preload_readers();
   m_loading_timer->stop();
@@ -1328,8 +1337,7 @@ void Courtroom::preload_chatmessage(QStringList p_contents)
 
 
 
-  for(auto it = l_file_list.cbegin(); it != l_file_list.cend(); ++it)
-  {
+  for(auto it = l_file_list.cbegin(); it != l_file_list.cend(); ++it) {
     const ViewportSprite l_type = it.key();
     const QString &l_file_name = it.value();
 
@@ -1391,7 +1399,7 @@ void Courtroom::handle_chatmessage()
 {
   ui_vp_player_char->setTint(Qt::transparent);
   qDebug() << "handle_chatmessage";
-  LuaBridge::OnCharacterMessage(m_chatmessage[CMShowName].toStdString(), m_chatmessage[CMChrName].toStdString(), m_chatmessage[CMEmote].toStdString(), m_chatmessage[CMMessage].toStdString(), m_chatmessage[CMMessage].trimmed().isEmpty());
+  LuaBridge::OnCharacterMessage(m_incomingMessage.showname, m_incomingMessage.speaker.character, m_chatmessage[CMEmote].toStdString(), m_incomingMessage.message, m_incomingMessage.emptyMessage);
   m_hide_character = m_chatmessage[CMHideCharacter].toInt();
   m_play_pre = false;
   m_play_zoom = false;
@@ -1536,7 +1544,6 @@ void Courtroom::objection_done()
 
 void Courtroom::handle_chatmessage_2() // handles IC
 {
-
   currentDelayLeft = CueWaitMax;
   customMessageSpeed = 0;
   int selfOffset = message::horizontalOffset();
@@ -1652,12 +1659,11 @@ void Courtroom::handle_chatmessage_3()
     ui_vp_player_pair->set_play_once(false);
   }
 
-
   setup_chat();
 
   int f_anim_state = 0;
   // BLUE is from an enum in datatypes.h
-  bool text_is_blue = m_chatmessage[CMTextColor].toInt() == DR::CBlue;
+  bool text_is_blue = m_incomingMessage.color == dialogue::DialogueColor::CBlue;
 
   if(!text_is_blue && text_state == 1) {
     f_anim_state = 2; // talking
@@ -1830,8 +1836,7 @@ void Courtroom::handle_chatmessage_3()
   calculate_chat_tick_interval();
 
   LuaBridge::LuaEventCall("OnMessageStart");
-  bool emptyMessage = m_chatmessage[CMMessage].trimmed().isEmpty();
-  if(!emptyMessage) {
+  if(!m_incomingMessage.emptyMessage) {
     m_configBlips->playStartingSfx();
   }
 
@@ -1853,6 +1858,7 @@ void Courtroom::handle_chatmessage_3()
   }
 
   ui_vp_player_pair->setCharacterAnimation(message::pair::getAnimation(), message::pair::getCharacter(), true);
+  m_benchmarkIncomingMessage.stop();
 
 }
 
@@ -2078,8 +2084,9 @@ void Courtroom::update_ic_log(bool p_reset_log)
     const int l_remove_block_count = ui_ic_chatlog->document()->blockCount() - l_max_block_count;
     if(l_remove_block_count > 0) {
       l_cursor.movePosition(l_orientation);
-      for(int i = 0; i < l_remove_block_count; ++i)
+      for(int i = 0; i < l_remove_block_count; ++i) {
         l_cursor.movePosition(l_block_orientation, QTextCursor::KeepAnchor);
+      }
       m_iclog_cursor_position -= l_cursor.selectedText().count();
       l_cursor.removeSelectedText();
     }
@@ -2149,7 +2156,7 @@ void Courtroom::append_ic_text(QString p_name, QString p_line, bool p_system, bo
  * @param p_showname The showname used by the system. Can be an empty string.
  * @param p_line The message that the system is sending.
  */
-void Courtroom::append_system_text(QString p_showname, QString p_line)
+void Courtroom::append_system_text(const QString& p_showname, const QString& p_line)
 {
   if(p_line.isEmpty()) {
     return;
@@ -2312,8 +2319,10 @@ void Courtroom::next_chat_letter()
     vp_message_format.setFont(overrides.baseFont);
   }
 
-  std::vector<CueData> unprocessedTags = {};
-  for(CueData tag : m_ProcessedTags) {
+  std::vector<CueData> unprocessedTags;
+  unprocessedTags.reserve(m_ProcessedTags.size());
+
+  for(const CueData& tag : m_ProcessedTags) {
     if(tag.timestamp <= m_tick_step || m_tick_step >= message_length) {
       switch(tag.type)
       {
@@ -2548,7 +2557,7 @@ void Courtroom::next_chat_letter()
 
     m_tick_step += 1;
   }
-  else if(m_chatmessage[CMTextColor].toInt() == DR::CRainbow) {
+  else if(m_incomingMessage.color == dialogue::DialogueColor::CRainbow) {
     static const QStringList rainbowColors = { "#BA1518", "#D55900", "#E7CE4E", "#65C856", "#1596C8" };
     QColor color(rainbowColors[m_rainbow_step]);
     vp_message_format.setForeground(color);
@@ -2631,7 +2640,7 @@ void Courtroom::next_chat_letter()
 
     ++m_blip_step;
   }
-  ui_vp_message->repaint();
+  ui_vp_message->update();
 
   ++m_tick_step;
   is_ignore_next_letter = false;
@@ -2640,10 +2649,9 @@ void Courtroom::next_chat_letter()
 
 void Courtroom::post_chatmessage()
 {
-  bool emptyMessage = m_chatmessage[CMMessage].trimmed().isEmpty();
-  LuaBridge::LuaEventCall("OnMessageCompleted", emptyMessage);
+  LuaBridge::LuaEventCall("OnMessageCompleted", m_incomingMessage.emptyMessage);
 
-  if(!emptyMessage) {
+  if(!m_incomingMessage.emptyMessage) {
     m_configBlips->playEndingSfx();
   }
 
@@ -2687,7 +2695,7 @@ void Courtroom::on_loading_bar_delay_changed(int p_delay)
 void Courtroom::set_text_color()
 {
   const QMap<DR::Color, DR::ColorInfo> color_map = ao_app->get_chatmessage_colors();
-  const DR::Color color = DR::Color(m_chatmessage[CMTextColor].toInt());
+  const DR::Color color = DR::Color(m_incomingMessage.color);
   const QString color_code = color_map[color_map.contains(color) ? color : DR::CDefault].code;
   ui_vp_message->setStyleSheet("background-color: rgba(0, 0, 0, 0)");
   m_message_color.setNamedColor(color_code);
@@ -3238,8 +3246,9 @@ void Courtroom::cycle_wtce(int p_delta)
  */
 void Courtroom::reset_effect_buttons()
 {
-  for(RPButton *i_button : qAsConst(ui_effects))
+  for(RPButton *i_button : qAsConst(ui_effects)) {
     i_button->setChecked(false);
+  }
   m_effect_state = 0;
 }
 
@@ -3257,8 +3266,7 @@ void Courtroom::on_effect_button_clicked(const bool p_checked)
   }
 
   // disable all other buttons
-  for(RPButton *i_button : qAsConst(ui_effects))
-  {
+  for(RPButton *i_button : qAsConst(ui_effects)) {
     if(i_button == l_button) {
       continue;
     }

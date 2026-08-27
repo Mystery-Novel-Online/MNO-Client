@@ -10,8 +10,7 @@ class ServerSelectList : public QWidget
 public:
   ServerSelectList(QWidget *parent = nullptr);
   void clearEntries();
-  void addEntry(QUrl icon, QString title);
-  void addEntry(QString title);
+  void addEntry(const QString& title);
 
   void setHidden(int id, bool state);
 

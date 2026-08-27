@@ -16,6 +16,7 @@
 #include "mk2/spriteplayer.h"
 #include "mk2/spritereadersynchronizer.h"
 #include "engine/system/effects.h"
+#include <rolechat/util/BenchmarkTimer.h>
 
 
 class AOApplication;
@@ -68,6 +69,8 @@ class QLabel;
 #include <config_tabs/config_tab_discord.h>
 
 #include <networking/HubUploadManager.h>
+
+#include <rolechat/dialogue/DialogueMessage.h>
 
 using namespace engine;
 using namespace engine::network::metadata;
@@ -259,7 +262,7 @@ public:
   // But the general idea is objection animation->pre animation->talking->idle
   void next_chatmessage(QStringList p_contents);
   void reset_viewport();
-  void preload_chatmessage(QStringList p_contents);
+  void preload_chatmessage(const QStringList& p_contents);
   void handle_chatmessage();
   void handle_chatmessage_2();
   void handle_chatmessage_3();
@@ -282,9 +285,9 @@ public:
   // newlin this function keeps the chatlog scrolled to the top unless there's
   // text selected or the user isn't already scrolled to the top
   void update_ic_log(bool p_reset_log);
-  void append_ic_text(QString p_name, QString p_line, bool p_system, bool p_music, int p_client_id, bool p_self, bool typingEnabled = false);
+  void append_ic_text(const QString p_name, QString p_line, bool p_system, bool p_music, int p_client_id, bool p_self, bool typingEnabled = false);
 
-  void append_system_text(QString p_showname, QString p_line);
+  void append_system_text(const QString& p_showname, const QString& p_line);
 
   // prints who played the song to IC chat and plays said song(if found on
   // local filesystem) takes in a list where the first element is the song
@@ -963,6 +966,10 @@ private:
   bool m_isAfk = false;
   const int m_afkThresholdMs = 5 * 60 * 1000;
 
+  benchmark::Timer m_benchmarkSetup;
+  benchmark::Timer m_benchmarkIncomingMessage;
+  dialogue::DialogueMessage m_incomingMessage;
+
   void resetAFKTimer();
 
 private slots:
@@ -974,8 +981,9 @@ void Courtroom::insert_widget_names(QVector<QString> &p_widget_names, QVector<T 
 {
   QVector<QWidget *> widgets;
 
-  for(QWidget *widget : p_widgets)
+  for(QWidget *widget : p_widgets) {
     widgets.append(widget);
+  }
 
   insert_widget_names(p_widget_names, widgets);
 }

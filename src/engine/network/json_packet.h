@@ -8,7 +8,7 @@
 class JsonPacket
 {
 public:
-  static void ProcessJson(QString p_jsonString);
+  static void ProcessJson(const QString& p_jsonString);
 
 private:
   //const static QString PLAYER_LIST_PACKET = "player_list";

@@ -144,12 +144,12 @@ void GraphicsSpriteItem::setHorizontalOffset(int t_offset)
 
 bool GraphicsSpriteItem::setKeyframeAnimation(const QString &directory, const QString &animation)
 {
-  if(directory.startsWith("effects/"))
+  if(directory.startsWith("effects/")) {
     m_layersUseHorizontalOffset = true;
+  }
 
   clearImageLayers();
-  for(const ActorLayer &layer : AnimationReader(directory + "/" + animation, m_KeyframeSequence).m_Layers)
-  {
+  for(const ActorLayer &layer : AnimationReader(directory + "/" + animation, m_KeyframeSequence).m_Layers) {
     QString qAssetPath = QString::fromStdString(layer.assetPath);
     QString qOffsetName = QString::fromStdString(layer.offsetName);
 
@@ -181,26 +181,23 @@ bool GraphicsSpriteItem::setThemeAnimation(const QString &animation)
 {
   clearImageLayers();
   const QString theme = AOApplication::getInstance()->getCurrentTheme();
-  for(const ActorLayer &layer : AnimationReader(animation, theme, m_KeyframeSequence).m_Layers)
-  {
-
+  for(const ActorLayer &layer : AnimationReader(animation, theme, m_KeyframeSequence).m_Layers) {
     QString qAssetPath = QString::fromStdString(layer.assetPath);
     QString qOffsetName = QString::fromStdString(layer.offsetName);
 
     QStringList searchPaths =
-        {
-            "themes/" + theme + "/animations/assets/" + qAssetPath,
-            "themes/" + theme + "/animations/assets/" + qOffsetName,
-            "animations/assets/" + qAssetPath,
-            "animations/assets/" + qOffsetName,
-            qAssetPath
-        };
+    {
+      "themes/" + theme + "/animations/assets/" + qAssetPath,
+      "themes/" + theme + "/animations/assets/" + qOffsetName,
+      "animations/assets/" + qAssetPath,
+      "animations/assets/" + qOffsetName,
+      qAssetPath
+    };
 
     QString filePath = FS::Paths::FindFile(searchPaths, true, FS::Formats::SupportedImages());
-
     SpriteLayer *layerData = createOverlay(layer, filePath);
-    if(layer.offsetName == "viewport")
-    {
+
+    if(layer.offsetName == "viewport") {
       layerData->getPixmap(m_KeyframeSequence.canRenderViewport());
     }
   }
@@ -222,15 +219,15 @@ bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, 
     auto targetFile = RCFile(assetPathCharacter.toStdString(), rolechat::fs::formats::supportedImages());
     std::string targetFilePath = targetFile.findFirst();
 
-    if(targetFilePath.empty())
+    if(targetFilePath.empty()) {
       targetFilePath = RCFile("animations/assets/" + qOffsetName.toStdString(), rolechat::fs::formats::supportedImages()).findFirst();
+    }
 
 
     if(targetFilePath.empty()){
       filePath = engine::fs::characters::getSpritePathIdle(character, qOffsetName);
     }
-    else
-    {
+    else {
       filePath = QString::fromStdString(targetFilePath);
     }
 
@@ -238,7 +235,9 @@ bool GraphicsSpriteItem::setCharacterAnimation(QString name, QString character, 
     createOverlay(layer, filePath);
   }
 
-  if(startFromEnd) m_KeyframeSequence.SequenceJumpEnd();
+  if(startFromEnd) {
+    m_KeyframeSequence.SequenceJumpEnd();
+  }
   m_KeyframeSequence.setRunningState(true);
   return m_KeyframeSequence.getLoopState();
 }
@@ -256,16 +255,6 @@ void GraphicsSpriteItem::setFlipped(bool state)
 void GraphicsSpriteItem::setMirrored(bool state)
 {
   m_isMirrored = state;
-}
-
-bool GraphicsSpriteItem::mirroredState()
-{
-  return m_isMirrored;
-}
-
-bool GraphicsSpriteItem::flippedState()
-{
-  return m_isFlipped;
 }
 
 bool GraphicsSpriteItem::keyAnimLoaded()
@@ -291,18 +280,15 @@ QRectF GraphicsSpriteItem::boundingRect() const
 void GraphicsSpriteItem::setLayerState(ViewportSprite viewportState)
 {
   m_spriteState = viewportState;
-  for(SpriteLayer *layer : m_spriteLayersStatic)
-  {
+  for(SpriteLayer *layer : m_spriteLayersStatic) {
     layer->setState(viewportState);
   }
 
-  for(SpriteLayer *layer : m_spriteLayers)
-  {
+  for(SpriteLayer *layer : m_spriteLayers) {
     layer->setState(viewportState);
   }
 
-  for(SpriteLayer *layer : m_spriteLayersBelow)
-  {
+  for(SpriteLayer *layer : m_spriteLayersBelow) {
     layer->setState(viewportState);
   }
 
@@ -319,11 +305,9 @@ void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QSt
 {
   clearImageLayers();
 
-  for(const QString& layerOffset : engine::system::encoding::text::DecodeBase64(overlayString))
-  {
+  for(const QString& layerOffset : engine::system::encoding::text::DecodeBase64(overlayString)) {
     QStringList offsetData = engine::system::encoding::text::DecodePacketContents(layerOffset);
-    if(offsetData.length() == 7)
-    {
+    if(offsetData.length() == 7) {
       createOverlay(character, emotePath, outfitName, offsetData);
     }
   }
@@ -386,16 +370,13 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const QString &characterName, con
   QString imageOrder = layerStrings[1].toLower();
   layer->setLayerPositioning(imageOrder);
 
-  if(imageOrder == "detach-below"  || imageOrder == "detach-behind" || imageOrder == "detach-beneath")
-  {
+  if(imageOrder == "detach-below"  || imageOrder == "detach-behind" || imageOrder == "detach-beneath") {
     m_spriteLayersBelow.append(layer);
   }
-  else if(imageOrder == "detach")
-  {
+  else if(imageOrder == "detach") {
     m_spriteLayers.append(layer);
   }
-  else
-  {
+  else {
     m_spriteLayersStatic.append(layer);
     m_player->addLayer(layer);
   }
@@ -505,14 +486,15 @@ SpriteLayer *GraphicsSpriteItem::createOverlay(const ActorLayer &layer, const QS
     {"set_destination", QPainter::RasterOp_SetDestination},
     {"not_destination", QPainter::RasterOp_NotDestination}
   };
-  if(compositionTable.contains(QString::fromStdString(layer.blendMode).toLower())) layerData->setCompositionMode(compositionTable.value(QString::fromStdString(layer.blendMode).toLower()));
 
-  if(QString::fromStdString(layer.spriteOrder).toLower() == "below" || QString::fromStdString(layer.spriteOrder).toLower() == "behind" || QString::fromStdString(layer.spriteOrder).toLower() == "beneath")
-  {
+  if(compositionTable.contains(QString::fromStdString(layer.blendMode).toLower())) {
+    layerData->setCompositionMode(compositionTable.value(QString::fromStdString(layer.blendMode).toLower()));
+  }
+
+  if(QString::fromStdString(layer.spriteOrder).toLower() == "below" || QString::fromStdString(layer.spriteOrder).toLower() == "behind" || QString::fromStdString(layer.spriteOrder).toLower() == "beneath") {
     m_spriteLayersBelow.append(layerData);
   }
-  else
-  {
+  else {
     m_spriteLayers.append(layerData);
   }
   update();
@@ -530,18 +512,15 @@ void GraphicsSpriteItem::updateLayer(const QString &name, const QString &updated
 void GraphicsSpriteItem::clearImageLayers()
 {
   m_player->clearLayers();
-  for(SpriteLayer *layer : m_spriteLayers)
-  {
+  for(SpriteLayer *layer : m_spriteLayers) {
     delete layer;
   }
 
-  for(SpriteLayer *layer : m_spriteLayersBelow)
-  {
+  for(SpriteLayer *layer : m_spriteLayersBelow) {
     delete layer;
   }
 
-  for(SpriteLayer *layer : m_spriteLayersStatic)
-  {
+  for(SpriteLayer *layer : m_spriteLayersStatic) {
     delete layer;
   }
 
@@ -582,29 +561,20 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
                          ? layer->getPixmap(m_KeyframeSequence.canRenderViewport())
                          : layer->spritePlayer.getCurrentPixmap();
 
-    if(pixmap.isNull())
+    if(pixmap.isNull()) {
       continue;
-
-    //layer->start(scale);
-    //painter->save();
+    }
 
     const bool isDetached = layer->detatched();
     const double worldScale = isDetached ? 1.0 : scale;
 
     const QString name = layer->name();
 
-           // Channel keys
+    // Channel keys
     const std::string posKey = (name + "_position").toStdString();
     const std::string alphaKey = (name + "_alpha").toStdString();
     const std::string scaleKey = (name + "_scale").toStdString();
     const std::string rotKey = (name + "_rotation").toStdString();
-
-
-    //const double scaleValue = isDetached ? 1.0 : scale;
-
-
-    //const QPointF basePosition = isDetached ? QPointF(0, 0) : basePos;
-
 
     QVector3D pos(0, 0, 0);
     double a = alpha;
@@ -612,21 +582,24 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
     double r = 0.0;
 
 
-    if(auto it = evaluatedFrames.find(posKey); it != evaluatedFrames.end())
+    if(auto it = evaluatedFrames.find(posKey); it != evaluatedFrames.end()) {
       pos = it->second.value<QVector3D>();
-
-    if(auto it = evaluatedFrames.find(alphaKey); it != evaluatedFrames.end())
-    {
-      a = it->second.toFloat();
-      if(a == 0.0f)
-        continue;
     }
 
-    if(auto it = evaluatedFrames.find(scaleKey); it != evaluatedFrames.end())
-      s = it->second.toFloat();
+    if(auto it = evaluatedFrames.find(alphaKey); it != evaluatedFrames.end()) {
+      a = it->second.toFloat();
+      if(a == 0.0f) {
+        continue;
+      }
+    }
 
-    if(auto it = evaluatedFrames.find(rotKey); it != evaluatedFrames.end())
+    if(auto it = evaluatedFrames.find(scaleKey); it != evaluatedFrames.end()) {
+      s = it->second.toFloat();
+    }
+
+    if(auto it = evaluatedFrames.find(rotKey); it != evaluatedFrames.end()) {
       r = it->second.toFloat();
+    }
 
 
     painter->save();
@@ -652,8 +625,9 @@ void GraphicsSpriteItem::drawSpriteLayers(QPainter *painter, QVector<SpriteLayer
     painter->translate(-pivot);
 
     QPainter::CompositionMode mode = layer->compositionMode();
-    if(mode != QPainter::CompositionMode_SourceOver)
+    if(mode != QPainter::CompositionMode_SourceOver) {
       painter->setCompositionMode(mode);
+    }
 
     painter->drawPixmap(QPointF(0, 0), pixmap);
 
@@ -670,7 +644,9 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   QPixmap pixmap = m_player->getCurrentPixmap();
   if(pixmap.isNull())
   {
-    if(!m_LayersExist) return;
+    if(!m_LayersExist) {
+      return;
+    }
     renderPixmap = false;
   }
 
@@ -687,9 +663,13 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
   std::unordered_map<std::string, QVariant> evaluatedValues;
   m_KeyframeSequence.Evaluate(evaluatedValues);
 
-  if(auto it = evaluatedValues.find("alpha"); it != evaluatedValues.end())
+  if(auto it = evaluatedValues.find("alpha"); it != evaluatedValues.end()) {
     alpha = it->second.toFloat();
-  if(alpha == 0.0f) return;
+  }
+
+  if(alpha == 0.0f) {
+    return;
+  }
 
   painter->save();
   painter->setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -749,8 +729,7 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
       combiner.drawPixmap(drawPos, pixmap);
 
-      if(tintColour != Qt::transparent)
-      {
+      if(tintColour != Qt::transparent) {
         combiner.setCompositionMode(QPainter::CompositionMode_SourceAtop);
         combiner.fillRect(QRect(drawPos.x(), drawPos.y(), pixmap.size().width(), pixmap.size().height()), tintColour);
       }
@@ -761,25 +740,21 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
     combiner.end();
 
-    if(m_isMirrored || m_isFlipped)
-    {
+    if(m_isMirrored || m_isFlipped) {
       painter->translate(sceneRect.center());
       painter->scale(m_isMirrored ? -1.0 : 1.0, m_isFlipped  ? -1.0 : 1.0);
       painter->translate(-sceneRect.center());
     }
     painter->drawPixmap(QPoint(0, 0), pixmapCombined);
   }
-  else
-  {
-    if(m_isMirrored || m_isFlipped)
-    {
+  else {
+    if(m_isMirrored || m_isFlipped) {
       painter->translate(sceneRect.center());
       painter->scale(m_isMirrored ? -1.0 : 1.0, m_isFlipped  ? -1.0 : 1.0);
       painter->translate(-sceneRect.center());
     }
 
-    if(tintColour != Qt::transparent)
-    {
+    if(tintColour != Qt::transparent) {
       QPixmap tinted(pixmap.size());
       tinted.fill(Qt::transparent);
 
@@ -792,8 +767,7 @@ void GraphicsSpriteItem::paint(QPainter *painter, const QStyleOptionGraphicsItem
 
       painter->drawPixmap(drawPos, tinted);
     }
-    else
-    {
+    else {
       painter->drawPixmap(drawPos, pixmap);
     }
 
@@ -829,8 +803,7 @@ SpriteLayer::SpriteLayer(QString name, const QRectF &rect) : targetRect(rect)
 
 SpriteLayer::SpriteLayer(QMap<ViewportSprite, mk2::SpriteReader::ptr> &readerMap, const QRectF &rect, ViewportSprite state) : m_readerMapping(readerMap), targetRect(rect), m_ViewportState(state)
 {
-  if(m_readerMapping.contains(state))
-  {
+  if(m_readerMapping.contains(state)) {
     spritePlayer.set_reader(m_readerMapping[m_ViewportState]);
     spritePlayer.set_size(targetRect.size().toSize());
     start(1.0f);
@@ -905,14 +878,15 @@ void SpriteLayer::setStateFilename(const QString &name)
 
   m_Metadata.findAssets(idle, talk, name);
 
-  if(m_readerMapping.contains(ViewportCharacterIdle))
+  if(m_readerMapping.contains(ViewportCharacterIdle)) {
     m_readerMapping[ViewportCharacterIdle]->set_file_name(idle);
+  }
 
-  if(m_readerMapping.contains(ViewportCharacterTalk))
+  if(m_readerMapping.contains(ViewportCharacterTalk)) {
     m_readerMapping[ViewportCharacterTalk]->set_file_name(talk);
+  }
 
-  if(m_readerMapping.contains(m_ViewportState))
-  {
+  if(m_readerMapping.contains(m_ViewportState)) {
     spritePlayer.stop();
     spritePlayer.set_reader(m_readerMapping[m_ViewportState]);
     spritePlayer.set_size(targetRect.size().toSize());
@@ -922,9 +896,8 @@ void SpriteLayer::setStateFilename(const QString &name)
 
 QPixmap &SpriteLayer::getPixmap(bool renderAllowed)
 {
-  if(renderAllowed)
-  {
-    if(m_Metadata.layerName == "viewport") m_screenshotPixmap = courtroom::viewport::getScreenshot();
+  if(renderAllowed && m_Metadata.layerName == "viewport") {
+    m_screenshotPixmap = courtroom::viewport::getScreenshot();
   }
   return m_screenshotPixmap;
 }

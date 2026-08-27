@@ -15,11 +15,11 @@ namespace engine::system::replays
   {
     void start();
 
-    void musicChange(QString music);
-    void backgroundChange(QString background, const QString& variant = "default");
+    void musicChange(const QString& music);
+    void backgroundChange(const QString& background, const QString& variant = "default");
     void messageCharacter();
-    void messageSystem(QString name, QString message);
-    void weatherChange(QString name, QString environment);
+    void messageSystem(const QString& name, const QString& message);
+    void weatherChange(const QString& name, const QString& environment);
     void splashAnimation(const QString &splash);
     void gamemodeChange(const QString &mode);
     void hourChange(const QString &hour);
@@ -30,7 +30,7 @@ namespace engine::system::replays
 
   namespace playback
   {
-    void loadFile(QString name);
+    void loadFile(const QString& name);
     void load(const QString &name, const QString &package, const QString &category);
     void setNextUpdate(int nextUpdate);
     void autoUpdate(const int &uptime);
@@ -43,10 +43,10 @@ namespace engine::system::replays
   namespace io
   {
     void resetCache();
-    void cachePackage(QString package, QStringList categories);
+    void cachePackage(const QString& package, QStringList categories);
     QStringList packageNames();
-    QStringList packageCategories(QString package);
-    QStringList packageContents(QString package, QString category);
+    QStringList packageCategories(const QString& package);
+    QStringList packageContents(const QString& package, const QString& category);
 
   }
 }

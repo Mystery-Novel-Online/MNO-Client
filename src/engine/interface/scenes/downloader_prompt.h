@@ -22,7 +22,7 @@ class DownloaderPrompt : public QDialog
   Q_OBJECT
 public:
   explicit DownloaderPrompt(QWidget *parent = nullptr);
-  static void StartDownload(QString repository, QString directory, const QString& contentName, DownloadType type = DOWNLOAD_Default);
+  static void StartDownload(QString repository, const QString& directory, const QString& contentName, DownloadType type = DOWNLOAD_Default);
   static bool StartDownload(const QStringList &guids, DownloadType type);
 
   void ProcessLinks(const QMap<QString, QString>& links, const QString& contentName, const QString& repositoryUrl, bool createContext);

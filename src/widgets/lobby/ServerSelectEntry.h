@@ -34,7 +34,7 @@ public:
   void setId(int id) { m_id = id; }
   int id() const { return m_id; }
 
-  void setIcon(QString path);
+  void setIcon(const QString& path);
 
 signals:
   void clicked(int id);

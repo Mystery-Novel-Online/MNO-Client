@@ -31,7 +31,7 @@ DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
   setLayout(layout);
 }
 
-void DownloaderPrompt::StartDownload(QString repository, QString directory, const QString &contentName, DownloadType type)
+void DownloaderPrompt::StartDownload(QString repository, const QString& directory, const QString &contentName, DownloadType type)
 {
   if(repository.isEmpty()) return;
   QUrl url(repository);

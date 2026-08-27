@@ -256,8 +256,8 @@ public slots:
 
   void setFlipped(bool state);
   void setMirrored(bool state);
-  bool mirroredState();
-  bool flippedState();
+  bool mirroredState() const { return m_isMirrored; };
+  bool flippedState() const { return m_isFlipped; }
 
   bool keyAnimLoaded();
 

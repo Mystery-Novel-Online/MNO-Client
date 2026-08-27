@@ -14,9 +14,9 @@ class DRChatLog : public QTextBrowser
 public:
   DRChatLog(QWidget *parent = nullptr);
 
-  void append_chatmessage(QString name, QString message);
-  void append_information(QString message);
-  void append_html(QString html);
+  void append_chatmessage(const QString& name, const QString& message);
+  void append_information(const QString& message);
+  void append_html(const QString& html);
   void reset_message_format();
 
 signals:

@@ -100,7 +100,7 @@ bool ApiManager::apiUseAllowed()
   return !config::ConfigUserSettings::booleanValue("authentication_disabled", false);
 }
 
-QString ApiManager::repoUrl(QString guid)
+QString ApiManager::repoUrl(const QString& guid)
 {
   return baseUri() + "api/workshop/" + guid + "/content";
 }

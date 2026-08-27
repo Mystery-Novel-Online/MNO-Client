@@ -7,7 +7,7 @@
 
 using namespace engine::network;
 
-void JsonPacket::ProcessJson(QString p_jsonString)
+void JsonPacket::ProcessJson(const QString& p_jsonString)
 {
   if(AOApplication::getInstance()->m_courtroom == nullptr) return;
   JSONReader jsonReader = JSONReader();
@@ -15,20 +15,16 @@ void JsonPacket::ProcessJson(QString p_jsonString)
 
   QString packetValue = jsonReader.getStringValue("packet");
 
-  if(packetValue == "player_list")
-  {
+  if(packetValue == "player_list") {
     ProcessPlayerListPacket(jsonReader);
   }
-  else if(packetValue == "notify_request")
-  {
+  else if(packetValue == "notify_request") {
     ProcessNotifyRequestPacket(jsonReader);
   }
-  else if(packetValue == "pair_data")
-  {
+  else if(packetValue == "pair_data") {
     ProcessPairDataPacket(jsonReader);
   }
-  else if(packetValue == "pair")
-  {
+  else if(packetValue == "pair") {
     ProcessPairPacket(jsonReader);
   }
 }

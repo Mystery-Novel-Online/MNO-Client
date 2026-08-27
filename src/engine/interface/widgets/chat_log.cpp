@@ -10,17 +10,17 @@ DRChatLog::DRChatLog(QWidget *parent)
   connect(this, &DRChatLog::message_queued, this, &DRChatLog::_p_write_message_queue);
 }
 
-void DRChatLog::append_chatmessage(QString p_name, QString p_text)
+void DRChatLog::append_chatmessage(const QString& p_name, const QString& p_text)
 {
   queue_message(p_name.trimmed().isEmpty() ? "Anonymous" : p_name, p_text, false);
 }
 
-void DRChatLog::append_information(QString p_text)
+void DRChatLog::append_information(const QString& p_text)
 {
   queue_message(nullptr, p_text, false);
 }
 
-void DRChatLog::append_html(QString p_text)
+void DRChatLog::append_html(const QString& p_text)
 {
   queue_message(nullptr, p_text, true);
 }

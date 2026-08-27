@@ -73,15 +73,14 @@ namespace engine::system::theme
   {
     s_PositionalDimensions.clear();
 
-    for(QString element : CHATBOX_ELEMENTS)
-    {
-      for(QString alignment : POSITIONAL_ALIGNMENTS)
-      {
+    for(const QString& element : CHATBOX_ELEMENTS) {
+      for(const QString& alignment : POSITIONAL_ALIGNMENTS) {
         QString fullName = element + alignment;
         RPRect sizing = getDimensions(fullName, ThemeSceneType::SceneType_Courtroom);
 
-        if(sizing.height != 0 && sizing.width != 0)
+        if(sizing.height != 0 && sizing.width != 0) {
           s_PositionalDimensions[fullName] = sizing;
+        }
       }
     }
 
@@ -91,8 +90,12 @@ namespace engine::system::theme
   {
     QString positionalIdentifier = identifier + "_" + alignment;
 
-    if(s_PositionalDimensions.contains(positionalIdentifier)) return s_PositionalDimensions[positionalIdentifier];
-    else if(s_PositionalDimensions.contains(identifier)) return s_PositionalDimensions[identifier];
+    if(s_PositionalDimensions.contains(positionalIdentifier)) {
+      return s_PositionalDimensions[positionalIdentifier];
+    }
+    else if(s_PositionalDimensions.contains(identifier)) {
+      return s_PositionalDimensions[identifier];
+    }
 
     return FALLBACK_DIMENSIONS;
   }
