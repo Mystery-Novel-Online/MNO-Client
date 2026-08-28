@@ -502,76 +502,6 @@ void Courtroom::connect_widgets()
 
 }
 
-
-void Courtroom::reset_widget_toggles()
-{
-    widget_toggles = { };
-
-    for(const QString &widgeToggle : widget_toggles)
-    {
-      if(widget_names.contains(widgeToggle)) widget_names[widgeToggle]->show();
-    }
-
-
-    if(ao_app->current_theme->m_jsonLoaded)
-    {
-      QStringList chat_tab = ao_app->current_theme->get_tab_widgets("Chat");
-      QStringList area_tab = ao_app->current_theme->get_tab_widgets("Area");
-      QStringList gm_tab = ao_app->current_theme->get_tab_widgets("GM");
-
-
-      for(const QString &chatTabWidget : chat_tab)
-      {
-        widget_toggles[chatTabWidget] = "Chat";
-      }
-
-      for(const QString &areaTabWidget : area_tab)
-      {
-        widget_toggles[areaTabWidget] = "Area";
-      }
-
-      for(const QString &gmTabWidget : gm_tab)
-      {
-        widget_toggles[gmTabWidget] = "GM";
-      }
-
-    }
-    else
-    {
-      const QString l_ini_path = ao_app->find_theme_asset_path(COURTROOM_TOGGLES_INI);
-      QFile l_toggle_ini(l_ini_path);
-
-
-      if(!l_toggle_ini.open(QIODevice::ReadOnly))
-        return;
-
-
-      QTextStream in(&l_toggle_ini);
-
-      QString l_parent_name = "Chat";
-
-
-      while(!in.atEnd())
-      {
-        QString l_line = in.readLine().trimmed();
-
-        if(l_line.isEmpty()) { continue; }
-
-        if(l_line.startsWith("["))
-        {
-          l_parent_name = l_line.remove(0, 1).chopped(1).trimmed();
-        }
-        else
-        {
-          QStringList line_elements = l_line.split("=");
-
-          if(line_elements.count() <= 2) widget_toggles[line_elements.at(0).trimmed()] = l_parent_name;
-
-        }
-      }
-    }
-}
-
 void Courtroom::reset_widget_names()
 {
   // Assign names to the default widgets
@@ -1570,12 +1500,12 @@ void Courtroom::set_judge_enabled(bool p_enabled)
   is_judge = p_enabled;
 
   // set judge button visibility
-  ui_defense_plus->setVisible(is_judge && ui_in_current_toggle("defense_plus"));
-  ui_defense_minus->setVisible(is_judge && ui_in_current_toggle("defense_minus"));
-  ui_prosecution_plus->setVisible(is_judge && ui_in_current_toggle("prosecution_plus"));
-  ui_prosecution_minus->setVisible(is_judge && ui_in_current_toggle("prosecution_minus"));
+  ui_defense_plus->setVisible(is_judge);
+  ui_defense_minus->setVisible(is_judge);
+  ui_prosecution_plus->setVisible(is_judge);
+  ui_prosecution_minus->setVisible(is_judge);
 
-  if(ui_in_current_toggle("player_list")) construct_playerlist_layout();
+  construct_playerlist_layout();
 
   set_judge_wtce();
 }
@@ -1594,11 +1524,11 @@ void Courtroom::set_judge_wtce()
   const bool is_single_wtce = ao_app->current_theme->read_config_bool("enable_single_wtce");
 
   // update visibility for next/previous
-  ui_wtce_up->setVisible(is_judge && is_single_wtce && ui_in_current_toggle("wtce_up"));
-  ui_wtce_down->setVisible(is_judge && is_single_wtce && ui_in_current_toggle("wtce_down"));
+  ui_wtce_up->setVisible(is_judge && is_single_wtce);
+  ui_wtce_down->setVisible(is_judge && is_single_wtce);
 
   // prevent going ahead if we have no wtce
-  if(!is_judge || ui_wtce.length() == 0 || !ui_in_current_toggle("wtce"))
+  if(!is_judge || ui_wtce.length() == 0)
     return;
 
   // set visibility based off parameter

@@ -83,14 +83,23 @@ void config_tab_blips::reloadBlipList()
   for(const auto& subDir : blipDirectory.subDirectories())
   {
     const QString qBlipName = QString::fromStdString(subDir);
-    if(qBlipName == qCurrentBlipSet)
+    if(qBlipName == qCurrentBlipSet) {
       lBlipIndex = ui->blipSet->count();
+    }
 
     ui->blipSet->addItem(qBlipName);
   }
-  ui->blipSet->blockSignals(false);
-  if(lBlipIndex.has_value())
+
+  if(lBlipIndex.has_value()) {
     ui->blipSet->setCurrentIndex(*lBlipIndex);
+  }
+
+  ui->blipSet->blockSignals(false);
+
+  if(ui->blipSet->currentIndex() >= 0) {
+    on_blipSet_currentIndexChanged(ui->blipSet->currentIndex());
+  }
+
 }
 
 void config_tab_blips::setCharacterBlip(const std::string &set)

@@ -96,14 +96,6 @@ public:
     Finished,
   };
 
-  enum class ToggleState
-  {
-    All,
-    Chat,
-    Area,
-    GM,
-  };
-
   enum class ChatTypes
   {
     Talk,
@@ -388,9 +380,6 @@ private:
   static const int OPTIMAL_MESSAGE_SIZE = 26;
   QStringList m_pre_chatmessage;
   GameState m_game_state = GameState::Finished;
-
-  ToggleState m_toggle_state = ToggleState::All;
-
 
   ChatTypes m_current_chat_type = ChatTypes::Talk;
 
@@ -704,11 +693,6 @@ private:
       {"ic_chat_name", "background-color: rgba(100, 100, 100, 255);"}
   };
 
-
-  QHash<QString, QString> widget_toggles;
-
-
-
   RPButton *ui_player_list_left = nullptr;
   RPButton *ui_player_list_right = nullptr;
 
@@ -736,15 +720,11 @@ private:
   void set_widget_layers();
   void set_widget_layers_legacy();
 
-  void reset_widget_toggles();
-
-
   void construct_char_select();
   void reconstruct_char_select();
   void reset_char_select();
   void set_char_select();
   void set_char_select_page();
-
 
   void construct_playerlist();
 
@@ -877,7 +857,6 @@ private slots:
   //toggles
 
   void switchToggle(QString t_tabName);
-  bool ui_in_current_toggle(QString p_ui_name);
 
   void on_pre_clicked();
   void on_flip_clicked();
