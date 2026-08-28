@@ -58,21 +58,21 @@ void BGMMenu::OnInsertTriggered()
 void BGMMenu::OnSmoothPlayAction()
 {
   if(m_TargetTrack.isEmpty()) return;
-  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback_Standard);
+  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback::Standard);
   courtroom::ic::focusMessageBox();
 }
 
 void BGMMenu::OnInstantPlayAction()
 {
   if(m_TargetTrack.isEmpty()) return;
-  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback_NoFade);
+  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback::NoFade);
   courtroom::ic::focusMessageBox();
 }
 
 void BGMMenu::OnSyncPlayAction()
 {
   if(m_TargetTrack.isEmpty()) return;
-  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback_Continue);
+  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback::Continue);
   courtroom::ic::focusMessageBox();
 }
 

@@ -3,12 +3,12 @@
 
 #include <QVariant>
 
-enum KeyframeCurve
+enum class KeyframeCurve
 {
-  CurveLinear,
-  CurveEase,
-  CurveBezier,
-  CurveParametric
+  Linear,
+  Ease,
+  Bezier,
+  Parametric
 };
 
 struct TimedSound {
@@ -40,11 +40,11 @@ public:
   {
     float time;
     T value;
-    KeyframeCurve curveIn = CurveLinear;
-    KeyframeCurve curveOut = CurveLinear;
+    KeyframeCurve curveIn = KeyframeCurve::Linear;
+    KeyframeCurve curveOut = KeyframeCurve::Linear;
   };
 
-  void AddKeyframe(float time, const T& value, KeyframeCurve curveIn = CurveLinear, KeyframeCurve curveOut = CurveLinear);
+  void AddKeyframe(float time, const T& value, KeyframeCurve curveIn = KeyframeCurve::Linear, KeyframeCurve curveOut = KeyframeCurve::Linear);
   void Cache(int frameRate) const override;
   void Evaluate(float time, QVariant& outValue) const override;
   const std::type_info& GetValueType() const override { return typeid(T); }

@@ -56,14 +56,16 @@ const float KeyframeChannel<T>::GetLength() const
 template<typename T>
 float KeyframeChannel<T>::ApplyCurve(float t, KeyframeCurve curve)
 {
-  if(curve == CurveLinear) return t;
-  if(curve == CurveEase) {
+  if(curve == KeyframeCurve::Linear) {
+    return t;
+  }
+  if(curve == KeyframeCurve::Ease) {
     return t < 0.5f ? 2.0f * t * t : 1.0f - 2.0f * (1.0f - t) * (1.0f - t);
   }
-  if(curve == CurveBezier) {
+  if(curve == KeyframeCurve::Bezier) {
     return t * t * (3.0f - 2.0f * t);
   }
-  if(curve == CurveParametric) {
+  if(curve == KeyframeCurve::Parametric) {
     return (t * t) / (2.0f * (t * t - t) + 1.0f);
   }
   return t;

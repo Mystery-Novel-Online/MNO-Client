@@ -152,7 +152,7 @@ AOApplication::~AOApplication()
 
 void AOApplication::leave_server()
 {
-  m_server_status = NotConnected;
+  m_server_status = ServerStatus::NotConnected;
   m_server_socket->disconnect_from_server();
 }
 

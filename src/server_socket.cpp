@@ -54,7 +54,7 @@ AOApplication::ServerStatus AOApplication::last_server_status()
 
 bool AOApplication::joined_server()
 {
-  return m_server_status == Joined;
+  return m_server_status == ServerStatus::Joined;
 }
 
 void AOApplication::_p_handle_server_state_update(DRServerSocket::ConnectionState p_state)
@@ -65,12 +65,12 @@ void AOApplication::_p_handle_server_state_update(DRServerSocket::ConnectionStat
   case DRServerSocket::NotConnected:
     switch (l_previous_status)
     {
-    case Connecting:
-      m_server_status = TimedOut;
+    case ServerStatus::Connecting:
+      m_server_status = ServerStatus::TimedOut;
       break;
 
-    case Joined:
-      m_server_status = Disconnected;
+    case ServerStatus::Joined:
+      m_server_status = ServerStatus::Disconnected;
       if(is_courtroom_constructed)
       {
         audio::StopAll();
@@ -81,17 +81,17 @@ void AOApplication::_p_handle_server_state_update(DRServerSocket::ConnectionStat
       break;
 
     default:
-      m_server_status = NotConnected;
+      m_server_status = ServerStatus::NotConnected;
       break;
     }
     break;
 
   case DRServerSocket::Connecting:
-    m_server_status = Connecting;
+    m_server_status = ServerStatus::Connecting;
     break;
 
   case DRServerSocket::Connected:
-    m_server_status = Connected;
+    m_server_status = ServerStatus::Connected;
     break;
   }
 
@@ -408,46 +408,51 @@ void AOApplication::_p_handle_server_packet(DRPacket p_packet)
   }
   else if(l_header == "DONE")
   {
-    if(!is_courtroom_constructed)
+    if(!is_courtroom_constructed) {
       return;
+    }
 
     m_courtroom->done_received();
-    m_server_status = Joined;
+    m_server_status = ServerStatus::Joined;
     emit server_status_changed(m_server_status);
 
     destruct_lobby();
   }
   else if(l_header == "joined_area")
   {
-    if(!is_courtroom_constructed)
+    if(!is_courtroom_constructed) {
       return;
+    }
 
     m_courtroom->reset_viewport();
   }
   else if(l_header == "WEA")
   {
-    if(l_content.size() < 2)
+    if(l_content.size() < 2) {
       return;
+    }
 
-    if(!is_courtroom_constructed)
+    if(!is_courtroom_constructed) {
       return;
+    }
 
     m_courtroom->updateWeather(l_content.at(0), l_content.at(1));
   }
   else if(l_header == "BN")
   {
-    if(l_content.size() < 1)
+    if(l_content.size() < 1) {
       return;
+    }
 
-    if(!is_courtroom_constructed)
+    if(!is_courtroom_constructed) {
       return;
+    }
 
     DRAreaBackground l_area_bg;
     QStringList areaBgArgs = l_content.at(0).split(':');
 
     l_area_bg.background = areaBgArgs.at(0);
-    if(areaBgArgs.count() > 1)
-    {
+    if(areaBgArgs.count() > 1) {
       l_area_bg.variant = areaBgArgs.at(1);
     }
 

@@ -74,13 +74,13 @@ private:
   AOImageDisplay *ui_background = nullptr;
   RPButton *ui_public_server_filter = nullptr;
   RPButton *ui_favorite_server_filter = nullptr;
-  enum ServerFilter
+  enum class ServerFilter
   {
-    NoFilter,
+    None,
     PublicOnly,
     FavoriteOnly,
   };
-  ServerFilter m_server_filter = NoFilter;
+  ServerFilter m_server_filter = ServerFilter::None;
 
 
   RPButton *ui_servers_toggle = nullptr;
@@ -151,12 +151,14 @@ private:
 
   QMenu *ui_server_menu;
   std::optional<int> m_server_index;
-  enum ServerType
+
+  enum class ServerType
   {
     NoServerType,
     FavoriteServer,
   };
-  ServerType m_server_index_type = NoServerType;
+
+  ServerType m_server_index_type = ServerType::NoServerType;
   QAction *ui_create_server;
   QAction *ui_modify_server;
   QAction *ui_delete_server;

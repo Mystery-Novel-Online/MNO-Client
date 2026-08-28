@@ -670,11 +670,11 @@ namespace courtroom
       QString targetWidget = "viewport";
       switch(captureMode)
       {
-      case Capture_Window:
+      case CaptureType::Window:
         targetWidget = "courtroom";
         break;
 
-      case Capture_ICLog:
+      case CaptureType::ICLog:
         targetWidget = "ic_chatlog";
         break;
 
@@ -782,15 +782,15 @@ namespace courtroom
     {
       auto newChannel = std::make_unique<KeyframeChannel<QVector3D>>();
       newChannel->AddKeyframe(timeMs, QVector3D(x, y, z),
-                              static_cast<KeyframeCurve>(CurveLinear),
-                              static_cast<KeyframeCurve>(CurveLinear));
+                              static_cast<KeyframeCurve>(KeyframeCurve::Linear),
+                              static_cast<KeyframeCurve>(KeyframeCurve::Linear));
       animator->AddChannel("position", std::move(newChannel));
     }
     else
     {
       channel->AddKeyframe(timeMs, QVector3D(x, y, z),
-                           static_cast<KeyframeCurve>(CurveLinear),
-                           static_cast<KeyframeCurve>(CurveLinear));
+                           static_cast<KeyframeCurve>(KeyframeCurve::Linear),
+                           static_cast<KeyframeCurve>(KeyframeCurve::Linear));
       animator->CalculateLength("position");
     }
   }

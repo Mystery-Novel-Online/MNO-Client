@@ -25,13 +25,13 @@ void ScreenshotMenu::OnMenuRequested(QPoint p_point)
 void ScreenshotMenu::OnCaptureLog()
 {
   audio::system::Play("screenshot");
-  courtroom::viewport::screenshot(courtroom::Capture_ICLog);
+  courtroom::viewport::screenshot(courtroom::CaptureType::ICLog);
 }
 
 void ScreenshotMenu::OnCaptureWindow()
 {
   audio::system::Play("screenshot");
-  courtroom::viewport::screenshot(courtroom::Capture_Window);
+  courtroom::viewport::screenshot(courtroom::CaptureType::Window);
 }
 
 void ScreenshotMenu::OnDirectoryOpen()

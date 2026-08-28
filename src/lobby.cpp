@@ -414,10 +414,10 @@ void Lobby::update_widgets()
 
   ui_gallery_preview->set_theme_image("replay_preview.png");
 
-  ui_public_server_filter->set_image(m_server_filter == PublicOnly ? "publicservers_selected.png" : "publicservers.png");
+  ui_public_server_filter->set_image(m_server_filter == ServerFilter::PublicOnly ? "publicservers_selected.png" : "publicservers.png");
   ui_public_server_filter->setParent(serverTabPanel);
 
-  ui_favorite_server_filter->set_image(m_server_filter == FavoriteOnly ? "favorites_selected.png" : "favorites.png");
+  ui_favorite_server_filter->set_image(m_server_filter == ServerFilter::FavoriteOnly ? "favorites_selected.png" : "favorites.png");
   ui_favorite_server_filter->setParent(serverTabPanel);
 
   ui_version->setText("Version: " + get_version_string());
@@ -565,7 +565,7 @@ void Lobby::load_settings()
   l_ini.setIniCodec("UTF-8");
 
   l_ini.beginGroup("filters");
-  m_server_filter = ServerFilter(l_ini.value("server_filter", NoFilter).toInt());
+  m_server_filter = ServerFilter(l_ini.value("server_filter", (int)ServerFilter::None).toInt());
   l_ini.endGroup();
 }
 
@@ -749,7 +749,7 @@ void Lobby::filter_server_listing()
   for(int i = 0; i < ui_server_list->count(); ++i)
   {
     QListWidgetItem *l_server_item = ui_server_list->item(i);
-    bool hiddenState = m_server_filter == (l_server_item->data(Qt::UserRole).toBool() ? PublicOnly : FavoriteOnly);
+    bool hiddenState = m_server_filter == (l_server_item->data(Qt::UserRole).toBool() ? ServerFilter::PublicOnly : ServerFilter::FavoriteOnly);
     l_server_item->setHidden(hiddenState);
     ui_new_server_list->setHidden(i, hiddenState);
   }
@@ -864,8 +864,7 @@ void Lobby::onGalleryToggle()
 void Lobby::AnimatePanelsToPosition(float x, float y)
 {
 
-  if(m_AnimatorPanels != nullptr)
-  {
+  if(m_AnimatorPanels != nullptr) {
     delete m_AnimatorPanels;
   }
   m_AnimatorPanels = new WidgetAnimator(panelCollection);
@@ -874,8 +873,8 @@ void Lobby::AnimatePanelsToPosition(float x, float y)
 
   auto frameChannel = std::make_unique<KeyframeChannel<QVector3D>>();
 
-  frameChannel->AddKeyframe(0, {(float)panelCollection->x(), (float)panelCollection->pos().y(), 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
-  frameChannel->AddKeyframe(400, {x, y, 0.0f}, KeyframeCurve::CurveEase, KeyframeCurve::CurveEase);
+  frameChannel->AddKeyframe(0, {(float)panelCollection->x(), (float)panelCollection->pos().y(), 0.0f}, KeyframeCurve::Ease, KeyframeCurve::Ease);
+  frameChannel->AddKeyframe(400, {x, y, 0.0f}, KeyframeCurve::Ease, KeyframeCurve::Ease);
 
   m_AnimatorPanels->AddChannel("position", std::move(frameChannel));
 
@@ -919,20 +918,20 @@ void Lobby::onWorkshopCategoryClicked(const QString &category)
 
 void Lobby::toggle_public_server_filter()
 {
-  m_server_filter = m_server_filter == PublicOnly ? NoFilter : PublicOnly;
+  m_server_filter = m_server_filter == ServerFilter::PublicOnly ? ServerFilter::None : ServerFilter::PublicOnly;
   update_server_filter_buttons();
 }
 
 void Lobby::toggle_favorite_server_filter()
 {
-  m_server_filter = m_server_filter == FavoriteOnly ? NoFilter : FavoriteOnly;
+  m_server_filter = m_server_filter == ServerFilter::FavoriteOnly ? ServerFilter::None : ServerFilter::FavoriteOnly;
   update_server_filter_buttons();
 }
 
 void Lobby::update_server_filter_buttons()
 {
-  ui_public_server_filter->set_image(m_server_filter == PublicOnly ? "publicservers_selected.png" : "publicservers.png");
-  ui_favorite_server_filter->set_image(m_server_filter == FavoriteOnly ? "favorites_selected.png" : "favorites.png");
+  ui_public_server_filter->set_image(m_server_filter == ServerFilter::PublicOnly ? "publicservers_selected.png" : "publicservers.png");
+  ui_favorite_server_filter->set_image(m_server_filter == ServerFilter::FavoriteOnly ? "favorites_selected.png" : "favorites.png");
   filter_server_listing();
 }
 
@@ -1043,7 +1042,7 @@ void Lobby::show_server_context_menu(QPoint p_point)
   const QPoint l_global_point = ui_server_list->viewport()->mapToGlobal(p_point);
 
   m_server_index.reset();
-  m_server_index_type = NoServerType;
+  m_server_index_type = ServerType::NoServerType;
   const auto l_item = ui_server_list->currentIndex();
   ui_create_server->setEnabled(true);
   ui_modify_server->setDisabled(true);
@@ -1056,7 +1055,7 @@ void Lobby::show_server_context_menu(QPoint p_point)
     m_server_index = l_item_row;
     if(l_item_row < m_favorite_server_list.length())
     {
-      m_server_index_type = FavoriteServer;
+      m_server_index_type = ServerType::FavoriteServer;
       ui_modify_server->setEnabled(true);
       ui_delete_server->setEnabled(true);
       ui_move_up_server->setEnabled(l_item_row - 1 >= 0);
@@ -1092,8 +1091,7 @@ void Lobby::prompt_server_info_editor()
 
 void Lobby::create_server_info()
 {
-  if(m_server_index_type == FavoriteServer)
-  {
+  if(m_server_index_type == ServerType::FavoriteServer) {
     m_server_index.reset();
   }
   prompt_server_info_editor();
@@ -1135,12 +1133,12 @@ void Lobby::move_down_server()
 void Lobby::_p_update_description()
 {
   QMap<AOApplication::ServerStatus, QString> l_report_map{
-      {AOApplication::NotConnected, localization::getText("CONNECTION_NOT")},
-      {AOApplication::Connecting, localization::getText("CONNECTION_CONNECTING")},
-      {AOApplication::Connected, localization::getText("CONNECTION_CONNECTED")},
-      {AOApplication::Joined, localization::getText("CONNECTION_JOINED")},
-      {AOApplication::TimedOut, localization::getText("CONNECTION_TIMEDOUT")},
-      {AOApplication::Disconnected, localization::getText("CONNECTION_NOT")},
+      {AOApplication::ServerStatus::NotConnected, localization::getText("CONNECTION_NOT")},
+      {AOApplication::ServerStatus::Connecting, localization::getText("CONNECTION_CONNECTING")},
+      {AOApplication::ServerStatus::Connected, localization::getText("CONNECTION_CONNECTED")},
+      {AOApplication::ServerStatus::Joined, localization::getText("CONNECTION_JOINED")},
+      {AOApplication::ServerStatus::TimedOut, localization::getText("CONNECTION_TIMEDOUT")},
+      {AOApplication::ServerStatus::Disconnected, localization::getText("CONNECTION_NOT")},
   };
 
   QString l_message = l_report_map[ao_app->last_server_status()];

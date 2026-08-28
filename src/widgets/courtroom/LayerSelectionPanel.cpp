@@ -75,7 +75,7 @@ void LayerSelectionPanel::disableLayerVariants(const QString &layerName) {
 
 void LayerSelectionPanel::addLayer(const QString &layer, const QString &toggle, LayerSelectionType type) {
   AOEmoteButton *emote = new AOEmoteButton(m_container, m_app, 0, 0);
-  emote->setLayerImage(toggle, toggle, toggle, type == LayerSelection_Toggle);
+  emote->setLayerImage(toggle, toggle, toggle, type == LayerSelectionType::Toggle);
   emote->set_emote_number(m_layers.count());
 
   LayerSelectionData data = {layer, toggle, "", emote, type};
@@ -162,32 +162,32 @@ void LayerSelectionPanel::layerClicked(int layerId) {
   }
 
   switch(data.type) {
-  case LayerSelection_Toggle:
-    data.type = LayerSelection_ToggleDisabled;
+  case LayerSelectionType::Toggle:
+    data.type = LayerSelectionType::ToggleDisabled;
     data.button->setLayerImage(data.toggleName, data.toggleName, data.toggleName, false);
     engine::actor::user::toggleLayer(data.toggleName.toStdString(), false);
     break;
 
-  case LayerSelection_ToggleDisabled:
-    data.type = LayerSelection_Toggle;
+  case LayerSelectionType::ToggleDisabled:
+    data.type = LayerSelectionType::Toggle;
     data.button->setLayerImage(data.toggleName, data.toggleName, data.toggleName, true);
     engine::actor::user::toggleLayer(data.toggleName.toStdString(), true);
     break;
 
-  case LayerSelection_Variation:
+  case LayerSelectionType::Variation:
     disableLayerVariants(data.layerName);
     m_VariantSwitches[data.layerName] = data.variation;
     data.button->setLayerImage(VariantName, VariantName, VariantName, true);
     break;
 
-  case LayerSelection_VariationGlobal:
-  case LayerSelection_VariationGlobalBase:
+  case LayerSelectionType::VariationGlobal:
+  case LayerSelectionType::VariationGlobalBase:
     disableLayerVariants(data.layerName);
     m_GlobalVariants[data.layerName] = data.variation;
     data.button->setLayerImage(VariantName, VariantName, VariantName, true);
     break;
 
-  case LayerSelectionType_VariationBase:
+  case LayerSelectionType::VariationBase:
     disableLayerVariants(data.layerName);
     m_baseImageOverride = data.variation;
     data.button->setLayerImage(VariantName, VariantName, VariantName, true);

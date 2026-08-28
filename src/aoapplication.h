@@ -23,7 +23,7 @@ class AOApplication : public QApplication
   Q_OBJECT
 
 public:
-  enum ServerStatus
+  enum class ServerStatus
   {
     NotConnected,
     Connecting,
@@ -194,7 +194,7 @@ private:
   DRDiscord *dr_discord = nullptr;
 
   DRServerSocket *m_server_socket = nullptr;
-  ServerStatus m_server_status = NotConnected;
+  ServerStatus m_server_status = ServerStatus::NotConnected;
 
   Lobby *m_lobby = nullptr;
   bool is_lobby_constructed = false;

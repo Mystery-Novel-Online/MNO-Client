@@ -814,7 +814,7 @@ void Courtroom::list_areas()
 
 QString Courtroom::get_current_position()
 {
-  if(ui_pos_dropdown->currentIndex() == DefaultPositionIndex) {
+  if(ui_pos_dropdown->currentIndex() <= 0) {
     return QString::fromStdString(engine::actor::user::retrieve()->side());
   }
 
@@ -3097,7 +3097,7 @@ void Courtroom::send_mc_packet(QString p_song, BGMPlayback playbackType)
 
   QStringList contents = {p_song, QString::number(user::GetCharacterId())};
   if(network::metadata::VNServerInformation::featureSupported("outfits")) {
-    contents.append(QString::number(playbackType));
+    contents.append(QString::number((int)playbackType));
   }
 
   ao_app->send_server_packet(DRPacket("MC", contents));

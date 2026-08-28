@@ -51,17 +51,15 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
     {
       QString qToggleName = QString::fromStdString(layer.toggleName);
       bool toggleEnabled = engine::actor::user::layerState(layer.toggleName);
-      selectionPanel->addLayer(qLayerName, qToggleName, toggleEnabled ? LayerSelection_Toggle : LayerSelection_ToggleDisabled);
+      selectionPanel->addLayer(qLayerName, qToggleName, toggleEnabled ? LayerSelectionType::Toggle : LayerSelectionType::ToggleDisabled);
     }
-    else if(!layer.variationOptions.empty())
-    {
-      LayerSelectionType type = layer.offsetName == "base_image" ? LayerSelectionType_VariationBase : LayerSelection_Variation;
+    else if(!layer.variationOptions.empty()) {
+      LayerSelectionType type = layer.offsetName == "base_image" ? LayerSelectionType::VariationBase : LayerSelectionType::Variation;
 
-      type = type == LayerSelection_Variation && layer.globalSelection ? LayerSelection_VariationGlobal : type;
-      type = type == LayerSelectionType_VariationBase && layer.globalSelection ? LayerSelection_VariationGlobalBase : type;
+      type = type == LayerSelectionType::Variation && layer.globalSelection ? LayerSelectionType::VariationGlobal : type;
+      type = type == LayerSelectionType::VariationBase && layer.globalSelection ? LayerSelectionType::VariationGlobalBase : type;
 
-      for(auto variation : layer.variationOptions)
-      {
+      for(auto variation : layer.variationOptions) {
         QString variationName = QString::fromStdString(variation);
         selectionPanel->addLayer(qLayerName, variationName, variationName == QString::fromStdString(layer.spriteName), type);
       }

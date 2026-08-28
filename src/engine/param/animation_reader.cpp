@@ -52,10 +52,10 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
 {
   static const QMap<QString, KeyframeCurve> curveMap =
   {
-    {"linear", CurveLinear},
-    {"ease", CurveEase},
-    {"bezier", CurveBezier},
-    {"parametric", CurveParametric}
+    {"linear", KeyframeCurve::Linear},
+    {"ease", KeyframeCurve::Ease},
+    {"bezier", KeyframeCurve::Bezier},
+    {"parametric", KeyframeCurve::Parametric}
   };
 
   bool animationLoop = getBoolValue("loop");
@@ -147,8 +147,8 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
 
         int frameTime = getIntValue("time");
         QVector3D frameValue = getVector3DValue("value");
-        KeyframeCurve frameCurveIn = KeyframeCurve::CurveEase;
-        KeyframeCurve frameCurveOut = KeyframeCurve::CurveEase;
+        KeyframeCurve frameCurveIn = KeyframeCurve::Ease;
+        KeyframeCurve frameCurveOut = KeyframeCurve::Ease;
 
         const float xValue = frameValue.x() / float(targetResolution.width()) * 1000.0f;
         const float yValue = frameValue.y() / float(targetResolution.height()) * 1000.0f;
@@ -160,9 +160,12 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
         QString curveInValue = getStringValue("curve_in");
         QString curveOutValue = getStringValue("curve_out");
 
-        if(curveMap.contains(curveInValue.toLower())) frameCurveIn = curveMap[curveInValue];
-        if(curveMap.contains(curveOutValue.toLower())) frameCurveOut = curveMap[curveOutValue];
-
+        if(curveMap.contains(curveInValue.toLower())) {
+          frameCurveIn = curveMap[curveInValue];
+        }
+        if(curveMap.contains(curveOutValue.toLower())) {
+          frameCurveOut = curveMap[curveOutValue];
+        }
 
         frameChannel->AddKeyframe(frameTime, frameValue, frameCurveIn, frameCurveOut);
       }
@@ -180,8 +183,8 @@ void AnimationReader::loadData(KeyframeSequence &sequence)
 
         int frameTime = getIntValue("time");
         float frameValue = getDoubleValue("value");
-        KeyframeCurve frameCurveIn = KeyframeCurve::CurveEase;
-        KeyframeCurve frameCurveOut = KeyframeCurve::CurveEase;
+        KeyframeCurve frameCurveIn = KeyframeCurve::Ease;
+        KeyframeCurve frameCurveOut = KeyframeCurve::Ease;
 
         QString curveInValue = getStringValue("curve_in");
         QString curveOutValue = getStringValue("curve_out");

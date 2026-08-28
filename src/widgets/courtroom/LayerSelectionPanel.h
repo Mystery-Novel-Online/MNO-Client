@@ -1,14 +1,14 @@
 #ifndef LAYERSELECTIONPANEL_H
 #define LAYERSELECTIONPANEL_H
 
-enum LayerSelectionType
+enum class LayerSelectionType
 {
-  LayerSelection_Toggle,
-  LayerSelection_ToggleDisabled,
-  LayerSelection_Variation,
-  LayerSelectionType_VariationBase,
-  LayerSelection_VariationGlobal,
-  LayerSelection_VariationGlobalBase
+  Toggle,
+  ToggleDisabled,
+  Variation,
+  VariationBase,
+  VariationGlobal,
+  VariationGlobalBase
 };
 
 struct LayerSelectionData

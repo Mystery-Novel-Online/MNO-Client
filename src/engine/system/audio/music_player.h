@@ -3,11 +3,11 @@
 #include "aoobject.h"
 #include "draudioengine.h"
 
-enum BGMPlayback
+enum class BGMPlayback
 {
-  BGMPlayback_Standard = 0,
-  BGMPlayback_NoFade = 1,
-  BGMPlayback_Continue = 2
+  Standard = 0,
+  NoFade = 1,
+  Continue = 2
 };
 
 
@@ -20,7 +20,7 @@ public:
 
 public slots:
   void customLoopPlay(QString p_song, int loopStart, int loopBack);
-  void play(QString p_song, BGMPlayback playbackType = BGMPlayback_Standard);
+  void play(QString p_song, BGMPlayback playbackType = BGMPlayback::Standard);
   void setSpeed(float speed);
   void toggleReverb(bool reverb);
   void setPitch(float speed);

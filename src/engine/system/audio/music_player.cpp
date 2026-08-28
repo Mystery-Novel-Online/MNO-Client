@@ -65,7 +65,7 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
   {
     switch(playbackType)
     {
-      case BGMPlayback_NoFade:
+      case BGMPlayback::NoFade:
         stop();
         break;
 
@@ -86,22 +86,24 @@ void AOMusicPlayer::play(QString p_song, BGMPlayback playbackType)
 
   switch(playbackType)
   {
-    case BGMPlayback_NoFade:
+    case BGMPlayback::NoFade:
       stop();
       newSong->play();
       break;
 
-    case BGMPlayback_Continue:
-      if(mCurrentSong)
+    case BGMPlayback::Continue:
+      if(mCurrentSong) {
         mCurrentSong->fadeOut(300);
+      }
       newSong->fadeIn(250);
       newSong->playSynced(mCurrentSong.data());
       break;
 
-    case BGMPlayback_Standard:
+    case BGMPlayback::Standard:
     default:
-      if(mCurrentSong)
+      if(mCurrentSong) {
         mCurrentSong->fadeOut(3000);
+      }
       newSong->fadeIn(3000);
       newSong->play();
       break;
