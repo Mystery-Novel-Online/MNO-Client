@@ -70,7 +70,7 @@
                 </li>
                 <li class="toctree-l2 current"><a class="reference internal current" href="#">Lua Theme Functions</a>
     <ul class="current">
-    <li class="toctree-l3"><a class="reference internal" href="#table-of-contents">📑 Table of Contents</a>
+    <li class="toctree-l3"><a class="reference internal" href="#table-of-contents">Table of Contents</a>
     </li>
     </ul>
                 </li>
@@ -106,9 +106,9 @@
               
                 <h1 id="lua-theme-functions">Lua Theme Functions</h1>
 <p>This is an outline of functions that you can call from within a lua script in a theme.</p>
-<h2 id="table-of-contents">📑 Table of Contents</h2>
+<h2 id="table-of-contents">Table of Contents</h2>
 <ul>
-<li>🔊 Music Audio<ul>
+<li>Music Audio<ul>
 <li><a href="#audiobgmplay">Audio.BGM.Play</a></li>
 <li><a href="#audiobgmstop">Audio.BGM.Stop</a></li>
 <li><a href="#audiobgmsetspeed">Audio.BGM.SetSpeed</a></li>
@@ -116,60 +116,60 @@
 <li><a href="#audiobgmtogglereverb">Audio.BGM.ToggleReverb</a></li>
 </ul>
 </li>
-<li>🔔 SFX Audio<ul>
+<li>SFX Audio<ul>
 <li><a href="#audiosfxplay">Audio.SFX.Play</a></li>
 </ul>
 </li>
-<li>💬 Blip Audio<ul>
+<li>Blip Audio<ul>
 <li><a href="#audiobliptick">Audio.Blip.Tick</a></li>
 <li><a href="#audioblipsetrate">Audio.Blip.SetRate</a></li>
 <li><a href="#audioblipsetsound">Audio.Blip.SetSound</a></li>
 <li><a href="#audioblipsetgender">Audio.Blip.SetGender</a></li>
 </ul>
 </li>
-<li>⚙ System Audio<ul>
+<li>System Audio<ul>
 <li><a href="#audiosystemplay">Audio.System.Play</a></li>
 </ul>
 </li>
-<li>📦 Widgets<ul>
+<li>Widgets<ul>
 <li><a href="#widgetmove">Widget.Move</a></li>
 <li><a href="#widgetraise">Widget.Raise</a></li>
 <li><a href="#widgetsetvisible">Widget.SetVisible</a></li>
 <li><a href="#widgetsetparent">Widget.SetParent</a></li>
 </ul>
 </li>
-<li>🔖 Stickers<ul>
+<li>Stickers<ul>
 <li><a href="#stickercreate">Sticker.Create</a></li>
 </ul>
 </li>
-<li>🕹 Buttons<ul>
+<li>Buttons<ul>
 <li><a href="#buttoncreate">Button.Create</a></li>
 </ul>
 </li>
-<li>🎚 Sliders<ul>
+<li>Sliders<ul>
 <li><a href="#slidercreate">Slider.Create</a></li>
 <li><a href="#slidercreatevertical">Slider.CreateVertical</a></li>
 <li><a href="#slidergetvalue">Slider.GetValue</a></li>
 <li><a href="#slidersetvalue">Slider.SetValue</a></li>
 </ul>
 </li>
-<li>📁 Tabs<ul>
+<li>Tabs<ul>
 <li><a href="#tabschange">Tabs.Change</a></li>
 </ul>
 </li>
-<li>💬 ChoiceDialog<ul>
+<li>ChoiceDialog<ul>
 <li><a href="#choicedialogtriggercustom">ChoiceDialog.TriggerCustom</a></li>
 <li><a href="#choicedialogsettext">ChoiceDialog.SetText</a></li>
 </ul>
 </li>
-<li>📝 In Character<ul>
+<li>In Character<ul>
 <li><a href="#icinputfieldfocus">IC.InputField.Focus</a></li>
 <li><a href="#icinputfieldgettext">IC.InputField.GetText</a></li>
 <li><a href="#icinputfieldsettext">IC.InputField.SetText</a></li>
 <li><a href="#icinputfieldappend">IC.InputField.Append</a></li>
 </ul>
 </li>
-<li>💭 Out of Character<ul>
+<li>Out of Character<ul>
 <li><a href="#ooclogappend">OOC.Log.Append</a></li>
 <li><a href="#oocnameget">OOC.Name.Get</a></li>
 <li><a href="#oocnameset">OOC.Name.Set</a></li>
@@ -177,17 +177,17 @@
 <li><a href="#oocinputfieldsettext">OOC.InputField.SetText</a></li>
 </ul>
 </li>
-<li>🚨 System<ul>
+<li>System<ul>
 <li><a href="#systemalert">System.Alert</a></li>
 </ul>
 </li>
-<li>🌐 Server<ul>
+<li>Server<ul>
 <li><a href="#servergetclientid">Server.GetClientId</a></li>
 <li><a href="#servergetcharacterid">Server.GetCharacterId</a></li>
 <li><a href="#servergetcurrentcharacter">Server.GetCurrentCharacter</a></li>
 </ul>
 </li>
-<li>👤 Character<ul>
+<li>Character<ul>
 <li><a href="#charactergetshowname">Character.GetShowname</a></li>
 <li><a href="#charactergetiniswap">Character.GetIniswap</a></li>
 <li><a href="#characterexists">Character.Exists</a></li>
@@ -199,7 +199,7 @@
 </li>
 </ul>
 <hr />
-<h1 id="music-audio">🔊 Music Audio</h1>
+<h1 id="music-audio">Music Audio</h1>
 <h2 id="audiobgmplay">Audio.BGM.Play</h2>
 <p>Plays an audio file located in the <code>sounds/music/</code> directory on the <code>Music</code> track.</p>
 <ul>
@@ -315,7 +315,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">BGM</span><span class="p">.</span><span class="nf">ToggleReverb</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
-<h1 id="sfx-audio">🔔 SFX Audio</h1>
+<h1 id="sfx-audio">SFX Audio</h1>
 <h2 id="audiosfxplay">Audio.SFX.Play</h2>
 <p>Plays an audio file located in the <code>sounds/general/</code> directory on the <code>Effects</code> track.</p>
 <ul>
@@ -342,7 +342,7 @@
 </ul>
 <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">SFX</span><span class="p">.</span><span class="nf">Play</span><span class="p">(</span><span class="s2">&quot;DRding&quot;</span><span class="p">)</span>
 </code></pre></div>
-<h1 id="blip-audio">💬 Blip Audio</h1>
+<h1 id="blip-audio">Blip Audio</h1>
 <h2 id="audiobliptick">Audio.Blip.Tick</h2>
 <p>Plays the currently set blip file once. </p>
 <ul>
@@ -429,7 +429,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">Blip</span><span class="p">.</span><span class="nf">SetGender</span><span class="p">(</span><span class="s2">&quot;female&quot;</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
-<h1 id="system-audio">⚙ System Audio</h1>
+<h1 id="system-audio">System Audio</h1>
 <h2 id="audiosystemplay">Audio.System.Play</h2>
 <p>Plays an audio file located in <code>sounds/general/</code> on the <code>System</code> audio track. </p>
 <ul>
@@ -456,7 +456,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">Audio</span><span class="p">.</span><span class="py">System</span><span class="p">.</span><span class="nf">Play</span><span class="p">(</span><span class="s2">&quot;screenshot&quot;</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
-<h1 id="widgets">📦 Widgets</h1>
+<h1 id="widgets">Widgets</h1>
 <h2 id="widgetmove">Widget.Move</h2>
 <p>Moves a widget to the specified coordinates.</p>
 <ul>
@@ -584,7 +584,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">Widget</span><span class="p">.</span><span class="nf">Raise</span><span class="p">(</span><span class="s2">&quot;char_select&quot;</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
-<h1 id="stickers">🔖 Stickers</h1>
+<h1 id="stickers">Stickers</h1>
 <h2 id="stickercreate">Sticker.Create</h2>
 <p>Create a sticker widget that will be rendered on the client. </p>
 <ul>
@@ -636,7 +636,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">Sticker</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="s2">&quot;sticker_taskbar&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;taskbar&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">823</span><span class="p">,</span><span class="w"> </span><span class="mi">5120</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
-<h1 id="buttons">⚙ Buttons</h1>
+<h1 id="buttons">Buttons</h1>
 <h2 id="buttoncreate">Button.Create</h2>
 <p>Creates a button that can call an event when clicked. </p>
 <ul>
@@ -688,7 +688,7 @@
 <span class="kr">end</span>
 </code></pre></div></li>
 </ul>
-<h1 id="sliders">🎚 Sliders</h1>
+<h1 id="sliders">Sliders</h1>
 <h2 id="slidercreate">Slider.Create</h2>
 <p>Creates a slider that can call an event when the value is changed. </p>
 <ul>
@@ -873,7 +873,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">Slider</span><span class="p">.</span><span class="nf">SetValue</span><span class="p">(</span><span class="s2">&quot;slider_MusicSpeed&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">30</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
-<h1 id="tabs">📁 Tabs</h1>
+<h1 id="tabs">Tabs</h1>
 <h2 id="tabschange">Tabs.Change</h2>
 <p>Triggers a tab change without clicking on the tab itself. </p>
 <ul>
@@ -905,7 +905,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">Tabs</span><span class="p">.</span><span class="nf">Change</span><span class="p">(</span><span class="s2">&quot;lists&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;areas&quot;</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
-<h1 id="choicedialog">💬 ChoiceDialog</h1>
+<h1 id="choicedialog">ChoiceDialog</h1>
 <h2 id="choicedialogtriggercustom">ChoiceDialog.TriggerCustom</h2>
 <p>Triggers the choice pop up with a custom event attached to it. </p>
 <ul>
@@ -977,7 +977,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">ChoiceDialog</span><span class="p">.</span><span class="nf">SetText</span><span class="p">(</span><span class="s2">&quot;You have received a pair request.&quot;</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
-<h1 id="in-character">📝 In Character</h1>
+<h1 id="in-character">In Character</h1>
 <h2 id="icinputfieldfocus">IC.InputField.Focus</h2>
 <p>Sets the window focus to the IC text field. </p>
 <ul>
@@ -1048,7 +1048,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">IC</span><span class="p">.</span><span class="py">InputField</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">s&quot;</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
-<h1 id="out-of-character">💭 Out of Character</h1>
+<h1 id="out-of-character">Out of Character</h1>
 <h2 id="ooclogappend">OOC.Log.Append</h2>
 <p>Adds a message to the OOC chat log.</p>
 <ul>
@@ -1152,7 +1152,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">OOC</span><span class="p">.</span><span class="py">InputField</span><span class="p">.</span><span class="nf">SetText</span><span class="p">(</span><span class="s2">&quot;/help&quot;</span><span class="p">)</span>
 </code></pre></div></li>
 </ul>
-<h1 id="system">🚨 System</h1>
+<h1 id="system">System</h1>
 <h2 id="systemalert">System.Alert</h2>
 <p>Causes the application icon in your task bar to behave similarly to a call word.</p>
 <ul>
@@ -1160,7 +1160,7 @@
   <div class="highlight"><pre><span></span><code><span class="nv">System</span><span class="p">.</span><span class="nf">Alert</span><span class="p">()</span>
 </code></pre></div></li>
 </ul>
-<h1 id="server">🌐 Server</h1>
+<h1 id="server">Server</h1>
 <h2 id="servergetclientid">Server.GetClientId</h2>
 <p>Returns your current client id that was set by the server.</p>
 <ul>
@@ -1187,7 +1187,7 @@
   <div class="highlight"><pre><span></span><code><span class="kd">local</span><span class="w"> </span><span class="nv">serverCharacterName</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Server</span><span class="p">.</span><span class="nf">GetCurrentCharacter</span><span class="p">();</span>
 </code></pre></div></li>
 </ul>
-<h1 id="character">👤 Character</h1>
+<h1 id="character">Character</h1>
 <h2 id="charactergetshowname">Character.GetShowname</h2>
 <p>Returns your current showname.</p>
 <ul>

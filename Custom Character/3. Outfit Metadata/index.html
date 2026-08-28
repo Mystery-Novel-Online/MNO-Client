@@ -128,18 +128,19 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="outfit-json">Outfit JSON</h1>
-<p>These outfit parameter files are used to define the various emotes a character can use and its relevant rules. </p>
+<p>These outfit parameter files are used to define the various emotes a character can use and their relevant rules. </p>
 <hr />
 <h2 id="top-level-structure">Top-Level Structure</h2>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;default_rules&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span>
 <span class="w">  </span><span class="nt">&quot;layers&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">],</span>
-<span class="w">  </span><span class="nt">&quot;emotes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">]</span>
+<span class="w">  </span><span class="nt">&quot;emotes&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;...&quot;</span>
 <span class="p">}</span>
 </code></pre></div>
 <hr />
 <h2 id="default_rules"><code>default_rules</code></h2>
-<p>Defines the rules emotes will follow by default unless individually specified.</p>
+<p>Defines optional rules that emotes will follow by default unless individually specified.</p>
 <h3 id="fields">Fields</h3>
 <ul>
 <li>
@@ -148,13 +149,18 @@
 </li>
 <li>
 <p><code>ignore_offsets</code> (boolean):
-  Indicates whether or not the player offset sliders should affected the positioning of the sprite.  </p>
+  Indicates whether or not the player offset sliders should affect the positioning of the sprite.  </p>
+</li>
+<li>
+<p><code>image</code> (string):
+  Assigns a default "image" value for emotes. Useful in single-pose ports where only the layers change between emotes. </p>
 </li>
 </ul>
 <p>Example:
 <div class="highlight"><pre><span></span><code><span class="nt">&quot;default_rules&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nt">&quot;show_desk&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;ignore_offsets&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">  </span><span class="nt">&quot;ignore_offsets&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;image&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;body&quot;</span>
 <span class="p">}</span>
 </code></pre></div></p>
 <hr />
@@ -183,11 +189,29 @@
 <ul>
 <li><code>"top"</code> </li>
 <li><code>"below"</code> </li>
+<li><code>"detach"</code> - Creates the layer as a seperate entity, rather than drawing onto the base sprite to save performance. </li>
+<li><code>"detach-behind"</code> - Same as detach, but positioned behind the base sprite. </li>
 </ul>
+</li>
+<li>
+<p><code>variations</code> (optional, string array):<br />
+  A list of assets the layer is allowed to switch between within the client's layer selector. </p>
 </li>
 <li>
 <p><code>toggle</code> (optional, string):<br />
   A toggleable visibility option for user control (e.g., <code>"Effect"</code>). These can be toggled by right-clicking the emote selector in-client. </p>
+</li>
+<li>
+<p><code>toggle_disabled</code> (optional, bool):<br />
+  Indicates to the client whether or not the layer should be disabled by default. </p>
+</li>
+<li>
+<p><code>selection_global</code> (optional, bool):<br />
+  Indicates to the client that the layer variation should remain selected when changing emotes. </p>
+</li>
+<li>
+<p><code>default</code> (optional, string):<br />
+  Assigns a default asset name to be loaded by a layer. Useful for toggle layers that share the same asset across emotes. </p>
 </li>
 </ul>
 <h3 id="example">Example</h3>

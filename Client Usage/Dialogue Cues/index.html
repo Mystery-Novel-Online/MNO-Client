@@ -66,13 +66,15 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#flip-flip">Flip - &lt;flip&gt;</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#hide-hide">Hide - &lt;hide&gt;</a>
+    <li class="toctree-l2"><a class="reference internal" href="#flip-vertical-flipv">Flip Vertical - &lt;flipv&gt;</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#layer-swap-layernameasset">Layer Swap - &lt;layer:name:asset&gt;</a>
+    <li class="toctree-l2"><a class="reference internal" href="#hide-hide">Hide - &lt;hide&gt;</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#sound-effect-sfxsound">Sound Effect - &lt;sfx:sound&gt;</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#swap-message-blips-blipblip_set">Swap Message Blips - &lt;blip:blip_set&gt;</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#tint-sprite-tintcolor">Tint Sprite - &lt;tint:color&gt;</a>
     </li>
     </ul>
                   </li>
@@ -168,15 +170,15 @@ Line Two
 </code></pre></div>
 <p>Toggles the "flip" state of the character sprite. </p>
 <hr />
+<h2 id="flip-vertical-flipv">Flip Vertical - <code>&lt;flipv&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>Let&#39;s &lt;flipv&gt;flip &lt;flip&gt;vertically!&lt;flipv&gt;
+</code></pre></div>
+<p>Toggles the vertical "flip" state of the character sprite. </p>
+<hr />
 <h2 id="hide-hide">Hide - <code>&lt;hide&gt;</code></h2>
 <div class="highlight"><pre><span></span><code>Now you see me: &lt;hide&gt;now you don&#39;t. 
 </code></pre></div>
 <p>Toggles the "visibility" state of the character on screen.</p>
-<hr />
-<h2 id="layer-swap-layernameasset">Layer Swap - <code>&lt;layer:name:asset&gt;</code></h2>
-<div class="highlight"><pre><span></span><code>&lt;layer:eyes:closed&gt;
-</code></pre></div>
-<p>Changes the asset that is loaded for a specified layer.</p>
 <hr />
 <h2 id="sound-effect-sfxsound">Sound Effect - <code>&lt;sfx:sound&gt;</code></h2>
 <p>Plays a sound effect at a specified point.</p>
@@ -189,6 +191,12 @@ Line Two
 </code></pre></div>
 <p>Changes the blip set that is used for the rest of the message.</p>
 <hr />
+<h2 id="tint-sprite-tintcolor">Tint Sprite - <code>&lt;tint:color&gt;</code></h2>
+<div class="highlight"><pre><span></span><code>&lt;tint:green&gt;I am now green.
+</code></pre></div>
+<p>Hex values can also be specified:</p>
+<div class="highlight"><pre><span></span><code>&lt;tint:#FFAA00&gt;I am now orange
+</code></pre></div>
               
             </div>
           </div><footer>
