@@ -77,14 +77,8 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
   rolechat::actor::IActorData *actor = retrieve();
 
   QString l_buttonImage = QString::fromStdString(actor->buttonImage(p_emote, false));
-
   QString qCharacterFolder = QString::fromStdString(p_emote.character);
-
-  QString l_texture = engine::fs::characters::getFilePath(qCharacterFolder, l_buttonImage + ".webp");
-
-  if(!FS::Checks::FileExists(l_texture)) {
-    l_texture = engine::fs::characters::getFilePath(qCharacterFolder, l_buttonImage + ".png");
-  }
+  QString l_texture = texturePath(qCharacterFolder, l_buttonImage);
 
   // reset states
   ui_selected->hide();
@@ -92,11 +86,11 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
   // nested ifs are okay
   if(p_enabled)
   {
-    const QString selectedTextureOutfit = engine::fs::characters::getFilePath(qCharacterFolder, QString::fromStdString(actor->selectedImage(p_emote))).replace('\\', '/');
-    const QString selectedTextureCharacter = engine::fs::characters::getFilePath(qCharacterFolder, "selected.png").replace('\\', '/');
+    const QString selectedTexture = texturePath(qCharacterFolder, QString::fromStdString(actor->selectedImage(p_emote)));
+    const QString selectedTextureCharacter = texturePath(qCharacterFolder, "selected");
 
-    if(FS::Checks::FileExists(selectedTextureOutfit)) {
-      ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(selectedTextureOutfit));
+    if(FS::Checks::FileExists(selectedTexture)) {
+      ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(selectedTexture));
       ui_selected->show();
     }
     else if(FS::Checks::FileExists(selectedTextureCharacter))
@@ -163,6 +157,21 @@ int AOEmoteButton::findHighestPixel()
 
   return -1;
 
+}
+
+QString AOEmoteButton::texturePath(const QString &a_character, const QString &a_file)
+{
+  QString path = engine::fs::characters::getFilePath(a_character, a_file + ".webp");
+
+  if(!FS::Checks::FileExists(path)) {
+    path = engine::fs::characters::getFilePath(a_character, a_file + ".png");
+  }
+
+  if(FS::Checks::FileExists(path)) {
+    return path.replace('\\', '/');
+  }
+
+  return {};
 }
 
 void AOEmoteButton::on_clicked()

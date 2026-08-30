@@ -148,6 +148,6 @@ std::string LegacyActorReader::buttonImage(const ActorEmote& t_emote, bool t_ena
 
 std::string LegacyActorReader::selectedImage(const ActorEmote& t_emote) const
 {
-  return "emotions/selected.png";
+  return "emotions/selected";
 }
 

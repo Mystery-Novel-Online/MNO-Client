@@ -26,6 +26,7 @@ public:
   void setLayerImage(const QString& character, const QString& layer, const QString& outfit, bool enabled);
   void set_image(ActorEmote emote, bool enabled);
   int findHighestPixel();
+  QString texturePath(const QString& a_character, const QString& a_file);
 
 signals:
   void emote_clicked(int emote_number);
