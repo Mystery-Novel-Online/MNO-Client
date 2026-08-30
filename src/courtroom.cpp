@@ -1181,13 +1181,13 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   m_incomingMessage.speakerCharacter = p_chatmessage[CMChrId].toInt();
   m_incomingMessage.color = (dialogue::DialogueColor)p_chatmessage[CMTextColor].toInt();
 
-  m_incomingMessage.message = m_chatmessage[CMMessage].toStdString();
-  m_incomingMessage.emptyMessage = m_incomingMessage.message.empty();
-  m_incomingMessage.showname = m_chatmessage[CMShowName].toStdString();
+  m_incomingMessage.message = p_chatmessage[CMMessage].toStdString();
+  m_incomingMessage.emptyMessage = p_chatmessage[CMMessage].trimmed().isEmpty();
+  m_incomingMessage.showname = p_chatmessage[CMShowName].toStdString();
 
-  m_incomingMessage.speaker.character = m_chatmessage[CMChrName].toStdString();
-  m_incomingMessage.speaker.emote = m_chatmessage[CMEmote].toStdString();
-  m_incomingMessage.speaker.isVisible = m_chatmessage[CMHideCharacter].toInt() != 1;
+  m_incomingMessage.speaker.character = p_chatmessage[CMChrName].toStdString();
+  m_incomingMessage.speaker.emote = p_chatmessage[CMEmote].toStdString();
+  m_incomingMessage.speaker.isVisible = p_chatmessage[CMHideCharacter].toInt() != 1;
 
   if(!m_incomingMessage.emptyMessage) {
     while(m_tick_step <= m_chatmessage[CMMessage].length() - 1) {
