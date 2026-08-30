@@ -82,9 +82,9 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
 
   QString l_texture = engine::fs::characters::getFilePath(qCharacterFolder, l_buttonImage + ".webp");
 
-  if(!FS::Checks::FileExists(l_texture))
+  if(!FS::Checks::FileExists(l_texture)) {
     l_texture = engine::fs::characters::getFilePath(qCharacterFolder, l_buttonImage + ".png");
-
+  }
 
   // reset states
   ui_selected->hide();
@@ -92,26 +92,31 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
   // nested ifs are okay
   if(p_enabled)
   {
-    const QString l_selected_texture = engine::fs::characters::getFilePath(qCharacterFolder, QString::fromStdString(actor->selectedImage(p_emote))).replace('\\', '/');
+    const QString selectedTextureOutfit = engine::fs::characters::getFilePath(qCharacterFolder, QString::fromStdString(actor->selectedImage(p_emote))).replace('\\', '/');
+    const QString selectedTextureCharacter = engine::fs::characters::getFilePath(qCharacterFolder, "selected.png").replace('\\', '/');
 
-    if(FS::Checks::FileExists(l_selected_texture)) {
-      ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(l_selected_texture));
+    if(FS::Checks::FileExists(selectedTextureOutfit)) {
+      ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(selectedTextureOutfit));
+      ui_selected->show();
+    }
+    else if(FS::Checks::FileExists(selectedTextureCharacter))
+    {
+      ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(selectedTextureCharacter));
       ui_selected->show();
     }
     else {
       QString qEnabledImage = QString::fromStdString(actor->buttonImage(p_emote, true));
       QString l_enabled_texture = engine::fs::characters::getFilePath(qCharacterFolder, qEnabledImage + ".webp");;
 
-      if(!FS::Checks::FileExists(l_enabled_texture))
+      if(!FS::Checks::FileExists(l_enabled_texture)) {
         l_enabled_texture = engine::fs::characters::getFilePath(qCharacterFolder, qEnabledImage + ".png");
+      }
 
 
-      if(FS::Checks::FileExists(l_enabled_texture))
-      {
+      if(FS::Checks::FileExists(l_enabled_texture)) {
         l_texture = l_enabled_texture;
       }
-      else
-      {
+      else {
         ui_selected->setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, "
                                    "y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(0, 0, 0, 127)); }");
         ui_selected->show();
