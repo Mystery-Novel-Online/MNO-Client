@@ -92,15 +92,13 @@ void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
   // nested ifs are okay
   if(p_enabled)
   {
-    const QString l_selected_texture = engine::fs::characters::getFilePath(qCharacterFolder, QString::fromStdString(actor->selectedImage(p_emote)));
+    const QString l_selected_texture = engine::fs::characters::getFilePath(qCharacterFolder, QString::fromStdString(actor->selectedImage(p_emote))).replace('\\', '/');
 
-    if(FS::Checks::FileExists(l_selected_texture))
-    {
+    if(FS::Checks::FileExists(l_selected_texture)) {
       ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(l_selected_texture));
       ui_selected->show();
     }
-    else
-    {
+    else {
       QString qEnabledImage = QString::fromStdString(actor->buttonImage(p_emote, true));
       QString l_enabled_texture = engine::fs::characters::getFilePath(qCharacterFolder, qEnabledImage + ".webp");;
 
