@@ -348,6 +348,7 @@ add_executable(rp-engine
   src/widgets/courtroom/AreaPlayerList.h src/widgets/courtroom/AreaPlayerList.cpp
   src/widgets/courtroom/AreaPlayerEntry.h src/widgets/courtroom/AreaPlayerEntry.cpp
   src/widgets/courtroom/ActorSelection.h src/widgets/courtroom/ActorSelection.cpp
+  src/dialogs/TransferOwnershipDialog.h src/dialogs/TransferOwnershipDialog.cpp
 
 )
 target_precompile_headers(rp-engine PRIVATE src/pch.h)
