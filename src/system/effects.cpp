@@ -17,8 +17,7 @@ namespace engine::system::effects
     s_viewportEffects = {};
 
     QJsonArray lEffectsArray = effectsReader.mDocument.array();
-    for(QJsonValueRef rEffect : lEffectsArray)
-    {
+    for(QJsonValueRef rEffect : lEffectsArray) {
       effectsReader.SetTargetObject(rEffect.toObject());
       MessageEffect lEffectData = MessageEffect(effectsReader.getStringValue("effect_name"));
       lEffectData.loops = effectsReader.getBoolValue("loop");
@@ -28,22 +27,22 @@ namespace engine::system::effects
     }
   }
 
-  const MessageEffect &effectByName(QString name)
+  const MessageEffect &effectByName(const QString& name)
   {
-    for(MessageEffect &effect : s_viewportEffects)
-    {
-      if(name == effect.name)
+    for(MessageEffect &effect : s_viewportEffects) {
+      if(name == effect.name) {
         return effect;
+      }
     }
     return s_fallbackEffect;
   }
 
   const MessageEffect &effectById(int id)
   {
-    for(MessageEffect &effect : s_viewportEffects)
-    {
-      if(id == effect.legacyId)
+    for(MessageEffect &effect : s_viewportEffects) {
+      if(id == effect.legacyId) {
         return effect;
+      }
     }
     return s_fallbackEffect;
   }

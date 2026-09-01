@@ -17,13 +17,6 @@ public:
     return s_Instance;
   }
 
-  RPLabel *CreateTransition(QWidget *parents, AOApplication* ao_app, DRGraphicsView *viewport);
-  RPLabel *GetTransition();
-
-  void RenderTransition();
-  void AnimateTransition();
-  void setFadeDuration(int duration);
-
   void clearPlayerDataList();
 
   QVector<DrPlayer> m_areaPlayers;
@@ -32,10 +25,6 @@ public:
 private:
   SceneManager() = default;
   static SceneManager s_Instance;
-
-  int mFadeDuration = 200;
-  RPLabel *pUiTransition = nullptr;
-  DRGraphicsView *pViewport = nullptr;
 
 };
 

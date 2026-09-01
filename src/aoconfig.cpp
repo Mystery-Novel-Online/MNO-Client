@@ -207,7 +207,6 @@ void AOConfigPrivate::load_file()
   LegacyThemeManager::get().setResize(config::ConfigUserSettings::floatValue("resize", 1.0f));
   theme::ThemeManager::Instance().SetResizeFactor(config::ConfigUserSettings::floatValue("resize", 1.0f));
   fade_duration = cfg.value("fade_duration", 200).toInt();
-  SceneManager::get().setFadeDuration(fade_duration);
 
   // audio update
   audio_engine->set_volume(master_volume);
@@ -1040,7 +1039,6 @@ void AOConfig::setFadeDuration(int duration)
   if(d->fade_duration == duration)
     return;
   d->fade_duration = duration;
-  SceneManager::get().setFadeDuration(duration);
   d->invoke_signal("fade_duration_changed", Q_ARG(int, duration));
 }
 

@@ -16,6 +16,7 @@
 #include "mk2/spriteplayer.h"
 #include "mk2/spritereadersynchronizer.h"
 #include "system/effects.h"
+#include "widgets/viewports/CrossfadeLabel.h"
 #include <rolechat/util/BenchmarkTimer.h>
 
 
@@ -470,6 +471,7 @@ private:
 
   FennecWidget *ui_fennec = nullptr;
   DRGraphicsView *ui_viewport = nullptr;
+  CrossfadeLabel *u_crossfadeDisplay = nullptr;
   QPropertyAnimation *background_anim = nullptr;
 
   QPropertyAnimation *chatbox_anim = nullptr;

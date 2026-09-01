@@ -18,9 +18,11 @@ void LegacyActorReader::load(const std::string& folder, const std::string& path)
 QString LegacyActorReader::DRLookupKey(const QStringList &keys, const QString &target)
 {
   const QString targetLower = target.toLower();
-  for(const QString& key : keys)
-    if(key.toLower() == targetLower)
+  for(const QString& key : keys) {
+    if(key.toLower() == targetLower) {
       return key;
+    }
+  }
   return target;
 }
 
@@ -35,10 +37,8 @@ std::vector<ActorEmote> LegacyActorReader::emotes()
   qDebug().noquote() << QString("Compiling char.ini for character <%1>").arg(QString::fromStdString(folder()));
 #endif
 
-  for(const QString &i_chr : l_chr_list)
-  {
-    if(!FS::Checks::DirectoryExists(engine::fs::characters::getDirectoryPath(i_chr)))
-    {
+  for(const QString &i_chr : l_chr_list) {
+    if(!FS::Checks::DirectoryExists(engine::fs::characters::getDirectoryPath(i_chr))) {
       qWarning().noquote()
       << QString("Parent character <%1> not found, character <%2> cannot use it.").arg(i_chr, QString::fromStdString(folder()));
       continue;

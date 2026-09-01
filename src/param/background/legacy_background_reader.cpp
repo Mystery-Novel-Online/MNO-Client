@@ -7,14 +7,12 @@ void LegacyBackgroundReader::loadBackground(const std::string& backgroundPath)
 
   QSettings l_settings(l_positions_ini, QSettings::IniFormat);
   l_settings.setIniCodec("UTF-8");
-  if(l_settings.status() != QSettings::NoError)
-  {
+  if(l_settings.status() != QSettings::NoError) {
     return;
   }
 
   const QStringList l_group_list = l_settings.childGroups();
-  for(const QString &i_group : l_group_list)
-  {
+  for(const QString &i_group : l_group_list) {
     BackgroundPosition l_positionData;
 
     const QString l_lower_group = i_group.toLower();

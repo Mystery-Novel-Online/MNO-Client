@@ -7,7 +7,7 @@ class MessageEffect;
 namespace engine::system::effects
 {
   void reload();
-  const MessageEffect &effectByName(QString name);
+  const MessageEffect &effectByName(const QString& name);
   const MessageEffect &effectById(int id);
 }
 #endif // EFFECTS_H

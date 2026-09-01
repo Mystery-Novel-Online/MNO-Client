@@ -54,7 +54,7 @@ void Courtroom::create_widgets()
     //ui_viewport->setViewport(ui_opengl_viewport);
   }
 
-  SceneManager::get().CreateTransition(this, ao_app, ui_viewport);
+  u_crossfadeDisplay = new CrossfadeLabel(ao_app, this);
 
   { // populate scene
     auto *l_scene = ui_viewport->scene();
@@ -590,7 +590,7 @@ void Courtroom::reset_widget_names()
       {"pair_offset", ui_slider_horizontal_axis},
       {"vertical_offset", ui_slider_vertical_axis},
       {"scale_offset", ui_slider_scale},
-      {"viewport_transition", SceneManager::get().GetTransition()},
+      {"viewport_transition", u_crossfadeDisplay},
       {"viewport_overlay", w_ViewportOverlay},
       {"outfit_selector", wOutfitDropdown},
       {"screenshot", p_ScreenshotBtn},
@@ -852,9 +852,9 @@ void Courtroom::set_widgets()
   courtroom::reload();
 
   setupWidgetElement(ui_viewport, "viewport");
-  setupWidgetElement(SceneManager::get().GetTransition(), "viewport");
+  setupWidgetElement(u_crossfadeDisplay, "viewport");
   setupWidgetElement(ui_fennec, "viewport");
-  SceneManager::get().GetTransition()->move(0,0);
+  u_crossfadeDisplay->move(0,0);
   setupWidgetElement(ui_vp_showname, "showname");
   setupWidgetElement(ui_vp_showname_image, "showname_image");
 

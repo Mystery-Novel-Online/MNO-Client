@@ -1168,6 +1168,7 @@ void Courtroom::handle_acknowledged_ms()
 
 void Courtroom::next_chatmessage(QStringList p_chatmessage)
 {
+  u_crossfadeDisplay->setFadeDuration(ao_config->fade_duration());
   m_benchmarkIncomingMessage.restart();
   if(p_chatmessage.length() < MINIMUM_MESSAGE_SIZE) {
     return;
@@ -1272,7 +1273,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
       handle_acknowledged_ms();
     }
   }
-  SceneManager::get().RenderTransition();
+  u_crossfadeDisplay->render();
   preload_chatmessage(p_chatmessage);
 }
 
@@ -1634,7 +1635,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
   ui_vp_player_char->setMirrored(flippedState);
   ui_vp_player_char->setFlipped(false);
 
-  SceneManager::get().AnimateTransition();
+  u_crossfadeDisplay->animate();
 
   if(m_play_pre) {
     int sfx_delay = m_chatmessage[CMSoundDelay].toInt();
@@ -2339,10 +2340,10 @@ void Courtroom::next_chat_letter()
         break;
 
       case CueType::Layer:
-        SceneManager::get().RenderTransition();
+        u_crossfadeDisplay->render();
         ui_vp_player_char->updateLayer(tag.arguments.at(1).toString(), tag.arguments.at(2).toString());
         ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
-        SceneManager::get().AnimateTransition();
+        u_crossfadeDisplay->animate();
         break;
 
       case CueType::Flip:
