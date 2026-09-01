@@ -2,7 +2,7 @@
 #include "pch.h"
 
 #include "interface/scenes/replay_window.h"
-#include "interface/widgets/viewports/rp_viewport.h"
+#include "widgets/viewports/rp_viewport.h"
 #include "network/metadata/message_metadata.h"
 #include "param/replay_reader.h"
 #include "fs/fs_reading.h"

@@ -2,7 +2,7 @@
 #define LOBBY_H
 
 #include "interface/scenes/replay_window.h"
-#include "interface/widgets/scene_widget.h"
+#include "widgets/scene_widget.h"
 #include "widgets/lobby/ServerSelectList.h"
 #include "widgets/workshop/WorkshopListWidget.h"
 #include "widgets/workshop/WorkshopTags.h"

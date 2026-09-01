@@ -57,10 +57,9 @@ class QLabel;
 
 #include <optional>
 
-#include <mk2/drplayer.h>
-#include "interface/widgets/scene_widget.h"
-
-#include <interface/widgets/fennec_widget.h>
+#include "mk2/drplayer.h"
+#include "widgets/scene_widget.h"
+#include "widgets/fennec_widget.h"
 #include "widgets/courtroom/LayerSelectionPanel.h"
 #include "widgets/courtroom/AreaPlayerList.h"
 

@@ -4,7 +4,7 @@
 #include "theme_scripting.h"
 #include "system/animation.h"
 #include "interface/courtroom_layout.h"
-#include "interface/widgets/viewports/legacy_viewport.h"
+#include "widgets/viewports/legacy_viewport.h"
 #include "system/replay_playback.h"
 #include "discord/workshop_discord.h"
 

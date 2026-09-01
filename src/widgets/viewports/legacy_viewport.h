@@ -1,7 +1,7 @@
 #ifndef LEGACY_VIEWPORT_H
 #define LEGACY_VIEWPORT_H
 #include "dreffectmovie.h"
-#include "interface/widgets/viewports/rp_viewport.h"
+#include "widgets/viewports/rp_viewport.h"
 #include "drshoutmovie.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "rolechat/background/IBackgroundData.h"

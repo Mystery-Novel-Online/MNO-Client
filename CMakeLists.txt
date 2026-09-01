@@ -25,33 +25,33 @@ set(HEADERS
   src/interface/menus/char_menu.h
   src/interface/menus/emote_menu.h
   src/interface/scenes/replay_window.h
-  src/interface/widgets/bgm_filter.h
-  src/interface/widgets/char_button.h
-  src/interface/widgets/character_select.h
-  src/interface/widgets/chat_log.h
-  src/interface/widgets/emotion_button.h
-  src/interface/widgets/health_bar.h
-  src/interface/widgets/image_display.h
+  src/widgets/bgm_filter.h
+  src/widgets/char_button.h
+  src/widgets/character_select.h
+  src/widgets/chat_log.h
+  src/widgets/emotion_button.h
+  src/widgets/health_bar.h
+  src/widgets/image_display.h
 
 
-  src/interface/widgets/rp_button.h
-  src/interface/widgets/rp_combo_box.h
-  src/interface/widgets/rp_hover_widget.h
-  src/interface/widgets/rp_label.h
-  src/interface/widgets/rp_line_edit.h
-  src/interface/widgets/rp_slider.h
-  src/interface/widgets/rp_text_edit.h
-  src/interface/widgets/rp_typewriter.h
-  src/interface/widgets/rp_widget.h
-  src/interface/widgets/screenshot_button.h
-  src/interface/widgets/emotion_selector.h
-  src/interface/widgets/choice_dialog.h
-  src/interface/widgets/sticker_viewer.h
-  src/interface/widgets/viewport_overlay.h
-  src/interface/widgets/tab_toggle_button.h
-  src/interface/widgets/aotimer.h
-  src/interface/widgets/viewports/legacy_viewport.h
-  src/interface/widgets/viewports/rp_viewport.h
+  src/widgets/rp_button.h
+  src/widgets/rp_combo_box.h
+  src/widgets/rp_hover_widget.h
+  src/widgets/rp_label.h
+  src/widgets/rp_line_edit.h
+  src/widgets/rp_slider.h
+  src/widgets/rp_text_edit.h
+  src/widgets/rp_typewriter.h
+  src/widgets/rp_widget.h
+  src/widgets/screenshot_button.h
+  src/widgets/emotion_selector.h
+  src/widgets/choice_dialog.h
+  src/widgets/sticker_viewer.h
+  src/widgets/viewport_overlay.h
+  src/widgets/tab_toggle_button.h
+  src/widgets/aotimer.h
+  src/widgets/viewports/legacy_viewport.h
+  src/widgets/viewports/rp_viewport.h
   src/network/json_packet.h
   src/network/metadata/area_metadata.h
   src/network/metadata/message_metadata.h
@@ -156,33 +156,33 @@ set(SOURCES
   src/interface/menus/char_menu.cpp
   src/interface/menus/emote_menu.cpp
   src/interface/scenes/replay_window.cpp
-  src/interface/widgets/bgm_filter.cpp
-  src/interface/widgets/char_button.cpp
-  src/interface/widgets/character_select.cpp
-  src/interface/widgets/chat_log.cpp
-  src/interface/widgets/emotion_button.cpp
-  src/interface/widgets/health_bar.cpp
-  src/interface/widgets/image_display.cpp
+  src/widgets/bgm_filter.cpp
+  src/widgets/char_button.cpp
+  src/widgets/character_select.cpp
+  src/widgets/chat_log.cpp
+  src/widgets/emotion_button.cpp
+  src/widgets/health_bar.cpp
+  src/widgets/image_display.cpp
 
 
-  src/interface/widgets/rp_button.cpp
-  src/interface/widgets/rp_combo_box.cpp
-  src/interface/widgets/rp_hover_widget.cpp
-  src/interface/widgets/rp_label.cpp
-  src/interface/widgets/rp_line_edit.cpp
-  src/interface/widgets/rp_slider.cpp
-  src/interface/widgets/rp_text_edit.cpp
-  src/interface/widgets/rp_typewriter.cpp
-  src/interface/widgets/rp_widget.cpp
-  src/interface/widgets/screenshot_button.cpp
-  src/interface/widgets/emotion_selector.cpp
-  src/interface/widgets/choice_dialog.cpp
-  src/interface/widgets/sticker_viewer.cpp
-  src/interface/widgets/viewport_overlay.cpp
-  src/interface/widgets/tab_toggle_button.cpp
-  src/interface/widgets/aotimer.cpp
-  src/interface/widgets/viewports/legacy_viewport.cpp
-  src/interface/widgets/viewports/rp_viewport.cpp
+  src/widgets/rp_button.cpp
+  src/widgets/rp_combo_box.cpp
+  src/widgets/rp_hover_widget.cpp
+  src/widgets/rp_label.cpp
+  src/widgets/rp_line_edit.cpp
+  src/widgets/rp_slider.cpp
+  src/widgets/rp_text_edit.cpp
+  src/widgets/rp_typewriter.cpp
+  src/widgets/rp_widget.cpp
+  src/widgets/screenshot_button.cpp
+  src/widgets/emotion_selector.cpp
+  src/widgets/choice_dialog.cpp
+  src/widgets/sticker_viewer.cpp
+  src/widgets/viewport_overlay.cpp
+  src/widgets/tab_toggle_button.cpp
+  src/widgets/aotimer.cpp
+  src/widgets/viewports/legacy_viewport.cpp
+  src/widgets/viewports/rp_viewport.cpp
   src/network/json_packet.cpp
   src/network/metadata/area_metadata.cpp
   src/network/metadata/message_metadata.cpp
@@ -293,9 +293,9 @@ add_executable(rp-engine
   src/param/actor_repository.h src/param/actor_repository.cpp
   src/system/runtime_values.h src/system/runtime_values.cpp
   src/system/theme.h src/system/theme.cpp
-  src/interface/widgets/scene_widget.h src/interface/widgets/scene_widget.cpp
-  src/interface/widgets/rp_list_widget.h src/interface/widgets/rp_list_widget.cpp
-  src/interface/widgets/rp_message_input.h src/interface/widgets/rp_message_input.cpp
+  src/widgets/scene_widget.h src/widgets/scene_widget.cpp
+  src/widgets/rp_list_widget.h src/widgets/rp_list_widget.cpp
+  src/widgets/rp_message_input.h src/widgets/rp_message_input.cpp
   src/encoding/binary_encoding.h src/encoding/binary_encoding.cpp
   src/pch.h
   src/fs/fs_characters.h src/fs/fs_characters.cpp
@@ -311,7 +311,7 @@ add_executable(rp-engine
   src/animation/widget_animator.h src/animation/widget_animator.cpp
   src/widgets/lobby/ServerSelectList.h src/widgets/lobby/ServerSelectList.cpp
   src/widgets/lobby/ServerSelectEntry.h src/widgets/lobby/ServerSelectEntry.cpp
-  src/interface/widgets/icon_grid_widget.h src/interface/widgets/icon_grid_widget.cpp
+  src/widgets/icon_grid_widget.h src/widgets/icon_grid_widget.cpp
   src/interface/menus/screenshot_menu.h src/interface/menus/screenshot_menu.cpp
   src/system/user_database.h src/system/user_database.cpp
   src/widgets/courtroom/LayerSelectionPanel.h src/widgets/courtroom/LayerSelectionPanel.cpp
@@ -336,7 +336,7 @@ add_executable(rp-engine
   src/network/workshop/WorkshopPackage.h src/network/workshop/WorkshopPackage.cpp
   src/network/workshop/ContentDownloader.h src/network/workshop/ContentDownloader.cpp
   src/interface/menus/WorkshopContextMenu.h src/interface/menus/WorkshopContextMenu.cpp
-  src/interface/widgets/fennec_widget.h src/interface/widgets/fennec_widget.cpp
+  src/widgets/fennec_widget.h src/widgets/fennec_widget.cpp
   src/fennec/windows/ThemeWindow.h src/fennec/windows/ThemeWindow.cpp
   src/fennec/windows/NetworkWindow.h src/fennec/windows/NetworkWindow.cpp
   src/networking/NetworkTraffic.h src/networking/NetworkTraffic.cpp
