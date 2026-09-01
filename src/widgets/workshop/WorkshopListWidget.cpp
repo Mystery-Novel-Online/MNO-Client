@@ -1,7 +1,7 @@
 #include "WorkshopListWidget.h"
-#include "engine/network/workshop/workshop_parser.h"
+#include "network/workshop/workshop_parser.h"
 
-#include <engine/network/api_manager.h>
+#include <network/api_manager.h>
 
 WorkshopListWidget::WorkshopListWidget(QWidget *parent) : QWidget(parent)
 {

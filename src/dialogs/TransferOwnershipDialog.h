@@ -1,7 +1,7 @@
 #ifndef TRANSFEROWNERSHIPDIALOG_H
 #define TRANSFEROWNERSHIPDIALOG_H
 
-#include "engine/network/workshop/workshop_models.h"
+#include "network/workshop/workshop_models.h"
 class TransferOwnershipDialog : public QDialog
 {
   Q_OBJECT

@@ -3,8 +3,8 @@
 
 #include <QObject>
 #include <QWidget>
-#include "engine/workshop/workshop_cache.h"
-#include "engine/network/workshop/workshop_models.h"
+#include "workshop/workshop_cache.h"
+#include "network/workshop/workshop_models.h"
 
 class WorkshopEntry : public QWidget
 {

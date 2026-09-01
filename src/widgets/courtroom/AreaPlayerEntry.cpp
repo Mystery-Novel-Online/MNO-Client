@@ -1,16 +1,16 @@
 #include "AreaPlayerEntry.h"
 
-#include "engine/system/user_database.h"
+#include "system/user_database.h"
 #include "theme.h"
 
-#include "engine/fs/fs_reading.h"
-#include "engine/system/localization.h"
-#include "engine/network/metadata/user_metadata.h"
+#include "fs/fs_reading.h"
+#include "system/localization.h"
+#include "network/metadata/user_metadata.h"
 #include "modules/theme/legacythememanager.h"
-#include "engine/fs/fs_characters.h"
-#include "engine/interface/scenes/downloader_prompt.h"
+#include "fs/fs_characters.h"
+#include "interface/scenes/downloader_prompt.h"
 
-#include "engine/discord/workshop_discord.h"
+#include "discord/workshop_discord.h"
 
 #include <rolechat/filesystem/RCDir.h>
 

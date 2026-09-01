@@ -3,8 +3,8 @@
 
 #include "drtheme.h"
 
-#include "engine/system/theme_scripting.h"
-#include "engine/interface/courtroom_layout.h"
+#include "system/theme_scripting.h"
+#include "interface/courtroom_layout.h"
 
 LegacyThemeManager LegacyThemeManager::s_Instance;
 

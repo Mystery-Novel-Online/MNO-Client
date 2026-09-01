@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include <rolechat/filesystem/RCDir.h>
-#include "engine/system/audio.h"
+#include "system/audio.h"
 config_tab_blips::config_tab_blips(QWidget *parent) : QWidget(parent), ui(new Ui::ConfigTabBlips)
 {
 

@@ -1,7 +1,7 @@
 #include "LayerSelectionPanel.h"
 #include "drtheme.h"
-#include "engine/param/actor_repository.h"
-#include "engine/interface/courtroom_layout.h"
+#include "param/actor_repository.h"
+#include "interface/courtroom_layout.h"
 
 constexpr int ButtonSize   = 40;
 constexpr int LayoutMargin = 22;

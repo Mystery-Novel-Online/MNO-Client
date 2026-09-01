@@ -9,18 +9,18 @@
 #include "drshoutmovie.h"
 #include "drsplashmovie.h"
 
-#include "engine/fs/fs_reading.h"
+#include "fs/fs_reading.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "modules/managers/notify_manager.h"
 #include "theme.h"
 
 #include "modules/theme/legacythememanager.h"
-#include "engine/system/debug/time_debugger.h"
-#include "engine/system/localization.h"
+#include "system/debug/time_debugger.h"
+#include "system/localization.h"
 
-#include "engine/fs/fs_reading.h"
-#include "engine/fs/fs_characters.h"
-#include "engine/interface/courtroom_layout.h"
+#include "fs/fs_reading.h"
+#include "fs/fs_characters.h"
+#include "interface/courtroom_layout.h"
 
 using namespace engine::system;
 

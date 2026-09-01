@@ -3,9 +3,9 @@
 #include <QFormLayout>
 #include <QHttpMultiPart>
 
-#include <engine/network/api_manager.h>
+#include <network/api_manager.h>
 
-#include <engine/param/json_reader.h>
+#include <param/json_reader.h>
 
 RenameContentDialog::RenameContentDialog(int contentId, const QString &contentName, QWidget *parent) : QDialog(parent), m_workshopId(contentId)
 {

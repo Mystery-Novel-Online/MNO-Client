@@ -3,19 +3,19 @@
 
 
 #include "drgraphicscene.h"
-#include "engine/interface/menus/area_menu.h"
-#include "engine/interface/menus/bgm_menu.h"
-#include "engine/interface/menus/char_menu.h"
-#include "engine/network/metadata/user_metadata.h"
-#include "engine/system/audio/music_player.h"
-#include "engine/system/theme.h"
+#include "interface/menus/area_menu.h"
+#include "interface/menus/bgm_menu.h"
+#include "interface/menus/char_menu.h"
+#include "network/metadata/user_metadata.h"
+#include "system/audio/music_player.h"
+#include "system/theme.h"
 #include "drposition.h"
 #include "drthememovie.h"
 #include "modules/managers/scene_manager.h"
 #include "mk2/graphicsvideoscreen.h"
 #include "mk2/spriteplayer.h"
 #include "mk2/spritereadersynchronizer.h"
-#include "engine/system/effects.h"
+#include "system/effects.h"
 #include <rolechat/util/BenchmarkTimer.h>
 
 
@@ -58,9 +58,9 @@ class QLabel;
 #include <optional>
 
 #include <mk2/drplayer.h>
-#include "engine/interface/widgets/scene_widget.h"
+#include "interface/widgets/scene_widget.h"
 
-#include <engine/interface/widgets/fennec_widget.h>
+#include <interface/widgets/fennec_widget.h>
 #include "widgets/courtroom/LayerSelectionPanel.h"
 #include "widgets/courtroom/AreaPlayerList.h"
 

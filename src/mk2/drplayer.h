@@ -3,7 +3,7 @@
 
 #include <qstring.h>
 
-#include <engine/param/json_reader.h>
+#include <param/json_reader.h>
 
 struct AreaPlayerData
 {

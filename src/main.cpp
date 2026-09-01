@@ -5,7 +5,7 @@
 #include "lobby.h"
 #include "version.h"
 #include <rolechat/util/FileSystem.h>
-#include "engine/system/user_database.h"
+#include "system/user_database.h"
 #include <rolechat-lib/src/rolechat/userdata/TemporaryDB.h>
 
 int main(int argc, char *argv[])

@@ -1,7 +1,7 @@
 #include "notify_manager.h"
 #include "pch.h"
 
-#include "engine/system/theme_scripting.h"
+#include "system/theme_scripting.h"
 
 NotifyManager NotifyManager::s_Instance;
 

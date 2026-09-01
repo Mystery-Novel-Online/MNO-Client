@@ -1,5 +1,5 @@
 #include "CueParser.h"
-#include "engine/system/text_encoding.h"
+#include "system/text_encoding.h"
 using namespace engine::system::encoding::text;
 
 std::vector<CueData> CueParser::parse(const QString &tagData)

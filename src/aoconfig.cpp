@@ -5,14 +5,14 @@
 #include "mk2/spritedynamicreader.h"
 
 #include "modules/managers/scene_manager.h"
-#include <engine/discord/workshop_discord.h>
+#include <discord/workshop_discord.h>
 #include <modules/theme/legacythememanager.h>
 #include <rolechat/config/ConfigUserSettings.h>
 
-#include "engine/fs/fs_reading.h"
-#include "engine/network/metadata/user_metadata.h"
-#include "engine/system/replay_playback.h"
-#include "engine/system/localization.h"
+#include "fs/fs_reading.h"
+#include "network/metadata/user_metadata.h"
+#include "system/replay_playback.h"
+#include "system/localization.h"
 
 
 /*!

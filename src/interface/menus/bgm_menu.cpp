@@ -1,0 +1,97 @@
+#include "bgm_menu.h"
+#include <modules/theme/legacythememanager.h>
+#include "network/metadata/tracklist_metadata.h"
+#include "interface/courtroom_layout.h"
+#include "system/audio.h"
+#include <system/audio/loop_detection.h>
+
+BGMMenu::BGMMenu(QWidget *parent) : QMenu(parent)
+{
+
+  QMenu *playMenu = new QMenu(tr("Play"), this);
+  addMenu(playMenu);
+
+  m_PlaySmooth = playMenu->addAction((tr("Smooth Play")));
+  m_PlayInstant = playMenu->addAction((tr("Instant Play")));
+  m_PlaySync = playMenu->addAction((tr("Sync Playback")));
+  m_PlaySolo = playMenu->addAction((tr("Solo Playback")));
+
+
+
+  p_InsertAction = addAction(tr("Insert into OOC"));
+  p_LoopAction = addAction(tr("Calculate Loop Points"));
+  p_PinAction = addAction(tr("Pin"));
+
+  connect(m_PlaySmooth, &QAction::triggered, this, &BGMMenu::OnSmoothPlayAction);
+  connect(m_PlayInstant, &QAction::triggered, this, &BGMMenu::OnInstantPlayAction);
+  connect(m_PlaySync, &QAction::triggered, this, &BGMMenu::OnSyncPlayAction);
+  connect(m_PlaySolo, &QAction::triggered, this, &BGMMenu::OnSoloPlayAction);
+
+  connect(p_LoopAction, &QAction::triggered, this, &BGMMenu::OnLoopAction);
+
+  connect(p_InsertAction, &QAction::triggered, this, &BGMMenu::OnInsertTriggered);
+  connect(p_PinAction, &QAction::triggered, this, &BGMMenu::OnPinTriggered);
+}
+
+void BGMMenu::OnMenuRequested(QPoint p_point)
+{
+  QListWidget *musicList = LegacyThemeManager::get().GetWidgetType<QListWidget>("music_list");
+  if(musicList == nullptr) return;
+
+  QListWidgetItem *l_item = musicList->currentItem();
+
+  if(!l_item) { m_TargetTrack = "";  return; }
+
+  m_TargetTrack = l_item->data(Qt::UserRole).toString();
+  const QPoint l_global_point = musicList->viewport()->mapToGlobal(p_point);
+  popup(l_global_point);
+}
+
+void BGMMenu::OnInsertTriggered()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  QLineEdit *oocChat = LegacyThemeManager::get().GetWidgetType<QLineEdit>("ooc_chat_message");
+  oocChat->insert(m_TargetTrack);
+  oocChat->setFocus();
+}
+
+void BGMMenu::OnSmoothPlayAction()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback::Standard);
+  courtroom::ic::focusMessageBox();
+}
+
+void BGMMenu::OnInstantPlayAction()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback::NoFade);
+  courtroom::ic::focusMessageBox();
+}
+
+void BGMMenu::OnSyncPlayAction()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  AOApplication::getInstance()->get_courtroom()->send_mc_packet(m_TargetTrack, BGMPlayback::Continue);
+  courtroom::ic::focusMessageBox();
+}
+
+void BGMMenu::OnSoloPlayAction()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  audio::bgm::Play(m_TargetTrack.toStdString());
+  courtroom::ic::focusMessageBox();
+}
+
+void BGMMenu::OnLoopAction()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  LoopDetection::FindLoop(m_TargetTrack);
+}
+
+void BGMMenu::OnPinTriggered()
+{
+  if(m_TargetTrack.isEmpty()) return;
+  TracklistMetadata::PinTrack(m_TargetTrack);
+}
+

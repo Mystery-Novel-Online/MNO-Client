@@ -2,7 +2,7 @@
 #define LEGACYTHEMEMANAGER_H
 
 #include <QHash>
-#include "engine/param/theme_reader.h"
+#include "param/theme_reader.h"
 #include "rolechat/theme/ThemeManager.h"
 
 class LegacyThemeManager

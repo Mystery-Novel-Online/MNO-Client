@@ -20,15 +20,15 @@
 #include "graphicsspriteitem.h"
 
 #include <modules/managers/scene_manager.h>
-#include "engine/param/animation_reader.h"
-#include "engine/interface/courtroom_layout.h"
+#include "param/animation_reader.h"
+#include "interface/courtroom_layout.h"
 #include "spriteseekingreader.h"
 
-#include "engine/system/text_encoding.h"
-#include "engine/fs/fs_reading.h"
-#include "engine/fs/fs_characters.h"
-#include "engine/system/runtime_loop.h"
-#include <engine/system/debug/time_debugger.h>
+#include "system/text_encoding.h"
+#include "fs/fs_reading.h"
+#include "fs/fs_characters.h"
+#include "system/runtime_loop.h"
+#include <system/debug/time_debugger.h>
 #include <rolechat/util/FileSystem.h>
 #include <rolechat/filesystem/RCFile.h>
 

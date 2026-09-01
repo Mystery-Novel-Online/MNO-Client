@@ -1,7 +1,7 @@
 #include "config_tab_discord.h"
 #include "ui_config_tab_discord.h"
 
-#include <engine/discord/workshop_discord.h>
+#include <discord/workshop_discord.h>
 
 ConfigTabDiscord::ConfigTabDiscord(QWidget *parent) : QWidget(parent), ui(new Ui::ConfigTabDiscord)
 {

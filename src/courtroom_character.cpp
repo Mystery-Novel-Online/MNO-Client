@@ -1,15 +1,15 @@
-#include "engine/system/user_database.h"
+#include "system/user_database.h"
 #include "pch.h"
 
 #include "aoconfig.h"
 #include "drpacket.h"
 #include "theme.h"
 
-#include "engine/fs/fs_reading.h"
-#include "engine/fs/fs_characters.h"
-#include "engine/fs/fs_mounting.h"
+#include "fs/fs_reading.h"
+#include "fs/fs_characters.h"
+#include "fs/fs_mounting.h"
 
-#include <engine/network/api_manager.h>
+#include <network/api_manager.h>
 
 #include <rolechat-lib/src/rolechat/userdata/TemporaryDB.h>
 

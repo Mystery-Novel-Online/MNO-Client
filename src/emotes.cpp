@@ -1,18 +1,18 @@
 #include "pch.h"
 
 #include "aoconfig.h"
-#include "engine/system/localization.h"
+#include "system/localization.h"
 #include "drcharactermovie.h"
 #include "drgraphicscene.h"
 #include "theme.h"
 #include "drtheme.h"
 #include "modules/theme/legacythememanager.h"
 
-#include "engine/param/actor_repository.h"
-#include "engine/param/actor/actor_loader.h"
-#include "engine/system/text_encoding.h"
-#include "engine/interface/menus/emote_menu.h"
-#include "engine/interface/courtroom_layout.h"
+#include "param/actor_repository.h"
+#include "param/actor/actor_loader.h"
+#include "system/text_encoding.h"
+#include "interface/menus/emote_menu.h"
+#include "interface/courtroom_layout.h"
 
 int s_emotePreviewIndex = -1;
 using namespace engine;

@@ -2,7 +2,7 @@
 #include "ui_config_tab_theme.h"
 #include <rolechat/filesystem/RCDir.h>
 #include <rolechat/config/ConfigUserSettings.h>
-#include "engine/system/config_manager.h"
+#include "system/config_manager.h"
 #include "modules/theme/legacythememanager.h"
 
 ConfigTabTheme::ConfigTabTheme(QWidget *parent) : QWidget(parent), ui(new Ui::ConfigTabTheme)

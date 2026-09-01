@@ -8,12 +8,12 @@
 
 #include <modules/theme/legacythememanager.h>
 
-#include "engine/system/localization.h"
-#include "engine/fs/fs_mounting.h"
+#include "system/localization.h"
+#include "fs/fs_mounting.h"
 
 #include <rolechat/config/ConfigUserSettings.h>
 
-#include <engine/system/config_manager.h>
+#include <system/config_manager.h>
 
 #include <config_tabs/config_tab_theme.h>
 

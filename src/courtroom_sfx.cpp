@@ -1,8 +1,8 @@
-#include "engine/fs/fs_reading.h"
+#include "fs/fs_reading.h"
 #include "drtheme.h"
-#include "engine/system/localization.h"
-#include "engine/fs/fs_reading.h"
-#include "engine/system/audio.h"
+#include "system/localization.h"
+#include "fs/fs_reading.h"
+#include "system/audio.h"
 
 std::optional<DRSfx> Courtroom::current_sfx()
 {

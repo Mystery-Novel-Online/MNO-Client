@@ -1,8 +1,8 @@
 #include "HubUploadManager.h"
 #include <QHttpPart>
 
-#include <engine/network/api_manager.h>
-#include <engine/param/json_reader.h>
+#include <network/api_manager.h>
+#include <param/json_reader.h>
 
 
 HubUploadManager::HubUploadManager(QObject *parent) : QObject(parent) { }

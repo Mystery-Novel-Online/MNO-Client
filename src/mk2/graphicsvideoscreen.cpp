@@ -24,7 +24,7 @@
 #include <QMediaService>
 #include <QStyleOptionGraphicsItem>
 #include <QUrl>
-#include "engine/fs/fs_characters.h"
+#include "fs/fs_characters.h"
 
 DRVideoScreen::DRVideoScreen(AOApplication *ao_app, QGraphicsItem *parent)
     : QGraphicsVideoItem(parent)

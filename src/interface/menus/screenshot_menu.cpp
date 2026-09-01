@@ -1,0 +1,41 @@
+#include "screenshot_menu.h"
+#include "system/audio.h"
+#include "interface/courtroom_layout.h"
+#include "fs/fs_reading.h"
+
+#include <modules/theme/legacythememanager.h>
+ScreenshotMenu::ScreenshotMenu()
+{
+  m_CaptureLogAction = addAction(tr("Capture IC Log"));
+  m_CaptureWindowAction = addAction(tr("Capture Entire Window"));
+  m_OpenCapturesAction = addAction(tr("Open Screenshot Directory"));
+
+  connect(m_CaptureLogAction, &QAction::triggered, this, &ScreenshotMenu::OnCaptureLog);
+  connect(m_CaptureWindowAction, &QAction::triggered, this, &ScreenshotMenu::OnCaptureWindow);
+  connect(m_OpenCapturesAction, &QAction::triggered, this, &ScreenshotMenu::OnDirectoryOpen);
+}
+
+void ScreenshotMenu::OnMenuRequested(QPoint p_point)
+{
+  QPushButton *screenshotBtn = LegacyThemeManager::get().GetWidgetType<ScreenshotButton>("screenshot");
+  const QPoint l_global_point = screenshotBtn->mapToGlobal(p_point);
+  popup(l_global_point);
+}
+
+void ScreenshotMenu::OnCaptureLog()
+{
+  audio::system::Play("screenshot");
+  courtroom::viewport::screenshot(courtroom::CaptureType::ICLog);
+}
+
+void ScreenshotMenu::OnCaptureWindow()
+{
+  audio::system::Play("screenshot");
+  courtroom::viewport::screenshot(courtroom::CaptureType::Window);
+}
+
+void ScreenshotMenu::OnDirectoryOpen()
+{
+  QUrl folderUrl = QUrl::fromLocalFile("base/screenshots");
+  QDesktopServices::openUrl(folderUrl);
+}

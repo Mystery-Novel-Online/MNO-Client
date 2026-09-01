@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QWidget>
 #include "WorkshopEntry.h"
-#include "engine/network/workshop/workshop_models.h"
+#include "network/workshop/workshop_models.h"
 
 
 class WorkshopListWidget : public QWidget

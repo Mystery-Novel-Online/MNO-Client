@@ -1,0 +1,213 @@
+#include "param/actor/actor_loader.h"
+#include "modules/theme/legacythememanager.h"
+#include "interface/menus/emote_menu.h"
+#include "fs/fs_reading.h"
+#include "fs/fs_characters.h"
+#include "param/actor_repository.h"
+
+using namespace engine::actor::user;
+
+const float DOUBLE_SIZE = 82;
+
+AOEmoteButton::AOEmoteButton(QWidget *p_parent, AOApplication *p_ao_app, int p_x, int p_y)
+    : QPushButton(p_parent)
+{
+  ao_app = p_ao_app;
+
+  this->move(p_x, p_y);
+
+  float buttonSize = EmoteMenu::isDoubleSize() ? DOUBLE_SIZE : 40;
+
+  int resizedButtonSize = (int)(buttonSize * LegacyThemeManager::get().getResize());
+
+  this->resize(resizedButtonSize, resizedButtonSize);
+
+  ui_selected = new QLabel(this);
+  ui_selected->resize(size());
+  ui_selected->setAttribute(Qt::WA_TransparentForMouseEvents);
+  ui_selected->hide();
+
+  connect(this, &QAbstractButton::clicked, this, &AOEmoteButton::on_clicked);
+}
+
+void AOEmoteButton::set_emote_number(int p_emote_number)
+{
+  m_index = p_emote_number;
+}
+
+void AOEmoteButton::setLayerImage(const QString &character, const QString &layer, const QString &outfit, bool enabled)
+{
+  rolechat::actor::IActorData *actor = retrieve();
+  QString l_texture = engine::fs::characters::getFilePath(QString::fromStdString(actor->folder()), "layer_icons/" + layer + ".png");
+
+  ui_selected->hide();
+
+  if(enabled)
+  {
+    const QString l_selected_texture = engine::fs::characters::getFilePath(QString::fromStdString(actor->folder()), "layer_icons/selected.png");
+
+    if(FS::Checks::FileExists(l_selected_texture))
+    {
+      ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(l_selected_texture));
+      ui_selected->show();
+    }
+    else
+    {
+        ui_selected->setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, "
+                                   "y2:1, stop:0 rgba(0, 0, 0, 50), stop:1 rgba(0, 0, 0, 210)); }");
+        ui_selected->show();
+    }
+
+  }
+
+
+  m_texture.load(l_texture);
+  m_comment = layer;
+  setText(m_texture.isNull() ? layer : nullptr);
+  setToolTip(m_texture.isNull() ? layer : QString());
+}
+
+int AOEmoteButton::get_emote_number()
+{
+  return m_index;
+}
+
+void AOEmoteButton::set_image(ActorEmote p_emote, bool p_enabled)
+{
+  rolechat::actor::IActorData *actor = retrieve();
+
+  QString l_buttonImage = QString::fromStdString(actor->buttonImage(p_emote, false));
+  QString qCharacterFolder = QString::fromStdString(p_emote.character);
+  QString l_texture = texturePath(qCharacterFolder, l_buttonImage);
+
+  // reset states
+  ui_selected->hide();
+
+  // nested ifs are okay
+  if(p_enabled)
+  {
+    const QString selectedTexture = texturePath(qCharacterFolder, QString::fromStdString(actor->selectedImage(p_emote)));
+    const QString selectedTextureCharacter = texturePath(qCharacterFolder, "selected");
+
+    if(FS::Checks::FileExists(selectedTexture)) {
+      ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(selectedTexture));
+      ui_selected->show();
+    }
+    else if(FS::Checks::FileExists(selectedTextureCharacter))
+    {
+      ui_selected->setStyleSheet(QString("border-image: url(\"%1\")").arg(selectedTextureCharacter));
+      ui_selected->show();
+    }
+    else {
+      QString qEnabledImage = QString::fromStdString(actor->buttonImage(p_emote, true));
+      QString l_enabled_texture = engine::fs::characters::getFilePath(qCharacterFolder, qEnabledImage + ".webp");;
+
+      if(!FS::Checks::FileExists(l_enabled_texture)) {
+        l_enabled_texture = engine::fs::characters::getFilePath(qCharacterFolder, qEnabledImage + ".png");
+      }
+
+
+      if(FS::Checks::FileExists(l_enabled_texture)) {
+        l_texture = l_enabled_texture;
+      }
+      else {
+        ui_selected->setStyleSheet("background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, "
+                                   "y2:1, stop:0 rgba(0, 0, 0, 0), stop:1 rgba(0, 0, 0, 127)); }");
+        ui_selected->show();
+      }
+    }
+
+  }
+
+  if(EmoteMenu::isRealtime())
+  {
+    m_texture.load(engine::fs::characters::getSpritePath(p_emote.character, p_emote.dialog, "", false));
+    m_texture = m_texture.scaledToHeight(250, Qt::SmoothTransformation);
+
+    int highestPixel = findHighestPixel();
+
+    int cropY = 0;
+    if(highestPixel != -1) cropY = highestPixel + 30;
+
+    if(cropY + DOUBLE_SIZE > m_texture.height()) cropY = m_texture.height() - DOUBLE_SIZE;
+    if(cropY < 0) cropY = 0;
+
+    int cropX = (m_texture.width() - DOUBLE_SIZE) / 2;
+
+    m_texture = m_texture.copy(cropX, cropY, DOUBLE_SIZE, DOUBLE_SIZE);
+  }
+  else
+  {
+    m_texture.load(l_texture);
+  }
+  m_comment = QString::fromStdString(p_emote.comment);
+  setText(m_texture.isNull() ? QString::fromStdString(p_emote.comment) : nullptr);
+}
+
+int AOEmoteButton::findHighestPixel()
+{
+  for(int y = 0; y < m_texture.height(); ++y)
+  {
+    const QRgb* scanLine = reinterpret_cast<const QRgb*>(m_texture.scanLine(y));
+    for(int x = 0; x < m_texture.width(); ++x)
+    {
+      if(qAlpha(scanLine[x]) > 0) return y;
+    }
+  }
+
+  return -1;
+
+}
+
+QString AOEmoteButton::texturePath(const QString &a_character, const QString &a_file)
+{
+  QString path = engine::fs::characters::getFilePath(a_character, a_file + ".webp");
+
+  if(!FS::Checks::FileExists(path)) {
+    path = engine::fs::characters::getFilePath(a_character, a_file + ".png");
+  }
+
+  if(FS::Checks::FileExists(path)) {
+    return path.replace('\\', '/');
+  }
+
+  return {};
+}
+
+void AOEmoteButton::on_clicked()
+{
+  Q_EMIT emote_clicked(m_index);
+}
+
+void AOEmoteButton::paintEvent(QPaintEvent *event)
+{
+  if(m_texture.isNull())
+  {
+    QPushButton::paintEvent(event);
+    return;
+  }
+
+  QPainter l_painter(this);
+  l_painter.drawImage(rect(), m_texture.scaled(size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+  l_painter.end();
+}
+
+bool AOEmoteButton::event(QEvent *event)
+{
+  switch (event->type())
+  {
+  case QEvent::ToolTip:
+    Q_EMIT tooltip_requested(m_index, dynamic_cast<QHelpEvent *>(event)->globalPos());
+    break;
+
+  case QEvent::Leave:
+    Q_EMIT mouse_left(m_index);
+    break;
+
+  default:
+    break;
+  }
+
+  return QPushButton::event(event);
+}
+

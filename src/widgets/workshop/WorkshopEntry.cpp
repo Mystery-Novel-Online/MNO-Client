@@ -4,10 +4,10 @@
 #include <QFont>
 #include <QLabel>
 #include <QMouseEvent>
-#include "engine/system/user_database.h"
-#include "engine/workshop/workshop_cache.h"
-#include <engine/network/api_manager.h>
-#include "engine/fs/fs_reading.h"
+#include "system/user_database.h"
+#include "workshop/workshop_cache.h"
+#include <network/api_manager.h>
+#include "fs/fs_reading.h"
 
 constexpr int ICON_CONTAINER_SIZE = 50;
 constexpr int ICON_RENDER_SIZE    = 48;

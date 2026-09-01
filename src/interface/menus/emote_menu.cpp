@@ -1,0 +1,156 @@
+#include "emote_menu.h"
+#include "param/actor/actor_loader.h"
+
+bool EmoteMenu::s_sizeDoubled   = false;
+bool EmoteMenu::s_renderSprites = false;
+
+#include "interface/courtroom_layout.h"
+#include "param/actor_repository.h"
+
+#include <modules/theme/legacythememanager.h>
+
+using namespace engine;
+
+EmoteMenu::EmoteMenu(EmotionSelector *parent) : QMenu(parent), m_EmotionSelector(parent)
+{
+  m_presetsMenu = new QMenu(tr("Offsets"), this);
+  addMenu(m_presetsMenu);
+  p_ResetOffsetsAction = new QAction(tr("Reset (Center)"), this);
+  m_presetsMenu->addAction(p_ResetOffsetsAction);
+
+  addSeparator();
+
+  QMenu *buttonsMenu = addMenu(tr("Buttons"));
+  p_SizeAction = buttonsMenu->addAction(tr("Resize"));
+  p_RenderAction = buttonsMenu->addAction(tr("Use Sprite Images"));
+  p_makerAction = buttonsMenu->addAction(tr("Button Maker"));
+
+  connect(p_SizeAction, &QAction::triggered, this, &EmoteMenu::OnDoubleSizeTriggered);
+  connect(p_RenderAction, &QAction::triggered, this, &EmoteMenu::OnRealtimeTriggered);
+  connect(p_ResetOffsetsAction, &QAction::triggered, this, &EmoteMenu::OnOffsetResetTriggered);
+  connect(p_makerAction, &QAction::triggered, this, &EmoteMenu::OnButtonMakerTriggered);
+
+  m_buttonMaker = new ButtonMaker();
+  m_buttonMaker->resize(960, 544);
+  m_buttonMaker->hide();
+}
+
+void EmoteMenu::EmoteChange(ActorEmote emote)
+{
+  if(m_buttonMaker->isVisible()) {
+    m_buttonMaker->SetEmote(emote);
+  }
+  m_currentEmote = emote;
+
+  LayerSelectionPanel *selectionPanel = static_cast<LayerSelectionPanel*>(LegacyThemeManager::get().getWidget("layers_panel"));
+  if(selectionPanel) selectionPanel->clear();
+
+  for(const ActorLayer &layer : emote.emoteOverlays) {
+    QString qLayerName = QString::fromStdString(layer.offsetName);
+    if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty() && layer.offsetName != "base_image")
+    {
+      QString qToggleName = QString::fromStdString(layer.toggleName);
+      bool toggleEnabled = engine::actor::user::layerState(layer.toggleName);
+      selectionPanel->addLayer(qLayerName, qToggleName, toggleEnabled ? LayerSelectionType::Toggle : LayerSelectionType::ToggleDisabled);
+    }
+    else if(!layer.variationOptions.empty()) {
+      LayerSelectionType type = layer.offsetName == "base_image" ? LayerSelectionType::VariationBase : LayerSelectionType::Variation;
+
+      type = type == LayerSelectionType::Variation && layer.globalSelection ? LayerSelectionType::VariationGlobal : type;
+      type = type == LayerSelectionType::VariationBase && layer.globalSelection ? LayerSelectionType::VariationGlobalBase : type;
+
+      for(auto variation : layer.variationOptions) {
+        QString variationName = QString::fromStdString(variation);
+        selectionPanel->addLayer(qLayerName, variationName, variationName == QString::fromStdString(layer.spriteName), type);
+      }
+    }
+  }
+}
+
+void EmoteMenu::reloadLayers()
+{
+  EmoteChange(m_currentEmote);
+}
+
+void EmoteMenu::ClearPresets()
+{
+  m_presetsMenu->clear();
+  m_presetsMenu->addAction(p_ResetOffsetsAction);
+  m_defaultVertical = 0;
+  m_defaultScale = 1000;
+  m_presetsClearedCheck = false;
+  m_presetsMenu->addSeparator();
+}
+
+void EmoteMenu::AddPreset(const QString &name)
+{
+  QAction* action = m_presetsMenu->addAction(name);
+  connect(action, &QAction::triggered, this, [=]() { ApplyPreset(name); });
+
+  if(m_presetsClearedCheck) return;
+
+  for(rolechat::actor::ActorScalingPreset presetData : engine::actor::user::retrieve()->scalingPresets())
+  {
+    if(presetData.name == name.toStdString())
+    {
+      m_defaultVertical = presetData.verticalAlign;
+      m_defaultScale = presetData.scale;
+    }
+  }
+  m_presetsClearedCheck = true;
+}
+
+void EmoteMenu::OnMenuRequested(QPoint p_point)
+{
+  const QPoint l_global_point = parentWidget()->mapToGlobal(p_point);
+  popup(l_global_point);
+}
+
+void EmoteMenu::OnDoubleSizeTriggered()
+{
+  s_sizeDoubled = s_sizeDoubled == false;
+  m_EmotionSelector->constructEmotes();
+}
+
+void EmoteMenu::OnRealtimeTriggered()
+{
+  s_renderSprites = !s_renderSprites;
+
+  p_RenderAction->setText(
+      s_renderSprites ? tr("Use Button Images")
+                      : tr("Use Sprite Images"));
+
+  m_EmotionSelector->refreshEmotes(true);
+}
+
+void EmoteMenu::OnButtonMakerTriggered()
+{
+  m_buttonMaker->show();
+  m_buttonMaker->SetCharacter(QString::fromStdString(engine::actor::user::retrieve()->folder()));
+  m_buttonMaker->SetEmote(m_currentEmote);
+}
+
+void EmoteMenu::OnOffsetResetTriggered()
+{
+  courtroom::sliders::setScale(m_defaultScale);
+  courtroom::sliders::setVertical(m_defaultVertical);
+  courtroom::sliders::setHorizontal(500);
+}
+
+void EmoteMenu::ApplyPreset(const QString &presetName)
+{
+  auto* user = engine::actor::user::retrieve();
+
+  for(const auto& preset : user->scalingPresets())
+  {
+    if(preset.name != presetName.toStdString())
+      continue;
+
+    courtroom::sliders::setScale(preset.scale);
+    courtroom::sliders::setVertical(preset.verticalAlign);
+    AOApplication::getInstance()->m_courtroom->horizontalAlign = preset.horizontalAlign;
+
+    m_defaultVertical = preset.verticalAlign;
+    m_defaultScale = preset.scale;
+  }
+}

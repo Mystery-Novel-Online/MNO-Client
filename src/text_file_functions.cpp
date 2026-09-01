@@ -2,8 +2,8 @@
 
 #include "aoconfig.h"
 #include "drtheme.h"
-#include "engine/fs/fs_reading.h"
-#include "engine/fs/fs_characters.h"
+#include "fs/fs_reading.h"
+#include "fs/fs_characters.h"
 #include "utils.h"
 
 void AOApplication::append_note(QString p_line, QString p_file)

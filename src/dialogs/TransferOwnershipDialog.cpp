@@ -3,8 +3,8 @@
 #include <QFormLayout>
 #include <QHttpMultiPart>
 
-#include "engine/network/api_manager.h"
-#include "engine/param/json_reader.h"
+#include "network/api_manager.h"
+#include "param/json_reader.h"
 
 TransferOwnershipDialog::TransferOwnershipDialog(const WorkshopContentEntry &content, QWidget *parent)
   : QDialog(parent)

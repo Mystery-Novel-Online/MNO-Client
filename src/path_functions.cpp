@@ -3,10 +3,10 @@
 #include "aoconfig.h"
 
 #include <modules/theme/legacythememanager.h>
-#include "engine/fs/fs_reading.h"
-#include "engine/fs/fs_mounting.h"
-#include "engine/system/replay_playback.h"
-#include "engine/network/metadata/server_metadata.h"
+#include "fs/fs_reading.h"
+#include "fs/fs_mounting.h"
+#include "system/replay_playback.h"
+#include "network/metadata/server_metadata.h"
 #include <rolechat/filesystem/RCDir.h>
 #include <rolechat/filesystem/RCFile.h>
 #include <rolechat/util/FileSystem.h>

@@ -1,8 +1,8 @@
 #include "drtheme.h"
 #include "pch.h"
 
-#include "engine/fs/fs_reading.h"
-#include "engine/system/theme_scripting.h"
+#include "fs/fs_reading.h"
+#include "system/theme_scripting.h"
 #include "modules/theme/legacythememanager.h"
 
 DRTheme::DRTheme(AOApplication *p_ao_app)

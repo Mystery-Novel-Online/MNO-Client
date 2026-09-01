@@ -1,9 +1,9 @@
 #include "pch.h"
 
-#include "engine/network/metadata/server_metadata.h"
-#include "engine/system/localization.h"
-#include "engine/fs/fs_reading.h"
-#include "engine/fs/fs_characters.h"
+#include "network/metadata/server_metadata.h"
+#include "system/localization.h"
+#include "fs/fs_reading.h"
+#include "fs/fs_characters.h"
 
 #include "aoconfig.h"
 #include "debug_functions.h"

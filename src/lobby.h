@@ -1,14 +1,14 @@
 #ifndef LOBBY_H
 #define LOBBY_H
 
-#include "engine/interface/scenes/replay_window.h"
-#include "engine/interface/widgets/scene_widget.h"
+#include "interface/scenes/replay_window.h"
+#include "interface/widgets/scene_widget.h"
 #include "widgets/lobby/ServerSelectList.h"
 #include "widgets/workshop/WorkshopListWidget.h"
 #include "widgets/workshop/WorkshopTags.h"
 
-#include "engine/animation/widget_animator.h"
-#include "engine/interface/scenes/downloader_prompt.h"
+#include "animation/widget_animator.h"
+#include "interface/scenes/downloader_prompt.h"
 
 
 class AOApplication;

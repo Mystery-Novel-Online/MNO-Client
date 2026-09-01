@@ -13,79 +13,79 @@ find_package(QT NAMES Qt5 REQUIRED COMPONENTS core gui widgets uitools network m
 find_package(Qt5 REQUIRED COMPONENTS core gui widgets uitools network multimedia multimediawidgets)
 
 set(HEADERS
-  src/engine/animation/keyframe_channel.h
-  src/engine/animation/keyframe_sequence.h
-  src/engine/fs/fs_mounting.h
-  src/engine/fs/fs_reading.h
-  src/engine/fs/fs_writing.h
-  src/engine/interface/courtroom_layout.h
-  src/engine/interface/lobby_layout.h
-  src/engine/interface/menus/area_menu.h
-  src/engine/interface/menus/bgm_menu.h
-  src/engine/interface/menus/char_menu.h
-  src/engine/interface/menus/emote_menu.h
-  src/engine/interface/scenes/replay_window.h
-  src/engine/interface/widgets/bgm_filter.h
-  src/engine/interface/widgets/char_button.h
-  src/engine/interface/widgets/character_select.h
-  src/engine/interface/widgets/chat_log.h
-  src/engine/interface/widgets/emotion_button.h
-  src/engine/interface/widgets/health_bar.h
-  src/engine/interface/widgets/image_display.h
+  src/animation/keyframe_channel.h
+  src/animation/keyframe_sequence.h
+  src/fs/fs_mounting.h
+  src/fs/fs_reading.h
+  src/fs/fs_writing.h
+  src/interface/courtroom_layout.h
+  src/interface/lobby_layout.h
+  src/interface/menus/area_menu.h
+  src/interface/menus/bgm_menu.h
+  src/interface/menus/char_menu.h
+  src/interface/menus/emote_menu.h
+  src/interface/scenes/replay_window.h
+  src/interface/widgets/bgm_filter.h
+  src/interface/widgets/char_button.h
+  src/interface/widgets/character_select.h
+  src/interface/widgets/chat_log.h
+  src/interface/widgets/emotion_button.h
+  src/interface/widgets/health_bar.h
+  src/interface/widgets/image_display.h
 
 
-  src/engine/interface/widgets/rp_button.h
-  src/engine/interface/widgets/rp_combo_box.h
-  src/engine/interface/widgets/rp_hover_widget.h
-  src/engine/interface/widgets/rp_label.h
-  src/engine/interface/widgets/rp_line_edit.h
-  src/engine/interface/widgets/rp_slider.h
-  src/engine/interface/widgets/rp_text_edit.h
-  src/engine/interface/widgets/rp_typewriter.h
-  src/engine/interface/widgets/rp_widget.h
-  src/engine/interface/widgets/screenshot_button.h
-  src/engine/interface/widgets/emotion_selector.h
-  src/engine/interface/widgets/choice_dialog.h
-  src/engine/interface/widgets/sticker_viewer.h
-  src/engine/interface/widgets/viewport_overlay.h
-  src/engine/interface/widgets/tab_toggle_button.h
-  src/engine/interface/widgets/aotimer.h
-  src/engine/interface/widgets/viewports/legacy_viewport.h
-  src/engine/interface/widgets/viewports/rp_viewport.h
-  src/engine/network/json_packet.h
-  src/engine/network/metadata/area_metadata.h
-  src/engine/network/metadata/message_metadata.h
-  src/engine/network/metadata/user_metadata.h
-  src/engine/network/metadata/server_metadata.h
-  src/engine/network/metadata/tracklist_metadata.h
-  src/engine/param/animation_reader.h
-  src/engine/param/replay_reader.h
-  src/engine/system/animation.h
-  src/engine/system/audio.h
-  src/engine/system/audio/ambience_player.h
-  src/engine/system/audio/blip_player.h
-  src/engine/system/audio/music_player.h
-  src/engine/system/audio/sfx_player.h
-  src/engine/system/audio/shout_player.h
-  src/engine/system/audio/system_player.h
-  src/engine/system/effects.h
-  src/engine/system/localization.h
-  src/engine/system/replay_playback.h
-  src/engine/system/runtime_loop.h
-  src/engine/system/text_encoding.h
-  src/engine/system/theme_scripting.h
-  src/engine/system/debug/time_debugger.h
-  src/engine/themes/theme_scene.h
-  src/engine/tools/button_maker.h
-  src/engine/param/json_reader.h
-  src/engine/param/localization_reader.h
-  src/engine/param/theme_mode_reader.h
-  src/engine/param/theme_module_reader.h
-  src/engine/param/theme_reader.h
-  src/engine/param/actor/actor_loader.h
+  src/interface/widgets/rp_button.h
+  src/interface/widgets/rp_combo_box.h
+  src/interface/widgets/rp_hover_widget.h
+  src/interface/widgets/rp_label.h
+  src/interface/widgets/rp_line_edit.h
+  src/interface/widgets/rp_slider.h
+  src/interface/widgets/rp_text_edit.h
+  src/interface/widgets/rp_typewriter.h
+  src/interface/widgets/rp_widget.h
+  src/interface/widgets/screenshot_button.h
+  src/interface/widgets/emotion_selector.h
+  src/interface/widgets/choice_dialog.h
+  src/interface/widgets/sticker_viewer.h
+  src/interface/widgets/viewport_overlay.h
+  src/interface/widgets/tab_toggle_button.h
+  src/interface/widgets/aotimer.h
+  src/interface/widgets/viewports/legacy_viewport.h
+  src/interface/widgets/viewports/rp_viewport.h
+  src/network/json_packet.h
+  src/network/metadata/area_metadata.h
+  src/network/metadata/message_metadata.h
+  src/network/metadata/user_metadata.h
+  src/network/metadata/server_metadata.h
+  src/network/metadata/tracklist_metadata.h
+  src/param/animation_reader.h
+  src/param/replay_reader.h
+  src/system/animation.h
+  src/system/audio.h
+  src/system/audio/ambience_player.h
+  src/system/audio/blip_player.h
+  src/system/audio/music_player.h
+  src/system/audio/sfx_player.h
+  src/system/audio/shout_player.h
+  src/system/audio/system_player.h
+  src/system/effects.h
+  src/system/localization.h
+  src/system/replay_playback.h
+  src/system/runtime_loop.h
+  src/system/text_encoding.h
+  src/system/theme_scripting.h
+  src/system/debug/time_debugger.h
+  src/themes/theme_scene.h
+  src/tools/button_maker.h
+  src/param/json_reader.h
+  src/param/localization_reader.h
+  src/param/theme_mode_reader.h
+  src/param/theme_module_reader.h
+  src/param/theme_reader.h
+  src/param/actor/actor_loader.h
 
 
-  src/engine/param/background/legacy_background_reader.h
+  src/param/background/legacy_background_reader.h
   src/aoapplication.h
   src/aoconfig.h
   src/aoconfigpanel.h
@@ -144,78 +144,78 @@ set(HEADERS
 )
 
 set(SOURCES
-  src/engine/animation/keyframe_channel.cpp
-  src/engine/animation/keyframe_sequence.cpp
-  src/engine/fs/fs_mounting.cpp
-  src/engine/fs/fs_reading.cpp
-  src/engine/fs/fs_writing.cpp
-  src/engine/interface/courtroom_layout.cpp
-  src/engine/interface/lobby_layout.cpp
-  src/engine/interface/menus/area_menu.cpp
-  src/engine/interface/menus/bgm_menu.cpp
-  src/engine/interface/menus/char_menu.cpp
-  src/engine/interface/menus/emote_menu.cpp
-  src/engine/interface/scenes/replay_window.cpp
-  src/engine/interface/widgets/bgm_filter.cpp
-  src/engine/interface/widgets/char_button.cpp
-  src/engine/interface/widgets/character_select.cpp
-  src/engine/interface/widgets/chat_log.cpp
-  src/engine/interface/widgets/emotion_button.cpp
-  src/engine/interface/widgets/health_bar.cpp
-  src/engine/interface/widgets/image_display.cpp
+  src/animation/keyframe_channel.cpp
+  src/animation/keyframe_sequence.cpp
+  src/fs/fs_mounting.cpp
+  src/fs/fs_reading.cpp
+  src/fs/fs_writing.cpp
+  src/interface/courtroom_layout.cpp
+  src/interface/lobby_layout.cpp
+  src/interface/menus/area_menu.cpp
+  src/interface/menus/bgm_menu.cpp
+  src/interface/menus/char_menu.cpp
+  src/interface/menus/emote_menu.cpp
+  src/interface/scenes/replay_window.cpp
+  src/interface/widgets/bgm_filter.cpp
+  src/interface/widgets/char_button.cpp
+  src/interface/widgets/character_select.cpp
+  src/interface/widgets/chat_log.cpp
+  src/interface/widgets/emotion_button.cpp
+  src/interface/widgets/health_bar.cpp
+  src/interface/widgets/image_display.cpp
 
 
-  src/engine/interface/widgets/rp_button.cpp
-  src/engine/interface/widgets/rp_combo_box.cpp
-  src/engine/interface/widgets/rp_hover_widget.cpp
-  src/engine/interface/widgets/rp_label.cpp
-  src/engine/interface/widgets/rp_line_edit.cpp
-  src/engine/interface/widgets/rp_slider.cpp
-  src/engine/interface/widgets/rp_text_edit.cpp
-  src/engine/interface/widgets/rp_typewriter.cpp
-  src/engine/interface/widgets/rp_widget.cpp
-  src/engine/interface/widgets/screenshot_button.cpp
-  src/engine/interface/widgets/emotion_selector.cpp
-  src/engine/interface/widgets/choice_dialog.cpp
-  src/engine/interface/widgets/sticker_viewer.cpp
-  src/engine/interface/widgets/viewport_overlay.cpp
-  src/engine/interface/widgets/tab_toggle_button.cpp
-  src/engine/interface/widgets/aotimer.cpp
-  src/engine/interface/widgets/viewports/legacy_viewport.cpp
-  src/engine/interface/widgets/viewports/rp_viewport.cpp
-  src/engine/network/json_packet.cpp
-  src/engine/network/metadata/area_metadata.cpp
-  src/engine/network/metadata/message_metadata.cpp
-  src/engine/network/metadata/user_metadata.cpp
-  src/engine/network/metadata/server_metadata.cpp
-  src/engine/network/metadata/tracklist_metadata.cpp
-  src/engine/param/animation_reader.cpp
-  src/engine/param/replay_reader.cpp
-  src/engine/system/animation.cpp
-  src/engine/system/audio.cpp
-  src/engine/system/audio/ambience_player.cpp
-  src/engine/system/audio/blip_player.cpp
-  src/engine/system/audio/music_player.cpp
-  src/engine/system/audio/sfx_player.cpp
-  src/engine/system/audio/shout_player.cpp
-  src/engine/system/audio/system_player.cpp
-  src/engine/system/effects.cpp
-  src/engine/system/localization.cpp
-  src/engine/system/replay_playback.cpp
-  src/engine/system/runtime_loop.cpp
-  src/engine/system/text_encoding.cpp
-  src/engine/system/theme_scripting.cpp
-  src/engine/system/debug/time_debugger.cpp
-  src/engine/themes/theme_scene.cpp
-  src/engine/tools/button_maker.cpp
-  src/engine/param/json_reader.cpp
-  src/engine/param/localization_reader.cpp
-  src/engine/param/theme_mode_reader.cpp
-  src/engine/param/theme_module_reader.cpp
-  src/engine/param/theme_reader.cpp
-  src/engine/param/actor/actor_loader.cpp
+  src/interface/widgets/rp_button.cpp
+  src/interface/widgets/rp_combo_box.cpp
+  src/interface/widgets/rp_hover_widget.cpp
+  src/interface/widgets/rp_label.cpp
+  src/interface/widgets/rp_line_edit.cpp
+  src/interface/widgets/rp_slider.cpp
+  src/interface/widgets/rp_text_edit.cpp
+  src/interface/widgets/rp_typewriter.cpp
+  src/interface/widgets/rp_widget.cpp
+  src/interface/widgets/screenshot_button.cpp
+  src/interface/widgets/emotion_selector.cpp
+  src/interface/widgets/choice_dialog.cpp
+  src/interface/widgets/sticker_viewer.cpp
+  src/interface/widgets/viewport_overlay.cpp
+  src/interface/widgets/tab_toggle_button.cpp
+  src/interface/widgets/aotimer.cpp
+  src/interface/widgets/viewports/legacy_viewport.cpp
+  src/interface/widgets/viewports/rp_viewport.cpp
+  src/network/json_packet.cpp
+  src/network/metadata/area_metadata.cpp
+  src/network/metadata/message_metadata.cpp
+  src/network/metadata/user_metadata.cpp
+  src/network/metadata/server_metadata.cpp
+  src/network/metadata/tracklist_metadata.cpp
+  src/param/animation_reader.cpp
+  src/param/replay_reader.cpp
+  src/system/animation.cpp
+  src/system/audio.cpp
+  src/system/audio/ambience_player.cpp
+  src/system/audio/blip_player.cpp
+  src/system/audio/music_player.cpp
+  src/system/audio/sfx_player.cpp
+  src/system/audio/shout_player.cpp
+  src/system/audio/system_player.cpp
+  src/system/effects.cpp
+  src/system/localization.cpp
+  src/system/replay_playback.cpp
+  src/system/runtime_loop.cpp
+  src/system/text_encoding.cpp
+  src/system/theme_scripting.cpp
+  src/system/debug/time_debugger.cpp
+  src/themes/theme_scene.cpp
+  src/tools/button_maker.cpp
+  src/param/json_reader.cpp
+  src/param/localization_reader.cpp
+  src/param/theme_mode_reader.cpp
+  src/param/theme_module_reader.cpp
+  src/param/theme_reader.cpp
+  src/param/actor/actor_loader.cpp
 
-  src/engine/param/background/legacy_background_reader.cpp
+  src/param/background/legacy_background_reader.cpp
   src/aoapplication.cpp
   src/aoconfig.cpp
   src/aoconfigpanel.cpp
@@ -290,53 +290,53 @@ add_executable(rp-engine
   ${HEADERS}
   ${SOURCES}
   ${RESOURCES}
-  src/engine/param/actor_repository.h src/engine/param/actor_repository.cpp
-  src/engine/system/runtime_values.h src/engine/system/runtime_values.cpp
-  src/engine/system/theme.h src/engine/system/theme.cpp
-  src/engine/interface/widgets/scene_widget.h src/engine/interface/widgets/scene_widget.cpp
-  src/engine/interface/widgets/rp_list_widget.h src/engine/interface/widgets/rp_list_widget.cpp
-  src/engine/interface/widgets/rp_message_input.h src/engine/interface/widgets/rp_message_input.cpp
-  src/engine/encoding/binary_encoding.h src/engine/encoding/binary_encoding.cpp
+  src/param/actor_repository.h src/param/actor_repository.cpp
+  src/system/runtime_values.h src/system/runtime_values.cpp
+  src/system/theme.h src/system/theme.cpp
+  src/interface/widgets/scene_widget.h src/interface/widgets/scene_widget.cpp
+  src/interface/widgets/rp_list_widget.h src/interface/widgets/rp_list_widget.cpp
+  src/interface/widgets/rp_message_input.h src/interface/widgets/rp_message_input.cpp
+  src/encoding/binary_encoding.h src/encoding/binary_encoding.cpp
   src/pch.h
-  src/engine/fs/fs_characters.h src/engine/fs/fs_characters.cpp
+  src/fs/fs_characters.h src/fs/fs_characters.cpp
   src/rolechat_config.h src/rolechat_config.cpp src/rolechat_config.ui
   src/config_tabs/config_tab_theme.h src/config_tabs/config_tab_theme.cpp src/config_tabs/config_tab_theme.ui
-  src/engine/system/config_manager.h src/engine/system/config_manager.cpp
+  src/system/config_manager.h src/system/config_manager.cpp
   src/widgets/workshop/WorkshopListWidget.h src/widgets/workshop/WorkshopListWidget.cpp
   src/widgets/workshop/WorkshopEntry.h src/widgets/workshop/WorkshopEntry.cpp
-  src/engine/interface/scenes/downloader_prompt.h src/engine/interface/scenes/downloader_prompt.cpp
-  src/engine/interface/scenes/workshop_uploader.h src/engine/interface/scenes/workshop_uploader.cpp
-  src/engine/workshop/workshop_cache.h src/engine/workshop/workshop_cache.cpp
-  src/engine/discord/workshop_discord.h src/engine/discord/workshop_discord.cpp
-  src/engine/animation/widget_animator.h src/engine/animation/widget_animator.cpp
+  src/interface/scenes/downloader_prompt.h src/interface/scenes/downloader_prompt.cpp
+  src/interface/scenes/workshop_uploader.h src/interface/scenes/workshop_uploader.cpp
+  src/workshop/workshop_cache.h src/workshop/workshop_cache.cpp
+  src/discord/workshop_discord.h src/discord/workshop_discord.cpp
+  src/animation/widget_animator.h src/animation/widget_animator.cpp
   src/widgets/lobby/ServerSelectList.h src/widgets/lobby/ServerSelectList.cpp
   src/widgets/lobby/ServerSelectEntry.h src/widgets/lobby/ServerSelectEntry.cpp
-  src/engine/interface/widgets/icon_grid_widget.h src/engine/interface/widgets/icon_grid_widget.cpp
-  src/engine/interface/menus/screenshot_menu.h src/engine/interface/menus/screenshot_menu.cpp
-  src/engine/system/user_database.h src/engine/system/user_database.cpp
+  src/interface/widgets/icon_grid_widget.h src/interface/widgets/icon_grid_widget.cpp
+  src/interface/menus/screenshot_menu.h src/interface/menus/screenshot_menu.cpp
+  src/system/user_database.h src/system/user_database.cpp
   src/widgets/courtroom/LayerSelectionPanel.h src/widgets/courtroom/LayerSelectionPanel.cpp
-  src/engine/network/api_manager.h src/engine/network/api_manager.cpp
-  src/engine/system/audio/loop_detection.h src/engine/system/audio/loop_detection.cpp
-  src/engine/system/client_worker.h src/engine/system/client_worker.cpp
-  src/engine/interface/scenes/collection_creation.h src/engine/interface/scenes/collection_creation.cpp
+  src/network/api_manager.h src/network/api_manager.cpp
+  src/system/audio/loop_detection.h src/system/audio/loop_detection.cpp
+  src/system/client_worker.h src/system/client_worker.cpp
+  src/interface/scenes/collection_creation.h src/interface/scenes/collection_creation.cpp
   src/config_tabs/config_tab_mounting.h src/config_tabs/config_tab_mounting.cpp src/config_tabs/config_tab_mounting.ui
   src/widgets/workshop/WorkshopTags.h src/widgets/workshop/WorkshopTags.cpp
   src/widgets/workshop/UploaderTagTable.h src/widgets/workshop/UploaderTagTable.cpp
   src/config_tabs/config_tab_blips.h src/config_tabs/config_tab_blips.cpp src/config_tabs/config_tab_blips.ui
   src/config_tabs/config_tab_callwords.h src/config_tabs/config_tab_callwords.cpp src/config_tabs/config_tab_callwords.ui
   src/utils/file_hash_util.h src/utils/file_hash_util.cpp
-  src/engine/network/workshop/workshop_parser.h src/engine/network/workshop/workshop_parser.cpp
-  src/engine/network/workshop/workshop_models.h
+  src/network/workshop/workshop_parser.h src/network/workshop/workshop_parser.cpp
+  src/network/workshop/workshop_models.h
   src/config_tabs/config_tab_discord.h src/config_tabs/config_tab_discord.cpp src/config_tabs/config_tab_discord.ui
   src/dialogue/DialogueCues.h
   src/dialogue/CueParser.h src/dialogue/CueParser.cpp
   src/scripting/lua/LuaSyncedVariable.h src/scripting/lua/LuaSyncedVariable.cpp
   src/networking/SyncedVariable.h src/networking/SyncedVariable.cpp
   src/dialogs/RenameContentDialog.h src/dialogs/RenameContentDialog.cpp
-  src/engine/network/workshop/WorkshopPackage.h src/engine/network/workshop/WorkshopPackage.cpp
-  src/engine/network/workshop/ContentDownloader.h src/engine/network/workshop/ContentDownloader.cpp
-  src/engine/interface/menus/WorkshopContextMenu.h src/engine/interface/menus/WorkshopContextMenu.cpp
-  src/engine/interface/widgets/fennec_widget.h src/engine/interface/widgets/fennec_widget.cpp
+  src/network/workshop/WorkshopPackage.h src/network/workshop/WorkshopPackage.cpp
+  src/network/workshop/ContentDownloader.h src/network/workshop/ContentDownloader.cpp
+  src/interface/menus/WorkshopContextMenu.h src/interface/menus/WorkshopContextMenu.cpp
+  src/interface/widgets/fennec_widget.h src/interface/widgets/fennec_widget.cpp
   src/fennec/windows/ThemeWindow.h src/fennec/windows/ThemeWindow.cpp
   src/fennec/windows/NetworkWindow.h src/fennec/windows/NetworkWindow.cpp
   src/networking/NetworkTraffic.h src/networking/NetworkTraffic.cpp

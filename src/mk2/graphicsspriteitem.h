@@ -26,9 +26,9 @@
 #include <QObject>
 #include <QPainter>
 
-#include "engine/animation/keyframe_sequence.h"
-#include "engine/fs/fs_characters.h"
-#include "engine/fs/fs_reading.h"
+#include "animation/keyframe_sequence.h"
+#include "fs/fs_characters.h"
+#include "fs/fs_reading.h"
 
 #include <rolechat/filesystem/RCFile.h>
 #include <rolechat/util/FileSystem.h>

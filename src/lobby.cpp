@@ -1,8 +1,8 @@
 #include "lobby.h"
 #include "aoconfig.h"
 
-#include "engine/system/localization.h"
-#include "engine/system/theme.h"
+#include "system/localization.h"
+#include "system/theme.h"
 #include "debug_functions.h"
 #include "drmasterclient.h"
 #include "drpacket.h"
@@ -12,24 +12,24 @@
 #include "theme.h"
 #include "version.h"
 
-#include "engine/fs/fs_reading.h"
-#include "engine/interface/lobby_layout.h"
+#include "fs/fs_reading.h"
+#include "interface/lobby_layout.h"
 
 #include <modules/theme/legacythememanager.h>
-#include "engine/interface/scenes/replay_window.h"
-#include "engine/system/replay_playback.h"
-#include "engine/interface/scenes/workshop_uploader.h"
-#include <engine/system/config_manager.h>
+#include "interface/scenes/replay_window.h"
+#include "system/replay_playback.h"
+#include "interface/scenes/workshop_uploader.h"
+#include <system/config_manager.h>
 #include "config_tabs/config_tab_theme.h"
 #include <dialogs/RenameContentDialog.h>
-#include "engine/discord/workshop_discord.h"
-#include "engine/interface/scenes/collection_creation.h"
+#include "discord/workshop_discord.h"
+#include "interface/scenes/collection_creation.h"
 #include "widgets/workshop/WorkshopTags.h"
-#include "engine/network/api_manager.h"
+#include "network/api_manager.h"
 #include "rolechat/userdata/RolechatDatabase.h"
 
-#include "engine/system/audio/loop_detection.h"
-#include "engine/interface/menus/WorkshopContextMenu.h"
+#include "system/audio/loop_detection.h"
+#include "interface/menus/WorkshopContextMenu.h"
 
 using namespace engine::system;
 
