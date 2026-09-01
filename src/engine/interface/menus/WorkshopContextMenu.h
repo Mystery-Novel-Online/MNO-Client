@@ -19,6 +19,7 @@ public slots:
   void OnApproveSilent();
   void OnUnapprove();
   void OnRename();
+  void OnTransfer();
   void OnDelete();
 
 private:
@@ -30,6 +31,7 @@ private:
 
   //Mod Actions
   QMenu *m_MenuMod;
+  QAction *m_ActModTransfer;
   QAction *m_ActModRename;
   QAction *m_ActModApprove;
   QAction *m_ActModUnapprove;

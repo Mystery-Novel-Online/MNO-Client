@@ -34,7 +34,7 @@ void TransferOwnershipDialog::submit()
 
   QString discordUserId = m_userValue->text().trimmed();
 
-  if(discordUserId.count() >= 19 || discordUserId.count() <= 16)
+  if(discordUserId.count() >= 20 || discordUserId.count() <= 16)
   {
     QMessageBox::warning(this, "Error", "You have not provided a valid discord account to transfer to.");
     return;

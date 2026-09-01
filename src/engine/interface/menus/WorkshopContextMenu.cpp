@@ -1,5 +1,6 @@
 #include "WorkshopContextMenu.h"
 #include "dialogs/RenameContentDialog.h"
+#include "dialogs/TransferOwnershipDialog.h"
 #include <engine/interface/scenes/workshop_uploader.h>
 #include <engine/network/api_manager.h>
 
@@ -20,12 +21,14 @@ WorkshopMenu::WorkshopMenu()
     m_ActModUnapprove = m_MenuMod->addAction("Un-approve");
     m_ActModRename = m_MenuMod->addAction("Rename");
     m_ActModDelete = m_MenuMod->addAction("Delete");
+    m_ActModTransfer = m_MenuMod->addAction("Transfer");
 
     connect(m_ActModApprove, &QAction::triggered, this, &WorkshopMenu::OnApprove);
     connect(m_ActModSilentApproval, &QAction::triggered, this, &WorkshopMenu::OnApproveSilent);
     connect(m_ActModUnapprove, &QAction::triggered, this, &WorkshopMenu::OnUnapprove);
     connect(m_ActModRename, &QAction::triggered, this, &WorkshopMenu::OnRename);
     connect(m_ActModDelete, &QAction::triggered, this, &WorkshopMenu::OnDelete);
+    connect(m_ActModTransfer, &QAction::triggered, this, &WorkshopMenu::OnTransfer);
   }
 }
 
@@ -77,6 +80,12 @@ void WorkshopMenu::OnUnapprove()
 void WorkshopMenu::OnRename()
 {
   RenameContentDialog dlg(m_targetContent.id, m_targetContent.name);
+  dlg.exec();
+}
+
+void WorkshopMenu::OnTransfer()
+{
+  TransferOwnershipDialog dlg(m_targetContent);
   dlg.exec();
 }
 
