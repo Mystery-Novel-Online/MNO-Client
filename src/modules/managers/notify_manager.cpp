@@ -13,14 +13,14 @@ void NotifyManager::ThemeSetupPopup(ChoiceDialog *notify)
 
 void NotifyManager::SetLuaNotification(QString dialog, QString eventName)
 {
-  mCurrentNotification = ChoiceEvent_Lua;
+  mCurrentNotification = ChoiceEvent::Lua;
   SetRequestKey(eventName);
   SetText(dialog, true);
 }
 
 void NotifyManager::SetPairNotifcation()
 {
-  mCurrentNotification = ChoiceEvent_Pair;
+  mCurrentNotification = ChoiceEvent::Pair;
 
   if(!LuaBridge::LuaEventCall("PairRequestEvent", mSenderName.toStdString()))
   {

@@ -7,6 +7,7 @@
 #include <rolechat/util/FileSystem.h>
 #include "system/user_database.h"
 #include <rolechat-lib/src/rolechat/userdata/TemporaryDB.h>
+#include "logger.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,7 +18,7 @@ int main(int argc, char *argv[])
 #endif
 
 
-  //qInstallMessageHandler(logger::log);
+  qInstallMessageHandler(logger::log);
   qInfo() << "Starting Mystery Novel Network...";
 
   bool l_dpi_scaling = false;
@@ -60,7 +61,7 @@ int main(int argc, char *argv[])
 
     l_exit_code = app.exec();
 
-    //logger::shutdown();
+    logger::shutdown();
 
     if(l_config.autosave())
     {

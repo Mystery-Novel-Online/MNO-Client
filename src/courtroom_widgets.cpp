@@ -48,11 +48,6 @@ void Courtroom::create_widgets()
 
   ui_fennec = new FennecWidget(this);
   ui_viewport = new DRGraphicsView(this);
-  if(ao_config->opengl_enabled())
-  {
-    //ui_opengl_viewport = new QOpenGLWidget();
-    //ui_viewport->setViewport(ui_opengl_viewport);
-  }
 
   u_crossfadeDisplay = new CrossfadeLabel(ao_app, this);
 

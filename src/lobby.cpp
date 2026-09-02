@@ -315,7 +315,6 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   connect(ui_gallery_categories, qOverload<int>(&QComboBox::currentIndexChanged), this, &Lobby::onGalleryCategoryChanged);
   connect(ui_gallery_packages, qOverload<int>(&QComboBox::currentIndexChanged), this, &Lobby::onGalleryPackageChanged);
 
-  connect(ui_replay_list, &QListWidget::currentRowChanged, this, &Lobby::onReplayRowChanged);
   connect(w_WorkshopSearchBar, &QLineEdit::returnPressed, this, &Lobby::onWorkshopSearch);
 
   connect(configTab, &ConfigTabTheme::reloadTheme, this, &Lobby::update_widgets);
@@ -784,22 +783,6 @@ void Lobby::onWorkshopSearch()
     return;
   }
   onWorkshopCategoryClicked("search?q=" + w_WorkshopSearchBar->text());
-}
-
-void Lobby::onReplayRowChanged(int row)
-{
-  if(row == -1) return;
-
-  //QString lImagePath = ReplayManager::get().getReplayImagePath(mCurrentPackage, mCurrentCategory, pUiReplayList->item(row)->text());
-  //
-  //if(!file_exists(lImagePath))
-  //{
-  //  pUIReplayPreview->set_theme_image("replay_preview.png");
-  //}
-  //else
-  //{
-  //  pUIReplayPreview->set_image(lImagePath);
-  //}
 }
 
 void Lobby::onGalleryPackageChanged(int index)

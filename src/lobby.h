@@ -200,7 +200,6 @@ private slots:
 
   //Replays
   void onGalleryToggle();
-  void onReplayRowChanged(int row);
   void onGalleryPackageChanged(int index);
   void onGalleryCategoryChanged(int index);
 

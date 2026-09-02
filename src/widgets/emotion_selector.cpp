@@ -249,11 +249,12 @@ void EmotionSelector::selectEmote(int emoteTarget)
   const int emote_mod = l_emote.modifier;
 
   QCheckBox* l_preCheckbox = dynamic_cast<QCheckBox*>(LegacyThemeManager::get().getWidget("pre"));
-  if(l_prev_emote_id == m_SelectedIndex) // toggle
+  if(l_prev_emote_id == m_SelectedIndex) { // toggle
     l_preCheckbox->setChecked(!l_preCheckbox->isChecked());
-  else
+  }
+  else {
     l_preCheckbox->setChecked(emote_mod == 1 || SceneManager::get().pConfigAO->always_pre_enabled());
-
+  }
 
 }
 

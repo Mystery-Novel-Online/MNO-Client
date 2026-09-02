@@ -9,9 +9,6 @@
 ViewportOverlay::ViewportOverlay(QWidget *parent)
     : QWidget{parent}
 {
-  this->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(this ,&QWidget::customContextMenuRequested, this, &ViewportOverlay::displayContextMenu);
-
   setMouseTracking(true);
   m_CursorOverlay = new AOImageDisplay(this, AOApplication::getInstance());
   m_CursorOverlay->setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -40,8 +37,9 @@ ViewportOverlay::ViewportOverlay(QWidget *parent)
 
 void ViewportOverlay::clearInteractions()
 {
-  for(InteractionObject *interaction : m_Interactions)
+  for(InteractionObject *interaction : m_Interactions) {
     delete interaction;
+  }
 
   m_Interactions.clear();
   m_CursorOverlay->hide();
@@ -68,18 +66,13 @@ void ViewportOverlay::moveCursor(int x, int y)
   m_CursorOverlay->move(x - 30, y - 30);
 }
 
-QAction *ViewportOverlay::createResizeAction(int t_width, int t_height)
-{
-  QAction *l_resizeAction = new QAction(QString::number(t_width) + " x " + QString::number(t_height));
-  QObject::connect(l_resizeAction, &QAction::triggered, [this, t_width, t_height](){resizeViewport(t_width, t_height);});
-  return l_resizeAction;
-}
-
 void ViewportOverlay::resizeWidgetAndChildren(QString t_widget, int t_width, int t_height)
 {
   
   QWidget* l_widget = LegacyThemeManager::get().getWidget(t_widget);
-  if(l_widget == nullptr) return;
+  if(!l_widget){
+    return;
+  }
 
   int l_viewportNativeHeight = LegacyThemeManager::get().mCurrentThemeReader.GetWidgetTransform(ThemeSceneType::SceneType_Courtroom, "viewport").height;
   RPRect l_widgetSize = LegacyThemeManager::get().mCurrentThemeReader.GetWidgetTransform(ThemeSceneType::SceneType_Courtroom, t_widget);
@@ -111,8 +104,7 @@ void ViewportOverlay::resizeWidgetAndChildren(QString t_widget, int t_width, int
   }
 
   QStringList l_viewportChildren = LegacyThemeManager::get().mCurrentThemeReader.GetLayerChildren(t_widget);
-  for(QString l_child : l_viewportChildren)
-  {
+  for(QString l_child : l_viewportChildren) {
     resizeWidgetAndChildren(l_child, t_width, t_height);
   }
 
@@ -134,53 +126,6 @@ void ViewportOverlay::enterEvent(QEvent *event)
   if(m_Interactions.isEmpty()) return;
   m_CursorOverlay->show();
   setCursor(Qt::BlankCursor);
-}
-
-void ViewportOverlay::displayContextMenu(QPoint t_position)
-{
-  //if(AOApplication::getInstance()->current_theme->read_config_bool("detatchable_viewport"))
-  //{
-  //  QMenu *l_menu = new QMenu(this);
-
-  //  //Create the detachWindowAction
-  //  QAction *l_detachWindowAction = new QAction("Detach from Window");
-  //  QObject::connect(l_detachWindowAction, &QAction::triggered, [this](){detatchViewport();});
-  //  l_menu->addAction(l_detachWindowAction);
-
-
-  //  //Create the resize Actions
-  //  QMenu *l_scaleMenu = l_menu->addMenu("Scale (1.76:1)");
-
-  //  l_scaleMenu->addAction(createResizeAction(480, 272));
-  //  l_scaleMenu->addAction(createResizeAction(960, 544));
-  //  l_scaleMenu->addAction(createResizeAction(1280, 725));
-  //  l_scaleMenu->addAction(createResizeAction(1440, 816));
-  //  l_scaleMenu->addAction(createResizeAction(1920, 1088));
-
-  //  l_menu->popup(this->mapToGlobal(t_position));
-  //}
-}
-
-void ViewportOverlay::detatchViewport()
-{
-  QWidget* l_viewport = LegacyThemeManager::get().getWidget("viewport");
-
-  l_viewport->setParent(nullptr);
-  l_viewport->show();
-  l_viewport->move(20, 20);
-}
-
-void ViewportOverlay::resizeViewport(int t_width, int t_height)
-{
-  QWidget* l_viewport = LegacyThemeManager::get().getWidget("viewport");
-  l_viewport->resize(t_width, t_height);
-
-  QStringList l_viewportChildren = LegacyThemeManager::get().mCurrentThemeReader.GetLayerChildren("viewport");
-  for(QString l_child : l_viewportChildren)
-  {
-    resizeWidgetAndChildren(l_child, t_width, t_height);
-  }
-
 }
 
 InteractionObject::InteractionObject(QWidget *parent) : QWidget{parent}
@@ -215,42 +160,33 @@ void InteractionObject::setCursorWidget(AOImageDisplay *widget)
 
 void InteractionObject::leaveEvent(QEvent *event)
 {
-  if(m_targetWidget == nullptr) return;
+  if(!m_targetWidget || !m_cursor) {
+    return;
+  }
   m_targetWidget->hide();
-  if(m_cursor == nullptr) return;
   m_cursor->set_image(AOApplication::getInstance()->find_theme_asset_path("cursor_idle.png"));
 }
 
 void InteractionObject::enterEvent(QEvent *event)
 {
-  if(m_targetWidget == nullptr) return;
-  if(m_textWidget == nullptr) return;
+  if(!m_targetWidget || !m_textWidget || !m_cursor) {
+    return;
+  }
   m_targetWidget->show();
   m_textWidget->setText(m_name);
-  if(m_cursor == nullptr) return;
   m_cursor->set_image(AOApplication::getInstance()->find_theme_asset_path("cursor_hover.png"));
 
   LuaBridge::LuaEventCall("OnInteractionHover", m_name.toStdString());
   audio::system::Play("cursor_hover");
 }
 
-void InteractionObject::paintEvent(QPaintEvent *event)
-{
-  //QPainter painter(this);
-  //painter.setPen(Qt::red);
-  //QRect rect(QPoint(), size());
-  //painter.drawRect(rect);
-}
 void InteractionObject::mouseReleaseEvent(QMouseEvent *event)
 {
-  if(event->button() == Qt::LeftButton)
-  {
+  if(event->button() == Qt::LeftButton) {
     LuaBridge::LuaEventCall("OnInteractionClick", m_name.toStdString(), m_description.toStdString());
     audio::system::Play("cursor_click");
 
-    if(SceneManager::get().m_areaPlayers.count() == 0)
-    {
-
+    if(SceneManager::get().m_areaPlayers.count() == 0) {
       QStringList messagePacket =
       {
               "-1",
@@ -273,13 +209,15 @@ void InteractionObject::mouseReleaseEvent(QMouseEvent *event)
   }
   else if(event->button() == Qt::RightButton)
   {
-    //Preview Mode
+    // TODO: Right clicking should overlay the background on the viewport so it can be seen a bit more clearly during dialogue.
   }
 }
 
 void InteractionObject::mouseMoveEvent(QMouseEvent *event)
 {
   ViewportOverlay* overlay = qobject_cast<ViewportOverlay*>(parentWidget());
-  if(overlay)
-    overlay->moveCursor(event->x() + pos().x(), event->y() + pos().y());
+  if(!overlay) {
+    return;
+  }
+  overlay->moveCursor(event->x() + pos().x(), event->y() + pos().y());
 }

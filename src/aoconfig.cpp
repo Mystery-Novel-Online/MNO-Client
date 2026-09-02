@@ -189,8 +189,9 @@ void AOConfigPrivate::load_file()
   mk2::SpriteDynamicReader::set_system_memory_threshold(system_memory_threshold);
 
   // audio
-  if(cfg.contains("favorite_device_driver"))
-    favorite_device_driver = cfg.value("favorite_device_driver").toString();
+  if(cfg.contains("favorite_device_driver")) {
+    favorite_device_driver = cfg.value("favorite_device_driver").toString(); 
+  }
 
   suppress_background_audio = cfg.value("suppress_background_audio").toBool();
   master_volume = cfg.value("default_master", 50).toInt();

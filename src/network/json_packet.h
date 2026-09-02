@@ -11,9 +11,6 @@ public:
   static void ProcessJson(const QString& p_jsonString);
 
 private:
-  //const static QString PLAYER_LIST_PACKET = "player_list";
-  //static const QString NOTIFY_REQUEST_PACKET = "notify_request";
-
   static void ProcessPlayerListPacket(JSONReader& jsonReader);
   static void ProcessNotifyRequestPacket(JSONReader& jsonReader);
   static void ProcessPairDataPacket(JSONReader& jsonReader);

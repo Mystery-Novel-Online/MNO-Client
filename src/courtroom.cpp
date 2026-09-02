@@ -603,9 +603,6 @@ void Courtroom::update_background_scene()
     if(position == m_userPosition.toStdString()) {
       set_character_position(m_userPosition);
     }
-
-    //Add a list for legacy position names
-    //ui_pos_dropdown->addItem(system::localization::getText("POS_WIT"), "wit");
   }
 
   if(!bgPositions.empty() && m_viewportScene.positionRandomized()) {
@@ -1780,9 +1777,6 @@ void Courtroom::handle_chatmessage_3()
           ui_vp_effect->setHorizontalOffset((int)(ui_viewport->width() / 2));
         }
 
-        //ui_vp_effect->clearImageLayers();
-        //ui_vp_effect->setKeyframeAnimation("effects/" + l_effect_name, "anim");
-
         QString s_eff = effect_names.at(l_effect_index - 1);
         QStringList f_eff = ao_app->get_effect(l_effect_index);
 
@@ -1803,13 +1797,6 @@ void Courtroom::handle_chatmessage_3()
         ui_vp_effect->set_play_once(once);
         swap_viewport_reader(ui_vp_effect, ViewportEffect);
 
-        //if(ui_vp_effect->keyAnimLoaded())
-        //{
-        //  ui_vp_effect->get_reader()->set_file_name("");
-        //  ui_vp_effect->start();
-        //  ui_vp_effect->show();
-        //  return;
-        //}
         ui_vp_effect->start();
       }
     }
@@ -1902,10 +1889,6 @@ void Courtroom::handleScene(QStringList p_contents)
     int randomIndex = QRandomGenerator::global()->bounded(1, transCount + 1);
     ui_vp_wtce->setThemeAnimation(QString("scene_transition_%1").arg(randomIndex));
   }
-
-  //DRAreaBackground l_area_bg;
-  //l_area_bg.background = t_Contents.at(1);
-  //l_CourtroomScene->set_background(l_area_bg);
 
   reset_viewport();
 }
@@ -3390,7 +3373,6 @@ void Courtroom::reset_wtce_buttons()
 
 void Courtroom::on_wtce_clicked()
 {
-  //  qDebug() << "AA: wtce clicked!";
   if(is_client_muted) {
     return;
   }

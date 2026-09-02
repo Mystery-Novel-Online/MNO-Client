@@ -67,7 +67,6 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_server_alerts = AO_GUI_WIDGET(QCheckBox, "server_alerts");
 
   // game
-  //ui_themeModules = AO_GUI_WIDGET(QTreeView, "themeModules");
   wSettingsLanguage = AO_GUI_WIDGET(QComboBox, "languageSelector");
   wLanguageCredits = AO_GUI_WIDGET(QLabel, "translationCredit");
   ui_showname = AO_GUI_WIDGET(QLineEdit, "showname");

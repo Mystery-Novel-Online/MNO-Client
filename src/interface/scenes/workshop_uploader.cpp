@@ -300,10 +300,9 @@ void WorkshopUploader::submitForm()
 
   ApiManager::appendField(multiPart, "key", ApiManager::authorizationKey());
 
-  if(m_editTarget != -1)
+  if(m_editTarget != -1) {
     ApiManager::appendField(multiPart, "id", QString::number(m_editTarget));
-
-  //ApiManager::appendField(multiPart, "artist", m_artist->text());
+  }
 
   ApiManager::appendField(multiPart, "description", m_description->toPlainText());
   ApiManager::appendField(multiPart, "is_private", QString::number(m_private->checkState() == Qt::Checked));

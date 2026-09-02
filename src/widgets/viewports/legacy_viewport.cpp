@@ -66,12 +66,7 @@ void LegacyViewport::constructViewport()
   m_pairSprite->setZValue(ViewportLayers_PlayerBack);
   m_characterSprite->setZValue(ViewportLayers_PlayerFront);
 
-  //ui_vp_desk->setZValue(ViewportLayers_Desk);
-  //ui_vp_weather->setZValue(ViewportLayers_Weather);
-
   m_effectMovie->setZValue(ViewportLayers_Effect);
-
-  //ui_vp_wtce->setZValue(ViewportLayers_WTCE);
 
   m_shoutMovie->setZValue(ViewportLayers_Objection);
   m_videoScreen->setZValue(ViewportLayers_Video);

@@ -77,13 +77,11 @@ void ChoiceDialog::setSenderId(int sender)
 
 void ChoiceDialog::OnAcceptClicked()
 {
-  if(m_choiceEvent == ChoiceEvent::ChoiceEvent_Pair)
-  {
+  if(m_choiceEvent == ChoiceEvent::Pair) {
     m_app->send_server_packet(DRPacket("PAIR", {QString::number(m_senderId), m_senderKey}));
     LuaBridge::LuaEventCall("OnPairRequestAccepted");
   }
-  else if(m_choiceEvent == ChoiceEvent::ChoiceEvent_Lua)
-  {
+  else if(m_choiceEvent == ChoiceEvent::Lua) {
     QString luaEventName = m_senderKey + "Accepted";
     LuaBridge::LuaEventCall(luaEventName.toStdString());
   }
@@ -97,15 +95,11 @@ void ChoiceDialog::OnDeclineClicked()
   m_app->get_courtroom()->SetChatboxFocus();
   this->hide();
 
-  if(m_choiceEvent == ChoiceEvent::ChoiceEvent_Pair)
-  {
+  if(m_choiceEvent == ChoiceEvent::Pair) {
     LuaBridge::LuaEventCall("OnPairRequestDeclined");
   }
-  else if(m_choiceEvent == ChoiceEvent::ChoiceEvent_Lua)
-  {
+  else if(m_choiceEvent == ChoiceEvent::Lua) {
     QString luaEventName = m_senderKey + "Declined";
     LuaBridge::LuaEventCall(luaEventName.toStdString());
   }
-
-
 }

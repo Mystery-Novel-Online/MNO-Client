@@ -32,7 +32,7 @@ private:
   QString mSenderName = "SYSTEM";
   QString mCurrentNotificationMessage = "";
   int mSenderId = -1;
-  ChoiceEvent mCurrentNotification = ChoiceEvent_Invalid;
+  ChoiceEvent mCurrentNotification = ChoiceEvent::Invalid;
   ChoiceDialog *u_choiceDialog;
 
 

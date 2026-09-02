@@ -23,7 +23,6 @@ public:
 protected:
   void leaveEvent(QEvent *event) override;
   void enterEvent(QEvent *event) override;
-  void paintEvent(QPaintEvent *event) override;
   void mouseReleaseEvent(QMouseEvent *event) override;
   void mouseMoveEvent(QMouseEvent *event) override;
 
@@ -47,7 +46,6 @@ public:
   void moveCursor(int x, int y);
 
 private:
-  QAction *createResizeAction(int t_width, int t_height);
   void resizeWidgetAndChildren(QString t_widget, int t_width, int t_height);
 
   QList<InteractionObject*> m_Interactions;
@@ -61,11 +59,6 @@ protected:
   void mouseMoveEvent(QMouseEvent *event) override;
   void leaveEvent(QEvent *event) override;
   void enterEvent(QEvent *event) override;
-
-private slots:
-  void displayContextMenu(QPoint t_position);
-  void detatchViewport();
-  void resizeViewport(int t_width, int t_height);
 
 signals:
 

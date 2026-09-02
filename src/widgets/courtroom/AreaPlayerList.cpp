@@ -34,8 +34,6 @@ void AreaPlayerList::deconstruct(bool a_destroyAll) {
 }
 
 void AreaPlayerList::constructLayout() {
-  //TODO: We shouldn't delete every player entry, see if it's more performant to add checks if
-  //      a user present in the latest network update before deleting.
   deconstruct();
 
   if(!u_navigationLeft && !u_navigationRight) {

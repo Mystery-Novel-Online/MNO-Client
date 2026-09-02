@@ -126,25 +126,6 @@ QString FindDirectory(const QString &directoryPath, bool allowPackages, bool abs
   std::string result = directory.findFirst();
 
   return QString::fromStdString(result);
-  //if(!allowPackages) return BasePath() + directoryPath;
-
-  //QVector<QString> packageNames = Packages::CachedNames();
-  //QVector<QString> disabledList = Packages::DisabledList();
-
-  //for(int i=0; i< packageNames.size(); i++)
-  //{
-  //  if(!disabledList.contains(packageNames.at(i)))
-  //  {
-  //    QString packagePath = Paths::Package(packageNames.at(i)) + directoryPath;
-  //    if(Checks::DirectoryExists(packagePath))
-  //    {
-  //      return packagePath;
-  //    }
-  //  }
-  //}
-
-  //if(absolutePath) return BasePath() + directoryPath;
-  //return "base/" + directoryPath;
 }
 
 QStringList GetFileList(const QString &directoryPath, bool includePackages, const QString& extensionFilter, bool includeExtension)

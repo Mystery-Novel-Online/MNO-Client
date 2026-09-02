@@ -111,16 +111,16 @@ void ButtonMaker::SetEmote(const ActorEmote& emote)
   if(m_Emotes.empty())
     return;
 
-  if(emote.character != m_Emotes.at(0).character)
-  {
+  if(emote.character != m_Emotes.at(0).character) {
     hide();
     return;
   }
 
   int index = findEmote(emote);
 
-  if(index == -1)
+  if(index == -1) {
     return;
+  }
 
   m_EmoteIndex = index;
   displayEmote(m_Emotes[index]);

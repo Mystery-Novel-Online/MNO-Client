@@ -262,11 +262,11 @@ namespace engine::system::replays
 
     void progress()
     {
-      if(!s_replayViewport) return;
-      if(!s_replayWindow) return;
+      if(!s_replayViewport || !s_replayWindow) {
+        return;
+      }
 
-      if(s_playbackOperations.count() > (s_playbackTimestamp + 1))
-      {
+      if(s_playbackOperations.count() > (s_playbackTimestamp + 1)) {
         s_playbackTimestamp += 1;
         QString operation = s_playbackOperations[s_playbackTimestamp].operation;
 
@@ -290,7 +290,9 @@ namespace engine::system::replays
         //  if(s_playbackOperations[s_playbackTimestamp].variables["name"] == "RoomTransition") mOp = "IGNORE";
 
 
-        if(operation != "msg" && operation != "wtce") progress();
+        if(operation != "msg" && operation != "wtce") {
+          progress();
+        }
       }
 
       s_replayWindow->setScrubberPosition(s_playbackTimestamp);

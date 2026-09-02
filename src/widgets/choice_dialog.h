@@ -1,13 +1,13 @@
 #ifndef CHOICE_DIALOG_H
 #define CHOICE_DIALOG_H
 
-enum ChoiceEvent
+enum class ChoiceEvent
 {
-  ChoiceEvent_Invalid = 0,
-  ChoiceEvent_Pair = 1,
-  ChoiceEvent_Party = 2,
-  ChoiceEvent_Reserved = 3,
-  ChoiceEvent_Lua = 4
+  Invalid = 0,
+  Pair = 1,
+  Party = 2,
+  Reserved = 3,
+  Lua = 4
 
 };
 
@@ -37,7 +37,7 @@ private:
 
   QString m_senderKey = "";
   int m_senderId = -1;
-  ChoiceEvent m_choiceEvent = ChoiceEvent_Invalid;
+  ChoiceEvent m_choiceEvent = ChoiceEvent::Invalid;
 
 signals:
 
