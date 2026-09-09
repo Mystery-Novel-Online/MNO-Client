@@ -44,6 +44,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QCheckBox" name="disableCharacterUpdate">
+     <property name="text">
+      <string>Disable Character Update Checks</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QCheckBox" name="disableIntergration">
      <property name="text">
       <string>Disable Discord Authentication</string>

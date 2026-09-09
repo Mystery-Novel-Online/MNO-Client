@@ -9,6 +9,7 @@ ConfigTabDiscord::ConfigTabDiscord(QWidget *parent) : QWidget(parent), ui(new Ui
   m_hideCharacter = config::ConfigUserSettings::booleanValue("discord_hide_character", false);
   m_hideServer = config::ConfigUserSettings::booleanValue("discord_hide_server", false);
   m_workshopAuthentication = config::ConfigUserSettings::booleanValue("authentication_disabled", false);
+  m_characterUpdatesDisabled = config::ConfigUserSettings::booleanValue("workshop_disable_update_check", false);
 
   ui->setupUi(this);
 
@@ -17,6 +18,7 @@ ConfigTabDiscord::ConfigTabDiscord(QWidget *parent) : QWidget(parent), ui(new Ui
   ui->hideServer->setChecked(m_hideServer);
   ui->disableIntergration->setChecked(m_workshopAuthentication);
   ui->warningAuthentication->setVisible(m_workshopAuthentication);
+  ui->disableCharacterUpdate->setVisible(m_characterUpdatesDisabled);
 }
 
 ConfigTabDiscord::~ConfigTabDiscord()
@@ -124,5 +126,12 @@ void ConfigTabDiscord::on_disableIntergration_stateChanged(int arg1)
   m_workshopAuthentication = ui->disableIntergration->isChecked();
   config::ConfigUserSettings::setValue("authentication_disabled", m_workshopAuthentication);
   ui->warningAuthentication->setVisible(m_workshopAuthentication);
+}
+
+
+void ConfigTabDiscord::on_disableCharacterUpdate_stateChanged(int arg1)
+{
+  m_characterUpdatesDisabled = ui->disableCharacterUpdate->isChecked();
+  config::ConfigUserSettings::setValue("workshop_disable_update_check", m_characterUpdatesDisabled);
 }
 

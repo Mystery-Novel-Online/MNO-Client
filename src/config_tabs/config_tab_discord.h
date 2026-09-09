@@ -42,6 +42,8 @@ private slots:
 
   void on_disableIntergration_stateChanged(int arg1);
 
+  void on_disableCharacterUpdate_stateChanged(int arg1);
+
 private:
   Ui::ConfigTabDiscord *ui;
 
@@ -49,6 +51,7 @@ private:
   bool m_hideCharacter = false;
   bool m_hideServer = false;
   bool m_workshopAuthentication = false;
+  bool m_characterUpdatesDisabled = false;
 
   DiscordState m_currentState = PresenceStateServerSelect;
   QString m_stateText = "";

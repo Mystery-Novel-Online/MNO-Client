@@ -507,8 +507,9 @@ void SpritePlayer::scale_current_frame()
 
   m_overallScale = static_cast<double>(composed.width()) / originalSize.width();
 
-  if(m_mirror)
+  if(m_mirror) {
     composed = composed.mirrored(true, false);
+  }
 
   m_scaled_current_frame = composed;
   m_scaled_pixmap_frame = QPixmap::fromImage(m_scaled_current_frame);
