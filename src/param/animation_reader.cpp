@@ -1,6 +1,6 @@
 #include "animation_reader.h"
-#include "animation/keyframe_sequence.h"
-#include "animation/keyframe_channel.h"
+#include "animation/KeyframeSequence.h"
+#include "animation/KeyframeChannel.h"
 #include "fs/fs_reading.h"
 #include "system/runtime_values.h"
 

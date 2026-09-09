@@ -1,4 +1,4 @@
-#include "keyframe_sequence.h"
+#include "KeyframeSequence.h"
 #include "system/animation.h"
 #include "system/audio.h"
 #include "interface/courtroom_layout.h"

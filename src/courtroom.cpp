@@ -1558,6 +1558,25 @@ void Courtroom::handle_chatmessage_2() // handles IC
     ui_vp_player_pair->setZValue(ViewportLayers_PlayerBack);
   }
 
+  //Setup Partner
+  if(message::pair::isVisible()) {
+    ui_vp_player_pair->hide();
+    if(ui_vp_player_pair->is_running()) {
+      ui_vp_player_pair->stop();
+    }
+
+    swap_viewport_reader(ui_vp_player_pair, ViewportPairCharacterIdle);
+    ui_vp_player_pair->start(m_PairScaling, m_PairScale);
+  }
+  else
+  {
+    ui_vp_player_pair->hide();
+  }
+
+  ui_vp_player_pair->clearImageLayers();
+  ui_vp_player_pair->processOverlays(message::pair::getLayers(), message::pair::getCharacter(), message::pair::getEmote(), message::pair::getOutfit());
+
+
 
   if(!m_chatmessage[CMOffsetH].isEmpty()) {
     int hOffset = m_chatmessage[CMOffsetH].toInt();
@@ -1703,22 +1722,6 @@ void Courtroom::handle_chatmessage_3()
       ui_vp_showname->show();
     }
   }
-
-  //Setup Partner
-  if(message::pair::isVisible()) {
-    ui_vp_player_pair->hide();
-    if(ui_vp_player_pair->is_running()) {
-      ui_vp_player_pair->stop();
-    }
-
-    swap_viewport_reader(ui_vp_player_pair, ViewportPairCharacterIdle);
-    ui_vp_player_pair->start(m_PairScaling, m_PairScale);
-  }
-  else
-  {
-    ui_vp_player_pair->hide();
-  }
-
   // Path may be empty if
   // 1. Chat message was empty
   // 2. Enable showname images was false
@@ -1726,7 +1729,7 @@ void Courtroom::handle_chatmessage_3()
 
   ui_vp_player_char->hide();
   ui_vp_player_char->clearImageLayers();
-  ui_vp_player_pair->clearImageLayers();
+
   if(ui_vp_player_char->is_running()) {
     ui_vp_player_char->stop();
   }
@@ -1755,7 +1758,6 @@ void Courtroom::handle_chatmessage_3()
   }
 
   ui_vp_player_char->processOverlays(m_pre_chatmessage[CMSpriteLayers], m_pre_chatmessage[CMChrName], f_emote, m_pre_chatmessage[CMOutfitName]);
-  ui_vp_player_pair->processOverlays(message::pair::getLayers(), message::pair::getCharacter(), message::pair::getEmote(), message::pair::getOutfit());
 
   {
     bool l_effect_index_result;

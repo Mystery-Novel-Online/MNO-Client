@@ -1,7 +1,7 @@
 #ifndef WIDGET_ANIMATOR_H
 #define WIDGET_ANIMATOR_H
 
-#include "keyframe_sequence.h"
+#include "KeyframeSequence.h"
 #include <QObject>
 
 class WidgetAnimator : public KeyframeSequence

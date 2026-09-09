@@ -1,10 +1,10 @@
-#ifndef KEYFRAME_SEQUENCE_H
-#define KEYFRAME_SEQUENCE_H
+#ifndef KEYFRAMESEQUENCE_H
+#define KEYFRAMESEQUENCE_H
 
 #include <memory>
 #include <string>
 #include <unordered_set>
-#include "animation/keyframe_channel.h"
+#include "animation/KeyframeChannel.h"
 
 class KeyframeSequence : public QObject
 {
@@ -77,4 +77,4 @@ private:
 
 };
 
-#endif // KEYFRAME_SEQUENCE_H
+#endif // KEYFRAMESEQUENCE_H

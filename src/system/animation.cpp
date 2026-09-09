@@ -1,5 +1,5 @@
 #include "animation.h"
-#include "animation/keyframe_sequence.h"
+#include "animation/KeyframeSequence.h"
 
 QVector<KeyframeSequence*> s_currentSequences = {};
 

@@ -13,8 +13,8 @@ find_package(QT NAMES Qt5 REQUIRED COMPONENTS core gui widgets uitools network m
 find_package(Qt5 REQUIRED COMPONENTS core gui widgets uitools network multimedia multimediawidgets)
 
 set(HEADERS
-  src/animation/keyframe_channel.h
-  src/animation/keyframe_sequence.h
+  src/animation/KeyframeChannel.h
+  src/animation/KeyframeSequence.h
   src/fs/fs_mounting.h
   src/fs/fs_reading.h
   src/fs/fs_writing.h
@@ -144,8 +144,8 @@ set(HEADERS
 )
 
 set(SOURCES
-  src/animation/keyframe_channel.cpp
-  src/animation/keyframe_sequence.cpp
+  src/animation/KeyframeChannel.cpp
+  src/animation/KeyframeSequence.cpp
   src/fs/fs_mounting.cpp
   src/fs/fs_reading.cpp
   src/fs/fs_writing.cpp

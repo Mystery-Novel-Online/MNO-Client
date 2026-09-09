@@ -26,7 +26,7 @@
 #include <QObject>
 #include <QPainter>
 
-#include "animation/keyframe_sequence.h"
+#include "animation/KeyframeSequence.h"
 #include "fs/fs_characters.h"
 #include "fs/fs_reading.h"
 

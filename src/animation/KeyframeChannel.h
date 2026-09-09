@@ -1,5 +1,5 @@
-#ifndef KEYFRAME_CHANNEL_H
-#define KEYFRAME_CHANNEL_H
+#ifndef KEYFRAMECHANNEL_H
+#define KEYFRAMECHANNEL_H
 
 #include <QVariant>
 
@@ -57,4 +57,4 @@ private:
   static T Interpolate(const T& a, const T& b, float t);
 };
 
-#endif // KEYFRAME_CHANNEL_H
+#endif // KEYFRAMECHANNEL_H
