@@ -272,28 +272,39 @@ int SpritePlayer::get_frame()
 void SpritePlayer::resolve_scaling_mode(rolechat::actor::ActorScalingMode scalingMode, double scale)
 {
 
-  if(scalingMode != rolechat::actor::ActorScalingMode::AutomaticScaling)
-  {
-    if(scalingMode == rolechat::actor::ActorScalingMode::WidthSmoothScaling)
-    {
-      m_transform = Qt::SmoothTransformation;
-      m_resolved_scaling_mode = rolechat::actor::ActorScalingMode::WidthScaling;
-      scale_current_frame();
-      return;
-    }
-    if(scalingMode == rolechat::actor::ActorScalingMode::WidthPixelScaling)
-    {
-      m_transform = Qt::FastTransformation;
-      m_resolved_scaling_mode = rolechat::actor::ActorScalingMode::WidthPixelScaling;
-      scale_current_frame();
-      return;
-    }
+  switch(scalingMode) {
+  case rolechat::actor::ActorScalingMode::WidthPixelScaling:
+    m_transform = Qt::FastTransformation;
+    m_resolved_scaling_mode = scalingMode;
+    scale_current_frame();
+    return;
+
+  case rolechat::actor::ActorScalingMode::HeightPixelScaling:
+    m_transform = Qt::FastTransformation;
+    m_resolved_scaling_mode = scalingMode;
+    scale_current_frame();
+    return;
+
+  case rolechat::actor::ActorScalingMode::WidthSmoothScaling:
+    m_transform = Qt::SmoothTransformation;
+    m_resolved_scaling_mode = rolechat::actor::ActorScalingMode::WidthScaling;
+    scale_current_frame();
+    return;
+
+  case rolechat::actor::ActorScalingMode::HeightSmoothScaling:
+    m_transform = Qt::SmoothTransformation;
+    m_resolved_scaling_mode = rolechat::actor::ActorScalingMode::HeightScaling;
+    scale_current_frame();
+    return;
+
+  default:
+    break;
   }
+
   m_resolved_scaling_mode = m_scaling_mode;
 
   const QSize l_image_size = m_reader->get_sprite_size();
-  if(m_size == l_image_size || !l_image_size.isValid())
-  {
+  if(m_size == l_image_size || !l_image_size.isValid())  {
     m_resolved_scaling_mode = rolechat::actor::ActorScalingMode::NoScaling;
   }
   else if(m_resolved_scaling_mode == rolechat::actor::ActorScalingMode::DynamicScaling)
@@ -462,20 +473,36 @@ void SpritePlayer::scale_current_frame()
     composed = composed.scaledToHeight(m_size.height() * m_scale, m_transform);
     break;
 
-    case rolechat::actor::ActorScalingMode::WidthPixelScaling:
+  case rolechat::actor::ActorScalingMode::WidthPixelScaling:
+  {
+    const int originalWidth = composed.width();
+    if(originalWidth > 0)
     {
-      const int originalWidth = composed.width();
-      if(originalWidth > 0)
-      {
-        int idealWidth = int(m_size.width() * m_scale);
+      int idealWidth = int(m_size.width() * m_scale);
 
-        int multiples = qMax(1, int((double)idealWidth / originalWidth + 0.5));
-        int finalWidth = originalWidth * multiples;
-        int finalHeight = composed.height() * multiples;
+      int multiples = qMax(1, int((double)idealWidth / originalWidth + 0.5));
+      int finalWidth = originalWidth * multiples;
+      int finalHeight = composed.height() * multiples;
 
-        composed = composed.scaled(finalWidth, finalHeight, Qt::IgnoreAspectRatio, Qt::FastTransformation);
-      }
+      composed = composed.scaled(finalWidth, finalHeight, Qt::IgnoreAspectRatio, Qt::FastTransformation);
     }
+  }
+
+  case rolechat::actor::ActorScalingMode::HeightPixelScaling:
+  {
+    const int originalHeight = composed.height();
+    if(originalHeight > 0)
+    {
+      int idealWidth = int(m_size.height() * m_scale);
+
+      int multiples = qMax(1, int((double)idealWidth / originalHeight + 0.5));
+      int finalHeight = originalHeight * multiples;
+      int finalWidth = composed.width() * multiples;
+
+      composed = composed.scaled(finalWidth, finalHeight, Qt::IgnoreAspectRatio, Qt::FastTransformation);
+    }
+  }
+
   }
 
   m_overallScale = static_cast<double>(composed.width()) / originalSize.width();
