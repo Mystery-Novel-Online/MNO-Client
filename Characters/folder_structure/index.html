@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Character Structure - Mystery Novel Network Docs</title>
+    <title>Folder Structure - Mystery Novel Network Docs</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Character Structure";
-        var mkdocs_page_input_path = "Custom Character\\1. Character Structure.md";
+        var mkdocs_page_name = "Folder Structure";
+        var mkdocs_page_input_path = "Characters\\folder_structure.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -48,18 +48,11 @@
                   <li class="toctree-l1"><a class="reference internal" href="../../Backgrounds/Background%20JSON/">Background JSON</a>
                   </li>
               </ul>
-              <p class="caption"><span class="caption-text">Client Usage</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="reference internal" href="../../Client%20Usage/Dialogue%20Cues/">Dialogue Cues</a>
-                  </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Custom Character</span></p>
+              <p class="caption"><span class="caption-text">Characters</span></p>
               <ul class="current">
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Character Structure</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Folder Structure</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#minimal-structure">Minimal Structure</a>
-    </li>
-    <li class="toctree-l2"><a class="reference internal" href="#shirou-emiya-fsn-charjson-char_iconpng-soundsini-outfits-default-outfitjson">Shirou Emiya (FSN)/ │ char.json │ char_icon.png │ sounds.ini │ └── outfits/ └── Default/ └── outfit.json</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#required-files">Required files</a>
     </li>
@@ -73,9 +66,14 @@
     </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../2.%20Character%20Metadata/">Character JSON</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../metadata_file/">char.json Structure</a>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../3.%20Outfit%20Metadata/">Outfit JSON</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../outfit_file/">outfit.json Structure</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Client Usage</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Client%20Usage/Dialogue%20Cues/">Dialogue Cues</a>
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">Themes</span></p>
@@ -105,8 +103,8 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Custom Character</li>
-      <li class="breadcrumb-item active">Character Structure</li>
+          <li class="breadcrumb-item">Characters</li>
+      <li class="breadcrumb-item active">Folder Structure</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -115,11 +113,10 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="character-structure">Character Structure</h1>
-<p>A character is defined by a folder containing configuration files, assets, and one or more outfits.</p>
-<hr />
+                <h1 id="folder-structure">Folder Structure</h1>
+<p>A character folder is set up with at least a <code>char.json</code> and <code>char_icon.png</code> file in it's root directory, with an outfits folder for organizing specific emotes.</p>
 <h2 id="minimal-structure">Minimal Structure</h2>
-<h2 id="shirou-emiya-fsn-charjson-char_iconpng-soundsini-outfits-default-outfitjson"><div class="highlight"><pre><span></span><code>Shirou Emiya (FSN)/
+<div class="highlight"><pre><span></span><code>Shirou Emiya (FSN)/
 │   char.json
 │   char_icon.png
 │   sounds.ini
@@ -127,11 +124,11 @@
 └── outfits/
     └── Default/
         └── outfit.json
-</code></pre></div></h2>
+</code></pre></div>
 <h2 id="required-files">Required files</h2>
 <ul>
 <li><code>char_icon.png</code> - The preview icon for your character that is displayed throughout the client.</li>
-<li><code>char.json</code> - Defines global character variables.</li>
+<li><code>char.json</code> - Defines the parameters that the character will use across all outfits.</li>
 <li><code>outfits/</code> - Contains all the outfit folders. </li>
 <li>At least one outfit subfolder which contains an <code>outfit.json</code></li>
 </ul>
@@ -181,15 +178,15 @@
 <h3 id="emotions-folder">Emotions Folder</h3>
 <ul>
 <li>This folder is found in every outfit folder and contains the button images used by the emote selector. </li>
-<li>These images are suggested to be 82x82 in file size and stored in <code>.png</code> format. </li>
-<li>The file name for each button must share the name of the emote it is targetting. </li>
+<li>These images are suggested to be 82x82 in file size and stored in <code>.webp</code> format, but can still use <code>.png</code>. </li>
+<li>The file name for each button must share the name of the emote it is targetting, not the filename of the sprite it uses. </li>
 </ul>
               
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../../Client%20Usage/Dialogue%20Cues/" class="btn btn-neutral float-left" title="Dialogue Cues"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../2.%20Character%20Metadata/" class="btn btn-neutral float-right" title="Character JSON">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../../Backgrounds/Background%20JSON/" class="btn btn-neutral float-left" title="Background JSON"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../metadata_file/" class="btn btn-neutral float-right" title="char.json Structure">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -212,10 +209,10 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../../Client%20Usage/Dialogue%20Cues/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../../Backgrounds/Background%20JSON/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../2.%20Character%20Metadata/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../metadata_file/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>

@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <link rel="shortcut icon" href="../../img/favicon.ico" />
-    <title>Character JSON - Mystery Novel Network Docs</title>
+    <title>char.json Structure - Mystery Novel Network Docs</title>
     <link rel="stylesheet" href="../../css/theme.css" />
     <link rel="stylesheet" href="../../css/theme_extra.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
     
       <script>
         // Current page data
-        var mkdocs_page_name = "Character JSON";
-        var mkdocs_page_input_path = "Custom Character\\2. Character Metadata.md";
+        var mkdocs_page_name = "char.json Structure";
+        var mkdocs_page_input_path = "Characters\\metadata_file.md";
         var mkdocs_page_url = null;
       </script>
     
@@ -48,16 +48,11 @@
                   <li class="toctree-l1"><a class="reference internal" href="../../Backgrounds/Background%20JSON/">Background JSON</a>
                   </li>
               </ul>
-              <p class="caption"><span class="caption-text">Client Usage</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="reference internal" href="../../Client%20Usage/Dialogue%20Cues/">Dialogue Cues</a>
-                  </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Custom Character</span></p>
+              <p class="caption"><span class="caption-text">Characters</span></p>
               <ul class="current">
-                  <li class="toctree-l1"><a class="reference internal" href="../1.%20Character%20Structure/">Character Structure</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../folder_structure/">Folder Structure</a>
                   </li>
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Character JSON</a>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">char.json Structure</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#top-level-structure">Top-Level Structure</a>
         <ul>
@@ -85,7 +80,12 @@
     </li>
     </ul>
                   </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../3.%20Outfit%20Metadata/">Outfit JSON</a>
+                  <li class="toctree-l1"><a class="reference internal" href="../outfit_file/">outfit.json Structure</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Client Usage</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../Client%20Usage/Dialogue%20Cues/">Dialogue Cues</a>
                   </li>
               </ul>
               <p class="caption"><span class="caption-text">Themes</span></p>
@@ -115,8 +115,8 @@
         <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
   <ul class="wy-breadcrumbs">
     <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">Custom Character</li>
-      <li class="breadcrumb-item active">Character JSON</li>
+          <li class="breadcrumb-item">Characters</li>
+      <li class="breadcrumb-item active">char.json Structure</li>
     <li class="wy-breadcrumbs-aside">
     </li>
   </ul>
@@ -125,8 +125,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
             <div class="section" itemprop="articleBody">
               
-                <h1 id="character-json">Character JSON</h1>
-<p>Characters user a singular <code>char.json</code> file to define the various variables used across all character outfits. </p>
+                <h1 id="charjson-structure">char.json Structure</h1>
+<p>Characters user a singular <code>char.json</code> file to define the various parameters used across all the individual outfits. </p>
 <hr />
 <h2 id="top-level-structure">Top-Level Structure</h2>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
@@ -157,7 +157,7 @@
 <h3 id="blip"><code>blip</code></h3>
 <ul>
 <li><strong>Type:</strong> <code>string</code></li>
-<li><strong>Description:</strong> Defines the blip sounds to play for the character that'll override the default.</li>
+<li><strong>Description:</strong> Defines the blip set to play for the character that'll override the default.</li>
 <li><strong>Example:</strong> <code>"Typewriter"</code></li>
 </ul>
 <hr />
@@ -212,8 +212,8 @@
             </div>
           </div><footer>
     <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../1.%20Character%20Structure/" class="btn btn-neutral float-left" title="Character Structure"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../3.%20Outfit%20Metadata/" class="btn btn-neutral float-right" title="Outfit JSON">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../folder_structure/" class="btn btn-neutral float-left" title="Folder Structure"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../outfit_file/" class="btn btn-neutral float-right" title="outfit.json Structure">Next <span class="icon icon-circle-arrow-right"></span></a>
     </div>
 
   <hr/>
@@ -236,10 +236,10 @@
   <span class="rst-current-version" data-toggle="rst-current-version">
     
     
-      <span><a href="../1.%20Character%20Structure/" style="color: #fcfcfc">&laquo; Previous</a></span>
+      <span><a href="../folder_structure/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../3.%20Outfit%20Metadata/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../outfit_file/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
