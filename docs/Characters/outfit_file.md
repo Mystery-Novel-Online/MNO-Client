@@ -1,4 +1,4 @@
-# Outfit JSON
+# outfit.json Structure
 
 These outfit parameter files are used to define the various emotes a character can use and their relevant rules. 
 
@@ -10,8 +10,7 @@ These outfit parameter files are used to define the various emotes a character c
 {
   "default_rules": { ... },
   "layers": [ ... ],
-  "emotes": [ ... ],
-  "image": "..."
+  "emotes": [ ... ]
 }
 ```
 

@@ -1,5 +1,5 @@
-# Character JSON
-Characters user a singular `char.json` file to define the various variables used across all character outfits. 
+# char.json Structure
+Characters user a singular `char.json` file to define the various parameters used across all the individual outfits. 
 
 ---
 
@@ -38,7 +38,7 @@ Characters user a singular `char.json` file to define the various variables used
 ### `blip`
 
 - **Type:** `string`
-- **Description:** Defines the blip sounds to play for the character that'll override the default.
+- **Description:** Defines the blip set to play for the character that'll override the default.
 - **Example:** `"Typewriter"`
 
 ---

@@ -1,9 +1,9 @@
-# Character Structure
-A character is defined by a folder containing configuration files, assets, and one or more outfits.
+# Folder Structure
+A character folder is set up with at least a `char.json` and `char_icon.png` file in it's root directory, with an outfits folder for organizing specific emotes.
 
----
 ## Minimal Structure
-```markdown
+
+```text
 Shirou Emiya (FSN)/
 │   char.json
 │   char_icon.png
@@ -13,10 +13,10 @@ Shirou Emiya (FSN)/
     └── Default/
         └── outfit.json
 ```
----
+
 ## Required files
 - `char_icon.png` - The preview icon for your character that is displayed throughout the client.
-- `char.json` - Defines global character variables.
+- `char.json` - Defines the parameters that the character will use across all outfits.
 - `outfits/` - Contains all the outfit folders. 
 - At least one outfit subfolder which contains an `outfit.json`
 ---
@@ -64,5 +64,5 @@ outfits/
 ---
 ### Emotions Folder
 - This folder is found in every outfit folder and contains the button images used by the emote selector. 
-- These images are suggested to be 82x82 in file size and stored in `.png` format. 
-- The file name for each button must share the name of the emote it is targetting. 
+- These images are suggested to be 82x82 in file size and stored in `.webp` format, but can still use `.png`. 
+- The file name for each button must share the name of the emote it is targetting, not the filename of the sprite it uses. 
