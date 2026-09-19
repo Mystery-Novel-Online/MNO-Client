@@ -139,6 +139,9 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_blip = AO_GUI_WIDGET(QSlider, "blip");
   ui_blip_ignore_suppression = AO_GUI_WIDGET(QCheckBox, "blip_ignore_suppression");
   ui_blip_value = AO_GUI_WIDGET(QLabel, "blip_value");
+  ui_ambience = AO_GUI_WIDGET(QSlider, "ambience");
+  ui_ambience_ignore_suppression = AO_GUI_WIDGET(QCheckBox, "ambience_ignore_suppression");
+  ui_ambience_value = AO_GUI_WIDGET(QLabel, "ambience_value");
   ui_punctuation_delay = AO_GUI_WIDGET(QSpinBox, "punctuation_delay");
   ui_reload_audiotracks = AO_GUI_WIDGET(QPushButton, "reload_audiotracks");
   ui_fade_duration = AO_GUI_WIDGET(QSpinBox, "FadeDurationBox");
@@ -148,8 +151,9 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
       {ui_system, ui_system_value},
       {ui_effect, ui_effect_value},
       {ui_music, ui_music_value},
-      {ui_video, ui_video_value}, // Corrected entry
-      {ui_blip, ui_blip_value}
+      {ui_video, ui_video_value},
+      {ui_blip, ui_blip_value},
+      {ui_ambience, ui_ambience_value}
   };
 
   // about
@@ -217,6 +221,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(m_config, SIGNAL(video_ignore_suppression_changed(bool)), ui_video_ignore_suppression, SLOT(setChecked(bool)));
   connect(m_config, SIGNAL(blip_volume_changed(int)), ui_blip, SLOT(setValue(int)));
   connect(m_config, SIGNAL(blip_ignore_suppression_changed(bool)), ui_blip_ignore_suppression, SLOT(setChecked(bool)));
+  connect(m_config, SIGNAL(ambience_volume_changed(int)), ui_ambience, SLOT(setValue(int)));
+  connect(m_config, SIGNAL(ambience_ignore_suppression_changed(bool)), ui_ambience_ignore_suppression, SLOT(setChecked(bool)));
   connect(m_config, SIGNAL(punctuation_delay_changed(int)), ui_punctuation_delay, SLOT(setValue(int)));
 
   connect(m_config, &AOConfig::fade_duration_changed, ui_fade_duration, &QSpinBox::setValue);
@@ -277,6 +283,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(ui_music_ignore_suppression, &QAbstractButton::toggled, m_config, &AOConfig::set_music_ignore_suppression);
   connect(ui_video_ignore_suppression, &QAbstractButton::toggled, m_config, &AOConfig::set_video_ignore_suppression);
   connect(ui_blip_ignore_suppression, &QAbstractButton::toggled, m_config, &AOConfig::set_blip_ignore_suppression);
+  connect(ui_ambience_ignore_suppression, &QAbstractButton::toggled, m_config, &AOConfig::set_ambience_ignore_suppression);
 
   connect(ui_master, &QAbstractSlider::valueChanged, m_config, &AOConfig::set_master_volume);
   connect(ui_system, &QAbstractSlider::valueChanged, m_config, &AOConfig::set_system_volume);
@@ -284,6 +291,7 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   connect(ui_music, &QAbstractSlider::valueChanged, m_config, &AOConfig::set_music_volume);
   connect(ui_video, &QAbstractSlider::valueChanged, m_config, &AOConfig::set_video_volume);
   connect(ui_blip, &QAbstractSlider::valueChanged, m_config, &AOConfig::set_blip_volume);
+  connect(ui_ambience, &QAbstractSlider::valueChanged, m_config, &AOConfig::set_ambience_volume);
 
   connect(ui_punctuation_delay, SIGNAL(valueChanged(int)), m_config, SLOT(set_punctuation_delay(int)));
 
@@ -376,6 +384,8 @@ AOConfigPanel::AOConfigPanel(AOApplication *p_ao_app, QWidget *p_parent)
   ui_video_ignore_suppression->setChecked(m_config->video_ignore_suppression());
   ui_blip->setValue(m_config->blip_volume());
   ui_blip_ignore_suppression->setChecked(m_config->blip_ignore_suppression());
+  ui_ambience->setValue(m_config->ambience_volume());
+  ui_ambience_ignore_suppression->setChecked(m_config->ambience_ignore_suppression());
   ui_punctuation_delay->setValue(m_config->punctuation_delay());
 
   ui_fade_duration->setValue(m_config->fade_duration());

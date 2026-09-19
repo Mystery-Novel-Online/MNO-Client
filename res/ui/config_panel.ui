@@ -62,7 +62,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>7</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -411,6 +411,55 @@
              </item>
             </layout>
            </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="effects_label_2">
+             <property name="text">
+              <string>Video:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <layout class="QHBoxLayout" name="video_layout">
+             <item>
+              <widget class="QSlider" name="video">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>20</height>
+                </size>
+               </property>
+               <property name="maximum">
+                <number>100</number>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="video_value">
+               <property name="minimumSize">
+                <size>
+                 <width>40</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>0%</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
            <item row="5" column="0">
             <widget class="QLabel" name="effects_label">
              <property name="text">
@@ -509,54 +558,30 @@
              </item>
             </layout>
            </item>
-           <item row="4" column="0">
-            <widget class="QLabel" name="effects_label_2">
-             <property name="text">
-              <string>Video:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="1">
-            <layout class="QHBoxLayout" name="video_layout">
+           <item row="7" column="1">
+            <layout class="QHBoxLayout" name="ambience_layout">
              <item>
-              <widget class="QSlider" name="video">
-               <property name="sizePolicy">
-                <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                 <horstretch>0</horstretch>
-                 <verstretch>0</verstretch>
-                </sizepolicy>
-               </property>
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>20</height>
-                </size>
-               </property>
-               <property name="maximum">
-                <number>100</number>
-               </property>
+              <widget class="QSlider" name="ambience">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="video_value">
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>0</height>
-                </size>
-               </property>
+              <widget class="QLabel" name="ambience_value">
                <property name="text">
                 <string>0%</string>
-               </property>
-               <property name="alignment">
-                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                </property>
               </widget>
              </item>
             </layout>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="ambience_label">
+             <property name="text">
+              <string>Ambience:</string>
+             </property>
+            </widget>
            </item>
           </layout>
          </item>
@@ -575,26 +600,6 @@
             <bool>false</bool>
            </property>
            <layout class="QGridLayout" name="gridLayout_2">
-            <item row="0" column="1">
-             <widget class="QCheckBox" name="music_ignore_suppression">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If enabled, the audio channel will not be suppressed when the option [&lt;span style=&quot; color:#0000ff;&quot;&gt;Suppress Background Audio&lt;/span&gt;] is enabled and activated.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Ignore Music</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QCheckBox" name="blip_ignore_suppression">
-              <property name="toolTip">
-               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If enabled, the audio channel will not be suppressed when the option [&lt;font style=&quot; color:#0000ff;&quot;&gt;Suppress Background Audio&lt;/font&gt;] is enabled and activated.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-              </property>
-              <property name="text">
-               <string>Ignore Blips</string>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="0">
              <widget class="QCheckBox" name="system_ignore_suppression">
               <property name="enabled">
@@ -624,6 +629,16 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="1">
+             <widget class="QCheckBox" name="music_ignore_suppression">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If enabled, the audio channel will not be suppressed when the option [&lt;span style=&quot; color:#0000ff;&quot;&gt;Suppress Background Audio&lt;/span&gt;] is enabled and activated.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Ignore Music</string>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="2">
              <widget class="QCheckBox" name="video_ignore_suppression">
               <property name="toolTip">
@@ -631,6 +646,23 @@
               </property>
               <property name="text">
                <string>Ignore Video</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QCheckBox" name="blip_ignore_suppression">
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If enabled, the audio channel will not be suppressed when the option [&lt;font style=&quot; color:#0000ff;&quot;&gt;Suppress Background Audio&lt;/font&gt;] is enabled and activated.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+              <property name="text">
+               <string>Ignore Blips</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QCheckBox" name="ambience_ignore_suppression">
+              <property name="text">
+               <string>Ignore Ambience</string>
               </property>
              </widget>
             </item>
