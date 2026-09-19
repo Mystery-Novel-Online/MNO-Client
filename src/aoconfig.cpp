@@ -962,8 +962,9 @@ void AOConfig::set_favorite_device_driver(QString p_device_driver)
 
 void AOConfig::set_system_volume(int p_number)
 {
-  if(d->system_volume == p_number)
+  if(d->system_volume == p_number){
     return;
+  }
   d->system_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FSystem)->set_volume(p_number);
   d->invoke_signal("system_volume_changed", Q_ARG(int, p_number));
@@ -971,8 +972,9 @@ void AOConfig::set_system_volume(int p_number)
 
 void AOConfig::set_effect_volume(int p_number)
 {
-  if(d->effect_volume == p_number)
+  if(d->effect_volume == p_number){
     return;
+  }
   d->effect_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FEffect)->set_volume(p_number);
   d->invoke_signal("effect_volume_changed", Q_ARG(int, p_number));
@@ -980,8 +982,9 @@ void AOConfig::set_effect_volume(int p_number)
 
 void AOConfig::set_effect_ignore_suppression(bool p_enabled)
 {
-  if(d->effect_ignore_suppression == p_enabled)
+  if(d->effect_ignore_suppression == p_enabled){
     return;
+  }
   d->effect_ignore_suppression = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FEffect)->set_ignore_suppression(p_enabled);
   d->invoke_signal("effect_ignore_suppression_changed", Q_ARG(bool, p_enabled));
@@ -989,8 +992,9 @@ void AOConfig::set_effect_ignore_suppression(bool p_enabled)
 
 void AOConfig::set_music_volume(int p_number)
 {
-  if(d->music_volume == p_number)
+  if(d->music_volume == p_number){
     return;
+  }
   d->music_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FMusic)->set_volume(p_number);
   d->invoke_signal("music_volume_changed", Q_ARG(int, p_number));
@@ -998,8 +1002,9 @@ void AOConfig::set_music_volume(int p_number)
 
 void AOConfig::set_music_ignore_suppression(bool p_enabled)
 {
-  if(d->music_ignore_suppression == p_enabled)
+  if(d->music_ignore_suppression == p_enabled){
     return;
+  }
   d->music_ignore_suppression = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FMusic)->set_ignore_suppression(p_enabled);
   d->invoke_signal("music_ignore_suppression_changed", Q_ARG(bool, p_enabled));
@@ -1007,8 +1012,9 @@ void AOConfig::set_music_ignore_suppression(bool p_enabled)
 
 void AOConfig::set_video_volume(int p_number)
 {
-  if(d->video_volume == p_number)
+  if(d->video_volume == p_number){
     return;
+  }
   d->video_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FVideo)->set_volume(p_number);
   d->invoke_signal("video_volume_changed", Q_ARG(int, p_number));
@@ -1016,8 +1022,9 @@ void AOConfig::set_video_volume(int p_number)
 
 void AOConfig::set_video_ignore_suppression(bool p_enabled)
 {
-  if(d->video_ignore_suppression == p_enabled)
+  if(d->video_ignore_suppression == p_enabled){
     return;
+  }
   d->video_ignore_suppression = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FVideo)->set_ignore_suppression(p_enabled);
   d->invoke_signal("video_ignore_suppression_changed", Q_ARG(bool, p_enabled));
@@ -1025,8 +1032,9 @@ void AOConfig::set_video_ignore_suppression(bool p_enabled)
 
 void AOConfig::set_blip_volume(int p_number)
 {
-  if(d->blip_volume == p_number)
+  if(d->blip_volume == p_number){
     return;
+  }
   d->blip_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FBlip)->set_volume(p_number);
   d->invoke_signal("blip_volume_changed", Q_ARG(int, p_number));
@@ -1034,8 +1042,9 @@ void AOConfig::set_blip_volume(int p_number)
 
 void AOConfig::set_blip_ignore_suppression(bool p_enabled)
 {
-  if(d->blip_ignore_suppression == p_enabled)
+  if(d->blip_ignore_suppression == p_enabled){
     return;
+  }
   d->blip_ignore_suppression = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FBlip)->set_ignore_suppression(p_enabled);
   d->invoke_signal("blip_ignore_suppression_changed", Q_ARG(bool, p_enabled));
@@ -1043,8 +1052,9 @@ void AOConfig::set_blip_ignore_suppression(bool p_enabled)
 
 void AOConfig::set_ambience_volume(int p_number)
 {
-  if(d->ambience_volume == p_number)
+  if(d->ambience_volume == p_number){
     return;
+  }
   d->ambience_volume = p_number;
   d->audio_engine->get_family(DRAudio::Family::FAmbience)->set_volume(p_number);
   d->invoke_signal("ambience_volume_changed", Q_ARG(int, p_number));
@@ -1052,8 +1062,9 @@ void AOConfig::set_ambience_volume(int p_number)
 
 void AOConfig::set_ambience_ignore_suppression(bool p_enabled)
 {
-  if(d->ambience_ignore_suppression == p_enabled)
+  if(d->ambience_ignore_suppression == p_enabled){
     return;
+  }
   d->ambience_ignore_suppression = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FAmbience)->set_ignore_suppression(p_enabled);
   d->invoke_signal("ambience_ignore_suppression_changed", Q_ARG(bool, p_enabled));
