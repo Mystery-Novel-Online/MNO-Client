@@ -27,7 +27,6 @@
 
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #include "graphicsspriteitem.h"
-#include "stb_image_resize2.h"
 
 using namespace mk2;
 
