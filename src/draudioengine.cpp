@@ -31,6 +31,8 @@ public:
                            DRAudioStreamFamily::ptr(new DRAudioStreamFamily(DRAudio::Family::FVideo)));
       d->family_map.insert(DRAudio::Family::FBlip,
                            DRAudioStreamFamily::ptr(new DRAudioStreamFamily(DRAudio::Family::FBlip)));
+      d->family_map.insert(DRAudio::Family::FAmbience,
+                           DRAudioStreamFamily::ptr(new DRAudioStreamFamily(DRAudio::Family::FAmbience)));
 
       // set family-specific options
       d->family_map.value(DRAudio::Family::FSystem)->set_ignore_suppression(true);

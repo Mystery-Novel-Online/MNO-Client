@@ -95,6 +95,8 @@ private:
   bool video_ignore_suppression;
   int blip_volume;
   bool blip_ignore_suppression;
+  int ambience_volume;
+  bool ambience_ignore_suppression;
   int punctuation_delay;
   int fade_duration;
 
@@ -204,6 +206,8 @@ void AOConfigPrivate::load_file()
   video_ignore_suppression = cfg.value("video_ignore_suppression", false).toBool();
   blip_volume = cfg.value("default_blip", 50).toInt();
   blip_ignore_suppression = cfg.value("blip_ignore_suppression", false).toBool();
+  ambience_volume = cfg.value("default_ambience", 50).toInt();
+  ambience_ignore_suppression = cfg.value("ambience_ignore_suppression", false).toBool();
   punctuation_delay = cfg.value("punctuation_delay", 110).toInt();
   LegacyThemeManager::get().setResize(config::ConfigUserSettings::floatValue("resize", 1.0f));
   theme::ThemeManager::Instance().SetResizeFactor(config::ConfigUserSettings::floatValue("resize", 1.0f));
@@ -215,11 +219,13 @@ void AOConfigPrivate::load_file()
   audio_engine->get_family(DRAudio::Family::FEffect)->set_volume(effect_volume);
   audio_engine->get_family(DRAudio::Family::FEffect)->set_ignore_suppression(effect_ignore_suppression);
   audio_engine->get_family(DRAudio::Family::FMusic)->set_volume(music_volume);
-  audio_engine->get_family(DRAudio::Family::FMusic)->set_ignore_suppression(effect_ignore_suppression);
+  audio_engine->get_family(DRAudio::Family::FMusic)->set_ignore_suppression(music_ignore_suppression);
   audio_engine->get_family(DRAudio::Family::FVideo)->set_volume(video_volume);
-  audio_engine->get_family(DRAudio::Family::FVideo)->set_ignore_suppression(effect_ignore_suppression);
+  audio_engine->get_family(DRAudio::Family::FVideo)->set_ignore_suppression(video_ignore_suppression);
   audio_engine->get_family(DRAudio::Family::FBlip)->set_volume(blip_volume);
-  audio_engine->get_family(DRAudio::Family::FBlip)->set_ignore_suppression(effect_ignore_suppression);
+  audio_engine->get_family(DRAudio::Family::FBlip)->set_ignore_suppression(blip_ignore_suppression);
+  audio_engine->get_family(DRAudio::Family::FAmbience)->set_volume(ambience_volume);
+  audio_engine->get_family(DRAudio::Family::FAmbience)->set_ignore_suppression(ambience_ignore_suppression);
 
   { // ini swap
     cfg.beginGroup("character_ini");
@@ -312,6 +318,8 @@ void AOConfigPrivate::save_file()
   cfg.setValue("video_ignore_suppression", video_ignore_suppression);
   cfg.setValue("default_blip", blip_volume);
   cfg.setValue("blip_ignore_suppression", blip_ignore_suppression);
+  cfg.setValue("default_ambience", ambience_volume);
+  cfg.setValue("ambience_ignore_suppresion", ambience_ignore_suppression);
   cfg.setValue("punctuation_delay", punctuation_delay);
   cfg.setValue("theme_resize", config::ConfigUserSettings::floatValue("resize", 1.0f));
   cfg.setValue("fade_duration", fade_duration);
@@ -610,6 +618,17 @@ bool AOConfig::blip_ignore_suppression() const
 {
   return d->blip_ignore_suppression;
 }
+
+int AOConfig::ambience_volume() const
+{
+  return d->ambience_volume;
+}
+
+bool AOConfig::ambience_ignore_suppression() const
+{
+  return d->ambience_ignore_suppression;
+}
+
 int AOConfig::punctuation_delay() const
 {
   return d->punctuation_delay;
@@ -1020,6 +1039,24 @@ void AOConfig::set_blip_ignore_suppression(bool p_enabled)
   d->blip_ignore_suppression = p_enabled;
   d->audio_engine->get_family(DRAudio::Family::FBlip)->set_ignore_suppression(p_enabled);
   d->invoke_signal("blip_ignore_suppression_changed", Q_ARG(bool, p_enabled));
+}
+
+void AOConfig::set_ambience_volume(int p_number)
+{
+  if(d->ambience_volume == p_number)
+    return;
+  d->ambience_volume = p_number;
+  d->audio_engine->get_family(DRAudio::Family::FAmbience)->set_volume(p_number);
+  d->invoke_signal("ambience_volume_changed", Q_ARG(int, p_number));
+}
+
+void AOConfig::set_ambience_ignore_suppression(bool p_enabled)
+{
+  if(d->ambience_ignore_suppression == p_enabled)
+    return;
+  d->ambience_ignore_suppression = p_enabled;
+  d->audio_engine->get_family(DRAudio::Family::FAmbience)->set_ignore_suppression(p_enabled);
+  d->invoke_signal("ambience_ignore_suppression_changed", Q_ARG(bool, p_enabled));
 }
 
 void AOConfig::set_punctuation_delay(int p_number)

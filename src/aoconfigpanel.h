@@ -185,6 +185,9 @@ private:
   QSlider *ui_blip = nullptr;
   QCheckBox *ui_blip_ignore_suppression = nullptr;
   QLabel *ui_blip_value = nullptr;
+  QSlider *ui_ambience = nullptr;
+  QCheckBox *ui_ambience_ignore_suppression = nullptr;
+  QLabel *ui_ambience_value = nullptr;
   QPushButton *ui_reload_audiotracks = nullptr;
 
   // about

@@ -11,6 +11,7 @@ enum class Family
   FMusic,
   FVideo,
   FBlip,
+  FAmbience,
 };
 
 enum Option
