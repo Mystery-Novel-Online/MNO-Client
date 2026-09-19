@@ -4,7 +4,7 @@
 RPAmbiencePlayer::RPAmbiencePlayer(QObject *p_parent)
     : AOObject(p_parent)
 {
-  m_family = DRAudioEngine::get_family(DRAudio::Family::FEffect);
+  m_family = DRAudioEngine::get_family(DRAudio::Family::FAmbience);
 }
 
 void RPAmbiencePlayer::play(QString ambienceName)
@@ -40,7 +40,7 @@ void RPAmbiencePlayer::toggleReverb(bool reverb)
   if(m_currentAmbience == nullptr) return;
   if(m_currentAmbience->is_playing())
   {
-    m_currentAmbience->toggle_reverb(true);
+    m_currentAmbience->toggle_reverb(reverb);
   }
 }
 

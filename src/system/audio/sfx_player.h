@@ -4,8 +4,7 @@
 #include "draudiostream.h"
 #include "draudiostreamfamily.h"
 
-#include <QMap>
-#include <QSharedPointer>
+#include <QVector>
 
 class AOSfxPlayer : public AOObject
 {
@@ -21,17 +20,7 @@ public:
   void play_character_effect(QString character, QString effect);
   void stop_all();
 
-  void play_ambient(QString filename);
-
 private:
   DRAudioStreamFamily::ptr m_player;
   QVector<DRAudioStream::ptr> m_stream_list;
-  QMap<QString, DRAudioStream::ptr> m_ambient_map;
-  DRAudioStream::ptr m_current_ambient;
-
-  DRAudioStream::ptr get_stream_by_qobject(QObject *object);
-
-private slots:
-  void remove_ambient();
-  void handle_ambient_fade(DRAudioStream::Fade fade);
 };

@@ -18,6 +18,7 @@ static int s_blipRateOverride = -1;
 static AOMusicPlayer *s_musicPlayer;
 static AOSfxPlayer *s_effectsPlayer;
 static RPAmbiencePlayer *s_weatherPlayer;
+static RPAmbiencePlayer *s_ambiencePlayer;
 static AOShoutPlayer *s_shoutPlayer;
 static AOSystemPlayer *s_systemPlayer;
 
@@ -31,6 +32,7 @@ namespace audio
     s_musicPlayer = new AOMusicPlayer();
     s_effectsPlayer = new AOSfxPlayer();
     s_weatherPlayer = new RPAmbiencePlayer();
+    s_ambiencePlayer = new RPAmbiencePlayer();
     s_systemPlayer = new AOSystemPlayer();
     s_blipPlayer = new AOBlipPlayer();
     s_shoutPlayer = new AOShoutPlayer();
@@ -72,7 +74,7 @@ namespace audio
 
     void PlayAmbient(const std::string &filepath)
     {
-      s_effectsPlayer->play_ambient(QString::fromStdString(filepath));
+      s_ambiencePlayer->play(QString::fromStdString(filepath));
     }
 
     void PlayWeather(const std::string &filepath)
