@@ -33,12 +33,14 @@ DownloaderPrompt::DownloaderPrompt(QWidget *parent) : QDialog{parent}
 
 void DownloaderPrompt::StartDownload(QString repository, const QString& directory, const QString &contentName, DownloadType type)
 {
-  if(repository.isEmpty()) return;
+  if(repository.isEmpty()) {
+    return;
+  }
   QUrl url(repository);
   bool isRepo = repository.endsWith("/repo", Qt::CaseInsensitive) || repository.endsWith("/content", Qt::CaseInsensitive) ;
   bool isCollection = repository.endsWith("/collection", Qt::CaseInsensitive);
-  if(!isRepo && !isCollection)
-  {
+
+  if(!isRepo && !isCollection) {
     QDesktopServices::openUrl(url);
     return;
   }
@@ -66,8 +68,9 @@ void DownloaderPrompt::StartDownload(QString repository, const QString& director
 
   QString repoUrl = repository += "?key=" + ApiManager::authorizationKey();
 
-  if(originType.has_value())
+  if(originType.has_value()) {
     repoUrl += "&origin=" + QString::number(originType.value());
+  }
 
   url = QUrl(repoUrl);
 
@@ -95,11 +98,13 @@ void DownloaderPrompt::StartDownload(QString repository, const QString& director
 
       DownloaderPrompt *prompt = new DownloaderPrompt(nullptr);
       prompt->setDownloadType(type);
-      if(HIDE_PROGRESS_BAR)
-        prompt->hide();
-      else
-        prompt->show();
 
+      if(HIDE_PROGRESS_BAR) {
+        prompt->hide();
+      }
+      else {
+        prompt->show();
+      }
 
 
       QString baseUrl = QString("%1://%2").arg(url.scheme(), url.host());
@@ -110,7 +115,6 @@ void DownloaderPrompt::StartDownload(QString repository, const QString& director
       prompt->setIsCollection(isCollection);
       prompt->setContentName(contentName);
       prompt->setRepository(repository);
-      prompt->setIsRepo(isRepo);
 
       QNetworkAccessManager *manager = new QNetworkAccessManager(prompt);
 
@@ -124,8 +128,9 @@ void DownloaderPrompt::StartDownload(QString repository, const QString& director
 
 bool DownloaderPrompt::StartDownload(const QStringList &guids, DownloadType type)
 {
-  if(guids.empty())
+  if(guids.empty()) {
     return false;
+  }
 
   QString urlString = ApiManager::baseUri() + "api/workshop/multi";
 
@@ -164,14 +169,15 @@ bool DownloaderPrompt::StartDownload(const QStringList &guids, DownloadType type
       downloadText,
       QMessageBox::Yes | QMessageBox::No);
 
-  if(reply == QMessageBox::Yes)
-  {
+  if(reply == QMessageBox::Yes) {
     DownloaderPrompt *prompt = new DownloaderPrompt(nullptr);
     prompt->setDownloadType(type);
     prompt->show();
 
     QString baseUrl = QString("%1://%2").arg(url.scheme(), url.host());
-    if(url.port() != -1) baseUrl += QString(":%1").arg(url.port());
+    if(url.port() != -1) {
+      baseUrl += QString(":%1").arg(url.port());
+    }
 
     prompt->setBaseUrl(baseUrl);
 
@@ -194,7 +200,7 @@ bool DownloaderPrompt::StartDownload(const QStringList &guids, DownloadType type
 
 }
 
-void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const QString &contentName, const QString& repositoryUrl, bool createContext)
+void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const QString &contentName, const QString& repositoryUrl)
 {
   m_cdnFiles = links;
 
@@ -310,12 +316,10 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
 
   QByteArray response = reply->readAll();
 
-  if(response.startsWith('['))
-  {
+  if(response.startsWith('[')) {
     m_currentCollection = WorkshopParser::parseCollections(response);
   }
-  else
-  {
+  else {
     m_currentCollection.append(WorkshopParser::parseCollection(response));
   }
 
@@ -323,10 +327,8 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
 
   for(auto& collection : m_currentCollection)
   {
-
     QString packageDirectory = collection.packageDirectory();
     m_totalDownloadBytes += (double)collection.sizeBytes;
-
 
     for(const WorkshopRepository& repo : collection.repositories)
     {
@@ -338,14 +340,10 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
         scanDirectory = packageDirectory + "characters/" + repo.folderName + "/";
 
         auto workshopSearch = GetDB().searchContentGuid(repo.guid.toStdString());
-        if(!workshopSearch.folder.empty())
-        {
+        if(!workshopSearch.folder.empty()) {
           QString existingPath = QString::fromStdString(rolechat::fs::RCDir("characters/" + workshopSearch.folder).findFirst());
-
-          if(!QDir(scanDirectory).exists())
-          {
-            if(QDir().rename(existingPath, scanDirectory))
-            {
+          if(!QDir(scanDirectory).exists()) {
+            if(QDir().rename(existingPath, scanDirectory)) {
               qDebug() << "Moved successfully";
             }
           }
@@ -356,28 +354,26 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
 
       GetDB().cacheContentData(repo.guid.toStdString(), repo.folderName.toStdString(), repo.lastUpdated, repo.contentId);
 
-      for(const WorkshopFile& file : repo.files)
-      {
+      for(const WorkshopFile& file : repo.files)  {
         QString cdnUri = m_baseUrl + "/api/workshop/file/" + file.hash;
         QString filePath = "";
 
-        if(repo.downloadType == "background")
+        if(repo.downloadType == "background") {
           filePath = packageDirectory + "background/" + repo.folderName + + "/" + file.relativePath;
-        else
+        }
+        else {
           filePath = packageDirectory + file.relativePath;
+        }
 
-        if(!filePath.startsWith(scanDirectory))
-        {
+        if(!filePath.startsWith(scanDirectory)) {
           QFile scanningFile(filePath);
-          if(scanningFile.exists())
-          {
+          if(scanningFile.exists()) {
             existingFileMap[filePath] = FileHashUtil::md5File(filePath);
             m_downloadedBytes += scanningFile.size();
           }
         }
 
-        if(existingFileMap.contains(filePath))
-        {
+        if(existingFileMap.contains(filePath)) {
           QFile scanningFile(filePath);
           m_downloadedBytes += scanningFile.size();
 
@@ -409,7 +405,7 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
   int progress = static_cast<int>((double)m_downloadedBytes / m_totalDownloadBytes * 100.0);
   m_progressBar->setValue(progress);
 
-  ProcessLinks(hashMap, m_contentName, m_repository, m_isRepo);
+  ProcessLinks(hashMap, m_contentName, m_repository);
   reply->deleteLater();
 }
 

@@ -402,6 +402,10 @@ void AOConfigPanel::showEvent(QShowEvent *event)
 
   if(isVisible())
   {
+    ConfigTabDiscord* tab = ConfigManager::retrieveTab<ConfigTabDiscord>("Discord");
+    if(tab) {
+      tab->reloadApiKey();
+    }
     refresh_theme_list();
     refresh_packages_list();
   }

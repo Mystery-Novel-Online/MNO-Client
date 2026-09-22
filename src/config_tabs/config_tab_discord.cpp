@@ -11,7 +11,10 @@ ConfigTabDiscord::ConfigTabDiscord(QWidget *parent) : QWidget(parent), ui(new Ui
   m_workshopAuthentication = config::ConfigUserSettings::booleanValue("authentication_disabled", false);
   m_characterUpdatesDisabled = config::ConfigUserSettings::booleanValue("workshop_disable_update_check", false);
 
+
   ui->setupUi(this);
+
+  reloadApiKey();
 
   ui->discordPresence->setChecked(m_discordActive);
   ui->hideCharacter->setChecked(m_hideCharacter);
@@ -77,6 +80,19 @@ void ConfigTabDiscord::reloadState()
   WorkshopDiscord::getInstance().setRichPresenceStateText(presence.toStdString());
 }
 
+void ConfigTabDiscord::reloadApiKey()
+{
+  QString apiKey = QString::fromStdString(config::ConfigUserSettings::stringValue("workshop_key", "PUT_KEY_HERE"));
+  ui->apiKeyEdit->setText(apiKey);
+
+  if(ui->apiKeyEdit->text() != "PUT_KEY_HERE") {
+    ui->apiKeyEdit->setEchoMode(QLineEdit::Password);
+  }
+  else {
+    ui->apiKeyEdit->setEchoMode(QLineEdit::Normal);
+  }
+}
+
 void ConfigTabDiscord::on_discordPresence_toggled(bool arg1)
 {
   m_discordActive = arg1;
@@ -133,5 +149,22 @@ void ConfigTabDiscord::on_disableCharacterUpdate_stateChanged(int arg1)
 {
   m_characterUpdatesDisabled = ui->disableCharacterUpdate->isChecked();
   config::ConfigUserSettings::setValue("workshop_disable_update_check", m_characterUpdatesDisabled);
+}
+
+
+void ConfigTabDiscord::on_apiKeyEdit_textEdited(const QString &arg1)
+{
+  config::ConfigUserSettings::setString("workshop_key", ui->apiKeyEdit->text().toStdString());
+}
+
+
+void ConfigTabDiscord::on_revealApiCheck_stateChanged(int arg1)
+{
+  if(!ui->revealApiCheck->isChecked()){
+    ui->apiKeyEdit->setEchoMode(QLineEdit::Password);
+  }
+  else {
+    ui->apiKeyEdit->setEchoMode(QLineEdit::Normal);
+  }
 }
 

@@ -25,10 +25,9 @@ public:
   static void StartDownload(QString repository, const QString& directory, const QString& contentName, DownloadType type = DOWNLOAD_Default);
   static bool StartDownload(const QStringList &guids, DownloadType type);
 
-  void ProcessLinks(const QMap<QString, QString>& links, const QString& contentName, const QString& repositoryUrl, bool createContext);
+  void ProcessLinks(const QMap<QString, QString>& links, const QString& contentName, const QString& repositoryUrl);
   void setDownloadType(DownloadType type) {m_downloadType = type; }
 
-  void setIsRepo(bool state) { m_isRepo = state; }
   void setIsCollection(bool state) { m_isCollection = state; }
 
   void setContentName(QString name) { m_contentName = name; }
@@ -55,7 +54,6 @@ private:
   QString m_baseUrl = "";
   QString m_repository = "";
 
-  bool m_isRepo = false;
   bool m_isCollection = false;
 
   int m_downloadedBytes = 0;

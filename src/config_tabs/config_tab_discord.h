@@ -29,6 +29,7 @@ public:
   void setServerText(const QString& text);
   void setCharacterText(const QString& text);
   void reloadState();
+  void reloadApiKey();
 
 private slots:
   void on_discordPresence_toggled(bool arg1);
@@ -43,6 +44,10 @@ private slots:
   void on_disableIntergration_stateChanged(int arg1);
 
   void on_disableCharacterUpdate_stateChanged(int arg1);
+
+  void on_apiKeyEdit_textEdited(const QString &arg1);
+
+  void on_revealApiCheck_stateChanged(int arg1);
 
 private:
   Ui::ConfigTabDiscord *ui;
