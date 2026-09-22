@@ -20,32 +20,24 @@ EmotionSelector::EmotionSelector(QWidget *parent)
 
 void EmotionSelector::emotionChange(ActorEmote emote)
 {
-  if(m_ContextMenu == nullptr) return;
-    m_ContextMenu->EmoteChange(emote);
+  if(m_ContextMenu == nullptr) {
+    return;
+  }
+
+  m_ContextMenu->EmoteChange(emote);
 }
 
 void EmotionSelector::actorChange(rolechat::actor::IActorData *actor)
 {
   m_ActorEmotions.clear();
+
   if(retrieve() != nullptr) {
     retrieve()->emotes();
   }
 
-  m_ContextMenu->ClearPresets();
+  m_ContextMenu->reload();
 
-  for(rolechat::actor::ActorScalingPreset presetData : actor->scalingPresets()) {
-    m_ContextMenu->AddPreset(QString::fromStdString(presetData.name));
-  }
-
-  auto offsets = GetDB().getCharacterOffsets(actor->folder());
-
-  for (const auto& [name, offset] : offsets)
-  {
-    m_ContextMenu->addPreset(QString::fromStdString(name), offset);
-  }
-
-  if(m_ActorEmotions.count() > 0)
-  {
+  if(m_ActorEmotions.count() > 0) {
     m_ContextMenu->EmoteChange(m_ActorEmotions[0]);
   }
 

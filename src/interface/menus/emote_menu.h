@@ -25,6 +25,11 @@ public:
   void AddPreset(const QString& name);
   void addPreset(const QString& name, const SavedOffset& offset);
 
+  void createDeleteActions();
+
+
+  void reload();
+
 
 public slots:
   void OnMenuRequested(QPoint p_point);
@@ -47,6 +52,7 @@ private:
   QAction *p_ResetOffsetsAction = nullptr;
 
   QMenu* m_presetsMenu;
+  QMenu* m_deleteCustomMenu;
   QMap<QString, SavedOffset> m_customOffsets = {};
 
 

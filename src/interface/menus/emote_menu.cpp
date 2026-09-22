@@ -1,5 +1,6 @@
 #include "emote_menu.h"
 #include "param/actor/actor_loader.h"
+#include "system/user_database.h"
 
 bool EmoteMenu::s_sizeDoubled   = false;
 bool EmoteMenu::s_renderSprites = false;
@@ -105,6 +106,43 @@ void EmoteMenu::addPreset(const QString &name, const SavedOffset &offset)
   m_customOffsets[name] = offset;
   QAction* action = m_presetsMenu->addAction(name);
   connect(action, &QAction::triggered, this, [=]() { ApplyPreset(name); });
+}
+
+void EmoteMenu::createDeleteActions()
+{
+  m_presetsMenu->addSeparator();
+  m_deleteCustomMenu = m_presetsMenu->addMenu("Delete Custom");
+
+  for(QString entry : m_customOffsets.keys()){
+    QAction* deleteAction = m_deleteCustomMenu->addAction(entry);
+    connect(deleteAction, &QAction::triggered, this, [=]() {
+              auto* user = engine::actor::user::retrieve();
+              GetDB().deleteCharacterOffset(user->folder(), entry.toStdString());
+              deleteAction->deleteLater();
+              reload();
+            }
+    );
+
+  }
+
+}
+
+void EmoteMenu::reload()
+{
+  ClearPresets();
+  auto* user = engine::actor::user::retrieve();
+
+  for(rolechat::actor::ActorScalingPreset presetData : user->scalingPresets()) {
+    AddPreset(QString::fromStdString(presetData.name));
+  }
+
+  auto offsets = GetDB().getCharacterOffsets(user->folder());
+
+  for (const auto& [name, offset] : offsets) {
+    addPreset(QString::fromStdString(name), offset);
+  }
+
+  createDeleteActions();
 }
 
 void EmoteMenu::OnMenuRequested(QPoint p_point)
