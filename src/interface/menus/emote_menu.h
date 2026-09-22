@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QWidget>
 #include "tools/button_maker.h"
+#include <rolechat/userdata/RolechatDatabase.h>
 
 class EmotionSelector;
 
@@ -22,6 +23,7 @@ public:
 
   void ClearPresets();
   void AddPreset(const QString& name);
+  void addPreset(const QString& name, const SavedOffset& offset);
 
 
 public slots:
@@ -45,6 +47,7 @@ private:
   QAction *p_ResetOffsetsAction = nullptr;
 
   QMenu* m_presetsMenu;
+  QMap<QString, SavedOffset> m_customOffsets = {};
 
 
   ActorEmote m_currentEmote;

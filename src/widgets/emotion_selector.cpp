@@ -6,6 +6,7 @@
 
 #include "drtheme.h"
 #include "interface/courtroom_layout.h"
+#include "system/user_database.h"
 
 using namespace engine::actor::user;
 
@@ -26,12 +27,22 @@ void EmotionSelector::emotionChange(ActorEmote emote)
 void EmotionSelector::actorChange(rolechat::actor::IActorData *actor)
 {
   m_ActorEmotions.clear();
-  if(retrieve() != nullptr) retrieve()->emotes();
+  if(retrieve() != nullptr) {
+    retrieve()->emotes();
+  }
 
   m_ContextMenu->ClearPresets();
 
-  for(rolechat::actor::ActorScalingPreset presetData : actor->scalingPresets())
+  for(rolechat::actor::ActorScalingPreset presetData : actor->scalingPresets()) {
     m_ContextMenu->AddPreset(QString::fromStdString(presetData.name));
+  }
+
+  auto offsets = GetDB().getCharacterOffsets(actor->folder());
+
+  for (const auto& [name, offset] : offsets)
+  {
+    m_ContextMenu->addPreset(QString::fromStdString(name), offset);
+  }
 
   if(m_ActorEmotions.count() > 0)
   {

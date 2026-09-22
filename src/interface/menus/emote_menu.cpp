@@ -47,8 +47,7 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
 
   for(const ActorLayer &layer : emote.emoteOverlays) {
     QString qLayerName = QString::fromStdString(layer.offsetName);
-    if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty() && layer.offsetName != "base_image")
-    {
+    if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty() && layer.offsetName != "base_image") {
       QString qToggleName = QString::fromStdString(layer.toggleName);
       bool toggleEnabled = engine::actor::user::layerState(layer.toggleName);
       selectionPanel->addLayer(qLayerName, qToggleName, toggleEnabled ? LayerSelectionType::Toggle : LayerSelectionType::ToggleDisabled);
@@ -80,6 +79,7 @@ void EmoteMenu::ClearPresets()
   m_defaultScale = 1000;
   m_presetsClearedCheck = false;
   m_presetsMenu->addSeparator();
+  m_customOffsets.clear();
 }
 
 void EmoteMenu::AddPreset(const QString &name)
@@ -98,6 +98,13 @@ void EmoteMenu::AddPreset(const QString &name)
     }
   }
   m_presetsClearedCheck = true;
+}
+
+void EmoteMenu::addPreset(const QString &name, const SavedOffset &offset)
+{
+  m_customOffsets[name] = offset;
+  QAction* action = m_presetsMenu->addAction(name);
+  connect(action, &QAction::triggered, this, [=]() { ApplyPreset(name); });
 }
 
 void EmoteMenu::OnMenuRequested(QPoint p_point)
@@ -139,12 +146,20 @@ void EmoteMenu::OnOffsetResetTriggered()
 
 void EmoteMenu::ApplyPreset(const QString &presetName)
 {
+
+  if(m_customOffsets.contains(presetName)) {
+    courtroom::sliders::setScale(m_customOffsets[presetName].scale);
+    courtroom::sliders::setVertical(m_customOffsets[presetName].y);
+    courtroom::sliders::setHorizontal(m_customOffsets[presetName].x);
+    return;
+  }
+
   auto* user = engine::actor::user::retrieve();
 
-  for(const auto& preset : user->scalingPresets())
-  {
-    if(preset.name != presetName.toStdString())
+  for(const auto& preset : user->scalingPresets()) {
+    if(preset.name != presetName.toStdString()) {
       continue;
+    }
 
     courtroom::sliders::setScale(preset.scale);
     courtroom::sliders::setVertical(preset.verticalAlign);
