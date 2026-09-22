@@ -111,6 +111,18 @@ void EmoteMenu::addPreset(const QString &name, const SavedOffset &offset)
 void EmoteMenu::createDeleteActions()
 {
   m_presetsMenu->addSeparator();
+  QAction* createAction = m_presetsMenu->addAction("Create Custom");
+  connect(createAction, &QAction::triggered, this, [=]() {
+            auto* user = engine::actor::user::retrieve();
+            bool ok = false;
+            const QString name = QInputDialog::getText(this, "Create Custom Preset", "Preset name:", QLineEdit::Normal, "", &ok);
+            GetDB().saveCharacterOffset(user->folder(), name.toStdString(), {courtroom::sliders::getValue("pair_offset"), courtroom::sliders::getValue("vertical_offset"), courtroom::sliders::getValue("scale_offset")});
+            reload();
+          });
+
+  if(m_customOffsets.empty()){
+    return;
+  }
   m_deleteCustomMenu = m_presetsMenu->addMenu("Delete Custom");
 
   for(QString entry : m_customOffsets.keys()){
