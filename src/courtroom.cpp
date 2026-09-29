@@ -1396,7 +1396,7 @@ void Courtroom::handle_chatmessage()
   m_hide_character = m_chatmessage[CMHideCharacter].toInt();
 
   int backgroundContrast = config::ConfigUserSettings::intergerValue("background_contrast");
-  if(backgroundContrast > 0 && !m_hide_character) {
+  if(backgroundContrast > 0 && (!m_hide_character || message::pair::isVisible())) {
     ui_vp_background->setTint("#000000", backgroundContrast);
   }
   else {
@@ -1578,8 +1578,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
     swap_viewport_reader(ui_vp_player_pair, ViewportPairCharacterIdle);
     ui_vp_player_pair->start(m_PairScaling, m_PairScale);
   }
-  else
-  {
+  else {
     ui_vp_player_pair->hide();
   }
 
