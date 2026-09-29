@@ -1393,17 +1393,20 @@ void Courtroom::start_chatmessage()
 
 void Courtroom::handle_chatmessage()
 {
+  m_hide_character = m_chatmessage[CMHideCharacter].toInt();
+
   int backgroundContrast = config::ConfigUserSettings::intergerValue("background_contrast");
-  if(backgroundContrast > 0) {
+  if(backgroundContrast > 0 && !m_hide_character) {
     ui_vp_background->setTint("#000000", backgroundContrast);
   }
   else {
     ui_vp_background->setTint(Qt::transparent);
   }
+
+
   ui_vp_player_char->setTint(Qt::transparent);
   qDebug() << "handle_chatmessage";
   LuaBridge::OnCharacterMessage(m_incomingMessage.showname, m_incomingMessage.speaker.character, m_chatmessage[CMEmote].toStdString(), m_incomingMessage.message, m_incomingMessage.emptyMessage);
-  m_hide_character = m_chatmessage[CMHideCharacter].toInt();
   m_play_pre = false;
   m_play_zoom = false;
   const int l_emote_mod = m_chatmessage[CMEmoteModifier].toInt();
