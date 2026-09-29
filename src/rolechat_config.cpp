@@ -1,4 +1,5 @@
 #include "rolechat_config.h"
+#include "config_tabs/ConfigTabAccessibility.h"
 #include "ui_rolechat_config.h"
 #include "config_tabs/config_tab_theme.h"
 #include <rolechat/config/ConfigUserSettings.h>
@@ -34,6 +35,7 @@ void RolechatConfig::setupTabs()
   m_tabWidgets["Mounting"] = new ConfigTabMounting();
   m_tabWidgets["Callwords"] = new ConfigTabCallwords();
   m_tabWidgets["Discord"] = new ConfigTabDiscord();
+  m_tabWidgets["Accessibility"] = new ConfigTabAccessibility();
   ui->category_list_widget->addItems(m_tabCategories.keys());
 }
 

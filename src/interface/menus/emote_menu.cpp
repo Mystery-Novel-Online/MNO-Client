@@ -200,7 +200,8 @@ void EmoteMenu::ApplyPreset(const QString &presetName)
   if(m_customOffsets.contains(presetName)) {
     courtroom::sliders::setScale(m_customOffsets[presetName].scale);
     courtroom::sliders::setVertical(m_customOffsets[presetName].y);
-    courtroom::sliders::setHorizontal(m_customOffsets[presetName].x);
+    //TO-DO: Run this through testing without horizontal first due to differing behaviour from non-custom persets. Enable if there is demand.
+    //courtroom::sliders::setHorizontal(m_customOffsets[presetName].x);
     return;
   }
 

@@ -699,7 +699,7 @@ void AOConfigPanel::updateTabsVisibility(const QModelIndex &current)
 
   QHash<QString, QStringList> dynamicTabs =
   {
-    {"General", {"Discord"}},
+    {"General", {"Discord", "Accessibility"}},
     {"Content", {"Theme", "Mounting"}},
     {"Message", {"Callwords", "Blips"}}
   };
