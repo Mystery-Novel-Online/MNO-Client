@@ -30,13 +30,16 @@ void engine::actor::user::toggleLayer(const std::string &name, bool state)
 
 rolechat::actor::IActorData *engine::actor::user::load(QString folder)
 {
-  s_layersEnabled.clear();
   isModified(folder.toStdString());
   if(folder == s_currentFolder)
   {
-    if(s_currentActor != nullptr) s_currentActor->reload();
+    if(s_currentActor != nullptr) {
+      s_currentActor->reload();
+    }
     return s_currentActor.get();
   }
+
+  s_layersEnabled.clear();
 
   GetDB().incrementCharacterUsage(folder.toStdString());
 
@@ -56,8 +59,9 @@ rolechat::actor::IActorData *engine::actor::user::load(QString folder)
     for(auto outfit : outfitNames)
     {
       for(auto layer : outfits[outfit]->layers()){
-        if(!layer.toggleName.empty())
+        if(!layer.toggleName.empty()) {
           toggleLayer(layer.toggleName, !layer.defaultDisabled);
+        }
       }
     }
 
@@ -187,7 +191,9 @@ void engine::actor::user::setOutfitList(QStringList outfits)
     QComboBox* l_outfitSelectorCombo = dynamic_cast<QComboBox*>(l_outfitSelectorWidget);
     l_outfitSelectorCombo->clear();
     l_outfitSelectorCombo->addItems(outfits);
-    if(l_outfitSelectorCombo->count() > 1) l_outfitSelectorCombo->setCurrentIndex(1);
+    if(l_outfitSelectorCombo->count() > 1) {
+      l_outfitSelectorCombo->setCurrentIndex(1);
+    }
   }
 }
 
