@@ -50,6 +50,7 @@ void Courtroom::create_widgets()
   ui_viewport = new DRGraphicsView(this);
 
   u_crossfadeDisplay = new CrossfadeLabel(ao_app, this);
+  u_crossfadeDisplay->assignRenderTarget(ui_viewport);
 
   { // populate scene
     auto *l_scene = ui_viewport->scene();
