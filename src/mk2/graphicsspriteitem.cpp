@@ -297,8 +297,17 @@ void GraphicsSpriteItem::setLayerState(ViewportSprite viewportState)
 void GraphicsSpriteItem::setTint(QColor col)
 {
   tintColour = col;
-  if(col != Qt::transparent)
+  if(col != Qt::transparent) {
     tintColour.setAlpha(100);
+  }
+}
+
+void GraphicsSpriteItem::setTint(QColor col, int a_alpha)
+{
+  tintColour = col;
+  if(col != Qt::transparent) {
+    tintColour.setAlpha(a_alpha);
+  }
 }
 
 void GraphicsSpriteItem::processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName)

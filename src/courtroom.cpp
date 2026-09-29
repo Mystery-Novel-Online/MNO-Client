@@ -1393,6 +1393,13 @@ void Courtroom::start_chatmessage()
 
 void Courtroom::handle_chatmessage()
 {
+  int backgroundContrast = config::ConfigUserSettings::intergerValue("background_contrast");
+  if(backgroundContrast > 0) {
+    ui_vp_background->setTint("#000000", backgroundContrast);
+  }
+  else {
+    ui_vp_background->setTint(Qt::transparent);
+  }
   ui_vp_player_char->setTint(Qt::transparent);
   qDebug() << "handle_chatmessage";
   LuaBridge::OnCharacterMessage(m_incomingMessage.showname, m_incomingMessage.speaker.character, m_chatmessage[CMEmote].toStdString(), m_incomingMessage.message, m_incomingMessage.emptyMessage);

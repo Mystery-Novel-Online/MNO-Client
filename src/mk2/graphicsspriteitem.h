@@ -213,6 +213,7 @@ public:
   void setLayerState(ViewportSprite viewportState);
 
   void setTint(QColor col);
+  void setTint(QColor col, int a_alpha);
 
   void processOverlays(const QString &overlayString, const QString& character, const QString& emotePath, const QString& outfitName);
   void processOverlays(const QVector<ActorLayer>& ActorLayers, const QString& character, const QString& emotePath, const QString& outfitName);

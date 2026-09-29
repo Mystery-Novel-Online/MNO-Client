@@ -16,6 +16,11 @@ public:
   explicit ConfigTabAccessibility(QWidget *parent = nullptr);
   ~ConfigTabAccessibility();
 
+private slots:
+  void on_horizontalSlider_valueChanged(int value);
+
+  void on_backgroundDimmingSlider_valueChanged(int value);
+
 private:
   Ui::ConfigTabAccessibility *ui;
 };
