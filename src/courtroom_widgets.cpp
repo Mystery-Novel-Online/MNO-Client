@@ -1101,6 +1101,9 @@ void Courtroom::set_widgets()
 
   pLayersPanel->clear();
   pLayersPanel->toggleShortcutMode(pLayersPanel->width() == 0);
+  if(!pLayersPanel->shortcutModeEnabled()) {
+    ui_emotes->getContextMenu()->reloadLayers();
+  }
 
 
   if(ao_app->current_theme->read_config_bool("enable_label_images"))

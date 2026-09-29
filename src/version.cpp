@@ -23,8 +23,7 @@ VersionNumber get_version_number(int baseVersion)
   int minorBase = 0;
 
   const QString baseVersionString = QString::number(baseVersion);
-  if(baseVersionString.length() >= 6 && !baseVersionString.startsWith("-"))
-  {
+  if(baseVersionString.length() >= 6 && !baseVersionString.startsWith("-")) {
     releaseBase = QString(baseVersionString.at(3)).toInt();
     majorBase = QString(baseVersionString.at(1)).toInt();
     minorBase = QString(baseVersionString.at(5)).toInt();
@@ -35,7 +34,7 @@ VersionNumber get_version_number(int baseVersion)
 
 QString get_post_version()
 {
-  return "b03";
+  return "b04";
 }
 
 QString get_version_string(int baseVersion)
