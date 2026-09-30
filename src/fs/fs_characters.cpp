@@ -94,8 +94,9 @@ QString engine::fs::characters::getSpritePathIdle(const QString& character, cons
 QString engine::fs::characters::getDirectoryPath(const QString &character)
 {
   std::string cachedPath = TemporaryDB::instance().characterPath(character.toStdString());
-  if(!cachedPath.empty())
+  if(!cachedPath.empty()) {
     return QString::fromStdString(cachedPath);
+  }
   return FS::Paths::FindDirectory("characters/" + character);
 }
 

@@ -996,7 +996,7 @@ void Courtroom::on_ic_message_return_pressed()
 
   packet_contents.append(QString::fromStdString(l_emote.anim));
 
-  packet_contents.append(get_character_ini());
+  packet_contents.append(QString::fromStdString(l_emote.character));
 
   if(ui_hide_character->isChecked()) {
     packet_contents.append("../../misc/blank");
