@@ -82,11 +82,6 @@ void DRTheme::setup_free_blocks()
   return;
 }
 
-const QString &DRTheme::readConfigString(const QString &key)
-{
-  return LegacyThemeManager::get().getConfigString(key);
-}
-
 QString DRTheme::LoadFileString(QString p_path)
 {
   if(!FS::Checks::FileExists(p_path))
@@ -244,73 +239,6 @@ QString DRTheme::get_widget_font_string_setting(QString p_identifier, QString p_
   return LegacyThemeManager::get().mCurrentThemeReader.GetFontData(sceneType, p_identifier).align;
 }
 
-bool DRTheme::get_widget_font_bool(QString p_identifier, QString p_scene, QString p_param, QString p_type)
-{
-  if(!m_jsonLoaded)
-  {
-    return false;
-  }
-
-  QJsonValue value = m_currentThemeObject.value(QString(p_scene));
-  QJsonObject item = value.toObject();
-  QJsonObject element_font = item[p_identifier].toObject();
-
-  bool l_font_bool = element_font["font"].toObject()[p_type + "_" + p_param].toBool();
-
-  return l_font_bool;
-
-}
-
-
-QColor DRTheme::get_widget_font_color(QString p_identifier, QString p_scene, QString p_type)
-{
-  QColor return_value = QColor(0,0,0);
-  if(!m_jsonLoaded)
-  {
-    return return_value;
-  }
-
-  QJsonValue value = m_currentThemeObject.value(QString(p_scene));
-  QJsonObject item = value.toObject();
-  QJsonObject element_font = item[p_identifier].toObject();
-
-
-  if(!element_font["font"].toObject().contains(p_type + "_color"))
-  {
-    return return_value;
-  }
-
-  return_value = QColor(element_font["font"].toObject()[p_type + "_color"].toString());
-
-  return return_value;
-
-}
-
-int DRTheme::get_widget_settings_int(QString p_identifier, QString p_scene, QString p_setting)
-{
-
-  int return_value = 0;
-  if(!m_jsonLoaded)
-  {
-    return return_value;
-  }
-
-  QJsonValue value = m_currentThemeObject.value(QString(p_scene));
-  QJsonObject item = value.toObject();
-  QJsonObject widget_object = item[p_identifier].toObject();
-
-
-  if(!widget_object["settings"].toObject().contains(p_setting))
-  {
-    return return_value;
-  }
-
-  return_value = widget_object["settings"].toObject()[p_setting].toInt();
-
-  return return_value;
-
-}
-
 bool DRTheme::get_widget_settings_bool(QString p_identifier, QString p_scene, QString p_setting)
 {
 
@@ -366,11 +294,6 @@ QPoint DRTheme::get_widget_settings_spacing(QString p_identifier, QString p_scen
   QVector2D spacing = LegacyThemeManager::get().mCurrentThemeReader.GetWidgetSpacing(p_identifier);
   QPoint return_value = QPoint(spacing.x(),spacing.y());
   return return_value;
-}
-
-QJsonObject *DRTheme::get_font_json_object(QString p_identifier, QString p_scene)
-{
-  return nullptr;
 }
 
 QMap<DR::Color, DR::ColorInfo> DRTheme::get_chat_colors()
@@ -479,23 +402,6 @@ int DRTheme::get_free_block_count()
   return free_block_count;
 }
 
-
-QStringList DRTheme::get_tab_names()
-{
-  QStringList l_tab_names = {};
-  QVector<ThemeTabInfo> l_tabs = LegacyThemeManager::get().mCurrentThemeReader.getTabs();
-
-  for(ThemeTabInfo tab : l_tabs)
-  {
-    if(!tab.m_Name.isEmpty())
-    {
-      l_tab_names.append(tab.m_Name);
-    }
-  }
-
-  return l_tab_names;
-}
-
 QStringList DRTheme::get_tab_widgets(QString p_tab_name)
 {
   QStringList widget_names = {};
@@ -516,26 +422,6 @@ QStringList DRTheme::get_tab_widgets(QString p_tab_name)
   return widget_names;
 }
 
-QStringList DRTheme::get_tab_widgets_disable(QString p_tab_name)
-{
-  QStringList widget_names = {};
-
-  QVector<ThemeTabInfo> l_tabs = LegacyThemeManager::get().mCurrentThemeReader.getTabs();
-
-  for(ThemeTabInfo tab : l_tabs)
-  {
-
-    for(QString widget_name : tab.m_WidgetContents)
-    {
-      if(!widget_name.isEmpty() && tab.m_Name != p_tab_name.toLower())
-      {
-        widget_names.append(widget_name);
-      }
-    }
-  }
-
-  return widget_names;
-}
 
 int DRTheme::get_music_name_speed()
 {

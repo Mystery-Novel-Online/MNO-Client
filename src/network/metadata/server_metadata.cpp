@@ -120,12 +120,6 @@ void CharacterRepository::addFiltered(const ActorSelectEntry &character)
   filteredCharacters.append(character);
 }
 
-ActorSelectEntry CharacterRepository::filteredCharacter(int index)
-{
-  if(index > filteredCharacters.count()) return {};
-  return filteredCharacters.at(index);
-}
-
 QString CharacterRepository::characterNameFiltered(int index)
 {
   return (index >= 0 && index < filteredCharacters.size()) ? QString::fromStdString(filteredCharacters.at(index).name) : "";
@@ -186,17 +180,12 @@ QVector<ActorSelectEntry> CharacterRepository::currentList()
   return filteredList(lastUsedFilter);
 }
 
-QVector<ActorSelectEntry> CharacterRepository::resetClaims()
-{
-  claimedCharacters.clear();
-  return serverCharacters;
-}
-
 int CharacterRepository::networkedIdFromName(const QString &name)
 {
   for(int i = 0; i < serverCharacters.size(); ++i) {
-    if(serverCharacters[i].name == name.toStdString())
+    if(serverCharacters[i].name == name.toStdString()) {
       return i;
+    }
   }
   return -1;
 }

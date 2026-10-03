@@ -119,12 +119,6 @@ void clientStatusChangedCallback(discordpp::Client::Status status, discordpp::Cl
   }
 }
 
-void authorizeClient()
-{
-
-
-}
-
 void WorkshopDiscord::sendPrivateMessage(const QString &discordId, const QString &message)
 {
   client->SendUserMessage(discordId.toLongLong(), message.toStdString(), [](auto result, uint64_t messageId) {
@@ -242,16 +236,6 @@ void userMessageStatus(discordpp::ClientResult result, uint64_t messageId)
   } else {
     std::cout << "❌ Failed to send message: " << result.Error() << "\n";
   }
-}
-
-void WorkshopDiscord::sendUserMessage(std::string message, uint64_t recipientId)
-{
-  m_currentClient->SendUserMessage(recipientId, message, userMessageStatus);
-}
-
-void WorkshopDiscord::updateRichPresence()
-{
-  setRichPresence();
 }
 
 QVector<DiscordUser> WorkshopDiscord::getFriends()

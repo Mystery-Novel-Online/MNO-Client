@@ -265,7 +265,9 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
 
 void DownloaderPrompt::updateUi()
 {
-  if(m_downloadedBytes <= 0) return;
+  if(m_downloadedBytes <= 0) {
+    return;
+  }
 
   int progress = static_cast<int>((double)m_downloadedBytes / m_totalDownloadBytes * 100.0);
   m_progressBar->setValue(progress);

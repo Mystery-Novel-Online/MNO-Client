@@ -8,7 +8,6 @@ class Lobby;
 namespace Layout::ServerSelect
 {
   void AssignLobby(Lobby *lobby, AOApplication* application);
-  RPButton *CreateButton(const QString& name, const QString& image, std::function<void()> releasedFunction = nullptr);
 }
 
 #endif // LOBBY_LAYOUT_H

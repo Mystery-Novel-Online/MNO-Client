@@ -37,8 +37,6 @@ public:
     return instance;
   }
 
-  DRServerInfoList get_combined_server_list();
-
   void set_choose_a_server();
   void set_player_count(int players_online, int max_players);
   void set_loading_text(QString p_text);

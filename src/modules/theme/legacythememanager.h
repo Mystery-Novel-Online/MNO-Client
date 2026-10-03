@@ -20,8 +20,6 @@ public:
   //Tabs
 
   void deleteTabPanels();
-  void createTabPanels();
-  void parentTabWidgets();
 
   void createTabParent();
   void execLayerTabs();
@@ -52,7 +50,6 @@ public:
 
   //Data Management
   const QString& getConfigString(const QString& key);
-  int getConfigInt(QString value);
   bool getConfigBool(QString value);
   bool getReloadPending();
   void toggleReload();

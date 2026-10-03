@@ -18,8 +18,6 @@ public:
 
   QStringList GetDirectoryLoadOrder();
 
-  void SetThemeJsonObject(QString category);
-
   void SetTimeOfDay(QString time);
 
 

@@ -224,11 +224,6 @@ void AOApplication::destruct_courtroom()
   }
 }
 
-DRDiscord *AOApplication::get_discord() const
-{
-  return dr_discord;
-}
-
 VersionNumber AOApplication::get_server_client_version() const
 {
   return m_server_client_version;
@@ -237,11 +232,6 @@ VersionNumber AOApplication::get_server_client_version() const
 VersionStatus AOApplication::get_server_client_version_status() const
 {
   return m_server_client_version_status;
-}
-
-bool AOApplication::is_server_client_version_compatible() const
-{
-  return m_server_client_version_status == VersionStatus::Ok;
 }
 
 void AOApplication::handle_theme_modification()
@@ -263,11 +253,6 @@ void AOApplication::handle_audiotracks_reloading()
 QString AOApplication::get_sfx_dir_path()
 {
   return "sounds/general";
-}
-
-QString AOApplication::get_sfx_path(QString p_sfx)
-{
-  return find_asset_path(FS::Paths::FindFile(get_sfx_dir_path() + "/" + p_sfx));
 }
 
 QString AOApplication::get_sfx_noext_path(QString p_file)
@@ -298,11 +283,6 @@ QString AOApplication::get_background_sprite_path(QString p_background_name, QSt
 QString AOApplication::get_background_sprite_noext_path(QString background, QString image)
 {
   return find_asset_path(get_background_path(background) + "/" + image, FS::Formats::SupportedImages());
-}
-
-QString AOApplication::getWeatherSprite(QString weather)
-{
-  return get_case_sensitive_path(FS::Paths::FindFile("animations/weather/" + weather + ".webp"));
 }
 
 QString AOApplication::get_shout_sprite_path(QString p_character, QString p_shout, const QString &outfit)
@@ -364,11 +344,6 @@ QString AOApplication::get_theme_sprite_path(QString p_file_name, QString p_char
   return l_file_path;
 }
 
-QString AOApplication::get_theme_sprite_path(QString file_name)
-{
-  return get_theme_sprite_path(file_name, QString{});
-}
-
 QString AOApplication::get_effect_anim_path(QString file_name)
 {
   QString l_file_path;
@@ -396,25 +371,22 @@ QString AOApplication::get_wtce_anim_path(QString file_name)
 
   l_file_path = find_theme_asset_path(file_name, FS::Formats::AnimatedImages());
 
-  if(l_file_path.isEmpty())
-  {
+  if(l_file_path.isEmpty()) {
     l_file_path = find_asset_path(FS::Paths::BasePath() + "animations/wtce/default/" + file_name, FS::Formats::AnimatedImages());
   }
 
-  if(l_file_path.isEmpty())
-  {
+  if(l_file_path.isEmpty()) {
     l_file_path = find_theme_asset_path("placeholder", FS::Formats::AnimatedImages());
   }
-
-
 
   return l_file_path;
 }
 
 QString AOApplication::get_current_char()
 {
-  if(!is_courtroom_constructed)
+  if(!is_courtroom_constructed) {
     return nullptr;
+  }
   return m_courtroom->get_character_ini();
 }
 

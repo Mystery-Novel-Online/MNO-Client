@@ -30,7 +30,6 @@ namespace engine::system::replays
 
   namespace playback
   {
-    void loadFile(const QString& name);
     void load(const QString &name, const QString &package, const QString &category);
     void setNextUpdate(int nextUpdate);
     void autoUpdate(const int &uptime);

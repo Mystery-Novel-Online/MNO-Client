@@ -38,7 +38,6 @@ namespace engine::network::metadata
 
     static void clearFiltered();
     static void addFiltered(const ActorSelectEntry& character);
-    static ActorSelectEntry filteredCharacter(int index);
 
     static QString characterNameFiltered(int index);
     static QString characterNameServer(int index);
@@ -48,7 +47,6 @@ namespace engine::network::metadata
     static const QVector<ActorSelectEntry>& serverList();
     static QVector<ActorSelectEntry> filteredList(const QString& packageName);
     static QVector<ActorSelectEntry> currentList();
-    static QVector<ActorSelectEntry> resetClaims();
 
     static int networkedIdFromName(const QString& name);
     static int networkedIdFromFiltered(int filteredId);

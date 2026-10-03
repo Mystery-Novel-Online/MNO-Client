@@ -11,10 +11,6 @@ DRMasterClient::DRMasterClient(QObject *parent)
 DRMasterClient::~DRMasterClient()
 {}
 
-QString DRMasterClient::address() const
-{
-  return m_address;
-}
 
 void DRMasterClient::set_address(QString p_address)
 {

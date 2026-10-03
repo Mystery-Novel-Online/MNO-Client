@@ -21,7 +21,6 @@ public:
   DRMasterClient(QObject *parent = nullptr);
   ~DRMasterClient();
 
-  QString address() const;
   QString motd() const;
   DRServerInfoList server_list() const;
 

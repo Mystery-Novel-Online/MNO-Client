@@ -251,14 +251,6 @@ namespace engine::system::replays
   namespace playback
   {
     using namespace engine::network::metadata;
-    void loadFile(const QString& name)
-    {
-      s_playbackTimestamp = 0;
-      ReplayReader(name, s_playbackOperations);
-      if(!s_replayWindow) return;
-      s_replayWindow->setScrubberData(s_playbackOperations.count());
-
-    }
 
     void progress()
     {

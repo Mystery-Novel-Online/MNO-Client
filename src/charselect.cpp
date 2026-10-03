@@ -168,8 +168,9 @@ void Courtroom::set_char_select_page()
     ui_chr_select_right->show();
   }
 
-  if(m_current_chr_page > 0)
+  if(m_current_chr_page > 0) {
     ui_chr_select_left->show();
+  }
 
   int yOffset = 0;
   int xOffset = 0;

@@ -5,7 +5,6 @@
 
 namespace FS::Packages
 {
-  QVector<QString> &Scan();
   void SetDisabled(QVector<QString> disableList);
   void SaveDisabled();
 }

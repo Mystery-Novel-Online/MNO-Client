@@ -21,11 +21,6 @@ LocalizationReader::LocalizationReader(QString t_languageCode) : mLangCode(t_lan
   }
 }
 
-bool LocalizationReader::getIsLoaded()
-{
-  return mIsLoaded;
-}
-
 QString LocalizationReader::getLanguageName()
 {
   return mName;

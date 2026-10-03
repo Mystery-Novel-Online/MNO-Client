@@ -47,16 +47,6 @@ void LegacyThemeManager::deleteTabPanels()
   }
 }
 
-void LegacyThemeManager::createTabPanels()
-{
-
-}
-
-void LegacyThemeManager::parentTabWidgets()
-{
-
-}
-
 
 void LegacyThemeManager::createTabParent()
 {
@@ -278,11 +268,6 @@ void LegacyThemeManager::addWidgetName(QString t_widgetName, QWidget *t_widget)
 const QString &LegacyThemeManager::getConfigString(const QString &key)
 {
   return mCurrentThemeReader.getConfigString(key);
-}
-
-int LegacyThemeManager::getConfigInt(QString value)
-{
-  return mCurrentThemeReader.GetConfigInt(value);
 }
 
 QVector<ThemeTabInfo> LegacyThemeManager::getTabsInfo()

@@ -122,20 +122,6 @@ int ThemeReader::getMusicScrollSpeed()
   return -1;
 }
 
-int ThemeReader::getTimerNumber()
-{
-  if(m_GameModeCurrent != nullptr)
-  {
-    if(m_GameModeCurrent->getTimerNumber() != -1) return m_GameModeCurrent->getTimerNumber();
-  }
-  if(m_GameModeCollection["default"]->getTimerNumber() != -1)
-  {
-    return m_GameModeCollection["default"]->getTimerNumber();
-  }
-
-  return 0;
-}
-
 QVector<QStringList> ThemeReader::GetLayers()
 {
   if(m_GameModeCurrent != nullptr)

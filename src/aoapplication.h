@@ -8,7 +8,6 @@
 class AOConfig;
 class AOConfigPanel;
 class Courtroom;
-class DRDiscord;
 class DRTheme;
 class DRMasterClient;
 class Lobby;
@@ -53,13 +52,10 @@ public:
   void construct_courtroom();
   void destruct_courtroom();
 
-  DRDiscord *get_discord() const;
-
   DRTheme *current_theme = nullptr;
 
   VersionNumber get_server_client_version() const;
   VersionStatus get_server_client_version_status() const;
-  bool is_server_client_version_compatible() const;
 
   ///////////////////////////////////////////
 
@@ -73,7 +69,6 @@ public:
   QString get_music_path(QString p_song);
 
   QString get_background_path(QString p_background_name);
-  QString get_background_dir_path(QString p_identifier);
 
   bool is_safe_path(QString p_file);
 
@@ -167,8 +162,6 @@ public:
   // Returns p_char's gender
   QString get_gender(QString p_char);
 
-  QVector<ActorEmote> get_emote_list(QString p_chr);
-
   // Returns x,y offset for effect p_effect
   QStringList get_effect_offset(QString p_char, int p_effect);
 
@@ -191,7 +184,6 @@ signals:
 private:
   AOConfig *ao_config = nullptr;
   AOConfigPanel *ao_config_panel = nullptr;
-  DRDiscord *dr_discord = nullptr;
 
   DRServerSocket *m_server_socket = nullptr;
   ServerStatus m_server_status = ServerStatus::NotConnected;
@@ -230,15 +222,12 @@ private slots:
 
 public:
   QString get_sfx_dir_path();
-  QString get_sfx_path(QString sfx);
   QString get_sfx_noext_path(QString p_file);
   QString get_ambient_sfx_path(QString p_file);
   QString get_background_sprite_path(QString background, QString image);
   QString get_background_sprite_noext_path(QString background, QString image);
-  QString getWeatherSprite(QString weather);
   QString get_shout_sprite_path(QString character, QString shout, const QString& outfit = "");
   QString get_theme_sprite_path(QString file_name, QString character);
-  QString get_theme_sprite_path(QString file_name);
   QString get_effect_anim_path(QString file_name);
   QString get_wtce_anim_path(QString file_name);
 

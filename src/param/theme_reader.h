@@ -31,7 +31,6 @@ public:
 
   const QString& getBlips();
   int getMusicScrollSpeed();
-  int getTimerNumber();
 
   QVector<ThemeTabInfo> getTabs();
 
@@ -75,12 +74,6 @@ private:
   QString m_GameModeCurrentName = "";
   ThemeModeReader* m_GameModeCurrent = nullptr;
   QHash<QString, ThemeModeReader*> m_GameModeCollection = {};
-
-  ThemeModeReader* GetCurrentGamemode()
-  {
-    if(m_GameModeCurrent != nullptr) return m_GameModeCurrent;
-    else return m_GameModeCollection["default"];
-  };
 
   QVector<ThemeModeReader*> GetGamemodeOrder()
   {

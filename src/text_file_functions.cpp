@@ -380,11 +380,6 @@ QVariant AOApplication::read_char_ini(QString p_chr, QString p_group, QString p_
   return read_char_ini(p_chr, p_group, p_key, QVariant());
 }
 
-QString AOApplication::get_char_name(QString p_chr)
-{
-  return read_char_ini(p_chr, "options", "name", p_chr).toString();
-}
-
 #include <QQueue>
 
 #include <modules/theme/legacythememanager.h>
@@ -436,11 +431,6 @@ QString drLookupKey(const QStringList &keyList, const QString &targetKey)
     if(i_key.toLower() == finalTargetKey)
       return i_key;
   return targetKey;
-}
-
-QVector<ActorEmote> AOApplication::get_emote_list(QString p_chr)
-{
-  return {};
 }
 
 QStringList AOApplication::get_effect_offset(QString p_chr, int p_effect)

@@ -75,12 +75,6 @@ ThemeModeReader::~ThemeModeReader()
   delete m_GamemodeModule;
 }
 
-void ThemeModeReader::SetThemeJsonObject(QString category)
-{
-  SetTargetObject(mMainObject);
-  SetTargetObject(category);
-}
-
 void ThemeModeReader::LoadTimeMode()
 {
   m_TimeModules = {};

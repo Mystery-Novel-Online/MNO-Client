@@ -408,12 +408,6 @@ namespace courtroom
         combobox->addItem(QString::fromStdString(value));
     }
 
-    void removeItem(const std::string &name, const std::string &value)
-    {
-      //if(auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))
-      //  combobox->addItem(QString::fromStdString(value));
-    }
-
     void clearItems(const std::string &name)
     {
       if(auto *combobox = qobject_cast<RPComboBox *>(s_CourtroomWidgets.value(QString::fromStdString(name))))

@@ -108,11 +108,6 @@ QString AOApplication::get_background_path(QString p_identifier)
   return QString::fromStdString(rolechat::fs::RCDir("background/" + p_identifier.toStdString()).findFirst());
 }
 
-QString AOApplication::get_background_dir_path(QString p_identifier)
-{
-  return get_case_sensitive_path(get_background_path(p_identifier));
-}
-
 /**
  * @brief Returns the 'correct' path for the file given as the parameter by
  * trying to match the case of the actual path.

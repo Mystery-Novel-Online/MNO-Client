@@ -16,7 +16,6 @@ public:
 
   WidgetThemeData *getWidgetData(QString t_name);
   widgetFontStruct *getWidgetFont(QString t_name);
-  QVector2D getWidgetSpacing(QString t_name);
   void setDummyTransform(QString t_name);
   void setWidgetTransform(QString t_name, RPRect t_transform);
   void setWidgetRotation(QString t_name, double t_rotation);

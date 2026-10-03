@@ -11,13 +11,6 @@ widgetFontStruct *ThemeScene::getWidgetFont(QString t_name)
   if(m_Widgets.contains(t_name)) return m_Widgets[t_name]->Font;
   return nullptr;
 }
-
-QVector2D ThemeScene::getWidgetSpacing(QString t_name)
-{
-  if(m_Widgets.contains(t_name)) return m_Widgets[t_name]->Spacing;
-  return QVector2D(-1, -1);
-}
-
 void ThemeScene::setDummyTransform(QString t_name)
 {
   m_Widgets[t_name] = new WidgetThemeData();
@@ -47,10 +40,6 @@ void ThemeScene::setWidgetFont(QString t_name, widgetFontStruct *t_font)
   if(!m_Widgets.contains(t_name)) setDummyTransform(t_name);
   m_Widgets[t_name]->Font = t_font;
 }
-
-
-
-
 
 bool ThemeScene::getChatlogBold(QString t_type)
 {

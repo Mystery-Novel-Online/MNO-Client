@@ -360,18 +360,11 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
 
   ui_workshop_upload->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(ui_workshop_upload, &QWidget::customContextMenuRequested, this, &Lobby::showUploadContextMenu);
-
-
 }
 
 Lobby::~Lobby()
 {
   save_settings();
-}
-
-DRServerInfoList Lobby::get_combined_server_list()
-{
-  return m_combined_server_list;
 }
 
 // sets images, position and size

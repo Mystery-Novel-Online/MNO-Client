@@ -9,7 +9,6 @@ class LocalizationReader : public JSONReader
 {
 public:
   LocalizationReader(QString t_languageCode);
-  bool getIsLoaded();
   QString getLanguageName();
   bool containsLocalizationValue(QString t_value);
   QString getLocalizationValue(QString t_value);

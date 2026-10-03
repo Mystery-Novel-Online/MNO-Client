@@ -103,7 +103,6 @@ namespace courtroom
   {
     void create(const std::string& name, const std::string& css, int x, int y, int width, int height);
     void addItem(const std::string& name, const std::string& value);
-    void removeItem(const std::string& name, const std::string& value);
     void clearItems(const std::string& name);
   }
 

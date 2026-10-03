@@ -107,8 +107,9 @@ QString ApiManager::repoUrl(const QString& guid)
 
 QString ApiManager::baseUri()
 {
-  if(USE_LOCALHOST)
+  if(USE_LOCALHOST) {
     return "http://localhost:3623/";
+  }
 
   return QString::fromStdString(config::ConfigUserSettings::stringValue("mnn_api", "https://api.mysterynovel.network/") );
 }

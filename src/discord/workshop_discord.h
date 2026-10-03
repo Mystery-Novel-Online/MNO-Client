@@ -26,8 +26,6 @@ public:
   void setRichPresenceDetailsText(std::string sdetails);
   void processOAuth();
   void runCallbacks();
-  void sendUserMessage(std::string message, uint64_t recipientId);
-  void updateRichPresence();
 
   QVector<DiscordUser> getFriends();
 
