@@ -37,6 +37,8 @@ public:
   QString getVariant(const QString& layerName, const QString& fallback);;
   QString getBaseVariant(const QString& fallback);
 
+  void resetBaseVariant();
+
   void moveToCursor(const QPoint& position);
   inline bool shortcutModeEnabled() { return m_shortcutMode; }
   void toggleShortcutMode(bool state);

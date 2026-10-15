@@ -123,6 +123,14 @@ QString LayerSelectionPanel::getBaseVariant(const QString &fallback) {
   return m_baseImageOverride;
 }
 
+void LayerSelectionPanel::resetBaseVariant()
+{
+  if(m_GlobalVariants.contains("base_image")) {
+    m_GlobalVariants.remove("base_image");
+  }
+  m_baseImageOverride.clear();
+}
+
 void LayerSelectionPanel::moveToCursor(const QPoint& position) {
   QPoint calculatedPosition(position.x() - (width() / 2), position.y() - (height() / 2));
   if(calculatedPosition.x() < 0) {

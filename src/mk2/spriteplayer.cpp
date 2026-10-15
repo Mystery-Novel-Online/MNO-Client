@@ -65,7 +65,7 @@ QPixmap SpritePlayer::getCurrentPixmap() const
   return m_scaled_pixmap_frame;
 }
 
-QImage SpritePlayer::get_current_native_frame() const
+QImage& SpritePlayer::get_current_native_frame()
 {
   return m_current_frame.image;
 }
@@ -405,7 +405,7 @@ void SpritePlayer::fetch_next_frame()
 
 void SpritePlayer::scale_current_frame()
 {
-  QImage l_image = m_current_frame.image;
+  QImage& l_image = m_current_frame.image;
   QSizeF originalSize = l_image.size();
 
   if(l_image.isNull())
@@ -428,7 +428,7 @@ void SpritePlayer::scale_current_frame()
       continue;
     }
 
-    QImage layerImg = layer->spritePlayerReference()->get_current_native_frame();
+    QImage& layerImg = layer->spritePlayerReference()->get_current_native_frame();
     if(!layerImg.isNull())
     {
       combiner.drawImage(layer->targetRect.x(), layer->targetRect.y(), layerImg);
@@ -447,7 +447,7 @@ void SpritePlayer::scale_current_frame()
 
   for(SpriteLayer* layer : overlayQueue)
   {
-    QImage layerImg = layer->spritePlayerReference()->get_current_native_frame();
+    QImage& layerImg = layer->spritePlayerReference()->get_current_native_frame();
     if(!layerImg.isNull())
     {
       combiner.drawImage(layer->targetRect, layerImg);
@@ -486,6 +486,7 @@ void SpritePlayer::scale_current_frame()
       composed = composed.scaled(finalWidth, finalHeight, Qt::IgnoreAspectRatio, Qt::FastTransformation);
     }
   }
+  break;
 
   case rolechat::actor::ActorScalingMode::HeightPixelScaling:
   {
@@ -501,6 +502,7 @@ void SpritePlayer::scale_current_frame()
       composed = composed.scaled(finalWidth, finalHeight, Qt::IgnoreAspectRatio, Qt::FastTransformation);
     }
   }
+  break;
 
   }
 

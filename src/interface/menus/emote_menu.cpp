@@ -46,6 +46,9 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
   LayerSelectionPanel *selectionPanel = static_cast<LayerSelectionPanel*>(LegacyThemeManager::get().getWidget("layers_panel"));
   if(selectionPanel) selectionPanel->clear();
 
+  bool baseImageFound = false;
+  QString baseVariant = selectionPanel->getBaseVariant("");
+
   for(const ActorLayer &layer : emote.emoteOverlays) {
     QString qLayerName = QString::fromStdString(layer.offsetName);
     if(!QString::fromStdString(layer.toggleName).trimmed().isEmpty() && layer.offsetName != "base_image") {
@@ -61,9 +64,17 @@ void EmoteMenu::EmoteChange(ActorEmote emote)
 
       for(auto variation : layer.variationOptions) {
         QString variationName = QString::fromStdString(variation);
+        if(baseVariant == variationName)
+        {
+          baseImageFound = true;
+        }
         selectionPanel->addLayer(qLayerName, variationName, variationName == QString::fromStdString(layer.spriteName), type);
       }
     }
+  }
+
+  if(!baseImageFound) {
+    selectionPanel->resetBaseVariant();
   }
 }
 

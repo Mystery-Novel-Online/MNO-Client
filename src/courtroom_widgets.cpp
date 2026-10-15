@@ -908,16 +908,17 @@ void Courtroom::set_widgets()
   }
 
 
-  if(ao_app->current_theme->get_widget_settings_bool("ic_chatlog", "courtroom", "hide_frame")) ui_ic_chatlog->setFrameStyle(QFrame::NoFrame);
+  if(ao_app->current_theme->get_widget_settings_bool("ic_chatlog", "courtroom", "hide_frame")) {
+    ui_ic_chatlog->setFrameStyle(QFrame::NoFrame);
+  }
 
   setupWidgetElement(ui_area_desc, "area_desc");
 
+  if(ao_app->current_theme->get_widget_settings_bool("area_desc", "courtroom", "hide_frame")){
+    ui_area_desc->setFrameStyle(QFrame::NoFrame);
+  }
 
-  if(ao_app->current_theme->get_widget_settings_bool("area_desc", "courtroom", "hide_frame")) ui_area_desc->setFrameStyle(QFrame::NoFrame);
-
-
-  if(ao_app->current_theme->get_widget_settings_bool("server_chatlog", "courtroom", "hide_frame"))
-  {
+  if(ao_app->current_theme->get_widget_settings_bool("server_chatlog", "courtroom", "hide_frame")) {
     ui_ooc_chatlog->setFrameStyle(QFrame::NoFrame);
   }
 

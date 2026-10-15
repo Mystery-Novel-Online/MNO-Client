@@ -44,7 +44,7 @@ public:
 
   QImage get_current_frame() const;
   QPixmap getCurrentPixmap() const;
-  QImage get_current_native_frame() const;
+  QImage& get_current_native_frame();
 
   QRectF get_scaled_bounding_rect() const;
 
