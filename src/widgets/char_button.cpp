@@ -65,7 +65,7 @@ void AOCharButton::set_character(QString p_character, QString p_character_ini)
   const QString l_icon_path = engine::fs::characters::getFilePath(m_character, "char_icon.png").replace('\\', '/');;
   const bool l_file_exist = FS::Checks::FileExists(l_icon_path);
   setStyleSheet(l_file_exist ? QString("AOCharButton { border-image: url(\"%1\");  }").arg(l_icon_path) : nullptr);
-  const QString l_final_character = QString(m_character).replace("&", "&&");
+  const QString l_final_character = m_character;
   setText(l_file_exist ? nullptr : l_final_character);
 
   const bool l_is_different_chr = m_character != p_character_ini;
@@ -73,7 +73,7 @@ void AOCharButton::set_character(QString p_character, QString p_character_ini)
     ui_character->setStyleSheet(
         QString("border-image: url(\"%1\");").arg(engine::fs::characters::getFilePath(p_character_ini, "char_icon.png").replace('\\', '/')));
   ui_character->setVisible(l_is_different_chr);
-  setToolTip(l_is_different_chr ? QString("%1 as %2").arg(m_character, QString(p_character_ini).replace("&", "&&"))
+  setToolTip(l_is_different_chr ? QString("%1 as %2").arg(m_character, QString(p_character_ini))
                                 : l_final_character);
 }
 
