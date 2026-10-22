@@ -75,6 +75,32 @@ class QLabel;
 using namespace engine;
 using namespace engine::network::metadata;
 
+struct MessageTickState
+{
+  // maintains a timer for how fast messages tick onto screen
+  QTimer *tick_timer = nullptr;
+  std::optional<int> server_tick_rate;
+
+  int iclog_cursor_position = 0;
+  int iclog_cursor_offset = 0;
+
+  // used to determine how often blips sound
+  int blip_step = 0;
+
+  // which tick position(character in chat message) we are at
+  int tick_step = 0;
+  int tick_speed = 0;
+
+  int rainbow_step = 0;
+  bool rainbow_enabled = false;
+
+  bool ignore_next_letter = false;
+  bool delay_next_letter = false;
+  bool first_showname_sent = false;
+  bool next_showname_ignored = false;
+  bool contains_add_button = false;
+};
+
 struct TagOverrides
 {
   std::optional<double> tagScaleOverride;
@@ -343,24 +369,8 @@ private:
   // triggers ping_server() every 60 seconds
   QTimer *m_keepalive_timer = nullptr;
 
-  // maintains a timer for how fast messages tick onto screen
-  int m_iclog_cursor_position = 0;
-  int m_iclog_cursor_offset = 0;
-  QTimer *m_tick_timer = nullptr;
-  std::optional<int> m_server_tick_rate;
-  int m_tick_speed = 0;
-  // which tick position(character in chat message) we are at
-  int m_tick_step = 0;
-  bool is_ignore_next_letter = false;
-  bool is_delay_next_letter = false;
-  // used to determine how often blips sound
-  int m_blip_step = 0;
-  int m_rainbow_step = 0;
-  bool is_first_showname_sent = false;
-  bool is_next_showname_ignored = false;
-  bool is_rainbow_enabled = false;
-  bool contains_add_button = false;
 
+  MessageTickState tickState;
 
   LayerSelectionPanel *pLayersPanel = nullptr;
   ChoiceDialog *pNotifyPopup = nullptr;

@@ -30,9 +30,9 @@ void Courtroom::create_widgets()
   m_keepalive_timer = new QTimer(this);
   m_keepalive_timer->start(60000);
 
-  m_tick_timer = new QTimer(this);
-  m_tick_timer->setSingleShot(true);
-  m_tick_timer->setTimerType(Qt::PreciseTimer);
+  tickState.tick_timer = new QTimer(this);
+  tickState.tick_timer->setSingleShot(true);
+  tickState.tick_timer->setTimerType(Qt::PreciseTimer);
 
   m_sound_timer = new QTimer(this);
   m_sound_timer->setSingleShot(true);
@@ -379,7 +379,7 @@ void Courtroom::connect_widgets()
 
   connect(m_sound_timer, SIGNAL(timeout()), this, SLOT(play_sfx()));
 
-  connect(m_tick_timer, &QTimer::timeout, this, &Courtroom::next_chat_letter);
+  connect(tickState.tick_timer, &QTimer::timeout, this, &Courtroom::next_chat_letter);
 
   connect(m_flash_timer, &QTimer::timeout, this, &Courtroom::realization_done);
 

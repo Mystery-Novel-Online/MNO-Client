@@ -436,7 +436,7 @@ void Courtroom::enter_courtroom(int p_cid)
   }
 
   const QString l_showname = ao_config->showname();
-  if(!l_showname.isEmpty() && !is_first_showname_sent) {
+  if(!l_showname.isEmpty() && !tickState.first_showname_sent) {
     send_showname_packet(l_showname);
   }
 
@@ -709,10 +709,10 @@ void Courtroom::set_background(DRAreaBackground p_background)
 void Courtroom::set_tick_rate(const int p_tick_rate)
 {
   if(p_tick_rate < 0) {
-    m_server_tick_rate.reset();
+    tickState.server_tick_rate.reset();
     return;
   }
-  m_server_tick_rate = p_tick_rate;
+  tickState.server_tick_rate = p_tick_rate;
 }
 
 void Courtroom::set_music_text(QString p_text)
@@ -845,7 +845,7 @@ void Courtroom::append_server_chatmessage(QString p_name, QString p_message)
 
 void Courtroom::ignore_next_showname()
 {
-  is_next_showname_ignored = true;
+  tickState.next_showname_ignored = true;
 }
 
 /**
@@ -855,12 +855,12 @@ void Courtroom::ignore_next_showname()
  */
 void Courtroom::send_showname_packet(QString p_showname)
 {
-  if(is_next_showname_ignored) {
-    is_next_showname_ignored = false;
+  if(tickState.next_showname_ignored) {
+    tickState.next_showname_ignored = false;
     return;
   }
 
-  is_first_showname_sent = true;
+  tickState.first_showname_sent = true;
 
   ao_app->send_server_packet(DRPacket("SN", {p_showname}));
 }
@@ -1188,7 +1188,7 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
   m_incomingMessage.speaker.isVisible = p_chatmessage[CMHideCharacter].toInt() != 1;
 
   if(!m_incomingMessage.emptyMessage) {
-    while(m_tick_step <= m_chatmessage[CMMessage].length() - 1) {
+    while(tickState.tick_step <= m_chatmessage[CMMessage].length() - 1) {
       next_chat_letter();
     }
   }
@@ -1252,8 +1252,8 @@ void Courtroom::next_chatmessage(QStringList p_chatmessage)
     QTextCursor cursor2 = ui_ic_chatlog->textCursor();
     cursor2.movePosition(QTextCursor::End);
     ui_ic_chatlog->setTextCursor(cursor2);
-    m_iclog_cursor_position = cursor2.position();
-    m_iclog_cursor_offset = 0;
+    tickState.iclog_cursor_position = cursor2.position();
+    tickState.iclog_cursor_offset = 0;
 
     l_scrollbar->setValue(l_scroll_limt ? l_scrollbar->maximum() : l_scroll_pos);
 
@@ -1367,7 +1367,7 @@ void Courtroom::start_chatmessage()
   m_loading_timer->stop();
   ui_vp_loading->hide();
 
-  m_tick_timer->stop();
+  tickState.tick_timer->stop();
   m_chatmessage = m_pre_chatmessage;
 
   m_appendMessage = m_chatmessage[CMMessage].startsWith("<a>");
@@ -2061,7 +2061,7 @@ void Courtroom::update_ic_log(bool p_reset_log)
       }
 
       if(hideMessage) {
-        m_iclog_cursor_position = l_cursor.position();
+        tickState.iclog_cursor_position = l_cursor.position();
       }
     }
   }
@@ -2077,7 +2077,7 @@ void Courtroom::update_ic_log(bool p_reset_log)
       for(int i = 0; i < l_remove_block_count; ++i) {
         l_cursor.movePosition(l_block_orientation, QTextCursor::KeepAnchor);
       }
-      m_iclog_cursor_position -= l_cursor.selectedText().count();
+      tickState.iclog_cursor_position -= l_cursor.selectedText().count();
       l_cursor.removeSelectedText();
     }
   }
@@ -2196,7 +2196,7 @@ void Courtroom::setup_chat()
   }
 
   set_text_color();
-  m_rainbow_step = 0;
+  tickState.rainbow_step = 0;
   // we need to ensure that the text isn't already ticking because this function
   // can be called by two logic paths
   if(text_state != 0) {
@@ -2211,10 +2211,10 @@ void Courtroom::setup_chat()
 
   ui_vp_chatbox->show();
 
-  m_tick_speed = 0;
-  m_tick_step = 0;
-  is_ignore_next_letter = false;
-  m_blip_step = 0;
+  tickState.tick_speed = 0;
+  tickState.tick_step = 0;
+  tickState.ignore_next_letter = false;
+  tickState.blip_step = 0;
 
   // Cache these so chat_tick performs better
   if(ao_app->current_theme->m_jsonLoaded) {
@@ -2253,36 +2253,36 @@ void Courtroom::setup_chat()
 
 void Courtroom::start_chat_timer()
 {
-  if(m_tick_timer->isActive()) {
+  if(tickState.tick_timer->isActive()) {
     return;
   }
-  m_tick_timer->start();
+  tickState.tick_timer->start();
 }
 
 void Courtroom::stop_chat_timer()
 {
-  m_tick_timer->stop();
+  tickState.tick_timer->stop();
 }
 
 void Courtroom::calculate_chat_tick_interval()
 {
   double l_tick_rate = ao_config->chat_tick_interval();
 
-  if(m_server_tick_rate.has_value()) {
-    l_tick_rate = qMax(m_server_tick_rate.value(), 0);
+  if(tickState.server_tick_rate.has_value()) {
+    l_tick_rate = qMax(tickState.server_tick_rate.value(), 0);
   }
 
-  l_tick_rate = qBound(0.0, l_tick_rate * (1.0 - qBound(-1.0, 0.4 * m_tick_speed, 1.0)), l_tick_rate * 2.0);
+  l_tick_rate = qBound(0.0, l_tick_rate * (1.0 - qBound(-1.0, 0.4 * tickState.tick_speed, 1.0)), l_tick_rate * 2.0);
 
   if(customMessageSpeed != 0) {
     l_tick_rate = customMessageSpeed;
   }
 
-  if(is_delay_next_letter) {
-    m_tick_timer->setInterval(l_tick_rate + ao_config->punctuation_delay() + pendingDelay);
+  if(tickState.delay_next_letter) {
+    tickState.tick_timer->setInterval(l_tick_rate + ao_config->punctuation_delay() + pendingDelay);
     return;
   }
-  m_tick_timer->setInterval(l_tick_rate + pendingDelay);
+  tickState.tick_timer->setInterval(l_tick_rate + pendingDelay);
 }
 
 void Courtroom::next_chat_letter()
@@ -2300,7 +2300,7 @@ void Courtroom::next_chat_letter()
   QTextCharFormat vp_message_format = ui_vp_message->currentCharFormat();
 
 
-  if(m_tick_step == 0) {
+  if(tickState.tick_step == 0) {
     overrides = {};
     overrides.baseFontSize = getMessageFontStruct("message", "").size;
     overrides.baseFont = getMessageFontStruct("message", "").font;
@@ -2313,7 +2313,7 @@ void Courtroom::next_chat_letter()
   unprocessedTags.reserve(m_ProcessedTags.size());
 
   for(const CueData& tag : m_ProcessedTags) {
-    if(tag.timestamp <= m_tick_step || m_tick_step >= message_length) {
+    if(tag.timestamp <= tickState.tick_step || tickState.tick_step >= message_length) {
       switch(tag.type)
       {
       case CueType::Tint:
@@ -2322,7 +2322,7 @@ void Courtroom::next_chat_letter()
 
       case CueType::Blip:
         m_configBlips->setTagBlip(tag.arguments.at(1).toString().toStdString());
-        m_blip_step = 0;
+        tickState.blip_step = 0;
         break;
 
       case CueType::SoundEffect:
@@ -2402,9 +2402,9 @@ void Courtroom::next_chat_letter()
   }
 
   m_ProcessedTags = unprocessedTags;
-  if(m_tick_step >= message_length || ui_vp_chatbox->isHidden()) {
+  if(tickState.tick_step >= message_length || ui_vp_chatbox->isHidden()) {
     post_chatmessage();
-    m_tick_step = message_length;
+    tickState.tick_step = message_length;
     return;
   }
 
@@ -2438,7 +2438,7 @@ void Courtroom::next_chat_letter()
     bool l_scroll_limt = l_scroll_pos == l_scrollbar->maximum();
 
     if(ao_config->log_is_topdown_enabled() && !is_system_speaking) {
-      cursor2.setPosition(m_iclog_cursor_position + m_iclog_cursor_offset);
+      cursor2.setPosition(tickState.iclog_cursor_position + tickState.iclog_cursor_offset);
       ui_ic_chatlog->setTextCursor(cursor2);
 
 
@@ -2454,7 +2454,7 @@ void Courtroom::next_chat_letter()
       }
 
       cursor2.insertText(ch, logFormat);
-      m_iclog_cursor_offset += 1;
+      tickState.iclog_cursor_offset += 1;
 
 
       if(l_scroll_limt) {
@@ -2467,33 +2467,33 @@ void Courtroom::next_chat_letter()
   };
 
   auto advanceLetter = [&]() {
-    ++m_tick_step;
-    is_ignore_next_letter = false;
+    ++tickState.tick_step;
+    tickState.ignore_next_letter = false;
   };
 
-  const QChar f_character = f_message.at(m_tick_step);
+  const QChar f_character = f_message.at(tickState.tick_step);
 
-  if(punctuationCharacters.contains(f_character) && m_tick_step != message_length - 1) {
-    if(!is_delay_next_letter) {
-      is_delay_next_letter = true;
+  if(punctuationCharacters.contains(f_character) && tickState.tick_step != message_length - 1) {
+    if(!tickState.delay_next_letter) {
+      tickState.delay_next_letter = true;
       calculate_chat_tick_interval();
     }
   }
-  else if(is_delay_next_letter) {
-    is_delay_next_letter = false;
+  else if(tickState.delay_next_letter) {
+    tickState.delay_next_letter = false;
     calculate_chat_tick_interval();
   }
 
-  if(!is_ignore_next_letter) {
+  if(!tickState.ignore_next_letter) {
     if(f_character == Qt::Key_Backslash) {
-      ++m_tick_step;
-      is_ignore_next_letter = true;
+      ++tickState.tick_step;
+      tickState.ignore_next_letter = true;
       next_chat_letter();
       return;
     }
     else if((f_character == Qt::Key_BraceLeft || f_character == Qt::Key_BraceRight)) {
-      ++m_tick_step;
-      m_tick_speed = qBound(-3, m_tick_speed + (f_character == '}' ? 1 : -1), 3);
+      ++tickState.tick_step;
+      tickState.tick_speed = qBound(-3, tickState.tick_speed + (f_character == '}' ? 1 : -1), 3);
       calculate_chat_tick_interval();
       next_chat_letter();
       return;
@@ -2533,7 +2533,7 @@ void Courtroom::next_chat_letter()
     useBlip = m_configBlips->useBlanks() ? true : false;
     insertChar(' ', vp_message_format);
   }
-  else if(f_character.isHighSurrogate() && m_tick_step + 1 < f_message.size() && f_message.at(m_tick_step + 1).isLowSurrogate()) {
+  else if(f_character.isHighSurrogate() && tickState.tick_step + 1 < f_message.size() && f_message.at(tickState.tick_step + 1).isLowSurrogate()) {
     if(overrides.tagColourOveride.has_value()) {
       vp_message_format.setForeground(overrides.tagColourOveride.value());
     }
@@ -2543,16 +2543,16 @@ void Courtroom::next_chat_letter()
     }
 
     insertChar(f_character, vp_message_format);
-    insertChar(f_message.at(m_tick_step + 1), vp_message_format);
+    insertChar(f_message.at(tickState.tick_step + 1), vp_message_format);
 
-    m_tick_step += 1;
+    tickState.tick_step += 1;
   }
   else if(m_incomingMessage.color == dialogue::DialogueColor::CRainbow) {
     static const QStringList rainbowColors = { "#BA1518", "#D55900", "#E7CE4E", "#65C856", "#1596C8" };
-    QColor color(rainbowColors[m_rainbow_step]);
+    QColor color(rainbowColors[tickState.rainbow_step]);
     vp_message_format.setForeground(color);
     insertChar(f_character, vp_message_format);
-    m_rainbow_step = (m_rainbow_step + 1) % rainbowColors.size();
+    tickState.rainbow_step = (tickState.rainbow_step + 1) % rainbowColors.size();
   }
   else if(m_chatbox_message_enable_highlighting) {
     bool highlight_found = false;
@@ -2564,7 +2564,7 @@ void Courtroom::next_chat_letter()
       m_message_color_stack.push("");
     }
 
-    if(!is_ignore_next_letter) {
+    if(!tickState.ignore_next_letter) {
       for(const auto &col : qAsConst(m_chatbox_message_highlight_colors)) {
         if(f_character == col[0][0] && m_message_color_name != col[1]) {
           m_message_color_stack.push(col[1]);
@@ -2586,7 +2586,7 @@ void Courtroom::next_chat_letter()
 
     QString m_future_string_color = m_message_color_name;
 
-    if(!highlight_found && !is_ignore_next_letter) {
+    if(!highlight_found && !tickState.ignore_next_letter) {
       for(const auto &col : qAsConst(m_chatbox_message_highlight_colors)) {
         if(f_character == col[0][1]) {
           if(m_message_color_stack.size() > 1) {
@@ -2620,21 +2620,21 @@ void Courtroom::next_chat_letter()
       overideBlipRate = 1;
     }
 
-    if(m_blip_step % overideBlipRate == 0) {
-      m_blip_step = 0;
+    if(tickState.blip_step % overideBlipRate == 0) {
+      tickState.blip_step = 0;
       if(!LuaBridge::LuaEventCall("BlipTickEvent")) {
         audio::blip::Tick();
         LuaBridge::LuaEventCall("OnBlipTick");
       }
     }
 
-    ++m_blip_step;
+    ++tickState.blip_step;
   }
   ui_vp_message->update();
 
-  ++m_tick_step;
-  is_ignore_next_letter = false;
-  m_tick_timer->start();
+  ++tickState.tick_step;
+  tickState.ignore_next_letter = false;
+  tickState.tick_timer->start();
 }
 
 void Courtroom::post_chatmessage()
@@ -2645,7 +2645,7 @@ void Courtroom::post_chatmessage()
     m_configBlips->playEndingSfx();
   }
 
-  m_tick_timer->stop();
+  tickState.tick_timer->stop();
   if(m_game_state != GameState::Preloading) {
     m_game_state = GameState::Finished;
   }
@@ -2888,7 +2888,7 @@ void Courtroom::on_ooc_message_return_pressed()
 
           {"/rainbow", [this, &l_message] {
             ui_text_color->addItem(localization::getText("COLOR_RAINBOW"));
-            is_rainbow_enabled = true;
+            tickState.rainbow_enabled = true;
           }},
 
           {"/afk", [this]{
