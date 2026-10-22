@@ -1408,7 +1408,6 @@ void Courtroom::handle_chatmessage()
   qDebug() << "handle_chatmessage";
   LuaBridge::OnCharacterMessage(m_incomingMessage.showname, m_incomingMessage.speaker.character, m_chatmessage[CMEmote].toStdString(), m_incomingMessage.message, m_incomingMessage.emptyMessage);
   m_play_pre = false;
-  m_play_zoom = false;
   const int l_emote_mod = m_chatmessage[CMEmoteModifier].toInt();
   switch (l_emote_mod)
   {
@@ -1419,11 +1418,9 @@ void Courtroom::handle_chatmessage()
     m_play_pre = true;
     break;
   case ZoomEmoteMod:
-    m_play_zoom = true;
     break;
   case PreZoomEmoteMod:
     m_play_pre = true;
-    m_play_zoom = true;
     break;
   }
 

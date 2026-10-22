@@ -392,7 +392,6 @@ private:
   bool m_appendMessage = false;
   bool m_hide_character = false;
   bool m_play_pre = false;
-  bool m_play_zoom = false;
   bool chatmessage_is_empty = false;
 
   QString previous_ic_message;
