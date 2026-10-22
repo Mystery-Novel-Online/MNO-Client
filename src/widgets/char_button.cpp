@@ -34,13 +34,16 @@ void AOCharButton::showContextMenu(QPoint pos)
 {
   QMenu *menu = new QMenu(this);
 
-  QAction *a = new QAction(engine::system::localization::getText("CSS_FAVORITES_ADD"));
-  QObject::connect(a, &QAction::triggered, [this](){addToFavorites();});
-  menu->addAction(a);
-
-  QAction *copyIDAction = new QAction(engine::system::localization::getText("CSS_FAVORITES_REMOVE"));
-  QObject::connect(copyIDAction, &QAction::triggered, [this](){removeFavorites();});
-  menu->addAction(copyIDAction);
+  if(CharacterRepository::isFavorite(m_character)) {
+    QAction *copyIDAction = new QAction(engine::system::localization::getText("CSS_FAVORITES_REMOVE"));
+    QObject::connect(copyIDAction, &QAction::triggered, [this](){removeFavorites();});
+    menu->addAction(copyIDAction);
+  }
+  else {
+    QAction *a = new QAction(engine::system::localization::getText("CSS_FAVORITES_ADD"));
+    QObject::connect(a, &QAction::triggered, [this](){addToFavorites();});
+    menu->addAction(a);
+  }
 
   QAction *opencharfolder = new QAction(engine::system::localization::getText("OPEN_CHAR_FOLDER"));
   QObject::connect(opencharfolder, &QAction::triggered, [this](){openCharacterFolder();});
