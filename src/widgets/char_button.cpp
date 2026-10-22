@@ -33,6 +33,7 @@ AOCharButton::AOCharButton(QWidget *parent, AOApplication *p_ao_app, int x_pos, 
 void AOCharButton::showContextMenu(QPoint pos)
 {
   QMenu *menu = new QMenu(this);
+  menu->setAttribute(Qt::WA_DeleteOnClose);
 
   if(CharacterRepository::isFavorite(m_character)) {
     QAction *copyIDAction = new QAction(engine::system::localization::getText("CSS_FAVORITES_REMOVE"));

@@ -352,6 +352,8 @@ void AreaPlayerEntry::handleTypingTimeout() {
 
 void AreaPlayerEntry::showContextMenu(QPoint pos) {
   QMenu *menu = new QMenu(this);
+  menu->setAttribute(Qt::WA_DeleteOnClose);
+
   QMenu *playerMenu = menu->addMenu("[" + QString::number(m_playerData.data.id) + "] " + m_showname);
   QMenu *pairMenu = menu->addMenu("Pair Options");
 
