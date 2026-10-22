@@ -2,6 +2,10 @@
 
 CrossfadeLabel::CrossfadeLabel(AOApplication *aoApp, QWidget* parent) : RPLabel(parent, aoApp)
 {
+  QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect();
+  setGraphicsEffect(eff);
+
+  m_fadeAnimation = new QPropertyAnimation(eff, "opacity");
 }
 
 void CrossfadeLabel::assignRenderTarget(DRGraphicsView *viewport)
@@ -25,13 +29,9 @@ void CrossfadeLabel::render()
 
 void CrossfadeLabel::animate()
 {
-  QGraphicsOpacityEffect *eff = new QGraphicsOpacityEffect();
-  setGraphicsEffect(eff);
-
-  QPropertyAnimation *a = new QPropertyAnimation(eff, "opacity");
-  a->setDuration(m_fadeDuration);
-  a->setStartValue(1);
-  a->setEndValue(0);
-  a->setEasingCurve(QEasingCurve::OutBack);
-  a->start(QPropertyAnimation::DeleteWhenStopped);
+  m_fadeAnimation->setDuration(m_fadeDuration);
+  m_fadeAnimation->setStartValue(1);
+  m_fadeAnimation->setEndValue(0);
+  m_fadeAnimation->setEasingCurve(QEasingCurve::OutBack);
+  m_fadeAnimation->start();
 }

@@ -15,6 +15,7 @@ public:
 
 private:
   DRGraphicsView* m_renderTarget = nullptr;
+  QPropertyAnimation* m_fadeAnimation = nullptr;
   int m_fadeDuration = 200;
 };
 
