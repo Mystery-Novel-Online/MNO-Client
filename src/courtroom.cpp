@@ -948,7 +948,7 @@ void Courtroom::on_ic_message_return_pressed()
     return;
   }
 
-  if((anim_state < 3 || text_state < 2) && m_shout_state == 0) {
+  if((m_messageState.anim_state < 3 || m_messageState.text_state < 2) && m_shout_state == 0) {
     return;
   }
 
@@ -1370,9 +1370,9 @@ void Courtroom::start_chatmessage()
   tickState.tick_timer->stop();
   m_chatmessage = m_pre_chatmessage;
 
-  m_appendMessage = m_chatmessage[CMMessage].startsWith("<a>");
+  m_messageState.appendMessage = m_chatmessage[CMMessage].startsWith("<a>");
 
-  if(m_appendMessage) {
+  if(m_messageState.appendMessage) {
     QString appendPrefix = ui_vp_message->toPlainText().right(1) == " " ? "" : " ";
     m_chatmessage[CMMessage] = appendPrefix + m_chatmessage[CMMessage].mid(3);
   }
@@ -1381,7 +1381,7 @@ void Courtroom::start_chatmessage()
   int incomingSender = m_chatmessage[CMClientId].toInt();
 
   if(m_messageSender != incomingSender) {
-    m_appendMessage = false;
+    m_messageState.appendMessage = false;
   }
 
   m_messageSender = incomingSender;
@@ -1393,10 +1393,10 @@ void Courtroom::start_chatmessage()
 
 void Courtroom::handle_chatmessage()
 {
-  m_hide_character = m_chatmessage[CMHideCharacter].toInt();
+  m_messageState.hide_character = m_chatmessage[CMHideCharacter].toInt();
 
   int backgroundContrast = config::ConfigUserSettings::intergerValue("background_contrast");
-  if(backgroundContrast > 0 && (!m_hide_character || message::pair::isVisible())) {
+  if(backgroundContrast > 0 && (!m_messageState.hide_character || message::pair::isVisible())) {
     ui_vp_background->setTint("#000000", backgroundContrast);
   }
   else {
@@ -1407,7 +1407,7 @@ void Courtroom::handle_chatmessage()
   ui_vp_player_char->setTint(Qt::transparent);
   qDebug() << "handle_chatmessage";
   LuaBridge::OnCharacterMessage(m_incomingMessage.showname, m_incomingMessage.speaker.character, m_chatmessage[CMEmote].toStdString(), m_incomingMessage.message, m_incomingMessage.emptyMessage);
-  m_play_pre = false;
+  m_messageState.play_pre = false;
   const int l_emote_mod = m_chatmessage[CMEmoteModifier].toInt();
   switch (l_emote_mod)
   {
@@ -1415,17 +1415,17 @@ void Courtroom::handle_chatmessage()
   default:
     break;
   case PreEmoteMod:
-    m_play_pre = true;
+    m_messageState.play_pre = true;
     break;
   case ZoomEmoteMod:
     break;
   case PreZoomEmoteMod:
-    m_play_pre = true;
+    m_messageState.play_pre = true;
     break;
   }
 
   m_speaker_chr_id = m_chatmessage[CMChrId].toInt();
-  is_system_speaking = (m_speaker_chr_id == SpectatorId);
+  m_messageState.system_speaking = (m_speaker_chr_id == SpectatorId);
 
   if(m_speaker_chr_id != SpectatorId && (m_speaker_chr_id < 0 || m_speaker_chr_id >= CharacterRepository::serverListLength())) {
     post_chatmessage();
@@ -1433,13 +1433,13 @@ void Courtroom::handle_chatmessage()
   }
 
   const QString l_message = QString(m_chatmessage[CMMessage]).remove(QRegularExpression("(?<!\\\\)(\\{|\\})")).replace(QRegularExpression("\\\\(\\{|\\})"), "\\1");
-  chatmessage_is_empty = l_message.trimmed().isEmpty();
-  m_msg_is_first_person = false;
+  m_messageState.chatmessage_is_empty = l_message.trimmed().isEmpty();
+  m_messageState.isFirstPerson = false;
 
   // reset our ui state if client just spoke
-  if(user::IsSpectator() && is_system_speaking == false) {
+  if(user::IsSpectator() && m_messageState.system_speaking == false) {
     // update first person mode status
-    m_msg_is_first_person = ao_app->get_first_person_enabled();
+    m_messageState.isFirstPerson = ao_app->get_first_person_enabled();
   }
 
   qDebug() << "handle_chatmessage";
@@ -1449,7 +1449,7 @@ void Courtroom::handle_chatmessage()
 
 
   QString f_showname = m_chatmessage[CMShowName];
-  if(f_showname.isEmpty() && !is_system_speaking) {
+  if(f_showname.isEmpty() && !m_messageState.system_speaking) {
     f_showname = QString::fromStdString(m_SpeakerActor->showname());
   }
   m_speaker_showname = f_showname;
@@ -1457,19 +1457,19 @@ void Courtroom::handle_chatmessage()
   ui_vp_chat_arrow->hide();
   audio::effect::StopAll();
 
-  text_state = 0;
-  anim_state = 0;
+  m_messageState.text_state = 0;
+  m_messageState.anim_state = 0;
   stop_chat_timer();
   ui_vp_objection->stop();
 
-  m_message_color_name.clear();
+  m_messageState.message_color_name.clear();
   m_message_color_stack.clear();
 
   // reset effect
   ui_vp_effect->stop();
   ui_vp_effect->hide();
 
-  if(!m_appendMessage) {
+  if(!m_messageState.appendMessage) {
     ui_vp_message->clear();
   }
 
@@ -1530,7 +1530,7 @@ void Courtroom::video_finished()
   }
 
   qDebug() << "[viewport] Starting shout..." << l_shout_name;
-  m_play_pre = true;
+  m_messageState.play_pre = true;
   ui_vp_objection->set_play_once(true);
   swap_viewport_reader(ui_vp_objection, ViewportShout);
   ui_vp_objection->start();
@@ -1539,7 +1539,7 @@ void Courtroom::video_finished()
 
 void Courtroom::objection_done()
 {
-  if(anim_state != 0) {
+  if(m_messageState.anim_state != 0) {
     return;
   }
   handle_chatmessage_2();
@@ -1643,11 +1643,11 @@ void Courtroom::handle_chatmessage_2() // handles IC
   const QString l_chatbox_name = ao_app->get_chat(m_chatmessage[CMChrName]);
   const bool l_is_self = (ao_config->log_display_self_highlight_enabled() && m_speaker_chr_id == user::GetCharacterId());
 
-  if(!LuaBridge::LuaEventCall("ChatboxImageEvent", l_is_self, chatmessage_is_empty, offsetTextbox.toStdString())) {
-    ui_vp_chatbox->set_chatbox_image(l_chatbox_name, l_is_self, chatmessage_is_empty, offsetTextbox);
+  if(!LuaBridge::LuaEventCall("ChatboxImageEvent", l_is_self, m_messageState.chatmessage_is_empty, offsetTextbox.toStdString())) {
+    ui_vp_chatbox->set_chatbox_image(l_chatbox_name, l_is_self, m_messageState.chatmessage_is_empty, offsetTextbox);
   }
 
-  if(!m_msg_is_first_person) {
+  if(!m_messageState.isFirstPerson) {
     display_background_scene();
   }
 
@@ -1659,7 +1659,7 @@ void Courtroom::handle_chatmessage_2() // handles IC
 
   u_crossfadeDisplay->animate();
 
-  if(m_play_pre) {
+  if(m_messageState.play_pre) {
     int sfx_delay = m_chatmessage[CMSoundDelay].toInt();
     m_sound_timer->start(sfx_delay);
     play_preanim();
@@ -1686,14 +1686,14 @@ void Courtroom::handle_chatmessage_3()
   // BLUE is from an enum in datatypes.h
   bool text_is_blue = m_incomingMessage.color == dialogue::DialogueColor::CBlue;
 
-  if(!text_is_blue && text_state == 1) {
+  if(!text_is_blue && m_messageState.text_state == 1) {
     f_anim_state = 2; // talking
   }
   else {
     f_anim_state = 3; // idle
   }
 
-  if(f_anim_state <= anim_state) {
+  if(f_anim_state <= m_messageState.anim_state) {
     return;
   }
 
@@ -1702,7 +1702,7 @@ void Courtroom::handle_chatmessage_3()
   const QString f_char = m_chatmessage[CMChrName];
   const QString f_emote = m_chatmessage[CMEmote];
 
-  if(!chatmessage_is_empty) {
+  if(!m_messageState.chatmessage_is_empty) {
     QString l_showname_image;
     if(ao_app->current_theme->read_config_bool("enable_showname_image")) {
       l_showname_image = ao_app->find_theme_asset_path("characters/" + f_char + "/showname_" + m_chatmessage[CMOutfitName], FS::Formats::StaticImages());
@@ -1743,23 +1743,23 @@ void Courtroom::handle_chatmessage_3()
   switch (f_anim_state)
   {
   case 2:
-    if(!m_hide_character && !m_msg_is_first_person) {
+    if(!m_messageState.hide_character && !m_messageState.isFirstPerson) {
       swap_viewport_reader(ui_vp_player_char, ViewportCharacterTalk);
       ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
       ui_vp_player_char->setLayerState(ViewportCharacterTalk);
     }
-    anim_state = 2;
+    m_messageState.anim_state = 2;
     break;
   default:
     qDebug() << "W: invalid anim_state: " << f_anim_state;
     [[fallthrough]];
   case 3:
-    if(!m_hide_character && !m_msg_is_first_person) {
+    if(!m_messageState.hide_character && !m_messageState.isFirstPerson) {
       swap_viewport_reader(ui_vp_player_char, ViewportCharacterIdle);
       ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
       ui_vp_player_char->setLayerState(ViewportCharacterIdle);
     }
-    anim_state = 3;
+    m_messageState.anim_state = 3;
     break;
   }
 
@@ -2157,9 +2157,9 @@ void Courtroom::append_system_text(const QString& p_showname, const QString& p_l
 void Courtroom::play_preanim()
 {
   // set state
-  anim_state = 1;
+  m_messageState.anim_state = 1;
 
-  if(m_msg_is_first_person) {
+  if(m_messageState.isFirstPerson) {
     qDebug() << "[viewport] Skipping character animation as first person.";
     preanim_done();
     return;
@@ -2177,7 +2177,7 @@ void Courtroom::play_preanim()
 
 void Courtroom::preanim_done()
 {
-  if(anim_state != 1) {
+  if(m_messageState.anim_state != 1) {
     return;
   }
   handle_chatmessage_3();
@@ -2191,7 +2191,7 @@ void Courtroom::realization_done()
 
 void Courtroom::setup_chat()
 {
-  if(!m_appendMessage) {
+  if(!m_messageState.appendMessage) {
     ui_vp_message->clear();
   }
 
@@ -2199,13 +2199,13 @@ void Courtroom::setup_chat()
   tickState.rainbow_step = 0;
   // we need to ensure that the text isn't already ticking because this function
   // can be called by two logic paths
-  if(text_state != 0) {
+  if(m_messageState.text_state != 0) {
     return;
   }
 
-  if(chatmessage_is_empty) {
+  if(m_messageState.chatmessage_is_empty) {
     // since the message is empty, it's technically done ticking
-    text_state = 2;
+    m_messageState.text_state = 2;
     return;
   }
 
@@ -2236,19 +2236,19 @@ void Courtroom::setup_chat()
   if(FS::Checks::FileExists(l_jsonPath)) {
     rolechat::actor::JsonActorData speakerActor;
     speakerActor.load(m_chatmessage[CMChrName].toStdString(), engine::fs::characters::getDirectoryPath(m_chatmessage[CMChrName]).toStdString());
-    m_gender = QString::fromStdString(speakerActor.gender());
+    m_messageState.gender = speakerActor.gender();
     m_configBlips->setCharacterBlip(speakerActor.blips());
   }
   else {
-    m_gender = ao_app->get_gender(m_chatmessage[CMChrName]);
+    m_messageState.gender = ao_app->get_gender(m_chatmessage[CMChrName]).toStdString();
     m_configBlips->setCharacterBlip("");
   }
   m_configBlips->setTagBlip("");
 
-  audio::blip::SetGender(m_gender.toStdString());
+  audio::blip::SetGender(m_messageState.gender);
 
   // means text is currently ticking
-  text_state = 1;
+  m_messageState.text_state = 1;
 }
 
 void Courtroom::start_chat_timer()
@@ -2429,7 +2429,7 @@ void Courtroom::next_chat_letter()
     messageCursor.insertText(ch, messageFormat);
 
     LuaBridge::LuaEventCall("OnMessageTick", QString(ch).toStdString());
-    audio::blip::SetGender(m_gender.toStdString());
+    audio::blip::SetGender(m_messageState.gender);
 
     // ---- Chatlog
     // -------- Scrollbar
@@ -2437,7 +2437,7 @@ void Courtroom::next_chat_letter()
     const int l_scroll_pos = l_scrollbar->value();
     bool l_scroll_limt = l_scroll_pos == l_scrollbar->maximum();
 
-    if(ao_config->log_is_topdown_enabled() && !is_system_speaking) {
+    if(ao_config->log_is_topdown_enabled() && !m_messageState.system_speaking) {
       cursor2.setPosition(tickState.iclog_cursor_position + tickState.iclog_cursor_offset);
       ui_ic_chatlog->setTextCursor(cursor2);
 
@@ -2449,7 +2449,7 @@ void Courtroom::next_chat_letter()
       logFormat.setForeground(format.foreground());
       logFormat.setTextOutline(Qt::NoPen);
 
-      if(format.foreground().color() == m_message_color) {
+      if(format.foreground().color() == m_messageState.message_color) {
         engine::system::theme::setChatlogColour("message", format);
       }
 
@@ -2538,7 +2538,7 @@ void Courtroom::next_chat_letter()
       vp_message_format.setForeground(overrides.tagColourOveride.value());
     }
     else {
-      QColor text_color = m_message_color_name.isEmpty() ? m_message_color : QColor(m_message_color_name);
+      QColor text_color = m_messageState.message_color_name.isEmpty() ? m_messageState.message_color : QColor(m_messageState.message_color_name);
       vp_message_format.setForeground(text_color);
     }
 
@@ -2566,9 +2566,9 @@ void Courtroom::next_chat_letter()
 
     if(!tickState.ignore_next_letter) {
       for(const auto &col : qAsConst(m_chatbox_message_highlight_colors)) {
-        if(f_character == col[0][0] && m_message_color_name != col[1]) {
+        if(f_character == col[0][0] && m_messageState.message_color_name != col[1]) {
           m_message_color_stack.push(col[1]);
-          m_message_color_name = m_message_color_stack.top();
+          m_messageState.message_color_name = m_message_color_stack.top();
           render_character = (col[2] != "0");
           highlight_found = true;
           break;
@@ -2580,11 +2580,11 @@ void Courtroom::next_chat_letter()
       vp_message_format.setForeground(overrides.tagColourOveride.value());
     }
     else {
-      QColor text_color = m_message_color_name.isEmpty() ? m_message_color : QColor(m_message_color_name);
+      QColor text_color = m_messageState.message_color_name.isEmpty() ? m_messageState.message_color : QColor(m_messageState.message_color_name);
       vp_message_format.setForeground(text_color);
     }
 
-    QString m_future_string_color = m_message_color_name;
+    QString m_future_string_color = m_messageState.message_color_name;
 
     if(!highlight_found && !tickState.ignore_next_letter) {
       for(const auto &col : qAsConst(m_chatbox_message_highlight_colors)) {
@@ -2603,7 +2603,7 @@ void Courtroom::next_chat_letter()
       insertChar(f_character, vp_message_format);
     }
 
-    m_message_color_name = m_future_string_color;
+    m_messageState.message_color_name = m_future_string_color;
   }
   else {
     insertChar(f_character, vp_message_format);
@@ -2649,16 +2649,16 @@ void Courtroom::post_chatmessage()
   if(m_game_state != GameState::Preloading) {
     m_game_state = GameState::Finished;
   }
-  text_state = 2;
-  anim_state = 3;
+  m_messageState.text_state = 2;
+  m_messageState.anim_state = 3;
 
-  if(!m_hide_character && !m_msg_is_first_person) {
+  if(!m_messageState.hide_character && !m_messageState.isFirstPerson) {
     swap_viewport_reader(ui_vp_player_char, ViewportCharacterIdle);
     ui_vp_player_char->setLayerState(ViewportCharacterIdle);
     ui_vp_player_char->start(m_ActorScaling, m_ActorScale);
   }
 
-  m_message_color_name = "";
+  m_messageState.message_color_name = "";
   m_message_color_stack.clear();
 
   if(ui_vp_chatbox->isVisible()) {
@@ -2688,7 +2688,7 @@ void Courtroom::set_text_color()
   const DR::Color color = DR::Color(m_incomingMessage.color);
   const QString color_code = color_map[color_map.contains(color) ? color : DR::CDefault].code;
   ui_vp_message->setStyleSheet("background-color: rgba(0, 0, 0, 0)");
-  m_message_color.setNamedColor(color_code);
+  m_messageState.message_color.setNamedColor(color_code);
 }
 
 void Courtroom::set_ban(int p_cid)

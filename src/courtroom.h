@@ -101,6 +101,30 @@ struct MessageTickState
   bool contains_add_button = false;
 };
 
+struct ICMessageState
+{
+  QColor message_color;
+  QString message_color_name;
+
+  std::string gender = "male";
+
+  // state of animation, 0 = objecting, 1 = preanim, 2 = talking, 3 = idle
+  int anim_state = 3;
+
+  // state of text ticking, 0 = not yet ticking, 1 = ticking in progress, 2 =
+  // ticking done
+  int text_state = 2;
+
+  bool appendMessage = false;
+  bool hide_character = false;
+  bool play_pre = false;
+  bool chatmessage_is_empty = false;
+
+  // if enabled, disable showing our own sprites when we talk in ic
+  bool isFirstPerson = false;
+  bool system_speaking = false;
+};
+
 struct TagOverrides
 {
   std::optional<double> tagScaleOverride;
@@ -399,27 +423,17 @@ private:
   int m_speaker_chr_id = SpectatorId;
   QString m_speaker_showname;
   int m_messageSender = -1;
-  bool m_appendMessage = false;
-  bool m_hide_character = false;
-  bool m_play_pre = false;
-  bool chatmessage_is_empty = false;
+
+  ICMessageState m_messageState;
 
   QString previous_ic_message;
 
   std::vector<CueData> m_ProcessedTags = {};
 
-  QColor m_message_color;
-  QString m_message_color_name;
   QStack<QString> m_message_color_stack;
 
   bool is_client_muted = false;
 
-  // state of animation, 0 = objecting, 1 = preanim, 2 = talking, 3 = idle
-  int anim_state = 3;
-
-  // state of text ticking, 0 = not yet ticking, 1 = ticking in progress, 2 =
-  // ticking done
-  int text_state = 2;
 
   //Temporary speaker management, will be put into its own class at some point.
   rolechat::actor::IActorData *m_SpeakerActor = nullptr;
@@ -429,8 +443,6 @@ private:
   rolechat::actor::ActorScalingMode m_ActorScaling = rolechat::actor::ActorScalingMode::AutomaticScaling;
   rolechat::actor::ActorScalingMode m_PairScaling = rolechat::actor::ActorScalingMode::AutomaticScaling;
 
-  // if enabled, disable showing our own sprites when we talk in ic
-  bool m_msg_is_first_person = false;
 
   // Cached values for chat_tick
   bool m_chatbox_message_outline = false;
@@ -441,7 +453,6 @@ private:
   QVector<QStringList> m_chatbox_message_highlight_colors;
 
   QString current_file;
-  QString m_gender = "male";
 
   // if true, a reload theme order was delayed to be executed *after* a shout
   // this allows reload theme orders that were received while a shout was
@@ -455,7 +466,6 @@ private:
   int m_effect_current = 0;
   int m_wtce_current = 0;
   bool is_judge = false;
-  bool is_system_speaking = false;
 
   int m_current_chr_page = 0;
   QPoint CharaSSSpacing;
@@ -681,8 +691,6 @@ private:
   QComboBox *pCharaSelectSeries = nullptr;
 
   RPButton *ui_back_to_lobby = nullptr;
-  bool m_back_to_lobby_clicked = false;
-
   RPButton *ui_chr_select_left = nullptr;
   RPButton *ui_chr_select_right = nullptr;
 
@@ -705,12 +713,6 @@ private:
   ScreenshotButton *p_ScreenshotBtn = nullptr;
 
   RPTextEdit *ui_area_desc = nullptr;
-
-  int m_player_id = 0;
-  int m_current_player_page = 0;
-  int player_columns = 5;
-  int m_page_max_player_count = 10;
-  int m_page_player_list = 0;
 
   void create_widgets();
 
@@ -948,14 +950,17 @@ protected:
 private:
   QTimer m_checkTimer;
   int m_lastActivityTimestamp = 0;
-  bool m_isAfk = false;
   const int m_afkThresholdMs = 5 * 60 * 1000;
+
 
   benchmark::Timer m_benchmarkSetup;
   benchmark::Timer m_benchmarkIncomingMessage;
   dialogue::DialogueMessage m_incomingMessage;
 
   void resetAFKTimer();
+
+  bool m_isAfk = false;
+  bool m_back_to_lobby_clicked = false;
 
 private slots:
   void checkAFKStatus();
