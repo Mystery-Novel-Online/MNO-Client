@@ -409,7 +409,7 @@ void Courtroom::enter_courtroom(int p_cid)
     }
     ao_app->send_server_packet(DRPacket("chrini", l_content));
 
-    constexpr static int updateCountdownDuration = 4000;
+    constexpr static int updateCountdownDuration = 3000;
     m_characterSwitchCooldown.start(updateCountdownDuration);
   }
   const bool l_changed_chr = l_chr_name != l_prev_chr_name;
