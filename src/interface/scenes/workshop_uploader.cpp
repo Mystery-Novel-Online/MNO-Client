@@ -323,8 +323,9 @@ void WorkshopUploader::submitForm()
     QString category = categoryItem->text().trimmed();
     QString tag      = tagItem->text().trimmed();
 
-    if(category.isEmpty() || tag.isEmpty())
+    if(category.isEmpty() || tag.isEmpty()) {
       continue;
+    }
 
 
     QJsonObject obj;

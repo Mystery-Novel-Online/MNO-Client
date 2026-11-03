@@ -125,6 +125,26 @@ void UploaderTagTable::pasteSelection()
     QString categoryName = parts[0].trimmed();
     QString tagName = parts[1].trimmed();
 
-    addTag(categoryName, tagName);
+    bool replacedTag = false;
+
+    if(categoryName == "Artist" || categoryName == "Franchise") {
+      for(int row = 0; row < rowCount(); ++row)
+      {
+        auto categoryItem = item(row, 0);
+        if(categoryItem->text() == categoryName) {
+          auto tagItem = item(row, 1);
+          if(tagItem->text() == "Unknown") {
+            tagItem->setText(tagName);
+            replacedTag = true;
+            break;
+          }
+        }
+      }
+
+    }
+
+    if(!replacedTag) {
+      addTag(categoryName, tagName);
+    }
   }
 }
