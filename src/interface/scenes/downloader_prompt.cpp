@@ -142,6 +142,10 @@ bool DownloaderPrompt::StartDownload(const QStringList &guids, DownloadType type
     originType = 5;
     break;
 
+  case DOWNLOAD_CharacterUpdate:
+    originType = 6;
+    break;
+
   default:
     originType.reset();
     break;
@@ -157,8 +161,12 @@ bool DownloaderPrompt::StartDownload(const QStringList &guids, DownloadType type
   QString downloadText = "Do you want to start the download?";
   switch(type)
   {
+    case DOWNLOAD_CharacterUpdate:
+      downloadText = "The character you are using is out of date, would you like to update it?";
+      break;
     case DOWNLOAD_ServerContent:
       downloadText = "The content this server recommends is either not installed or is out-of-date.\nWould you like download the missing files?";
+      break;
     default:
       break;
   }
@@ -171,6 +179,10 @@ bool DownloaderPrompt::StartDownload(const QStringList &guids, DownloadType type
 
   if(reply == QMessageBox::Yes) {
     DownloaderPrompt *prompt = new DownloaderPrompt(nullptr);
+    if(type == DOWNLOAD_CharacterUpdate) {
+      prompt->setIniswapTarget(AOApplication::getInstance()->getConfig()->character_ini(user::GetCharacterName()));
+      AOApplication::getInstance()->send_server_packet(DRPacket("CC", {QString::number(user::getOutgoingClientId()), "-1", "HDID"}));
+    }
     prompt->setDownloadType(type);
     prompt->show();
 
@@ -209,6 +221,9 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
   if(m_cdnFiles.isEmpty())
   {
     QMessageBox::information(this, "Download Complete", "All files are already up-to-date!");
+    if(m_downloadType == DOWNLOAD_CharacterUpdate) {
+      AOApplication::getInstance()->get_courtroom()->SwitchCharacterByName(m_iniswapTarget.toStdString());
+    }
     deleteLater();
     return;
   }
@@ -245,6 +260,9 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
       case DOWNLOAD_PlayerList:
         AOApplication::getInstance()->m_courtroom->construct_playerlist_layout();
         break;
+      case DOWNLOAD_CharacterUpdate:
+        AOApplication::getInstance()->get_courtroom()->SwitchCharacterByName(m_iniswapTarget.toStdString());
+          break;
       default:
         break;
       }
@@ -353,7 +371,7 @@ void DownloaderPrompt::repoDownloaded(QNetworkReply *reply)
 
         existingFileMap = FileHashUtil::buildMd5Map(scanDirectory);
       }
-
+      m_iniswapTarget = repo.folderName;
       GetDB().cacheContentData(repo.guid.toStdString(), repo.folderName.toStdString(), repo.lastUpdated, repo.contentId);
 
       for(const WorkshopFile& file : repo.files)  {

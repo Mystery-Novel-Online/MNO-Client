@@ -14,7 +14,8 @@ enum DownloadType
   DOWNLOAD_Workshop,
   DOWNLOAD_PlayerList,
   DOWNLOAD_Discord,
-  DOWNLOAD_ServerContent
+  DOWNLOAD_ServerContent,
+  DOWNLOAD_CharacterUpdate
 };
 
 class DownloaderPrompt : public QDialog
@@ -34,6 +35,8 @@ public:
   void setDirectory(QString directory) { m_directory = directory; }
   void setBaseUrl(QString url) { m_baseUrl = url; }
   void setRepository(QString repo) { m_repository = repo; }
+  void setIniswapTarget(const QString& target) { m_iniswapTarget = target; }
+
 
   void updateUi();
   QString formatBytes(double bytes);
@@ -68,6 +71,8 @@ private:
   QLabel *m_currentActionText = nullptr;
 
   std::shared_ptr<DownloadTask> m_task = nullptr;
+
+  QString m_iniswapTarget = "";
 
 
 public slots:

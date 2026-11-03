@@ -172,6 +172,8 @@ public:
   void load_fonts();
   Courtroom *m_courtroom = nullptr;
 
+  AOConfig *getConfig() { return ao_config; };
+
 public slots:
   void loading_cancelled();
 

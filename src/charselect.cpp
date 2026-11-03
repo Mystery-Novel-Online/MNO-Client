@@ -245,7 +245,9 @@ void Courtroom::SwitchCharacterByName(std::string characterName)
   if(!CharacterRepository::characterExists(qCharacterName))
   {
     serverCharacterId = CharacterRepository::findAvailablePersona();
-    if(serverCharacterId == -1) return;
+    if(serverCharacterId == -1) {
+      return;
+    }
     ao_config->set_character_ini(CharacterRepository::characterNameServer(serverCharacterId), qCharacterName);
   }
   else

@@ -409,7 +409,8 @@ void Courtroom::enter_courtroom(int p_cid)
     }
     ao_app->send_server_packet(DRPacket("chrini", l_content));
 
-    m_characterSwitchCooldown.start(4000);
+    constexpr static int updateCountdownDuration = 4000;
+    m_characterSwitchCooldown.start(updateCountdownDuration);
   }
   const bool l_changed_chr = l_chr_name != l_prev_chr_name;
   if(l_changed_chr) {
@@ -3733,6 +3734,12 @@ void Courtroom::checkAFKStatus()
 void Courtroom::charaSwitchCooldownFinish()
 {
   qDebug() << "Checking for updates.";
+  std::string guid = GetDB().workshopGuid(get_character_ini().toStdString());
+  if(!guid.empty()) {
+    if(DownloaderPrompt::StartDownload({QString::fromStdString(guid)}, DOWNLOAD_CharacterUpdate)){
+      return;
+    }
+  }
 }
 
 void Courtroom::keyPressEvent(QKeyEvent *event)
