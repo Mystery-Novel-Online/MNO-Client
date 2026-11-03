@@ -243,7 +243,7 @@ void DownloaderPrompt::ProcessLinks(const QMap<QString, QString>& links, const Q
   });
 
 
-  connect( downloader, &ContentDownloader::downloadFinished,this,[this](QByteArray data)
+  connect( downloader, &ContentDownloader::downloadFinished, this,[this](QByteArray data)
   {
     m_currentActionText->setText("Unpacking downloaded content, please wait...");
     WorkshopPackage::extract(data, m_cdnFiles);

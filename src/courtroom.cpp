@@ -3735,10 +3735,27 @@ void Courtroom::charaSwitchCooldownFinish()
 {
   qDebug() << "Checking for updates.";
   std::string guid = GetDB().workshopGuid(get_character_ini().toStdString());
-  if(!guid.empty()) {
-    if(DownloaderPrompt::StartDownload({QString::fromStdString(guid)}, DOWNLOAD_CharacterUpdate)){
-      return;
-    }
+  if(!guid.empty())
+  {
+    QNetworkReply* reply = ApiManager::instance().get("api/workshop/" + QString::fromStdString(guid) + "/check");
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply, guid]()
+    {
+
+      if(reply->error() != QNetworkReply::NoError)  {
+        return;
+      }
+
+      JSONReader replyData;
+      replyData.ReadFromString(reply->readAll());
+      int revNumber = replyData.getIntValue("revision_number");
+      if(revNumber > GetDB().workshopUpdateTime(get_character_ini().toStdString())) {
+        DownloaderPrompt::StartDownload({QString::fromStdString(guid)}, DOWNLOAD_CharacterUpdate);
+      }
+      reply->deleteLater();
+    });
+
+
   }
 }
 
