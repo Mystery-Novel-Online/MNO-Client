@@ -205,6 +205,12 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   connect(ui_workshop_tags, &WorkshopTags::tagClicked, this, [this](const QString& tag)
   {
     QString current = w_WorkshopSearchBar->text();
+
+
+    if (QApplication::keyboardModifiers() & Qt::ShiftModifier) {
+      current = "";
+    }
+
     QString insertedTag = tag;
 
     const QString artistTagPrefix = "🎨 ";
