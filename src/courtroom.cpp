@@ -3733,7 +3733,9 @@ void Courtroom::checkAFKStatus()
 
 void Courtroom::charaSwitchCooldownFinish()
 {
-  qDebug() << "Checking for updates.";
+  if(config::ConfigUserSettings::booleanValue("workshop_disable_update_check", false)) {
+    return;
+  }
   std::string guid = GetDB().workshopGuid(get_character_ini().toStdString());
   if(!guid.empty())
   {
