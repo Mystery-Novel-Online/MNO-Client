@@ -21,7 +21,7 @@ ConfigTabDiscord::ConfigTabDiscord(QWidget *parent) : QWidget(parent), ui(new Ui
   ui->hideServer->setChecked(m_hideServer);
   ui->disableIntergration->setChecked(m_workshopAuthentication);
   ui->warningAuthentication->setVisible(m_workshopAuthentication);
-  ui->disableCharacterUpdate->setVisible(m_characterUpdatesDisabled);
+  ui->disableCharacterUpdate->setChecked(m_characterUpdatesDisabled);
 }
 
 ConfigTabDiscord::~ConfigTabDiscord()
