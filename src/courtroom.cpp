@@ -113,6 +113,8 @@ Courtroom::Courtroom(AOApplication *p_ao_app, QWidget *parent)
     return;
   }
   connect(&m_checkTimer, &QTimer::timeout, this, &Courtroom::checkAFKStatus);
+  connect(&m_characterSwitchCooldown, &QTimer::timeout, this, QOverload<>::of(&Courtroom::charaSwitchCooldownFinish));
+  m_characterSwitchCooldown.setSingleShot(true);
   m_checkTimer.start(1000);
 
   auto shortcut = new QShortcut(QKeySequence("Ctrl+/"), this);
@@ -406,6 +408,8 @@ void Courtroom::enter_courtroom(int p_cid)
       l_content.append(QString::number(GetDB().workshopUpdateTime(l_chr_name.toStdString())));
     }
     ao_app->send_server_packet(DRPacket("chrini", l_content));
+
+    m_characterSwitchCooldown.start(4000);
   }
   const bool l_changed_chr = l_chr_name != l_prev_chr_name;
   if(l_changed_chr) {
@@ -3724,6 +3728,11 @@ void Courtroom::checkAFKStatus()
     m_isAfk = true;
     ao_app->send_server_packet(DRPacket("STATUS", {QString::number(UserState_AFK), QString::number(true)}));
   }
+}
+
+void Courtroom::charaSwitchCooldownFinish()
+{
+  qDebug() << "Checking for updates.";
 }
 
 void Courtroom::keyPressEvent(QKeyEvent *event)

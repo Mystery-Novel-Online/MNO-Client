@@ -948,6 +948,7 @@ protected:
 
 
 private:
+  QTimer m_characterSwitchCooldown;
   QTimer m_checkTimer;
   int m_lastActivityTimestamp = 0;
   const int m_afkThresholdMs = 5 * 60 * 1000;
@@ -964,6 +965,7 @@ private:
 
 private slots:
   void checkAFKStatus();
+  void charaSwitchCooldownFinish();
 };
 
 template <typename T>
