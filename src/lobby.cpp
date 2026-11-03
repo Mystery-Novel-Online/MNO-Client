@@ -205,11 +205,18 @@ Lobby::Lobby(AOApplication *p_ao_app) : SceneWidget(ThemeSceneType::SceneType_Se
   connect(ui_workshop_tags, &WorkshopTags::tagClicked, this, [this](const QString& tag)
   {
     QString current = w_WorkshopSearchBar->text();
+    QString insertedTag = tag;
+
+    const QString artistTagPrefix = "🎨 ";
+
+    if(insertedTag.startsWith(artistTagPrefix)) {
+      insertedTag.remove(0, artistTagPrefix.length());
+    }
 
     if(!current.isEmpty() && !current.endsWith(' '))
       current += ' ';
 
-    current += "[" + tag + "]";
+    current += "[" + insertedTag + "]";
 
     w_WorkshopSearchBar->setText(current);
     w_WorkshopSearchBar->setFocus();
