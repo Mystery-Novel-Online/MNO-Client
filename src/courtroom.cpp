@@ -3491,10 +3491,20 @@ void Courtroom::on_spectator_clicked()
 
 void Courtroom::OnCharRefreshClicked()
 {
+  QString currentSelection = pCharaSelectSeries->currentText();
+  pCharaSelectSeries->blockSignals(true);
   ao_app->reload_packages();
   pCharaSelectSeries->clear();
   pCharaSelectSeries->addItems(CharacterRepository::filterList());
   m_current_chr_page = 0;
+  pCharaSelectSeries->blockSignals(false);
+
+  int index = pCharaSelectSeries->findText(currentSelection);
+
+  if (index != -1) {
+    pCharaSelectSeries->setCurrentIndex(index);
+  }
+
   set_char_select_page();
 }
 
