@@ -23,6 +23,8 @@ private slots:
   void updateProgress(qint64 bytesSent, qint64 bytesTotal);
 
 private:
+  QLineEdit *m_nameField;
+
   QLineEdit *m_filePath;
   QLineEdit *m_previewPath;
   QTextEdit *m_description;

@@ -18,6 +18,11 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, c
   setWindowTitle(m_isEdit ? "Edit Character" : "Upload Character");
   setModal(true);
 
+  m_nameField = new QLineEdit(this);
+  m_nameField->setVisible(edit);
+  m_nameField->setText(entry.name);
+
+
   m_filePath = new QLineEdit(this);
   m_filePath->setReadOnly(true);
 
@@ -36,8 +41,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, c
   m_addTag = new QPushButton("Add Tag", this);
 
   m_collectionList = new QComboBox(this);
-  if(edit)
-  {
+  if(edit) {
     m_collectionList->addItem("<No Change>");
   }
 
@@ -56,8 +60,7 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, c
   m_private = new QCheckBox(this);
   m_private->setText("Make Upload Private");
 
-  if(edit)
-  {
+  if(edit) {
     m_filePath->setText("<No Change>");
     m_description->setText(entry.description);
     m_previewPath->setText("<No Change>");
@@ -66,6 +69,11 @@ WorkshopUploader::WorkshopUploader(QWidget *parent, bool edit, int editTarget, c
   m_chooseButton->setMinimumWidth(100);
   m_imageButton->setMinimumWidth(100);
   QFormLayout *layout = new QFormLayout();
+
+  if(edit) {
+    layout->addRow("Name:", m_nameField);
+  }
+
 
   if(entry.content_type != "collection")
   {
@@ -303,6 +311,8 @@ void WorkshopUploader::submitForm()
   if(m_editTarget != -1) {
     ApiManager::appendField(multiPart, "id", QString::number(m_editTarget));
   }
+
+  ApiManager::appendField(multiPart, "name", m_nameField->text());
 
   ApiManager::appendField(multiPart, "description", m_description->toPlainText());
   ApiManager::appendField(multiPart, "is_private", QString::number(m_private->checkState() == Qt::Checked));
